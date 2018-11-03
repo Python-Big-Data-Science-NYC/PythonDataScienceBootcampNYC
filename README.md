@@ -11,3 +11,6 @@ https://www.eventbrite.com/o/python-sql-data-science-class-bootcamp-nyc-affordab
 
 
 https://notebooks.azure.com/shivgan3/libraries/PythonClassesNYCBootcamp
+
+
+<div style="width:195px; text-align:center;" ><iframe  src="https://www.eventbrite.com/calendar-widget?eid=50334503856" frameborder="0" height="631" width="195" marginheight="0" marginwidth="0" scrolling="no" allowtransparency="true"></iframe><div style="font-family:Helvetica, Arial; font-size:12px; padding:10px 0 5px; margin:2px; width:195px; text-align:center;" ><a class="powered-by-eb" style="color: #ADB0B6; text-decoration: none;" target="_blank" href="http://www.eventbrite.com/">Powered by Eventbrite</a></div></div>
