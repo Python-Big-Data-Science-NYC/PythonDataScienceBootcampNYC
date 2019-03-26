@@ -21,6 +21,13 @@ https://www.eventbrite.com/o/python-sql-data-science-class-bootcamp-nyc-affordab
 
 https://notebooks.azure.com/shivgan3/libraries/PythonClassesNYCBootcamp
 
+http://learnpythondatasciencenyc.site/
+
+http://bigdatascienceblockchainnyc.site/
+
+http://excelhelponsiteconsultantnyc.site
+
+http://ebscorp.us/
 
 
 Contact:
