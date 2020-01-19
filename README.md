@@ -15,7 +15,7 @@ https://docs.google.com/presentation/d/1HrmkW6d53I6YETWS5pDDhE6E3OXTlDljcHyjARLd
 Ginger Beer and Free Python support class in NYC New York - Manhattan Upper East
 https://docs.google.com/presentation/d/1Oz8P88XttY6Z2RA7Wz7ZFfVwgvMGR7hPziZ4Pm2PfFI/edit?usp=sharing
 
-https://www.meetup.com/New-York-Python-SQL-Bootcamp-Data-Science-Analytics/events/
+http://learnprogrammingnyc.com/
 
 https://www.eventbrite.com/o/python-sql-data-science-class-bootcamp-nyc-affordable-coding-programming-14448368531
 
