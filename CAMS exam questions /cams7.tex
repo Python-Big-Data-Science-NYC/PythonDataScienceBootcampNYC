@@ -1,0 +1,190 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{titlesec}
+\usepackage{microtype}
+
+\titleformat{\section}{\large\bfseries\sffamily}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\sffamily}{}{0em}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt plus 2pt minus 1pt}
+
+\title{\textbf{CAMS Exam: Model Risk Management Questions}}
+\author{\textbf{Advanced AML Training}}
+\date{\today}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section*{Instructions}
+	Each question has \textbf{five options (A through E)}. Exactly \textbf{two} of the options are correct. Select both correct answers.
+	
+	\section{Transaction Monitoring Model Risk Management}
+	
+	\subsection{1. False Positives vs. False Negatives — The Calibration Trade-Off}
+	
+	A regional bank has operated the same transaction monitoring system for four years without recalibration. The system generates approximately 8,000 alerts per month, of which 96\% are closed as false positives after manual review. The compliance director, under pressure to reduce operational costs, instructs the analytics team to raise all scenario thresholds by 250\%. The team leader warns that this will increase false negatives. The director replies, "We cannot afford to review 8,000 alerts per month. A 250\% threshold increase will reduce volume, and any missed activity is acceptable as long as we still file some SARs."
+	
+	Which two of the following correctly assess the director's position and the team leader's warning?
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item The director is correct: operational efficiency is a valid justification for reducing alert volume, and a modest increase in false negatives is an acceptable trade-off.
+		\item The team leader's warning is correct. Raising thresholds by 250\% creates a high risk of over-filtering, which will cause actual suspicious activity (true positives) to drop below the new thresholds, resulting in materially increased false negatives — a direct AML program deficiency.
+		\item False negatives (missed suspicious activity) are more dangerous than false positives (wasted analyst time). Regulators prioritize detection effectiveness over operational efficiency. A monitoring system that systematically fails to detect known ML typologies is ineffective regardless of its false positive rate.
+		\item The bank should immediately adopt the 250\% threshold increase to align with industry best practices for cost reduction.
+		\item False positives are always a greater regulatory concern than false negatives because they indicate the system is too sensitive and creates unnecessary filings.
+	\end{enumerate}
+	
+	\textbf{Correct Answers: B and C}
+	
+	\subsection{2. Model Drift — Performance Degradation Over Time}
+	
+	A bank deployed a machine learning-based AML transaction monitoring model in January 2024. The model's validation report at deployment showed: precision 72\%, recall 81\%, false positive rate 4.2\%. A June 2026 validation review finds: precision 51\%, recall 62\%, false positive rate 11.7\%. The compliance team notes that customer transaction volumes have increased 180\% since deployment, new payment products have been introduced, and the criminal typologies observed in SARs have shifted from structured cash deposits to cryptocurrency-related layering. The model was never recalibrated or retrained after deployment.
+	
+	Which two of the following accurately characterize the situation?
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item The model has experienced significant model drift — the statistical relationship between the model's inputs and the target variable (suspicious activity) has changed over time due to shifts in customer behavior, product mix, and criminal typologies. The model's performance degradation requires immediate remediation.
+		\item The model is still performing within acceptable tolerances because recall above 60\% is considered effective by most regulators.
+		\item The bank's failure to establish a model monitoring and refresh cadence (e.g., annual recalibration, trigger-based retraining) is a governance deficiency. Models deployed in dynamic environments must be periodically reassessed and updated to maintain effectiveness against evolving ML risks.
+		\item The model should be decommissioned immediately and replaced with a rules-based system, which does not suffer from drift.
+		\item Performance degradation is irrelevant because AML models only need to be validated once at deployment; ongoing monitoring is optional under FATF standards.
+	\end{enumerate}
+	
+	\textbf{Correct Answers: A and C}
+	
+	\subsection{3. Explainability — The Black-Box AI Problem}
+	
+	A large international bank deploys a deep neural network (DNN) transaction monitoring model that achieves 89\% recall and only 3.2\% false positives on historical SAR cases — significantly outperforming the prior rules-based system (42\% recall, 12\% false positives). However, the DNN model is a "black box": compliance analysts cannot determine why a specific transaction was flagged or which features (e.g., velocity, amount, counterparty, geographic risk) contributed most to the alert. The bank's external auditor rates the model governance as "deficient" because analysts cannot explain alert rationales in their investigation narratives. The bank's Chief Data Scientist argues that high accuracy justifies the lack of explainability.
+	
+	Which two of the following best describe the compliance and regulatory risks?
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item The Chief Data Scientist is correct. Under the risk-based approach, accuracy is the paramount consideration, and explainability is secondary when the model clearly outperforms prior systems.
+		\item Explainability is a regulatory requirement for AML models. Compliance analysts must be able to articulate why a transaction was flagged to conduct a meaningful investigation and determine whether a SAR is required. A model that produces "black-box" alerts forces analysts to file SARs without understanding the underlying rationale, creating legal exposure if the SAR is later challenged.
+		\item The auditor's deficiency finding is correct. Model explainability enables: (i) effective analyst investigations, (ii) model validation and bias detection, (iii) regulatory auditability, and (iv) customer dispute resolution. An inexplicable model creates unmanaged risk regardless of its accuracy metrics.
+		\item The bank should immediately replace the DNN with a simpler logistic regression model that is fully explainable, even if accuracy decreases.
+		\item Regulators do not require model explainability for AML transaction monitoring; only credit scoring models are subject to explainability requirements under ECOA.
+	\end{enumerate}
+	
+	\textbf{Correct Answers: B and C}
+	
+	\subsection{4. Reproducibility — The Inconsistent Alert Problem}
+	
+	A bank's AML compliance team uses a transaction monitoring system that produces different alert results when the same historical data is rerun through the model. Specifically, when the team reruns transaction data from January 2026 through the current production model to validate a new scenario, they obtain materially different alert sets than the alerts originally generated in January 2026 for the same transactions. The model vendor explains that the model uses randomized sampling for certain feature calculations and that "slight variations are normal." The bank's internal audit team flags the system for lack of reproducibility.
+	
+	Which two of the following correctly assess the reproducibility requirement?
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item Reproducibility is not required for AML models; the risk-based approach permits some variation as long as the model is directionally correct.
+		\item AML models must be reproducible to support audit, validation, and law enforcement inquiries. If a model cannot consistently produce the same output for the same input data, it is impossible to: (i) validate the model's performance over time, (ii) determine whether a model update improved or degraded performance, (iii) defend an alert or SAR in litigation or regulatory examination, or (iv) comply with recordkeeping requirements.
+		\item The vendor's explanation is insufficient. Randomized sampling should be controlled through a fixed random seed that ensures deterministic, reproducible outputs. The bank should require the vendor to implement reproducibility controls or consider alternative solutions.
+		\item The audit finding is overreaching; randomized models are acceptable under BSA regulations because they reduce false positives.
+		\item The bank should simply accept the variation and document it in the model's user guide; no further action is required.
+	\end{enumerate}
+	
+	\textbf{Correct Answers: B and C}
+	
+	\subsection{5. Change Control — The Unauthorized Scenario Tweak}
+	
+	A senior AML analyst at a bank modifies 12 transaction monitoring scenarios by adjusting threshold values and adding new logic to reduce alert volume. The analyst documents the changes in a personal notebook but does not notify the compliance officer, the model validation team, or the BSA Officer. The changes go live in the production system the next day. Three months later, an internal audit discovers the modifications. The analyst states that the changes "improved efficiency" and "did not require approval because they were minor adjustments to existing scenarios."
+	
+	Which two of the following are correct regarding this change control failure?
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item The analyst is correct: minor threshold adjustments are within the delegated authority of senior analysts and do not require formal change control approval.
+		\item All changes to AML monitoring scenarios, including threshold adjustments, must follow documented change management procedures that include: (i) business justification, (ii) impact assessment, (iii) validation by a qualified independent party, (iv) compliance officer approval, (v) board notification for material changes, and (vi) audit trail documentation.
+		\item The analyst's unauthorized changes violate the bank's change control policy (if one exists) and may constitute a breach of the bank's AML program governance. Undocumented changes create an audit gap because: (i) the bank cannot demonstrate regulatory due diligence, (ii) the effectiveness of the modified scenarios cannot be validated, (iii) the change history is lost for future reviews, and (iv) the changes may have introduced false negatives without detection.
+		\item The compliance officer should retroactively approve the changes since they improved efficiency; no further action is required.
+		\item Change control requirements apply only to vendor software upgrades, not to internal analyst modifications of scenario logic.
+	\end{enumerate}
+	
+	\textbf{Correct Answers: B and C}
+	
+	\subsection{6. Scenario Effectiveness — The Holdout Sample Validation Failure}
+	
+	A bank's model validation team tests the effectiveness of its AML transaction monitoring scenarios using a holdout sample of 1,500 historical SAR cases (known true positives) and 5,000 randomly selected non-SAR accounts (assumed true negatives). The validation results show that only 28\% of the SAR cases would have generated an alert under the current scenarios, meaning 72\% of historical confirmed suspicious activity would be missed. The compliance director argues that the holdout sample is not representative because the SAR cases are from prior years when criminal typologies were different, and the bank's current risk profile has changed.
+	
+	Which two of the following correctly assess the validation finding and the director's objection?
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item The director is correct; historical SAR cases are inherently biased and should not be used for validation because the bank's controls may have changed since those cases occurred.
+		\item A 28\% capture rate on known SAR cases is a material effectiveness deficiency. Even considering potential typology evolution, a properly calibrated scenario library should detect the majority of previously confirmed suspicious activity unless the bank can specifically demonstrate that those SARs involved typologies the bank has affirmatively decided not to monitor.
+		\item The validation team should supplement the holdout sample with synthetic data representing current typologies and should also test for scenario decay by comparing detection rates across different time periods to quantify drift.
+		\item The 28\% capture rate is acceptable if the bank's current false positive rate is below 1\%.
+		\item Validation using historical SARs is prohibited under BSA regulations because SARs are confidential and cannot be used for testing purposes.
+	\end{enumerate}
+	
+	\textbf{Correct Answers: B and C}
+	
+	\subsection{7. Data Quality — The Silent Failure Impact on Model Performance}
+	
+	A bank's transaction monitoring system relies on daily data feeds from 17 upstream source systems. A compliance audit reveals that for the past 14 months, the data feed from the bank's international wire transfer system has been silently failing for 34\% of all international wires — meaning those transactions never entered the monitoring system, never generated alerts, and were never reviewed by compliance analysts. The failure did not produce error messages; the monitoring system simply did not receive the data. An estimated 47,000 international wires aggregating approximately \$340 million were not monitored. The wire transfer system's logs show no evidence of tampering; the failure was a technical misconfiguration that went undetected because no reconciliation controls existed between the source system and the monitoring system.
+	
+	Which two of the following are the most critical findings?
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item The missing 34\% of international wire data represents a complete monitoring gap for those transactions. No alerts could have been generated for activity the system never received. This is a material AML program deficiency regardless of the model's theoretical effectiveness.
+		\item The absence of reconciliation controls between source systems and the transaction monitoring system is a foundational data quality failure. Financial institutions must have controls to verify that all required transaction data is ingested completely and accurately into the monitoring system.
+		\item The misconfiguration is a technical issue with no compliance implications because the bank did not intentionally exclude the data.
+		\item The bank should immediately implement retrospective review of the 47,000 missed wires, file SARs where suspicious activity is identified, and notify relevant authorities of the monitoring gap.
+		\item The bank's only obligation is to fix the technical misconfiguration going forward; the past 14 months of missed data cannot be remediated and should be ignored.
+	\end{enumerate}
+	
+	\textbf{Correct Answers: A and B}
+	
+	\subsection{8. Scenario Validation Frequency — Annual vs. Trigger-Based}
+	
+	A bank's AML compliance policy requires full scenario validation "at least annually" but does not define trigger events for interim validation. During a regulatory examination, the examiner notes the following: (i) the bank introduced two new high-risk products (cryptocurrency custody and cross-border P2P payments) eight months after the last annual validation; (ii) the bank's SAR filing volume for a specific typology (human trafficking) increased 400\% over four months; (iii) the bank's customer base grew by 35\% due to an acquisition; and (iv) the bank's model experienced a known performance degradation flagged by the vendor three months ago. None of these events triggered an interim validation.
+	
+	Which two of the following correctly describe the bank's validation obligations?
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item Annual validation is sufficient; interim validation is a best practice but not a regulatory requirement.
+		\item Material changes to risk profile, product offerings, customer composition, criminal typologies, or model performance should trigger interim validation outside the annual cycle. The four events identified by the examiner are all trigger events that should have prompted a validation to determine whether the existing scenarios remain effective.
+		\item The bank's policy is deficient for failing to define specific trigger events for interim validation. A robust model governance framework includes both scheduled validation (at least annually) and event-driven validation triggered by: new products, significant volume shifts, emerging typologies, model performance alerts, and regulatory changes.
+		\item The acquisition and new products do not require validation because they occurred after the annual validation; the bank can wait until the next annual cycle.
+		\item Scenario validation is only required when the vendor releases a software update; internal changes do not trigger validation obligations.
+	\end{enumerate}
+	
+	\textbf{Correct Answers: B and C}
+	
+	\subsection{9. Alert Adjudication Consistency — The Investigator Variation Problem}
+	
+	A bank's internal quality assurance review of 200 randomly selected closed alerts finds significant variation in adjudication outcomes among the 12 compliance analysts. For one scenario (cash deposits just below \$10,000), Analyst A closed 94\% of alerts as false positives with a standard note: "Customer is a retailer; cash is normal." Analyst B, reviewing similar accounts for the same scenario, escalated 67\% of alerts for further investigation and filed SARs on 22\%. Neither analyst's file notes included supporting documentation (e.g., daily sales logs, deposit receipts, or other source documents). The bank has no written adjudication guidance for the scenario.
+	
+	Which two of the following are the most critical findings?
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item The variation between analysts is acceptable because different analysts apply professional judgment differently; standardization is not required for AML investigations.
+		\item The 94\% vs. 67\% escalation variation indicates a lack of clear adjudication standards and inconsistent application of analyst judgment. This creates regulatory risk because two analysts reviewing similar activity reached radically different conclusions without documented justification.
+		\item The absence of supporting documentation in the case files means the bank cannot demonstrate to regulators that any investigation actually occurred. The bank's alert adjudication process is effectively undocumented and therefore unverifiable.
+		\item The bank should write a written adjudication guide for the scenario specifying: (i) what documentation analysts must obtain, (ii) what constitutes a legitimate business explanation, (iii) red flags that require escalation, and (iv) the required level of documentation in the case file.
+		\item Analyst B is clearly over-escalating; the bank should retrain Analyst B to align with Analyst A's more efficient approach.
+	\end{enumerate}
+	
+	\textbf{Correct Answers: B and C}
+	
+	\subsection{10. Machine Learning Governance — The Unsupervised Anomaly Detection Risk}
+	
+	A bank deploys an unsupervised machine learning model designed to detect anomalous transaction patterns without prior labeling of suspicious activity. The model identifies clusters of transactions that deviate from historical customer behavior and generates alerts for "unusual activity." The model's developers cannot explain why specific transactions are flagged because the model learns patterns autonomously. The model has a 94\% false positive rate, but the bank continues to use it because it has detected two complex layering schemes that rules-based scenarios missed. The compliance committee approves the model without independent validation because it is "supplemental" to the primary rules-based system.
+	
+	Which two of the following correctly identify governance deficiencies?
+	
+	\begin{enumerate}[label=\Alph*.]
+		\item Unsupervised models are exempt from standard validation requirements because they do not rely on labeled historical data.
+		\item The 94\% false positive rate is a significant operational burden. While the model detected two valuable true positives, the high false positive volume may overwhelm analysts and obscure the meaningful alerts. The bank must weigh the incremental detection value against the operational cost.
+		\item Independent validation is required regardless of whether the model is "supplemental" or "primary." The model's lack of explainability and inability to specify why transactions are flagged makes it difficult to validate, but that difficulty does not waive the validation requirement.
+		\item The model's unsupervised nature and lack of explainability are acceptable because it is only used for anomaly detection, not for SAR decision-making.
+		\item The bank should deploy the model without further validation because it has already demonstrated value by detecting two schemes missed by the rules-based system.
+	\end{enumerate}
+	
+	\textbf{Correct Answers: B and C}
+	
+\end{document}
