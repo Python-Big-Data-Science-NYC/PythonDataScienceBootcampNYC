@@ -1,0 +1,524 @@
+% ==========================================================
+% COURSE: DATA PERMISSIONS, SOURCES, TOOLS & CONNECTIONS
+% ==========================================================
+\documentclass[aspectratio=169, 11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{whale}
+\usefonttheme{professionalfonts}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{xcolor}
+
+\definecolor{primary}{RGB}{0, 82, 112}
+\definecolor{accent}{RGB}{200, 83, 0}
+\definecolor{softgray}{RGB}{245, 247, 250}
+
+\setbeamercolor{title}{fg=white, bg=primary}
+\setbeamercolor{frametitle}{fg=primary, bg=softgray}
+\setbeamercolor{block title}{fg=white, bg=primary}
+\setbeamercolor{block body}{fg=darkgray, bg=softgray}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+\title{\textbf{Data Permissions, Sources, Tools \& Connections}}
+\subtitle{Enterprise Data Survival}
+\author{Professional Development}
+\date{}
+
+\begin{document}
+	
+	% SLIDE 1: TITLE
+	\begin{frame}
+		\titlepage
+		\centering
+		\tiny{TOAD · Teradata · Vertica · Hive · ODBC · Oracle · PySpark · SAS}
+	\end{frame}
+	
+	% SLIDE 2: COURSE OVERVIEW
+	\begin{frame}{What this course covers}
+		\tiny
+		\begin{itemize}
+			\item \textbf{Permissions} — prod vs dev vs uat, confidential levels
+			\item \textbf{Sources} — where data lives, how to find it
+			\item \textbf{Tools} — TOAD, Teradata, PySpark, PowerBroker
+			\item \textbf{Connections} — ODBC, drivers, error handling
+			\item \textbf{Queries} — SQL optimization, conversion to PySpark
+			\item \textbf{SAS} — logistic regression, data cleaning
+		\end{itemize}
+	\end{frame}
+	
+	% SLIDE 3: DATA IS EVERYWHERE (AND MESSY)
+	\begin{frame}{Enterprise data reality}
+		\begin{block}{Different data sizes}
+			\tiny
+			\begin{itemize}
+				\item \textbf{Data} — Excel, CSV, small tables
+				\item \textbf{Big Data} — Terabytes, Hadoop, Hive
+				\item \textbf{Very Big Data} — Petabytes, distributed clusters
+			\end{itemize}
+		\end{block}
+		\vspace{0.03cm}
+		\begin{block}{Different formats \& locations}
+			\tiny
+			\begin{itemize}
+				\item Teradata, Vertica, Oracle, Hive, SQL Server
+				\item On-premise vs cloud vs hybrid
+				\item Prod / Dev / UAT / Sandbox environments
+			\end{itemize}
+		\end{block}
+		\tiny\alert{You won't know where anything is. That's normal.}
+	\end{frame}
+	
+	% SLIDE 4: PERMISSIONS — WHAT YOU CAN AND CANNOT DO
+	\begin{frame}{Permissions hell}
+		\begin{block}{Typical permission levels}
+			\tiny
+			\begin{itemize}
+				\item \textbf{Prod} — live data, read-only usually
+				\item \textbf{Dev} — test data, can write
+				\item \textbf{UAT} — user acceptance testing
+				\item \textbf{Sandbox} — play around
+			\end{itemize}
+		\end{block}
+		\vspace{0.03cm}
+		\begin{block}{The problem}
+			\tiny
+			\begin{itemize}
+				\item You have Dev access but need Prod → error
+				\item You have Prod access but not UAT → can't test
+				\item You have no access at all → raise a ticket (wait 2 weeks)
+			\end{itemize}
+		\end{block}
+		\tiny\alert{You will see "Table not found" when table exists. It's permissions.}
+	\end{frame}
+	
+	% SLIDE 5: CONFIDENTIAL VS VERY CONFIDENTIAL
+	\begin{frame}{Confidential data levels}
+		\tiny
+		\begin{columns}[T]
+			\column{0.48\textwidth}
+			\textbf{Confidential}
+			\begin{itemize}
+				\item Internal reports
+				\item Non-public metrics
+				\item Normal approval needed
+			\end{itemize}
+			\column{0.48\textwidth}
+			\textbf{Very Confidential}
+			\begin{itemize}
+				\item PII (personally identifiable info)
+				\item Customer data
+				\item Legal/compliance review required
+			\end{itemize}
+		\end{columns}
+		\vspace{0.1cm}
+		\begin{block}{What this means for you}
+			\tiny
+			\begin{itemize}
+				\item Different database schemas
+				\item Different ODBC connections
+				\item Extra approval forms
+				\item "You are not authorized" errors
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% SLIDE 6: RAISING PERMISSIONS — THE PROCESS
+	\begin{frame}{How to raise a permission request}
+		\tiny
+		\begin{enumerate}
+			\item Get a new error (e.g., "Table not found")
+			\item Search wiki for "permission" + database name
+			\item Find the request form (SharePoint, ServiceNow, Jira)
+			\item Fill it out (database, schema, table, read/write)
+			\item Wait 2 days to 2 weeks
+			\item Chase via email, Teams, Slack
+			\item Eventually get access (or not)
+		\end{enumerate}
+		\vspace{0.05cm}
+		\tiny\alert{No one will tell you this process. You find it yourself.}
+	\end{frame}
+	
+	% SLIDE 7: PERMISSION ERRORS — WHAT THEY MEAN
+	\begin{frame}{Common permission errors}
+		\tiny
+		\begin{tabular}{p{4cm} p{5cm}}
+			\toprule
+			\textbf{Error message} & \textbf{What it actually means} \\
+			\midrule
+			"Table not found" & Table exists, you can't see it \\
+			"Database not found" & Wrong environment or no access \\
+			"Access denied" & You need approval \\
+			"ODBC connection failed" & Wrong driver or no network permission \\
+			"User not authorized" & Ask your manager (who won't answer) \\
+			\bottomrule
+		\end{tabular}
+	\end{frame}
+	
+	% SLIDE 8: CONNECTIONS OVERVIEW
+	\begin{frame}{Connection types in enterprise}
+		\tiny
+		\begin{block}{ODBC (Open Database Connectivity)}
+			\begin{itemize}
+				\item \textbf{Manual ODBC} — you configure driver, DSN, server
+				\item \textbf{Automatic ODBC} — pre-configured, just use it
+			\end{itemize}
+		\end{block}
+		\begin{block}{Other connection methods}
+			\tiny
+			\begin{itemize}
+				\item JDBC (Java)
+				\item Native drivers (Teradata, Oracle)
+				\item REST APIs
+				\item SSH tunnels
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% SLIDE 9: TOAD CONNECTIONS
+	\begin{frame}{TOAD connection screens}
+		\tiny
+		\begin{block}{TOAD Data Point (TDP)}
+			\begin{itemize}
+				\item Connect to Teradata, Oracle, SQL Server, Hadoop
+				\item Need: Server name, port, database, username, password
+				\item Authentication: LDAP, Windows, or database auth
+			\end{itemize}
+		\end{block}
+		\vspace{0.03cm}
+		\begin{block}{Common TOAD issues}
+			\tiny
+			\begin{itemize}
+				\item "Unable to connect" → wrong driver or firewall
+				\item "Invalid credentials" → password expired
+				\item "Timeout" → network slow or query too big
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% SLIDE 10: TERADATA CONNECTIONS
+	\begin{frame}{Teradata connections}
+		\tiny
+		\begin{block}{Via ODBC driver}
+			\begin{itemize}
+				\item Teradata ODBC driver installed (version matters)
+				\item DSN configured with server IP and database
+				\item Connection string: \texttt{DBCName=server; Database=schema;}
+			\end{itemize}
+		\end{block}
+		\begin{block}{Common Teradata errors}
+			\tiny
+			\begin{itemize}
+				\item "[Teradata] Driver] No server found" → wrong host
+				\item "Logon failed" → wrong user/pass or expired
+				\item "Query timeout" → query runs too long
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% SLIDE 11: VERTICA, HIVE, ORACLE
+	\begin{frame}{Other databases — Vertica, Hive, Oracle}
+		\tiny
+		\begin{columns}[T]
+			\column{0.3\textwidth}
+			\textbf{Vertica}
+			\begin{itemize}
+				\item Columnar storage
+				\item ODBC/JDBC
+				\item High performance
+			\end{itemize}
+			\column{0.3\textwidth}
+			\textbf{Hive}
+			\begin{itemize}
+				\item Hadoop layer
+				\item SQL-like (HiveQL)
+				\item Slow but big data
+			\end{itemize}
+			\column{0.3\textwidth}
+			\textbf{Oracle}
+			\begin{itemize}
+				\item Traditional RDBMS
+				\item TNS names file
+				\item Enterprise standard
+			\end{itemize}
+		\end{columns}
+		\vspace{0.1cm}
+		\tiny\alert{Each has its own permission system. Each has its own error messages.}
+	\end{frame}
+	
+	% SLIDE 12: CONNECTION ERRORS — COMPLETE LIST
+	\begin{frame}{Connection errors you will see}
+		\tiny
+		\begin{itemize}
+			\item "Unable to connect to server" — network down or firewall
+			\item "Driver not found" — install ODBC driver
+			\item "Authentication failed" — wrong password or expired
+			\item "TNS could not resolve" — Oracle TNS misconfigured
+			\item "SSL handshake failed" — certificate issue
+			\item "Connection refused" — server not accepting
+			\item "Timeout expired" — slow network or query
+		\end{itemize}
+		\vspace{0.05cm}
+		\tiny\alert{You will see all of these. Probably in one day.}
+	\end{frame}
+	
+	% SLIDE 13: TOOLS OVERVIEW
+	\begin{frame}{Enterprise data tools}
+		\tiny
+		\begin{tabular}{p{3cm} p{6cm}}
+			\toprule
+			\textbf{Tool} & \textbf{Use} \\
+			\midrule
+			Teradata & Data warehouse, big SQL \\
+			TOAD & Query editor, multiple DB connections \\
+			PySpark & Big data processing, Python on clusters \\
+			PowerBroker & Admin account escalation \\
+			SAS & Statistics, logistic regression \\
+			\bottomrule
+		\end{tabular}
+	\end{frame}
+	
+	% SLIDE 14: PYSPARK AND MASTER NODES
+	\begin{frame}{PySpark on clusters}
+		\tiny
+		\begin{block}{Setup}
+			\begin{itemize}
+				\item Connect to master node (SSH)
+				\item Submit job to cluster
+				\item Data distributed across worker nodes
+			\end{itemize}
+		\end{block}
+		\begin{block}{Common PySpark issues}
+			\tiny
+			\begin{itemize}
+				\item "Master not found" — wrong IP
+				\item "Out of memory" — executor too small
+				\item "Stage failed" — data skew or missing partition
+				\item "Permission denied" — wrong Linux user
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% SLIDE 15: QUERIES — LONG AND HARD
+	\begin{frame}{Enterprise queries are not simple}
+		\tiny
+		\begin{block}{What you will see}
+			\begin{itemize}
+				\item 200+ line SQL queries
+				\item 15+ joins across 10 tables
+				\item Nested subqueries, CTEs, window functions
+				\item No comments, no documentation
+			\end{itemize}
+		\end{block}
+		\begin{block}{How to survive}
+			\tiny
+			\begin{itemize}
+				\item Run small \texttt{SELECT COUNT(*)} first
+				\item Add \texttt{LIMIT 10} or \texttt{SAMPLE}
+				\item Comment as you go
+				\item Break into smaller CTEs
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% SLIDE 16: JOINS — MULTIPLE TYPES
+	\begin{frame}{Joins you will use}
+		\tiny
+		\begin{tabular}{p{3cm} p{5cm}}
+			\toprule
+			\textbf{Join type} & \textbf{When to use} \\
+			\midrule
+			INNER JOIN & Only matching rows \\
+			LEFT JOIN & All rows from left table \\
+			RIGHT JOIN & All rows from right table \\
+			FULL OUTER JOIN & All rows from both \\
+			CROSS JOIN & Cartesian product (dangerous) \\
+			\bottomrule
+		\end{tabular}
+		\vspace{0.1cm}
+		\tiny\alert{Mismatched keys, duplicate rows, and NULLs will break everything.}
+	\end{frame}
+	
+	% SLIDE 17: AI FOR QUERIES — BE CAREFUL
+	\begin{frame}{Using Copilot/AI for queries}
+		\tiny
+		\begin{block}{What AI can do}
+			\begin{itemize}
+				\item Convert SQL to PySpark
+				\item Explain long queries
+				\item Suggest optimizations
+				\item Write simple queries from scratch
+			\end{itemize}
+		\end{block}
+		\begin{block}{What AI will do wrong}
+			\tiny
+			\begin{itemize}
+				\item Hallucinate columns that don't exist
+				\item Ignore your database dialect
+				\item Create inefficient joins
+				\item Give confident wrong answers
+			\end{itemize}
+		\end{block}
+		\tiny\alert{Never run AI-generated code without checking.}
+	\end{frame}
+	
+	% SLIDE 18: QUERY OPTIMIZATION
+	\begin{frame}{Making queries faster}
+		\tiny
+		\begin{enumerate}
+			\item Use \texttt{WHERE} to filter early
+			\item Avoid \texttt{SELECT *} — name columns
+			\item Use \texttt{EXPLAIN} to see the plan
+			\item Add indexes on join columns
+			\item Partition large tables
+			\item Avoid functions in \texttt{WHERE} clauses
+			\item Use \texttt{UNION ALL} instead of \texttt{UNION} if possible
+		\end{enumerate}
+		\vspace{0.05cm}
+		\tiny\alert{Slow queries will be killed by the DBA. You will get angry emails.}
+	\end{frame}
+	
+	% SLIDE 19: SAS INTRODUCTION
+	\begin{frame}{SAS in enterprise}
+		\tiny
+		\begin{block}{What SAS is used for}
+			\begin{itemize}
+				\item Logistic regression (credit risk, fraud)
+				\item Data cleaning and transformation
+				\item Statistical analysis
+				\item Reporting (old school)
+			\end{itemize}
+		\end{block}
+		\begin{block}{SAS code structure}
+			\tiny
+			\begin{itemize}
+				\item \texttt{DATA} step — manipulate data
+				\item \texttt{PROC} step — run procedures
+				\item \texttt{PROC LOGISTIC} — regression
+				\item \texttt{PROC FREQ} — frequency tables
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% SLIDE 20: READING SAS CODE
+	\begin{frame}{How to read SAS code (when you don't know SAS)}
+		\tiny
+		\begin{block}{Example: Logistic regression}
+			\scriptsize
+			\texttt{proc logistic data=mydata;}\\
+			\texttt{   class gender region;}\\
+			\texttt{   model default(event='1') = age income debt / selection=stepwise;}\\
+			\texttt{run;}
+		\end{block}
+		\vspace{0.05cm}
+		\begin{block}{What it means}
+			\tiny
+			\begin{itemize}
+				\item \texttt{proc logistic} — run logistic regression
+				\item \texttt{class} — categorical variables
+				\item \texttt{model} — dependent variable = independent vars
+				\item \texttt{event='1'} — predict default = 1
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% SLIDE 21: SAS DATA CLEANING
+	\begin{frame}{SAS for data cleaning}
+		\tiny
+		\begin{block}{Common SAS data steps}
+			\scriptsize
+			\texttt{data clean;}\\
+			\texttt{   set raw;}\\
+			\texttt{   if age = . then age = 0;}\\
+			\texttt{   if income < 0 then delete;}\\
+			\texttt{   format date yymmdd10.;}\\
+			\texttt{run;}
+		\end{block}
+		\vspace{0.05cm}
+		\begin{itemize}
+			\item Handle missing values (.)
+			\item Remove negative or invalid values
+			\item Format dates properly
+		\end{itemize}
+	\end{frame}
+	
+	% SLIDE 22: IMPLEMENTATION TEAM AND FRAMEWORK
+	\begin{frame}{How implementation team works}
+		\tiny
+		\begin{block}{What they do}
+			\begin{itemize}
+				\item Take model code from dev team
+				\item Deploy to production environment
+				\item Handle high resource requirements
+				\item Monitor performance
+			\end{itemize}
+		\end{block}
+		\begin{block}{Your interaction with them}
+			\tiny
+			\begin{itemize}
+				\item Raise Jira tickets
+				\item Wait (sometimes weeks)
+				\item Get "deployment failed" errors
+				\item Chase via Teams/Slack
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% SLIDE 23: HOW TO RUN A QUERY OR DATA REQUEST
+	\begin{frame}{Step-by-step: running your first query}
+		\tiny
+		\begin{enumerate}
+			\item Get connection details (wiki, email, teammate)
+			\item Install ODBC driver (may need admin)
+			\item Configure DSN (server, database)
+			\item Open TOAD / Teradata / PySpark
+			\item Write a simple \texttt{SELECT COUNT(*) FROM table}
+			\item Run it
+			\item Get an error
+			\item Fix error (permissions, driver, typo)
+			\item Repeat until it works
+		\end{enumerate}
+		\vspace{0.05cm}
+		\tiny\alert{Step 7 is guaranteed. Step 8 is where you learn.}
+	\end{frame}
+	
+	% SLIDE 24: SUMMARY — SURVIVING DATA HELL
+	\begin{frame}{Enterprise data survival cheat sheet}
+		\tiny
+		\begin{tabular}{p{4cm} p{5cm}}
+			\toprule
+			\textbf{Problem} & \textbf{Solution} \\
+			\midrule
+			"Table not found" & Check permissions, then environment \\
+			"Connection failed" & Check ODBC driver, firewall, VPN \\
+			Query too slow & Add filters, limit, check indexes \\
+			SAS won't run & Check library path, permissions \\
+			No access to anything & Raise ticket, document, wait \\
+			AI gave wrong code & Test on small sample first \\
+			\bottomrule
+		\end{tabular}
+	\end{frame}
+	
+	% SLIDE 25: CLOSING
+	\begin{frame}{You will survive data}
+		\centering
+		\tiny
+		Every senior data person started exactly where you are now.
+		
+		No permissions. Broken connections. Unreadable queries. Silent teams.
+		
+		The difference?
+		
+		They kept trying. They documented what worked. They asked better questions.
+		
+		\vspace{0.2cm}
+		\alert{Now you go do the same.}
+		
+		\vspace{0.2cm}
+		\textit{Good luck. You will need it.}
+	\end{frame}
+	
+\end{document}
