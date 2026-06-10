@@ -1,0 +1,1173 @@
+\documentclass[11pt,a4paper]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+
+% ============================================================
+% EXTREMELY SMALL FONT - MAXIMUM CONTENT PER SLIDE
+% ============================================================
+\usefonttheme{professionalfonts}
+\setbeamerfont{itemize/enumerate body}{size=\tiny}
+\setbeamerfont{itemize/enumerate subbody}{size=\tiny}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\small}
+\setbeamerfont{title}{size=\large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\tiny}
+\setbeamerfont{date}{size=\tiny}
+
+\renewcommand{\tiny}{\fontsize{5pt}{6pt}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{6pt}{7pt}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{6.5pt}{8pt}\selectfont}
+\renewcommand{\small}{\fontsize{7.5pt}{9pt}\selectfont}
+\renewcommand{\normalsize}{\fontsize{8.5pt}{10.5pt}\selectfont}
+
+\newcommand{\redflag}[1]{\textcolor{red}{\textbf{[ALERT] 1}}}
+\newcommand{\bluenote}[1]{\textcolor{blue}{\textbf{[I] #1}}}
+
+
+\newcommand{\greennote}[1]{\textcolor{green!50!black}{\textbf{[√] #1}}}
+\newcommand{\examfocus}[1]{\textcolor{orange!80!black}{\textbf{[FOCUS] #1}}}
+\newcommand{\trap}[1]{\textcolor{purple}{\textbf{[TRAP] 1}}}
+\newcommand{\correct}[1]{\textcolor{green!50!black}{\textbf{[CORRECT] #1}}}
+\newcommand{\scenario}[1]{\textcolor{blue!70!black}{\textbf{[SCENARIO] #1}}}
+\newcommand{\keyterm}[1]{\textcolor{red!80!black}{\textbf{[KEY] #1}}}
+\newcommand{\lawcite}[1]{\textcolor{brown!70!black}{\textbf{[LAW] #1}}}
+\newcommand{\techterm}[1]{\textcolor{cyan!50!black}{\textbf{[TECH] #1}}}
+
+\title[CAMS Domain D]{CAMS Exam Preparation\\Domain D: Tools and Technologies\\to Fight Financial Crime (20 percent of Exam)}
+\author{Advanced AML Training Framework}
+\date{}
+
+\setbeamercovered{transparent}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{frametitle continuation}{}
+\setlength{\parskip}{2pt}
+\setlength{\itemsep}{1pt}
+
+\begin{document}
+
+% ============================================================
+% TITLE SLIDE
+% ============================================================
+\begin{frame}
+	\titlepage
+	\centering
+	\tiny Domain D: 20 percent of CAMS Exam | 90+ Slides | Tools, Technology, Data Quality, AI/ML, Screening
+\end{frame}
+
+% ============================================================
+% SECTION 1: DATA QUALITY AND INTEGRITY
+% ============================================================
+
+\begin{frame}{D.1: Data Quality - Foundation of All AML Technology}
+	\begin{block}{Core Concept}
+		All AML tools are only as effective as the data they receive. Poor data quality = failed controls.
+	\end{block}
+	\textbf{Key Data Quality Dimensions:}
+	\begin{itemize}
+		\item Completeness: All required data fields are populated (no null values)
+		\item Accuracy: Data correctly reflects real-world values
+		\item Timeliness: Data is available when needed (no latency)
+		\item Consistency: Same data has same format across systems
+		\item Validity: Data conforms to defined business rules
+		\item Uniqueness: No duplicate records for same entity
+	\end{itemize}
+	\textbf{Data Quality Failures on the Exam:}
+	\begin{itemize}
+		\item Silent data feed failures (34 percent of wires missing for 14 months)
+		\item Unlinked transactions (Customer ID = NULL)
+		\item Inconsistent name formats causing screening misses
+		\item Duplicate customer records across systems
+		\item Missing beneficial ownership information
+	\end{itemize}
+	\redflag{Most common exam scenario: Missing data with no error messages - undetected gap for months or years.}
+	\examfocus{Exam tests whether you understand that data quality is a COMPLIANCE responsibility, not just IT.}
+\end{frame}
+
+\begin{frame}{D.1.1: Silent Data Feed Failure - Complete Analysis}
+	\scenario{34 Percent of International Wires Missing for 14 Months}
+	A bank's transaction monitoring system relies on daily data feeds from 17 upstream systems. An audit reveals that for 14 months, the feed from the international wire system silently failed for 34 percent of all wires. Those transactions never entered the monitoring system, never generated alerts, and were never reviewed. Estimated \$340 million in wires were not monitored. The failure was a technical misconfiguration with no error messages. No reconciliation controls existed to detect the gap. The compliance team was unaware because no alerts were triggered.
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} The critical importance of data reconciliation controls and the danger of silent failures.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item 34 percent missing data = massive monitoring gap
+		\item No alerts could be generated for transactions the system never received
+		\item The absence of reconciliation controls is a foundational failure
+		\item The bank must remediate AND review missed transactions retrospectively
+		\item SARs must be filed for any suspicious activity identified in missed transactions
+		\item This is a material deficiency regardless of whether the failure was accidental
+	\end{enumerate}
+	
+	\trap{Common Distractor: "The misconfiguration was accidental, so no compliance violation occurred."}
+	\correct{Correct Answer: The bank must have controls to verify complete data ingestion. The 14-month gap requires retrospective review and SAR filing. Data quality is a compliance responsibility.}
+\end{frame}
+
+\begin{frame}{D.1.2: Data Reconciliation Controls - What Must Exist}
+	\begin{block}{Reconciliation Requirements}
+		Banks must be able to prove that ALL transactions entered the monitoring system.
+	\end{block}
+	\textbf{Required Reconciliation Controls:}
+	\begin{itemize}
+		\item Source system transaction count vs. monitoring system intake count (daily)
+		\item Source system total dollar volume vs. monitoring system total volume (daily)
+		\item Hash total comparisons for data integrity verification
+		\item Exception report for ANY discrepancy (automated)
+		\item Timely resolution of exceptions (24-48 hours maximum)
+		\item Escalation path for unresolved exceptions
+		\item Audit trail of all reconciliation activities
+	\end{itemize}
+	\textbf{Common Data Quality Issues Detected by Reconciliation:}
+	\begin{itemize}
+		\item Missing transactions (data feed failure - most dangerous)
+		\item Duplicate transactions (processing errors)
+		\item Corrupted data (format issues, encoding problems)
+		\item Delayed data (latency beyond acceptable window)
+		\item Incomplete data (missing required fields like customer ID)
+		\item Incorrect data (wrong values, mapping errors)
+	\end{itemize}
+	\textbf{Risk of No Reconciliation:}
+	\begin{itemize}
+		\item Cannot demonstrate monitoring completeness to regulators
+		\item Undetected data gaps may exist for months or years
+		\item Criminal activity may be processed without detection
+		\item Bank may face enforcement action for monitoring failure
+	\end{itemize}
+	\redflag{The exam frequently tests silent data failures with no error messages.}
+\end{frame}
+
+\begin{frame}{D.1.3: Missing Customer Identification - Unlinked Transactions}
+	\scenario{12 Percent of Transactions Have NULL Customer ID}
+	A bank's transaction monitoring system flags a series of large wire transfers. When the analyst tries to investigate, the system shows the transactions are associated with a "Customer ID: NULL" value. The data issue has been present for 8 months. The bank's IT team explains that when customers open accounts through the mobile app, the unique identifier sometimes fails to populate in the monitoring system. Approximately 12 percent of transactions cannot be linked to any customer record. The compliance team cannot determine which customer conducted which transaction.
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} The importance of customer identification in transaction monitoring and the risk of orphaned transactions.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item Unlinked transactions cannot be investigated properly
+		\item The bank cannot determine customer risk or conduct CDD
+		\item Data quality failure with direct AML impact
+		\item Cannot file accurate SARs without customer identification
+		\item Root cause must be fixed immediately
+		\item Process needed to identify and investigate orphaned transactions retrospectively
+	\end{enumerate}
+	
+	\trap{Common Distractor: "IT issues are operational and not a compliance concern."}
+	\correct{Correct Answer: Missing customer identification data is a material AML deficiency. Fix the root cause and develop a process to identify and investigate orphaned transactions.}
+\end{frame}
+
+\begin{frame}{D.1.4: Data Quality Metrics and Governance}
+	\begin{block}{Data Quality Key Performance Indicators (KPIs)}
+		Compliance must monitor and report data quality metrics to management and the Board.
+	\end{block}
+	\textbf{Essential Data Quality Metrics:}
+	\begin{itemize}
+		\item Data completeness percentage by source system (target: 99.9 percent or higher)
+		\item Data timeliness (average latency from transaction to monitoring)
+		\item Data accuracy (error rate in critical fields like amount, currency, counterparty)
+		\item Reconciliation exception rate and aging of exceptions
+		\item Number of unlinked transactions (NULL customer ID)
+		\item Number of failed data feeds and recovery time
+		\item Duplicate record rate across systems
+	\end{itemize}
+	\textbf{Governance Requirements:}
+	\begin{itemize}
+		\item Data quality is SHARED responsibility (IT, Compliance, Business)
+		\item Compliance must DEFINE data requirements for monitoring
+		\item IT must IMPLEMENT controls to meet requirements
+		\item Business must ENSURE source system data quality
+		\item Regular data quality review meetings (weekly or monthly)
+		\item Escalation path for unresolved data issues
+		\item Board reporting on material data gaps
+	\end{itemize}
+	\redflag{Compliance cannot simply accept whatever data IT provides. Compliance must define requirements and monitor quality.}
+\end{frame}
+
+% ============================================================
+% SECTION 2: ONBOARDING CONTROLS (KYC, E-KYC, DIGITAL ID)
+% ============================================================
+
+\begin{frame}{D.2: Onboarding Controls - Customer Identification}
+	\begin{block}{Core Concept}
+		Digital onboarding tools have transformed KYC, but each technology has specific strengths and weaknesses tested on the exam.
+	\end{block}
+	\textbf{Key Onboarding Technologies:}
+	\begin{itemize}
+		\item E-KYC (Electronic Know Your Customer): Digital verification using government databases
+		\item Digital Identity: Verified digital credentials (e.g., government-issued digital ID)
+		\item Facial Recognition: Comparing selfie to government ID photo
+		\item Liveness Detection: Ensuring the person is physically present (not a photo or video)
+		\item Biometrics: Fingerprint, voice recognition, behavioral biometrics
+		\item Geolocation: Verifying customer's physical location during onboarding
+		\item Document Verification: Scanning and validating passports, driver's licenses
+	\end{itemize}
+	\examfocus{Exam tests which technology is appropriate for which risk scenario.}
+\end{frame}
+
+\begin{frame}{D.2.1: E-KYC and Digital Identity - Capabilities and Limitations}
+	\begin{block}{E-KYC vs. Traditional KYC}
+		E-KYC uses electronic verification of identity documents and databases rather than physical document inspection.
+	\end{block}
+	\textbf{Capabilities of E-KYC:}
+	\begin{itemize}
+		\item Instant verification of government ID documents
+		\item Cross-reference with credit bureaus and government databases
+		\item Biometric matching (face, fingerprint)
+		\item Liveness detection to prevent spoofing
+		\item Reduced onboarding time (minutes vs. days)
+		\item Improved customer experience
+		\item Audit trail of verification steps
+	\end{itemize}
+	\textbf{Limitations and Risks:}
+	\begin{itemize}
+		\item Database availability varies by jurisdiction
+		\item May not work for customers without government-issued ID
+		\item Deepfake and presentation attacks (sophisticated fraud)
+		\item Data privacy concerns (biometric data storage)
+		\item Not all jurisdictions recognize digital ID
+		\item May not satisfy regulatory requirements for certain high-risk customers
+	\end{itemize}
+	\redflag{E-KYC may be insufficient for high-risk customers or PEPs - EDD still required.}
+\end{frame}
+
+\begin{frame}{D.2.2: Facial Recognition and Liveness Detection}
+	\scenario{Bank Uses Facial Recognition for High-Risk Account Opening}
+	A bank implements facial recognition for all account openings. A customer uses a high-quality video of another person displayed on a tablet screen in front of their face. The system verifies the face matches the ID document but does not detect that the face is a video recording. The account is opened fraudulently. The bank's compliance officer argues that facial recognition alone is sufficient for identity verification.
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} The difference between facial recognition and liveness detection.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item Facial recognition alone cannot distinguish between a live person and a photo/video
+		\item Liveness detection is REQUIRED to prevent presentation attacks
+		\item Liveness detection uses: eye movement, blinking, head movement, skin texture analysis
+		\item The bank's system was insufficient without liveness detection
+		\item High-risk customers may require additional verification methods
+	\end{enumerate}
+	
+	\trap{Common Distractor: "Facial recognition is sufficient for identity verification in all cases."}
+	\correct{Correct Answer: Liveness detection is necessary to prevent spoofing. Facial recognition alone is not sufficient for high-assurance verification.}
+\end{frame}
+
+\begin{frame}{D.2.3: External Data Sources for KYC and Screening}
+	\begin{block}{Automated and Manual External Data Sources}
+		Onboarding tools pull data from multiple external sources to verify customer identity and risk.
+	\end{block}
+	\textbf{Key External Data Sources:}
+	\begin{itemize}
+		\item Credit Reference Agencies: Verify address history, credit activity (Experian, Equifax, TransUnion)
+		\item Beneficial Ownership Registers: Corporate UBO information (public registers, commercial databases)
+		\item Government Identity Databases: Passport, driver's license, national ID verification
+		\item Sanctions Lists: UN, OFAC, EU, UK HMT, other national lists
+		\item PEP Lists: Commercially available PEP databases
+		\item Adverse Media Databases: Aggregated news, regulatory actions, court records
+		\item Criminal Records Databases: Where legally permitted
+		\item Watch Lists: Internal fraud databases, industry sharing (where permitted)
+	\end{itemize}
+	\textbf{Integration Considerations:}
+	\begin{itemize}
+		\item Real-time vs. batch processing (real-time for onboarding)
+		\item API availability and reliability
+		\item Data refresh frequency (daily for sanctions, weekly for PEPs)
+		\item Coverage by jurisdiction (not all sources cover all countries)
+		\item Cost per inquiry vs. subscription models
+	\end{itemize}
+	\redflag{No single data source is sufficient - banks should use multiple sources for triangulation.}
+\end{frame}
+
+\begin{frame}{D.2.4: Name Screening and Sanctions Lists}
+	\begin{block}{Sanctions Screening - Critical Technology}
+		Name screening is a mandatory control for all financial institutions. The exam heavily tests screening methodology.
+	\end{block}
+	\textbf{Key Sanctions Lists:}
+	\begin{itemize}
+		\item UN Security Council Consolidated Sanctions List
+		\item OFAC SDN List (Specially Designated Nationals)
+		\item OFAC Sectoral Sanctions List (SSI)
+		\item EU Consolidated Sanctions List
+		\item UK HM Treasury Sanctions List
+		\item Other national sanctions lists (Canada, Australia, Japan, Switzerland)
+		\item Internal watch lists (bank-specific restricted persons)
+		\item Law enforcement requests (314(a) etc.)
+	\end{itemize}
+	\textbf{Screening Methodology:}
+	\begin{itemize}
+		\item Batch screening: Periodic screening of entire customer database (daily or weekly)
+		\item Real-time screening: Transaction screening at point of processing
+		\item Fuzzy logic: Name matching with variations, misspellings, transliterations
+		\item Phonetic matching: Soundex, Metaphone for name variations
+		\item Threshold scoring: Score-based matching with configurable thresholds
+	\end{itemize}
+	\redflag{Exact-string matching is INSUFFICIENT for sanctions screening. Fuzzy logic is required.}
+\end{frame}
+
+\begin{frame}{D.2.5: Fuzzy Logic vs. Exact Matching - Exam Critical}
+	\scenario{Sanctions Screening Misses Name Transliteration}
+	A payment processor uses exact-string matching for sanctions screening. A wire transfer is initiated by "Muammar Gadaffi." The OFAC SDN list contains "Moammar Qaddafi" with 48 alternative spellings. The exact-string system generates no alert because the name does not match any entry exactly. The wire is processed. An internal review identifies the missed match two weeks later. The compliance officer argues that since the name didn't match exactly, no violation occurred.
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} The requirement for fuzzy logic or algorithmic name matching in sanctions screening.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item Exact-string matching is inadequate for names with multiple transliterations
+		\item OFAC expects institutions to use fuzzy logic to catch name variations
+		\item Arabic, Chinese, Russian names have multiple common spellings
+		\item The missed match is a potential OFAC violation
+		\item The bank must file a Voluntary Self-Disclosure with OFAC
+		\item The screening methodology must be remediated
+	\end{enumerate}
+	
+	\trap{Common Distractor: "Exact-string matching is a legally defensible standard under BSA regulations."}
+	\correct{Correct Answer: Sanctions screening systems must employ fuzzy logic or algorithmic name matching capable of identifying phonetically similar and transliterated name variants.}
+\end{frame}
+
+\begin{frame}{D.2.6: Customer Segmentation in Onboarding}
+	\begin{block}{Risk-Based Onboarding Segmentation}
+		Different customer types receive different levels of onboarding scrutiny based on risk assessment.
+	\end{block}
+	\textbf{Typical Customer Segments and Onboarding Requirements:}
+	\begin{tabular}{p{0.3\textwidth}|p{0.65\textwidth}}
+		\hline
+		\rowcolor{lightgray}
+		\textbf{Customer Segment} & \textbf{Onboarding Requirements} \\
+		\hline
+		Low-risk retail (salary account) & Basic CIP, identity verification, no additional screening \\
+		\hline
+		Medium-risk retail (business account) & CIP, beneficial ownership (if entity), sanctions screening \\
+		\hline
+		High-risk retail (MSB, NPO) & Enhanced CDD, source of funds, PEP screening, adverse media \\
+		\hline
+		Corporate (simple structure) & CIP for entity and UBOs, sanctions screening \\
+		\hline
+		Corporate (complex structure) & Full EDD, source of wealth, multi-tier UBO identification \\
+		\hline
+		PEP (foreign senior official) & Maximum EDD, senior management approval, source of wealth verification \\
+		\hline
+		Correspondent Bank & Wolfsberg CBDDQ, on-site inspection, enhanced monitoring \\
+		\hline
+	\end{tabular}
+	\redflag{One-size-fits-all onboarding violates the risk-based approach.}
+\end{frame}
+
+% ============================================================
+% SECTION 3: ONGOING CONTROLS - TRANSACTION MONITORING
+% ============================================================
+
+\begin{frame}{D.3: Transaction Monitoring - Core Concepts}
+	\begin{block}{Transaction Monitoring Overview}
+		Transaction monitoring is the primary detective control for identifying suspicious activity after onboarding.
+	\end{block}
+	\textbf{Key Components of Transaction Monitoring:}
+	\begin{itemize}
+		\item Rules-based scenarios: Pre-defined logic to flag specific patterns
+		\item Customer segmentation: Different rules for different customer types
+		\item Threshold setting: Values that trigger alerts (e.g., amounts over \$10,000)
+		\item Statistical testing: Above Threshold Limit (ATL) / Below Threshold Limit (BTL) testing
+		\item Scenario coverage: Ensuring scenarios detect known typologies
+		\item Alert generation: Output of the monitoring system
+		\item Case management: Workflow for investigating alerts
+	\end{itemize}
+	\examfocus{Exam tests understanding of false positives, false negatives, and calibration trade-offs.}
+\end{frame}
+
+\begin{frame}{D.3.1: Rules-Based vs. Machine Learning - Key Differences}
+	\begin{block}{Two Primary Monitoring Approaches}
+		The exam heavily tests the differences between traditional rules-based and AI/ML-based monitoring.
+	\end{block}
+	\begin{tabular}{p{0.45\textwidth}|p{0.45\textwidth}}
+		\hline
+		\rowcolor{lightgray}
+		\textbf{Rules-Based} & \textbf{Machine Learning} \\
+		\hline
+		Pre-defined, static rules & Learns patterns from data \\
+		Easy to explain and audit & Black box - harder to explain \\
+		Low false positives if well-tuned & Can have high false positives \\
+		Misses new or evolving typologies & Adapts to new patterns \\
+		No model drift & Subject to model drift \\
+		Simple implementation & Complex implementation \\
+		Low computational requirements & High computational requirements \\
+		Requires manual rule updates & Can retrain automatically \\
+		\hline
+	\end{tabular}
+	\vspace{0.2cm}
+	\redflag{Machine learning is NOT a replacement for rules-based monitoring. Best practice is a HYBRID approach.}
+\end{frame}
+
+\begin{frame}{D.3.2: False Positives vs. False Negatives - Calibration Trade-Off}
+	\begin{block}{The Core Monitoring Trade-Off}
+		Every AML monitoring system faces this fundamental calibration decision.
+	\end{block}
+	\begin{tabular}{p{0.25\textwidth}|p{0.35\textwidth}|p{0.35\textwidth}}
+		\hline
+		\rowcolor{lightgray}
+		\textbf{Term} & \textbf{Definition} & \textbf{Risk} \\
+		\hline
+		False Positive & Legitimate activity triggers an alert & Wasted analyst time; operational inefficiency; analyst fatigue \\
+		\hline
+		False Negative & Suspicious activity generates NO alert & MISSED criminal activity; direct AML deficiency; enforcement risk \\
+		\hline
+	\end{tabular}
+	\vspace{0.2cm}
+	\redflag{Which is worse? FALSE NEGATIVES are significantly worse.}
+	\bluenote{Regulator Priority: Detection effectiveness > operational efficiency.}
+	\examfocus{Exam tests scenarios where directors raise thresholds to reduce costs, increasing false negatives.}
+\end{frame}
+
+\begin{frame}{D.3.3: Over-Filtering Trap - Raising Thresholds Too High}
+	\scenario{Director Raises All Thresholds by 250 Percent}
+	A bank generates 8,000 alerts per month. The compliance director reviews metrics showing that 96 percent of alerts are closed as false positives after manual review. Under pressure to reduce operational costs, the director orders the analytics team to raise all threshold values by 250 percent across all monitoring scenarios. The team leader warns that this will significantly increase false negatives. The director replies: "We cannot afford to review 8,000 alerts per month. A 250 percent threshold increase will reduce volume to a manageable level. Any missed activity is acceptable as long as we still file some SARs."
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} Over-filtering creates unacceptable false negative risk.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item 250 percent threshold increase is extreme and arbitrary
+		\item No data analysis was conducted to determine appropriate thresholds
+		\item Many suspicious transactions will fall below new thresholds
+		\item The director is prioritizing cost over effectiveness
+		\item Regulators will view this as a material deficiency
+		\item The statement "any missed activity is acceptable" is regulatory non-compliance
+	\end{enumerate}
+	
+	\trap{Common Distractor: "The director is correctly managing operational efficiency under the risk-based approach."}
+	\correct{Correct Answer: Raising thresholds must be based on data analysis and validation. Effectiveness cannot be sacrificed for efficiency.}
+\end{frame}
+
+\begin{frame}{D.3.4: Statistical Testing - ATL and BTL}
+	\begin{block}{Above Threshold Limit (ATL) and Below Threshold Limit (BTL)}
+		Statistical testing ensures scenarios are properly calibrated and performing as expected.
+	\end{block}
+	\textbf{ATL (Above Threshold Limit) Testing:}
+	\begin{itemize}
+		\item Tests transactions that SHOULD generate alerts based on scenario logic
+		\item Validates that the system correctly identifies high-risk patterns
+		\item Uses known suspicious cases (historical SARs) as test data
+		\item Expected result: 90-100 percent capture rate for ATL cases
+		\item Low capture rate indicates over-filtering or scenario decay
+	\end{itemize}
+	\textbf{BTL (Below Threshold Limit) Testing:}
+	\begin{itemize}
+		\item Tests transactions that SHOULD NOT generate alerts
+		\item Uses known legitimate transactions as test data
+		\item Expected result: 0-10 percent false positive rate for BTL cases
+		\item High false positive rate indicates under-filtering or overly sensitive scenarios
+	\end{itemize}
+	\textbf{Validation Requirements:}
+	\begin{itemize}
+		\item ATL and BTL testing should be performed at least annually
+		\item Material changes trigger interim testing
+		\item Results must be documented and presented to management
+		\item Remediation required for out-of-tolerance results
+	\end{itemize}
+	\redflag{Banks that skip ATL/BTL testing cannot demonstrate scenario effectiveness.}
+\end{frame}
+
+\begin{frame}{D.3.5: Scenario Coverage and Typology Detection}
+	\begin{block}{Ensuring Scenarios Detect Known Money Laundering Typologies}
+		A transaction monitoring system is only effective if its scenarios cover relevant ML/TF typologies.
+	\end{block}
+	\textbf{Required Scenario Coverage by Typology:}
+	\begin{itemize}
+		\item Structuring (Smurfing): Threshold-based alerts for cash deposits just below CTR limit
+		\item Rapid Movement: Funds in and out within short timeframes
+		\item Layering: Multiple transfers through intermediate accounts
+		\item Trade-Based ML: Mismatched invoices, round-dollar trade payments
+		\item Shell Company Activity: Transfers to/from high-risk jurisdictions
+		\item PEP Activity: Large unexplained transfers, complex structures
+		\item NPO/TF Risk: Rapid cash withdrawals, conflict zone activity
+		\item Cybercrime/Ransomware: Payments to known ransomware wallets
+		\item Human Trafficking: Multiple small payments to controller account
+	\end{itemize}
+	\textbf{Scenario Effectiveness Testing:}
+	\begin{itemize}
+		\item Run historical SAR cases through current scenarios
+		\item Calculate capture rate for each typology
+		\item Low capture rate indicates missing scenarios or over-filtering
+		\item Emerging typologies require new scenario development
+	\end{itemize}
+	\redflag{A 77 percent false negative rate on historical SARs is a material deficiency.}
+\end{frame}
+
+\begin{frame}{D.3.6: Model Risk Management for AML Systems}
+	\begin{block}{Model Risk Management (MRM) Framework}
+		AML models, including transaction monitoring and sanctions screening, are subject to model risk management requirements.
+	\end{block}
+	\textbf{Key MRM Components:}
+	\begin{itemize}
+		\item Model Inventory: All models documented with owners, risk ratings
+		\item Model Validation: Independent validation before deployment and periodically thereafter
+		\item Performance Monitoring: Ongoing tracking of precision, recall, false positive rate
+		\item Model Drift Detection: Monitoring for performance degradation over time
+		\item Change Management: Documented approval process for model changes
+		\item Model Governance: Policies, procedures, and oversight
+	\end{itemize}
+	\textbf{Model Validation Requirements:}
+	\begin{itemize}
+		\item Validator must be independent of model development
+		\item Validation must assess conceptual soundness, data quality, outcomes
+		\item Validation report must document findings and recommendations
+		\item Management must respond to validation findings
+	\end{itemize}
+	\redflag{A model that cannot be explained (black box AI) creates significant regulatory risk.}
+\end{frame}
+
+\begin{frame}{D.3.7: Model Drift - Performance Degradation Over Time}
+	\scenario{ML Model Performance Degrades Over 3.5 Years}
+	A bank deployed a machine learning transaction monitoring model in January 2022. The validation report at deployment showed 72 percent precision and 81 percent recall. In June 2025, a validation review finds precision has dropped to 51 percent and recall to 62 percent. During this period, the bank introduced three new payment products, customer transaction volumes increased 180 percent, and criminal typologies shifted from cash structuring to cryptocurrency layering. The model was never recalibrated or retrained after deployment. The compliance director states: "The model was validated at deployment and is still operational."
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} Model drift requires regular recalibration. Models degrade over time.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item Models degrade when customer behavior, products, or typologies change
+		\item 3.5 years without recalibration is a significant gap
+		\item The bank failed to establish model monitoring and refresh cadence
+		\item Annual recalibration or trigger-based retraining is required
+		\item The performance degradation is material and requires immediate remediation
+	\end{enumerate}
+	
+	\trap{Common Distractor: "The model still has recall above 60 percent, which is acceptable performance."}
+	\correct{Correct Answer: The bank must establish model monitoring and refresh processes. Significant performance degradation requires recalibration or model replacement.}
+\end{frame}
+
+\begin{frame}{D.3.8: Explainability - The Black Box AI Problem}
+	\scenario{Bank Deploys Deep Neural Network with No Explainability}
+	A large international bank deploys a deep neural network transaction monitoring model that achieves 89 percent recall and only 3.2 percent false positives - significantly outperforming the prior rules-based system. However, the DNN model is a "black box": compliance analysts cannot determine why a specific transaction was flagged or which features contributed most to the alert. The external auditor rates model governance as "deficient" because analysts cannot explain alert rationales in investigation narratives. The Chief Data Scientist argues that high accuracy justifies the lack of explainability.
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} Explainability is a regulatory requirement for AML models.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item Analysts must understand WHY a transaction was flagged
+		\item SARs based on unexplained model outputs may not withstand legal scrutiny
+		\item Model cannot be validated for bias or errors without explainability
+		\item Regulators require model governance, not just accuracy
+		\item High accuracy does NOT substitute for explainability
+	\end{enumerate}
+	
+	\trap{Common Distractor: "Under the risk-based approach, accuracy is paramount; explainability is secondary."}
+	\correct{Correct Answer: Model explainability enables effective investigations, model validation, regulatory auditability, and customer dispute resolution. An inexplicable model creates unmanaged risk regardless of accuracy metrics.}
+\end{frame}
+
+\begin{frame}{D.3.9: Unsupervised Anomaly Detection - Risks and Benefits}
+	\scenario{Bank Uses Unsupervised Model with 94 Percent False Positive Rate}
+	A bank deploys an unsupervised machine learning model designed to detect anomalous transaction patterns without prior labeling of suspicious activity. The model identifies clusters of transactions that deviate from historical customer behavior and generates alerts for "unusual activity." The model's developers cannot explain why specific transactions are flagged. The model has a 94 percent false positive rate, but the bank continues to use it because it has detected two complex layering schemes that rules-based scenarios missed. The compliance committee approves the model without independent validation because it is "supplemental."
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} Unsupervised models still require validation and governance.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item 94 percent false positive rate is a significant operational burden
+		\item High false positive volume may overwhelm analysts and obscure meaningful alerts
+		\item Independent validation is required regardless of "supplemental" status
+		\item The model's lack of explainability makes validation difficult
+		\item Difficulty does NOT waive the validation requirement
+	\end{enumerate}
+	
+	\trap{Common Distractor: "Unsupervised models are exempt from standard validation requirements."}
+	\correct{Correct Answer: Independent validation is required regardless of whether the model is supplemental or primary. The bank must weigh incremental detection value against operational cost.}
+\end{frame}
+
+% ============================================================
+% SECTION 4: PERIODIC REVIEW AND PERPETUAL KYC
+% ============================================================
+
+\begin{frame}{D.4: Periodic Refresh and Perpetual KYC}
+	\begin{block}{Ongoing Customer Due Diligence}
+		CDD is not a one-time event. Customer information and risk profiles must be kept current.
+	\end{block}
+	\textbf{Periodic Refresh (Traditional Approach):}
+	\begin{itemize}
+		\item Scheduled reviews based on risk tier (e.g., high risk annually, medium risk every 3 years)
+		\item Customer must provide updated documentation
+		\item Labor-intensive and reactive
+		\item Risk of missing changes between reviews
+	\end{itemize}
+	\textbf{Perpetual KYC (Continuous Monitoring):}
+	\begin{itemize}
+		\item Continuous monitoring of customer data and transactions
+		\item Automated alerts when customer information changes
+		\item Real-time adverse media screening
+		\item Trigger-based refresh when risk indicators appear
+		\item AI/ML can prioritize which customers need immediate review
+	\end{itemize}
+	\textbf{Trigger Events Requiring Unscheduled Refresh:}
+	\begin{itemize}
+		\item Change in ownership structure (new UBOs)
+		\item Change in business activity or geography
+		\item Adverse media findings
+		\item PEP designation change
+		\item Unusual transaction patterns
+		\item Law enforcement inquiry
+	\end{itemize}
+	\redflag{Waiting for scheduled refresh after material changes is a control failure.}
+\end{frame}
+
+\begin{frame}{D.4.1: Prioritization of CDD Refresh Using AI}
+	\begin{block}{Risk-Based Prioritization for KYC Refresh}
+		AI/ML can help prioritize which customers need immediate refresh vs. those that can wait.
+	\end{block}
+	\textbf{Factors for AI-Based Prioritization:}
+	\begin{itemize}
+		\item Time since last refresh (older reviews prioritized)
+		\item Risk tier (high-risk customers prioritized)
+		\item Transaction activity volume and velocity
+		\item Changes in customer behavior patterns
+		\item Adverse media hits
+		\item Sanctions or PEP list changes
+		\item Geographic risk changes (e.g., country added to Grey List)
+		\item Product usage changes (e.g., customer started using high-risk products)
+	\end{itemize}
+	\textbf{Benefits of AI Prioritization:}
+	\begin{itemize}
+		\item Resources focused on highest-risk customers
+		\item Reduced manual effort for low-risk customers
+		\item Faster identification of risk changes
+		\item Ability to refresh thousands of customers based on risk scoring
+	\end{itemize}
+	\redflag{Prioritization must be documented and defensible to regulators.}
+\end{frame}
+
+% ============================================================
+% SECTION 5: ADVERSE MEDIA SCREENING
+% ============================================================
+
+\begin{frame}{D.5: Adverse Media Screening Tools}
+	\begin{block}{Adverse Media as a Risk Indicator}
+		Adverse media screening identifies negative information about customers from public sources.
+	\end{block}
+	\textbf{Sources of Adverse Media:}
+	\begin{itemize}
+		\item Government sanctions lists (OFAC, UN, EU, UK HMT)
+		\item Regulatory enforcement actions (SEC, FinCEN, FCA)
+		\item Court records and criminal proceedings
+		\item Investigative journalism (ICIJ, OCCRP)
+		\item Reputable news media (Reuters, Bloomberg, FT)
+		\item Government procurement records (corruption indicators)
+		\item Law enforcement wanted lists (Interpol Red Notices)
+		\item Professional disciplinary actions
+	\end{itemize}
+	\textbf{What is NOT Credible Adverse Media:}
+	\begin{itemize}
+		\item Unverified social media posts
+		\item Anonymous blog posts
+		\item Unmoderated online forums
+		\item Competitor allegations without evidence
+	\end{itemize}
+	\examfocus{Exam tests distinction between credible and non-credible sources.}
+\end{frame}
+
+\begin{frame}{D.5.1: Adverse Media - Actionable Findings Without Conviction}
+	\scenario{CEO Named in Corruption Inquiry - No Conviction}
+	A bank's EDD team discovers through OSINT that a corporate customer's CEO was named (not charged, not convicted) in a foreign parliamentary corruption inquiry 18 months ago. The customer's primary counterparty's director appears on an Interpol Red Notice. The compliance officer argues that because no conviction has occurred, the adverse media is inconclusive and no action is required.
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} Reasonable suspicion, not conviction, is the standard for AML action.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item OSINT findings constitute credible adverse media
+		\item Conviction is NOT required for AML action
+		\item Reasonable suspicion of ML/TF risk is the standard
+		\item Findings require escalation and potential EDD
+		\item Interpol Red Notice alone may justify SAR filing
+	\end{enumerate}
+	
+	\trap{Common Distractor: "No conviction means the adverse media is inconclusive and can be ignored."}
+	\correct{Correct Answer: OSINT findings do not require a conviction to be actionable. Reasonable suspicion, not proof of guilt, is the standard for AML risk assessment.}
+\end{frame}
+
+% ============================================================
+% SECTION 6: NETWORK ANALYSIS AND LINK ANALYSIS
+% ============================================================
+
+\begin{frame}{D.6: Network Analysis Tools}
+	\begin{block}{Network Analysis for Financial Crime Detection}
+		Network analysis tools identify relationships between entities that may indicate criminal networks.
+	\end{block}
+	\textbf{What Network Analysis Detects:}
+	\begin{itemize}
+		\item Common ownership across multiple accounts
+		\item Shared addresses, phone numbers, or IP addresses
+		\item Circular transactions between related parties
+		\item Money mule networks (layered transfers)
+		\item Trade-based ML networks (common counterparties)
+		\item Shell company networks (shared directors, registered agents)
+		\item Human trafficking networks (controller accounts)
+		\item Terrorist financing networks (donor clusters)
+	\end{itemize}
+	\textbf{Visualization Capabilities:}
+	\begin{itemize}
+		\item Node-link diagrams showing entity relationships
+		\item Transaction flow mapping
+		\item Time-series analysis of network evolution
+		\item Centrality analysis (identifying key players)
+		\item Community detection (identifying clusters)
+	\end{itemize}
+	\redflag{Network analysis is particularly effective for detecting layering and money mule networks.}
+\end{frame}
+
+\begin{frame}{D.6.1: Network Analysis Example - Money Mule Detection}
+	\scenario{Network Analysis Reveals Money Mule Ring}
+	A bank's network analysis tool identifies a cluster of 23 accounts with the following characteristics: all accounts were opened within a 48-hour window; all accounts received small P2P transfers (200-500 dollars) from over 100 different external senders; all accounts then aggregated funds and wired to the same offshore shell company; the accounts share common IP addresses (VPN through secrecy haven) and use the same mobile phone number for verification. Individual transaction monitoring did not flag any single account as suspicious because each account's activity appeared isolated.
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} Network analysis detects patterns that individual account monitoring misses.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item Individual account monitoring cannot see cross-account patterns
+		\item Network analysis reveals the coordinated activity across 23 accounts
+		\item The pattern is classic money mule network
+		\item The bank should file SARs on all 23 accounts
+		\item The shared IP addresses and phone numbers are critical indicators
+	\end{enumerate}
+	
+	\trap{Common Distractor: "Individual account monitoring is sufficient; network analysis is optional."}
+	\correct{Correct Answer: Network analysis is essential for detecting coordinated criminal networks that individual account monitoring cannot identify. The pattern requires SAR filing.}
+\end{frame}
+
+% ============================================================
+% SECTION 7: PAYMENT SCREENING (SWIFT, BLOCKCHAIN)
+% ============================================================
+
+\begin{frame}{D.7: Payment Screening - SWIFT and Payment Messages}
+	\begin{block}{Screening Payment Messages}
+		Payment messages contain structured and unstructured data that must be screened for sanctions and AML.
+	\end{block}
+	\textbf{Key Payment Message Types:}
+	\begin{itemize}
+		\item SWIFT MT messages (international wire transfers)
+		\item ISO 20022 (successor to SWIFT MT, richer data)
+		\item ACH (domestic automated clearing house)
+		\item Fedwire (US real-time gross settlement)
+		\item CHIPS (US clearing house interbank payments)
+		\item SEPA (eurozone payments)
+	\end{itemize}
+	\textbf{SWIFT MT Fields Requiring Screening:}
+	\begin{itemize}
+		\item Field 50: Ordering Customer (originator name and address)
+		\item Field 52: Ordering Institution (originating bank)
+		\item Field 56: Intermediary Institution (correspondent bank)
+		\item Field 57: Account With Institution (beneficiary bank)
+		\item Field 59: Beneficiary Customer (beneficiary name and address)
+		\item Field 70: Remittance Information (payment purpose - free text)
+	\end{itemize}
+	\redflag{Free text fields (Field 70) are often used to evade screening with misspellings or coded language.}
+\end{frame}
+
+\begin{frame}{D.7.1: Blockchain Transaction Screening}
+	\begin{block}{Screening Blockchain Transactions}
+		Virtual Asset Service Providers (VASPs) must screen blockchain transactions for sanctions and illicit activity.
+	\end{block}
+	\textbf{Blockchain Screening Capabilities:}
+	\begin{itemize}
+		\item Address screening against OFAC SDN list (crypto wallet addresses)
+		\item Transaction tracing through blockchain explorers
+		\item Risk scoring of counterparty wallets
+		\item Travel Rule compliance (originator/beneficiary information)
+		\item Mixer/tumbler detection
+		\item Privacy coin conversion detection
+		\item Cross-chain bridge monitoring
+	\end{itemize}
+	\textbf{Key Blockchain Analytics Tools:}
+	\begin{itemize}
+		\item Chainalysis: Comprehensive blockchain analysis
+		\item Elliptic: Risk scoring and sanctions screening
+		\item CipherTrace: Transaction monitoring and tracing
+		\item TRM Labs: Real-time risk assessment
+	\end{itemize}
+	\textbf{Risks in Blockchain Transactions:}
+	\begin{itemize}
+		\item Privacy coins (Monero, Zcash) obscure transaction trails
+		\item Mixers and tumblers break the audit trail
+		\item Cross-chain bridges move value between blockchains
+		\item Decentralized exchanges have no KYC
+	\end{itemize}
+	\redflag{Transactions involving privacy coins, mixers, or cross-chain bridges require EDD.}
+\end{frame}
+
+\begin{frame}{D.7.2: FATF Travel Rule for Virtual Assets}
+	\begin{block}{Travel Rule Requirements for VASPs}
+		Under FATF Recommendation 16 (updated for virtual assets), VASPs must share originator and beneficiary information.
+	\end{block}
+	\textbf{Required Information for Transfers Above Threshold (typically 1,000 USD/EUR):}
+	\begin{itemize}
+		\item Originator's full name
+		\item Originator's account number (wallet address or account reference)
+		\item Originator's address, national ID number, or date of birth (at least one)
+		\item Beneficiary's full name
+		\item Beneficiary's account number (wallet address)
+	\end{itemize}
+	\textbf{Receiving VASP Obligations:}
+	\begin{itemize}
+		\item Must obtain required information from sending VASP
+		\item Must take action if information not provided (request, delay, enhanced scrutiny)
+		\item Cannot accept transfers without required information
+		\item May need to file SAR if information cannot be obtained
+	\end{itemize}
+	\redflag{Receiving VASP cannot simply ignore missing originator data.}
+\end{frame}
+
+\begin{frame}{D.7.3: Travel Rule Compliance Failure}
+	\scenario{VASP Receives Transfer with No Originator Information}
+	A registered VASP receives a transfer of 4.2 Bitcoin (approximately \$180,000) from another VASP with no originator or beneficiary information attached. The receiving VASP's compliance officer argues that because the customer has already passed KYC, the missing originator data is the sending VASP's problem. The customer states the funds are a personal Bitcoin investment.
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} Receiving VASP obligations under the Travel Rule.
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item The receiving VASP has an obligation to obtain required information
+		\item Missing information requires follow-up action
+		\item Actions may include: requesting information from sending VASP, delaying transaction, enhanced scrutiny
+		\item SAR filing may be required if information cannot be obtained
+		\item Customer's KYC at receiving VASP does NOT substitute for originator data
+	\end{enumerate}
+	
+	\trap{Common Distractor: "The Travel Rule imposes obligations only on the originating VASP."}
+	\correct{Correct Answer: The receiving VASP has an obligation to obtain originator and beneficiary information. If not provided, the receiving VASP must take follow-up action, including enhanced scrutiny and potential SAR filing.}
+\end{frame}
+
+% ============================================================
+% SECTION 8: INVESTIGATION TOOLS AND AUTOMATION
+% ============================================================
+
+\begin{frame}{D.8: Investigation Tools and Automation}
+	\begin{block}{Tools to Support AML Investigators}
+		Modern investigation platforms automate many aspects of case management and analysis.
+	\end{block}
+	\textbf{Key Investigation Tool Capabilities:}
+	\begin{itemize}
+		\item Case Management: Workflow for alert review, investigation, SAR filing
+		\item Link Analysis: Visualizing relationships between entities
+		\item Transaction Visualization: Graphical display of fund flows
+		\item Timeline Analysis: Chronological view of customer activity
+		\item Document Management: Storage of investigation notes and evidence
+		\item SAR Generation: Automated population of SAR forms from case data
+		\item Audit Trail: Complete record of investigation actions
+		\item Collaboration Tools: Notes, tasks, assignments for team members
+	\end{itemize}
+	\textbf{Automation Opportunities:}
+	\begin{itemize}
+		\item Automated data aggregation from multiple sources
+		\item Automated sanctions and PEP screening
+		\item Automated adverse media ingestion
+		\item Automated SAR form population
+		\item Automated closure of low-risk alerts (with validation)
+		\item Automated assignment of alerts to investigators (round-robin or skills-based)
+	\end{itemize}
+	\redflag{Automation should augment, not replace, investigator judgment.}
+\end{frame}
+
+\begin{frame}{D.8.1: Open Source Intelligence (OSINT) Tools}
+	\begin{block}{OSINT for AML Investigations}
+		Open source intelligence uses publicly available information to corroborate or refute suspicion.
+	\end{block}
+	\textbf{Credible OSINT Sources for AML:}
+	\begin{itemize}
+		\item Official government gazettes and sanctions lists
+		\item Corporate registries and beneficial ownership databases
+		\item Court records and legal filings
+		\item Reputable investigative journalism (ICIJ, OCCRP, Bellingcat)
+		\item Regulatory enforcement databases (SEC, FinCEN, FCA)
+		\item Law enforcement wanted lists (Interpol, FBI, Europol)
+		\item Professional licensing boards (disciplinary actions)
+		\item Business information databases (Dun   Bradstreet, LexisNexis)
+	\end{itemize}
+	\textbf{Sources NOT Credible for AML:}
+	\begin{itemize}
+		\item Unverified social media posts
+		\item Anonymous blogs or forums
+		\item Competitor allegations without evidence
+		\item Unmoderated comment sections
+		\item Personal websites with no attribution
+	\end{itemize}
+	\redflag{Investigators must distinguish between credible and non-credible sources.}
+\end{frame}
+
+% ============================================================
+% SECTION 9: PRIVACY AND DATA PROTECTION
+% ============================================================
+
+\begin{frame}{D.9: Technologies for Privacy and Data Protection}
+	\begin{block}{Navigating AML and Privacy Requirements}
+		AML obligations require data collection and sharing; privacy laws restrict it. Technology helps balance these.
+	\end{block}
+	\textbf{Privacy-Enhancing Technologies (PETs) for AML:}
+	\begin{itemize}
+		\item Data Minimization: Collect only what is necessary for AML purposes
+		\item Anonymization: Remove personal identifiers where not needed
+		\item Pseudonymization: Replace identifiers with tokens
+		\item Encryption: Protect data at rest and in transit
+		\item Access Controls: Limit who can view sensitive data
+		\item Audit Logs: Track all access to AML data
+		\item Secure Data Sharing: Encrypted channels for 314(b) and FIU reporting
+	\end{itemize}
+	\textbf{GDPR-Compliant AML Practices:}
+	\begin{itemize}
+		\item Legal basis for processing: AML legal obligation (Article 6)
+		\item Data retention: 5-year minimum for AML records (Article 17 exception)
+		\item Data subject rights: Right to erasure does NOT apply to AML records
+		\item Data transfers: Allowable for law enforcement cooperation
+		\item Privacy notices: Customers must be informed of AML data processing
+	\end{itemize}
+	\redflag{AML obligations override privacy rights for required data retention.}
+\end{frame}
+
+\begin{frame}{D.9.1: GDPR and AML - Right to Erasure Exception}
+	\scenario{Bank Receives Right to Erasure Request for SAR Customer}
+	A European bank receives a GDPR "right to erasure" request from a customer demanding deletion of all personal data, including KYC documents and transaction records. The customer was the subject of a SAR filed 18 months ago. The Data Privacy Officer argues GDPR requires deletion. The AML Officer argues AML recordkeeping requires retention (minimum 5 years).
+	
+	\vspace{0.1cm}
+	\textbf{What the Exam Tests:} GDPR exception for legal obligations (AML retention).
+	
+	\vspace{0.1cm}
+	\textbf{How to Analyze:}
+	\begin{enumerate}
+		\item GDPR Article 17(3) exempts data retention required by law
+		\item AML recordkeeping (minimum 5 years) is a legal obligation
+		\item The bank can lawfully refuse to delete AML-required records
+		\item SAR confidentiality also prohibits acknowledging the SAR to the customer
+	\end{enumerate}
+	
+	\trap{Common Distractor: "GDPR's right to erasure is absolute and overrides all other laws."}
+	\correct{Correct Answer: AML retention requirements are a legal exception to GDPR erasure rights. The bank may refuse deletion for records it is required to retain.}
+\end{frame}
+
+% ============================================================
+% SECTION 10: SELECTING AND INTEGRATING AML TOOLS
+% ============================================================
+
+\begin{frame}{D.10: Selecting the Best AFC Tool for Your Organization}
+	\begin{block}{Tool Selection Criteria}
+		Choosing the right AML technology requires evaluating multiple factors.
+	\end{block}
+	\textbf{Key Selection Criteria:}
+	\begin{itemize}
+		\item Risk Profile: Does the tool address the institution's specific ML/TF risks?
+		\item Regulatory Requirements: Does the tool meet regulatory expectations?
+		\item Integration Complexity: Can the tool integrate with existing systems?
+		\item Data Requirements: What data does the tool need? Is it available?
+		\item Scalability: Can the tool handle current and projected transaction volume?
+		\item Performance: Alert generation speed, false positive rate, recall rate
+		\item Explainability: Can the tool explain why it flagged transactions?
+		\item Vendor Reputation: Track record with other financial institutions
+		\item Regulatory References: Has the vendor been examined by regulators?
+		\item Cost: Licensing fees, implementation, maintenance, training
+		\item Support: Vendor support quality and responsiveness
+	\end{itemize}
+	\redflag{The cheapest tool is rarely the best choice. Effectiveness must be prioritized.}
+\end{frame}
+
+\begin{frame}{D.10.1: Integration Considerations}
+	\begin{block}{Integrating AML Tools with Existing Systems}
+		Successful AML technology requires seamless integration with core banking and other systems.
+	\end{block}
+	\textbf{Systems That Must Integrate with AML Tools:}
+	\begin{itemize}
+		\item Core Banking System: Customer data, account balances, transaction history
+		\item Payment Systems: Wire transfers, ACH, credit card transactions
+		\item Customer Relationship Management (CRM): Customer contact information
+		\item Sanctions Screening: Real-time and batch screening
+		\item Case Management: Investigation workflow, SAR filing
+		\item Data Warehouse: Historical data for model training and validation
+	\end{itemize}
+	\textbf{Integration Challenges:}
+	\begin{itemize}
+		\item Data format mismatches (different systems use different formats)
+		\item Data latency (delays between transaction and monitoring)
+		\item API availability (some systems lack modern APIs)
+		\item Data quality (poor data in source systems = poor monitoring)
+		\item Version compatibility (upgrades may break integrations)
+	\end{itemize}
+	\textbf{Best Practices:}
+	\begin{itemize}
+		\item Conduct proof of concept before full implementation
+		\item Test data feeds thoroughly before go-live
+		\item Establish reconciliation between source and target
+		\item Document integration architecture and data flows
+	\end{itemize}
+\end{frame}
+
+% ============================================================
+% SECTION 11: OPERATIONAL EFFECTIVENESS AND EFFICIENCY
+% ============================================================
+
+\begin{frame}{D.11: Operational Effectiveness and Efficient Controls}
+	\begin{block}{Balancing Effectiveness and Efficiency}
+		AML controls must be effective first; efficiency is a secondary consideration.
+	\end{block}
+	\textbf{Prioritizing Resources Based on Risk:}
+	\begin{itemize}
+		\item Highest-risk customers, products, and geographies receive most resources
+		\item Low-risk areas receive lighter touch (Simplified Due Diligence where permitted)
+		\item Risk assessment drives resource allocation
+		\item Regular review of risk assessment ensures resources remain aligned
+	\end{itemize}
+	\textbf{Measuring Operational Effectiveness:}
+	\begin{itemize}
+		\item False negative rate (missed suspicious activity) - should be low
+		\item SAR quality (actionable intelligence for law enforcement)
+		\item Investigation timeliness (alerts reviewed within target timeframes)
+		\item Alert-to-SAR conversion rate (meaningful alerts vs. noise)
+		\item Audit findings (fewer findings indicate better controls)
+	\end{itemize}
+	\textbf{Measuring Operational Efficiency:}
+	\begin{itemize}
+		\item Cost per alert reviewed
+		\item Time per investigation
+		\item False positive rate (higher = less efficient)
+		\item Analyst utilization rate
+		\item SAR filing rate relative to peer institutions
+	\end{itemize}
+	\redflag{Efficiency improvements should never come at the cost of effectiveness.}
+\end{frame}
+
+\begin{frame}{D.11.1: Risk-Based Approach to Resource Prioritization}
+	\begin{block}{Using Risk Assessment to Prioritize Investment}
+		The risk-based approach means investing most heavily where risk is highest.
+	\end{block}
+	\textbf{High-Risk Areas Requiring More Investment:}
+	\begin{itemize}
+		\item Correspondent banking (highest risk, highest investment)
+		\item Private banking and wealth management (PEP risk)
+		\item Trade finance (TBML vulnerability)
+		\item Virtual assets (emerging typologies)
+		\item Cross-border payments (jurisdictional risk)
+		\item Cash-intensive businesses (structuring risk)
+	\end{itemize}
+	\textbf{Lower-Risk Areas for Lighter Investment:}
+	\begin{itemize}
+		\item Domestic retail payroll accounts
+		\item Low-balance consumer accounts
+		\item Government benefit disbursement accounts
+		\item Regulated public companies (subject to disclosure)
+	\end{itemize}
+	\textbf{Documentation Requirements:}
+	\begin{itemize}
+		\item Risk assessment must document resource allocation decisions
+		\item Regulators will review whether resources match risk
+		\item Under-investment in high-risk areas is a deficiency
+	\end{itemize}
+	\redflag{Applying the same resources to all customers violates the risk-based approach.}
+\end{frame}
+
+% ============================================================
+% SECTION 12: CONCLUSION AND EXAM REMINDERS
+% ============================================================
+
+\begin{frame}{Domain D Summary: Top 30 Most Tested Concepts}
+	\begin{multicols}{2}
+		\begin{enumerate}
+			\item Silent data failure = monitoring gap
+			\item Reconciliation controls prevent undetected data loss
+			\item Fuzzy logic required for sanctions screening
+			\item False negatives worse than false positives
+			\item Model drift requires regular recalibration
+			\item Explainability required for AI models
+			\item E-KYC requires liveness detection
+			\item Network analysis detects money mule rings
+			\item Travel Rule applies to VASPs (both sending and receiving)
+			\item Adverse media does NOT require conviction
+			\item Data quality is compliance responsibility
+			\item Perpetual KYC > periodic refresh
+			\item Trigger-based refresh required for material changes
+			\item ATL/BTL testing validates scenario effectiveness
+			\item Rules-based + ML hybrid is best practice
+			\item Unsupervised models still require validation
+			\item SWIFT fields requiring screening: 50, 52, 56, 57, 59, 70
+			\item Blockchain analytics required for VASPs
+			\item Privacy coins and mixers require EDD
+			\item Receiving VASP cannot ignore missing Travel Rule data
+			\item GDPR has AML retention exception
+			\item OSINT must use credible sources only
+			\item Tool selection must consider integration and scalability
+			\item Effectiveness prioritized over efficiency
+			\item Risk-based approach drives resource allocation
+			\item Model risk management requires independent validation
+			\item Sanctions screening requires fuzzy logic, not exact matching
+			\item Over-filtering increases false negatives
+			\item Scenario coverage must address all typologies
+			\item Investigation tools require audit trails
+		\end{enumerate}
+	\end{multicols}
+\end{frame}
+
+\begin{frame}{Critical Red Flags - Domain D Quick Reference}
+	\begin{multicols}{2}
+		\begin{itemize}
+			\item 34 percent missing data for 14 months → Data failure
+			\item NULL Customer ID on transactions → Unlinked transactions
+			\item No reconciliation controls → Undetected gaps
+			\item 77 percent false negative rate → Material deficiency
+			\item No recalibration for 3.5 years → Model drift
+			\item Black box AI with no explainability → Governance failure
+			\item Exact-string matching only → Sanctions screening failure
+			\item No liveness detection → Spoofing vulnerability
+			\item No adverse media review → Missed risk indicators
+			\item No network analysis → Missed mule rings
+			\item Missing Travel Rule data accepted → VASP violation
+			\item No ATL/BTL testing → Unvalidated scenarios
+			\item Only annual refresh after material changes → Control gap
+			\item Same onboarding for all customers → RBA violation
+			\item No independent model validation → MRM failure
+		\end{itemize}
+	\end{multicols}
+\end{frame}
+
+\begin{frame}{Exam Day Reminders for Domain D}
+	\begin{itemize}
+		\item Domain D is 20 percent of exam
+		\item Data quality is a COMPLIANCE responsibility, not just IT
+		\item Silent data failures (no error messages) are the most dangerous
+		\item FALSE NEGATIVES are worse than false positives
+		\item Fuzzy logic is REQUIRED for sanctions screening
+		\item ML models require explainability and ongoing validation
+		\item Model drift requires regular recalibration
+		\item Travel Rule applies to BOTH sending and receiving VASPs
+		\item E-KYC without liveness detection can be spoofed
+		\item Adverse media findings do NOT require conviction
+		\item Network analysis detects patterns individual monitoring misses
+		\item GDPR has an AML retention exception (Article 17(3))
+		\item Credible OSINT sources: government, courts, reputable journalism
+		\item Privacy coins and mixers require EDD
+		\item Effectiveness > efficiency (regulator priority)
+		\item Risk-based approach drives resource allocation
+	\end{itemize}
+	\vspace{0.3cm}
+
+\end{frame}
+
+\end{document}
