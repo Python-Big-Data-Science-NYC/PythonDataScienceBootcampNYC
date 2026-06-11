@@ -1085,6 +1085,197 @@
 \end{frame}
 
 % ============================================================
+% MISSING SLIDES FOR DOMAIN D
+% Insert after D.1 (Data Quality) or before D.2 (Onboarding Controls)
+% ============================================================
+
+\begin{frame}{D.1.5: Building a Good Customer Experience (CX)}
+	\begin{block}{Balancing Friction and Risk}
+		Effective AML controls must balance regulatory requirements with customer experience. Too much friction drives customers away or to competitors.
+	\end{block}
+	\textbf{Low-Friction (Good CX) Techniques:}
+	\begin{itemize}
+		\item Digital onboarding with real-time verification (seconds, not days)
+		\item Risk-based friction: EDD only for high-risk customers, SDD for low-risk
+		\item Transparent communication: Explain why information is needed
+		\item Biometric authentication replaces passwords for login
+		\item Mobile-first document upload (scan passport/driver's license)
+	\end{itemize}
+	\textbf{High-Friction (Bad CX) Red Flags (Over-Controlling):}
+	\begin{itemize}
+		\item Requiring in-person branch visit for every account type
+		\item Asking all customers for source-of-wealth documentation
+		\item Repeatedly requesting same documents already provided
+		\item No digital channel for KYC updates
+	\end{itemize}
+	\examfocus{Exam tests ability to apply risk-based friction: low-risk  low friction; high-risk  high friction.}
+\end{frame}
+
+\begin{frame}{D.2.0: Automated/Manual External Data Sources for KYC and Screening}
+	\begin{block}{External Data Sources Overview}
+		Onboarding and screening tools pull data from multiple external sources to verify identity, risk, and sanctions status.
+	\end{block}
+	\textbf{Key External Data Sources and Their Use:}
+	\begin{tabular}{p{0.35\textwidth}|p{0.6\textwidth}}
+		\hline
+		\rowcolor{lightgray}
+		\textbf{Source Type} & \textbf{What It Verifies / AML Use} \\
+		\hline
+		Credit Reference Agencies (Experian, Equifax, TransUnion) & Address history, credit activity, identity verification \\
+		\hline
+		Beneficial Ownership Registers (public/commercial) & Corporate UBO identification (e.g., OpenCorporates, local registries) \\
+		\hline
+		Government Identity Databases & Passport, driver's license, national ID verification (real-time API) \\
+		\hline
+		Sanctions Lists (UN, OFAC, EU, UK HMT) & Mandatory screening for prohibited persons/entities \\
+		\hline
+		PEP Lists (commercial databases) & Identify Politically Exposed Persons (WorldCheck, Refinitiv) \\
+		\hline
+		Adverse Media Databases (aggregated news/regulatory) & Negative news, enforcement actions, court records \\
+		\hline
+		Criminal Records Databases (where legally permitted) & Past convictions relevant to financial crime \\
+		\hline
+		Internal Watch Lists & Bank-specific restricted persons, previous SAR subjects \\
+		\hline
+	\end{tabular}
+	\redflag{No single source is sufficient. Triangulation across multiple sources is required.}
+\end{frame}
+
+\begin{frame}{D.2.7: Customer/Batch Screening for Sanctions - List Management}
+	\begin{block}{Batch Screening vs. Real-Time Screening}
+		Sanctions screening occurs at two different frequencies, each with specific requirements.
+	\end{block}
+	\textbf{Batch Screening (Periodic):}
+	\begin{itemize}
+		\item Screens entire customer database against updated sanctions lists
+		\item Frequency: Typically daily, weekly, or after each sanctions list update
+		\item Detects customers who became sanctioned \textit{after} onboarding
+		\item High volume of false positives requires fuzzy logic
+	\end{itemize}
+	\textbf{Real-Time Screening (Transactional):}
+	\begin{itemize}
+		\item Screens each payment/transaction before processing (holds payment if alert)
+		\item Required for wire transfers, crypto transactions, instant payments
+		\item Must complete screening within milliseconds to avoid payment delays
+	\end{itemize}
+	\textbf{List Management Considerations:}
+	\begin{itemize}
+		\item Sanctions lists change frequently (OFAC updates daily)
+		\item Must maintain audit trail of which list version was used for each screen
+		\item False positive analysis: Document why a match is not a true positive
+		\item Fuzzy logic (not exact matching) is REQUIRED (as covered in D.2.5)
+	\end{itemize}
+	\examfocus{Exam tests the difference: batch = customer database; real-time = transactions.}
+\end{frame}
+
+\begin{frame}{D.5.2: Adverse Media Screening Tools - AI/ML and Workflow}
+	\begin{block}{Adverse Media as a Risk Indicator (Expanded)}
+		Adverse media screening identifies negative information from public sources using automated tools and AI.
+	\end{block}
+	\textbf{How Adverse Media Tools Work:}
+	\begin{itemize}
+		\item Web scraping and API feeds from thousands of sources (news, regulators, courts)
+		\item Natural Language Processing (NLP) to classify sentiment and extract entities
+		\item Entity resolution: Matching "John Smith" from article to customer "J. Smith"
+		\item Risk scoring: Assign severity score (e.g., fraud = 8/10, minor traffic violation = 1/10)
+		\item Ongoing monitoring: Continuous screening, not just at onboarding
+	\end{itemize}
+	\textbf{Actionable Findings (No Conviction Required):}
+	\begin{itemize}
+		\item Naming in a corruption inquiry → Escalate for EDD
+		\item Regulatory fine for AML violations → Reassess relationship
+		\item Indictment (even before conviction) → Consider SAR
+		\item Interpol Red Notice → Immediate SAR filing
+	\end{itemize}
+	\bluenote{FATF expects institutions to screen for adverse media continuously, not just at onboarding.}
+\end{frame}
+
+\begin{frame}{D.8.2: AI/Machine Learning in Investigations - Automation Support}
+	\begin{block}{AI Tools to Support AML Investigators}
+		Beyond alert generation, AI/ML can significantly enhance the investigation workflow.
+	\end{block}
+	\textbf{AI-Powered Investigation Tools:}
+	\begin{itemize}
+		\item Automated data aggregation: Pulls KYC, transactions, sanctions hits, adverse media into single case file (minutes vs. hours)
+		\item Entity resolution: Connects related accounts, addresses, phone numbers across systems
+		\item Risk scoring of alerts: Prioritizes highest-risk alerts for investigator review
+		\item Automated narrative generation: Drafts SAR narratives from structured case data (analyst reviews and edits)
+		\item Link analysis visualization: Automatically maps relationships between entities
+		\item Predictive case closure: Suggests "likely false positive" based on historical patterns (with human validation)
+	\end{itemize}
+	\textbf{Key Exam Distinction:}
+	\begin{itemize}
+		\item AI can AUTOMATE data collection and prioritization
+		\item AI should NOT replace investigator judgment for SAR decisions
+		\item Investigators must always review and validate AI suggestions
+	\end{itemize}
+	\redflag{A SAR filed solely on an AI recommendation without human analysis is a regulatory risk.}
+\end{frame}
+
+\begin{frame}{D.10.2: What to Consider When Choosing the Best AFC Tool}
+	\begin{block}{Tool Selection Criteria (Expanded)}
+		Choosing the right AML technology requires evaluating multiple factors beyond just price.
+	\end{block}
+	\textbf{Comprehensive Selection Framework:}
+	\begin{itemize}
+		\item Risk Alignment: Does the tool address your specific ML/TF risks (e.g., trade finance, crypto, correspondent banking)?
+		\item Regulatory Acceptance: Has the vendor been examined by regulators? Do peer institutions use it?
+		\item Integration Complexity: APIs available? Data format compatibility with core banking system?
+		\item Performance Metrics: Request vendor's false positive rate, recall rate, precision on independent test data
+		\item Explainability: Can the tool explain WHY it flagged a transaction (critical for AI models)?
+		\item Total Cost of Ownership (TCO): License fees + implementation + integration + training + ongoing maintenance
+		\item Vendor Stability: Financial health, support responsiveness, update frequency
+		\item Scalability: Can it handle 2x or 5x current transaction volume without performance degradation?
+	\end{itemize}
+	\examfocus{Cheapest tool is rarely the best. Effectiveness and explainability are paramount.}
+\end{frame}
+
+\begin{frame}{D.10.3: Integration Considerations - Connecting AFC Tools to Core Systems}
+	\begin{block}{Integration Architecture}
+		A tool is only as good as its data feeds. Poor integration = poor detection.
+	\end{block}
+	\textbf{Systems That Must Integrate:}
+	\begin{itemize}
+		\item Core Banking System: Customer master, account balances, transaction history
+		\item Payment Systems: SWIFT, ACH, Fedwire, SEPA, crypto wallets
+		\item CRM: Customer contact info, relationship manager assignments
+		\item Case Management: Workflow integration (alert → case → SAR)
+		\item Data Lake/Warehouse: Historical data for model training and validation
+		\item Sanctions Lists: Real-time API feeds for list updates
+	\end{itemize}
+	\textbf{Integration Risk Points (Exam Scenarios):}
+	\begin{itemize}
+		\item Data format mismatches (CSV vs. JSON vs. XML)
+		\item Data latency (transaction at 9:00 AM, monitoring system sees it at 9:00 PM)
+		\item Silent feed failures (no error message, data just missing)
+		\item API rate limiting (vendor caps queries, transactions queued and delayed)
+	\end{itemize}
+	\redflag{Always require a proof of concept (POC) with your actual data before signing a contract.}
+\end{frame}
+
+\begin{frame}{Domain D - COMPLETE MISSING TOPICS SUMMARY}
+	\begin{block}{Additional Topics Now Covered}
+		The following slides have been added to complement your existing materials:
+	\end{block}
+	\begin{multicols}{2}
+		\begin{itemize}
+			\item Customer Experience (CX) / Friction management
+			\item External data sources for KYC (credit agencies, govt ID, etc.)
+			\item Batch screening vs. real-time screening
+			\item List management for sanctions
+			\item Adverse media AI/ML tools
+			\item AI in investigations (automation support)
+			\item Comprehensive tool selection criteria
+			\item Integration considerations (APIs, latency, feed failures)
+			\item Total Cost of Ownership (TCO)
+			\item Vendor due diligence
+		\end{itemize}
+	\end{multicols}
+	\vspace{0.3cm}
+	\bluenote{These slides ensure full syllabus coverage for Domain D (20\% of CAMS exam).}
+\end{frame}
+
+% ============================================================
 % SECTION 12: CONCLUSION AND EXAM REMINDERS
 % ============================================================
 
