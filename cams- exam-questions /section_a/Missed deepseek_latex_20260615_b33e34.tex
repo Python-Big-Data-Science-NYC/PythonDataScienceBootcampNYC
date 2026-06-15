@@ -1,0 +1,350 @@
+\documentclass[11pt,a4paper]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+
+% ============================================================
+% TINY FONT FOR MAXIMUM CONTENT
+% ============================================================
+\usefonttheme{professionalfonts}
+\setbeamerfont{normal text}{size=\scriptsize}
+\setbeamerfont{itemize/enumerate body}{size=\scriptsize}
+\setbeamerfont{itemize/enumerate subbody}{size=\tiny}
+\setbeamerfont{block body}{size=\scriptsize}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\small}
+\setbeamerfont{title}{size=\normalsize}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\tiny}
+\setbeamerfont{date}{size=\tiny}
+
+\renewcommand{\scriptsize}{\fontsize{6pt}{7pt}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{6.5pt}{8pt}\selectfont}
+
+\newcommand{\redflag}[1]{\textcolor{red}{\textbf{[!] #1}}}
+\newcommand{\greennote}[1]{\textcolor{green!50!black}{\textbf{[Right] #1}}}
+\newcommand{\examfocus}[1]{\textcolor{orange!80!black}{\textbf{[FOCUS] #1}}}
+\newcommand{\trap}[1]{\textcolor{purple}{\textbf{[TRAP] #1}}}
+\newcommand{\correct}[1]{\textcolor{green!50!black}{\textbf{[CORRECT] #1}}}
+\newcommand{\scenario}[1]{\textcolor{blue!70!black}{\textbf{[SCENARIO] #1}}}
+
+\title[CAMS Domain A - Missed Hard Questions]{CAMS Exam: The Missed Hard Questions\\High-Difficulty Concepts from Recent Test-Taker Feedback}
+\author{Based on Post-Exam Reports \& Reddit Feedback}
+\date{}
+
+\setbeamercovered{transparent}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{frametitle continuation}{}
+\setlength{\parskip}{2pt}
+\setlength{\itemsep}{1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\centering
+\tiny Focus: FATF Immediate Outcomes (IOs), Insurance ML, Patriot Act Sections, DeFi Control, Nested Correspondent, and the "Most Correct" Answer Trap
+\end{frame}
+
+% ============================================================
+% SECTION 1: FATF IMMEDIATE OUTCOMES (MISSED IN BOTH FILES)
+% ============================================================
+
+\begin{frame}{FATF Immediate Outcomes (IOs) - MISSING in your slides}
+\begin{block}{What are Immediate Outcomes?}
+FATF measures effectiveness through 11 IOs, NOT just technical compliance. The exam tests scenario-to-IO matching.
+\end{block}
+\begin{tabular}{p{0.35\textwidth}|p{0.60\textwidth}}
+\hline
+\rowcolor{lightgray}
+\textbf{IO Number \& Name} & \textbf{What It Measures / Exam Scenario Example} \\
+\hline
+\textbf{IO.1: ML/TF Risks} & Country understands its risks (e.g., completed NRA) \\
+\hline
+\textbf{IO.2: International Cooperation} & Exchanging info with foreign FIUs; extradition success \\
+\hline
+\textbf{IO.3: Supervision} & FIs supervised and penalized for non-compliance \\
+\hline
+\textbf{IO.4: Preventive Measures} & FIs apply CDD, SARs, record-keeping effectively \\
+\hline
+\textbf{IO.5: Legal Persons \& Arrangements} & BO information available and accurate (lack of registry = failure here) \\
+\hline
+\textbf{IO.6: Financial Intelligence} & FIU produces and disseminates actionable intelligence \\
+\hline
+\textbf{IO.7: ML Investigation \& Prosecution} & ML prosecuted; proceeds confiscated \\
+\hline
+\textbf{IO.8: TF Investigation \& Prosecution} & TF prosecuted; no minimum threshold \\
+\hline
+\textbf{IO.9: Financial Sanctions} & Assets frozen without delay; reporting enforced \\
+\hline
+\textbf{IO.10: Confiscation} & Proceeds and instrumentalities confiscated \\
+\hline
+\textbf{IO.11: NPO Vulnerabilities} & Targeted supervision without disrupting legitimate NPOs \\
+\hline
+\end{tabular}
+\redflag{Exam QUESTION: "Which IO is failing if no BO registry exists?" → IO.5}
+\end{frame}
+
+\begin{frame}{FATF IO Scenario Application}
+\scenario{Country A has excellent ML/TF laws on paper. However, the FIU never shares reports with prosecutors. LE cannot obtain bank records without a 6-month court order. No foreign MLAT requests have ever been answered.}
+\vspace{0.2cm}
+\textbf{Q: Which FATF Immediate Outcome is MOST deficient?}
+\begin{itemize}
+\item A) IO.1 (Risk Understanding)
+\item B) IO.4 (Preventive Measures)
+\item C) IO.2 (International Cooperation)
+\item D) IO.6 (Financial Intelligence)
+\end{itemize}
+\trap{Distractor: IO.4 seems correct because "preventive measures" includes SARs. But SARs exist; they just aren't used.}
+\correct{Correct Answer: D (IO.6 - Financial Intelligence) because intelligence is not disseminated to LE. Also C (IO.2) is partially correct, but IO.6 is the primary failure.}
+\examfocus{Exam often asks for the MOST deficient IO in a scenario. Know all 11 by name and core function.}
+\end{frame}
+
+% ============================================================
+% SECTION 2: LIFE INSURANCE (UNDER-EMPHASIZED)
+% ============================================================
+
+\begin{frame}{Life Insurance - CDD Triggers \& ML Methods}
+\begin{block}{CDD Triggers (FATF Rec. 12)}
+CDD applies to life insurance policies when:
+\begin{itemize}
+\item Annual premium exceeds USD/EUR 10,000
+\item Single premium exceeds USD/EUR 10,000
+\item ANY suspicious transaction regardless of amount
+\end{itemize}
+\redflag{BENEFICIARY CDD: Must identify beneficial owner of a life insurance policy ONCE THE BENEFICIARY IS DESIGNATED (not necessarily at purchase).}
+\end{block}
+\begin{block}{Money Laundering via Life Insurance}
+\textbf{Method 1 - Policy Loan Layering:}
+\begin{enumerate}
+\item Purchase policy with illicit funds (single premium)
+\item Take a policy loan for 80-90\% of cash value
+\item Loan check is "legitimate" - layered funds
+\end{enumerate}
+\textbf{Method 2 - Early Surrender:}
+\begin{enumerate}
+\item Purchase policy with dirty money
+\item Surrender policy after short period (e.g., 6 months)
+\item Receive surrender check minus penalty (the "laundering fee")
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}{Life Insurance Exam Scenario - Policy Loan}
+\scenario{A foreign PEP purchases a \$2.5 million single-premium life insurance policy. Three months later, he takes a \$2.1 million policy loan. The loan proceeds are wired to a real estate closing attorney for a luxury condo purchase. The PEP surrenders the policy one year later, receiving the remaining cash value.}
+\vspace{0.2cm}
+\textbf{Q: Which stage of money laundering is the policy loan?}
+\begin{itemize}
+\item A) Placement
+\item B) Layering
+\item C) Integration
+\item D) Structuring
+\end{itemize}
+\trap{The loan is from a legitimate insurance company, so it appears clean. But the underlying premium was illicit.}
+\correct{Correct Answer: B (Layering). The loan converts the illicit premium into a "legitimate" check from an insurance company, obscuring the origin. The surrender is integration.}
+\redflag{The insurance company must apply EDD to the foreign PEP policyholder AND identify the beneficiary (even if an entity).}
+\end{frame}
+
+% ============================================================
+% SECTION 3: USA PATRIOT ACT SECTIONS (MISSING DETAIL)
+% ============================================================
+
+\begin{frame}{USA PATRIOT Act - Key Sections Tested}
+Test-takers report multiple questions on specific Patriot Act sections. Memorize these:
+\begin{tabular}{p{0.20\textwidth}|p{0.75\textwidth}}
+\hline
+\rowcolor{lightgray}
+\textbf{Section} & \textbf{Key Provision} \\
+\hline
+\textbf{Section 311} & Designate jurisdictions, institutions, or transactions as "primary money laundering concern" → special measures \\
+\hline
+\textbf{Section 312} & Enhanced Due Diligence for correspondent accounts with foreign banks (especially those with shell banks or PEPs) \\
+\hline
+\textbf{Section 313} & \textbf{PROHIBITS} U.S. banks from maintaining correspondent accounts for foreign shell banks (no physical presence, not affiliated with regulated bank) \\
+\hline
+\textbf{Section 314(a)} & LE can request information from FIs; FIs must search records and respond \\
+\hline
+\textbf{Section 314(b)} | \textbf{ALLOWS information sharing between FIs} (safe harbor from liability) \\
+\hline
+\textbf{Section 319(b)} | Requires respondent banks to identify BOs; U.S. courts can order forfeiture of funds in correspondent accounts \\
+\hline
+\textbf{Section 326} & Customer Identification Program (CIP) requirements \\
+\hline
+\textbf{Section 352} & Mandatory AML compliance programs \\
+\hline
+\textbf{Section 5318(h)} & Due diligence for foreign correspondent accounts \\
+\hline
+\end{tabular}
+\redflag{Sections 313 (shell bank prohibition) and 314(b) (FI-to-FI sharing) are frequently tested.}
+\end{frame}
+
+\begin{frame}{Patriot Act Section 314(b) - Exam Scenario}
+\scenario{Bank A suspects a customer is using multiple accounts across Bank B, Bank C, and Bank D to layer funds. Bank A wants to ask the other banks if they have seen similar activity.}
+\vspace{0.2cm}
+\textbf{Q: Under the USA Patriot Act, what allows Bank A to share information with Bank B?}
+\begin{itemize}
+\item A) Section 311
+\item B) Section 313
+\item C) Section 314(a)
+\item D) Section 314(b)
+\end{itemize}
+\trap{Section 314(a) is for law enforcement requests, not voluntary FI sharing.}
+\correct{Correct Answer: D (Section 314(b)). This section provides a safe harbor for FIs to share information regarding suspected ML/TF. Both parties must file SARs.}
+\examfocus{314(a) = LE to FI. 314(b) = FI to FI.}
+\end{frame}
+
+% ============================================================
+% SECTION 4: DeFi AND VASP CONTROL (ADVANCED)
+% ============================================================
+
+\begin{frame}{DeFi Protocol - Who is a VASP? (FATF Guidance)}
+\begin{block}{The "Control or Influence" Test}
+A person or entity that maintains \textbf{control or sufficient influence} over a DeFi protocol may be considered a VASP subject to AML obligations.
+\vspace{0.2cm}
+\textbf{Indicators of Control:}
+\begin{itemize}
+\item Owns >50\% of governance tokens (can unilaterally pass proposals)
+\item Ability to upgrade smart contract code
+\item Controls admin keys or multi-signature keys
+\item Receives fees or revenue from protocol operations
+\item Markets the protocol to users
+\end{itemize}
+\end{block}
+\scenario{A software developer creates a DEX. He retains 68\% of governance tokens and holds the only admin key that can pause the contract. He does not collect fees directly.}
+\vspace{0.1cm}
+\textbf{Q: Is he a VASP under FATF guidance?}
+\trap{He doesn't collect fees - but that's irrelevant.}
+\correct{Correct Answer: YES. He has control via tokens and admin key. He must register and implement AML/CFT controls.}
+\end{frame}
+
+% ============================================================
+% SECTION 5: NESTED CORRESPONDENT (EXPANDED)
+% ============================================================
+
+\begin{frame}{Nested Correspondent Accounts - The Complete Risk}
+\begin{block}{Definition}
+A "nested" account is when a respondent bank allows \textbf{its own downstream correspondent banks or third-party clients} to route transactions through the respondent's account at the correspondent bank, WITHOUT the correspondent's knowledge or consent.
+\end{block}
+\begin{tabular}{p{0.30\textwidth}|p{0.65\textwidth}}
+\hline
+\rowcolor{lightgray}
+\textbf{Risk} & \textbf{Why It Matters} \\
+\hline
+Loss of visibility & Correspondent cannot see true originator/beneficiary \\
+\hline
+Sanctions evasion & Downstream party may be sanctioned entity \\
+\hline
+PEP exposure & Downstream party may be PEP with no EDD \\
+\hline
+TBML & Nested structure perfect for trade-based layering \\
+\hline
+Regulatory violation & Correspondent's CDD is effectively useless \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\redflag{If a correspondent discovers undisclosed nesting, it must file a SAR, send an RFI, and consider termination. The respondent bank may be violating its own AML program.}
+\end{frame}
+
+% ============================================================
+% SECTION 6: "MOST CORRECT" ANSWER TRAP
+% ============================================================
+
+\begin{frame}{The "Most Correct" Answer - CAMS Question Structure}
+\begin{block}{Why This is the 1 Complaint}
+Many CAMS questions present \textbf{two or three factually correct answers}. You must select the \textbf{BEST} or \textbf{MOST} correct based on FATF standards, not just what makes sense from experience.
+\end{block}
+\scenario{A bank identifies a foreign PEP customer with unexplained wealth. The bank has already performed EDD but cannot verify the source of wealth. The relationship manager wants to close the account.}
+\vspace{0.2cm}
+\textbf{Q: What is the bank's MOST appropriate action?}
+\begin{itemize}
+\item A) Close the account immediately
+\item B) File a SAR and close the account
+\item C) File a SAR, continue monitoring, and seek senior management approval to maintain or exit
+\item D) Ignore the issue since EDD was already performed
+\end{itemize}
+\trap{Both B and C are partially correct (SAR filing is required). But immediate closure without approval may violate tipping-off.}
+\correct{Correct Answer: C. Under FATF standards, exit should be risk-based and coordinated. Senior management must approve. SAR is mandatory regardless.}
+\examfocus{Read for words like "most," "primary," "best," "first." These signal a "most correct" question.}
+\end{frame}
+
+% ============================================================
+% SECTION 7: ADDITIONAL MISSED CONCEPTS
+% ============================================================
+
+\begin{frame}{Wolfsberg Group, Basel, Egmont - Specific Functions}
+\begin{block}{Not Just "What They Are" - Specific Exam Angles}
+Test-takers report questions on \textbf{specific secondary functions} of these bodies, not just primary missions.
+\end{block}
+\begin{tabular}{p{0.25\textwidth}|p{0.70\textwidth}}
+\hline
+\rowcolor{lightgray}
+\textbf{Body} & \textbf{Exam-Tested Detail} \\
+\hline
+\textbf{Wolfsberg Group} & \textbf{NOT a regulator}. Association of 13 global banks. Produces \textbf{correspondent banking due diligence questionnaires} (CDDQs) and AML principles for private banking. \\
+\hline
+\textbf{Basel Committee} & Sets banking supervision standards (Basel III). Its \textbf{CDD paper} (1998) was foundational for KYC. Tests on history, not just capital rules. \\
+\hline
+\textbf{Egmont Group} & Network of FIUs. Facilitates \textbf{secure information exchange} between FIUs. NOT an investigative body. Exam tests: Egmont does NOT investigate; domestic FIUs do. \\
+\hline
+\end{tabular}
+\redflag{QUESTION: "Which body produces the standard correspondent banking due diligence questionnaire?" → Wolfsberg Group.}
+\end{frame}
+
+\begin{frame}{Dual-Use Goods \& Proliferation Financing}
+\begin{block}{Definition}
+Dual-use goods are items that have legitimate civilian applications but can also be used in weapons of mass destruction (WMD) programs.
+\end{block}
+\textbf{Exam Red Flags:}
+\begin{itemize}
+\item Sale of dual-use goods to sanctioned countries (North Korea, Iran)
+\item Transactions involving UNSC Resolution 1540 (non-proliferation)
+\item Customer is a trading company with no apparent use for precision bearings, specialized valves, or aerospace-grade aluminum
+\item Shipping routing through intermediary countries known for transshipment
+\end{itemize}
+\scenario{A small trading company orders \$2M in precision ball bearings rated for 10,000+ RPM. The buyer has never ordered industrial goods before. The destination is a front company in a country under UNSC sanctions for WMD programs.}
+\vspace{0.1cm}
+\textbf{Q: This is most indicative of?}
+\correct{Correct Answer: Proliferation financing. The bank should file a SAR and block the transaction if sanctions apply.}
+\end{frame}
+
+\begin{frame}{Summary: Top 10 Missed Hard Questions Concepts}
+\begin{enumerate}
+\item \textbf{FATF IOs} (IO.1-IO.11): Know scenarios that map to each IO (especially IO.5, IO.6, IO.2)
+\item \textbf{Life Insurance ML}: Policy loan = layering. CDD applies at \$10k premium or upon beneficiary designation
+\item \textbf{Patriot Act Sections}: 311, 312, 313, 314(a), 314(b), 319(b), 326
+\item \textbf{DeFi VASP Status}: >50\% governance tokens OR admin key = likely VASP
+\item \textbf{Nested Correspondent}: Undisclosed nesting = SAR + RFI + potential termination
+\item \textbf{"Most Correct" Questions}: Two correct answers; choose the one most aligned with FATF standards
+\item \textbf{Wolfsberg Group}: Produces correspondent banking CDD questionnaires (not a regulator)
+\item \textbf{Egmont Group}: Information exchange between FIUs; does NOT investigate
+\item \textbf{Proliferation Financing}: Dual-use goods to sanctioned entities
+\item \textbf{De-risking vs. Risk-Based Approach}: Blanket termination is NOT preferred; targeted exit is.
+\end{enumerate}
+\greennote{These concepts are consistently reported as "surprise" questions on recent CAMS exams. Master them to move from passing to confident.}
+\end{frame}
+
+\begin{frame}{Final Exam Day Reminders - From Recent Passers}
+\begin{itemize}
+\item \textbf{Time pressure is real}: 120 questions, 3.5 hours. Many questions require selecting 2-3 answers. Flag and move on.
+\item \textbf{Version 6 vs. Version 7}: If taking V7, expect MORE on FATF IOs, less on pure memorization of recommendation numbers.
+\item \textbf{Practice exams are EASIER than real exam}: Do not be overconfident from 90\% on ACAMS mock.
+\item \textbf{Discord/ExamTopics}: Helpful but some answers are wrong. Verify against the study guide.
+\item \textbf{Read the GLOSSARY}: Test-takers report the glossary saved them on obscure term questions.
+\item \textbf{Insurance and Patriot Act}: Two areas that surprise experienced AML professionals.
+\item \textbf{You can pass with 2-3 months of study while working full time.}
+\end{itemize}
+\vspace{0.5cm}
+\centering
+\greennote{Good luck - you've covered the hard parts now!}
+\end{frame}
+
+\end{document}
