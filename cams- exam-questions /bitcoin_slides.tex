@@ -1,0 +1,686 @@
+\documentclass[11pt,a4paper]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+
+% ============================================================
+% PROFESSIONAL FONT SETTINGS (VERY SMALL FOR DETAILED SLIDES)
+% ============================================================
+\usefonttheme{professionalfonts}
+
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamerfont{itemize/enumerate body}{size=\tiny}
+\setbeamerfont{itemize/enumerate subbody}{size=\tiny}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\small}
+\setbeamerfont{title}{size=\small}
+\setbeamerfont{subtitle}{size=\footnotesize}
+\setbeamerfont{author}{size=\tiny}
+\setbeamerfont{date}{size=\tiny}
+
+\setlength{\leftmargini}{0.3em}
+\setlength{\leftmarginii}{0.3em}
+\setlength{\labelsep}{0.1em}
+\setlength{\itemsep}{0.02em}
+\setlength{\parskip}{0.02em}
+
+\newcommand{\redflag}[1]{\textcolor{red}{\textbf{[!] #1}}}
+\newcommand{\greennote}[1]{\textcolor{green!50!black}{\textbf{[CORRECT] #1}}}
+\newcommand{\examfocus}[1]{\textcolor{orange!80!black}{\textbf{[FOCUS] #1}}}
+\newcommand{\trap}[1]{\textcolor{purple}{\textbf{[TRAP] #1}}}
+\newcommand{\keyterm}[1]{\textcolor{red!80!black}{\textbf{[KEY] #1}}}
+\newcommand{\expert}[1]{\textcolor{blue!70!black}{\textbf{[EXPERT ANALYSIS] #1}}}
+
+\title[CAMS Crypto AML]{CAMS Exam Preparation}
+\subtitle{Bitcoin \& Cryptocurrency AML/CFT - Dealer Level Deep Dive}
+\author{Professional Explanations | VASPs | DeFi | Privacy Coins | Blockchain Forensics}
+\date{}
+
+\setbeamercolor{title}{fg=white,bg=blue!70!black}
+\setbeamercolor{frametitle}{fg=white,bg=blue!70!black}
+\setbeamertemplate{navigation symbols}{}
+
+\begin{document}
+	
+	% TITLE SLIDE
+	\begin{frame}
+		\titlepage
+		\centering
+		\tiny 30 Crypto AML Topics | Detailed Expert Explanations on Each Slide
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 1 - VASP DEFINITION
+	% ============================================================
+	\begin{frame}{1. Virtual Asset Service Providers (VASPs) - FATF Definition}
+		\tiny
+		\keyterm{What is a VASP?} The Financial Action Task Force (FATF) defines a VASP as any natural or legal person who conducts any of the following activities for or on behalf of another person: exchange between virtual assets and fiat currency; exchange between one or more forms of virtual assets; transfer of virtual assets; safekeeping or administration of virtual assets or instruments enabling control; participation in and provision of financial services related to issuer offer or sale of virtual assets. This definition captures centralized exchanges (like Coinbase, Binance), custodial wallet providers, OTC desks, and even some DeFi platforms that maintain administrative control.
+		
+		\vspace{0.1cm}
+		\examfocus{VASPs must register with financial intelligence units in every jurisdiction where they operate. They must conduct Customer Due Diligence (CDD) including identifying beneficial owners, monitor transactions continuously, file Suspicious Activity Reports (SARs), and comply with the Travel Rule (FATF Recommendation 16) which requires sharing originator and beneficiary information for transfers above threshold.}
+		
+		\vspace{0.1cm}
+		\trap{The most dangerous trap is assuming “decentralized platforms are never VASPs.” If a platform has any control—admin keys, fee collection, governance voting power, or the ability to freeze assets—FATF considers it a VASP.}
+		
+		\vspace{0.1cm}
+		\redflag{An unregistered VASP operating in your jurisdiction is a massive red flag. It is likely engaging in illegal activity, evading taxes, and facilitating money laundering. Any transaction involving an unregistered VASP should trigger enhanced due diligence and potentially a SAR.}
+		
+		\vspace{0.1cm}
+		\expert{From a dealer's perspective: Always verify VASP registration status before accepting funds. Use the jurisdiction's financial regulator website. Unregistered VASPs are the number one channel for illicit crypto flow. If a client refuses to tell you which VASPs they use, that is itself a red flag.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 2 - TRAVEL RULE
+	% ============================================================
+	\begin{frame}{2. Travel Rule (FATF Recommendation 16)}
+		\tiny
+		\keyterm{What is the Travel Rule?} FATF Recommendation 16 requires that for virtual asset transfers above a threshold (typically USD/EUR 1,000), the originating VASP must collect, verify, and share with the beneficiary VASP specific information about both parties. The required data includes: originator's name, originator's account number (wallet address), originator's address or national ID number or customer identification number, beneficiary's name, and beneficiary's account number (wallet address). This mirrors the requirements for traditional wire transfers under the Bank Secrecy Act.
+		
+		\vspace{0.1cm}
+		\examfocus{The beneficiary VASP must have risk-based procedures in place to detect missing or incomplete originator information. If the Travel Rule data is missing, the beneficiary VASP should either reject the transaction or file a SAR. FATF expects VASPs to use technological solutions like the Travel Rule Protocol (TRP) or IVMS 101 data standard to exchange this information securely.}
+		
+		\vspace{0.1cm}
+		\trap{A common and dangerous trap is believing “the Travel Rule only applies to fiat wire transfers.” This is completely false. FATF explicitly extended the Travel Rule to virtual assets in 2019. Many VASPs have been fined for non-compliance.}
+		
+		\vspace{0.1cm}
+		\redflag{A VASP that never requests or sends Travel Rule data is demonstrating a systemic AML control failure. This VASP cannot know who its counterparties are, cannot screen against sanctions lists properly, and is effectively operating a money laundering platform. Any relationship with such a VASP should be terminated.}
+		
+		\vspace{0.1cm}
+		\expert{In practice, when a client receives crypto from a VASP that provides no Travel Rule information, you must treat that transaction as higher risk. Document the missing data. If it happens repeatedly from the same VASP, consider that VASP non-compliant and file a SAR. The absence of Travel Rule data is often the first indicator of a problematic counterparty.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 3 - PRIVACY COINS
+	% ============================================================
+	\begin{frame}{3. Anonymity-Enhanced Cryptocurrencies (Privacy Coins)}
+		\tiny
+		\keyterm{What are privacy coins?} Privacy coins are cryptocurrencies specifically designed to obscure transaction details that are normally public on standard blockchains like Bitcoin or Ethereum. The most prominent examples are Monero (XMR), which uses ring signatures, stealth addresses, and RingCT to hide sender, receiver, and amount; Zcash (ZEC) which offers shielded transactions using zero-knowledge proofs (zk-SNARKs); Dash with its PrivateSend feature; and Grin/Beam which implement the Mimblewimble protocol. Unlike Bitcoin where anyone can view any transaction forever, privacy coins make blockchain tracing effectively impossible.
+		
+		\vspace{0.1cm}
+		\examfocus{The core exam focus is that privacy coins eliminate the transparency that makes blockchain forensics possible. When a client uses Monero, you cannot trace where the funds came from or where they went. This is precisely why criminals use them—for ransomware payments, darknet market purchases, and general money laundering. Regulated VASPs increasingly delist privacy coins entirely because they cannot meet their AML obligations.}
+		
+		\vspace{0.1cm}
+		\trap{The trap argument is “privacy coins are legitimate for privacy protection.” While theoretically true—some individuals do value financial privacy—the overwhelming real-world usage of privacy coins is for illicit activity. Law enforcement and financial intelligence units treat privacy coin usage as presumptively suspicious.}
+		
+		\vspace{0.1cm}
+		\redflag{If a client uses privacy coins (especially Monero) and refuses to explain the source of those funds before and after conversion, this is a mandatory EDD trigger. If the client cannot provide a verifiable audit trail from a regulated VASP, file a SAR. Many AML programs treat any Monero transaction as automatically reportable.}
+		
+		\vspace{0.1cm}
+		\expert{Dealer-level approach: I ask every crypto client directly: “Do you use Monero or any other privacy coin?” If yes, I require complete documentation showing the source of fiat used to purchase the Monero, the wallet addresses, and any conversion back to Bitcoin or fiat. If the client refuses or claims they “lost the records,” I exit the relationship immediately. Privacy coins are not worth the regulatory risk.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 4 - CRYPTO MIXERS / TUMBLERS
+	% ============================================================
+	\begin{frame}{4. Crypto Mixers / Tumblers}
+		\tiny
+		\keyterm{How do mixers work?} Crypto mixers (also called tumblers) are services that pool cryptocurrency from multiple users simultaneously, then redistribute outputs to different addresses after a delay. The core mechanism is simple: you deposit Bitcoin into a mixing pool. The mixer combines your Bitcoin with Bitcoin from many other users. After a random delay, the mixer sends you back Bitcoin from a different address, but not the same Bitcoin you deposited. This breaks the transaction trail on the blockchain. The mixer takes a fee (typically 1-3\%) for this service. Some mixers, like Tornado Cash, are smart contract-based on Ethereum and are non-custodial.
+		
+		\vspace{0.1cm}
+		\examfocus{The exam emphasizes that using a mixer is itself a red flag because it demonstrates intent to obscure the origin of funds. There is no legitimate business purpose for using a mixer that cannot be achieved through other means. The US Treasury's OFAC has sanctioned Tornado Cash, making any interaction with it illegal for US persons. Other mixers like ChipMixer, Blender.io have also been sanctioned.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “mixers can have legitimate privacy uses.” In theory, someone might want to prevent their employer from seeing their spending. In practice, blockchain forensics firms have documented that over 90\% of mixer usage is associated with illicit activity including ransomware, darknet markets, theft, and sanctions evasion. Regulators do not accept the privacy justification.}
+		
+		\vspace{0.1cm}
+		\redflag{Any deposit from a known mixer address is a high-risk red flag requiring immediate SAR filing. Any withdrawal to a mixer address indicates layering—the client is actively trying to hide the destination of funds. This is also SAR-worthy. Some AML policies require termination of any client who uses a mixer, even once.}
+		
+		\vspace{0.1cm}
+		\expert{Blockchain forensics tools like Chainalysis flag mixer-related addresses. In my practice, any mixer touch—even a small test transaction—results in an immediate SAR. I also require the client to explain in writing why they used the mixer. I have never received a satisfactory explanation. Mixer usage is usually the point where I exit a client relationship entirely because the regulatory liability is too high.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 5 - DeFi RISKS
+	% ============================================================
+	\begin{frame}{5. Decentralized Finance (DeFi) Risks}
+		\tiny
+		\keyterm{What is DeFi?} Decentralized Finance (DeFi) refers to blockchain-based financial protocols that operate without centralized intermediaries. Key protocols include Aave and Compound for lending and borrowing, Uniswap and Curve for swapping tokens, Lido for liquid staking, and various yield farming aggregators. Unlike centralized exchanges, DeFi protocols typically have no KYC requirements—anyone with a wallet can interact with them. The protocol executes automatically via smart contracts.
+		
+		\vspace{0.1cm}
+		\examfocus{Criminals use DeFi extensively for layering. A typical money laundering pattern: dirty crypto → swap on Uniswap to a different token → lend that token on Aave → borrow a different asset → send through a cross-chain bridge to another blockchain → deposit into a new DeFi protocol → eventually cash out at a compliant VASP. Each step adds another layer of obfuscation. The exam focuses on identifying this pattern and understanding that DeFi protocols are not subject to AML regulation in most jurisdictions.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “DeFi is transparent because all transactions are on the blockchain.” This is true but misleading. While you can see that Wallet A interacted with Uniswap, you do not know who owns Wallet A. The transparency is pseudonymous, not identified. Without CDD at the protocol level, DeFi is a black box for ownership.}
+		
+		\vspace{0.1cm}
+		\redflag{A client who refuses to provide DeFi transaction history or wallet addresses is a serious red flag. A client who engages in complex, multi-step DeFi interactions (swap→lend→borrow→bridge→swap) without a clear economic explanation is likely layering money. This requires EDD and potentially a SAR.}
+		
+		\vspace{0.1cm}
+		\expert{My practice requires clients to provide read-only access or exported transaction history for every DeFi wallet they control. I look for patterns: value moving through 3 or more protocols without increasing in value (or with losses) is almost certainly layering. Legitimate investors usually have a simple strategy—buy, hold, maybe stake. Complex multi-protocol movements are criminal. I ask: “What economic benefit do you get from this complex path?” If they cannot answer clearly, I file a SAR.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 6 - CROSS-CHAIN BRIDGES
+	% ============================================================
+	\begin{frame}{6. Cross-Chain Bridges \& Chain Hopping}
+		\tiny
+		\keyterm{What are cross-chain bridges?} Bridges are protocols that allow transferring value from one blockchain to another. For example, the Wormhole bridge moves value between Solana and Ethereum; the Avalanche Bridge moves value between Ethereum and Avalanche; the Multichain bridge supports many chains. When you use a bridge, you deposit asset A on Chain 1, and the bridge issues a wrapped version of that asset (or a native asset) on Chain 2. The original asset is locked in the bridge contract.
+		
+		\vspace{0.1cm}
+		\examfocus{Chain hopping—moving value across multiple bridges and blockchains—is a powerful layering technique. Each hop breaks the transaction trail because the original blockchain shows a deposit to a bridge contract (which looks like any other transaction), and the destination blockchain shows a withdrawal from the bridge (which looks like any other incoming transaction). Connecting the two requires analyzing both blockchains and knowing which bridge transaction pairs. Criminals use chain hopping specifically to defeat blockchain forensics.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “blockchain is immutable and fully traceable so there is no risk.” This is naive. While each individual blockchain is traceable, cross-chain movements require sophisticated forensics to link. Many bridges do not share transaction data between chains. A criminal who hops through 5 chains on 5 different bridges creates a tracing nightmare.}
+		
+		\vspace{0.1cm}
+		\redflag{Rapid chain hopping across multiple bridges without economic purpose (e.g., going from Ethereum to BSC to Solana to Polygon to Arbitrum and back to Ethereum without any trade) is almost certainly layering. The pattern of using bridges that are known to have weak AML controls (some bridges have no KYC at all) is an additional red flag.}
+		
+		\vspace{0.1cm}
+		\expert{When I see chain hopping, I use blockchain forensics tools to attempt to follow the flow. If the tool cannot trace it (often the case after 2-3 hops), I inform the client that the source of funds cannot be verified. If the client cannot provide alternative documentation (like exchange withdrawal records before the hops), I file a SAR. Legitimate users rarely need to cross more than one bridge.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 7 - NFTs AND MONEY LAUNDERING
+	% ============================================================
+	\begin{frame}{7. Non-Fungible Tokens (NFTs) \& Money Laundering}
+		\tiny
+		\keyterm{How are NFTs used for money laundering?} Non-fungible tokens represent unique digital assets—art, collectibles, in-game items, even real estate titles. Unlike fungible crypto (where one Bitcoin equals another Bitcoin), each NFT has unique characteristics and subjective value. Criminals exploit this subjectivity in three primary ways. First, wash trading: the same wallet or colluding wallets buy and sell the same NFT repeatedly to create fake transaction volume or generate artificial price history. Second, inflated sales: a criminal creates an NFT, lists it for an extremely high price (e.g., \$1 million), and then uses dirty money to buy it from themselves through a different wallet they control. The NFT is worthless, but the criminal now has a “legitimate” sale record. Third, data embedding: criminals embed illicit content (links to child exploitation material, stolen data, malware) directly into NFT metadata.
+		
+		\vspace{0.1cm}
+		\examfocus{Rapid NFT purchase at an inflated price followed by resale at a significant loss is a classic layering pattern. The loss (e.g., buying for \$100,000, selling for \$70,000) is the laundering cost—criminals accept losses to clean money. Wash trading is also a red flag because it artificially manipulates value with no economic purpose.}
+		
+		\vspace{0.1cm}
+		\trap{“NFTs are just art, not financial instruments.” This trap argument ignores that NFTs are bought, sold, and traded on marketplaces that convert crypto to fiat. FATF guidance explicitly states that NFTs can be virtual assets if used for payment or investment purposes. Regulators are increasingly treating high-value NFTs as subject to AML rules.}
+		
+		\vspace{0.1cm}
+		\redflag{The same wallet or linked wallets buying and selling the same NFT repeatedly (wash trading) is suspicious. An NFT purchased at a price far above comparable NFTs (e.g., a generic pixel art NFT selling for \$500,000 when similar ones sell for \$500) without explanation is a red flag. NFT flipping (buying and selling within hours or days) with consistent losses is also suspicious.}
+		
+		\vspace{0.1cm}
+		\expert{I treat NFT transactions like high-value art transactions. I ask for the marketplace used, the specific NFT collection, and the rationale for the price. If a client claims an NFT is worth \$500,000, I require third-party valuation or evidence of prior sales at that level. If they cannot provide it, I assume the transaction is inflated. Wash trading is an automatic SAR.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 8 - UNHOSTED WALLETS
+	% ============================================================
+	\begin{frame}{8. Unhosted Wallets (Self-Custody)}
+		\tiny
+		\keyterm{What is an unhosted wallet?} An unhosted wallet (also called self-custody or non-custodial wallet) is a cryptocurrency wallet where the user controls the private keys directly. No third party holds the funds. Examples include MetaMask (browser extension), Ledger and Trezor hardware wallets, Electrum (Bitcoin desktop wallet), Wasabi (privacy-focused), and mobile wallets like Trust Wallet. The opposite is a hosted wallet where a VASP like Coinbase controls the keys. Unhosted wallets are not subject to direct AML regulation because there is no service provider.
+		
+		\vspace{0.1cm}
+		\examfocus{FATF Recommendation 16 applies to transactions involving unhosted wallets if the VASP can identify the counterparty. Many jurisdictions now require VASPs to collect counterparty information for unhosted wallet transactions above a threshold. The core exam point is that unhosted wallets increase AML risk because the VASP cannot perform CDD on the wallet owner. Increased monitoring is required.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “VASPs have no obligations for unhosted wallet transactions.” This is incorrect. VASPs must apply risk-based measures. They cannot simply ignore unhosted wallet transactions. Some VASPs refuse to send to unhosted wallets above certain amounts without additional verification.}
+		
+		\vspace{0.1cm}
+		\redflag{A client who consistently uses unhosted wallets to receive funds and then immediately sends those funds to a mixer or privacy coin is demonstrating a clear layering pattern. A client who refuses to prove control of an unhosted wallet (via a signed message from that wallet) is hiding something. Large value consistently stored in unhosted wallets with no explanation is also a red flag.}
+		
+		\vspace{0.1cm}
+		\expert{My standard practice: I require clients to provide proof of ownership for any unhosted wallet they use. This means signing a specific message with the wallet's private key that includes my challenge phrase. I also require a full transaction history export from the wallet. If the wallet cannot export history (some mobile wallets are limited), I treat that as a deficiency. Clients who refuse wallet proof are terminated. There is no legitimate reason to refuse.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 9 - CRYPTO ATMS / BTMS
+	% ============================================================
+	\begin{frame}{9. Crypto ATMs (BTMs)}
+		\tiny
+		\keyterm{How do crypto ATMs work?} Crypto ATMs, also called Bitcoin ATMs or BTMs, are physical kiosks that allow users to exchange cash for cryptocurrency (placement) or cryptocurrency for cash (integration). The user inserts cash, scans their wallet QR code, and the BTM sends crypto to that wallet. For cash-out, the user sends crypto to the BTM's wallet and receives cash. KYC requirements vary dramatically by operator and jurisdiction—some BTMs require government ID and facial recognition; others allow transactions up to \$500 or \$1,000 with only a phone number.
+		
+		\vspace{0.1cm}
+		\examfocus{Crypto ATMs are frequently used for placement because they convert physical cash (which can be from illegal activities) into crypto that can be moved anywhere in the world. They are also used for structuring (smurfing): criminals make multiple deposits just below KYC thresholds at multiple BTMs. The exam focuses on identifying structuring patterns and understanding that many BTMs have weak or non-existent AML programs.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is assuming “crypto ATMs are regulated like banks.” Most crypto ATMs are regulated as money service businesses (MSBs) in theory, but enforcement is weak. Many BTMs operate without proper registration. The compliance culture at BTM operators is often poor.}
+		
+		\vspace{0.1cm}
+		\redflag{Cash deposits at multiple BTMs just under reporting thresholds (e.g., \$499 multiple times) is structuring and should trigger a SAR. The same wallet address receiving from multiple different BTMs over a short period is a red flag. A client who cannot name which BTMs they use or claims to use “many different ones” without explanation is suspicious.}
+		
+		\vspace{0.1cm}
+		\expert{When a client claims their crypto came from a BTM, I ask for receipts. Every legitimate BTM provides a receipt or transaction ID. I then check the BTM operator's registration status. If the BTM is unregistered, the transaction is automatically high risk. I also look at the pattern: lumpy cash deposits (e.g., \$490, \$485, \$510) near thresholds is structuring. I have filed many SARs on BTM patterns.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 10 - LIGHTNING NETWORK
+	% ============================================================
+	\begin{frame}{10. Lightning Network \& Layer 2 Risks}
+		\tiny
+		\keyterm{What is the Lightning Network?} The Lightning Network is a second-layer protocol built on top of Bitcoin. It enables near-instant, low-fee transactions by moving most transactions off the main Bitcoin blockchain. Users open payment channels by depositing Bitcoin into a multi-signature address (recorded on-chain). Once the channel is open, they can send unlimited payments back and forth almost instantly, updating channel balances without recording each payment on the blockchain. Only the final channel balance (when the channel is closed) is recorded on-chain. This means intermediate payments are invisible to blockchain analysis.
+		
+		\vspace{0.1cm}
+		\examfocus{The core risk is that Lightning payments are not publicly traceable. A criminal can send Bitcoin through multiple Lightning hops, and no permanent record exists of the payment path. Only the channel open and channel close transactions appear on-chain. This creates a layering opportunity without the normal blockchain footprint. The exam tests your understanding that Layer 2 solutions reduce transparency.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “the Lightning Network is fully traceable because it's based on Bitcoin.” This is false. While channel opens/closes are traceable, the thousands of payments inside a channel are not. A criminal could open a channel with clean Bitcoin, receive dirty Bitcoin through Lightning within the channel, then close the channel and withdraw clean-looking Bitcoin. The on-chain record would show only the original deposit and the final withdrawal, not the intermediate dirty payment.}
+		
+		\vspace{0.1cm}
+		\redflag{Large value routinely moving through Lightning with no business explanation is a red flag. A client who uses Lightning but cannot provide channel information or explain who their channel peers are is suspect. Multiple rapid channel opens and closes (within hours) suggests layering.}
+		
+		\vspace{0.1cm}
+		\expert{When a client uses Lightning, I require a full list of channel opens and closes (which are on-chain) plus an explanation of the volume of payments through each channel. I also ask for the identities of channel peers (to the extent known). Legitimate businesses that use Lightning (e.g., for micropayments) can usually explain their pattern. Criminals cannot because they are using the opacity to layer. If the client refuses to explain, I file a SAR.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 11 - STABLECOIN RISKS
+	% ============================================================
+	\begin{frame}{11. Stablecoin Risks}
+		\tiny
+		\keyterm{What are stablecoins?} Stablecoins are cryptocurrencies designed to maintain a stable value relative to an external asset, usually the US dollar. Major examples include USDC (issued by Circle), USDT (issued by Tether), DAI (decentralized and algorithmic, issued by MakerDAO), and BUSD (issued by Paxos, now being phased out). Unlike volatile cryptocurrencies like Bitcoin, stablecoins hold their value, making them useful for storing value during the layering process.
+		
+		\vspace{0.1cm}
+		\examfocus{Criminals frequently convert volatile crypto (like Bitcoin) into stablecoins to preserve value while moving funds through multiple wallets. The stablecoin acts as a stable store of value during the layering phase. The exam focuses on identifying rapid crypto → stablecoin → different crypto → different stablecoin cycles as layering. Also important: some stablecoins have freeze capabilities (USDC, BUSD) while others do not (DAI).}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “stablecoins are low risk because they are pegged 1:1 to the dollar.” The peg does not affect money laundering risk at all. A dollar is a dollar whether it's volatile or not. Stablecoins facilitate ML just like any other crypto. In fact, their stability makes them more useful for criminals who want to preserve value while layering.}
+		
+		\vspace{0.1cm}
+		\redflag{A rapid pattern of crypto → stablecoin → different crypto → different stablecoin (especially non-freezable DAI) is classic layering. A client who exclusively uses DAI or other non-freezable stablecoins should be asked why they avoid freezable ones. Large stablecoin holdings with no explanation of source are a red flag.}
+		
+		\vspace{0.1cm}
+		\expert{In my analysis, I pay close attention to which stablecoins a client uses. Clients who use only USDC (freezable) are lower risk because law enforcement can freeze assets if needed. Clients who use DAI exclusively are higher risk—they are specifically choosing a stablecoin that cannot be frozen. I ask directly: “Why don't you use USDC?” A legitimate investor might say “I prefer decentralization.” A criminal will often become defensive or refuse to answer. I note that in my file.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 12 - SANCTIONS EVASION
+	% ============================================================
+	\begin{frame}{12. Sanctions Evasion Using Crypto}
+		\tiny
+		\keyterm{Who uses crypto for sanctions evasion?} Sanctioned entities including North Korea (DPRK), Russia, Iran, designated terrorist organizations (e.g., Hamas, ISIS), and ransomware groups all use cryptocurrency to bypass international financial sanctions. Traditional banking is cut off for these entities, but crypto offers an alternative. North Korea's Lazarus Group is particularly sophisticated, stealing hundreds of millions in crypto and laundering it through mixers, DeFi, and cross-chain bridges.
+		
+		\vspace{0.1cm}
+		\examfocus{The exam tests your knowledge of evasion methods: mixers (to break the trail), privacy coins (especially Monero for North Korea), DeFi protocols (no KYC), cross-chain bridges (to hop between blockchains), P2P trading (direct cash-for-crypto), and unregistered VASPs. You must also know that OFAC sanctions specific crypto addresses, and VASPs are required to screen against the SDN list.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “crypto addresses cannot be sanctioned.” This is false. OFAC has sanctioned hundreds of crypto addresses, including those associated with Tornado Cash (mixer), Lazarus Group, and ransomware variants. Transactions with these addresses are prohibited.}
+		
+		\vspace{0.1cm}
+		\redflag{Any transaction touching a sanctioned address—even indirectly through a mixer or bridge—requires an immediate SAR and potential blocking. If your client receives crypto that can be traced back to a sanctioned address, you have a problem. Even if the client claims ignorance, you must report.}
+		
+		\vspace{0.1cm}
+		\expert{Sanctions evasion is the highest risk category. I use blockchain forensics on every incoming crypto transaction to screen for sanctioned address exposure. I also screen for exposure to known mixers that sanctioned entities use (e.g., Tornado Cash). If I find any exposure, I freeze the funds (if possible) and file a SAR immediately. I also exit the client relationship because the regulatory liability is extreme. No client is worth an OFAC fine.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 13 - BLOCKCHAIN FORENSICS
+	% ============================================================
+	\begin{frame}{13. Blockchain Forensics Tools}
+		\tiny
+		\keyterm{What are blockchain forensics tools?} Blockchain forensics tools are software platforms that analyze blockchain transactions to identify illicit activity, trace fund flows, and assess risk. Leading providers include Chainalysis (the industry standard, used by IRS, FBI, and most major VASPs), Elliptic (used by many banks), CipherTrace (now owned by Mastercard), TRM Labs (strong for sanctions screening), and Merkle Science.
+		
+		\vspace{0.1cm}
+		\examfocus{These tools provide several critical functions: address clustering (identifying which addresses are controlled by the same entity or VASP), risk scoring (assigning a risk score to an address based on its transaction history), exposure detection (flagging connections to mixers, darknet markets, ransomware wallets, or sanctioned addresses), and transaction tracing (following funds through multiple hops and even across different blockchains). The exam expects you to know that VASPs and banks handling crypto must use these tools for EDD.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “blockchain is anonymous, so forensics doesn't work.” This is false. Blockchain is pseudonymous, not anonymous. Forensics tools successfully trace billions of dollars in illicit funds. Law enforcement arrests criminals based on blockchain forensics. The trap understates the power of these tools.}
+		
+		\vspace{0.1cm}
+		\redflag{A VASP or bank that does not use blockchain forensics for crypto EDD is demonstrating a critical AML deficiency. A client who refuses to allow their wallet addresses to be screened by forensics tools is hiding something.}
+		
+		\vspace{0.1cm}
+		\expert{My standard EDD for any crypto client includes a full Chainalysis report on every wallet address they provide. I look for any red flags: exposure to mixers, darknet markets, ransomware, sanctioned addresses, or high-risk VASPs. If the report shows any of these, I require the client to explain. If they cannot provide a compelling explanation, I file a SAR and exit. I also require periodic rescreening—at least every six months.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 14 - CRYPTO ML PATTERN
+	% ============================================================
+	\begin{frame}{14. Common Crypto Money Laundering Pattern}
+		\tiny
+		\keyterm{The three stages with crypto:} Crypto money laundering follows the same three stages as traditional money laundering but with crypto-specific techniques. \textbf{Placement}: Cash enters the crypto system. Methods include cash deposits at crypto ATMs (BTMs), in-person P2P trades for cash, or cash purchases at unregulated VASPs. Some criminals use legitimate VASPs with stolen identities. \textbf{Layering}: The dirty crypto is obfuscated. Methods include sending through mixers/tumblers, swapping through DeFi protocols, using cross-chain bridges to hop between blockchains, converting to privacy coins (Monero), and moving through multiple unhosted wallets. \textbf{Integration}: Clean-appearing crypto is converted back to fiat. Methods include selling on a regulated VASP (now with a clean-looking history), using a crypto debit card, or cashing out through a compliant exchange.
+		
+		\vspace{0.1cm}
+		\examfocus{Criminals accept losses at each layering stage. Mixer fees (1-3\%), DeFi swap slippage, bridge fees, and price movements may all reduce the original value. A criminal willing to lose 20-30\% of the original dirty money to clean the remaining 70-80\% is still profitable. The exam emphasizes that these losses are laundering costs and are themselves red flags.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “crypto is too traceable for effective money laundering.” This is naive. While Bitcoin alone is traceable, sophisticated criminals using mixers, privacy coins, cross-chain bridges, and DeFi can successfully launder funds. Regulators and law enforcement acknowledge that crypto ML is a serious problem.}
+		
+		\vspace{0.1cm}
+		\redflag{A complex multi-step pattern involving 4 or more different protocols (e.g., VASP → unhosted wallet → mixer → DeFi swap → bridge → privacy coin → different VASP) is almost certainly layering. If the client cannot explain the economic purpose of each step, file a SAR.}
+		
+		\vspace{0.1cm}
+		\expert{When I see a complex pattern, I map out each hop and ask the client: “Why did you use this mixer? Why did you bridge to this chain? Why did you convert to Monero and then back?” Legitimate investors have simple answers. Criminals cannot explain or give contradictory answers. I have never seen a legitimate pattern with more than 3 hops. More than 3 hops is an automatic SAR in my practice.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 15 - TRANSACTION RED FLAGS
+	% ============================================================
+	\begin{frame}{15. Crypto Transaction Red Flags (FATF)}
+		\tiny
+		\keyterm{FATF's listed red flags for crypto transactions:} (1) Rapid in-and-out transactions where crypto is received and sent out within hours or days with no apparent economic reason. (2) Multiple wallet hops (e.g., A→B→C→D→E) with small amounts at each hop before consolidating. (3) Structured amounts just under VASP reporting thresholds or Travel Rule thresholds. (4) Geographic mismatch where the user resides in one country but the VASP is registered in a high-risk or uncooperative jurisdiction. (5) Use of known high-risk addresses including mixers, darknet markets, ransomware wallets, or sanctioned addresses. (6) Transactions just below the Travel Rule threshold repeated many times. (7) Unusual patterns like round numbers consistently just under limits.
+		
+		\vspace{0.1cm}
+		\examfocus{The key exam point is that the user's explanation matters. If a client cannot explain the purpose of rapid in-and-out transactions, or says “I was just trading” but cannot show trading profits, that is a red flag. Legitimate traders can explain their strategy and show records.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “crypto is fast; rapid in-and-out is normal trading.” While day trading is legitimate, criminals use the “day trading” excuse to hide layering. The difference is that a legitimate day trader has a strategy, keeps records, and pays taxes. A criminal cannot produce any of these.}
+		
+		\vspace{0.1cm}
+		\redflag{Declared low income (e.g., \$50,000/year) but large crypto purchases (e.g., \$500,000) = potential source of funds issue. Multiple just-below-threshold transactions to the same ultimate wallet. Geographic mismatch without explanation. Refusal to explain trading strategy.}
+		
+		\vspace{0.1cm}
+		\expert{I require all trading clients to provide: exchange statements, wallet transaction history, and a written trading strategy. I also check tax returns—if they claim large crypto gains but did not report them to tax authorities, that is a red flag. I compare their declared income to their crypto purchase volume. If purchases exceed income significantly, I require proof of the source (gift, loan, savings). Without proof, I file a SAR.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 16 - P2P TRADING RISKS
+	% ============================================================
+	\begin{frame}{16. Peer-to-Peer (P2P) Crypto Trading Risks}
+		\tiny
+		\keyterm{What is P2P trading?} Peer-to-peer platforms connect buyers and sellers directly without a centralized exchange holding the funds. Major P2P platforms include LocalBitcoins (historically the largest, now winding down), Paxful, Binance P2P, and various Telegram-based OTC groups. The platform typically escrows the crypto, but the payment is made directly between buyer and seller (bank transfer, cash, gift cards, etc.). KYC requirements vary: some platforms require ID verification; others require only an email address. In-person cash trades are the highest risk because there is no payment record.
+		
+		\vspace{0.1cm}
+		\examfocus{Criminals use P2P trading to exchange cash for crypto with no VASP intermediary. An in-person cash trade leaves no paper trail. A criminal with dirty cash finds a P2P seller, meets in person, hands over cash, and receives crypto. The crypto now appears to have come from a legitimate seller (who may be an unwitting mule). The exam focuses on the lack of traceability and the difficulty of verifying counterparties.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “P2P trading is regulated like centralized exchanges.” Most P2P platforms are regulated as money service businesses in theory, but many operate in regulatory gray areas. Enforcement against individual P2P traders is rare. Even regulated platforms have weaker controls than major exchanges.}
+		
+		\vspace{0.1cm}
+		\redflag{A client who primarily uses P2P trading and refuses to provide counterparty information or trade receipts is high risk. A client who does in-person cash trades without documentation is extremely high risk. A client who uses P2P platforms in high-risk jurisdictions is another red flag.}
+		
+		\vspace{0.1cm}
+		\expert{I treat P2P trading as high risk by default. I require full trade history from the P2P platform, including counterparty usernames and payment methods. If a client does in-person cash trades, I require receipts, photos, or bank statements showing cash withdrawals. Without documentation, I cannot verify source of funds. I have rejected many clients whose only source of crypto was unverifiable P2P trades.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 17 - MINING RISKS
+	% ============================================================
+	\begin{frame}{17. Crypto Mining Risks}
+		\tiny
+		\keyterm{How can mining be used for money laundering?} Cryptocurrency mining involves using computing power to secure a blockchain and being rewarded with new coins. Criminals exploit mining in several ways. First, mining pools (which combine many miners' hash power) can receive illicit funds disguised as mining rewards. A criminal could simply send dirty crypto to a mining pool's payout address, and the pool will send out what look like legitimate mining rewards to other addresses. Second, criminals can rent hash power from cloud mining services using dirty crypto, then receive clean mining rewards. Third, criminals may steal electricity to mine (theft) or use compromised computer systems (cryptojacking).
+		
+		\vspace{0.1cm}
+		\examfocus{The core exam point is that mining rewards are not automatically legitimate just because they come from mining. The examiner wants you to verify the source of hardware, electricity, and pool payouts. A client claiming large mining income must be able to explain their mining operation in detail.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “mining rewards are always legitimate because they come from the protocol.” This ignores that the hash power used to earn those rewards could have been paid for with dirty money, or the criminal could simply be sending dirty funds through a mining pool's payout system.}
+		
+		\vspace{0.1cm}
+		\redflag{A client who receives mining rewards but cannot explain their mining operation (hardware specifications, electricity cost, pool name, location, hashrate) is a red flag. Mining rewards that are inconsistent with the client's claimed hashrate (too high or too low) are suspicious. A client who uses cloud mining services but cannot provide contracts or payment records is another red flag.}
+		
+		\vspace{0.1cm}
+		\expert{For clients claiming mining income, I require: pool payout records for at least 12 months, hardware purchase receipts, electricity bills, and evidence of physical mining location (e.g., photos, lease agreement). I also verify the pool's AML controls if possible. If the client uses cloud mining, I require the contract and payment records. If the client cannot provide these, I do not accept mining as a verified source of funds. Many criminals use “mining” as a cover story because it sounds legitimate. I verify thoroughly.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 18 - ICO / TOKEN SALE RISKS
+	% ============================================================
+	\begin{frame}{18. Initial Coin Offerings (ICOs) / Token Sales}
+		\tiny
+		\keyterm{What are ICOs and token sales?} An Initial Coin Offering (ICO) is a fundraising method where a project sells newly created tokens to investors in exchange for cryptocurrency (usually Ethereum). The investor hopes the token will increase in value. ICOs were popular from 2017-2019. Security Token Offerings (STOs) and Initial DEX Offerings (IDOs) are newer variants. Many ICOs had minimal KYC (sometimes none at all), anonymous teams, and no use-of-proceeds tracking.
+		
+		\vspace{0.1cm}
+		\examfocus{Criminals use ICOs in two ways. First, a criminal creates their own fraudulent ICO (exit scam), collects millions in crypto, and disappears. Second, a criminal invests dirty crypto into an existing ICO (especially one with weak KYC), waits for the token to list on exchanges, and then sells the tokens for clean crypto. The exam focuses on the second method: converting dirty crypto into what appears to be legitimate investment returns.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “regulated ICOs are completely safe.” While regulation reduces risk, even regulated ICOs may have weak AML controls. Criminals target ICOs with the weakest verification. A regulated ICO that only asks for an email address and a selfie is still vulnerable.}
+		
+		\vspace{0.1cm}
+		\redflag{A client who invested in anonymous ICOs (no team, no white paper, no business plan) is high risk. A client who invested in multiple ICOs that all failed or were later revealed as scams is suspicious. A client who cannot provide ICO contribution records (wallet transaction, confirmation email, token distribution) is another red flag.}
+		
+		\vspace{0.1cm}
+		\expert{When a client claims ICO investments as source of wealth, I require: the ICO's name and website, proof of contribution (on-chain transaction), token distribution records, and evidence that the token was subsequently sold on an exchange. I also research the ICO's reputation. If the ICO was anonymous or later charged with fraud, I treat the entire source as unverified. I have rejected many clients whose “ICO millions” came from obviously fraudulent projects.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 19 - NFT GAMING / METAVERSE
+	% ============================================================
+	\begin{frame}{19. NFT Gaming / Metaverse Money Laundering}
+		\tiny
+		\keyterm{How are metaverse and gaming assets used for ML?} Blockchain-based games (Axie Infinity, The Sandbox, Decentraland) allow players to earn in-game assets (characters, land, weapons, skins) that are NFTs that can be sold for cryptocurrency. A criminal can buy a low-value in-game asset for dirty crypto, then “sell” it to themselves (through a different wallet they control) at an inflated price. The sale looks legitimate to an outsider because gaming asset values are subjective and volatile. The criminal now has clean-appearing crypto from the “sale.”
+		
+		\vspace{0.1cm}
+		\examfocus{The key exam point is the subjective valuation of gaming assets. There is no objective price for a virtual sword or a piece of metaverse land. A criminal can claim that a specific NFT is worth \$100,000 because it is “rare,” even if comparable items sell for \$100. Regulators cannot easily challenge this without expert testimony. This creates a significant loophole.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “gaming assets are not real money, so they don't matter.” This ignores that gaming assets are bought and sold for real crypto (ETH, SOL, MATIC), which converts to real fiat. A \$1 million metaverse land sale is real money. The IRS treats NFT sales as taxable events. Regulators are increasingly focused on this area.}
+		
+		\vspace{0.1cm}
+		\redflag{Rapid appreciation of gaming asset value without logical gameplay explanation (e.g., a common sword selling for \$50,000) is a red flag. A client who engages in wash trading of gaming NFTs (buying and selling the same asset to themselves) is another red flag. A client who cannot provide gameplay history or asset transaction records is suspicious.}
+		
+		\vspace{0.1cm}
+		\expert{I treat gaming NFTs like high-value art: I require third-party valuation or evidence of comparable sales. If a client claims a virtual land parcel is worth \$200,000, I ask to see sales of similar parcels. If they cannot provide them, I treat the value as inflated. I also check if the client actually plays the game—gamers have gameplay history, screenshots, and community participation. Criminals usually have none of these.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 20 - GREY LIST / BLACK LIST
+	% ============================================================
+	\begin{frame}{20. FATF Grey List / Black List \& Crypto}
+		\tiny
+		\keyterm{What are FATF Grey and Black Lists?} FATF identifies jurisdictions with strategic AML/CFT deficiencies. The \textbf{Black List} (Call for Action) includes jurisdictions with serious deficiencies that have not made sufficient progress. The \textbf{Grey List} (Increased Monitoring) includes jurisdictions that have committed to addressing deficiencies but are still being monitored. Both lists trigger enhanced due diligence. For crypto specifically, some Grey List countries have weak or no regulation of VASPs, making them attractive to criminals.
+		
+		\vspace{0.1cm}
+		\examfocus{The exam tests your knowledge that crypto does not eliminate jurisdictional risk. Even though crypto is borderless, the VASP a client uses is registered somewhere. If that jurisdiction is on the FATF Grey List, the VASP is higher risk. The client's country of residence also matters—if they reside in a Grey List country, EDD is required.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “crypto is borderless, so jurisdiction doesn't matter.” This is dangerously false. The VASP's jurisdiction determines: which AML regulations apply, whether the VASP is supervised, whether the Travel Rule is enforced, whether sanctions screening is adequate, and whether law enforcement can freeze assets. Jurisdiction matters enormously.}
+		
+		\vspace{0.1cm}
+		\redflag{A client using a VASP registered in a Grey List jurisdiction is a red flag requiring enhanced monitoring. A client residing in a Grey List jurisdiction is also higher risk. A client who refuses to disclose which VASPs they use or which jurisdiction those VASPs are registered in is another red flag.}
+		
+		\vspace{0.1cm}
+		\expert{I maintain a current list of FATF Grey and Black List jurisdictions. Before accepting a client, I verify the registration jurisdiction of every VASP they use. If any VASP is registered in a Grey List jurisdiction, I apply EDD including independent verification of that VASP's AML controls. If the VASP is on the Black List, I refuse to accept any funds from that VASP entirely. No exceptions.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 21 - BANKING VASPS
+	% ============================================================
+	\begin{frame}{21. Cryptocurrency and Correspondent Banking}
+		\tiny
+		\keyterm{Bank relationships with VASPs:} Banks that provide accounts to VASPs (e.g., a crypto exchange's operating account) are engaging in a correspondent-like relationship. The bank must conduct EDD on the VASP. This includes reviewing the VASP's AML program, CDD procedures, transaction monitoring system, Travel Rule compliance, blockchain forensics usage, SAR filing history, independent audit reports, and regulatory registration status.
+		
+		\vspace{0.1cm}
+		\examfocus{The exam emphasizes that the bank's risk does not end at onboarding. The bank must continuously monitor the VASP's transaction volume, types of clients (are there PEPs? sanctioned entities?), and any regulatory actions against the VASP. A VASP that loses its registration or is fined for AML deficiencies is a risk trigger.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “the VASP is regulated, so the bank has low risk.” This ignores that many VASPs have weak AML controls despite being registered. Registration does not equal effective compliance. The bank must independently verify the VASP's controls, not just accept a license.}
+		
+		\vspace{0.1cm}
+		\redflag{A VASP with no independent AML audit in the past 12 months is a red flag. A VASP that refuses to provide client due diligence information (e.g., percentage of PEP clients) is a red flag. A VASP that has been cited by its regulator for AML deficiencies is a serious red flag. A VASP with no blockchain forensics capability is another red flag.}
+		
+		\vspace{0.1cm}
+		\expert{If I were a bank compliance officer, I would only accept VASP clients after a full on-site audit (or remote deep dive). I would require quarterly reporting on SAR filings, Travel Rule compliance rates, and blockchain forensics results. Any major deficiency would trigger an immediate relationship termination. Most banks simply refuse all VASP accounts because the risk is too high. That is a defensible position.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 22 - RANSOMWARE
+	% ============================================================
+	\begin{frame}{22. Ransomware and Cryptocurrency}
+		\tiny
+		\keyterm{How ransomware uses crypto:} Ransomware is malware that encrypts a victim's files and demands payment in cryptocurrency (almost always Bitcoin or Monero) to provide the decryption key. The victim buys crypto (often through a BTM or exchange), sends it to the ransomware's wallet address. The ransomware group then launders the funds through mixers, chain hopping, and DeFi to convert to clean crypto or cash.
+		
+		\vspace{0.1cm}
+		\examfocus{The exam expects you to know that VASPs must screen for ransomware-associated addresses. Blockchain forensics firms maintain lists of known ransomware wallets. OFAC sanctions ransomware addresses. A VASP that processes a transaction to or from a known ransomware address without reporting is at risk of regulatory action.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “only Bitcoin is used for ransomware.” Monero is increasingly common because it is untraceable. Ransomware groups like LockBit, REvil, and Conti have used Monero. Some groups offer discounts for Monero payments.}
+		
+		\vspace{0.1cm}
+		\redflag{Any transaction to or from a known ransomware address is an immediate SAR and potential blocking. Even a small test transaction (e.g., \$10) to a ransomware address is reportable. If a client receives funds that can be traced back to a ransomware address (e.g., through a mixer), that is also SAR-worthy.}
+		
+		\vspace{0.1cm}
+		\expert{Ransomware is a zero-tolerance area. I screen every incoming transaction against ransomware address lists using blockchain forensics. If I find any connection, I freeze the funds (if possible) and file a SAR immediately. I also exit the client relationship. Ransomware is linked to organized crime and state-sponsored groups. No legitimate client should have any connection to ransomware addresses.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 23 - DARKNET MARKETS
+	% ============================================================
+	\begin{frame}{23. Darknet Markets and Crypto}
+		\tiny
+		\keyterm{What are darknet markets?} Darknet markets (also called cryptomarkets) are hidden websites on the Tor network that sell illegal goods and services—drugs, stolen data, counterfeit currency, hacking tools, weapons, and more. They exclusively accept cryptocurrency, historically Bitcoin, now increasingly Monero. Major markets have included Silk Road (closed by FBI), AlphaBay, Hansa, Wall Street Market, and Hydra (Russian-focused, closed by German police). Each market has deposit and withdrawal addresses that blockchain forensics firms track.
+		
+		\vspace{0.1cm}
+		\examfocus{The exam tests your knowledge that any transaction linked to a darknet market is a red flag. Even a small transaction (e.g., \$10) suggests the client was at least browsing or testing the market. Forensic tools can identify darknet market deposit addresses. A VASP that processes darknet-linked transactions without reporting is non-compliant.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “a small transaction to a darknet market could be accidental.” This is highly unlikely. Darknet markets are not websites you stumble upon. They require specific software (Tor), specific URLs (.onion), and often registration. A small test transaction is a common pattern—the user is testing before a larger purchase.}
+		
+		\vspace{0.1cm}
+		\redflag{Any transaction linked to a known darknet market address requires a SAR. This includes deposits to a darknet market (purchasing drugs or illegal goods) and withdrawals from a darknet market (selling illegal goods). There is no legitimate reason to transact with a darknet market.}
+		
+		\vspace{0.1cm}
+		\expert{Darknet market exposure is an automatic SAR and client termination in my practice. I do not accept explanations like “I was researching” or “a friend sent me crypto.” If blockchain forensics shows a darknet market link, I report it. I have never had a client successfully explain away a darknet market transaction. Law enforcement also monitors these addresses. Protect yourself by reporting.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 24 - CRYPTO STRUCTURING
+	% ============================================================
+	\begin{frame}{24. Crypto Structuring / Smurfing}
+		\tiny
+		\keyterm{What is crypto structuring?} Structuring (also called smurfing) is the practice of breaking large transactions into smaller amounts to avoid triggering reporting thresholds or KYC requirements. In crypto, this can take several forms: breaking a large crypto purchase into multiple purchases just below a VASP's KYC threshold (e.g., \$900 multiple times when the VASP requires ID at \$1000); breaking large withdrawals into multiple smaller withdrawals to avoid Travel Rule thresholds (e.g., sending \$900 multiple times when Travel Rule triggers at \$1000); using multiple accounts at the same or different VASPs to stay under thresholds; or using multiple wallet addresses controlled by the same person to receive structured amounts.
+		
+		\vspace{0.1cm}
+		\examfocus{The exam emphasizes that structuring is illegal regardless of the source of funds. Even if the money is legitimate, structuring to avoid reporting is a crime. The pattern—transactions just below a threshold, repeated, from the same ultimate source—is the key identifier.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “crypto has no legal reporting thresholds like cash.” While crypto itself has no cash-like reporting requirements, VASPs have internal thresholds and regulatory obligations. Most VASPs have KYC thresholds (e.g., verify ID at \$1000) and Travel Rule thresholds. Structuring to avoid these is still suspicious and reportable.}
+		
+		\vspace{0.1cm}
+		\redflag{Multiple transactions from the same source just below a threshold (e.g., \$950, \$980, \$990) is structuring. A client using multiple VASPs to make just-below-threshold purchases that sum to a large amount is structuring. Transactions just below the Travel Rule threshold repeated many times to the same ultimate wallet is structuring.}
+		
+		\vspace{0.1cm}
+		\expert{I aggregate all client transactions across all VASPs I know about. If I see a pattern of just-below-threshold transactions that sum to a significant amount, I file a SAR. Legitimate clients do not structure. They either stay under thresholds genuinely or go over and provide the required information. Structuring is criminal behavior by definition.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 25 - NON-COMPLIANT VASPS
+	% ============================================================
+	\begin{frame}{25. Non-Compliant VASPs (Offshore / No KYC)}
+		\tiny
+		\keyterm{What are non-compliant VASPs?} Non-compliant VASPs are cryptocurrency platforms that deliberately operate without AML/CFT controls. They typically have no KYC (or minimal KYC like just an email address), no Travel Rule implementation, no SAR filing, no registration with financial regulators, and no sanctions screening. They often are incorporated in jurisdictions with weak or no crypto regulation (some small island nations, certain offshore centers). Examples include many smaller exchanges, some DEX aggregators that maintain off-chain order books, and unregistered OTC desks.
+		
+		\vspace{0.1cm}
+		\examfocus{FATF explicitly identifies dealing with non-compliant VASPs as a risk indicator. A compliant VASP or bank should avoid transacting with non-compliant VASPs. If a client uses a non-compliant VASP, that client is higher risk because they chose a platform designed to evade AML controls.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “the VASP is licensed in a small country, so it must be compliant.” A license does not guarantee effective AML controls. Some jurisdictions issue licenses with minimal oversight. You must verify actual controls, not just license status. Many “licensed” VASPs have no real AML program.}
+		
+		\vspace{0.1cm}
+		\redflag{A VASP that refuses to identify its beneficial owners is a red flag. A VASP that has no independent audit is a red flag. A VASP that cannot provide Travel Rule data is a red flag. A VASP that has never filed a SAR (in a jurisdiction where SARs are required) is a red flag. Any relationship with such a VASP should be terminated.}
+		
+		\vspace{0.1cm}
+		\expert{I maintain a list of VASPs that I consider high-risk or unacceptable. Before accepting a client, I ask for all VASPs they use. If any VASP is on my unacceptable list, I refuse the client. If a client voluntarily uses a no-KYC VASP, I ask why. There is no good answer. I file a SAR if the client has used a no-KYC VASP for significant value.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 26 - CRYPTO EDD CHECKLIST
+	% ============================================================
+	\begin{frame}{26. Crypto EDD Checklist for Private Banking}
+		\tiny
+		\keyterm{Required elements for crypto EDD:} For any high-net-worth client with crypto activity, enhanced due diligence must include the following. \textbf{Wallet information}: All wallet addresses ever used (including exchange wallets, unhosted wallets, DeFi wallets, hardware wallets, paper wallets). \textbf{Transaction history}: Full transaction history for each wallet for at least 12 months (preferably 24 months). \textbf{Trading explanation}: Written explanation of trading/investment strategy, including average holding periods, use of DeFi, use of mixers or privacy coins (if any). \textbf{Source of crypto funds}: For each significant crypto deposit, the original source (mining, purchase, payment, gift, airdrop) with supporting documentation. \textbf{VASP list}: All VASPs used, with registration jurisdiction and AML controls summary. \textbf{Tax compliance}: Evidence of crypto tax reporting (tax returns showing crypto gains/losses). \textbf{Blockchain forensics}: A forensic report (e.g., Chainalysis) on each wallet showing risk score and exposure to illicit addresses. \textbf{Certification}: Client signed attestation that all wallet addresses and information provided is complete and accurate.
+		
+		\vspace{0.1cm}
+		\examfocus{The exam emphasizes that refusal to provide any of these elements is grounds to reject or exit the relationship. A client who claims “crypto is private” or “my wallet addresses are confidential” is not suitable for a regulated financial institution.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “only crypto-specific information matters.” You must also consider traditional risk factors: PEP status, jurisdiction risk, negative media, unexplained wealth outside crypto. Crypto EDD supplements, not replaces, standard EDD.}
+		
+		\vspace{0.1cm}
+		\redflag{Client refuses to provide wallet addresses. Client refuses to sign blockchain forensics authorization. Client provides incomplete wallet list and then additional wallets are discovered. Client's transaction history shows unexplained gaps. Client's trading explanation is vague or inconsistent. Client has no tax reporting on significant crypto gains.}
+		
+		\vspace{0.1cm}
+		\expert{I use a standard crypto EDD intake form. Clients must complete it in full. I then run blockchain forensics on every wallet. If any wallet has a risk score above my threshold, I require explanation. If the client refuses any item on the form, I do not onboard them. Period. The regulatory risk of crypto clients is too high to accept incomplete information.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 27 - TRAVEL RULE GAPS
+	% ============================================================
+	\begin{frame}{27. Travel Rule Implementation Gaps}
+		\tiny
+		\keyterm{Current Travel Rule challenges:} Despite FATF requirements, Travel Rule implementation is inconsistent across the crypto industry. Major VASPs (Coinbase, Gemini, Kraken) have implemented solutions (e.g., Travel Rule Protocol, TRP, IVMS 101 standard). However, many smaller VASPs have not. Unhosted wallets obviously cannot comply because there is no VASP to send or receive Travel Rule data. VASPs in non-FATF jurisdictions may not comply at all. This creates information gaps.
+		
+		\vspace{0.1cm}
+		\examfocus{When a compliant VASP receives a transaction from a non-compliant VASP with missing originator information, the receiving VASP must apply risk-based procedures. This typically means flagging the transaction for review, attempting to obtain the missing information, and filing a SAR if the information cannot be obtained. The exam focuses on the obligation to act on missing Travel Rule data, not just ignore it.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “Travel Rule is optional until fully implemented.” FATF deadlines have passed. Travel Rule is required now. VASPs that have not implemented it are non-compliant. Transacting with them is higher risk.}
+		
+		\vspace{0.1cm}
+		\redflag{A VASP that never requests Travel Rule information from counterparties is a red flag. A VASP that provides missing originator information without reasonable explanation (e.g., “we don't collect that”) is non-compliant. Repeated receipt of crypto with missing Travel Rule data from the same counterparty VASP is a pattern requiring action.}
+		
+		\vspace{0.1cm}
+		\expert{For every incoming crypto transaction from another VASP, I check Travel Rule data. If it's missing, I log it. If it happens repeatedly from the same counterparty VASP, I file a SAR on that VASP as a potential money laundering concern. I also consider terminating relationships with any VASP that consistently fails to provide Travel Rule data.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 28 - CRYPTO DERIVATIVES
+	% ============================================================
+	\begin{frame}{28. Crypto Derivatives / Futures ML Risks}
+		\tiny
+		\keyterm{How derivatives are used in ML:} Crypto derivatives (futures, perpetual swaps, options) allow trading with leverage. Criminals use derivatives to layer funds or create tax losses. One method: open a large long position and a large short position simultaneously on different platforms (or same platform if allowed). One position will lose money. The criminal can report the losing position as a capital loss on taxes, while the winning position's gain is treated separately. This can offset other gains. Another method: use derivatives to move value without moving the underlying asset—the value change is settled in stablecoins or margin, creating a new transaction record.
+		
+		\vspace{0.1cm}
+		\examfocus{The exam point is that complex derivatives strategies can obscure the economic reality. A client who cannot explain their derivatives strategy—why they opened a particular position, what hedge they were executing—is a red flag. Criminals use complexity as a shield.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “derivatives are regulated futures, so they are lower risk.” Some crypto derivatives platforms are regulated (e.g., CME Bitcoin futures). But many are not. Offshore crypto derivatives platforms often have no KYC, no Travel Rule, and no SAR filing. Even regulated platforms may have weaker AML controls than spot exchanges.}
+		
+		\vspace{0.1cm}
+		\redflag{Large derivatives positions with no economic hedge explanation are a red flag. A client who trades derivatives but cannot explain their strategy or show consistent profits is suspicious. A client who uses unregulated offshore derivatives platforms is another red flag. Pattern of losses that offset other gains (tax-motivated) may also be reportable.}
+		
+		\vspace{0.1cm}
+		\expert{When a client claims derivatives trading, I require platform statements, trade history, and a written strategy explanation. I compare their realized gains/losses to their tax returns. If they report large losses but have no corresponding gains elsewhere, I ask why. Criminals sometimes fabricate losses. I also check the platform's AML controls. Unregulated derivatives platforms are an automatic red flag.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 29 - FREEZABLE VS NON-FREEZABLE
+	% ============================================================
+	\begin{frame}{29. Stablecoin Freeze Capabilities}
+		\tiny
+		\keyterm{Freeze capability differences:} Stablecoin issuers have different abilities to freeze addresses. \textbf{USDC (Circle)}: Fully freezable. Circle can freeze any address if ordered by law enforcement or if the address is connected to sanctioned activity. \textbf{USDT (Tether)}: Selectively freezable. Tether has frozen addresses linked to major hacks and sanctions evasion but is less aggressive than Circle. \textbf{BUSD (Paxos)}: Freezable but being phased out. \textbf{DAI (MakerDAO)}: NOT freezable. DAI is decentralized—no single entity controls the smart contracts. Law enforcement cannot freeze DAI addresses. \textbf{FRAX, Liquity USD}: Also non-freezable.
+		
+		\vspace{0.1cm}
+		\examfocus{Criminals who anticipate asset freezes (e.g., sanctioned entities, those under investigation) will avoid freezable stablecoins. They prefer DAI or other non-freezable options. The exam tests your awareness that preference for non-freezable stablecoins is a risk indicator.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “all stablecoins are the same.” They are not. Freeze capability is a critical difference. A criminal using DAI is actively choosing an asset that law enforcement cannot seize. This is a conscious risk-evasion decision.}
+		
+		\vspace{0.1cm}
+		\redflag{A client who exclusively uses DAI or other non-freezable stablecoins should be asked why. A client who converts freezable stablecoins (USDC) to DAI without explanation is suspicious. Large DAI holdings with no legitimate DeFi participation (e.g., not providing liquidity, not borrowing) is another red flag—why hold DAI instead of USDC?}
+		
+		\vspace{0.1cm}
+		\expert{I ask every client with stablecoin holdings: “Do you use USDC, DAI, or both? Why?” A legitimate DeFi user might say “I use DAI for lending on Maker.” That makes sense. A criminal might say “I don't want anyone to freeze my funds.” Or give a vague answer. I document the response. If I see a pattern of converting USDC to DAI before moving funds, I file a SAR. That is active freeze avoidance.}
+	\end{frame}
+	
+	% ============================================================
+	% SLIDE 30 - CROSS-BORDER CRYPTO WIRES
+	% ============================================================
+	\begin{frame}{30. Crypto and Cross-Border Wire Transfers}
+		\tiny
+		\keyterm{Crypto-to-fiat wires:} When a client withdraws crypto from a VASP and receives fiat in their bank account via wire transfer, that wire is subject to standard wire transfer regulations (Regulation S in the US, FATF Rec. 16 globally). The VASP is the originator; the bank is the beneficiary institution. The VASP must include originator information (client name, address, account number) and beneficiary information (bank account details). The bank must screen this information.
+		
+		\vspace{0.1cm}
+		\examfocus{The exam emphasizes that the bank's obligations do not disappear because the funds came from crypto. The bank must still verify that the wire includes complete originator information. If the VASP sends a wire with missing originator information (e.g., just a reference number), the bank must reject the wire or file a SAR. The bank must also screen the client's name against sanctions lists and PEP lists.}
+		
+		\vspace{0.1cm}
+		\trap{The trap is “crypto wires are anonymous, so banks can't screen.” This is false. A compliant VASP includes the client's real identity in the wire originator information. If a VASP sends anonymous wires, that VASP is non-compliant and the bank should reject all wires from that VASP.}
+		
+		\vspace{0.1cm}
+		\redflag{Incoming wire from a VASP with missing originator information = reject and file SAR. Incoming wire from an unregistered VASP = reject entirely. Incoming wire where the originator name does not match the client's declared identity = investigate. Repeated incoming wires from the same VASP just below reporting thresholds = structuring.}
+		
+		\vspace{0.1cm}
+		\expert{I treat incoming wires from VASPs the same as wires from any other financial institution. I require complete originator information. If any information is missing, I reject the wire. If a VASP repeatedly sends wires with missing information, I block that VASP entirely. I also screen every incoming crypto wire name against sanctions lists. No exceptions.}
+	\end{frame}
+	
+	% ============================================================
+	% SUMMARY SLIDE
+	% ============================================================
+	\begin{frame}{Summary: Professional Dealer Crypto AML Principles}
+		\tiny
+		\keyterm{The 10 most critical principles:}
+		\begin{enumerate}
+			\item \textbf{VASP registration matters.} Only accept crypto from registered, compliant VASPs. Unregistered VASPs are unacceptable.
+			\item \textbf{Privacy coins (Monero) are maximum risk.} Require full documentation or reject.
+			\item \textbf{Mixers = SAR.} Any mixer touch is a mandatory reportable event.
+			\item \textbf{DeFi requires full disclosure.} Clients must provide all wallet addresses and transaction histories.
+			\item \textbf{Cross-chain complexity is layering.} More than 3 hops without economic explanation = SAR.
+			\item \textbf{Blockchain forensics are mandatory.} Run Chainalysis or equivalent on every crypto client.
+			\item \textbf{Travel Rule data must be present.} Missing Travel Rule information is a red flag.
+			\item \textbf{Sanctions evasion is zero tolerance.} Any sanctions exposure = exit client.
+			\item \textbf{Structuring is structuring.} Crypto structuring is still illegal. Report it.
+			\item \textbf{Document everything.} Crypto EDD requires comprehensive documentation. Refusal = exit.
+		\end{enumerate}
+		\vspace{0.3cm}
+		\centering
+		\greennote{Dealer-Level Expertise: Verify, Document, Report, or Reject.}
+		\vspace{0.1cm}
+		\redflag{When in doubt, file a SAR. Crypto AML enforcement is aggressive.}
+	\end{frame}
+	
+\end{document}

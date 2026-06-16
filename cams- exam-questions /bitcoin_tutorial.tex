@@ -1,0 +1,235 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage{xcolor}
+
+\geometry{margin=0.6in, top=0.5in, bottom=0.5in}
+
+\newcommand{\redflag}[1]{\textcolor{red}{\textbf{[!] #1}}}
+\newcommand{\greennote}[1]{\textcolor{green!50!black}{\textbf{[CORRECT] #1}}}
+\newcommand{\examfocus}[1]{\textcolor{orange!80!black}{\textbf{[FOCUS] #1}}}
+\newcommand{\trap}[1]{\textcolor{purple}{\textbf{[TRAP] #1}}}
+\newcommand{\keyterm}[1]{\textcolor{red!80!black}{\textbf{[KEY] #1}}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.1em}
+\setlist{nosep, left=0pt, itemsep=0.05em, parsep=0em, topsep=0em}
+
+\begin{document}
+
+\centering
+{\Large \textbf{CAMS Tutorial: Bitcoin \& Cryptocurrency}} \\
+{\large AML/CFT Risks – VASPs, DeFi, Privacy Coins, Mixers, Blockchain Forensics} \\
+\vspace{0.2cm}
+\rule{\textwidth}{0.5pt}
+\vspace{0.2cm}
+
+\tiny
+\raggedright
+
+\section*{How Cryptocurrency AML Questions Are Framed}
+In the CAMS exam, crypto questions test your ability to identify:
+\begin{itemize}
+\item \textbf{VASP obligations} (registration, KYC, transaction monitoring, SAR filing)
+\item \textbf{Anonymity-enhancing technologies} (privacy coins, mixers, tumblers)
+\item \textbf{DeFi risks} (no centralized KYC, cross-chain bridges, illicit fund flows)
+\item \textbf{Blockchain forensic techniques} (chain analysis, clustering, tracking)
+\item \textbf{Red flags in crypto transactions} (rapid cross-chain movement, layering, unusual patterns)
+\item \textbf{Sanctions evasion using crypto} (mixers, privacy wallets, non-compliant VASPs)
+\item \textbf{Travel Rule compliance} (FATF Rec. 16 – beneficiary/originator info)
+\end{itemize}
+
+\section*{Key Ideas \& Explanations (No Questions)}
+
+\subsection*{1. Virtual Asset Service Providers (VASPs) – FATF Definition}
+\keyterm{VASP includes:} exchanges, custodial wallets, OTC desks, DeFi platforms with control, some NFT marketplaces. \\
+\examfocus{VASPs must register, conduct CDD, monitor transactions, file SARs, and comply with Travel Rule.} \\
+\trap{“Decentralized platforms are never VASPs” – If they have any control, they may be.} \\
+\redflag{Unregistered VASP operating in your jurisdiction = high risk, likely illegal.}
+
+\subsection*{2. Travel Rule (FATF Rec. 16)}
+\keyterm{Crypto-to-crypto transfers above threshold require originator and beneficiary information to be shared between VASPs.} \\
+\examfocus{If a VASP refuses to provide Travel Rule data, it is a red flag.} \\
+\trap{“Travel Rule only applies to fiat wires” – No, applies to virtual assets.} \\
+\redflag{VASP that never requests or sends Travel Rule info = AML control failure.}
+
+\subsection*{3. Anonymity-Enhanced Cryptocurrencies (Privacy Coins)}
+\keyterm{Examples:} Monero (XMR), Zcash (ZEC with shielded transactions), Dash (PrivateSend), Grin. \\
+\examfocus{Privacy coins obscure sender, receiver, and amount – making blockchain tracing impossible.} \\
+\trap{“Privacy coins are legitimate for privacy” – Yes, but they are high risk for ML.} \\
+\redflag{Client using privacy coins + refusing to explain source = EDD and potential SAR. Many VASPs delist privacy coins.}
+
+\subsection*{4. Crypto Mixers / Tumblers}
+\keyterm{Mixers pool and redistribute crypto to break the transaction trail.} \\
+\examfocus{Use of a mixer is itself a red flag – indicates intent to obscure origin.} \\
+\trap{“Mixers can have legitimate privacy uses” – Theoretically yes, but heavily associated with illicit activity.} \\
+\redflag{Deposits from a known mixer address = high risk, SAR recommended.}
+
+\subsection*{5. Decentralized Finance (DeFi) Risks}
+\keyterm{DeFi protocols:} lending, borrowing, swapping without centralized KYC. \\
+\examfocus{Criminals use DeFi to layer funds: swap crypto → lend → borrow different asset → bridge to another chain → cash out at compliant VASP.} \\
+\trap{“DeFi is transparent on blockchain” – Transactions are visible but ownership is anonymous.} \\
+\redflag{Client who refuses to provide DeFi transaction history or wallet addresses = EDD required.}
+
+\subsection*{6. Cross-Chain Bridges \& Chain Hopping}
+\keyterm{Chain hopping:} Bitcoin → Ethereum → Binance Smart Chain → Solana → back to Bitcoin. \\
+\examfocus{Each hop can obscure audit trail. Bridges often have weaker AML controls than major VASPs.} \\
+\trap{“Blockchain is immutable and traceable” – Cross-chain moves break traceability.} \\
+\redflag{Rapid chain hopping across multiple bridges without economic purpose = layering.}
+
+\subsection*{7. Non-Fungible Tokens (NFTs) \& Money Laundering}
+\keyterm{NFT ML techniques:} wash trading (self-sales to create false value), inflated sales (dirty money buys NFT from self), NFT as data carrier (embed illicit content). \\
+\examfocus{Rapid NFT purchase at inflated price followed by resale at loss = layering.} \\
+\trap{“NFTs are art, not financial instruments” – FATF considers them virtual assets in many contexts.} \\
+\redflag{Same wallet buying and selling same NFT repeatedly (wash trading) = suspicious.}
+
+\subsection*{8. Unhosted Wallets (Self-Custody Wallets)}
+\keyterm{Unhosted wallet:} client controls private keys (e.g., MetaMask, Ledger, Electrum). \\
+\examfocus{FATF Recommendation 16 applies to transactions involving unhosted wallets if VASP can identify counterparty. Increased monitoring required.} \\
+\trap{“VASPs have no obligation for unhosted wallet transactions” – They must apply risk-based measures.} \\
+\redflag{Client consistently uses unhosted wallets to receive then immediately sends to mixer = red flag.}
+
+\subsection*{9. Crypto ATMs \/ BTMs}
+\keyterm{Crypto ATMs allow cash-to-crypto and crypto-to-cash with varying KYC levels.} \\
+\examfocus{Low KYC limits (e.g., \$500/day) exploited for structuring.} \\
+\trap{“Crypto ATMs are regulated like banks” – Often poorly regulated.} \\
+\redflag{Cash deposits at multiple BTMs just under reporting thresholds = structuring.}
+
+\subsection*{10. Lightning Network \& Layer 2 Risks}
+\keyterm{Lightning Network:} off-chain Bitcoin transactions – faster, cheaper, less traceable. \\
+\examfocus{Opening/closing channels recorded on-chain but intermediate payments are not.} \\
+\trap{“Lightning is fully traceable” – Only channel opens/closes are on-chain.} \\
+\redflag{Large value routinely moving through Lightning with no business explanation = EDD.}
+
+\subsection*{11. Stablecoin Risks}
+\keyterm{Stablecoins (USDT, USDC, DAI) used for layering because they hold value.} \\
+\examfocus{Criminals convert volatile crypto to stablecoins to preserve value while laundering.} \\
+\trap{“Stablecoins are low risk because they are pegged” – The peg doesn't matter; they facilitate ML.} \\
+\redflag{Rapid crypto → stablecoin → different crypto → stablecoin cycle = layering.}
+
+\subsection*{12. Sanctions Evasion Using Crypto}
+\keyterm{North Korea, Russia, Iran, ransomware groups use crypto to bypass sanctions.} \\
+\examfocus{Use of mixers, privacy coins, non-compliant VASPs, and DeFi to move funds.} \\
+\trap{“Crypto addresses can be sanctioned” – OFAC sanctions addresses. VASPs must screen.} \\
+\redflag{Transaction touching a sanctioned address (even indirectly) = SAR and potential blocking.}
+
+\subsection*{13. Blockchain Forensics Tools}
+\keyterm{Tools:} Chainalysis, Elliptic, CipherTrace, TRM Labs. \\
+\examfocus{These tools cluster addresses, trace fund flows, identify high-risk wallets (mixers, ransomware, darknet markets).} \\
+\trap{“Blockchain is anonymous” – It is pseudonymous, traceable with forensic tools.} \\
+\redflag{VASP that does not use blockchain forensics for EDD is deficient.}
+
+\subsection*{14. Common Crypto Money Laundering Pattern}
+\keyterm{Placement:} Cash → crypto via BTM or unregulated P2P. \\
+\keyterm{Layering:} Crypto → mixer → DeFi swap → cross-chain bridge → privacy coin → new wallet. \\
+\keyterm{Integration:} Swap to USDC → send to regulated VASP → withdraw to bank account. \\
+\examfocus{Losses accepted at layering stages (e.g., fees, slippage) = laundering cost.} \\
+\trap{“Crypto is too traceable for ML” – Sophisticated criminals use multiple hops.} \\
+\redflag{Complex multi-step DeFi + mixer + bridge + privacy coin pattern = SAR.}
+
+\subsection*{15. Red Flags for Crypto Transactions (FATF)}
+\keyterm{Transaction red flags:} rapid in-and-out (same day), multiple wallet hops, structured amounts just under reporting thresholds, geographic mismatch (user in Country A, VASP in Country B), use of known high-risk addresses (mixers, darknet, ransomware). \\
+\examfocus{User cannot explain the business purpose of complex DeFi interactions.} \\
+\trap{“Crypto is fast; rapid in-and-out is normal” – Not without explanation.} \\
+\redflag{Declared low income but large crypto purchases = potential source of funds issue.}
+
+\subsection*{16. Peer-to-Peer (P2P) Crypto Trading Risks}
+\keyterm{P2P platforms connect buyers and sellers directly; platform may have minimal KYC.} \\
+\examfocus{Criminals use P2P to exchange cash for crypto with no VASP intermediary.} \\
+\trap{“P2P trading is regulated like exchanges” – Often unregulated or weakly regulated.} \\
+\redflag{Client who primarily uses P2P and refuses to provide counterparty info = high risk.}
+
+\subsection*{17. Crypto Mining Risks}
+\keyterm{Mining pools can be used to receive illicit funds disguised as mining rewards.} \\
+\examfocus{Criminals may rent hash power to send payments to their own pool.} \\
+\trap{“Mining rewards are always legitimate” – Not if hash power was paid for with dirty money.} \\
+\redflag{Client receiving mining rewards but cannot explain mining operation (hardware, electricity, pool) = red flag.}
+
+\subsection*{18. Initial Coin Offerings (ICOs) \/ Token Sales}
+\keyterm{ICOs historically used for fraud and ML: anonymous teams, no use of proceeds tracking.} \\
+\examfocus{Criminals buy tokens with illicit funds, then sell on secondary market for clean crypto.} \\
+\trap{“Regulated ICOs are safe” – Still higher risk; token may have no liquidity.} \\
+\redflag{Client investing in anonymous ICO with no clear business = EDD required.}
+
+\subsection*{19. NFT Gaming \/ Metaverse Money Laundering}
+\keyterm{In-game assets, land, skins sold for crypto – valuation is subjective.} \\
+\examfocus{Criminals buy low-value asset for dirty crypto, then “sell” to themselves at inflated price.} \\
+\trap{“Gaming assets are not real money” – They convert to crypto/fiat.} \\
+\redflag{Rapid appreciation of gaming asset value without logical explanation = potential ML.}
+
+\subsection*{20. FATF Grey List \/ Black List \& Crypto}
+\keyterm{Countries with weak crypto regulation on FATF Grey List require EDD.} \\
+\examfocus{VASP domiciled in Grey List jurisdiction is higher risk.} \\
+\trap{“Crypto is borderless; jurisdiction doesn't matter” – VASP jurisdiction matters for AML.} \\
+\redflag{Client using VASP registered in Grey List country with weak enforcement = enhanced monitoring.}
+
+\subsection*{21. Cryptocurrency and Correspondent Banking}
+\keyterm{Banks that provide accounts to VASPs must apply EDD.} \\
+\examfocus{Bank must understand VASP's AML controls, transaction monitoring, and Travel Rule compliance.} \\
+\trap{“VASP is regulated, so bank has low risk” – No, banks face reputational and sanctions risk.} \\
+\redflag{VASP with no independent audit, no blockchain forensics, no Travel Rule compliance = bank should terminate relationship.}
+
+\subsection*{22. Ransomware and Cryptocurrency}
+\keyterm{Ransomware payments demanded in crypto (Bitcoin, Monero).} \\
+\examfocus{VASPs must screen for ransomware-associated addresses.} \\
+\trap{“Only Bitcoin is used for ransomware” – Monero is increasingly common.} \\
+\redflag{Transaction to or from known ransomware address = immediate SAR and potential blocking.}
+
+\subsection*{23. Darknet Markets and Crypto}
+\keyterm{Darknet markets (Silk Road, Hydra) exclusively use crypto.} \\
+\examfocus{Blockchain forensics can identify darknet deposit addresses.} \\
+\trap{“Small transaction to darknet is accidental” – Unlikely; SAR still required.} \\
+\redflag{Any transaction linked to darknet market address = SAR.}
+
+\subsection*{24. Crypto Structuring / Smurfing}
+\keyterm{Criminals break large crypto purchases into smaller amounts below VASP KYC thresholds.} \\
+\examfocus{Multiple accounts, multiple VASPs, same ultimate beneficiary.} \\
+\trap{“Crypto has no reporting thresholds” – VASPs have internal thresholds.} \\
+\redflag{Client using multiple VASPs with just-under-limit transactions = structuring.}
+
+\subsection*{25. Non-Compliant VASPs (Offshore / No KYC)}
+\keyterm{Some VASPs deliberately operate with no KYC, no registration, no SAR filing.} \\
+\examfocus{FATF calls these “high-risk VASPs”. Banks must avoid or terminate relationships.} \\
+\trap{“VASP is licensed in a small country, so it's compliant” – Check actual controls.} \\
+\redflag{VASP that refuses to identify UBO or provide Travel Rule data = terminate relationship.}
+
+\subsection*{26. Crypto EDD Checklist for Private Banking}
+\keyterm{For HNW clients with crypto activity, EDD should include:} wallet addresses, transaction history (at least 12 months), explanation of trading strategy, source of crypto funds (mining, purchase, payment), VASPs used, use of mixers/privacy coins, tax treatment. \\
+\examfocus{Refusal to provide wallet addresses or transaction history = grounds to reject or exit relationship.} \\
+\trap{“Crypto is private; bank doesn't need wallet addresses” – False for EDD.} \\
+\redflag{Client who moves crypto through DeFi and refuses to explain = SAR.}
+
+\subsection*{27. Travel Rule Implementation Gaps}
+\keyterm{Many VASPs still do not fully implement Travel Rule (especially for unhosted wallets).} \\
+\examfocus{FATF expects VASPs to use technological solutions (e.g., TRP, IVMS 101).} \\
+\trap{“Travel Rule is optional” – Mandatory for FATF member jurisdictions.} \\
+\redflag{VASP that never requests Travel Rule information from counterparties = AML deficiency.}
+
+\subsection*{28. Crypto Derivatives \/ Futures ML Risks}
+\keyterm{Crypto futures can be used to layer funds without full collateral.} \\
+\examfocus{Complex trading strategies obscure fund origin.} \\
+\trap{“Futures are regulated like spot” – Often less AML scrutiny.} \\
+\redflag{Large futures positions with no economic hedge explanation = EDD required.}
+
+\subsection*{29. Stablecoin Issuer Risks}
+\keyterm{Stablecoin issuers (e.g., Circle, Tether) must have AML programs.} \\
+\examfocus{Issuers can freeze addresses (USDC does). Criminals avoid freeze-prone stablecoins.} \\
+\trap{“All stablecoins are the same” – Freeze capability differs.} \\
+\redflag{Criminal use of non-freezable stablecoin (e.g., DAI) to avoid asset freeze.}
+
+\subsection*{30. Crypto and Cross-Border Wire Transfers}
+\keyterm{Crypto-to-fiat wires from VASPs to banks require standard wire transfer compliance.} \\
+\examfocus{Bank must screen originator/beneficiary info, apply sanctions screening.} \\
+\trap{“Crypto wire is anonymous” – Not when VASP is regulated.} \\
+\redflag{Incoming wire from VASP with missing originator information = reject or file SAR.}
+
+\vspace{0.5cm}
+\rule{\textwidth}{0.5pt}
+\centering
+\greennote{End of Bitcoin \& Cryptocurrency AML Tutorial – Focus on VASP obligations, privacy coins, mixers, DeFi risks, and forensic tools.}
+\end{document}
