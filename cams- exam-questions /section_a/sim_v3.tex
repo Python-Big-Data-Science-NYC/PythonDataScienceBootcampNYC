@@ -1,0 +1,1246 @@
+% !TeX program = lualatex
+\documentclass[12pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{anyfontsize}
+\usepackage{lmodern}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+
+% ====== FONT SIZES ======
+\renewcommand{\tiny}{\fontsize{4}{5}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{5}{6}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{6}{7}\selectfont}
+\renewcommand{\small}{\fontsize{7}{8}\selectfont}
+\renewcommand{\normalsize}{\fontsize{8}{9}\selectfont}
+\renewcommand{\large}{\fontsize{9}{10}\selectfont}
+\renewcommand{\Large}{\fontsize{10}{11}\selectfont}
+\renewcommand{\LARGE}{\fontsize{11}{13}\selectfont}
+\renewcommand{\huge}{\fontsize{12}{14}\selectfont}
+\renewcommand{\Huge}{\fontsize{14}{17}\selectfont}
+
+% ====== COLORS ======
+\definecolor{redcorrect}{RGB}{200,30,30}
+\definecolor{bluecorrect}{RGB}{30,80,200}
+\definecolor{greencheck}{RGB}{0,150,50}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{50,50,50}
+\definecolor{softyellow}{RGB}{255,248,200}
+\definecolor{steppurple}{RGB}{150,50,200}
+\definecolor{deepblue}{RGB}{20,60,150}
+\definecolor{darkred}{RGB}{150,20,20}
+\definecolor{orangewarning}{RGB}{255,140,0}
+\definecolor{correctgreen}{RGB}{0,120,40}
+\definecolor{trapcolor}{RGB}{180,80,0}
+
+\setbeamercolor{title}{fg=white,bg=redcorrect}
+\setbeamercolor{frametitle}{fg=white,bg=redcorrect}
+\setbeamercolor{block title}{fg=white,bg=bluecorrect}
+\setbeamercolor{block body}{fg=darkgray,bg=lightgray}
+\setbeamercolor{normal text}{fg=darkgray}
+\usecolortheme{default}
+
+% ====== CUSTOM COMMANDS ======
+\newcommand{\correct}[1]{\textcolor{greencheck}{\textbf{\checkmark}} #1}
+\newcommand{\keypoint}[1]{\textcolor{deepblue}{\textbf{#1}}}
+\newcommand{\hardconcept}[1]{\textcolor{darkred}{\textbf{#1}}}
+\newcommand{\tipbox}[1]{\fcolorbox{bluecorrect}{softyellow}{\parbox{0.88\textwidth}{\centering #1}}}
+\newcommand{\stepbox}[1]{%
+	\begin{center}
+		\fcolorbox{darkgray}{white}{%
+			\parbox{0.90\textwidth}{\vspace{0.05cm} #1 \vspace{0.05cm}}%
+		}
+	\end{center}
+}
+\newcommand{\wrongbox}[1]{\fcolorbox{redcorrect}{red!10}{\parbox{0.88\textwidth}{\centering \textcolor{redcorrect}{\textbf{$\times$}} #1}}}
+\newcommand{\highlight}[1]{\textcolor{redcorrect}{\textbf{#1}}}
+\newcommand{\bluetext}[1]{\textcolor{bluecorrect}{\textbf{#1}}}
+\newcommand{\trapbox}[1]{\fcolorbox{trapcolor}{orange!8}{\parbox{0.88\textwidth}{\centering \textcolor{trapcolor}{\textbf{EXAM TRAP:}} #1}}}
+\newcommand{\answerbox}[1]{\fcolorbox{correctgreen}{green!8}{\parbox{0.88\textwidth}{\centering \textcolor{correctgreen}{\textbf{\checkmark\ CORRECT:}} #1}}}
+
+\begin{document}
+	
+	% ================================================================
+	% SLIDE 1: TITLE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{0.5cm}
+		{\fontsize{16}{19}\selectfont \textbf{Domain A: Understanding Financial Crime}}\\[0.15cm]
+		{\fontsize{12}{14}\selectfont \textbf{45 Hard Questions --- Corrected \& Explained}}\\[0.3cm]
+		{\fontsize{9}{11}\selectfont \textit{All Factual Errors from Prior Version Fixed}}\\[0.2cm]
+		{\fontsize{8}{10}\selectfont Covers: SAR/STR obligations by entity type $\cdot$ FATF Recommendations $\cdot$ PEP rules $\cdot$ TF vs ML $\cdot$ Sanctions $\cdot$ DNFBPs $\cdot$ VASPs $\cdot$ Gatekeepers}
+		\vspace{0.2cm}
+		\rule{4cm}{0.5pt}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 2: KEY CORRECTIONS FROM PRIOR VERSION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Key Corrections from Prior Version}
+		\scriptsize
+		\begin{block}{\fontsize{8}{10}\selectfont What was wrong and why it matters for CAMS:}
+			\vspace{0.04cm}
+			\scriptsize
+			\begin{itemize}
+				\item \highlight{SAR vs STR --- Who Files?} The prior version said ALL entity types ``file SAR.'' \textbf{WRONG.} In the US, SARs are filed by BSA-defined financial institutions (banks, MSBs, broker-dealers, etc.). DNFBPs (lawyers, real estate agents) in the US have NO BSA SAR obligation. Outside the US, entities file STRs with their national FIU. Terminology and obligation vary by jurisdiction and entity type.
+				\item \highlight{FATF Rec 15 vs 16 for VASPs} The prior version cited ``Rec 16'' as the primary VASP standard. \textbf{WRONG.} VASPs are governed under \textbf{FATF Recommendation 15} (updated 2019 to include virtual assets). Recommendation 16 (Travel Rule) applies to VA transfers --- both apply, but Rec 15 is the foundational framework.
+				\item \highlight{Domestic PEPs --- Risk Level} The prior version stated domestic PEPs present ``lower risk'' as fact and implied standard CDD suffices. \textbf{WRONG.} Under FATF Rec 12, domestic PEPs require a risk-based assessment; EDD is still required where elevated risk is found. Cannot apply standard CDD without completing the risk assessment.
+				\item \highlight{FCPA Facilitation Payments} Oversimplified as ``allowed.'' The DOJ/SEC have narrowed the exception significantly; many companies prohibit facilitation payments by policy even where FCPA technically permits them.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 3: AGENDA
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Agenda --- 45 Hard Questions}
+		\scriptsize
+		\begin{longtable}{p{0.45\textwidth} p{0.50\textwidth}}
+			\toprule
+			\keypoint{Topic} & \keypoint{Questions} \\
+			\midrule
+			ML Definition \& Three Stages & Q1--Q2 \\
+			Terrorist Financing vs ML & Q3--Q5 \\
+			Sanctions (OFAC, Strict Liability, 50\% Rule) & Q6--Q8 \\
+			UK Bribery Act vs FCPA & Q9 \\
+			Tax Evasion vs Avoidance & Q10 \\
+			Fraud Types (Synthetic Identity, Application) & Q11--Q12 \\
+			Predicate Offenses & Q13 \\
+			Structuring / Smurfing & Q14--Q15 \\
+			SAR vs STR --- Who Files? & Q16--Q17 \\
+			Tipping Off & Q18 \\
+			Correspondent Banking (Rec 13, Shell Banks, Nested) & Q19--Q21 \\
+			Trade-Based ML (TBML, FTZs) & Q22--Q23 \\
+			PEPs (Definition, EDD, Domestic) & Q24--Q26 \\
+			Beneficial Ownership & Q27 \\
+			CDD (Ongoing Monitoring, SDD) & Q28--Q29 \\
+			MSB / PSP / E-Commerce & Q30--Q32 \\
+			Life Insurance \& Casino ML & Q33--Q34 \\
+			Real Estate \& Art & Q35--Q36 \\
+			VASPs, Travel Rule, Privacy Coins & Q37--Q39 \\
+			Securities Sector (Wash Trading) & Q40 \\
+			Gatekeepers (Lawyers, TCSPs) & Q41--Q42 \\
+			Human Trafficking Indicators & Q43 \\
+			Proliferation Financing & Q44 \\
+			FATF Mutual Evaluations, Gray/Black List, De-Risking, NRA & Q45 \\
+			\bottomrule
+		\end{longtable}
+	\end{frame}
+	
+	% ================================================================
+	% Q1: ML DEFINITION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q1: Money Laundering --- Definition \& Scope}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: ML Definition}
+			\scriptsize
+			A trainee states: \textit{``Money laundering just means hiding dirty money from authorities.''} Which response BEST corrects this understanding?\\[0.15cm]
+			\textbf{A.} Correct --- concealment from authorities is the primary objective.\\
+			\textbf{B.} Incorrect --- hiding is only the placement stage; the goal is integration so funds can be freely used in the legitimate economy.\\
+			\textbf{C.} Partially correct --- hiding is the goal but layering is what makes it criminal.\\
+			\textbf{D.} Incorrect --- ML is only illegal when the predicate offense is a felony.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} ML has three stages: \textbf{Placement} (introducing illicit cash into the financial system), \textbf{Layering} (obscuring origin via complex transactions), and \textbf{Integration} (returning ``cleaned'' funds to the legitimate economy). The ultimate goal is \textbf{INTEGRATION} --- making funds usable without suspicion. Concealment alone (hiding) is insufficient; funds must be \textit{legitimized} to be spent. FATF defines ML as \textit{``processing criminal proceeds to disguise their illegal origin.''} The trainee confuses hiding (placement only) with the full ML cycle.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Hiding alone $\neq$ money laundering. Without \textbf{integration}, funds remain unusable. Examiners test whether you know all three stages and their purpose.}
+	\end{frame}
+	
+	% ================================================================
+	% Q2: PLACEMENT vs LAYERING
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q2: Three Stages --- Placement vs Layering vs Integration}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: ML Stages}
+			\scriptsize
+			A criminal wires \$500K through 15 intermediary accounts in 6 countries before purchasing a real estate investment. Which ML stage BEST describes the wire transfer activity?\\[0.15cm]
+			\textbf{A.} Placement --- funds are entering international financial accounts.\\
+			\textbf{B.} Layering --- transactions designed to obscure the trail and origin of funds.\\
+			\textbf{C.} Integration --- funds are moving toward a legitimate asset purchase.\\
+			\textbf{D.} Structuring --- multiple transfers are used to stay below thresholds.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{Layering} is the second stage, characterized by complex multi-step transactions to create distance between illicit funds and their criminal origin. Multiple accounts, multiple jurisdictions, shell companies, and rapid wire transfers are hallmark layering techniques. \textbf{Placement} = the initial introduction of illicit cash into the financial system (already done before the wires). \textbf{Integration} = the final stage where ``cleaned'' funds re-enter as apparently lawful assets (here, that is the real estate purchase at the end, not the wires). Multiple transfers alone is not structuring --- structuring specifically means breaking amounts to avoid CTR thresholds.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Multiple transfers $\neq$ structuring. Structuring = deliberately breaking up cash deposits to avoid CTR thresholds. Layering = obscuring the audit trail through complex transactions regardless of amounts.}
+	\end{frame}
+	
+	% ================================================================
+	% Q3: TF vs ML --- KEY DISTINCTION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q3: Terrorist Financing vs Money Laundering}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: TF Definition --- Most-Tested CAMS Distinction}
+			\scriptsize
+			An investigator states: \textit{``This charity diverted legitimate donations to extremists --- but since the money was legitimate, it cannot be terrorist financing.''} What is the critical error?\\[0.15cm]
+			\textbf{A.} TF requires illegal source funds; legitimate funds cannot constitute TF.\\
+			\textbf{B.} TF is defined by the PURPOSE of funds, not the source --- legitimate funds diverted for terrorism IS TF.\\
+			\textbf{C.} The error is that charity fraud, not TF, applies when source funds are legal.\\
+			\textbf{D.} No error --- TF requires both illegal source AND illegal destination.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} This is the most-tested TF distinction on CAMS. Unlike ML where funds are \textbf{always illicit}, TF can involve entirely \textbf{legitimate funds} (salaries, charity donations, savings) provided the \textbf{INTENT} is to support terrorism. FATF Recommendation 5 criminalizes TF regardless of source legality. Key comparison: ML focuses on \textit{where money came from} (source); TF focuses on \textit{where money is going} (destination/purpose). The investigator confused source of funds (irrelevant for TF) with purpose/destination (determinative for TF).
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize TF funds can be 100\% legitimate. \textbf{Destination and intent}, not source, are determinative. ML = disguise origin. TF = fund terrorism regardless of source.}
+	\end{frame}
+	
+	% ================================================================
+	% Q4: TF --- DETECTION DIFFICULTY
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q4: Terrorist Financing --- Why Hard to Detect}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: TF Characteristics}
+			\scriptsize
+			Which characteristic makes terrorist financing transactions MOST DIFFICULT to detect compared to money laundering?\\[0.15cm]
+			\textbf{A.} TF always uses cryptocurrency, which is untraceable.\\
+			\textbf{B.} TF amounts are often small and below reporting thresholds, with no need to enter the legitimate financial system.\\
+			\textbf{C.} TF is not criminalized in most jurisdictions, limiting detection cooperation.\\
+			\textbf{D.} TF always involves foreign jurisdictions, making domestic detection impossible.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} TF transactions are often \textbf{small} (below CTR/STR reporting thresholds), may involve entirely normal financial products, and the funds do \textbf{NOT need to be ``cleaned.''} There is no integration stage requirement for TF --- funds only need to reach the recipient. A terrorist may receive a small salary, keep funds in a normal bank account, and transfer small sums that appear completely routine. ML by contrast involves large illicit amounts requiring disguise through all three stages. This makes TF behaviorally indistinguishable from normal transactions, defeating threshold-based detection systems.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize TF $\neq$ large amounts. Small, legitimate-appearing transactions are the hallmark detection challenge. No integration stage required = no suspicious ``cleaning'' behavior to detect.}
+	\end{frame}
+	
+	% ================================================================
+	% Q5: TF --- FATF REC 5
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q5: TF Criminalization --- FATF Recommendation 5}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: TF Legal Framework}
+			\scriptsize
+			Under FATF Recommendation 5, which statement about the criminalization of terrorist financing is MOST ACCURATE?\\[0.15cm]
+			\textbf{A.} TF must be criminalized only when the funds derive from drug trafficking.\\
+			\textbf{B.} TF must be criminalized regardless of whether the funds are from legitimate or illicit sources, and regardless of whether a terrorist act actually occurs.\\
+			\textbf{C.} TF criminalization is optional for countries that have ratified the UN Convention against Transnational Organized Crime.\\
+			\textbf{D.} TF requires proof that funds were actually used to carry out a terrorist attack.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF Recommendation 5 requires countries to criminalize TF on the basis of the UN Terrorist Financing Convention (1999). Key points: (1) Criminalization applies \textbf{regardless of whether funds are legitimate or illicit}; (2) A terrorist act does \textbf{not need to have occurred} --- intent to fund terrorism is sufficient; (3) Criminalization must cover the \textit{financing of individual terrorists}, terrorist organizations, and terrorist acts; (4) There must be ancillary offenses (attempt, conspiracy). The offense is complete when funds are provided/collected with terrorist intent --- actual deployment of funds is not required.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize TF offense is complete on \textbf{intent and provision of funds}. No terrorist act needs to occur. Source of funds (legal or illegal) is irrelevant.}
+	\end{frame}
+	
+	% ================================================================
+	% Q6: SANCTIONS --- OFAC 50% RULE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q6: Sanctions --- OFAC 50\% Rule}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Sanctions --- Beneficial Ownership}
+			\scriptsize
+			A compliance officer approves a payment to Company X because it is not on the OFAC SDN list. However, Company X is 60\% owned by a designated individual. What error has the officer made?\\[0.15cm]
+			\textbf{A.} No error --- only directly-listed entities are sanctioned under US law.\\
+			\textbf{B.} The officer failed to apply OFAC's 50\% rule: entities 50\%+ owned by a designated person are blocked even if not themselves listed.\\
+			\textbf{C.} The officer should have applied the EU's 25\% beneficial ownership threshold instead.\\
+			\textbf{D.} The error is minor --- a blocked transaction report satisfies compliance.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} OFAC's \textbf{50\% rule} (2014 guidance, reinforced 2019): any entity \textbf{owned 50\% or more} by a designated person or blocked entity is itself blocked, \textit{regardless of whether it appears on the SDN list}. Aggregate ownership counts (e.g., two designated persons each owning 30\% = 60\% combined = entity is blocked). \textbf{Sanctions are strict liability} --- no intent required. SDN list screening alone is insufficient; you must trace ownership to identify indirect blocking. The payment must be blocked and an OFAC report filed.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize SDN list screening alone is \textbf{insufficient}. Must trace ownership. 50\%+ aggregate ownership by designated persons = blocked entity even if unlisted.}
+	\end{frame}
+	
+	% ================================================================
+	% Q7: SANCTIONS --- STRICT LIABILITY
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q7: Sanctions --- Strict Liability}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Sanctions --- Intent Requirement}
+			\scriptsize
+			A bank processes a sanctioned transaction due to a data entry error, with no intent to evade sanctions. What is the correct legal position?\\[0.15cm]
+			\textbf{A.} No violation --- intent is required for a sanctions breach under OFAC regulations.\\
+			\textbf{B.} Civil violation only --- criminal penalties require intent, civil do not.\\
+			\textbf{C.} Sanctions are strict liability --- inadvertent violations can result in civil penalties even without intent.\\
+			\textbf{D.} The bank is protected if it self-reports within 10 business days.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Sanctions regimes (OFAC/US, OFSI/UK, EU) are \textbf{strict liability for civil violations} --- intent is NOT required. A bank can face civil penalties for inadvertent screening failures, data errors, or system gaps. Criminal prosecution typically requires intent/willfulness, but civil fines can be substantial even for honest mistakes (OFAC has issued multimillion-dollar civil penalties for inadvertent violations). Self-reporting mitigates but does not eliminate penalties. This is the fundamental distinction between sanctions and most other criminal statutes where mens rea is required.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize \textbf{Civil} sanctions violations = strict liability. ``We didn't know'' is NOT a defense. Criminal violations require intent but civil penalties apply regardless.}
+	\end{frame}
+	
+	% ================================================================
+	% Q8: SANCTIONS --- COMPREHENSIVE vs TARGETED
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q8: Sanctions --- Types and Scope}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Sanctions Types}
+			\scriptsize
+			A bank processes a payment involving goods not on any restricted list, between two non-sanctioned companies, but the beneficial owner of one company is a national of a comprehensively sanctioned country. The officer states: \textit{``The goods aren't restricted, so we can process this.''} Why is this wrong?\\[0.15cm]
+			\textbf{A.} Correct reasoning --- goods classification is the only relevant factor.\\
+			\textbf{B.} Wrong --- comprehensive country sanctions can prohibit all transactions involving nationals of that country, regardless of goods classification, especially under OFAC's 50\% rule if the national controls an entity.\\
+			\textbf{C.} Wrong --- the payment should be blocked only if over \$10,000.\\
+			\textbf{D.} Correct only if the goods are dual-use items.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Sanctions types: \textbf{Comprehensive sanctions} (e.g., Iran, Cuba, North Korea) can block all transactions involving designated country nationals or entities they control, regardless of goods. \textbf{Targeted sanctions} list specific persons/entities (SDN). \textbf{Sectoral sanctions} restrict specific industries (e.g., Russian energy). \textbf{Goods/export controls} are a separate regime (BIS/EAR). The officer's error conflates goods controls (``restricted list'') with sanctions (``designated persons/entities/countries''). The beneficial owner's nationality triggers the sanctions analysis, not just the goods.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Goods restriction lists $\neq$ sanctions lists. Sanctions screen \textbf{parties}; export controls screen \textbf{goods}. Both must be checked independently.}
+	\end{frame}
+	
+	% ================================================================
+	% Q9: UK BRIBERY ACT vs FCPA
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q9: UK Bribery Act vs FCPA --- Facilitation Payments}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Anti-Bribery \& Corruption}
+			\scriptsize
+			A UK-incorporated company operating in a country where local law permits facilitation payments makes such a payment. The regional manager argues local law makes it acceptable. The compliance officer disagrees. Who is correct?\\[0.15cm]
+			\textbf{A.} Manager is correct --- local law governs; UK Bribery Act defers to host country law.\\
+			\textbf{B.} Both are wrong --- all payments to officials are illegal under both UK and US law.\\
+			\textbf{C.} Compliance officer is correct --- UK Bribery Act 2010 prohibits facilitation payments globally, regardless of local law, and has full extraterritorial reach.\\
+			\textbf{D.} Manager is correct --- the FCPA's facilitation payment exception applies to UK companies operating in the US sphere.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{UK Bribery Act 2010}: (1) Explicitly \textbf{prohibits} facilitation payments --- NO exception; (2) \textbf{Extraterritorial reach} --- applies to UK companies and persons anywhere in the world; (3) Corporate offense of \textit{failure to prevent bribery} unless adequate procedures exist. \textbf{US FCPA}: has a narrow facilitation payment exception for routine government actions (though DOJ/SEC have narrowed this in practice and many companies ban them by policy). A UK company cannot use FCPA standards or local law to justify facilitation payments. UK law governs UK-incorporated entities globally.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize UK Bribery Act = \textbf{ZERO} facilitation payment tolerance, \textbf{globally}. FCPA has a narrow exception but many companies prohibit these payments anyway. UK companies cannot rely on FCPA or local law.}
+	\end{frame}
+	
+	% ================================================================
+	% Q10: TAX EVASION vs AVOIDANCE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q10: Tax Evasion vs Tax Avoidance}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Tax Evasion}
+			\scriptsize
+			A wealthy client uses offshore trusts and tax-haven structures. The key factor determining whether this is ILLEGAL tax evasion vs.\ LEGAL tax avoidance is:\\[0.15cm]
+			\textbf{A.} Whether the jurisdiction has a tax treaty with the client's home country.\\
+			\textbf{B.} Whether the structures were set up by a licensed attorney.\\
+			\textbf{C.} Whether the client FULLY DISCLOSES all assets, income, and structures to relevant tax authorities.\\
+			\textbf{D.} Whether the tax saved exceeds a materiality threshold.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Tax \textbf{evasion} = illegal concealment or misrepresentation of taxable income/assets. Tax \textbf{avoidance} = legal use of legitimate structures to reduce tax burden. The \textbf{critical distinction is disclosure and truthfulness}. The same offshore trust can be legal (avoidance) if fully disclosed to authorities, or illegal (evasion) if concealed. FATCA (US) and the Common Reporting Standard (CRS, 100+ countries) require automatic exchange of offshore account information to enforce this distinction. Tax evasion is a \textbf{predicate offense for ML} in most FATF member jurisdictions --- making it reportable as suspicious activity.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Offshore structures alone $\neq$ evasion. \textbf{Concealment from tax authorities} is the line. Full disclosure = potentially legal. Concealment = evasion = ML predicate.}
+	\end{frame}
+	
+	% ================================================================
+	% Q11: SYNTHETIC IDENTITY FRAUD
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q11: Synthetic Identity Fraud vs Identity Theft}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Fraud Types}
+			\scriptsize
+			A bank sees applications with different names and addresses but the SAME Social Security Number variants (slightly altered). This is BEST classified as:\\[0.15cm]
+			\textbf{A.} Traditional identity theft --- the SSN belongs to real victims being impersonated.\\
+			\textbf{B.} Application fraud using stolen but unaltered identities.\\
+			\textbf{C.} Synthetic identity fraud --- new identities manufactured by combining real and fabricated data elements.\\
+			\textbf{D.} Structuring --- the applications are designed to stay below detection thresholds.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{Synthetic identity fraud} creates MANUFACTURED identities by combining real elements (often a real SSN) with fabricated information (fake names, addresses, DOBs). It differs from \textbf{traditional identity theft} which uses a COMPLETE stolen identity of a real, identified person. Key detection signals: same SSN variant with multiple name/address combinations; no consistent credit history; rapid account opening followed by cash-out (``bust-out fraud''). Synthetic fraud is harder to detect because there is no single victim reporting the theft --- the fraudster builds credit gradually before extracting maximum value.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Synthetic fraud $\neq$ identity theft. No single real victim --- a new identity is \textbf{created} from mixed real/fake data. Bust-out pattern: build credit, extract maximum, disappear.}
+	\end{frame}
+	
+	% ================================================================
+	% Q12: FRAUD -- PROCEEDS AS ML PREDICATE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q12: Fraud Proceeds as ML Predicate}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Fraud \& ML Overlap}
+			\scriptsize
+			A bank identifies loan applications using fabricated employment and income documents. Loans are approved, quickly withdrawn, and transferred overseas. What TWO crimes have been committed?\\[0.15cm]
+			\textbf{A.} Only fraud --- money laundering requires a separate criminal organization.\\
+			\textbf{B.} Only money laundering --- the overseas transfer is the offense.\\
+			\textbf{C.} Fraud (predicate offense) AND money laundering (laundering of fraud proceeds) --- fraud generates illicit proceeds that must be laundered.\\
+			\textbf{D.} Tax evasion and wire fraud only.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Fraud is a \textbf{designated predicate offense} for money laundering under FATF standards. When fraud generates proceeds, those proceeds are ``criminal property'' that must be laundered before use. The ML stages here: \textbf{Placement} = fraud proceeds deposited into bank accounts; \textbf{Layering} = rapid transfers between accounts/overseas to obscure origin; \textbf{Integration} = funds withdrawn abroad as ``clean'' money. Both crimes are charged simultaneously. The bank must: verify documents independently, identify the pattern, freeze accounts, and file a SAR (US) or STR (other jurisdictions).
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Fraud + overseas transfer = \textbf{two crimes}: fraud (predicate) AND ML (laundering proceeds). Fraud proceeds are criminal property requiring laundering. Banks file SAR/STR for both.}
+	\end{frame}
+	
+	% ================================================================
+	% Q13: PREDICATE OFFENSES
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q13: Predicate Offenses --- FATF Categories}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Designated Categories of Predicate Offenses}
+			\scriptsize
+			Under FATF standards, which of the following is NOT a designated category of predicate offense for money laundering?\\[0.15cm]
+			\textbf{A.} Drug trafficking.\\
+			\textbf{B.} Tax crimes (in jurisdictions that criminalize them).\\
+			\textbf{C.} Minor civil infractions (e.g., jaywalking, parking violations).\\
+			\textbf{D.} Environmental crime.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF designates \textbf{21 categories of predicate offenses} (from the FATF Recommendations Glossary), including: drug trafficking, corruption/bribery, fraud, counterfeiting, smuggling, human trafficking, tax crimes, arms trafficking, \textbf{environmental crime}, cybercrime, terrorism, proliferation financing, and more. These are \textit{serious crimes}. Minor civil infractions are NOT predicate offenses. FATF Recommendation 3 requires countries to criminalize ML for ``all serious offenses.'' ML can only arise where the underlying funds derive from a criminal offense in the designated category. Environmental crime has been an increasingly emphasized predicate in recent FATF guidance.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Not ALL crimes are predicates --- FATF focuses on \textbf{serious offenses}. Environmental crime IS a predicate. Jaywalking is NOT. Tax crimes ARE predicates in jurisdictions that criminalize them.}
+	\end{frame}
+	
+	% ================================================================
+	% Q14: STRUCTURING / SMURFING
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q14: Structuring (Smurfing) --- Key Rule}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Structuring --- 31 USC 5324}
+			\scriptsize
+			A criminal uses 20 individuals to each deposit \$9,500 in cash at different branches of the same bank on the same day. Which statement is MOST accurate?\\[0.15cm]
+			\textbf{A.} No crime --- no single deposit exceeds \$10,000, so no CTR is required and no offense exists.\\
+			\textbf{B.} Structuring (smurfing) --- deliberately breaking up transactions to avoid the \$10,000 CTR threshold, which is a crime under 31 USC 5324 even if the underlying funds are entirely legitimate.\\
+			\textbf{C.} Tax evasion --- cash deposits are not ML if funds are from legal sources.\\
+			\textbf{D.} Insider trading --- multiple accounts used to conceal investment activity.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{Structuring} is the illegal act of deliberately breaking up cash transactions to keep them BELOW a reporting threshold (US: \$10,000 CTR threshold). \textbf{CRITICAL}: Structuring is a crime under 31 USC 5324 \textbf{even if the underlying funds are entirely legitimate}. You do NOT need to prove the money is from crime to prove structuring. The criminal intent is avoiding the CTR filing, not laundering per se. Banks must file SARs when they detect structuring patterns. ``Smurfing'' refers to using multiple individuals (smurfs) to make deposits. Bank staff must NOT alert the customer (tipping off prohibition).
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Structuring is illegal \textbf{even with clean money}. The crime is avoiding the reporting requirement, not the source of funds. File SAR; do NOT tip off the customer.}
+	\end{frame}
+	
+	% ================================================================
+	% Q15: CTR vs SAR
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q15: CTR vs SAR --- When Each Is Required}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Reporting Obligations}
+			\scriptsize
+			A US bank customer deposits exactly \$9,800 in cash every week for 6 months. No single deposit exceeds \$10,000. The bank has not filed CTRs but has filed a SAR. Which statement is MOST accurate?\\[0.15cm]
+			\textbf{A.} Wrong --- CTRs are required because the weekly pattern exceeds \$10,000.\\
+			\textbf{B.} Partially correct --- no CTR is required (no single transaction over \$10K), but the SAR is appropriate because the \$9,800 pattern indicates structuring.\\
+			\textbf{C.} Wrong --- the bank must file both CTRs and SARs for every \$9,800 deposit.\\
+			\textbf{D.} Wrong --- the bank's only obligation is to freeze the account.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{CTRs} (Currency Transaction Reports) are required for SINGLE cash transactions over \$10,000. No individual deposit here exceeds \$10,000, so no CTR is legally required. However, the weekly \$9,800 pattern is textbook structuring --- clearly designed to stay below the threshold. The bank is REQUIRED to file a \textbf{SAR} because it has reason to suspect structuring (31 USC 5318(g)). The SAR documents the suspicious pattern even when individual CTRs are not triggered. Key: CTRs are transaction-triggered; SARs are behavior/suspicion-triggered.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize \textbf{CTR} = triggered by single transactions over \$10K (mandatory, no discretion). \textbf{SAR} = triggered by suspicious behavior/patterns regardless of dollar amount (judgment-based). These are independent obligations.}
+	\end{frame}
+	
+	% ================================================================
+	% Q16: SAR vs STR --- WHO FILES?
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q16: SAR vs STR --- Who Has the Obligation?}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Reporting Obligations by Entity Type --- MOST TESTED CORRECTION}
+			\scriptsize
+			Under the US Bank Secrecy Act (BSA), which entities are REQUIRED to file Suspicious Activity Reports (SARs)?\\[0.15cm]
+			\textbf{A.} All US businesses whenever they suspect a crime involving money.\\
+			\textbf{B.} Only federally-chartered banks.\\
+			\textbf{C.} BSA-defined ``financial institutions'': banks, broker-dealers, MSBs, mutual funds, insurance companies, casinos, futures commission merchants, and similar --- NOT US attorneys or US real estate agents (who have no BSA SAR obligation).\\
+			\textbf{D.} All FATF-member entities universally.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation (THIS WAS WRONG IN THE PRIOR VERSION):} In the US, SAR filing is a BSA obligation for \textbf{defined financial institutions} only: depository institutions, broker-dealers, mutual funds, futures commission merchants, MSBs, insurance companies, loan companies, and casinos under Bank Secrecy Act. US \textbf{attorneys} and \textbf{real estate agents} do NOT have BSA SAR obligations. In other jurisdictions: UK uses ``Suspicious Activity Reports'' (same name, different law --- National Crime Agency); EU/most FATF jurisdictions use ``Suspicious Transaction Reports'' (STRs) filed with national FIU. DNFBPs in most FATF jurisdictions file STRs. \textbf{The prior version incorrectly said all entity types ``file SAR.''} This is a critical CAMS distinction.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize US SAR = BSA obligation for \textbf{defined FIs}. US lawyers/real estate agents $\neq$ BSA SAR filers. Non-US DNFBPs file \textbf{STRs} with national FIUs. Terminology and obligation vary by jurisdiction.}
+	\end{frame}
+	
+	% ================================================================
+	% Q17: STR OBLIGATION --- DNFBPs
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q17: STR Obligation --- DNFBPs Outside the US}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: DNFBP Reporting under FATF Rec 23}
+			\scriptsize
+			In a FATF-member jurisdiction (outside the US), a lawyer assists with a real estate transaction and identifies suspicious circumstances. What AML obligation does the lawyer typically have?\\[0.15cm]
+			\textbf{A.} No obligation --- attorney-client privilege fully exempts lawyers from AML reporting.\\
+			\textbf{B.} File a SAR with FinCEN if the client is American.\\
+			\textbf{C.} File a Suspicious Transaction Report (STR) with the national FIU for designated activities, subject to tipping-off restrictions and legal professional privilege carve-outs for confidential legal advice.\\
+			\textbf{D.} Report directly to the client's home country regulators.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Under FATF Recommendation 23, DNFBPs including lawyers are required to file STRs when they perform \textbf{designated activities}: real estate transactions, managing client funds, company/trust formation, buying/selling businesses. Key rules: (1) \textbf{Tipping-off prohibition} --- lawyer CANNOT warn the client an STR was filed; (2) \textbf{Legal professional privilege (LPP)} carve-outs exist for confidential communications in the course of \textit{legal advice} (varies by jurisdiction) but do NOT protect transactional facilitation; (3) Report goes to \textbf{national FIU}, not FinCEN. Blanket privilege cannot be used to avoid STR filing for transactional work.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Lawyers DO have STR obligations for \textbf{designated transactional activities}. LPP protects legal \textit{advice}; it does NOT protect transactional facilitation. Tipping off is a separate criminal offense.}
+	\end{frame}
+	
+	% ================================================================
+	% Q18: TIPPING OFF
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q18: Tipping Off --- Criminal Prohibition}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Tipping Off Offense}
+			\scriptsize
+			A bank files a SAR on a customer suspected of ML. The customer's relationship manager then warns the customer that a report has been filed. What has occurred?\\[0.15cm]
+			\textbf{A.} A minor procedural breach --- the SAR remains valid but must be refiled.\\
+			\textbf{B.} The tipping-off offense --- illegal disclosure of a SAR filing to the subject, carrying criminal penalties and compromising law enforcement investigations.\\
+			\textbf{C.} A legitimate customer service action --- customers have a right to know when they are reported.\\
+			\textbf{D.} A GDPR/data privacy breach only --- no AML-specific offense.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{Tipping off} is a criminal offense in virtually all FATF member jurisdictions. Once a SAR/STR has been filed, the reporting institution and its staff are PROHIBITED from disclosing to the subject (or to third parties who might inform the subject): (1) that a SAR/STR has been filed, OR (2) that an ML/TF investigation is underway. This protects law enforcement investigation integrity and prevents asset dissipation or flight. US: 31 USC 5318(g)(2) --- SAR secrecy is absolute. Staff face criminal prosecution. Exception: institutions within the same financial group may share SAR information in certain jurisdictions for group-level AML purposes (intra-group exception).
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Tipping off = \textbf{criminal offense} for individual staff. SAR secrecy is absolute toward the subject. No exceptions for ``good customer relations.'' Intra-group sharing is a limited exception in some jurisdictions.}
+	\end{frame}
+	
+	% ================================================================
+	% Q19: CORRESPONDENT BANKING --- FATF REC 13
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q19: Correspondent Banking --- FATF Recommendation 13}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Correspondent Banking EDD}
+			\scriptsize
+			A US bank reviews a correspondent relationship with a respondent bank in a high-risk jurisdiction with weak AML controls. Under FATF Recommendation 13, what is the US bank's PRIMARY obligation?\\[0.15cm]
+			\textbf{A.} Terminate all correspondent relationships with high-risk jurisdictions immediately.\\
+			\textbf{B.} Conduct EDD on the respondent: assess AML controls, understand ownership, verify no shell bank clients, and obtain senior management approval.\\
+			\textbf{C.} Limit the relationship to USD correspondent services only.\\
+			\textbf{D.} File SARs covering all transactions for the prior 12 months.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF Recommendation 13 requires: (1) Gather information on respondent's business, reputation, and AML supervision quality; (2) Assess respondent's AML/CFT controls; (3) Obtain \textbf{senior management approval}; (4) Document respective AML responsibilities; (5) Satisfy that respondent does \textbf{not permit shell banks} to use its accounts. Outright termination (``de-risking'') is \textbf{NOT FATF's preferred approach} --- FATF explicitly discourages blanket de-risking. Payable-through accounts require additional scrutiny. The obligation is to \textit{manage} risk, not reflexively exit.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize FATF \textbf{opposes blanket de-risking}. Correspondent banking requires EDD + management, not automatic termination. Senior management approval is mandatory for establishment.}
+	\end{frame}
+	
+	% ================================================================
+	% Q20: SHELL BANKS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q20: Shell Banks --- Absolute Prohibition}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Shell Banks under FATF Rec 13}
+			\scriptsize
+			FATF Recommendation 13 explicitly prohibits banks from doing what regarding shell banks?\\[0.15cm]
+			\textbf{A.} Offering currency exchange services to shell banks.\\
+			\textbf{B.} Establishing or maintaining correspondent relationships with shell banks, or allowing respondent banks to use their accounts to serve shell banks.\\
+			\textbf{C.} Accepting deposits from companies registered in tax haven jurisdictions.\\
+			\textbf{D.} Conducting wire transfers for any entity incorporated offshore.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF Recommendation 13 explicitly prohibits: (1) Financial institutions from establishing correspondent relationships with \textbf{shell banks}; (2) Allowing respondent banks to use their correspondent accounts to serve shell banks (passing-through prohibition). A \textbf{shell bank} = a bank with \textit{no physical presence} in any country and \textit{not affiliated} with a regulated financial group subject to effective supervision. Shell banks lack meaningful management, supervision, and accountability. This prohibition is \textbf{ABSOLUTE} --- no amount of EDD or mitigation makes a shell bank relationship acceptable. Contrast with offshore banks that ARE supervised by their licensing jurisdiction.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Shell bank prohibition is \textbf{ABSOLUTE} --- no risk-based exception exists. Even if EDD reveals ``clean'' ownership, a shell bank relationship cannot proceed. Offshore $\neq$ shell bank (offshore banks can be legitimate if supervised).}
+	\end{frame}
+	
+	% ================================================================
+	% Q21: NESTED CORRESPONDENT ACCOUNTS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q21: Nested Correspondent Accounts}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Nested/Embedded Correspondent Banking}
+			\scriptsize
+			What is a ``nested correspondent account'' and why is it particularly high risk?\\[0.15cm]
+			\textbf{A.} A correspondent account used only for domestic wire transfers.\\
+			\textbf{B.} An account where a third-party institution (the respondent's own clients) accesses the correspondent bank's services INDIRECTLY through the respondent, without the correspondent knowing the ultimate end-users.\\
+			\textbf{C.} A savings account nested within a checking account for cash management.\\
+			\textbf{D.} A correspondent relationship between two banks in the same jurisdiction.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} A \textbf{nested correspondent account} occurs when a respondent bank allows ITS OWN CLIENTS (other banks/FIs) to conduct transactions through the respondent's correspondent account at the US bank, effectively extending the US correspondent's services to unknown third parties. The problem: the correspondent has done CDD on the respondent but has NO VISIBILITY into the respondent's clients who are actually using the correspondent services. This creates a ``black box'' --- illicit actors can access the US financial system through two banking layers with no direct correspondent due diligence. FATF Rec 13 and FinCEN guidance require correspondents to understand the extent to which respondents provide nested services and apply additional scrutiny.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Nested accounts = correspondent's services reach \textbf{unknown end-users} the correspondent never screened. Must understand if respondent provides nested services and apply additional scrutiny accordingly.}
+	\end{frame}
+	
+	% ================================================================
+	% Q22: TRADE-BASED ML
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q22: Trade-Based Money Laundering (TBML)}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: TBML --- Over/Under-Invoicing}
+			\scriptsize
+			An invoice shows 10,000 tons of steel at \$500/ton when the market price is \$250/ton. What ML method does this represent, and what is the primary purpose?\\[0.15cm]
+			\textbf{A.} Under-invoicing --- to avoid import duties on the steel.\\
+			\textbf{B.} Over-invoicing --- to transfer \$2.5M in illicit value from the buyer's jurisdiction to the seller's jurisdiction under cover of legitimate trade.\\
+			\textbf{C.} Phantom shipment --- no goods are actually shipped.\\
+			\textbf{D.} Multiple invoicing --- the same shipment is invoiced to different buyers.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} TBML uses trade transactions to transfer illicit value. \textbf{Over-invoicing}: buyer pays more than goods are worth $\rightarrow$ excess value moves from buyer country to seller country. Calculation here: \$500 billed vs \$250 market $\rightarrow$ \$250/ton $\times$ 10,000 tons = \textbf{\$2.5M illicit value transferred to the seller}. \textbf{Under-invoicing}: buyer pays less than goods are worth $\rightarrow$ value moves to buyer country. Other TBML methods: misclassification (wrong goods description), phantom shipments (no goods), multiple invoicing (same goods invoiced multiple times), over/under-shipment. TBML is extremely difficult to detect without trade finance expertise and commodity market knowledge.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize \textbf{Over-invoicing} moves value TO the seller. \textbf{Under-invoicing} moves value TO the buyer. The value transferred = (billed price $-$ market price) $\times$ quantity.}
+	\end{frame}
+	
+	% ================================================================
+	% Q23: FREE TRADE ZONES
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q23: Free Trade Zones (FTZ) --- ML Risk}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Free Trade Zones and TBML}
+			\scriptsize
+			Why are Free Trade Zones specifically identified by FATF as HIGH RISK for trade-based money laundering?\\[0.15cm]
+			\textbf{A.} FTZs operate outside national legal systems making contracts unenforceable.\\
+			\textbf{B.} FTZs only accept payments in foreign currency, complicating AML screening.\\
+			\textbf{C.} FTZs often have reduced customs inspection, minimal AML oversight, and relaxed documentation requirements, creating ideal conditions for TBML through over/under-invoicing and misclassification.\\
+			\textbf{D.} FTZs require all transactions to use a single currency.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF identified FTZs as high-risk in TBML typologies (2006, 2020 updates) due to: (1) \textbf{Reduced inspection} --- goods move with minimal customs scrutiny; (2) \textbf{Documentation gaps} --- paperwork requirements relaxed to encourage trade; (3) \textbf{Minimal AML oversight} --- FTZ operators may not be subject to standard AML regulations; (4) \textbf{Multiple company layering} --- shell companies transact within the FTZ with limited transparency; (5) \textbf{Cash flow opacity} --- mismatches between trade documentation and actual value are harder to detect. Classic TBML in FTZ: invoice a \$10 widget as \$1,000, ship through FTZ with minimal inspection, move \$990 in illicit value.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize FTZ risk = \textbf{reduced inspection + minimal AML oversight + documentation gaps}. Not about extraterritorial legal status. The physical inspection gap is the core vulnerability.}
+	\end{frame}
+	
+	% ================================================================
+	% Q24: PEP DEFINITION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q24: PEP Definition --- FATF Recommendation 12}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: PEP Categories}
+			\scriptsize
+			Under FATF Recommendation 12, which individual is classified as a PEP?\\[0.15cm]
+			\textbf{A.} A retired local mayor who left office 10 years ago with no remaining influence.\\
+			\textbf{B.} A mid-level customs officer with no significant discretionary authority.\\
+			\textbf{C.} The adult child of a current foreign head of state who runs a private business.\\
+			\textbf{D.} A senior bank compliance officer at a regulated financial institution.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF Recommendation 12 defines PEPs as individuals entrusted with \textbf{prominent public functions} (heads of state/government, senior politicians, senior government/judicial/military officials, senior executives of state-owned enterprises, senior officials of international organizations) \textbf{AND their family members and close associates}. The adult child of a current foreign head of state = PEP (family member category). Retired local mayor: ``local'' officials generally below threshold, AND the ``decommissioning period'' (typically 12 months) may have elapsed. Mid-level customs officers without significant authority are typically not PEPs. Close associates include persons with joint beneficial ownership or close business/personal relationships.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize PEP family members and close associates are \textbf{ALSO PEPs}. The definition extends beyond the official to their immediate family and business associates. ``Local'' officials typically below threshold.}
+	\end{frame}
+	
+	% ================================================================
+	% Q25: DOMESTIC PEPs --- CORRECTED
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q25: Domestic PEPs --- Risk Level (CORRECTED)}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Domestic PEP Treatment --- This was wrong in the prior version}
+			\scriptsize
+			A bank onboards a domestic PEP. The compliance team argues domestic PEPs are ``lower risk'' and standard CDD suffices. Is this correct?\\[0.15cm]
+			\textbf{A.} Yes --- FATF Rec 12 explicitly states domestic PEPs present lower risk; standard CDD is permitted.\\
+			\textbf{B.} No --- domestic PEPs require a risk-based assessment; EDD is required where elevated risk is identified. Standard CDD is not automatically sufficient without completing the assessment.\\
+			\textbf{C.} Yes --- domestic PEPs are not covered under FATF Rec 12 at all.\\
+			\textbf{D.} No --- domestic PEPs always require the same EDD as foreign PEPs with no differentiation.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation (PRIOR VERSION WAS WRONG):} FATF Rec 12 allows a \textbf{risk-based approach} for domestic PEPs and PEPs in international organizations --- meaning EDD is required when risk is \textit{assessed} as elevated, not automatically for every domestic PEP. However: (1) Institutions CANNOT simply say ``domestic = standard CDD'' without conducting the risk assessment; (2) EDD is still required when assessment shows elevated risk; (3) In practice, most programs apply EDD to all PEPs due to audit/regulatory scrutiny. The prior version stated domestic PEPs have ``lower risk'' as a fact --- this is wrong. It is a potential outcome of a risk assessment, not a predetermined conclusion.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Domestic PEPs need \textbf{RISK ASSESSMENT first}, not automatic standard CDD. EDD required if risk is elevated. Lower risk is a possible \textit{outcome} of assessment, not a starting assumption.}
+	\end{frame}
+	
+	% ================================================================
+	% Q26: PEP EDD REQUIREMENTS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q26: PEP EDD --- Required Measures under Rec 12}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: PEP EDD Components}
+			\scriptsize
+			A bank onboards a foreign PEP with \$20M in assets. Under FATF Recommendation 12, which combination of EDD measures is REQUIRED?\\[0.15cm]
+			\textbf{A.} Source of funds verification only --- wealth verification is optional.\\
+			\textbf{B.} Senior management approval, source of WEALTH AND source of FUNDS verification, and enhanced ongoing monitoring.\\
+			\textbf{C.} Standard CDD plus an annual review.\\
+			\textbf{D.} Outsource EDD to a third-party screening provider and rely on their certification.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF Recommendation 12 mandates for PEPs: (1) \textbf{Senior management APPROVAL} to establish or continue the relationship; (2) Reasonable measures to establish \textbf{SOURCE OF WEALTH} (how the person accumulated overall wealth --- career, inheritance, business) AND \textbf{SOURCE OF FUNDS} (where the specific funds in this transaction came from) --- \textit{both required, not interchangeable}; (3) \textbf{Enhanced ongoing monitoring}. Third-party EDD can supplement but NOT replace the institution's obligations --- the institution remains fully responsible. Annual review alone is insufficient for active PEP monitoring.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize \textbf{Source of Wealth} (overall how they got rich) $\neq$ \textbf{Source of Funds} (this transaction's money). FATF Rec 12 requires \textbf{BOTH}. Senior management approval is mandatory. Third-party screening does not discharge the institution's responsibility.}
+	\end{frame}
+	
+	% ================================================================
+	% Q27: BENEFICIAL OWNERSHIP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q27: Beneficial Ownership --- FATF Recommendation 24}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Beneficial Owner Definition}
+			\scriptsize
+			Under FATF Recommendation 24, what defines the ``beneficial owner'' of a company?\\[0.15cm]
+			\textbf{A.} The registered director of the company.\\
+			\textbf{B.} Any person with a legal contract with the company.\\
+			\textbf{C.} The natural person(s) who ultimately OWN or CONTROL the legal entity (commonly using 25\% as an initial threshold), and/or any person on whose behalf a transaction is conducted.\\
+			\textbf{D.} The CEO regardless of equity ownership percentage.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF Rec 24 defines beneficial owner as the natural person who ultimately OWNS or CONTROLS a legal entity. Key elements: (1) \textbf{Natural person} --- look through all corporate layers until you reach a human being; (2) \textbf{Ultimate} --- through all layers of ownership; (3) \textbf{Control} --- through ownership, voting rights, board control, power of attorney, or other means; (4) \textbf{25\% threshold} --- FATF's suggested starting point only, NOT a safe harbor. Control exercised through other means still triggers identification even below 25\%. Fallback: if no natural person meets the threshold, the senior managing official serves as fallback. US CDD Rule uses 25\% for ownership + requires identifying one control-person separately.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize 25\% is a \textbf{starting point}, not a safe harbor. Control through other means (voting rights, directorships, etc.) triggers beneficial owner identification regardless of ownership percentage.}
+	\end{frame}
+	
+	% ================================================================
+	% Q28: ONGOING MONITORING
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q28: CDD --- Ongoing Monitoring}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Ongoing Transaction Monitoring}
+			\scriptsize
+			Which transaction pattern should MOST URGENTLY trigger a CDD review under ongoing monitoring obligations?\\[0.15cm]
+			\textbf{A.} A business account receiving monthly revenue consistent with declared activity.\\
+			\textbf{B.} A personal account receiving a one-time inheritance consistent with prior disclosures.\\
+			\textbf{C.} A business declared as a small retail shop suddenly receiving \$500K in international wire transfers from high-risk jurisdictions, inconsistent with the expected profile.\\
+			\textbf{D.} A personal savings account with monthly direct deposit from the same employer for 3 years.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Ongoing monitoring requires comparing ACTUAL TRANSACTION ACTIVITY against the \textbf{EXPECTED PROFILE} established during onboarding (CDD/KYC). The highest alert trigger: transactions INCONSISTENT WITH THE CUSTOMER'S DECLARED BUSINESS PURPOSE. A ``small retail shop'' generating \$500K in international wires is a stark anomaly requiring: (1) Review and update CDD; (2) Investigate source; (3) Conduct EDD; (4) File SAR if suspicious after investigation. FATF Recommendation 10 requires ongoing monitoring as a core CDD element --- it is not a one-time onboarding exercise. Transaction monitoring systems automate this comparison; anomalies generate alerts for human review.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Ongoing monitoring = compare actual activity to \textbf{expected profile}. Significant deviations = review CDD + investigate + potentially file SAR. Not a one-time exercise.}
+	\end{frame}
+	
+	% ================================================================
+	% Q29: SIMPLIFIED DUE DILIGENCE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q29: Simplified Due Diligence (SDD) --- When Permitted}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: SDD under FATF Rec 10}
+			\scriptsize
+			Under FATF Recommendation 10, when is Simplified Due Diligence (SDD) permissible?\\[0.15cm]
+			\textbf{A.} Always --- SDD is the default for retail customers to reduce compliance costs.\\
+			\textbf{B.} Never --- FATF requires full CDD for all customers at all times.\\
+			\textbf{C.} Only when the NRA, institutional risk assessment, and customer/product analysis demonstrate the ML/TF risk is LOW --- SDD still requires core identity information but with proportionately reduced scope/frequency.\\
+			\textbf{D.} Only for government entities and listed public companies in every jurisdiction.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF Rec 10 Interpretive Note permits SDD when: (1) Overall risk is assessed as \textbf{LOW} --- based on NRA + institutional risk assessment + specific customer/product/channel factors; (2) Specific low-risk indicators apply (e.g., low-premium life insurance, low-limit electronic money, public authorities, listed companies with disclosure requirements). SDD does NOT mean zero CDD --- core identification is still required. It means \textbf{proportionate CDD}: less frequent updating, reduced documentation, or streamlined verification. \textbf{Crucially}: any suspicious indicators override SDD automatically --- suspicion requires at minimum standard CDD regardless.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize SDD $\neq$ no CDD. Core identity verification still required. Suspicion \textbf{overrides SDD automatically}. SDD is only appropriate after documented risk assessment, not as a default cost-saving measure.}
+	\end{frame}
+	
+	% ================================================================
+	% Q30: MSB --- AGENT NETWORK LIABILITY
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q30: MSB Agent Networks --- Principal Liability}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: MSB Agent Oversight}
+			\scriptsize
+			A large US money transmitter has 500 agents across high-risk jurisdictions with no AML oversight of agent activity. What is the PRINCIPAL regulatory risk?\\[0.15cm]
+			\textbf{A.} Currency exchange rate risk from international transactions.\\
+			\textbf{B.} The principal transmitter bears responsibility for AML compliance across its agent network --- weak agent controls extend the ML risk footprint and FinCEN holds the principal accountable.\\
+			\textbf{C.} Agents operate under local rules only; principal has no responsibility.\\
+			\textbf{D.} Reputation risk only --- agent failures create no legal liability for the principal.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Under US BSA rules (31 CFR 1022.380), a \textbf{principal money transmitter is responsible for AML compliance of its AGENTS}. Requirements: (1) The principal registers with FinCEN; agents do not separately register if covered under principal's registration; (2) The principal must maintain a current list of agents; (3) The principal's AML program must cover agent activity. If an agent facilitates ML, the PRINCIPAL can face regulatory action. The Western Union enforcement action (2017, \$586M settlement) is the landmark example --- Western Union was held accountable for its agent network failing to stop ML. Weak agent oversight in high-risk jurisdictions is a critical vulnerability.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Principal MSBs are \textbf{responsible for their agents'} AML compliance. Agent liability = principal liability. The 2017 Western Union settlement (\$586M) illustrates this principle.}
+	\end{frame}
+	
+	% ================================================================
+	% Q31: PSP RISKS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q31: PSP / E-Commerce --- Transaction Laundering}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Payment Service Provider ML Risk}
+			\scriptsize
+			An online marketplace detects sellers with low inventory but processing thousands of small transactions, using multiple account names with different payment destinations. What ML technique does this represent?\\[0.15cm]
+			\textbf{A.} Legitimate high-volume retail --- no concern.\\
+			\textbf{B.} Transaction laundering --- using fake/front merchant accounts to process payments for illicit goods/services through a legitimate PSP, making proceeds appear as e-commerce revenue.\\
+			\textbf{C.} Arbitrage trading --- legal profit from price differentials.\\
+			\textbf{D.} Chargeback fraud --- disputing legitimate transactions.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{Transaction laundering} (also called ``undisclosed aggregation'' or ``factoring''): illicit actors use legitimate merchant accounts (or create fake ones) to process payments for illegal goods/services through a legitimate PSP, making proceeds appear as e-commerce revenue. Pattern: illicit goods sold online $\rightarrow$ payment processed as ``merchandise'' through legitimate PSP $\rightarrow$ proceeds appear as merchant income. Red flags: minimal real inventory but high transaction volume; multiple accounts with inconsistent beneficiaries; refund/chargeback patterns inconsistent with legitimate retail. PSPs must conduct \textbf{merchant onboarding due diligence} and monitor for these patterns.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Transaction laundering = illicit proceeds hidden as e-commerce revenue. \textbf{Merchant accounts} used as fronts. Low inventory + high transaction volume = key red flag constellation.}
+	\end{frame}
+	
+	% ================================================================
+	% Q32: E-COMMERCE MITIGATION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q32: E-Commerce ML --- Mitigation Controls}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: E-Commerce AML Controls}
+			\scriptsize
+			An e-commerce platform wants to reduce ML risk while maintaining business growth. Which combination of controls is MOST EFFECTIVE?\\[0.15cm]
+			\textbf{A.} Require all sellers to use cryptocurrency to enable blockchain tracing.\\
+			\textbf{B.} Tiered seller onboarding (CDD scaled to projected sales volume), transaction monitoring for suspicious patterns, sanctions screening, and STR/SAR filing for suspicious sellers.\\
+			\textbf{C.} Limit the platform to domestic sellers only.\\
+			\textbf{D.} Only apply controls to sellers transacting over \$10,000 per month.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Effective e-commerce AML controls: (1) \textbf{Tiered onboarding} --- scale CDD depth to seller risk (projected volume, jurisdiction, product type); (2) \textbf{Transaction monitoring} --- flag anomalous patterns (low inventory/high volume, round-trip transactions, unusual beneficiaries); (3) \textbf{Sanctions screening} --- screen sellers at onboarding and periodically; (4) \textbf{Adverse media checks}; (5) \textbf{STR/SAR filing} for suspicious activity. Note: the reporting obligation here falls on the platform if it is a covered entity under applicable law. E-commerce platforms are an evolving area of AML regulation; FATF has noted the risk of TBML through e-commerce.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Cryptocurrency does not resolve ML risk --- it creates additional VASP/Travel Rule obligations. Tiered risk-based controls scaled to actual risk level are the FATF-preferred approach.}
+	\end{frame}
+	
+	% ================================================================
+	% Q33: LIFE INSURANCE ML
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q33: Life Insurance --- ML Red Flags}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Insurance ML --- Placement \& Integration}
+			\scriptsize
+			Which combination makes a life insurance policy HIGHEST risk for money laundering?\\[0.15cm]
+			\textbf{A.} A 30-year term life policy with monthly premiums from a salary account.\\
+			\textbf{B.} A single-premium life policy (\$500K+) purchased with cash, where the policyholder requests early surrender immediately after issue.\\
+			\textbf{C.} A group life policy purchased by an employer for 50 employees.\\
+			\textbf{D.} A universal life policy with automatic premium waiver.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Highest-risk life insurance combination: (1) \textbf{Single large premium} (lump sum = placement); (2) \textbf{Cash payment} (avoids bank KYC); (3) \textbf{Early surrender or policy loan immediately after issue} (integration --- getting ``clean'' insurance company proceeds back). This converts: illicit cash $\rightarrow$ insurance premium $\rightarrow$ insurance company surrender/payout check (appears as legitimate financial product proceeds). Under FATF guidance on insurance, insurers must apply CDD to policyholder AND beneficiary. Early surrender, third-party payors, and requests for cash payouts are all separate red flags. Penalty for early surrender (loss fee) is the ``laundering fee.''
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Single large premium + early surrender = classic \textbf{placement/integration} cycle. The penalty for early surrender is the ``laundering fee'' --- the cost of converting dirty cash to clean insurance proceeds.}
+	\end{frame}
+	
+	% ================================================================
+	% Q34: CASINO ML
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q34: Casino ML --- Chip Placement and Integration}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Casino ML --- Classic Pattern}
+			\scriptsize
+			A casino high-roller buys \$200,000 in chips with cash, gambles minimally, then cashes out \$190,000 as a casino check. What ML stage does the \$10,000 ``loss'' represent, and why is the casino check significant?\\[0.15cm]
+			\textbf{A.} Layering only --- the casino check obscures the cash origin.\\
+			\textbf{B.} Placement (chip purchase with cash) followed by integration (casino check creates a ``gambling winnings'' paper trail legitimizing the \$190,000).\\
+			\textbf{C.} Structuring --- \$10,000 below CTR threshold.\\
+			\textbf{D.} Tax evasion --- gambling losses reduce taxable income.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Classic casino ML: (1) \textbf{Placement} --- criminal exchanges illicit CASH for casino chips (no longer raw cash); (2) Minimal gambling (the \$10,000 ``loss'' is the laundering service fee); (3) \textbf{Integration} --- casino cashes out \$190,000 as a \textbf{casino check} with a ``gambling winnings'' paper trail. The check appears as legitimate winnings. The \$200,000 chip purchase triggers a \textbf{CTR} (cash transaction over \$10,000). The ``minimal play, full cashout'' pattern also requires a \textbf{SAR}. Casinos ARE covered by BSA SAR and CTR obligations (31 CFR 1021). FATF Recommendation 22 covers casinos as DNFBPs requiring CDD at set thresholds.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Casino check = \textbf{integration tool}. The \$10K ``loss'' is the ML service fee. The \$200K chip purchase requires a \textbf{CTR}. The minimal-play-cashout pattern requires a \textbf{SAR}. BOTH reporting obligations apply.}
+	\end{frame}
+	
+	% ================================================================
+	% Q35: REAL ESTATE ML
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q35: Real Estate --- ML Integration}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Real Estate ML Risks}
+			\scriptsize
+			A foreign shell company purchases a \$3M residential property with all-cash (no mortgage). The beneficial owner is unknown. Which red flag combination is MOST significant?\\[0.15cm]
+			\textbf{A.} Residential property --- commercial real estate is higher risk.\\
+			\textbf{B.} Shell company + all-cash purchase + unknown beneficial owner + no mortgage (bypassing bank KYC) = classic real estate ML integration pattern.\\
+			\textbf{C.} Foreign buyer only --- domestic purchases present no ML risk.\\
+			\textbf{D.} Amount is below significant thresholds; no reporting required.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Real estate is a preferred ML \textbf{integration} vehicle. Highest-risk combination: (1) \textbf{Shell company} --- conceals beneficial owner; (2) \textbf{All-cash purchase} --- bypasses bank mortgage CDD/KYC (a bank mortgage adds an AML layer; cash purchase eliminates it); (3) \textbf{Unknown beneficial owner} --- critical AML gap; (4) \textbf{Foreign buyer} --- potential cross-border ML. FinCEN Geographic Targeting Orders (GTOs) require title insurance companies to identify beneficial owners of shell companies in high-risk metro areas for cash real estate purchases. Real estate agents and attorneys involved in real estate transactions are DNFBPs with STR obligations in most FATF jurisdictions.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Cash purchase = \textbf{no bank KYC layer}. Shell company + cash = highest risk combination. GTOs require beneficial owner identification for all-cash shell company purchases in designated metro areas.}
+	\end{frame}
+	
+	% ================================================================
+	% Q36: ART AND PRECIOUS METALS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q36: Art and Antiquities --- ML Risks}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Art/Antiquities ML}
+			\scriptsize
+			A high-value artwork is sold through a private sale with no public record, at a price far above any prior valuation. What ML risk does this represent?\\[0.15cm]
+			\textbf{A.} No ML risk --- art sales are private transactions not subject to AML.\\
+			\textbf{B.} Integration via subjective valuation: art prices are subjective, enabling over-valuation to justify moving large sums; private sales eliminate transparency; cross-border movement is easy.\\
+			\textbf{C.} Tax avoidance only --- art sales are not covered by FATF.\\
+			\textbf{D.} Placement only --- art purchases introduce new illicit funds.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Art is attractive for ML integration due to: (1) \textbf{Subjective valuation} --- no objective market price for unique works, enabling manipulation; (2) \textbf{Private sales} --- no exchange, no public price discovery, anonymous parties; (3) \textbf{Portability} --- art crosses borders with limited inspection compared to value; (4) \textbf{Over/under-invoicing} to transfer value between parties. FATF has specifically addressed art market risks. The US Anti-Money Laundering Act 2020 (AMLA 2020) expanded BSA to cover art dealers for transactions over \$10,000. Art dealers in most FATF jurisdictions are now DNFBPs with CDD and STR obligations.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Subjective valuation = core art ML risk. Art dealers are now \textbf{covered entities} under FATF and AMLA 2020 (US). Private sales with no audit trail amplify the integration risk.}
+	\end{frame}
+	
+	% ================================================================
+	% Q37: VASP --- FATF REC 15 (CORRECTED)
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q37: VASPs --- FATF Recommendation 15 (CORRECTED)}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: VASP Framework --- Prior version cited wrong Rec number}
+			\scriptsize
+			Under FATF standards, which Recommendation is the PRIMARY framework governing Virtual Asset Service Providers (VASPs)?\\[0.15cm]
+			\textbf{A.} Recommendation 13 --- Correspondent Banking, extended to VASPs.\\
+			\textbf{B.} Recommendation 16 --- Wire Transfers (Travel Rule), as the primary VASP standard.\\
+			\textbf{C.} Recommendation 15 --- New Technologies, updated in 2019 to explicitly include virtual assets and VASPs as the foundational framework.\\
+			\textbf{D.} Recommendation 22 --- DNFBPs, as VASPs are non-bank financial businesses.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation (PRIOR VERSION CITED WRONG REC):} FATF \textbf{Recommendation 15} covers New Technologies and was updated October 2018/June 2019 to require that VASPs be subject to AML/CFT regulation, supervision, and monitoring. The 2021 FATF Guidance on virtual assets and VASPs further elaborated requirements. \textbf{Recommendation 16} (Travel Rule) ALSO applies to VASPs for virtual asset transfers --- requiring originator and beneficiary information --- but this is secondary. Both apply, but Rec 15 is the FOUNDATIONAL framework. The prior version incorrectly cited Rec 16 as the primary VASP recommendation.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Primary VASP framework = \textbf{Rec 15}. Travel Rule for VA transfers = \textbf{Rec 16}. Both apply, but Rec 15 is the foundation. Prior version incorrectly cited Rec 16 as primary.}
+	\end{frame}
+	
+	% ================================================================
+	% Q38: TRAVEL RULE --- VASP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q38: VASP Travel Rule --- Required Information}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Travel Rule for Virtual Assets}
+			\scriptsize
+			Under the FATF Travel Rule (Recommendation 16) extended to VASPs, which information must accompany a virtual asset transfer of \$1,000+?\\[0.15cm]
+			\textbf{A.} Only the originator's wallet address --- beneficiary info is optional.\\
+			\textbf{B.} Originator: full name, wallet address, AND one of (physical address/national ID/customer number/DOB); Beneficiary: name and wallet address.\\
+			\textbf{C.} The transaction hash and block confirmation number only.\\
+			\textbf{D.} AML risk score for the wallet, but no personal identifying information.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF Rec 16 extended to VASPs (2019) requires for transfers $\geq$\$1,000 USD/EUR: \textbf{ORIGINATOR}: full name, account number/wallet address, AND at least one of: physical address, national identity number, customer identification number, or date and place of birth. \textbf{BENEFICIARY}: name and account number/wallet address. This mirrors wire transfer requirements for traditional finance. The ``sunrise problem'' (uneven implementation across jurisdictions) creates compliance challenges. \textbf{Privacy coins and non-custodial/unhosted wallets} are major compliance gaps --- recipient cannot always be identified. VASP-to-VASP transfers are covered; peer-to-peer unhosted wallet transfers are a regulatory gap still being addressed.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Both \textbf{originator AND beneficiary} information required. Wallet address alone is insufficient. Unhosted wallets and privacy coins are compliance gaps where Travel Rule cannot be fully applied.}
+	\end{frame}
+	
+	% ================================================================
+	% Q39: PRIVACY COINS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q39: Privacy Coins vs Standard Cryptocurrency}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Privacy Coins ML Risk}
+			\scriptsize
+			Why do privacy coins (e.g., Monero, Zcash) present GREATER AML risk than standard cryptocurrencies like Bitcoin?\\[0.15cm]
+			\textbf{A.} Privacy coins are faster, allowing criminals to move more funds.\\
+			\textbf{B.} Privacy coins obfuscate sender, receiver, and transaction amounts using cryptographic techniques (ring signatures, zero-knowledge proofs), making blockchain analysis largely ineffective.\\
+			\textbf{C.} Privacy coins are not covered under FATF Recommendation 15.\\
+			\textbf{D.} Privacy coins require more computing power, making them harder to confiscate.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{Bitcoin} = pseudonymous, NOT anonymous. All transactions are publicly visible on the blockchain; only wallet address (not name) is shown. Blockchain analytics firms (Chainalysis, Elliptic) can often trace Bitcoin transactions. \textbf{Privacy coins}: \textbf{Monero} uses ring signatures (mixes with other transactions), stealth addresses (one-time recipient addresses), and RingCT (hides amounts) --- making tracing near-impossible. \textbf{Zcash} uses zero-knowledge proofs (zk-SNARKs). This is why major exchanges have delisted privacy coins in some jurisdictions and why FinCEN/FATF identify them as high-risk. Privacy coins ARE covered under FATF Rec 15 --- they are virtual assets.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Bitcoin = \textbf{pseudonymous} (traceable with analytics). Privacy coins = \textbf{cryptographically anonymous} (nearly untraceable). Fundamentally different privacy guarantees, not just a degree of difference.}
+	\end{frame}
+	
+	% ================================================================
+	% Q40: SECURITIES SECTOR --- WASH TRADING
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q40: Securities Sector --- Wash Trading}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Securities ML --- Market Manipulation}
+			\scriptsize
+			A securities firm identifies a customer conducting rapid round-trip trades --- buying and selling the same securities between related accounts within hours, with no net economic gain. What does this indicate?\\[0.15cm]
+			\textbf{A.} High-frequency trading --- a legal and common investment strategy.\\
+			\textbf{B.} Wash trading --- creating artificial trading activity to generate apparent profits for ML integration or to manipulate market prices.\\
+			\textbf{C.} Dollar-cost averaging --- a conservative investment technique.\\
+			\textbf{D.} Short selling --- profiting from declining share prices.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{Wash trading}: executing buy and sell orders for the same security between related accounts to create the APPEARANCE of trading activity without genuine market risk or economic purpose. In ML context: (1) Illicit funds enter as investment capital; (2) Round-trip trades generate ``trading profit'' documentation; (3) Proceeds withdrawn as ``investment returns'' --- legitimized (integration). Wash trading is also \textbf{market manipulation}, a separate offense. Securities firms must file both \textbf{SARs} (for the ML component) AND \textbf{market abuse reports} (for the manipulation component). Post-trade surveillance systems flag zero-sum round-trip trades. High-frequency trading involves real economic risk and market positions --- not round-trips between related accounts.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Round-trips with no economic gain = \textbf{wash trading} = ML integration AND market manipulation. File \textbf{both} SAR (ML) and market abuse report (manipulation). HFT involves real market risk; wash trading does not.}
+	\end{frame}
+	
+	% ================================================================
+	% Q41: GATEKEEPERS --- LAWYERS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q41: Gatekeepers --- Lawyer Liability for ML}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Lawyer Liability under FATF Rec 23}
+			\scriptsize
+			A lawyer helps a client incorporate a company, open bank accounts, and purchase real estate, knowing the client's funds derive from drug trafficking. Under what principle can the lawyer face criminal liability?\\[0.15cm]
+			\textbf{A.} Lawyers are fully exempt from ML liability due to attorney-client privilege.\\
+			\textbf{B.} Only civil sanctions apply to lawyers --- no criminal prosecution possible.\\
+			\textbf{C.} The lawyer can be criminally prosecuted for money laundering by facilitating ML transactions with knowledge of the predicate offense, regardless of professional privilege.\\
+			\textbf{D.} Liability only attaches if the lawyer personally transferred the funds.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{C} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{Attorney-client privilege} protects CONFIDENTIAL COMMUNICATIONS for legal advice --- it does NOT protect a lawyer from criminal prosecution for PARTICIPATING IN or FACILITATING financial crime with knowledge. When a lawyer incorporates companies, opens accounts, or moves funds KNOWING the money is criminal, they can be charged as co-conspirator in ML. FATF Rec 23 designates lawyers as DNFBPs requiring STR filing for designated activities. UK: Proceeds of Crime Act 2002 --- offense to ``arrange'' or ``facilitate'' ML transactions (s.328). US: 18 USC 1956 --- prosecutes those who knowingly engage in ML transactions. Knowledge of the predicate offense is the key element.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Privilege protects \textbf{legal advice communications}. It does NOT immunize \textbf{transactional participation} in ML with knowledge. ``Knowing'' facilitation = criminal liability regardless of professional status.}
+	\end{frame}
+	
+	% ================================================================
+	% Q42: TCSP RISKS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q42: TCSPs --- Nominee Director Risk}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Trust and Company Service Providers}
+			\scriptsize
+			A TCSP provides nominee director and shareholder services without verifying the ultimate beneficial owner. What is the PRIMARY ML risk?\\[0.15cm]
+			\textbf{A.} The TCSP creates currency exchange risk.\\
+			\textbf{B.} Nominee arrangements obscure true beneficial ownership, enabling criminals to control companies while remaining invisible to banks and regulators.\\
+			\textbf{C.} TCSPs are exempt from beneficial ownership requirements as non-financial intermediaries.\\
+			\textbf{D.} The risk is limited to the jurisdiction where the trust is formed.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} TCSPs (under FATF Recs 22/23) are high-risk because nominee directors/shareholders appear in public records \textbf{in place of the true beneficial owner}. This enables the \textbf{layering} technique of ownership concealment. FATF Recommendations 24/25 (beneficial ownership of legal persons and legal arrangements) require accurate beneficial ownership information. TCSPs must apply CDD to identify the TRUE beneficial owner --- not just the nominee client. FATF Guidance on TCSPs (2017) requires: identify the natural person who ultimately controls/benefits; apply EDD to higher-risk arrangements; file STRs for suspicious structures. Nominee structures are not illegal but require look-through diligence.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Nominees obscure beneficial ownership. TCSPs must look \textbf{THROUGH} nominees to identify the true natural person who owns or controls. Nominee arrangements are a layering tool.}
+	\end{frame}
+	
+	% ================================================================
+	% Q43: HUMAN TRAFFICKING
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q43: Human Trafficking --- Financial Indicators}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: Human Trafficking ML Patterns}
+			\scriptsize
+			A bank account receives multiple small cash deposits from different locations, followed by rapid wire transfers abroad, with the account holder paying for multiple apartment rentals. What financial crime might this indicate?\\[0.15cm]
+			\textbf{A.} Import/export business activity.\\
+			\textbf{B.} Human trafficking proceeds --- cash from victims, rapid repatriation, multiple rental locations consistent with controlling and housing victims.\\
+			\textbf{C.} Standard remittance activity by a migrant worker.\\
+			\textbf{D.} A legitimate real estate portfolio.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} Human trafficking is a FATF designated predicate offense with specific financial patterns. Red flags: (1) Multiple small \textbf{cash deposits from various locations} (victim payments collected by traffickers); (2) \textbf{Rapid wire transfers abroad} (sending proceeds to traffickers in home country); (3) \textbf{Multiple rental payments} (controlling multiple locations where victims are housed/controlled); (4) Third-party payments for accommodation, transportation; (5) Bulk purchases of food, phones, transportation (logistics for victims). FATF issued ``Financial Flows from Human Trafficking'' guidance (2018). Financial institutions are often the ONLY institutional contact point able to detect trafficking through financial patterns.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Human trafficking financial signature: \textbf{multiple small cash deposits} (victim payments) + \textbf{rapid overseas wires} (repatriation) + \textbf{multiple rental payments} (controlling locations). Banks may be the only institution that can detect this.}
+	\end{frame}
+	
+	% ================================================================
+	% Q44: PROLIFERATION FINANCING
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q44: Proliferation Financing --- FATF Rec 7}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: PF vs TF --- FATF Framework}
+			\scriptsize
+			How does proliferation financing (PF) differ from terrorist financing (TF), and which FATF Recommendation specifically addresses PF?\\[0.15cm]
+			\textbf{A.} PF and TF are identical --- both covered under FATF Recommendation 5.\\
+			\textbf{B.} PF funds weapons of mass destruction programs; TF funds terrorist acts. PF is primarily addressed through targeted financial sanctions under FATF Recommendation 7, while TF is under Recommendation 5.\\
+			\textbf{C.} PF applies only to nuclear programs; TF covers all other weapons.\\
+			\textbf{D.} PF is addressed under Recommendation 15 as a new technology risk.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} \textbf{Proliferation Financing (PF)} = financing the development or acquisition of weapons of mass destruction (nuclear, biological, chemical, radiological/CBRN). \textbf{Terrorist Financing (TF)} = providing funds for terrorist acts. These are distinct offenses. FATF framework: \textbf{Rec 7} requires targeted financial sanctions related to proliferation per UN Security Council Resolutions (particularly Iran/DPRK programs). FATF revised recommendations (2012) and added PF risk assessment requirements (2020--2021). The 2020 ``Guidance on Proliferation Financing Risk Assessment and Mitigation'' is significant. Unlike TF (which can involve small amounts), PF often involves larger transactions for dual-use goods, equipment, and technology transfers.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize PF $\neq$ TF. \textbf{PF = WMD financing $\rightarrow$ FATF Rec 7} (targeted sanctions). \textbf{TF = terrorist acts $\rightarrow$ FATF Rec 5}. CBRN weapons are the PF scope; not limited to nuclear.}
+	\end{frame}
+	
+	% ================================================================
+	% Q45: FATF MUTUAL EVALUATIONS + GRAY LIST + DE-RISKING + NRA
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Q45: FATF Mutual Evaluations --- Two Dimensions}
+		\begin{block}{\fontsize{8}{10}\selectfont Topic: FATF Mutual Evaluation Framework}
+			\scriptsize
+			In a FATF Mutual Evaluation (4th Round), countries are assessed on two dimensions. What are they, and what does a Gray List placement require financial institutions to do?\\[0.15cm]
+			\textbf{A.} GDP size and number of SARs filed; Gray List requires terminating all relationships.\\
+			\textbf{B.} Technical compliance (laws/regulations meet FATF standards) AND Effectiveness (system achieves expected outcomes in practice); Gray List requires EDD per Rec 19, not blanket termination.\\
+			\textbf{C.} Number of ML convictions and FIU budget; Gray List is informational only with no institution obligation.\\
+			\textbf{D.} Treaty ratification and court convictions; Gray List prohibits all transactions.
+		\end{block}
+		\vspace{0.05cm}
+		\answerbox{\scriptsize \textbf{B} is correct.}
+		\vspace{0.05cm}
+		\stepbox{\scriptsize
+			\keypoint{Explanation:} FATF 4th Round assesses two dimensions: (1) \textbf{Technical Compliance} --- do laws/regulations technically meet FATF's 40 Recommendations? (Rated C/LC/PC/NC); (2) \textbf{Effectiveness} --- is the system working in practice with expected outcomes? (11 Immediate Outcomes; rated HE/SE/ME/LE). Perfect laws $\neq$ effectiveness. \textbf{Gray List} (Increased Monitoring): FATF Rec 19 requires FIs to apply EDD to parties from Gray-listed countries. \textbf{Black List} (Call for Action, e.g., Iran, DPRK): countermeasures up to refusing transactions. \textbf{De-risking} (blanket termination) is NOT compliant with FATF's risk-based approach. Manage risk through EDD; do not reflexively exit.
+		}
+		\vspace{0.03cm}
+		\trapbox{\scriptsize Two dimensions: \textbf{technical compliance} (law on paper) + \textbf{effectiveness} (practice). Gray List = \textbf{EDD required per Rec 19}; not blanket termination. FATF opposes de-risking as inconsistent with the risk-based approach.}
+	\end{frame}
+	
+	% ================================================================
+	% SUMMARY TABLE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Summary: Key Rules to Memorize for CAMS}
+		\scriptsize
+		\begin{longtable}{|p{0.28\textwidth}|p{0.67\textwidth}|}
+			\hline
+			\keypoint{Rule} & \keypoint{What the CAMS Exam Tests} \\
+			\hline
+			SAR vs STR & US BSA: defined FIs file SARs with FinCEN. US lawyers/real estate agents = NO BSA SAR. Non-US DNFBPs file STRs with national FIU. \\
+			\hline
+			TF vs ML & TF funds can be \textbf{legitimate}; intent/destination is key. ML funds always illicit; source concealment is key. \\
+			\hline
+			Sanctions & Strict liability (civil). OFAC 50\% rule: 50\%+ owned by designated = blocked even if unlisted. Goods screening $\neq$ party screening. \\
+			\hline
+			Facilitation Payments & UK Bribery Act = zero tolerance, global. FCPA = narrow exception, often waived by policy. \\
+			\hline
+			PEPs & Foreign PEPs: mandatory EDD. Domestic PEPs: risk-based assessment required; EDD if elevated risk. Family/associates: also PEPs. SOW and SOF both required. \\
+			\hline
+			VASPs & Foundational framework = Rec 15. Travel Rule for VA transfers = Rec 16. Both originator AND beneficiary required $\geq$\$1K. \\
+			\hline
+			Structuring & Illegal even with clean money. Crime = avoiding CTR filing (31 USC 5324). File SAR; do NOT tip off. \\
+			\hline
+			Correspondent Banking & EDD + senior approval required. Shell banks: absolute prohibition. Blanket de-risking $\neq$ FATF compliant. \\
+			\hline
+			Beneficial Ownership & Natural person who ultimately owns/controls. 25\% = starting point only, not safe harbor. Control by other means also triggers. \\
+			\hline
+			FATF Evaluations & Two dimensions: technical compliance + effectiveness. Gray List = EDD (Rec 19). Black List = countermeasures. De-risking = not compliant. \\
+			\hline
+		\end{longtable}
+	\end{frame}
+	
+	% ================================================================
+	% EXAM TIPS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont Exam Tips --- Common Traps on CAMS Domain A}
+		\scriptsize
+		\begin{block}{\fontsize{9}{11}\selectfont The Most Frequently Missed Distinctions:}
+			\vspace{0.05cm}
+			\scriptsize
+			\begin{itemize}
+				\item \highlight{TF vs ML}: TF funds can be \textbf{legitimate}; ML funds are \textbf{always illicit}. TF = destination/intent; ML = source/disguise.
+				\item \highlight{SAR vs STR}: US BSA SARs are for defined financial institutions. DNFBPs outside US file STRs with national FIU. Terminology varies by jurisdiction.
+				\item \highlight{FATF Rec 15 vs 16}: Rec 15 = VASP framework. Rec 16 = Travel Rule. Both apply to VASPs, but Rec 15 is the foundation.
+				\item \highlight{Domestic PEPs}: Require risk-based assessment. EDD if elevated risk. NOT automatically lower risk without conducting the assessment.
+				\item \highlight{50\% Rule}: Own 50\%+ of an entity = entity is blocked, even if not listed. Aggregate ownership counts.
+				\item \highlight{Structuring}: Illegal even with clean money. Breaking up cash to avoid CTR = crime in itself.
+				\item \highlight{Tipping Off}: Absolute criminal prohibition. Cannot disclose SAR filing or ML investigation to subject.
+				\item \highlight{SDD}: Not zero CDD. Core identity required. Any suspicion overrides SDD.
+				\item \highlight{Shell Banks}: Absolute prohibition. No EDD can make a shell bank relationship acceptable.
+				\item \highlight{De-Risking}: FATF opposes blanket termination. Risk must be managed, not avoided through exit.
+				\item \highlight{SOW vs SOF}: Source of Wealth (overall) $\neq$ Source of Funds (this transaction). FATF Rec 12 requires BOTH for PEPs.
+				\item \highlight{PF vs TF}: Proliferation financing = CBRN weapons $\rightarrow$ Rec 7. Terrorist financing = terrorist acts $\rightarrow$ Rec 5.
+			\end{itemize}
+		\end{block}
+		\vspace{0.03cm}
+		\tipbox{\scriptsize \textbf{Final Tip:} For every answer choice, ask: \textit{``Is this always true, sometimes true, or never true?''} CAMS distractors are typically statements that are \textit{partially} correct or true in a different context. The correct answer is the one that is \textit{precisely} correct for the specific scenario presented.}
+	\end{frame}
+	
+	% ================================================================
+	% END SLIDE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{2.0cm}
+		{\fontsize{16}{19}\selectfont \textbf{Domain A --- 45 Hard Questions Complete}}\\[0.3cm]
+		{\fontsize{10}{12}\selectfont All answers verified against FATF Recommendations, US BSA, UK Bribery Act, and CAMS Study Guide principles.}\\[0.3cm]
+		\rule{4cm}{0.5pt}\\[0.2cm]
+		{\fontsize{8}{10}\selectfont \textit{For each question, understand WHY the wrong answers are wrong. Exam distractors test the same misconceptions repeatedly.}}
+	\end{frame}
+	
+\end{document}
