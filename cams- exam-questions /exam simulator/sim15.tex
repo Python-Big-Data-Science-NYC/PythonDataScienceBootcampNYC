@@ -1,0 +1,677 @@
+% !TeX program = lualatex
+\documentclass[12pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{anyfontsize}
+\usepackage{lmodern}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+
+% ====== EXTREME FONT REDUCTION ======
+\renewcommand{\tiny}{\fontsize{3.5}{4.5}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{4.5}{5.5}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{5.5}{6.5}\selectfont}
+\renewcommand{\small}{\fontsize{6.5}{7.5}\selectfont}
+\renewcommand{\normalsize}{\fontsize{7.5}{8.5}\selectfont}
+\renewcommand{\large}{\fontsize{8.5}{9.5}\selectfont}
+\renewcommand{\Large}{\fontsize{9.5}{10.5}\selectfont}
+\renewcommand{\LARGE}{\fontsize{10.5}{12}\selectfont}
+\renewcommand{\huge}{\fontsize{11.5}{13.5}\selectfont}
+\renewcommand{\Huge}{\fontsize{13}{16}\selectfont}
+
+% ====== COLORS ======
+\definecolor{redcorrect}{RGB}{200,30,30}
+\definecolor{bluecorrect}{RGB}{30,80,200}
+\definecolor{greencheck}{RGB}{0,150,50}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{40,40,40}
+\definecolor{softyellow}{RGB}{255,248,200}
+\definecolor{deepblue}{RGB}{20,60,150}
+\definecolor{darkred}{RGB}{150,20,20}
+\definecolor{orangewarning}{RGB}{255,140,0}
+\definecolor{correctgreen}{RGB}{0,120,40}
+\definecolor{trapcolor}{RGB}{180,80,0}
+\definecolor{purpleconcept}{RGB}{120,50,180}
+\definecolor{tealhard}{RGB}{0,120,120}
+
+\setbeamercolor{title}{fg=white,bg=redcorrect}
+\setbeamercolor{frametitle}{fg=white,bg=redcorrect}
+\setbeamercolor{block title}{fg=white,bg=bluecorrect}
+\setbeamercolor{block body}{fg=darkgray,bg=lightgray}
+\setbeamercolor{normal text}{fg=darkgray}
+\usecolortheme{default}
+
+% ====== CUSTOM COMMANDS ======
+\newcommand{\correct}[1]{\textcolor{greencheck}{\textbf{\checkmark}} #1}
+\newcommand{\keypoint}[1]{\textcolor{deepblue}{\textbf{#1}}}
+\newcommand{\hardconcept}[1]{\textcolor{darkred}{\textbf{#1}}}
+\newcommand{\examtraps}[1]{\textcolor{trapcolor}{\textbf{⚠ TRAP:}} #1}
+\newcommand{\recallbox}[1]{\fcolorbox{deepblue}{blue!5}{\parbox{0.88\textwidth}{\centering \textbf{REMEMBER:} #1}}}
+\newcommand{\stepbox}[1]{%
+	\begin{center}
+		\fcolorbox{darkgray}{white}{%
+			\parbox{0.92\textwidth}{\vspace{0.03cm} #1 \vspace{0.03cm}}%
+		}
+	\end{center}
+}
+\newcommand{\answerbox}[1]{\fcolorbox{correctgreen}{green!8}{\parbox{0.88\textwidth}{\centering \textcolor{correctgreen}{\textbf{\checkmark\ CORRECT:}} #1}}}
+\newcommand{\wronganswer}[1]{\textcolor{redcorrect}{\textbf{✘}} #1}
+\newcommand{\trapbox}[1]{\fcolorbox{trapcolor}{orange!8}{\parbox{0.88\textwidth}{\centering \textcolor{trapcolor}{\textbf{⚠ EXAM TRAP:}} #1}}}
+\newcommand{\keyrule}[1]{\textcolor{tealhard}{\textbf{🔑}} #1}
+
+\begin{document}
+	
+	% ================================================================
+	% SLIDE 1: TITLE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{0.5cm}
+		{\fontsize{18}{22}\selectfont \textbf{ALL CAMS DOMAINS}}\\[0.15cm]
+		{\fontsize{14}{17}\selectfont \textbf{HARD QUESTIONS \& EXAM TRAPS FROM ALL IMAGES}}\\[0.2cm]
+		{\fontsize{9}{11}\selectfont \textit{Everything You Get Wrong — Explained in Natural Language}}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{7}{9}\selectfont Data Collection · MLAT · PPP · FATF 6-Step · Financial Secrecy Index}\\[0.05cm]
+		{\fontsize{7}{9}\selectfont EWRA · Biometrics · Authentication · Concentration Accounts · Trade Topology}\\[0.05cm]
+		{\fontsize{7}{9}\selectfont Board Oversight · Terrorist Financing · DNFBPs · Layering · Structuring}\\[0.05cm]
+		{\fontsize{7}{9}\selectfont IOSCO · BSA · China AML · Open Source · Batch Screening · Clustering}
+		\vspace{0.3cm}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 2: DATA EXTRACTION - THE FORMAT TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Extraction — The Format Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which best describes a challenge during AFC data extraction?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Data may come in different formats, requiring normalization during integration.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item Many candidates think data extraction is just \textbf{pulling data} from systems. But the \textbf{real challenge} is what happens \textbf{after} you pull it.
+				\item Different systems use \textbf{different formats}: one system uses "US," another uses "USA," another uses "840" or "United States."
+				\item \textbf{Normalization} is the process of making all this data \textbf{consistent} so it can be used together.
+				\item Without normalization, your transaction monitoring system can't properly analyze transactions or identify patterns.
+				\item \textbf{Key principle:} Data extraction is \textbf{not} the challenge — \textbf{data normalization} is.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Data extraction challenge = \textbf{different formats requiring normalization}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 3: DATA MINING - THE EXTERNAL SOURCES TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Mining — The External Sources Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which are requirements for effective data mining and matching in AFC controls? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Comparing extracted data against structured and unstructured risk sources. 2. Applying intelligent filters to reduce false positives during entity resolution.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Focusing on internal customer files for mining purposes} — This is a \textbf{trap}. Effective data mining requires \textbf{both internal and external} sources.
+				\item \textbf{Structured data:} Databases, spreadsheets, formatted fields.
+				\item \textbf{Unstructured data:} Emails, documents, free-text fields, news articles.
+				\item \textbf{Intelligent filters:} Reduce false positives during entity resolution (matching entities across different data sources).
+				\item \textbf{Key principle:} Data mining is \textbf{broad}, not narrow. You need \textbf{external} data to catch \textbf{external} risks.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Data mining = \textbf{internal + external} data sources + \textbf{intelligent filters}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 4: DATA INTEGRATION - THE ISOLATION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Integration — The Isolation Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which help ensure effective integration of multiple data sources into compliance platforms? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Maintaining a common data dictionary. 2. Mapping all incoming data to standardized field names. 3. Aligning control data requirements to system inputs.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Separating internal and external data into isolated systems} — This is a \textbf{trap}. Separation \textbf{undermines} integration, it doesn't help it.
+				\item \textbf{Common data dictionary:} Ensures all systems use the same definitions (e.g., "customer" means the same thing everywhere).
+				\item \textbf{Field mapping:} Ensures data from source systems is translated correctly into target systems.
+				\item \textbf{Aligning control requirements:} Ensures the monitoring system receives all necessary data.
+				\item \textbf{Key principle:} Integration is about \textbf{connection}, not isolation.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Integration = \textbf{common dictionary} + \textbf{field mapping} + \textbf{aligned requirements}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 5: INTERNAL vs EXTERNAL SOURCES - THE SCOPE TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Internal vs External Sources — The Scope Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which characteristics describe internal versus external sources used during AFC data extraction? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Internal sources reflect observed customer behavior or system-held values. 2. External sources include sanction or adverse media lists from agencies.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Internal data includes account balance snapshots, not user activity} — This is \textbf{too narrow}. Internal data includes \textbf{much more} than just account balances.
+				\item \textbf{Internal sources:} Transaction histories, account balances, customer profiles, onboarding records, system-held values.
+				\item \textbf{External sources:} Sanctions lists (OFAC, UN), PEP lists, adverse media databases, regulatory watchlists.
+				\item \textbf{Key principle:} Internal data provides \textbf{behavioral context}. External data provides \textbf{risk context}. Both are essential.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Internal = \textbf{behavioral context}. External = \textbf{risk context}. Both needed.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 6: MLAT - THE ADMISSIBILITY TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{MLAT — The Admissibility Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Two countries establish an MLAT. Country A has data protection rules preventing sharing of client identities. Country B bases investigations on BO disclosures. What challenge arises?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Evidence exchanged under the MLAT will NOT be admissible in Country B's legal system.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item Most candidates think the problem is \textbf{Country A won't share the data}. That's \textbf{obvious}. The exam tests deeper understanding.
+				\item The \textbf{real issue} is that even if Country A \textbf{does} share the data, Country B's courts may \textbf{reject} it.
+				\item \textbf{Admissibility} is the legal standard for evidence in court.
+				\item If the evidence doesn't meet Country B's evidentiary standards, it's \textbf{useless} — even if shared.
+				\item \textbf{Key principle:} MLATs must address both \textbf{sharing} AND \textbf{admissibility}. The exam tests admissibility, not sharing.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} MLAT challenge = \textbf{admissibility}, not just sharing.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 7: PPP - THE REAL-TIME INTELLIGENCE TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{PPP — The Real-Time Intelligence Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			An FIU wants to use PPP for real-time intelligence sharing to disrupt a terrorist financing network. Which approach is most aligned?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Establishing a formal platform with direct two-way communication on specific threats.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item Many candidates choose \wronganswer{anonymized, aggregated format after threat is resolved} because it sounds \textbf{safer} or more \textbf{privacy-protecting}.
+				\item But \textbf{that's not a PPP}. That's \textbf{after-the-fact reporting}.
+				\item \textbf{PPP is about DISRUPTION} — stopping crimes \textbf{before} they happen.
+				\item To disrupt, you need \textbf{real-time two-way communication}.
+				\item Anonymized reporting \textbf{protects privacy} but \textbf{doesn't enable disruption}.
+				\item \textbf{Key principle:} PPPs are about \textbf{real-time} intelligence sharing to \textbf{disrupt} active threats.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} PPP = \textbf{real-time two-way communication} for disruption.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 8: FATF 6-STEP FRAMEWORK - THE COMPONENTS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{FATF 6-Step — The Component Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which are key components of FATF's six-step framework for national ML/TF risk assessments? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Environmental scanning. 2. Horizon scanning. 3. Threat identification.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Cross-border tax enforcement} — This \textbf{sounds plausible} because it's related to financial crime, but it's \textbf{not} a FATF risk assessment component.
+				\item \wronganswer{Offshore asset repatriation} — Also sounds related, but \textbf{not} a component.
+				\item \textbf{Environmental scanning:} Understanding the context (what's happening in the country?).
+				\item \textbf{Horizon scanning:} Identifying emerging risks (what's coming?).
+				\item \textbf{Threat identification:} Identifying specific threats (who are the bad actors?).
+				\item \textbf{Key principle:} FATF's framework is about \textbf{understanding risk}, not enforcement actions.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} FATF 6-step = \textbf{environmental + horizon scanning + threat identification}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 9: FINANCIAL SECRECY INDEX - THE FACTORS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Financial Secrecy Index — The Factors Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which contribute to an elevated Financial Secrecy Index rating? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Minimal BO reporting. 2. Extensive cross-border services to non-residents. 3. High secrecy-to-scale ratio.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{High ranking on global GDP without AML laws} — This \textbf{sounds} like it would matter, but GDP alone \textbf{doesn't create secrecy}.
+				\item \textbf{Minimal BO reporting:} If you don't know who owns companies, that's secrecy.
+				\item \textbf{Cross-border services to non-residents:} Providing banking services to people who don't live there enables secrecy.
+				\item \textbf{High secrecy-to-scale ratio:} How much secrecy relative to financial activity — if a small jurisdiction has a lot of secrecy, that's a red flag.
+				\item \textbf{Key principle:} FSI measures \textbf{actual secrecy}, not just size or wealth.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} FSI factors = \textbf{BO reporting + cross-border services + secrecy-to-scale ratio}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 10: EWRA - THE MLRO ROLE TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{EWRA — The MLRO Role Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which function uses EWRA results to shape risk posture?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{The Money Laundering Reporting Officer (MLRO).}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item Many candidates choose \wronganswer{Internal Audit Lead} because audit \textbf{sounds} like it would shape risk.
+				\item But \textbf{Internal Audit} is the \textbf{third line of defense} — they assess controls, they don't shape risk posture.
+				\item The \textbf{MLRO} is responsible for \textbf{managing AML risk} — they use EWRA to adjust controls, enhance monitoring, and allocate resources.
+				\item \textbf{Key principle:} MLRO = \textbf{risk manager}. Internal Audit = \textbf{risk assessor}. Different roles.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} MLRO = \textbf{shapes risk posture}. Internal Audit = \textbf{assesses} controls.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 11: TAX EVASION vs TAX AVOIDANCE - THE DISTINCTION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Tax Evasion vs Tax Avoidance — The Distinction Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			A company failed to report offshore revenue and laundered funds through an unrelated third party. What conclusion is best supported?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{The company committed tax evasion by concealing income.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item Many candidates choose \wronganswer{legally avoided taxes through offshore structuring} because offshore structuring \textbf{sounds} like tax planning.
+				\item But there's a \textbf{critical distinction}:
+				\begin{itemize}
+					\item \textbf{Tax avoidance:} Legal — you structure to minimize taxes \textbf{within the law}.
+					\item \textbf{Tax evasion:} Illegal — you \textbf{conceal} income or assets.
+				\end{itemize}
+				\item \textbf{Failure to report + laundering through a third party} = concealment = \textbf{evasion}.
+				\item \textbf{Key principle:} Tax avoidance requires \textbf{full disclosure}. Concealment = evasion = predicate offense for ML.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Avoidance = legal with disclosure. Evasion = illegal with concealment.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 12: BOARD OVERSIGHT - THE OPERATIONAL TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Board Oversight — The Operational Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which actions demonstrate effective board oversight? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Receiving regular reports on risks. 2. Reviewing management's response to audit findings. 3. Challenging management on weak performance.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item Many candidates choose \wronganswer{Participating in SAR investigations} because it sounds \textbf{engaged} and \textbf{involved}.
+				\item But \textbf{boards provide OVERSIGHT}, not operational involvement.
+				\item \textbf{Participating in SAR investigations} is \textbf{operational} — that's for compliance staff, not the board.
+				\item \textbf{Board duties:}
+				\begin{itemize}
+					\item Receive reports (stay informed)
+					\item Review audit responses (hold management accountable)
+					\item Challenge management (ask tough questions)
+				\end{itemize}
+				\item \textbf{Key principle:} Board = \textbf{oversight and challenge}. NOT \textbf{doing the work}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Board = \textbf{oversight}. NOT operational involvement.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 13: TERRORIST FINANCING - THE MOVEMENT METHODS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Terrorist Financing — The Movement Methods Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which techniques are commonly used by terrorists to move or store money across borders avoiding detection? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Fake charities. 2. Hawala (informal value transfer). 3. Physical cash transport across porous borders.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Large wire transfers through regulated banks} — This is a \textbf{trap} because it \textbf{sounds} like a method, but it's \textbf{detectable}.
+				\item Terrorists want to \textbf{avoid detection}, so they use \textbf{unregulated} methods.
+				\item \textbf{Fake charities:} Disguise TF as humanitarian aid.
+				\item \textbf{Hawala:} Informal value transfer outside regulated banking.
+				\item \textbf{Physical cash transport:} Crosses borders avoiding detection.
+				\item \textbf{Key principle:} Terrorists use \textbf{unregulated} and \textbf{hard-to-detect} methods.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} TF = \textbf{fake charities + Hawala + physical cash}. NOT regulated wire transfers.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 14: HUMAN TRAFFICKING - THE LAUNDERING METHODS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Human Trafficking — The Laundering Methods Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which characteristics enable human trafficking operations to effectively launder illicit proceeds? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Use of mobile payment and remittance systems. 2. Weak cross-border enforcement cooperation.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{High correlation between trafficking and counterfeit document operations} — This is \textbf{related} to trafficking, but \textbf{counterfeit documents} are a \textbf{separate crime}, not a laundering method.
+				\item \textbf{Mobile payments/remittances:} Enable rapid movement of small amounts (structuring).
+				\item \textbf{Weak cross-border enforcement:} Allows traffickers to operate across jurisdictions.
+				\item \textbf{Key principle:} Traffickers launder proceeds through \textbf{rapid, small, cross-border} transactions.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Trafficking laundering = \textbf{mobile payments} + \textbf{weak cross-border enforcement}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 15: TCSP - THE OUTSOURCING TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{TCSP — The Outsourcing Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			A TCSP is reviewing a client who wants confidentiality and is linked to high-risk industries in the NRA. What should the TCSP do?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Decline immediately unless full BO info and risk justifications are disclosed and verified.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Refer to offshore local counsel and detach from compliance responsibility} — This is a \textbf{trap}. You \textbf{cannot} outsource AML responsibility.
+				\item \textbf{TCSP retains compliance responsibility} — always.
+				\item \textbf{Confidentiality requests + high-risk industries = red flags.}
+				\item \textbf{FATF Rec 24/25:} BO identification is \textbf{mandatory}.
+				\item \textbf{Key principle:} You can use local counsel, but you \textbf{cannot transfer liability}. You remain responsible.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} TCSP cannot outsource AML responsibility. Decline unless BO disclosed.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 16: DNFBP RISK MANAGEMENT - THE EDD TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{DNFBP Risk Management — The EDD Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which strategies help manage DNFBP risks? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Creating a reputational risk/client selection committee. 2. Using standardized sector-specific questionnaires.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Defaulting to EDD for all DNFBPs} — This \textbf{sounds} prudent, but it's \textbf{not risk-based}. You would over-control low-risk DNFBPs.
+				\item \textbf{Risk-based approach:} Apply proportionate measures based on actual risk.
+				\item \textbf{Client selection committee:} Governance for high-risk decisions.
+				\item \textbf{Standardized questionnaires:} Consistent risk assessment across DNFBPs.
+				\item \textbf{Key principle:} Risk management = \textbf{proportionate measures}, not blanket EDD.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} DNFBP risk = \textbf{committee} + \textbf{standardized questionnaires}. NOT blanket EDD.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 17: LAYERING - THE CLASSIFICATION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Layering — The Classification Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			A private loan extended to a shell company with no operations, loan amount matches criminal proceeds. What is the initial classification?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{A layering tactic designed to conceal the origin of illicit funds.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{A placement strategy to integrate clean capital} — This is a \textbf{trap}. Placement is the \textbf{first stage} — entering illicit funds into the system.
+				\item \textbf{Layering} is the \textbf{second stage} — concealing the origin.
+				\item A \textbf{private loan to a shell company} creates a \textbf{false paper trail} that appears legitimate.
+				\item The loan \textbf{distances} the funds from their criminal source.
+				\item \textbf{Key principle:} Layering = \textbf{concealing origin}. Placement = \textbf{entering system}. Integration = \textbf{using funds legitimately}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Layering = \textbf{concealing origin}. Placement = \textbf{entering system}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 18: PROACTIVE RESPONSE - THE UPDATING TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Proactive Response — The Updating Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			What is a proactive institutional response to newly detected AML risks?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Immediately updating the enterprise-wide risk assessment.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Reducing reliance on transaction monitoring systems} — This is \textbf{reactive} and \textbf{counterproductive}.
+				\item \textbf{Proactive} = take action \textbf{before} the risk materializes.
+				\item \textbf{Updating EWRA} allows the institution to:
+				\begin{itemize}
+					\item Adjust controls
+					\item Allocate resources to higher-risk areas
+					\item Enhance monitoring before risks materialize
+				\end{itemize}
+				\item \textbf{Key principle:} Proactive = \textbf{update risk assessment}. Reactive = \textbf{respond after the fact}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Proactive = \textbf{update EWRA immediately}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 19: IOSCO - THE OBJECTIVES TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{IOSCO — The Objectives Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which of IOSCO's core objectives directly support anti-financial crime efforts? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Enhancing investor protection through cooperation and enforcement. 2. Promoting financial stability by managing systemic risks and facilitating international information exchange.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Requiring uniform compliance departments} — This \textbf{sounds} like it would help, but it's \textbf{not} an IOSCO objective.
+				\item \textbf{IOSCO objectives:}
+				\begin{itemize}
+					\item \textbf{Investor protection:} Combating fraud and market abuse.
+					\item \textbf{Financial stability:} Managing systemic risks and cross-border info sharing.
+				\end{itemize}
+				\item \textbf{Key principle:} IOSCO's objectives are \textbf{high-level} — investor protection and financial stability. Uniform departments is \textbf{operational}, not an objective.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} IOSCO = \textbf{investor protection} + \textbf{financial stability}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 20: OPEN SOURCE RESEARCH - THE ENTITY-SPECIFIC TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Open Source Research — The Entity-Specific Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			An analyst notes wire transfers to an unfamiliar entity in a sanctioned jurisdiction. Which information source would most help understand the activity?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Open-source research into the entity.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Regulatory advisories about common evasion techniques} — This is \textbf{general} information, not \textbf{specific} to the entity.
+				\item \textbf{Open-source research} on the \textbf{specific entity} provides:
+				\begin{itemize}
+					\item Ownership information
+					\item Business activities
+					\item Connections to other entities
+					\item Whether it's a shell company or front
+				\end{itemize}
+				\item \textbf{Key principle:} When investigating an \textbf{unknown entity}, go to \textbf{entity-specific} sources, not general guidance.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Unknown entity = \textbf{open-source research} on that specific entity.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 21: BATCH SCREENING - THE VOLUME TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Batch Screening — The Volume Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which are true about batch screening? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. It helps reveal changing risks within the existing customer base. 2. It is designed to handle large volumes of data.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{It provides real-time transaction screening} — This is \textbf{real-time screening}, not batch screening.
+				\item \textbf{Batch screening:} Processes data in bulk — typically the entire customer database — against sanctions lists, PEP lists.
+				\item \textbf{Purpose:} Detects existing customers who have become risky (e.g., newly designated sanctions).
+				\item \textbf{Volume-oriented:} Designed to handle millions of records.
+				\item \textbf{Key principle:} Batch screening = \textbf{periodic re-screening} of the \textbf{entire customer base}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Batch screening = \textbf{large volumes} + \textbf{changing risks}. NOT real-time.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 22: FINAL EXAM TIPS - ALL DOMAINS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{ALL DOMAINS — Hardest Exam Traps Summary}}
+		\scriptsize
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Top 20 Traps — Natural Explanations}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{Data Extraction:} Challenge = \textbf{normalization}, not just pulling data.
+				\item \textbf{Data Mining:} Need \textbf{internal + external} data sources.
+				\item \textbf{Data Integration:} Need \textbf{connection}, not isolation.
+				\item \textbf{MLAT:} Challenge = \textbf{admissibility}, not just sharing.
+				\item \textbf{PPP:} = \textbf{real-time two-way communication}, not post-hoc reporting.
+				\item \textbf{FATF 6-Step:} = \textbf{environmental + horizon scanning + threat identification}.
+				\item \textbf{Financial Secrecy Index:} = \textbf{BO reporting + cross-border services + secrecy-to-scale ratio}.
+				\item \textbf{EWRA:} MLRO \textbf{shapes risk}; Internal Audit \textbf{assesses} controls.
+				\item \textbf{Tax:} Avoidance = \textbf{legal with disclosure}. Evasion = \textbf{illegal with concealment}.
+				\item \textbf{Board:} = \textbf{oversight}, NOT operational involvement.
+				\item \textbf{TF:} = \textbf{fake charities + Hawala + physical cash}. NOT regulated wire transfers.
+				\item \textbf{Human Trafficking:} = \textbf{mobile payments + weak cross-border enforcement}.
+				\item \textbf{TCSP:} Cannot outsource AML responsibility.
+				\item \textbf{DNFBP:} = \textbf{committee + questionnaires}. NOT blanket EDD.
+				\item \textbf{Layering:} = \textbf{concealing origin}. Placement = \textbf{entering system}.
+				\item \textbf{Proactive:} = \textbf{update EWRA immediately}.
+				\item \textbf{IOSCO:} = \textbf{investor protection + financial stability}.
+				\item \textbf{Open Source:} = \textbf{entity-specific research}, not general guidance.
+				\item \textbf{Batch Screening:} = \textbf{large volumes + changing risks}. NOT real-time.
+				\item \textbf{Structuring:} = \textbf{small deposits to avoid thresholds} + sudden wire transfer.
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Final Rule:} Understand the \textbf{why} behind each concept. The exam tests \textbf{application}, not memorization.}
+	\end{frame}
+	
+	% ================================================================
+	% END SLIDE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{1.5cm}
+		{\fontsize{18}{22}\selectfont \textbf{ALL CAMS DOMAINS — COMPLETE}}\\[0.2cm]
+		{\fontsize{11}{13}\selectfont Hard Questions \& Exam Traps from All Images}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{8}{10}\selectfont Data Collection · MLAT · PPP · FATF 6-Step · Financial Secrecy Index}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont EWRA · Biometrics · Authentication · Concentration Accounts · Trade Topology}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont Board Oversight · Terrorist Financing · DNFBPs · Layering · Structuring}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont IOSCO · BSA · China AML · Open Source · Batch Screening · Clustering}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{8}{10}\selectfont \textit{All traps explained in natural language. Ready for the exam.}}
+		\vspace{0.5cm}
+	\end{frame}
+	
+\end{document}

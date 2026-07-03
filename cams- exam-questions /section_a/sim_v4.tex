@@ -1,0 +1,1347 @@
+% !TeX program = lualatex
+\documentclass[12pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{anyfontsize}
+\usepackage{lmodern}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+
+% ====== EXTREME FONT REDUCTION FOR MAX CONTENT ======
+\renewcommand{\tiny}{\fontsize{3.5}{4.5}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{4.5}{5.5}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{5.5}{6.5}\selectfont}
+\renewcommand{\small}{\fontsize{6.5}{7.5}\selectfont}
+\renewcommand{\normalsize}{\fontsize{7.5}{8.5}\selectfont}
+\renewcommand{\large}{\fontsize{8.5}{9.5}\selectfont}
+\renewcommand{\Large}{\fontsize{9.5}{10.5}\selectfont}
+\renewcommand{\LARGE}{\fontsize{10.5}{12}\selectfont}
+\renewcommand{\huge}{\fontsize{11.5}{13.5}\selectfont}
+\renewcommand{\Huge}{\fontsize{13}{16}\selectfont}
+
+% ====== COLORS ======
+\definecolor{redcorrect}{RGB}{200,30,30}
+\definecolor{bluecorrect}{RGB}{30,80,200}
+\definecolor{greencheck}{RGB}{0,150,50}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{40,40,40}
+\definecolor{softyellow}{RGB}{255,248,200}
+\definecolor{deepblue}{RGB}{20,60,150}
+\definecolor{darkred}{RGB}{150,20,20}
+\definecolor{orangewarning}{RGB}{255,140,0}
+\definecolor{correctgreen}{RGB}{0,120,40}
+\definecolor{trapcolor}{RGB}{180,80,0}
+\definecolor{purpleconcept}{RGB}{120,50,180}
+\definecolor{tealhard}{RGB}{0,120,120}
+
+\setbeamercolor{title}{fg=white,bg=redcorrect}
+\setbeamercolor{frametitle}{fg=white,bg=redcorrect}
+\setbeamercolor{block title}{fg=white,bg=bluecorrect}
+\setbeamercolor{block body}{fg=darkgray,bg=lightgray}
+\setbeamercolor{normal text}{fg=darkgray}
+\usecolortheme{default}
+
+% ====== CUSTOM COMMANDS ======
+\newcommand{\correct}[1]{\textcolor{greencheck}{\textbf{\checkmark}} #1}
+\newcommand{\keypoint}[1]{\textcolor{deepblue}{\textbf{#1}}}
+\newcommand{\hardconcept}[1]{\textcolor{darkred}{\textbf{#1}}}
+\newcommand{\examtraps}[1]{\textcolor{trapcolor}{\textbf{⚠ TRAP:}} #1}
+\newcommand{\recallbox}[1]{\fcolorbox{deepblue}{blue!5}{\parbox{0.88\textwidth}{\centering \textbf{REMEMBER:} #1}}}
+\newcommand{\stepbox}[1]{%
+	\begin{center}
+		\fcolorbox{darkgray}{white}{%
+			\parbox{0.92\textwidth}{\vspace{0.03cm} #1 \vspace{0.03cm}}%
+		}
+	\end{center}
+}
+\newcommand{\answerbox}[1]{\fcolorbox{correctgreen}{green!8}{\parbox{0.88\textwidth}{\centering \textcolor{correctgreen}{\textbf{\checkmark\ CORRECT:}} #1}}}
+\newcommand{\wronganswer}[1]{\textcolor{redcorrect}{\textbf{✘}} #1}
+\newcommand{\trapbox}[1]{\fcolorbox{trapcolor}{orange!8}{\parbox{0.88\textwidth}{\centering \textcolor{trapcolor}{\textbf{⚠ EXAM TRAP:}} #1}}}
+\newcommand{\keyrule}[1]{\textcolor{tealhard}{\textbf{🔑}} #1}
+
+\begin{document}
+	
+	% ================================================================
+	% SLIDE 1: TITLE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{0.5cm}
+		{\fontsize{18}{22}\selectfont \textbf{CAMS Domain A}}\\[0.15cm]
+		{\fontsize{14}{17}\selectfont \textbf{Hard Concepts \& Exam Traps}}\\[0.2cm]
+		{\fontsize{9}{11}\selectfont \textit{Advanced Explanations for Difficult Topics}}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{7}{9}\selectfont VASP · Crypto · FATF Recommendations · Sanctions · DORA}\\[0.05cm]
+		{\fontsize{7}{9}\selectfont Investment Banking · Wealth Management · PSP · OSINT · KYC}\\[0.05cm]
+		{\fontsize{7}{9}\selectfont Trust Companies · Data Governance · Post-Acquisition Integration}
+		\vspace{0.3cm}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 2: VASP - FATF Recommendation 15 DETAILED
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{VASP \& FATF Recommendation 15 — Complete Breakdown}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is a VASP?}}
+			\scriptsize
+			\textbf{Virtual Asset Service Provider} — any natural/legal person conducting \textbf{one or more} of:
+			\begin{itemize}
+				\item Exchange between virtual assets and fiat currencies
+				\item Exchange between one or more forms of virtual assets
+				\item Transfer of virtual assets (on behalf of another)
+				\item Safekeeping/administration of virtual assets
+				\item Participation in financial services related to issuer offers/sale of VAs
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{FATF Rec 15 Requirements}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Licensing/Registration:} VASPs must be licensed or registered in all jurisdictions
+				\item \textbf{AML/CFT Obligations:} Same as traditional FIs (CDD, EDD, record-keeping, SARs)
+				\item \textbf{Travel Rule (Rec 16):} Originator/beneficiary info for all VA transfers
+				\item \textbf{Sanctions Screening:} Must screen all wallet addresses against sanctions lists
+				\item \textbf{Risk Assessment:} Must assess ML/TF risks of VA products/services
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Common Exam Trap:} Rec 15 = \textbf{VASP framework}. Rec 16 = \textbf{Travel Rule}. Many candidates confuse these!}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize Rec 15 is the \textbf{foundational} requirement for VASPs — without it, no VASP can legally operate.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 3: CRYPTO AML - HARD CONCEPTS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Cryptocurrency AML — Advanced Concepts}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Key Crypto ML/TF Risks}}
+			\scriptsize
+			\begin{tabular}{|p{0.28\textwidth}|p{0.68\textwidth}|}
+				\hline
+				\keypoint{Risk Factor} & \keypoint{Explanation} \\
+				\hline
+				Pseudonymity & Wallet addresses are not directly linked to real identities \\
+				\hline
+				Decentralized Exchanges & No KYC required; rapid token swaps obscure source/destination \\
+				\hline
+				Privacy Coins & Monero, Zcash — transactions are fully anonymous \\
+				\hline
+				Mixers/Tumblers & Combine funds from multiple sources to obscure origin \\
+				\hline
+				NFTs & Art can be used for layering via wash trading \\
+				\hline
+				DeFi Protocols & No central authority; lending/borrowing without KYC \\
+				\hline
+			\end{tabular}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Crypto Compliance Toolkit}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Blockchain Analytics:} Chainalysis, Elliptic, CipherTrace — trace on-chain activity
+				\item \textbf{Entity Resolution:} Link wallet addresses to real-world entities
+				\item \textbf{Wallet Clustering:} Group related wallets to identify entities
+				\item \textbf{Real-time Screening:} Screen transactions against sanctions lists
+				\item \textbf{Travel Rule Compliance:} Share originator/beneficiary info for transfers > \$1,000
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{Centralized exchanges obscure source/destination} — actually, \textbf{decentralized} exchanges do this. Centralized exchanges require KYC.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 4: CRYPTO SANCTIONS SCREENING
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Crypto Sanctions Screening — Complete Guide}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Core Requirements}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{OFAC Compliance:} Must screen all crypto transactions against SDN List
+				\item \textbf{UN Sanctions:} Must screen against UN Security Council sanctions
+				\item \textbf{EU Sanctions:} Must comply with EU restrictive measures
+				\item \textbf{FATF Rec 7:} Targeted financial sanctions for TF and proliferation financing
+				\item \textbf{50\% Rule:} Applies to crypto entities — if 50\%+ owned by sanctioned entity, it's blocked
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Technical Implementation}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{On-Chain Screening:} Screen wallet addresses in real-time using blockchain analytics
+				\item \textbf{Off-Chain Screening:} Screen counterparty identity info (name, DOB, address)
+				\item \textbf{Entity Resolution:} Link on-chain addresses to off-chain risk data
+				\item \textbf{Travel Rule:} FATF Rec 16 requires originator/beneficiary info transfer
+				\item \textbf{Sanctions Evasion Detection:} Monitor for use of mixers, privacy coins, and cross-chain bridges
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Sanctions are \textbf{strict liability} — no intent required. If you process a transaction with a sanctioned entity, you're liable.}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{Only screen fiat transactions} — crypto transactions \textbf{must} be screened too.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 5: FATF RECOMMENDATIONS QUICK REFERENCE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{FATF Recommendations — Hard-to-Remember Ones}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Critical Recs for CAMS Exam}}
+			\scriptsize
+			\begin{longtable}{|p{0.12\textwidth}|p{0.40\textwidth}|p{0.44\textwidth}|}
+				\hline
+				\keypoint{Rec} & \keypoint{Title} & \keypoint{Key Requirement} \\
+				\hline
+				Rec 1 & Risk-Based Approach & Assess ML/TF risks; apply proportionate measures \\
+				\hline
+				Rec 6 & Targeted Financial Sanctions (TF) & Freeze assets of designated terrorists \\
+				\hline
+				Rec 7 & Targeted Financial Sanctions (PF) & Freeze assets of proliferation financiers \\
+				\hline
+				Rec 10 & Customer Due Diligence & Identify and verify customer identity \\
+				\hline
+				Rec 12 & PEPs & Apply EDD to foreign PEPs; domestic PEPs risk-based \\
+				\hline
+				Rec 15 & New Technologies & VASP licensing and AML obligations \\
+				\hline
+				Rec 16 & Travel Rule & Originator/beneficiary info for wire transfers \\
+				\hline
+				Rec 17 & Third-Party Reliance & May rely on third parties for CDD (with conditions) \\
+				\hline
+				Rec 18 & Internal Controls & Group-wide AML programs for all branches/subsidiaries \\
+				\hline
+				Rec 19 & High-Risk Countries & Apply EDD for FATF black/grey-listed countries \\
+				\hline
+				Rec 20 & Suspicious Transaction Reporting & File STRs for suspicious activity \\
+				\hline
+				Rec 22 & DNFBPs & Casinos, real estate, lawyers, accountants, TCSPs \\
+				\hline
+				Rec 24 & Beneficial Ownership (Legal Persons) & Identify and verify UBOs \\
+				\hline
+				Rec 25 & Beneficial Ownership (Legal Arrangements) & Trusts: identify settlor, trustee, protector, beneficiaries \\
+				\hline
+				Rec 35 & Sanctions & Administrative sanctions for non-compliance \\
+				\hline
+				Rec 36 & Mutual Legal Assistance & International cooperation for investigations \\
+				\hline
+				Rec 40 & International Cooperation & FIU-to-FIU information sharing \\
+				\hline
+			\end{longtable}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Rec 15 = VASP. Rec 16 = Travel Rule. Rec 17 = Third-party CDD. Rec 24/25 = Beneficial Ownership.}}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 6: FATF GREY LIST REMEDIATION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{FATF Grey List Remediation — Complete Process}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is the Grey List?}}
+			\scriptsize
+			Jurisdictions under \textbf{increased monitoring} — committed to resolving strategic AML/CFT deficiencies.
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Remediation Steps (Must-Know Order)}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{Identify Strategic Deficiencies:} FATF publishes specific deficiencies (e.g., weak supervision, BO transparency)
+				\item \textbf{Develop Action Plan:} Country submits high-level political commitment to FATF
+				\item \textbf{Enact Legislation:} Pass laws to address deficiencies (e.g., AML Act amendments)
+				\item \textbf{Strengthen Supervision:} Improve oversight of FIs and DNFBPs
+				\item \textbf{Enhance BO Transparency:} Implement BO registers and verification systems
+				\item \textbf{Increase Enforcement:} Apply sanctions for non-compliance; prosecute ML cases
+				\item \textbf{Show Effectiveness:} Demonstrate that measures are producing results
+				\item \textbf{On-Site Visit:} FATF team visits to verify implementation
+				\item \textbf{Removal:} FATF votes to remove from grey list
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Consequences of Grey List Status}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{EDD Required:} Rec 19 — enhanced due diligence for transactions involving grey-listed countries
+				\item \textbf{Reputational Risk:} Negative perception in financial markets
+				\item \textbf{Correspondent Banking:} Banks may terminate relationships
+				\item \textbf{Investment:} Reduced foreign direct investment
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{Grey list = black list} — \textbf{NO.} Grey = increased monitoring; Black = call for action. Different consequences!}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 7: FATF BLACK LIST VS GREY LIST
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Black List vs Grey List — Critical Distinction}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Comparison Table}}
+			\scriptsize
+			\begin{tabular}{|p{0.18\textwidth}|p{0.38\textwidth}|p{0.40\textwidth}|}
+				\hline
+				\keypoint{Factor} & \keypoint{Black List (Call for Action)} & \keypoint{Grey List (Increased Monitoring)} \\
+				\hline
+				Definition & Jurisdictions with \textbf{serious} strategic AML/CFT deficiencies & Jurisdictions \textbf{committed} to resolving deficiencies \\
+				\hline
+				Consequence & \textbf{Strong} countermeasures recommended & \textbf{Enhanced} due diligence (EDD) required \\
+				\hline
+				FATF Action & Call for action — all members apply countermeasures & Increased monitoring — progress reports required \\
+				\hline
+				Removal Process & Must address ALL deficiencies; on-site visit & Progress report; may be removed when deficiencies addressed \\
+				\hline
+				Examples & Iran, North Korea & Nigeria, South Africa, UAE, Turkey \\
+				\hline
+				Rec Reference & Rec 19 (High-Risk Countries) & Rec 19 (High-Risk Countries) \\
+				\hline
+			\end{tabular}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Black List = Countermeasures (strong sanctions). Grey List = EDD (enhanced due diligence).}}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Common Error:} \wronganswer{Both lists require the same level of due diligence} — \textbf{NO.} Black list requires \textbf{countermeasures}, not just EDD.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 8: INVESTMENT BANKING AML
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Investment Banking AML — Hard Concepts}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Key ML Risks in Investment Banking}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Complex Products:} Derivatives, structured products, OTC instruments
+				\item \textbf{High-Value Transactions:} Large trades can move significant funds quickly
+				\item \textbf{Cross-Border:} Multiple jurisdictions, counterparties, and clearing systems
+				\item \textbf{Speed:} Trades execute in milliseconds; monitoring must keep up
+				\item \textbf{Anonymity:} Some products can obscure beneficial ownership
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Red Flags Specific to Investment Banking}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Sudden Business Changes:} Client shifts from low-margin to high-return instruments via unfamiliar subsidiary
+				\item \textbf{Unusual Trade Patterns:} Wash trading, round-trip transactions, cross-trading
+				\item \textbf{Complex Ownership:} Multiple layers, offshore jurisdictions, nominee companies
+				\item \textbf{Unusual Counterparties:} Transactions with entities in high-risk jurisdictions
+				\item \textbf{Market Manipulation:} Pump-and-dump, spoofing, layering of orders
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Correct Response to Red Flags}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Escalate Internally:} Report to compliance team for investigation
+				\item \textbf{Request Documentation:} Obtain beneficial ownership, financial statements, business rationale
+				\item \textbf{Conduct EDD:} Enhanced due diligence on counterparties and subsidiaries
+				\item \textbf{File SAR/STR:} If suspicious activity is confirmed
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{Immediately decline the client} — first \textbf{escalate and investigate}. De-risking without investigation is not the risk-based approach.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 9: WEALTH MANAGEMENT AML
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Wealth Management AML — Advanced Concepts}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Core ML Vulnerabilities in Wealth Management}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Discretion:} Relationship managers may have high autonomy, bypassing controls
+				\item \textbf{Complex Structures:} Trusts, foundations, offshore companies, nominee arrangements
+				\item \textbf{High-Value Clients:} HNWIs with complex financial structures
+				\item \textbf{Cross-Border:} Multiple jurisdictions, asset classes, and currencies
+				\item \textbf{Confidentiality:} Client expectations of privacy can be abused
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{High-Risk Features (Select Three) — CAMS Exam Favorite}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{Minimum Assets Requirement:} Attracts HNWIs with complex structures
+				\item \textbf{Offering Numbered Accounts:} Reduces transparency; conceals identity
+				\item \textbf{Dedicated Relationship Service with Transaction Discretion:} Enables circumvention of controls
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Mitigations}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{EDD for HNWIs and PEPs:} Source of funds, source of wealth verification
+				\item \textbf{Independent Review:} Separate team reviews client transactions
+				\item \textbf{Regular Training:} Relationship managers trained on red flags
+				\item \textbf{Committee Approval:} High-risk clients require committee-level approval
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{Standardized online account opening} is \textbf{low-risk}, not high-risk. Wealth management risk comes from \textbf{discretion and complexity}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 10: PORTFOLIO MANAGEMENT AML
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Portfolio Management AML — Key Concepts}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{AML Risks in Portfolio Management}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Discretionary Accounts:} Managers can trade without client approval — risk of ML
+				\item \textbf{Complex Products:} Derivatives, structured products, alternative investments
+				\item \textbf{Cross-Border:} Investments in multiple jurisdictions
+				\item \textbf{High Turnover:} Frequent trading can generate artificial profits/losses
+				\item \textbf{Concentration Risk:} Over-concentration in high-risk assets
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Red Flags for Portfolio Managers}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Unusual Investment Strategy:} Client typically low-risk but suddenly invests in high-risk assets
+				\item \textbf{Circular Trading:} Client buys and sells same asset through different accounts
+				\item \textbf{Wash Trading:} Buying and selling same asset to create artificial volume
+				\item \textbf{Unusual Redemptions:} Large, unexpected redemption requests
+				\item \textbf{Lack of Investment Objective:} Client has no clear investment strategy
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Compliance Controls}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Pre-Trade Compliance:} Check trades against investment mandates
+				\item \textbf{Post-Trade Monitoring:} Review all trades for suspicious patterns
+				\item \textbf{Client Risk Assessment:} Regular review of client risk profiles
+				\item \textbf{EDD for High-Risk Clients:} Enhanced due diligence for PEPs, HNWIs
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Discretionary accounts are \textbf{higher risk} because the manager can trade without client approval.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 11: PSP - PAYMENT SERVICE PROVIDERS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{PSP AML — Complete Overview}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is a PSP?}}
+			\scriptsize
+			\textbf{Payment Service Provider} — entity that enables electronic payments:
+			\begin{itemize}
+				\item Payment processing (credit/debit cards, direct debits)
+				\item Digital wallets (Apple Pay, Google Pay, PayPal)
+				\item Money transfer services (Western Union, MoneyGram)
+				\item Acquiring services (merchant payment processing)
+				\item Payment initiation services (PSD2)
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Key ML Risks for PSPs}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{High Volume:} Millions of transactions daily — harder to detect patterns
+				\item \textbf{Fast Processing:} Instant settlement — less time for screening
+				\item \textbf{Cross-Border:} Multiple jurisdictions with varying AML regimes
+				\item \textbf{Agent Networks:} Third-party agents may have weak AML controls
+				\item \textbf{Anonymity:} Prepaid cards, digital wallets can be anonymous
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Best Practices for PSPs}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Customize AML Policy:} Per jurisdiction and product
+				\item \textbf{EDD for High-Risk Jurisdictions:} Apply enhanced due diligence
+				\item \textbf{Real-Time Screening:} Screen all transactions against sanctions lists
+				\item \textbf{Agent Oversight:} Monitor agent compliance with AML obligations
+				\item \textbf{Transaction Monitoring:} AI/ML to detect patterns in high-volume data
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{Apply home-country standards everywhere} — \textbf{NO.} PSPs must \textbf{customize} per jurisdiction. One-size-fits-all fails.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 12: OSINT - OPEN SOURCE INTELLIGENCE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{OSINT in AML Investigations — Complete Guide}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is OSINT?}}
+			\scriptsize
+			\textbf{Open Source Intelligence} — information collected from publicly available sources:
+			\begin{itemize}
+				\item Public records (company registers, court records)
+				\item Media (news articles, press releases)
+				\item Social media (LinkedIn, Facebook, Twitter)
+				\item Websites (company websites, government sites)
+				\item Databases (sanctions lists, PEP lists, adverse media)
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{OSINT in Investigations — When to Use}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Unfamiliar Entity:} Research an unknown counterparty in a sanctioned jurisdiction
+				\item \textbf{Beneficial Ownership:} Identify UBOs when documentation is incomplete
+				\item \textbf{Adverse Media:} Identify negative news about clients
+				\item \textbf{PEP Status:} Confirm PEP status when not flagged by screening
+				\item \textbf{Shell Companies:} Identify shell companies and nominee arrangements
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{OSINT Best Practices}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Source Verification:} Verify the reliability of sources
+				\item \textbf{Documentation:} Record findings and sources for audit trail
+				\item \textbf{Privacy Compliance:} Respect data privacy laws (GDPR, CCPA)
+				\item \textbf{Tipping Off:} Never disclose investigation to the subject
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} OSINT is \textbf{critical} for investigating unfamiliar entities. Regulatory advisories are helpful, but \textbf{entity-specific research} is the most useful next step.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 13: KYC/CDD - RECOMMENDATION 10
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{KYC/CDD — FATF Recommendation 10 Detailed}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Core CDD Requirements (Rec 10)}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{Identify Customer:} Name, DOB, address, identification number
+				\item \textbf{Verify Identity:} Using reliable, independent source documents/data
+				\item \textbf{Identify Beneficial Owner:} Natural person who ultimately owns/controls
+				\item \textbf{Verify BO Identity:} Using reliable sources
+				\item \textbf{Understand Business Relationship:} Purpose and intended nature
+				\item \textbf{Ongoing Due Diligence:} Monitor transactions and update information
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{CDD Timing — Critical Exam Point}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Before} establishing business relationship
+				\item \textbf{Before} carrying out occasional transaction (threshold applies)
+				\item \textbf{Before} carrying out suspicious transaction
+				\item \textbf{When} doubt about previously obtained customer identification data
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Simplified Due Diligence (SDD)}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{When Allowed:} Low-risk customers/products/jurisdictions
+				\item \textbf{Not Allowed:} If there is suspicion of ML/TF
+				\item \textbf{Not Allowed:} If customer is from high-risk jurisdiction
+				\item \textbf{Remember:} SDD is \textbf{not zero} due diligence — still must identify and verify
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} CDD must be done \textbf{before} establishing relationship. Suspicion overrides SDD.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 14: ENHANCED DUE DILIGENCE (EDD)
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{EDD — Enhanced Due Diligence Complete Guide}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{When is EDD Required?}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{PEPs:} Foreign PEPs \textbf{mandatory}; domestic PEPs \textbf{risk-based}
+				\item \textbf{High-Risk Customers:} From FATF black/grey-listed countries
+				\item \textbf{High-Risk Products:} Private banking, correspondent banking, crypto
+				\item \textbf{High-Risk Jurisdictions:} Countries with weak AML enforcement
+				\item \textbf{Complex Ownership:} Trusts, offshore companies, nominee arrangements
+				\item \textbf{Suspicion:} If there is suspicion of ML/TF
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{EDD Components — MUST KNOW}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{Source of Wealth:} How did the customer acquire their wealth?
+				\item \textbf{Source of Funds:} Where did the specific funds come from?
+				\item \textbf{Beneficial Ownership:} Identify and verify ALL UBOs (25\%+)
+				\item \textbf{Business Purpose:} Understand the reason for the relationship
+				\item \textbf{Ongoing Monitoring:} Enhanced transaction monitoring
+				\item \textbf{Senior Approval:} Senior management approval required
+				\item \textbf{Regular Reviews:} More frequent reviews (e.g., annually vs. 3 years)
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{SOW vs SOF — Critical Distinction}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Source of Wealth:} \textit{How} did you get your money? (e.g., inheritance, business profits)
+				\item \textbf{Source of Funds:} \textit{Where} did this specific money come from? (e.g., sale of property, business sale)
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{SOW and SOF are the same} — \textbf{NO.} SOW = overall wealth; SOF = specific funds for the transaction.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 15: TRUST AND COMPANY SERVICE PROVIDERS (TCSP)
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{TCSP — Trust \& Company Service Providers (Rec 22)}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is a TCSP? (DNFBP)}}
+			\scriptsize
+			\textbf{Trust and Company Service Providers} are \textbf{DNFBPs} under FATF Rec 22:
+			\begin{itemize}
+				\item Incorporation of companies
+				\item Administration of trusts and companies
+				\item Acting as company secretary
+				\item Providing registered office address
+				\item Acting as director/nominee shareholder
+				\item Acting as trustee or protector of a trust
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{TCSP AML Obligations}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{CDD:} Identify and verify customers and beneficial owners (Rec 10)
+				\item \textbf{BO Identification:} Identify natural persons who own/control (Rec 24/25)
+				\item \textbf{Record-Keeping:} Maintain records for 5+ years
+				\item \textbf{STR Filing:} File suspicious transaction reports
+				\item \textbf{Internal Controls:} Implement AML program
+				\item \textbf{Sanctions Screening:} Screen against sanctions lists
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{High-Risk Client Handling — CAMS Exam Favorite}}
+			\scriptsize
+			\textbf{Scenario:} Client requests confidentiality for all shareholders. Connection to high-risk industries in NRA.
+			\par \textbf{Correct Response:} \textbf{Decline immediately} unless full BO information and risk justifications are disclosed and verified.
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{Refer to local counsel and detach from compliance responsibility} — \textbf{NO.} TCSP retains compliance responsibility. Cannot outsource AML obligations.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 16: DATA GOVERNANCE - BCBS 239
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Governance — BCBS 239 \& AML}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{BCBS 239 — Principles for Effective Risk Data Aggregation}}
+			\scriptsize
+			\textbf{14 Principles} — banks must have:
+			\begin{itemize}
+				\item \textbf{Accuracy \& Integrity:} Data must be correct and reliable
+				\item \textbf{Completeness:} All data must be captured
+				\item \textbf{Timeliness:} Data must be available when needed
+				\item \textbf{Adaptability:} Systems must adapt to changing needs
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{AML Data Governance Challenges}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Missing Identifiers:} No DOB, no tax ID, no passport number
+				\item \textbf{Inconsistent Formats:} "US" vs "USA" vs "840" vs "United States"
+				\item \textbf{Duplicate Profiles:} Same customer appears multiple times
+				\item \textbf{Incomplete Data:} Missing fields in transaction monitoring
+				\item \textbf{Data Silos:} Different systems don't share data
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Data Cleansing Process — CAMS Exam Favorite}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{Removal of Duplicate Entries:} Merge duplicate customer profiles
+				\item \textbf{Validation of Data Accuracy:} Check formats and values
+				\item \textbf{Standardization:} Apply consistent formats (e.g., country codes)
+				\item \textbf{Enrichment:} Add missing data from external sources
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Data cleansing is \textbf{pre-requisite} for effective AML controls. Without clean data, monitoring alerts are unreliable.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 17: DATA LINEAGE - TRANSPARENCY
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Lineage — Transparency \& Auditability}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is Data Lineage?}}
+			\scriptsize
+			\textbf{Data lineage} is the process of tracking the \textbf{flow of data} from its source to its destination:
+			\begin{itemize}
+				\item Where did the data come from?
+				\item How was it transformed?
+				\item Where is it stored?
+				\item Who accessed it?
+				\item When was it modified?
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Data Lineage for AML — CAMS Exam Favorite}}
+			\scriptsize
+			What supports transparency and auditability through data lineage? (Select Two.)
+			\begin{enumerate}
+				\item \textbf{Maintaining history of data transformations}
+				\item \textbf{Capturing source of each data field}
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Why Data Lineage Matters in AML}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Regulatory Audit:} Regulators want to see where data came from
+				\item \textbf{Model Validation:} Need to trace data inputs to models
+				\item \textbf{Error Correction:} Trace errors back to source
+				\item \textbf{SAR Filing:} Need to verify accuracy of reported data
+				\item \textbf{Data Quality:} Identify and correct data quality issues
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{Archiving analyst notes} is case documentation, \textbf{not} data lineage. \wronganswer{Deleting outdated data} undermines auditability.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 18: POST-ACQUISITION AML INTEGRATION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Post-Acquisition AML Integration — Complete Process}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Scenario — CAMS Exam Favorite}}
+			\scriptsize
+			During post-acquisition integration, compliance team reviews merged customer databases and identifies:
+			\begin{itemize}
+				\item Multiple entries with inconsistent address formats
+				\item Duplicate customer profiles
+				\item Missing identifiers (DOB, tax ID)
+				\item Inconsistent country codes
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Correct Priority — Step-by-Step}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{Data Cleansing:} Target missing and duplicated records \textbf{immediately}
+				\item \textbf{Data Coverage \& Gap Assessment:} Identify what data is missing
+				\item \textbf{Standardization:} Harmonize country codes and data formats
+				\item \textbf{System Integration:} Align transaction monitoring scenarios
+				\item \textbf{Policy Alignment:} Harmonize AML policies across merged entities
+				\item \textbf{Training:} Train staff on new systems and procedures
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Why Data Cleansing First?}}
+			\scriptsize
+			\begin{itemize}
+				\item Without clean data, you cannot:
+				\begin{itemize}
+					\item Screen accurately against sanctions
+					\item Monitor transactions effectively
+					\item File accurate SARs
+					\item Assess risk properly
+				\end{itemize}
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Data cleansing is the \textbf{first} priority in post-acquisition integration. Clean data is the foundation of AML controls.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 19: SANCTIONS SCREENING - COMPLETE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Sanctions Screening — Complete Guide}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is Sanctions Screening?}}
+			\scriptsize
+			Process of checking customers, transactions, and counterparties against \textbf{sanctions lists}:
+			\begin{itemize}
+				\item OFAC SDN List (US)
+				\item UN Security Council Sanctions (UN)
+				\item EU Restrictive Measures (EU)
+				\item HM Treasury Sanctions List (UK)
+				\item FATF High-Risk Jurisdictions (Black/Grey Lists)
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Sanctions Screening Process}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Real-Time Screening:} At point of onboarding, transactions, payments
+				\item \textbf{Batch Screening:} Periodic re-screening of entire customer database
+				\item \textbf{Name Screening:} Match against names on sanctions lists
+				\item \textbf{Transaction Screening:} Match against sanctions list entries
+				\item \textbf{Blocking:} Must block/restrict transactions with sanctioned entities
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{OFAC 50\% Rule — MUST KNOW}}
+			\scriptsize
+			If a sanctioned entity owns \textbf{50\% or more} of another entity, that entity is \textbf{also blocked} — even if not on SDN list.
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{External Sanctions Sources — CAMS Exam}}
+			\scriptsize
+			Which are \textbf{external} sources? (Select Two.)
+			\begin{enumerate}
+				\item \textbf{FATF blacklists and UN Security Council lists}
+				\item \textbf{State Department embargo registries}
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Sanctions are \textbf{strict liability}. No intent required — if you process a transaction with a sanctioned entity, you're liable.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 20: TRANSACTION MONITORING - ADVANCED
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Transaction Monitoring — Advanced Concepts}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Transaction Monitoring System Components}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Data Ingestion:} Collect transaction data from multiple systems
+				\item \textbf{Scenarios/Rules:} Pre-defined rules to detect suspicious patterns
+				\item \textbf{Scoring:} Assign risk scores to transactions/customers
+				\item \textbf{Alert Generation:} Create alerts for suspicious activity
+				\item \textbf{Case Management:} Manage investigation workflow
+				\item \textbf{Reporting:} Generate SARs/STRs
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Rules-Based vs AI/ML Monitoring}}
+			\scriptsize
+			\begin{tabular}{|p{0.30\textwidth}|p{0.32\textwidth}|p{0.34\textwidth}|}
+				\hline
+				\keypoint{Factor} & \keypoint{Rules-Based} & \keypoint{AI/ML} \\
+				\hline
+				False Positives & High & Lower (with tuning) \\
+				\hline
+				Adaptability & Static; requires manual updates & Dynamic; learns from data \\
+				\hline
+				Complex Patterns & Limited detection & Advanced pattern detection \\
+				\hline
+				Transparency & High (rules are clear) & Lower (black box concern) \\
+				\hline
+				Regulatory Acceptance & Well-established & Requires validation \\
+				\hline
+			\end{tabular}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Typical Scenarios (Red Flags)}}
+			\scriptsize
+			\begin{itemize}
+				\item Structuring: Multiple small deposits below reporting threshold
+				\item Round-Trip Transactions: Funds leave and return to same account
+				\item Rapid Movement: Funds move quickly through multiple accounts
+				\item Unusual Geographic Patterns: Transactions to high-risk jurisdictions
+				\item Mismatched Profile: Transaction pattern doesn't match KYC profile
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Transaction monitoring is about \textbf{detecting unusual activity} — not just large transactions.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 21: GAMBLING AML
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Gambling AML — Complete Overview}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Why Gambling is High-Risk for ML}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Cash-Intensive:} Large volumes of cash transactions
+				\item \textbf{Anonymity:} Chips can be purchased anonymously
+				\item \textbf{Rapid Movement:} Funds move quickly in/out
+				\item \textbf{Cross-Border:} Online gambling operates globally
+				\item \textbf{Layering:} Chips can be used to layer illicit funds
+				\item \textbf{Integration:} Winnings appear legitimate
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Casino AML Controls — CAMS Exam Favorite}}
+			\scriptsize
+			Which are effective controls? (Select Two.)
+			\begin{enumerate}
+				\item \textbf{Enforcing chip redemption policies tied to minimum gaming thresholds}
+				\item \textbf{Tracking player activity through registered loyalty programs}
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Online Gambling Risks}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Cryptocurrency:} Used to fund gambling accounts
+				\item \textbf{E-Wallets:} Rapid movement of funds
+				\item \textbf{Multiple Accounts:} Players use multiple accounts
+				\item \textbf{Bonus Abuse:} Using bonuses to launder funds
+				\item \textbf{P2P Transfers:} Players transfer funds between accounts
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Countermeasures}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{CDD:} Identify and verify customers
+				\item \textbf{Transaction Monitoring:} Track deposits, withdrawals, and gameplay
+				\item \textbf{Threshold Reporting:} Report transactions above thresholds
+				\item \textbf{EDD:} Enhanced due diligence for high-risk customers
+				\item \textbf{Sanctions Screening:} Screen customers against sanctions lists
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Casinos are \textbf{DNFBPs} under FATF Rec 22 and must have AML programs.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 22: ASSET MANAGER AML
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Asset Manager AML — Key Concepts}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{AML Risks for Asset Managers}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Complex Products:} Alternative investments, hedge funds, private equity
+				\item \textbf{Cross-Border:} Multiple jurisdictions and counterparties
+				\item \textbf{High-Value:} Large investments
+				\item \textbf{Anonymity:} Some products can obscure beneficial ownership
+				\item \textbf{Third-Party Assets:} Managing assets for third parties
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Red Flags for Asset Managers}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Unusual Investment Strategy:} Mismatch with client profile
+				\item \textbf{Unusual Redemptions:} Large, unexpected redemption requests
+				\item \textbf{Circular Trading:} Client buys/sells same asset
+				\item \textbf{Concentration Risk:} Over-concentration in high-risk assets
+				\item \textbf{Source of Funds:} Inability to verify source of funds
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Compliance Controls}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{CDD/EDD:} Identify and verify customers and BOs
+				\item \textbf{Transaction Monitoring:} Monitor all trades and transactions
+				\item \textbf{Sanctions Screening:} Screen against sanctions lists
+				\item \textbf{PEP Screening:} Identify and monitor PEPs
+				\item \textbf{Adverse Media:} Monitor for negative news about clients
+				\item \textbf{Independent Review:} Review by compliance team
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Asset managers are \textbf{financial institutions} under FATF and must have comprehensive AML programs.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 23: FRAUD - AML INTERSECTION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Fraud \& AML — Critical Intersection}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Fraud as a Predicate Offense}}
+			\scriptsize
+			Fraud is a \textbf{predicate offense} for money laundering:
+			\begin{itemize}
+				\item Proceeds of fraud must be laundered
+				\item Fraudsters use laundering techniques to hide proceeds
+				\item AML controls can detect fraud
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Fraud Types Relevant to AML}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Synthetic Identity Fraud:} Creating fake identities using real/partially real info
+				\item \textbf{Account Takeover:} Criminal takes over legitimate account
+				\item \textbf{Payment Fraud:} Fraudulent payments and transfers
+				\item \textbf{Application Fraud:} Fraudulent loan/credit card applications
+				\item \textbf{Phishing:} Stealing credentials via deceptive emails
+				\item \textbf{Ransomware:} Extorting payments via crypto
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Corrective Action for Fraud — CAMS Exam}}
+			\scriptsize
+			\textbf{Scenario:} New credit product targeted at low-income customers. Firm identifies trend of synthetic identity fraud.
+			\par \textbf{Correct Action:} \textbf{Suspend the product} while updating risk assessment and onboarding controls.
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Fraud and AML are \textbf{integrated}. AML controls detect fraud, and fraud controls detect AML.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 24: DORA - DIGITAL OPERATIONAL RESILIENCE ACT
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{DORA — Digital Operational Resilience Act (Complete)}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is DORA?}}
+			\scriptsize
+			\textbf{Regulation (EU) 2022/2554} — applies to all financial entities operating in the EU:
+			\begin{itemize}
+				\item Banks, investment firms, credit institutions
+				\item Crypto-asset service providers
+				\item Third-party ICT providers
+				\item Payment institutions, e-money institutions
+				\item Insurance and reinsurance companies
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Key Regulatory Expectation — CAMS Exam Favorite}}
+			\scriptsize
+			\begin{center}
+				\textbf{Centralizing oversight} of ICT risk management across all member-state branches.
+			\end{center}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{DORA Requirements}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{ICT Risk Governance Framework:} Unified across all EU operations
+				\item \textbf{ICT Risk Assessments:} Identify and assess ICT risks
+				\item \textbf{Incident Reporting:} Report ICT incidents to regulators
+				\item \textbf{Third-Party ICT Provider Risk Management:} Monitor and manage vendor risks
+				\item \textbf{Resilience Testing:} Regular testing of ICT systems
+				\item \textbf{Information Sharing:} Share threat intelligence with peers
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{Relying solely on national regulators' cybersecurity requirements} is \textbf{insufficient}. DORA mandates centralized, pan-European oversight.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 25: RECOMMENDATION 17 - THIRD-PARTY RELIANCE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Rec 17 — Third-Party Reliance for CDD}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is Third-Party Reliance?}}
+			\scriptsize
+			Financial institutions may \textbf{rely on third parties} to perform CDD (Rec 17):
+			\begin{itemize}
+				\item Another financial institution (in same group)
+				\item Third-party service provider (if regulated)
+				\item Professional advisor (lawyer, accountant)
+				\item Trust/company service provider (TCSP)
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Conditions for Reliance — MUST KNOW}}
+			\scriptsize
+			\begin{enumerate}
+				\item Third party must be \textbf{subject to FATF-compliant AML/CFT requirements}
+				\item Third party must \textbf{apply CDD requirements} equivalent to Rec 10
+				\item Third party must \textbf{obtain and verify} customer identification
+				\item Third party must \textbf{provide the information promptly} upon request
+				\item The \textbf{ultimate responsibility} remains with the relying institution
+				\item The relying institution must be \textbf{satisfied} that the third party will comply
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Critical Exam Points}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Liability:} The relying institution remains \textbf{fully liable} for CDD
+				\item \textbf{Data Protection:} Must comply with data protection laws (GDPR)
+				\item \textbf{Record-Keeping:} Must maintain records of reliance
+				\item \textbf{Risk-Based:} Can rely for low-risk; may need EDD for high-risk
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} You can \textbf{rely} on third parties for CDD, but you \textbf{cannot outsource responsibility}. You remain liable.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 26: CROSS-BORDER DATA PRIVACY
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Cross-Border Data Privacy — AML Compliance}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Key Data Privacy Regulations}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{GDPR (EU):} General Data Protection Regulation
+				\item \textbf{CCPA (California):} California Consumer Privacy Act
+				\item \textbf{PDPA (Singapore):} Personal Data Protection Act
+				\item \textbf{LGPD (Brazil):} Lei Geral de Proteção de Dados
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{AML vs Data Privacy Conflict}}
+			\scriptsize
+			\begin{tabular}{|p{0.40\textwidth}|p{0.56\textwidth}|}
+				\hline
+				\keypoint{AML Requirement} & \keypoint{Data Privacy Concern} \\
+				\hline
+				Collect customer data & Data minimization principle \\
+				\hline
+				Share with regulators & Data transfer restrictions \\
+				\hline
+				Retain records for 5+ years & Storage limitation principle \\
+				\hline
+				Share within group & Data sharing restrictions \\
+				\hline
+				Screen against watchlists & Processing sensitive data \\
+				\hline
+			\end{tabular}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Correct Approach — CAMS Exam}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{Jurisdiction-Specific Procedures:} Create procedures that comply with local laws
+				\item \textbf{Standard Template with Adjustable Sections:} Core sections consistent; adjustable for local laws
+				\item \textbf{Legal Basis:} Ensure legal basis for processing (e.g., legal obligation)
+				\item \textbf{Data Transfer Mechanisms:} Use SCCs, BCRs, or other transfer mechanisms
+				\item \textbf{Data Protection Impact Assessment:} Conduct DPIA for high-risk processing
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} AML compliance \textbf{does not override} data privacy. Must comply with both.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 27: FREE-TRADE ZONES (FTZ) AML
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Free-Trade Zones (FTZ) — AML Vulnerabilities}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What are FTZs?}}
+			\scriptsize
+			Special economic zones with \textbf{reduced customs and regulatory requirements}:
+			\begin{itemize}
+				\item Duty-free import/export
+				\item Reduced inspections
+				\item Limited customs authority
+				\item Special tax regimes
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{FTZ Vulnerabilities — CAMS Exam Favorite}}
+			\scriptsize
+			Which are typical FTZ vulnerabilities? (Select Two.)
+			\begin{enumerate}
+				\item \textbf{Limited customs authority over transitory goods}
+				\item \textbf{Evasions of customs payments}
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{FTZ ML Techniques}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Mis-Invoicing:} Over/under-invoice goods to move value
+				\item \textbf{Phantom Shipments:} Invoicing for goods that don't exist
+				\item \textbf{Customs Evasion:} Declaring goods for re-export, then selling locally
+				\item \textbf{Shell Companies:} Using FTZ shell companies to hide ownership
+				\item \textbf{Commingling:} Mixing legal and illegal goods
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Mitigations}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{EDD:} Enhanced due diligence for FTZ-related clients
+				\item \textbf{Transaction Monitoring:} Monitor FTZ-related transactions
+				\item \textbf{Document Verification:} Verify shipping and customs documents
+				\item \textbf{Sanctions Screening:} Screen FTZ counterparties against sanctions
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\trapbox{\scriptsize \textbf{Exam Trap:} \wronganswer{Over-invoicing} is a TBML technique, but FTZ-specific risk in scenario = \textbf{customs payment evasion}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 28: TBML - TRADE-BASED MONEY LAUNDERING
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{TBML — Trade-Based Money Laundering}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is TBML?}}
+			\scriptsize
+			\textbf{Trade-Based Money Laundering} — using international trade to launder money:
+			\begin{itemize}
+				\item Mis-invoicing (over/under-invoicing)
+				\item Phantom shipments
+				\item Multiple invoicing
+				\item Over/under-shipment
+				\item Using shell companies
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Key TBML Techniques — CAMS Exam}}
+			\scriptsize
+			\begin{tabular}{|p{0.30\textwidth}|p{0.35\textwidth}|p{0.31\textwidth}|}
+				\hline
+				\keypoint{Technique} & \keypoint{Description} & \keypoint{Beneficiary} \\
+				\hline
+				Over-Invoicing & Invoice price higher than market & Seller (exporter) \\
+				\hline
+				Under-Invoicing & Invoice price lower than market & Buyer (importer) \\
+				\hline
+				Phantom Shipment & Invoice for goods not shipped & Both parties \\
+				\hline
+				Multiple Invoicing & Multiple invoices for same goods & Seller (exporter) \\
+				\hline
+				Over-Shipment & Ship more than invoiced & Buyer (importer) \\
+				\hline
+			\end{tabular}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{TBML Red Flags}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Pricing:} Significantly above/below market rates
+				\item \textbf{Documentation:} Inconsistencies in shipping documents
+				\item \textbf{Counterparties:} Transactions with high-risk jurisdictions
+				\item \textbf{Routes:} Unusual shipping routes
+				\item \textbf{Payment:} Third-party payments
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Over-invoicing = value to \textbf{seller}. Under-invoicing = value to \textbf{buyer}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 29: STRUCTURING - DETAILED
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Structuring (Smurfing) — Complete Guide}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is Structuring?}}
+			\scriptsize
+			Breaking up large transactions into \textbf{smaller amounts} to avoid reporting thresholds.
+			\par \textbf{Thresholds:}
+			\begin{itemize}
+				\item US: \$10,000 (CTR filing)
+				\item EU: €10,000 (Cash controls)
+				\item UK: £10,000 (SAR threshold)
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Key Fact — CAMS Exam Favorite}}
+			\scriptsize
+			\begin{center}
+				\textbf{Structuring is illegal even if the money is legitimate.}
+			\end{center}
+			The crime is \textbf{evading reporting requirements} — not the source of funds.
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Structuring Red Flags}}
+			\scriptsize
+			\begin{itemize}
+				\item Multiple small cash deposits just below the reporting threshold
+				\item Deposits made by different people into the same account
+				\item Deposits made at different branches/locations
+				\item Deposits made over several days/weeks
+				\item Sudden international wire transfer after structuring
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Analyst Action — CAMS Exam}}
+			\scriptsize
+			\begin{itemize}
+				\item Identify structuring pattern
+				\item \textbf{File SAR} (suspicious activity report)
+				\item \textbf{DO NOT tip off} the customer
+				\item Escalate to Level 2 for investigation
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Structuring is illegal \textbf{regardless} of whether the money is clean or dirty.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 30: LAYERING - DETAILED
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Layering — Money Laundering Stage 2}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{What is Layering?}}
+			\scriptsize
+			\textbf{Second stage} of money laundering — \textbf{concealing the origin} of illicit funds:
+			\begin{itemize}
+				\item Moving funds through multiple accounts
+				\item Converting funds to different assets
+				\item Using complex transactions
+				\item Creating false paper trails
+				\item Distance from source
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Layering Techniques — CAMS Exam}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Shell Companies:} Transfer funds to shell company with no operations
+				\item \textbf{Private Loans:} Loan to shell company matching criminal proceeds
+				\item \textbf{Multiple Transfers:} Move funds through multiple accounts
+				\item \textbf{Asset Purchases:} Buy assets (art, real estate, crypto)
+				\item \textbf{False Invoices:} Use false invoices to justify transfers
+				\item \textbf{Complex Structures:} Use trusts, offshore companies
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Identifying Layering — CAMS Exam Favorite}}
+			\scriptsize
+			\textbf{Scenario:} Private loan extended to shell company with no operations. Loan amount matches criminal proceeds.
+			\par \textbf{Classification:} \textbf{Layering tactic} — designed to conceal origin of illicit funds.
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Layering = \textbf{concealing origin}. Placement = \textbf{entering system}. Integration = \textbf{using funds legitimately}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 31: FINAL EXAM TIPS - DOMAIN A
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Domain A — Critical Exam Tips}}
+		\scriptsize
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Most Common Traps}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Rec 15 vs Rec 16:} Rec 15 = VASP framework. Rec 16 = Travel Rule.
+				\item \textbf{Black vs Grey List:} Black = countermeasures. Grey = EDD.
+				\item \textbf{Decentralized vs Centralized:} Decentralized = anonymity. Centralized = KYC.
+				\item \textbf{SOW vs SOF:} SOW = overall wealth. SOF = specific funds.
+				\item \textbf{De-Risking:} \textbf{Not} a substitute for managing risk. FATF discourages blanket de-risking.
+				\item \textbf{Tipping Off:} \textbf{Never} disclose SAR/STR investigation to customer.
+				\item \textbf{Structuring:} Illegal even with clean money.
+				\item \textbf{SDD:} Suspicion overrides — must do full CDD if suspicious.
+				\item \textbf{Shell Banks:} Always prohibited.
+				\item \textbf{Rec 17:} Can rely on third parties, but \textbf{remain liable}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Exam Strategy}}
+			\scriptsize
+			\begin{itemize}
+				\item \textbf{Read Carefully:} "Select Two" vs "Select Three" vs "Select All"
+				\item \textbf{Eliminate Wrong Answers:} Look for absolute statements (always, never)
+				\item \textbf{Think Risk-Based:} When in doubt, apply the risk-based approach
+				\item \textbf{Document:} Always document your decisions and rationale
+				\item \textbf{Escalate:} When in doubt, escalate to compliance
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Final Rule:} Compliance is about \textbf{understanding the risk} and applying \textbf{proportionate controls}.}
+	\end{frame}
+	
+	% ================================================================
+	% END SLIDE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{1.5cm}
+		{\fontsize{18}{22}\selectfont \textbf{Domain A — Complete}}\\[0.2cm]
+		{\fontsize{11}{13}\selectfont All Hard Concepts with Detailed Explanations}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{8}{10}\selectfont VASP · Crypto · FATF Recommendations · Black/Grey Lists}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont Investment Banking · Wealth Management · PSP · OSINT · KYC}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont TCSP · Data Governance · Post-Acquisition · Sanctions · DORA}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont Transaction Monitoring · Gambling · Asset Management · Fraud}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont TBML · Structuring · Layering · FTZ · Third-Party Reliance}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{8}{10}\selectfont \textit{All traps explained. All concepts covered. Good luck on your CAMS exam!}}
+		\vspace{0.5cm}
+	\end{frame}
+	
+\end{document}
