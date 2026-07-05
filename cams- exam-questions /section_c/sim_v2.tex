@@ -1,0 +1,790 @@
+% !TeX program = lualatex
+\documentclass[12pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{anyfontsize}
+\usepackage{lmodern}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+
+% ====== EXTREME FONT REDUCTION ======
+\renewcommand{\tiny}{\fontsize{3.5}{4.5}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{4.5}{5.5}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{5.5}{6.5}\selectfont}
+\renewcommand{\small}{\fontsize{6.5}{7.5}\selectfont}
+\renewcommand{\normalsize}{\fontsize{7.5}{8.5}\selectfont}
+\renewcommand{\large}{\fontsize{8.5}{9.5}\selectfont}
+\renewcommand{\Large}{\fontsize{9.5}{10.5}\selectfont}
+\renewcommand{\LARGE}{\fontsize{10.5}{12}\selectfont}
+\renewcommand{\huge}{\fontsize{11.5}{13.5}\selectfont}
+\renewcommand{\Huge}{\fontsize{13}{16}\selectfont}
+
+% ====== COLORS ======
+\definecolor{redcorrect}{RGB}{200,30,30}
+\definecolor{bluecorrect}{RGB}{30,80,200}
+\definecolor{greencheck}{RGB}{0,150,50}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{40,40,40}
+\definecolor{softyellow}{RGB}{255,248,200}
+\definecolor{deepblue}{RGB}{20,60,150}
+\definecolor{darkred}{RGB}{150,20,20}
+\definecolor{orangewarning}{RGB}{255,140,0}
+\definecolor{correctgreen}{RGB}{0,120,40}
+\definecolor{trapcolor}{RGB}{180,80,0}
+\definecolor{purpleconcept}{RGB}{120,50,180}
+\definecolor{tealhard}{RGB}{0,120,120}
+
+\setbeamercolor{title}{fg=white,bg=redcorrect}
+\setbeamercolor{frametitle}{fg=white,bg=redcorrect}
+\setbeamercolor{block title}{fg=white,bg=bluecorrect}
+\setbeamercolor{block body}{fg=darkgray,bg=lightgray}
+\setbeamercolor{normal text}{fg=darkgray}
+\usecolortheme{default}
+
+% ====== CUSTOM COMMANDS ======
+\newcommand{\correct}[1]{\textcolor{greencheck}{\textbf{\checkmark}} #1}
+\newcommand{\keypoint}[1]{\textcolor{deepblue}{\textbf{#1}}}
+\newcommand{\hardconcept}[1]{\textcolor{darkred}{\textbf{#1}}}
+\newcommand{\examtraps}[1]{\textcolor{trapcolor}{\textbf{⚠ TRAP:}} #1}
+\newcommand{\recallbox}[1]{\fcolorbox{deepblue}{blue!5}{\parbox{0.88\textwidth}{\centering \textbf{REMEMBER:} #1}}}
+\newcommand{\stepbox}[1]{%
+	\begin{center}
+		\fcolorbox{darkgray}{white}{%
+			\parbox{0.92\textwidth}{\vspace{0.03cm} #1 \vspace{0.03cm}}%
+		}
+	\end{center}
+}
+\newcommand{\answerbox}[1]{\fcolorbox{correctgreen}{green!8}{\parbox{0.88\textwidth}{\centering \textcolor{correctgreen}{\textbf{\checkmark\ CORRECT:}} #1}}}
+\newcommand{\wronganswer}[1]{\textcolor{redcorrect}{\textbf{✘}} #1}
+\newcommand{\trapbox}[1]{\fcolorbox{trapcolor}{orange!8}{\parbox{0.88\textwidth}{\centering \textcolor{trapcolor}{\textbf{⚠ EXAM TRAP:}} #1}}}
+\newcommand{\keyrule}[1]{\textcolor{tealhard}{\textbf{🔑}} #1}
+
+\begin{document}
+	
+	% ================================================================
+	% SLIDE 1: TITLE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{0.3cm}
+		{\fontsize{18}{22}\selectfont \textbf{CAMS DOMAIN C}}\\[0.1cm]
+		{\fontsize{14}{17}\selectfont \textbf{BUILDING AN AML/AFC COMPLIANCE PROGRAM}}\\[0.15cm]
+		{\fontsize{9}{11}\selectfont \textit{ALL 50+ — COMPLETE EXPANDED TUTORIAL}}\\[0.08cm]
+		\rule{4cm}{0.5pt}\\[0.08cm]
+		{\fontsize{6}{7}\selectfont MiCA · OFAC · Biometrics · MLAT · EWRA · DORA · TCSP · PEP EDD}\\[0.04cm]
+		{\fontsize{6}{7}\selectfont KYC/CDD/EDD · Transaction Monitoring · Data Lineage · Clustering}\\[0.04cm]
+		{\fontsize{6}{7}\selectfont Digital Onboarding · Deepfake Detection · AML Communications · PSP}\\[0.04cm]
+		{\fontsize{6}{7}\selectfont Risk Assessments · Three Lines · Board Oversight · SAR/STR Reporting}
+		\vspace{0.2cm}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 2: AML POLICY MANDATORY ELEMENTS — THE SELECTION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{AML Policy — Mandatory Elements Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which of the following are key elements that AML/CFT policies must include? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Assignment of compliance responsibilities. 2. Program review triggers based on regulatory or business events.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Cash flow performance figures segmented by region} — \textbf{NOT} AML policy content. This is financial performance.
+				\item \wronganswer{Marketing strategy} — \textbf{NOT} an AML policy element.
+				\item \textbf{Assignment of compliance responsibilities:} Who does what? Must designate a Compliance Officer (MLRO in the UK) with clear authority and resources.
+				\item \textbf{Program review triggers:} When to update the program? New regulations, significant business changes, new products/services, or changes in risk appetite.
+				\item \textbf{BSA Requirement:} Written AML program must include: Internal controls, independent testing, designated compliance officer, training.
+				\item \textbf{Key principle:} AML policies are \textbf{risk-based} — tailored to the institution's specific risks.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} AML policy = \textbf{compliance responsibilities} + \textbf{review triggers} + internal controls + training + testing.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 3: TCSP — THE CONFIDENTIALITY AND OUTSOURCING TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{TCSP — The Confidentiality and Outsourcing Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Scenario — CAMS Exam Favorite}}
+			\scriptsize
+			A trust and company service provider (TCSP) firm is reviewing whether to accept a client who wants to incorporate in a low-tax Caribbean jurisdiction. The potential client requests confidentiality protections for all shareholders. A connection is identified to industries marked high-risk in the NRA.
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question}}
+			\scriptsize
+			What should the TCSP response be?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Decline immediately unless full beneficial owner information and risk justifications are disclosed and verified.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Refer to offshore local counsel and detach from compliance responsibility} — \textbf{NO.} TCSP retains compliance responsibility. Cannot outsource AML obligations.
+				\item \wronganswer{Accept with standard CDD} — \textbf{NO.} High-risk indicators require EDD or decline.
+				\item \textbf{Confidentiality requests + high-risk industries + low-tax jurisdiction = significant red flags.}
+				\item \textbf{FATF Rec 24/25:} BO identification is mandatory for legal persons and arrangements.
+				\item \textbf{Offloading responsibility} to local counsel = \textbf{not} a valid risk mitigation strategy.
+				\item \textbf{Key principle:} You can use local counsel, but you \textbf{cannot transfer liability}. You remain responsible.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} TCSP cannot outsource AML responsibility. Decline unless BO info is disclosed and verified.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 4: AFC GOVERNANCE REPORTS — THE CONTENT TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{AFC Governance Reports — The Content Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which of the following are appropriate contents of internal AFC reporting submitted to governance committees? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Updates on regulatory interactions and supervisory reviews. 2. Assessment outcomes of control effectiveness on monitoring tools. 3. Investigation statuses of escalated SAR reviews.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Cash flow performance figures segmented by region} — \textbf{NOT} a core AFC governance report component.
+				\item \wronganswer{Sales targets by business unit} — \textbf{NOT} AFC governance content.
+				\item \textbf{Regulatory interactions:} What did regulators say? Any findings? Any enforcement actions?
+				\item \textbf{Control effectiveness:} Are our monitoring tools working? KPIs/KRIs on alerts, false positives, SARs.
+				\item \textbf{SAR investigation statuses:} How many SARs filed? What's the disposition? Any law enforcement feedback?
+				\item \textbf{Key principle:} Governance reports = \textbf{risk and compliance}, NOT financial performance.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} AFC governance reports = \textbf{regulatory interactions, control effectiveness, SAR statuses}. NOT financial metrics.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 5: BOARD OVERSIGHT — THE OPERATIONAL INVOLVEMENT TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Board Oversight — The Operational Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which actions demonstrate effective board oversight of an AFC program? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Receiving regular reports on financial crime risks and control effectiveness. 2. Reviewing whether senior management is addressing audit findings. 3. Challenging management when AFC performance metrics show signs of weakness.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Participating in SAR investigations} — \textbf{Operational}, NOT governance.
+				\item \wronganswer{Conducting transaction reviews} — \textbf{Operational}, NOT governance.
+				\item \textbf{Board duties:}
+				\begin{itemize}
+					\item Receive reports (stay informed)
+					\item Review audit responses (hold management accountable)
+					\item Challenge management (ask tough questions)
+				\end{itemize}
+				\item \textbf{Key principle:} Board = \textbf{oversight and challenge}. NOT \textbf{doing the work}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Board = \textbf{oversight}. NOT operational involvement.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 6: PASSIVE LIVENESS DETECTION — THE DISTINCTION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Passive Liveness — The Distinction Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			What distinguishes passive liveness detection from active methods?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{It uses minimal user interaction and analyzes subtle facial movement or texture patterns.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{It asks users to answer KYC security questions during video evaluation} — \textbf{NO.} That's KYC verification, NOT liveness detection.
+				\item \textbf{Passive Liveness:}
+				\begin{itemize}
+					\item Uses \textbf{minimal user interaction}
+					\item Analyzes subtle facial movement or texture patterns
+					\item Micro-expressions, skin texture, depth perception
+					\item Detects if using a photo or video (spoof detection)
+				\end{itemize}
+				\item \textbf{Active Liveness:}
+				\begin{itemize}
+					\item Requires explicit user actions: blinking, smiling, turning head
+					\item More secure but more intrusive
+					\item May have lower completion rates
+				\end{itemize}
+				\item \textbf{Key principle:} Passive is less intrusive; active is more secure.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Passive = \textbf{minimal interaction} + \textbf{subtle facial analysis}. Active = \textbf{user actions}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 7: EWRA — THE DIGITAL CHANNEL TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{EWRA — The Digital Channel Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Scenario — CAMS Exam Favorite}}
+			\scriptsize
+			A financial institution identifies that several of its high-risk jurisdiction customers conduct transactions through its mobile platform, bypassing in-branch monitoring measures.
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question}}
+			\scriptsize
+			How should this be addressed as part of the enterprise-wide risk assessment (EWRA)?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Incorporate digital delivery channels into the EWRA to reassess risk exposure.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Close all mobile accounts} — \textbf{De-risking}, NOT risk management.
+				\item \wronganswer{Apply same controls as branches} — Digital channels have \textbf{different} risk profiles.
+				\item \textbf{Mobile platforms often bypass branch monitoring} = risk blind spot.
+				\item EWRA must be \textbf{updated} when new channels emerge.
+				\item Digital-specific risk indicators must be added.
+				\item \textbf{Key principle:} EWRA must be \textbf{dynamic} — updated when new channels, products, or customers emerge.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} EWRA must \textbf{include digital channels}. Mobile = different risk profile.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 8: ENTITY RESOLUTION — THE BLOCKCHAIN TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Entity Resolution — The Blockchain Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			How does entity resolution improve blockchain analytics for on-chain behavior monitoring?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{It links data from multiple sources to improve match accuracy.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{It replaces all manual reviews} — \textbf{NO.} It's a tool, not a replacement.
+				\item \wronganswer{It eliminates false positives entirely} — \textbf{NO.} It reduces them but doesn't eliminate them.
+				\item \textbf{Entity resolution:} Links on-chain wallet addresses to off-chain risk data.
+				\item \textbf{Multiple sources:} Wallet addresses, KYC data, sanctions lists, PEP lists, adverse media.
+				\item \textbf{Example:} A wallet address associated with ransomware is linked to an exchange account.
+				\item \textbf{Key principle:} Entity resolution = \textbf{links data from multiple sources} to improve match accuracy.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Entity resolution = \textbf{links data from multiple sources} to improve accuracy.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 9: DATA COVERAGE AND GAP ASSESSMENT — THE CHALLENGES TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Coverage — The Challenges Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which of the following challenges can be identified through a data coverage and gap assessment? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Missing identifiers in customer profiles. 2. Inconsistent use of country codes across systems.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Misalignment between transaction monitoring scenarios and typologies} — This is a \textbf{scenario design issue}, not a data coverage gap.
+				\item \textbf{Missing identifiers:} No DOB, no tax ID, no passport number — impacts screening against sanctions and PEP lists.
+				\item \textbf{Inconsistent country codes:} "US" vs "USA" vs "840" vs "United States" — leads to false negatives and false positives in monitoring and reporting.
+				\item \textbf{Key principle:} Data gaps and inconsistencies undermine the effectiveness of transaction monitoring, screening, and regulatory reporting.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Data gaps = \textbf{missing identifiers + inconsistent codes}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 10: ROUND-TRIP TRANSACTIONS — THE ESCALATION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Round-Trip Transactions — The Escalation Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			A Level 1 analyst reviews an alert triggered by a rules-based system identifying a "round trip" transaction. After reviewing recent account activity and confirming a nearly identical send and receive remittance within minutes, what should the analyst do next?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Escalate to Level 2 for deeper investigation.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Close the alert as false positive} — \textbf{NO.} Round-trip transactions are suspicious.
+				\item \wronganswer{Conduct full investigation at Level 1} — \textbf{NO.} Level 1 is for triage, not full investigation.
+				\item \textbf{Level 1 analysts:} Initial triage and data gathering.
+				\item \textbf{Level 2 analysts:} Deeper investigation, customer interview, SAR filing.
+				\item \textbf{Round-trip:} Funds transferred out and returned to the same account — classic layering technique.
+				\item \textbf{Key principle:} Escalate when the pattern is confirmed.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Round-trip = \textbf{escalate to Level 2}. Level 1 = triage.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 11: AI TRANSITION — THE DATA/PEOPLE/EXPLAINABILITY TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{AI Transition — The Data/People/Explainability Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which actions are most important when transitioning to AI-based compliance tools? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Ensuring data quality for training algorithms. 2. Managing change in employee workflows. 3. Verifying transparency and explainability in AI models.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Selecting third-party global audit providers} — This is \textbf{less critical} than data, people, and explainability.
+				\item \textbf{Data quality:} "Garbage in, garbage out" — AI is only as good as its training data.
+				\item \textbf{Employee workflows:} AI changes how analysts work — must provide adequate training.
+				\item \textbf{Explainability:} Regulators require \textbf{explainable AI} — must justify why an AI flagged something.
+				\item \textbf{Key principle:} AI transition = \textbf{data + people + explainability}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} AI transition = \textbf{data + people + explainability}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 12: CARD-BASED PRODUCT RISK FACTORS — THE SELECTION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Card-Based Products — The Selection Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which of the following represent common risk factors associated with card-based products? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Anonymity through prepaid cards. 2. High volumes of rapid transactions. 3. Use by customers in high-risk sectors.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Low transaction limits} — Low limits \textbf{reduce} risk, not increase it.
+				\item \textbf{Anonymity through prepaid cards:} Prepaid cards can be purchased with cash and used without identification.
+				\item \textbf{High volumes of rapid transactions:} Card transactions are processed instantly in high volumes — structuring (smurfing) can occur.
+				\item \textbf{Use by customers in high-risk sectors:} Merchants in crypto, gambling, or cash-intensive businesses generate high-risk card transactions.
+				\item \textbf{Key principle:} Card risk = \textbf{anonymity + speed + sector}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Card risk = \textbf{anonymity + high volume + high-risk sectors}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 13: PREPAID CARDS — THE VULNERABILITY TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Prepaid Cards — The Vulnerability Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Why are prepaid cards particularly vulnerable to financial crime risks?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{They can be used anonymously, especially when reloadable or unregistered.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{They always require full KYC} — \textbf{NO.} Many prepaid cards do NOT require KYC.
+				\item \wronganswer{They have high transaction limits} — \textbf{NO.} The risk is anonymity, not limits.
+				\item \textbf{Unregistered cards:} Can be purchased with cash at retail outlets; no customer identification required.
+				\item \textbf{Reloadable cards:} Can be topped up multiple times, potentially with illicit funds.
+				\item \textbf{Cross-border use:} Can be used internationally, bypassing local AML controls.
+				\item \textbf{Key principle:} Prepaid cards = \textbf{anonymity + reloadability + cross-border}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Prepaid cards = \textbf{anonymous + reloadable + cross-border}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 14: CASINO AML CONTROLS — THE SELECTION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Casino Controls — The Selection Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which control measures help mitigate AML risks in casinos? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Enforcing chip redemption policies tied to minimum gaming thresholds. 2. Tracking player activity through registered loyalty programs.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Monitoring unstructured table gameplay for win/loss patterns} — This is a \textbf{monitoring technique}, not a formal control measure.
+				\item \textbf{Chip redemption policies:} Prevents "chip washing" — exchanging chips for cash without meaningful gaming.
+				\item \textbf{Thresholds:} US \$10,000 triggers reporting.
+				\item \textbf{Loyalty programs:} Provide rich data on player behavior (wins, losses, session durations).
+				\item \textbf{Key principle:} Casino controls = \textbf{chip redemption + loyalty program tracking}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Casino controls = \textbf{chip redemption + loyalty program tracking}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 15: E-COMMERCE TRANSACTION MONITORING — THE VOLUME TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{E-Commerce Monitoring — The Volume Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Why is transaction monitoring particularly challenging in an e-commerce risk context?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{High transaction volumes and decentralized payments make patterns harder to detect.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Transactions are always small and therefore low-risk} — \textbf{NO.} Small transactions can still be suspicious.
+				\item \textbf{High volume:} Millions of transactions daily — traditional rules-based monitoring generates too many false positives.
+				\item \textbf{Decentralized payments:} Multiple payment gateways, cryptocurrencies, digital wallets.
+				\item \textbf{Consequence:} Patterns are harder to detect.
+				\item \textbf{Mitigation:} Use AI/ML models to detect anomalies; segment data by merchant, payment method, and product.
+				\item \textbf{Key principle:} E-commerce challenge = \textbf{high volume + decentralized payments}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} E-commerce challenge = \textbf{high volume + decentralized payments}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 16: PSP — THE CUSTOMIZATION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{PSP — The Customization Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Scenario — CAMS Exam Favorite}}
+			\scriptsize
+			A PSP is planning to offer new services targeting small merchants in multiple countries, some of which lack mature AML frameworks.
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question}}
+			\scriptsize
+			Which strategy is most appropriate to maintain compliance and mitigate risk?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Customize AML policy and onboarding procedures per jurisdiction and product.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Apply home-country AML standards across all jurisdictions} — \textbf{NO.} One-size-fits-all fails.
+				\item \textbf{Jurisdiction-specific:} High-risk jurisdictions = EDD, transaction limits, or restricted services.
+				\item \textbf{Product-specific:} Low-value vs high-value products have different risk profiles.
+				\item \textbf{Risk-based approach:} Apply proportionate measures based on risk.
+				\item \textbf{Key principle:} PSPs must \textbf{customize} AML per jurisdiction and product.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} PSPs = \textbf{customize per jurisdiction and product}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 17: HIGH-VALUE ASSETS — THE CRYPTO RED FLAG TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{High-Value Assets — The Crypto Red Flag Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which red flag is most commonly associated with abuse of high-value assets for laundering purposes?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Making payments for high-value items in cryptocurrency.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Purchasing assets with complex financing plans spanning several years} — This \textbf{can} be a red flag, but crypto is \textbf{more directly} associated.
+				\item \textbf{Cryptocurrency offers pseudonymity}, making it attractive for illicit payments.
+				\item \textbf{High-value items:} Real estate, art, luxury cars purchased with crypto = suspicion.
+				\item \textbf{Challenge:} Volatility and price fluctuations complicate source-of-funds verification.
+				\item \textbf{Key principle:} Crypto payments for high-value assets = \textbf{primary red flag}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Crypto payments for high-value assets = \textbf{primary red flag}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 18: AML COMMUNICATIONS — THE SCRIPT TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{AML Communications — The Script Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			What should AML-sensitive communications materials emphasize to reduce risk? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Avoid mentioning any internal reviews, even if prompted by the customer. 2. Use pre-approved scripts when addressing service disruptions caused by internal reviews.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Refer customers to the AML department for financial advice} — \textbf{NO.} AML department doesn't give financial advice.
+				\item \textbf{Avoid mentioning internal reviews:} This prevents tipping off.
+				\item \textbf{Pre-approved scripts:} Ensures consistent, compliant messaging.
+				\item \textbf{Tipping off risk:} Even hinting at an investigation can be tipping off.
+				\item \textbf{Key principle:} Customer-facing staff must \textbf{not} reveal any AML-related investigations.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} AML communications = \textbf{avoid reviews + use pre-approved scripts}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 19: DEEPFAKE DETECTION — THE LIVENESS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Deepfake Detection — The Liveness Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Scenario — CAMS Exam Favorite}}
+			\scriptsize
+			A fraudster used a high-resolution image and a deepfake video to bypass facial recognition verification.
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question}}
+			\scriptsize
+			What tools could have prevented this fraud attempt? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Use of software that can detect inconsistencies in light or skin texture. 2. Prompts for the customer to blink, smile, or repeat a phrase.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Real-time fraud risk scoring algorithms using behavioral analytics} — This is \textbf{behavioral analytics}, not deepfake detection.
+				\item \textbf{Texture analysis:} Deepfakes often have inconsistencies in light, skin texture, and shadows.
+				\item \textbf{Active liveness prompts:} Blink, smile, repeat a phrase — requires real-time action.
+				\item \textbf{Passive liveness:} Analyzes subtle facial movements without user action.
+				\item \textbf{Key principle:} Deepfake detection = \textbf{texture analysis + active liveness prompts}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Deepfake detection = \textbf{texture analysis + active liveness prompts}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 20: CLUSTERING — THE BEHAVIORAL TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Clustering — The Behavioral Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which are characteristics of clustering in compliance analytics? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. It groups entities by shared behavioral characteristics. 2. It identifies connections across multiple transaction types.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{It excludes outliers to reduce financial crime risk} — \textbf{NO.} Outliers are often the \textbf{most suspicious}.
+				\item \textbf{Clustering:} Groups entities that exhibit similar behaviors.
+				\item \textbf{Purpose:} Detect networks of criminal activity (money mule networks, organized crime).
+				\item \textbf{Connections across transaction types:} Links separate accounts that exhibit similar patterns.
+				\item \textbf{Key principle:} Clustering = \textbf{shared behavior + connections}. NOT excluding outliers.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Clustering = \textbf{shared behaviors + connections}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 21: DATA LINEAGE — THE TRANSPARENCY TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Lineage — The Transparency Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which support transparency and auditability through data lineage? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Maintaining history of data transformations. 2. Capturing source of each data field.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Archiving analyst notes from alert reviews} — This is \textbf{case documentation}, NOT data lineage.
+				\item \wronganswer{Deleting outdated data annually} — \textbf{Undermines} auditability.
+				\item \textbf{Data lineage:} Tracking the \textbf{flow of data} from source to destination.
+				\item \textbf{History of transformations:} Shows how data was modified.
+				\item \textbf{Source of each field:} Shows where data originated.
+				\item \textbf{Key principle:} Data lineage = \textbf{transformations + source}. NOT case notes.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Data lineage = \textbf{transformations history + source of each field}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 22: DATA VALIDATION — THE OBJECTIVES TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Validation — The Objectives Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which are typical objectives of data validation and testing in AFC systems? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Ensuring data inputs reflect actual customer behavior. 2. Verifying automated controls function correctly. 3. Testing whether controls generate alerts under appropriate risk conditions.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Confirming reports are generated in a format preferred by third-party vendors} — \textbf{NOT} a validation objective.
+				\item \textbf{Data inputs reflect behavior:} Test that data from source systems accurately feeds into AML systems.
+				\item \textbf{Controls functioning:} Validate that transaction monitoring rules fire alerts correctly.
+				\item \textbf{Alerts under risk conditions:} Use known test cases to validate system logic.
+				\item \textbf{Key principle:} Validation = \textbf{accuracy + functionality + appropriate alerts}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Data validation = \textbf{accuracy + functionality + appropriate alerts}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 23: DIGITAL ONBOARDING — THE BENEFITS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Digital Onboarding — The Benefits Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which benefits are associated with digital onboarding technology according to FATF? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Lower cost and increased auditability. 2. Greater accountability in compliance processes.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Elimination of human review for high-risk customers} — \textbf{NO.} High-risk still require human review.
+				\item \textbf{Lower cost:} Automation reduces manual effort.
+				\item \textbf{Increased auditability:} Digital records are easier to track and audit.
+				\item \textbf{Greater accountability:} Clear audit trails of who did what.
+				\item \textbf{Key principle:} Digital onboarding = \textbf{lower cost + auditability + accountability}. NOT eliminating human review.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Digital onboarding = \textbf{lower cost + auditability + accountability}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 24: PERPETUAL KYC — THE TRIGGER-BASED TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Perpetual KYC — The Trigger-Based Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which feature most effectively distinguishes perpetual KYC from traditional periodic reviews?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Trigger-based updates rather than fixed calendar reviews.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{It eliminates all manual review} — \textbf{NO.} Human review is still required.
+				\item \textbf{Perpetual KYC (pKYC):} Continuous, event-driven KYC refresh.
+				\item \textbf{Triggers:}
+				\begin{itemize}
+					\item Changes in PEP status
+					\item Adverse media hits
+					\item Unusual transaction patterns
+					\item Jurisdictional risk changes
+				\end{itemize}
+				\item \textbf{Benefits:} Reduces customer friction, improves accuracy, ensures timely EDD.
+				\item \textbf{Key principle:} pKYC = \textbf{trigger-based}, not calendar-based.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} pKYC = \textbf{trigger-based updates}, not fixed calendar reviews.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 25: FINAL EXAM TIPS — DOMAIN C COMPLETE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Domain C — Complete Exam Traps Summary}}
+		\scriptsize
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{All Traps — 50+ Images Covered}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{AML Policy:} Assignment of compliance responsibilities + program review triggers.
+				\item \textbf{TCSP:} Cannot outsource AML responsibility. Decline unless BO disclosed.
+				\item \textbf{AFC Governance Reports:} Regulatory interactions + control effectiveness + SAR statuses.
+				\item \textbf{Board Oversight:} Oversight and challenge. NOT operational involvement.
+				\item \textbf{Passive Liveness:} Minimal interaction + subtle facial analysis.
+				\item \textbf{EWRA:} Must include digital channels. Update when risk changes.
+				\item \textbf{Entity Resolution:} Links data from multiple sources to improve accuracy.
+				\item \textbf{Data Coverage:} Missing identifiers + inconsistent country codes.
+				\item \textbf{Round-Trip:} Escalate to Level 2 for deeper investigation.
+				\item \textbf{AI Transition:} Data + people + explainability.
+				\item \textbf{Card Risk:} Anonymity + high volume + high-risk sectors.
+				\item \textbf{Prepaid Cards:} Anonymous + reloadable + cross-border.
+				\item \textbf{Casino Controls:} Chip redemption + loyalty program tracking.
+				\item \textbf{E-Commerce:} High volume + decentralized payments.
+				\item \textbf{PSP:} Customize per jurisdiction and product.
+				\item \textbf{High-Value Assets:} Crypto payments = primary red flag.
+				\item \textbf{AML Communications:} Avoid reviews + use pre-approved scripts.
+				\item \textbf{Deepfake Detection:} Texture analysis + active liveness prompts.
+				\item \textbf{Clustering:} Shared behaviors + connections across transaction types.
+				\item \textbf{Data Lineage:} Transformations history + source of each field.
+				\item \textbf{Data Validation:} Accuracy + functionality + appropriate alerts.
+				\item \textbf{Digital Onboarding:} Lower cost + auditability + accountability.
+				\item \textbf{Perpetual KYC:} Trigger-based updates, not fixed calendar reviews.
+				\item \textbf{Risk-Based Authentication:} Prompt only when behavior deviates.
+				\item \textbf{MLAT:} Challenge = admissibility, not just sharing.
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Final Rule:} Understand the \textbf{why} behind each concept. The exam tests \textbf{application}, not memorization.}
+	\end{frame}
+	
+	% ================================================================
+	% END SLIDE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{1.5cm}
+		{\fontsize{18}{22}\selectfont \textbf{Domain C — Complete}}\\[0.2cm]
+		{\fontsize{11}{13}\selectfont All 50+  — Full Expanded Tutorial}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{8}{10}\selectfont MiCA · OFAC · Biometrics · MLAT · EWRA · DORA · TCSP · PEP EDD}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont KYC/CDD/EDD · Transaction Monitoring · Data Lineage · Clustering}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont Digital Onboarding · Deepfake Detection · AML Communications · PSP}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont Risk Assessments · Three Lines · Board Oversight · SAR/STR Reporting}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{8}{10}\selectfont \textit{All traps explained. All concepts covered. Ready for the exam.}}
+		\vspace{0.5cm}
+	\end{frame}
+	
+\end{document}

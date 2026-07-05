@@ -1,0 +1,702 @@
+% !TeX program = lualatex
+\documentclass[12pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{anyfontsize}
+\usepackage{lmodern}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+
+% ====== EXTREME FONT REDUCTION ======
+\renewcommand{\tiny}{\fontsize{3.5}{4.5}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{4.5}{5.5}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{5.5}{6.5}\selectfont}
+\renewcommand{\small}{\fontsize{6.5}{7.5}\selectfont}
+\renewcommand{\normalsize}{\fontsize{7.5}{8.5}\selectfont}
+\renewcommand{\large}{\fontsize{8.5}{9.5}\selectfont}
+\renewcommand{\Large}{\fontsize{9.5}{10.5}\selectfont}
+\renewcommand{\LARGE}{\fontsize{10.5}{12}\selectfont}
+\renewcommand{\huge}{\fontsize{11.5}{13.5}\selectfont}
+\renewcommand{\Huge}{\fontsize{13}{16}\selectfont}
+
+% ====== COLORS ======
+\definecolor{redcorrect}{RGB}{200,30,30}
+\definecolor{bluecorrect}{RGB}{30,80,200}
+\definecolor{greencheck}{RGB}{0,150,50}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{40,40,40}
+\definecolor{softyellow}{RGB}{255,248,200}
+\definecolor{deepblue}{RGB}{20,60,150}
+\definecolor{darkred}{RGB}{150,20,20}
+\definecolor{orangewarning}{RGB}{255,140,0}
+\definecolor{correctgreen}{RGB}{0,120,40}
+\definecolor{trapcolor}{RGB}{180,80,0}
+\definecolor{purpleconcept}{RGB}{120,50,180}
+\definecolor{tealhard}{RGB}{0,120,120}
+
+\setbeamercolor{title}{fg=white,bg=redcorrect}
+\setbeamercolor{frametitle}{fg=white,bg=redcorrect}
+\setbeamercolor{block title}{fg=white,bg=bluecorrect}
+\setbeamercolor{block body}{fg=darkgray,bg=lightgray}
+\setbeamercolor{normal text}{fg=darkgray}
+\usecolortheme{default}
+
+% ====== CUSTOM COMMANDS ======
+\newcommand{\correct}[1]{\textcolor{greencheck}{\textbf{\checkmark}} #1}
+\newcommand{\keypoint}[1]{\textcolor{deepblue}{\textbf{#1}}}
+\newcommand{\hardconcept}[1]{\textcolor{darkred}{\textbf{#1}}}
+\newcommand{\examtraps}[1]{\textcolor{trapcolor}{\textbf{⚠ TRAP:}} #1}
+\newcommand{\recallbox}[1]{\fcolorbox{deepblue}{blue!5}{\parbox{0.88\textwidth}{\centering \textbf{REMEMBER:} #1}}}
+\newcommand{\stepbox}[1]{%
+	\begin{center}
+		\fcolorbox{darkgray}{white}{%
+			\parbox{0.92\textwidth}{\vspace{0.03cm} #1 \vspace{0.03cm}}%
+		}
+	\end{center}
+}
+\newcommand{\answerbox}[1]{\fcolorbox{correctgreen}{green!8}{\parbox{0.88\textwidth}{\centering \textcolor{correctgreen}{\textbf{\checkmark\ CORRECT:}} #1}}}
+\newcommand{\wronganswer}[1]{\textcolor{redcorrect}{\textbf{✘}} #1}
+\newcommand{\trapbox}[1]{\fcolorbox{trapcolor}{orange!8}{\parbox{0.88\textwidth}{\centering \textcolor{trapcolor}{\textbf{⚠ EXAM TRAP:}} #1}}}
+\newcommand{\keyrule}[1]{\textcolor{tealhard}{\textbf{🔑}} #1}
+
+\begin{document}
+	
+	% ================================================================
+	% SLIDE 1: TITLE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{0.3cm}
+		{\fontsize{18}{22}\selectfont \textbf{CAMS DOMAIN D}}\\[0.1cm]
+		{\fontsize{14}{17}\selectfont \textbf{TOOLS \& TECHNOLOGIES TO FIGHT FINANCIAL CRIME}}\\[0.15cm]
+		{\fontsize{9}{11}\selectfont \textit{ALL HARD QUESTIONS — COMPLETE TUTORIAL}}\\[0.08cm]
+		\rule{4cm}{0.5pt}\\[0.08cm]
+		{\fontsize{6}{7}\selectfont AI/ML Tools · RPA · Digital Onboarding · Data Validation · Data Lineage}\\[0.04cm]
+		{\fontsize{6}{7}\selectfont Blockchain Analytics · Entity Resolution · Clustering · Batch Screening}\\[0.04cm]
+		{\fontsize{6}{7}\selectfont Device Intelligence · Biometrics · Liveness Detection · Perpetual KYC}\\[0.04cm]
+		{\fontsize{6}{7}\selectfont OSINT · Network Analysis · Cryptocurrency · Deepfake Detection}
+		\vspace{0.2cm}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 2: AI TRANSITION — THE DATA/PEOPLE/EXPLAINABILITY TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{AI Transition — The Data/People/Explainability Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which actions are most important when transitioning from traditional to AI-based compliance tools? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Ensuring data quality for training algorithms. 2. Managing change in employee workflows. 3. Verifying transparency and explainability in AI models.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Selecting third-party global audit providers} — This is \textbf{less critical} than data, people, and explainability.
+				\item \textbf{Data quality:} "Garbage in, garbage out" — AI is only as good as its training data.
+				\item \textbf{Employee workflows:} AI changes how analysts work — must provide adequate training.
+				\item \textbf{Explainability:} Regulators require \textbf{explainable AI} — must justify why an AI flagged something.
+				\item \textbf{Key principle:} AI transition = \textbf{data + people + explainability}.
+				\item \textbf{Exam Trap:} "Selecting third-party audit providers" sounds important but is not the primary concern.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} AI transition = \textbf{data + people + explainability}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 3: RPA — THE LARGE-VOLUME TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{RPA — The Large-Volume Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			One advantage of robotic process automation (RPA) in AML operations is that it can:
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Reduce compliance costs by handling large-volume, repeatable tasks.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Replace all human decision-making} — \textbf{NO.} RPA automates \textbf{tasks}, not decisions.
+				\item \wronganswer{Eliminate all false positives} — \textbf{NO.} RPA doesn't eliminate false positives.
+				\item \textbf{RPA:} Handles large-volume, repeatable tasks (data extraction, reconciliation, report generation).
+				\item \textbf{Key principle:} RPA = \textbf{large-volume, repeatable tasks}. NOT decision-making.
+				\item \textbf{Exam Trap:} "Replace all human decision-making" is a trap — RPA is task-based, not decision-based.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} RPA = \textbf{large-volume, repeatable tasks}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 4: DATA VALIDATION — THE OBJECTIVES TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Validation — The Objectives Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which are typical objectives of data validation and testing in AFC systems? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Ensuring data inputs reflect actual customer behavior. 2. Verifying automated controls function correctly. 3. Testing whether controls generate alerts under appropriate risk conditions.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Confirming reports are generated in a format preferred by third-party vendors} — \textbf{NOT} a validation objective.
+				\item \textbf{Data inputs reflect behavior:} Test that data from source systems accurately feeds into AML systems.
+				\item \textbf{Controls functioning:} Validate that transaction monitoring rules fire alerts correctly.
+				\item \textbf{Alerts under risk conditions:} Use known test cases to validate system logic.
+				\item \textbf{Key principle:} Validation = \textbf{accuracy + functionality + appropriate alerts}.
+				\item \textbf{Exam Trap:} "Vendor format preference" is operational, not a validation objective.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Data validation = \textbf{accuracy + functionality + appropriate alerts}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 5: DATA LINEAGE — THE TRANSPARENCY TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Lineage — The Transparency Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which support transparency and auditability through data lineage? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Maintaining history of data transformations. 2. Capturing source of each data field.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Archiving analyst notes from alert reviews} — This is \textbf{case documentation}, NOT data lineage.
+				\item \wronganswer{Deleting outdated data annually} — \textbf{Undermines} auditability.
+				\item \textbf{Data lineage:} Tracking the \textbf{flow of data} from source to destination.
+				\item \textbf{History of transformations:} Shows how data was modified.
+				\item \textbf{Source of each field:} Shows where data originated.
+				\item \textbf{Key principle:} Data lineage = \textbf{transformations + source}. NOT case notes.
+				\item \textbf{Exam Trap:} "Archiving analyst notes" sounds like documentation but is not data lineage.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Data lineage = \textbf{transformations history + source of each field}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 6: DEVICE INTELLIGENCE — THE SOCIAL MEDIA TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Device Intelligence — The Social Media Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which elements do device intelligence tools capture? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. IP address and geolocation. 2. Operating system and installed plugins. 3. Browser type and screen resolution.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Social media accounts and browsing history} — \textbf{NO.} Device intelligence captures \textbf{device fingerprinting}, not social media.
+				\item \textbf{IP address/geolocation:} Location and network information.
+				\item \textbf{OS/plugins:} Device configuration.
+				\item \textbf{Browser/screen resolution:} Browser fingerprinting.
+				\item \textbf{Key principle:} Device intelligence = \textbf{device fingerprinting}, NOT social media or browsing history.
+				\item \textbf{Exam Trap:} "Social media accounts" sounds like intelligence but is NOT captured by device intelligence.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Device intelligence = \textbf{device fingerprinting}. NOT social media.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 7: DIGITAL ONBOARDING — THE BENEFITS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Digital Onboarding — The Benefits Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which benefits are associated with digital onboarding technology according to FATF? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Lower cost and increased auditability. 2. Greater accountability in compliance processes.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Elimination of human review for high-risk customers} — \textbf{NO.} High-risk still require human review.
+				\item \textbf{Lower cost:} Automation reduces manual effort.
+				\item \textbf{Increased auditability:} Digital records are easier to track and audit.
+				\item \textbf{Greater accountability:} Clear audit trails of who did what.
+				\item \textbf{Key principle:} Digital onboarding = \textbf{lower cost + auditability + accountability}. NOT eliminating human review.
+				\item \textbf{Exam Trap:} "Elimination of human review" sounds efficient but is incorrect.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Digital onboarding = \textbf{lower cost + auditability + accountability}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 8: PERPETUAL KYC — THE TRIGGER-BASED TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Perpetual KYC — The Trigger-Based Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which feature most effectively distinguishes perpetual KYC from traditional periodic reviews?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Trigger-based updates rather than fixed calendar reviews.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{It eliminates all manual review} — \textbf{NO.} Human review is still required.
+				\item \textbf{Perpetual KYC (pKYC):} Continuous, event-driven KYC refresh.
+				\item \textbf{Triggers:}
+				\begin{itemize}
+					\item Changes in PEP status
+					\item Adverse media hits
+					\item Unusual transaction patterns
+					\item Jurisdictional risk changes
+				\end{itemize}
+				\item \textbf{Benefits:} Reduces customer friction, improves accuracy, ensures timely EDD.
+				\item \textbf{Key principle:} pKYC = \textbf{trigger-based}, not calendar-based.
+				\item \textbf{Exam Trap:} "Eliminates manual review" is a trap — pKYC still requires human oversight.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} pKYC = \textbf{trigger-based updates}, not fixed calendar reviews.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 9: BLOCKCHAIN TRACING — THE WALLET CLUSTERING TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Blockchain Tracing — The Wallet Clustering Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which technologies or methods support blockchain transaction tracing activities? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Wallet clustering algorithms. 2. Chain visualization dashboards.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Distributed IPFS file sharing} — IPFS is a \textbf{file system}, not a tracing tool.
+				\item \textbf{Wallet clustering:} Groups related wallets to identify entities.
+				\item \textbf{Chain visualization:} Visually trace transaction flows.
+				\item \textbf{Key principle:} Blockchain tracing = \textbf{clustering + visualization}. NOT file sharing.
+				\item \textbf{Exam Trap:} "IPFS" sounds technical but is NOT a blockchain tracing method.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Blockchain tracing = \textbf{wallet clustering + chain visualization}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 10: PAYMENT SCREENING — THE HYBRID SYSTEM TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Payment Screening — The Hybrid System Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			A global bank with high transaction volume is updating its payment screening system. Its goal is to minimize false positives while maintaining regulatory compliance. Which configuration of tools would best achieve this?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Use a hybrid system combining fuzzy logic, behavioral AI models, and rule-based filters.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Use AI only, removing all rules} — \textbf{NO.} Rules provide regulatory coverage.
+				\item \wronganswer{Use a single rule-based filter} — \textbf{NO.} Too many false positives.
+				\item \textbf{Fuzzy logic:} Handles name variations.
+				\item \textbf{Behavioral AI:} Learns normal patterns.
+				\item \textbf{Rule-based filters:} Enforces regulatory requirements.
+				\item \textbf{Key principle:} Hybrid = \textbf{best of all worlds}. Single approaches are less effective.
+				\item \textbf{Exam Trap:} "AI only" sounds advanced but lacks regulatory coverage.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Payment screening = \textbf{hybrid: fuzzy logic + AI + rules}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 11: ENTITY RESOLUTION — THE BLOCKCHAIN TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Entity Resolution — The Blockchain Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			How does entity resolution improve blockchain analytics?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{It links data from multiple sources to improve match accuracy.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{It replaces all manual reviews} — \textbf{NO.} It's a tool, not a replacement.
+				\item \textbf{Entity resolution:} Links on-chain wallet addresses to off-chain risk data.
+				\item \textbf{Multiple sources:} Wallet addresses, KYC data, sanctions lists, PEP lists, adverse media.
+				\item \textbf{Improves match accuracy:} Reduces false positives and false negatives.
+				\item \textbf{Key principle:} Entity resolution = \textbf{links data from multiple sources}.
+				\item \textbf{Exam Trap:} "Replaces manual reviews" is a trap — it's an enhancement, not a replacement.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Entity resolution = \textbf{links data from multiple sources} to improve accuracy.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 12: CLUSTERING — THE BEHAVIORAL TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Clustering — The Behavioral Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which are characteristics of clustering in compliance analytics? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. It groups entities by shared behavioral characteristics. 2. It identifies connections across multiple transaction types.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{It excludes outliers to reduce financial crime risk} — \textbf{NO.} Outliers are often the \textbf{most suspicious}.
+				\item \textbf{Clustering:} Groups entities that exhibit similar behaviors.
+				\item \textbf{Purpose:} Detect networks of criminal activity (money mule networks, organized crime).
+				\item \textbf{Connections across transaction types:} Links separate accounts that exhibit similar patterns.
+				\item \textbf{Key principle:} Clustering = \textbf{shared behavior + connections}. NOT excluding outliers.
+				\item \textbf{Exam Trap:} "Excluding outliers" sounds like risk reduction but misses suspicious activity.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Clustering = \textbf{shared behaviors + connections}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 13: BIOMETRICS — THE COMPROMISED DATA TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Biometrics — The Compromised Data Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which risk is specifically associated with facial recognition compared to passwords?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Compromised biometric data is difficult to change or reset unlike passwords.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{The technology requires more storage capacity} — Not a unique risk.
+				\item \wronganswer{Facial recognition is less secure} — Not necessarily true.
+				\item \textbf{Passwords can be changed} — if compromised, you reset them.
+				\item \textbf{Biometrics cannot be changed} — you can't get a new face or fingerprint.
+				\item Once biometric data is compromised, it's \textbf{permanently compromised}.
+				\item \textbf{Key principle:} Biometric risk = \textbf{irreplaceable} — can't change like passwords.
+				\item \textbf{Exam Trap:} "Storage capacity" is a red herring — the real risk is irreplaceability.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Biometric risk = \textbf{can't change like passwords}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 14: AUTHENTICATION TECHNOLOGIES — THE BIOMETRICS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Authentication — The Biometrics Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which technologies enhance authentication and security in financial systems? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Multi-factor authentication. 2. Physiological biometrics. 3. Behavioral biometrics.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Password biometrics} — This is a \textbf{trap}. There is \textbf{no such thing} as "password biometrics." Passwords are \textbf{not biometrics}.
+				\item \textbf{Multi-factor authentication (MFA)} = multiple factors (something you know, have, are).
+				\item \textbf{Physiological biometrics} = physical traits (fingerprint, facial recognition, iris scan, voice).
+				\item \textbf{Behavioral biometrics} = behavioral patterns (typing rhythm, mouse movements, gait).
+				\item \textbf{Key principle:} Biometrics are \textbf{physical or behavioral}. Passwords are \textbf{knowledge-based}.
+				\item \textbf{Exam Trap:} "Password biometrics" sounds plausible but does NOT exist.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} MFA + physiological + behavioral = correct. "Password biometrics" = trap.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 15: PASSIVE LIVENESS — THE DISTINCTION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Passive Liveness — The Distinction Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			What distinguishes passive liveness detection from active methods?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{It uses minimal user interaction and analyzes subtle facial movement or texture patterns.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{It asks users to answer KYC security questions during video evaluation} — \textbf{NO.} That's KYC verification, NOT liveness detection.
+				\item \textbf{Passive Liveness:}
+				\begin{itemize}
+					\item Uses \textbf{minimal user interaction}
+					\item Analyzes subtle facial movement or texture patterns
+					\item Micro-expressions, skin texture, depth perception
+					\item Detects if using a photo or video (spoof detection)
+				\end{itemize}
+				\item \textbf{Active Liveness:}
+				\begin{itemize}
+					\item Requires explicit user actions: blinking, smiling, turning head
+					\item More secure but more intrusive
+					\item May have lower completion rates
+				\end{itemize}
+				\item \textbf{Key principle:} Passive is less intrusive; active is more secure.
+				\item \textbf{Exam Trap:} "KYC questions" is a trap — that's verification, not liveness.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Passive = \textbf{minimal interaction} + \textbf{subtle facial analysis}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 16: DEEPFAKE DETECTION — THE LIVENESS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Deepfake Detection — The Liveness Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Scenario — CAMS Exam Favorite}}
+			\scriptsize
+			A fraudster used a high-resolution image and a deepfake video to bypass facial recognition verification.
+		\end{block}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question}}
+			\scriptsize
+			What tools could have prevented this fraud attempt? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Use of software that can detect inconsistencies in light or skin texture. 2. Prompts for the customer to blink, smile, or repeat a phrase.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Real-time fraud risk scoring algorithms using behavioral analytics} — This is \textbf{behavioral analytics}, not deepfake detection.
+				\item \textbf{Texture analysis:} Deepfakes often have inconsistencies in light, skin texture, and shadows.
+				\item \textbf{Active liveness prompts:} Blink, smile, repeat a phrase — requires real-time action.
+				\item \textbf{Key principle:} Deepfake detection = \textbf{texture analysis + active liveness prompts}.
+				\item \textbf{Exam Trap:} "Behavioral analytics" sounds like detection but is different from deepfake detection.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Deepfake detection = \textbf{texture analysis + active liveness prompts}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 17: OSINT — THE ENTITY-SPECIFIC TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{OSINT — The Entity-Specific Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			An analyst notes wire transfers to an unfamiliar entity in a sanctioned jurisdiction. Which information source would most help understand the activity?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Open-source research into the entity.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Regulatory advisories about common evasion techniques} — This is \textbf{general} information, not \textbf{specific} to the entity.
+				\item \textbf{Open-source research} on the \textbf{specific entity} provides:
+				\begin{itemize}
+					\item Ownership information
+					\item Business activities
+					\item Connections to other entities
+					\item Whether it's a shell company or front
+				\end{itemize}
+				\item \textbf{Key principle:} When investigating an \textbf{unknown entity}, go to \textbf{entity-specific} sources, not general guidance.
+				\item \textbf{Exam Trap:} "Regulatory advisories" sounds helpful but is too general for entity-specific investigation.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Unknown entity = \textbf{open-source research} on that specific entity.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 18: NETWORK ANALYSIS — THE RELATIONSHIP TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Network Analysis — The Relationship Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			In what way does network analysis improve Customer Due Diligence (CDD) processes?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{By identifying hidden relationships among entities.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{By replacing all manual CDD checks} — \textbf{NO.} It's a tool, not a replacement.
+				\item \textbf{Network analysis:} Reveals connections that are not obvious.
+				\item \textbf{Purpose:} Find hidden relationships (same address, same phone, shared ownership, common counterparties).
+				\item \textbf{Key principle:} Network analysis = \textbf{hidden relationships}. NOT replacing manual checks.
+				\item \textbf{Exam Trap:} "Replacing manual checks" sounds efficient but network analysis is an enhancement, not a replacement.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Network analysis = \textbf{identifying hidden relationships}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 19: DATA STANDARDIZATION — THE DATA DICTIONARY TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Data Standardization — The Data Dictionary Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			A global institution operates multiple platforms with varying labels for "beneficiary" data, causing confusion during system transfers. What integrated solution should it prioritize?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Developing a standardized mapping schema linked to a data dictionary.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{Using the same system for all platforms} — \textbf{NO.} Different platforms have different data structures.
+				\item \textbf{Data dictionary:} Defines what each field means across all systems.
+				\item \textbf{Mapping schema:} Shows how data from each system maps to the dictionary.
+				\item \textbf{Key principle:} Standardization = \textbf{dictionary + mapping}. NOT using one system for everything.
+				\item \textbf{Exam Trap:} "Same system for all platforms" sounds simple but is not a realistic solution.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Data standardization = \textbf{data dictionary + mapping schema}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 20: CRYPTO VENDOR — THE REAL-TIME ALERTS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Crypto Vendor — The Real-Time Alerts Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			A financial institution wants to enhance its blockchain tracing and monitoring capabilities. It has high transaction volumes and deals in multiple cryptocurrencies. Which vendor capability should it prioritize?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Real-time alerts on suspicious wallet activity.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{On-chain analytics without integration of off-chain data sources} — \textbf{NO.} Both on-chain and off-chain data are needed.
+				\item \textbf{Real-time alerts:} Detects suspicious activity as it happens.
+				\item \textbf{High transaction volumes:} Need real-time detection to keep up.
+				\item \textbf{Multiple cryptocurrencies:} Need comprehensive coverage.
+				\item \textbf{Key principle:} Prioritize \textbf{real-time} capabilities for high-volume crypto monitoring.
+				\item \textbf{Exam Trap:} "On-chain analytics only" sounds technical but misses off-chain data.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Crypto vendor priority = \textbf{real-time alerts + off-chain integration}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 21: AI GOVERNANCE — THE REGIONAL VARIATION TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{AI Governance — The Regional Variation Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{The Hard Question — CAMS Exam Favorite}}
+			\scriptsize
+			Which regulatory features vary for AI governance across different regions?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Specific AI use-case restrictions. 2. Requirements for human-in-the-loop oversight. 3. Differing standards for transparency and data usage.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wronganswer{AI governance is uniform globally} — \textbf{NO.} Different regions have different approaches.
+				\item \textbf{Use-case restrictions:} Some regions ban certain AI uses.
+				\item \textbf{Human-in-the-loop:} Some regions require human oversight.
+				\item \textbf{Transparency standards:} Different requirements for explainability.
+				\item \textbf{Key principle:} AI governance = \textbf{region-specific}. Must comply with all where you operate.
+				\item \textbf{Exam Trap:} "Uniform globally" is a trap — AI governance varies significantly.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} AI governance = \textbf{region-specific} — varies by jurisdiction.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 22: FINAL EXAM TIPS — DOMAIN D
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Domain D — Complete Exam Traps Summary}}
+		\scriptsize
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{All Hard Questions — Natural Explanations}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{AI Transition:} = \textbf{data + people + explainability}. NOT audit providers.
+				\item \textbf{RPA:} = \textbf{large-volume, repeatable tasks}. NOT decision-making.
+				\item \textbf{Data Validation:} = \textbf{accuracy + functionality + appropriate alerts}. NOT vendor format.
+				\item \textbf{Data Lineage:} = \textbf{transformations history + source of each field}. NOT case notes.
+				\item \textbf{Device Intelligence:} = \textbf{device fingerprinting}. NOT social media.
+				\item \textbf{Digital Onboarding:} = \textbf{lower cost + auditability + accountability}. NOT eliminating human review.
+				\item \textbf{Perpetual KYC:} = \textbf{trigger-based updates}, not fixed calendar reviews.
+				\item \textbf{Blockchain Tracing:} = \textbf{wallet clustering + chain visualization}. NOT IPFS.
+				\item \textbf{Payment Screening:} = \textbf{hybrid: fuzzy logic + AI + rules}. NOT single approach.
+				\item \textbf{Entity Resolution:} = \textbf{links data from multiple sources} to improve accuracy.
+				\item \textbf{Clustering:} = \textbf{shared behaviors + connections}. NOT excluding outliers.
+				\item \textbf{Biometrics:} Risk = \textbf{can't change like passwords}.
+				\item \textbf{Authentication:} MFA + physiological + behavioral = correct. "Password biometrics" = trap.
+				\item \textbf{Passive Liveness:} = \textbf{minimal interaction + subtle facial analysis}.
+				\item \textbf{Deepfake Detection:} = \textbf{texture analysis + active liveness prompts}.
+				\item \textbf{OSINT:} = \textbf{entity-specific research}, not general guidance.
+				\item \textbf{Network Analysis:} = \textbf{identifying hidden relationships}.
+				\item \textbf{Data Standardization:} = \textbf{data dictionary + mapping schema}.
+				\item \textbf{Crypto Vendor:} = \textbf{real-time alerts + off-chain integration}.
+				\item \textbf{AI Governance:} = \textbf{region-specific} — varies by jurisdiction.
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Final Rule:} Domain D tests \textbf{technology application} in AML. Understand \textbf{what each tool does} and \textbf{how it helps}.}
+	\end{frame}
+	
+	% ================================================================
+	% END SLIDE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{1.5cm}
+		{\fontsize{18}{22}\selectfont \textbf{Domain D — Complete}}\\[0.2cm]
+		{\fontsize{11}{13}\selectfont Tools \& Technologies to Fight Financial Crime}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{8}{10}\selectfont AI/ML Tools · RPA · Digital Onboarding · Data Validation · Data Lineage}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont Blockchain Analytics · Entity Resolution · Clustering · Batch Screening}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont Device Intelligence · Biometrics · Liveness Detection · Perpetual KYC}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont OSINT · Network Analysis · Cryptocurrency · Deepfake Detection}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{8}{10}\selectfont \textit{All traps explained. All concepts covered. Ready for the exam.}}
+		\vspace{0.5cm}
+	\end{frame}
+	
+\end{document}

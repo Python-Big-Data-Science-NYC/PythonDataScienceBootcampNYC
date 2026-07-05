@@ -1,0 +1,811 @@
+% !TeX program = lualatex
+\documentclass[12pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{anyfontsize}
+\usepackage{lmodern}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+
+% ====== EXTREME FONT REDUCTION ======
+\renewcommand{\tiny}{\fontsize{3.5}{4.5}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{4.5}{5.5}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{5.5}{6.5}\selectfont}
+\renewcommand{\small}{\fontsize{6.5}{7.5}\selectfont}
+\renewcommand{\normalsize}{\fontsize{7.5}{8.5}\selectfont}
+\renewcommand{\large}{\fontsize{8.5}{9.5}\selectfont}
+\renewcommand{\Large}{\fontsize{9.5}{10.5}\selectfont}
+\renewcommand{\LARGE}{\fontsize{10.5}{12}\selectfont}
+\renewcommand{\huge}{\fontsize{11.5}{13.5}\selectfont}
+\renewcommand{\Huge}{\fontsize{13}{16}\selectfont}
+
+% ====== COLORS ======
+\definecolor{redcorrect}{RGB}{200,30,30}
+\definecolor{bluecorrect}{RGB}{30,80,200}
+\definecolor{greencheck}{RGB}{0,150,50}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{40,40,40}
+\definecolor{softyellow}{RGB}{255,248,200}
+\definecolor{deepblue}{RGB}{20,60,150}
+\definecolor{darkred}{RGB}{150,20,20}
+\definecolor{orangewarning}{RGB}{255,140,0}
+\definecolor{correctgreen}{RGB}{0,120,40}
+\definecolor{trapcolor}{RGB}{180,80,0}
+\definecolor{purpleconcept}{RGB}{120,50,180}
+\definecolor{tealhard}{RGB}{0,120,120}
+
+\setbeamercolor{title}{fg=white,bg=redcorrect}
+\setbeamercolor{frametitle}{fg=white,bg=redcorrect}
+\setbeamercolor{block title}{fg=white,bg=bluecorrect}
+\setbeamercolor{block body}{fg=darkgray,bg=lightgray}
+\setbeamercolor{normal text}{fg=darkgray}
+\usecolortheme{default}
+
+% ====== CUSTOM COMMANDS ======
+\newcommand{\correct}[1]{\textcolor{greencheck}{\textbf{\checkmark}} #1}
+\newcommand{\keypoint}[1]{\textcolor{deepblue}{\textbf{#1}}}
+\newcommand{\hardconcept}[1]{\textcolor{darkred}{\textbf{#1}}}
+\newcommand{\examtraps}[1]{\textcolor{trapcolor}{\textbf{⚠ TRAP:}} #1}
+\newcommand{\recallbox}[1]{\fcolorbox{deepblue}{blue!5}{\parbox{0.88\textwidth}{\centering \textbf{REMEMBER:} #1}}}
+\newcommand{\answerbox}[1]{\fcolorbox{correctgreen}{green!8}{\parbox{0.88\textwidth}{\centering \textcolor{correctgreen}{\textbf{\checkmark\ CORRECT:}} #1}}}
+\newcommand{\wronganswer}[1]{\textcolor{redcorrect}{\textbf{✘}} #1}
+\newcommand{\wrong}[1]{\textcolor{redcorrect}{\textbf{✘\ }#1}}
+\newcommand{\trapbox}[1]{\fcolorbox{trapcolor}{orange!8}{\parbox{0.88\textwidth}{\centering \textcolor{trapcolor}{\textbf{⚠ EXAM TRAP:}} #1}}}
+\newcommand{\keyrule}[1]{\textcolor{tealhard}{\textbf{🔑}} #1}
+\newcommand{\youanswered}[1]{\textcolor{orangewarning}{\textbf{✘ You Answered:}} #1}
+\newcommand{\correctanswer}[1]{\textcolor{correctgreen}{\textbf{\checkmark Correct Answer:}} #1}
+
+\begin{document}
+	
+	% ================================================================
+	% SLIDE 1: TITLE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{0.3cm}
+		{\fontsize{18}{22}\selectfont \textbf{CAMS DOMAIN C}}\\[0.1cm]
+		{\fontsize{14}{17}\selectfont \textbf{BUILDING A COMPLIANCE PROGRAM}}\\[0.15cm]
+		{\fontsize{9}{11}\selectfont \textit{ALL EXAM QUESTIONS — COMPLETE TUTORIAL}}\\[0.08cm]
+		\rule{4cm}{0.5pt}\\[0.08cm]
+		{\fontsize{6}{7}\selectfont SAR Narratives · Investigations · Training · Governance · Risk Assessment}\\[0.04cm]
+		{\fontsize{6}{7}\selectfont PEP Onboarding · Financial Inclusion · Perpetual KYC · Data Governance}\\[0.04cm]
+		{\fontsize{6}{7}\selectfont FATF Framework · Suspicious Activity Reporting · Compliance Culture}\\[0.04cm]
+		{\fontsize{6}{7}\selectfont Board Oversight · Employee Engagement · Third-Party Risk}
+		\vspace{0.2cm}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 2: SAR NARRATIVE — OBSERVABLE FACTS TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{SAR Narrative — The Speculation Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont 
+			\scriptsize}
+			Which of the following, even without any additional context, best illustrates an effective suspicious activity report (SAR) narrative?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{"Funds left the account almost daily with high volume and no stated purpose."}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{"Wire transfers occurred to Country X, known for political instability."}
+				\item \wrong{This is speculation} — "known for political instability" is a \textbf{judgment}, not an observable fact.
+				\item \correctanswer{"Funds left the account almost daily with high volume and no stated purpose."}
+				\item \textbf{Key principle:} SAR narratives should describe \textbf{observable facts}, not draw legal conclusions or personal opinions.
+				\item \textbf{Best practice:} State \textbf{what happened} (facts), not \textbf{why you think} it happened (opinion).
+				\item \textbf{Exam Trap:} "Known for political instability" sounds relevant but is \textbf{subjective} — not fact-based.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} SAR narrative = \textbf{observable facts only} — no speculation or opinions.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 3: TRANSACTION MONITORING ESCALATION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Transaction Monitoring — The Escalation Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			After an alert is triggered for frequent small deposits from multiple individuals into a single account, Level 1 review concludes the activity does not match standard customer behavior. What should be the next step in a well-structured transaction monitoring process?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Escalate the alert to Level 2 review for detailed investigation.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{Closing the alert} — \textbf{NO.} Suspicious patterns require further review.
+				\item \wrong{SAR filing immediately} — \textbf{NO.} More investigation is needed first.
+				\item \textbf{Level 1 review:} Initial triage to determine if activity is unusual.
+				\item \textbf{Level 2 review:} Detailed investigation with additional data and analysis.
+				\item \textbf{Key principle:} Alerts with suspicious patterns = \textbf{escalate for deeper review}.
+				\item \textbf{Exam Trap:} Filing SAR too early without sufficient investigation is premature.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Suspicious alert = \textbf{escalate to Level 2} before SAR filing.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 4: SAR CHARACTERISTICS FOR LAW ENFORCEMENT
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{SAR for Law Enforcement — The Extraneous Detail Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which suspicious activity report (SAR) characteristics would most likely support efficient decision-making by law enforcement investigators? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Structured format with customer identifiers and related transaction data. 2. Concise, fact-driven narrative with chronological detail. 3. Explanation of how detected activity deviates from the norm.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Detailed descriptions and timeline of the investigation and SAR filing decision process}
+				\item \wrong{This is extraneous} — law enforcement doesn't need investigation \textbf{process} details.
+				\item \correctanswer{Structured format with customer identifiers and related transaction data}
+				\item \correctanswer{Concise, fact-driven narrative with chronological detail}
+				\item \correctanswer{Explanation of how detected activity deviates from the norm}
+				\item \textbf{Key principle:} Law enforcement needs \textbf{structured facts and context} to assess suspicions quickly.
+				\item \textbf{Exam Trap:} Details about the investigation process are \textbf{not relevant} for law enforcement.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} SAR for LE = \textbf{structured facts + context + deviation explanation} — no process details.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 5: DEMONSTRATING AML CONTROL IMPROVEMENT
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{AML Controls — The Snapshot Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which of the following reporting outputs would be most useful in demonstrating improvement in an institution's AML risk controls over time?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Trend analysis showing reduction in exposure across customer sectors.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Snapshot comparison of alert volumes and times to closure}
+				\item \wrong{Snapshots show point-in-time data} — not improvement over time.
+				\item \correctanswer{Trend analysis showing reduction in exposure across customer sectors}
+				\item \textbf{Key principle:} Control effectiveness over time = \textbf{trend analysis}, not isolated data points.
+				\item \textbf{Exam Trap:} "Snapshot" is static — doesn't demonstrate improvement over time.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Demonstrate improvement = \textbf{trend analysis over time} — not snapshots.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 6: EXTERNAL SOURCES FOR WIRE TRANSFER INVESTIGATION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Wire Transfer Investigation — The Public News Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			An investigator wants to better understand a customer's spike in offshore wire transfers reflected in recent alerts. Which external source would best support their investigation at this stage?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Corporate registration databases from the destination country.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Public news sources about economic conditions in the destination region}
+				\item \wrong{News sources don't provide specific entity information} — too general.
+				\item \correctanswer{Corporate registration databases from the destination country}
+				\item \textbf{Key principle:} Corporate registration databases provide \textbf{specific information} about recipients.
+				\item \textbf{Allows verification:} Verify legitimacy of recipients and understand business relationships.
+				\item \textbf{Exam Trap:} Public news is general — corporate registries are \textbf{specific and actionable}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} External investigation = \textbf{specific corporate registries} — not general news.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 7: INVESTIGATION CONFIDENTIALITY
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Investigation Protection — The Confidentiality Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which of the following are key elements in protecting an organization during a financial crime investigation? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Maintaining confidentiality throughout the investigation. 2. Escalating issues following a predetermined protocol.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{Updating financial products involved with the transaction risk} — \textbf{NO.} Product updates are secondary.
+				\item \correctanswer{Maintaining confidentiality throughout the investigation}
+				\item \correctanswer{Escalating issues following a predetermined protocol}
+				\item \textbf{Key principle:} Confidentiality and proper escalation = \textbf{legal compliance + reputation protection}.
+				\item \textbf{Exam Trap:} Product updates are not key elements — \textbf{confidentiality and escalation} are critical.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Investigation protection = \textbf{confidentiality + escalation protocol}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 8: PEP ONBOARDING CONTROLS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{PEP Onboarding — The Enhanced Due Diligence Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which of the following controls would be suitable when onboarding a politically exposed person (PEP)? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Conducting source of wealth checks. 2. Running checks against sanctions and watchlists. 3. Mandating senior management-level approval.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{Standard KYC only} — \textbf{NO.} PEPs require \textbf{enhanced} due diligence.
+				\item \correctanswer{Source of wealth checks}
+				\item \correctanswer{Sanctions and watchlist checks}
+				\item \correctanswer{Senior management-level approval}
+				\item \textbf{Key principle:} PEPs = \textbf{enhanced due diligence} — higher level of scrutiny.
+				\item \textbf{Exam Trap:} PEPs require \textbf{more} than standard onboarding — don't treat them like regular customers.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} PEP onboarding = \textbf{source of wealth + sanctions + senior approval}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 9: THIRD-PARTY RISK TOOL — ALGORITHM UPDATE TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Third-Party Risk Tool — The Algorithm Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			A third-party risk tool categorizes many low-volume accounts as "high-risk" following a system update. Internal investigators find no recent evidence of suspicious activity. What is the most plausible explanation?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{The tool's algorithm expanded the definition of product risk.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Internal teams failed to activate law enforcement referrals}
+				\item \wrong{No evidence of suspicious activity means law enforcement isn't relevant.}
+				\item \correctanswer{The tool's algorithm expanded the definition of product risk}
+				\item \textbf{Key principle:} System updates can change risk classifications — algorithm changes are the most plausible explanation.
+				\item \textbf{Exam Trap:} "Law enforcement referrals" is a red herring — algorithm updates are the cause.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Unexpected risk reclassification = \textbf{algorithm update} likely the cause.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 10: PERPETUAL KYC VS TRADITIONAL KYC
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Perpetual KYC — The Continuous Monitoring Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which feature most effectively distinguishes perpetual KYC from traditional periodic KYC reviews?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Continuous risk monitoring and trigger-based updates rather than scheduled reviews.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{More frequent periodic reviews} — \textbf{NO.} Frequency isn't the key distinction.
+				\item \correctanswer{Continuous risk monitoring and trigger-based updates}
+				\item \textbf{Key principle:} Perpetual KYC = \textbf{continuous} monitoring, not scheduled intervals.
+				\item \textbf{Trigger-based:} Updates happen when \textbf{risk events} occur, not on a fixed schedule.
+				\item \textbf{Exam Trap:} "More frequent reviews" is still periodic — perpetual is \textbf{continuous}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Perpetual KYC = \textbf{continuous + trigger-based} — not scheduled.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 11: ACF TECHNOLOGY STRATEGY — PERPETUAL KYC
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{ACF Technology Strategy — The Decentralized Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			A financial firm receives customer complaints about delays in opening accounts and repeated KYC requests from different departments. What AFC technology strategy would best minimize these issues?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Implement perpetual KYC with centralized data and trigger-based updates.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{Decentralized KYC across departments} — \textbf{NO.} That's the problem — repeated requests.
+				\item \correctanswer{Perpetual KYC with centralized data and trigger-based updates}
+				\item \textbf{Centralized data:} One source of truth — no repeated requests.
+				\item \textbf{Trigger-based updates:} Updates happen when needed, not on fixed schedule.
+				\item \textbf{Key principle:} Customer experience = \textbf{centralized + perpetual KYC}.
+				\item \textbf{Exam Trap:} "Decentralized" is the problem — \textbf{centralized} is the solution.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} AFC tech strategy = \textbf{centralized perpetual KYC} + trigger-based updates.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 12: FATF SIX-STEP FRAMEWORK
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{FATF Framework — The Components Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which of the following are key components of the six-step framework promoted by FATF for conducting national money laundering and terrorist financing risk assessments? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Environmental scanning. 2. Horizon scanning. 3. Threat identification.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Threat identification, Horizon scanning, Offshore asset repatriation}
+				\item \wrong{Offshore asset repatriation is \textbf{NOT} a FATF framework component.}
+				\item \correctanswer{Environmental scanning}
+				\item \correctanswer{Horizon scanning}
+				\item \correctanswer{Threat identification}
+				\item \textbf{Key principle:} FATF framework = \textbf{environmental scanning + horizon scanning + threat identification}.
+				\item \textbf{Exam Trap:} "Offshore asset repatriation" sounds important but is \textbf{not} part of the framework.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} FATF six-step = \textbf{environmental + horizon scanning + threat identification}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 13: SUSTAINING COMPLIANCE CULTURE
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Compliance Culture — The Autonomy Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which elements contribute to sustaining an embedded culture of compliance over time? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Regular refresher training informed by evolving risks. 2. Open dialogue between compliance and operational teams. 3. Governance oversight committees reviewing scenario and rule integrity.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Autonomous decision-making by line staff without accountability}
+				\item \wrong{Autonomous decision-making without accountability \textbf{undermines} compliance culture.}
+				\item \correctanswer{Regular refresher training informed by evolving risks}
+				\item \correctanswer{Open dialogue between compliance and operational teams}
+				\item \correctanswer{Governance oversight committees reviewing scenario and rule integrity}
+				\item \textbf{Key principle:} Compliance culture = \textbf{training + communication + oversight}.
+				\item \textbf{Exam Trap:} "Autonomous decision-making" sounds good but \textbf{lacks accountability}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Compliance culture = \textbf{training + dialogue + governance oversight}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 14: REASON NOT TO FILE SAR
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{SAR Filing — The False Positive Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			What is one commonly accepted reason not to file a suspicious activity report (SAR) after investigating potential suspicious activity?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{The alert was determined to be a false positive after thorough review.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{The customer is a valued client} — \textbf{NO.} Relationship status doesn't determine SAR filing.
+				\item \wrong{The transaction amount was below reporting threshold} — \textbf{NO.} Suspicion matters, not just threshold.
+				\item \correctanswer{The alert was determined to be a false positive after thorough review}
+				\item \textbf{Key principle:} False positive = \textbf{no suspicion after investigation} = no SAR required.
+				\item \textbf{Exam Trap:} "Valued client" or "below threshold" are \textbf{not} valid reasons not to file.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} No SAR = \textbf{false positive after thorough review} — not client status or threshold.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 15: RISK ASSESSMENT DEFICIENCY
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Risk Assessment — The Biennial Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			A financial institution has implemented the following practices in its risk assessment program. Which one represents a significant deficiency that regulators would likely criticize during an examination?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{The institution updates its enterprise-wide risk assessment biennially while monitoring emerging risks through quarterly management reports.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Reviews high-risk customer segments semi-annually while conducting comprehensive customer risk rating validations annually}
+				\item \wrong{Semi-annual reviews are \textbf{acceptable} — proactive approach.}
+				\item \correctanswer{Updates enterprise-wide risk assessment biennially}
+				\item \textbf{FATF requirement:} Risk assessments must be \textbf{current} — biennial (every 2 years) is too infrequent.
+				\item \textbf{Key principle:} Risk assessments must be \textbf{updated regularly} as risks evolve.
+				\item \textbf{Exam Trap:} "Biennial" might sound reasonable but is \textbf{criticized} by regulators.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Risk assessment must be \textbf{current} — biennial updates = \textbf{deficiency}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 16: FINANCIAL INCLUSION GOALS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Financial Inclusion — The Goals Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which of the following are commonly cited goals of financial inclusion programs? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Access to financial services for underserved populations. 2. Reducing poverty through economic participation. 3. Promoting sustainable economic development.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{Maximizing bank profits} — \textbf{NO.} Financial inclusion is about \textbf{access}, not profits.
+				\item \wrong{Reducing regulatory requirements} — \textbf{NO.} Inclusion doesn't mean lower standards.
+				\item \correctanswer{Access for underserved populations}
+				\item \correctanswer{Reducing poverty through participation}
+				\item \correctanswer{Promoting sustainable economic development}
+				\item \textbf{Key principle:} Financial inclusion = \textbf{access + poverty reduction + development}.
+				\item \textbf{Exam Trap:} "Maximizing profits" is not a goal of financial inclusion.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Financial inclusion goals = \textbf{access + poverty reduction + development}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 17: BOARD OVERSIGHT
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Board Oversight — The Participation Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which of the following are ways board members demonstrate effective oversight over an institution's AFC program? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Receiving regular reports on financial crime risks and control effectiveness. 2. Reviewing whether senior management is addressing audit findings. 3. Challenging management when AFC performance metrics show signs of weakness.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Participating in SAR investigations to understand typologies}
+				\item \wrong{Board members don't participate in SAR investigations} — that's operational.
+				\item \correctanswer{Regular reports on risks and control effectiveness}
+				\item \correctanswer{Reviewing senior management addressing audit findings}
+				\item \correctanswer{Challenging management when metrics show weakness}
+				\item \textbf{Key principle:} Board oversight = \textbf{oversight and challenge}, not operational involvement.
+				\item \textbf{Exam Trap:} SAR investigations are \textbf{operational} — boards provide \textbf{oversight}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Board oversight = \textbf{receive reports + review management + challenge weakness}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 18: EMPLOYEE ENGAGEMENT — CULTURE TRAP
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Employee Engagement — The Culture Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			An internal compliance audit finds that despite robust policies, employee engagement on compliance is low. Survey data shows most staff view compliance as a barrier to performance. Which conclusion is most accurate?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{The organization has failed to embed compliance values in its operational culture.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Compliance policies are too complex for employees to understand}
+				\item \wrong{Complexity may be a factor, but the root cause is \textbf{culture}.}
+				\item \correctanswer{The organization has failed to embed compliance values in its operational culture}
+				\item \textbf{Key principle:} Low engagement = \textbf{culture failure} — policies alone aren't enough.
+				\item \textbf{Solution:} Embed compliance values in \textbf{day-to-day operations}.
+				\item \textbf{Exam Trap:} "Policies too complex" is surface-level — \textbf{culture} is the deeper issue.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Low engagement = \textbf{culture failure} — not policy complexity.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 19: DATA REQUEST RESPONSE — REGULATORS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Regulatory Data Requests — The Versioning Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which of the following actions are most appropriate when preparing to respond to a complex data request from regulators regarding transaction surveillance model inputs? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Archive model inputs quarterly and store results in a separate compliance repository. 2. Tag input datasets with version identifiers for effective tracing.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Consolidate model outputs into a summarized reporting format without full audit trail}
+				\item \wrong{No audit trail = \textbf{unacceptable} for regulatory response.}
+				\item \correctanswer{Archive model inputs quarterly and store results in a separate compliance repository}
+				\item \correctanswer{Tag input datasets with version identifiers for effective tracing}
+				\item \textbf{Key principle:} Regulatory response = \textbf{audit trail + version tracing}.
+				\item \textbf{Exam Trap:} "Summarized without audit trail" is exactly what regulators \textbf{don't} want.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Regulatory response = \textbf{audit trail + version identifiers + separate repository}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 20: ALERT CLOSURE STANDARDS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Alert Closure — The Documentation Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			A compliance team aims to enhance its standards for determining when enough research has been done to close or escalate an alert. Which of the following practices should be included in their enhanced methodology? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Establishing guidelines that another independent reviewer could rely on to reach similar conclusions. 2. Presentation of evidence and data sources included. 3. Communication decisions; risk-based financial assumptions.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{Closing alerts based on analyst discretion without documentation} — \textbf{NO.} Must be documented.
+				\item \correctanswer{Guidelines another reviewer could rely on}
+				\item \correctanswer{Presentation of evidence and data sources}
+				\item \correctanswer{Communication decisions; risk-based assumptions}
+				\item \textbf{Key principle:} Alert closure = \textbf{reproducible + documented + auditable}.
+				\item \textbf{Exam Trap:} "Analyst discretion" without documentation is \textbf{unacceptable}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Alert closure = \textbf{reproducible guidelines + evidence + risk-based decisions}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 21: INVESTIGATION DOCUMENTATION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Investigation Documentation — The Timing Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which of the following best practices support effective research documentation in suspicious activity investigations? (Select Two.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Using structured templates for investigative notes. 2. Adapting tools based on jurisdictional requirements.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Documenting findings at the conclusion of an investigation}
+				\item \wrong{Documenting only at conclusion = \textbf{risk of omission} and data loss.}
+				\item \correctanswer{Using structured templates for investigative notes}
+				\item \correctanswer{Adapting tools based on jurisdictional requirements}
+				\item \textbf{Key principle:} Documentation must be \textbf{continuous} — not just at conclusion.
+				\item \textbf{Exam Trap:} "At conclusion" seems logical but creates \textbf{data loss and non-compliance risks}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Investigation documentation = \textbf{continuous + templates + jurisdictional adaptation}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 22: REFUGEE FINANCIAL INCLUSION
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Refugee Financial Inclusion — The Alternative ID Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			A development-focused bank wants to open accounts for refugees, many of whom lack traditional identity documents. What is the best approach to ensure financial inclusion while meeting regulatory obligations?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Find alternative identity verification within trusted humanitarian sources.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{Waive KYC requirements for refugees} — \textbf{NO.} Can't waive regulatory obligations.
+				\item \wrong{Use only self-attestation} — \textbf{NO.} Not sufficient for verification.
+				\item \correctanswer{Alternative identity verification from humanitarian sources}
+				\item \textbf{Key principle:} Financial inclusion + compliance = \textbf{alternative verification from trusted sources}.
+				\item \textbf{Exam Trap:} "Waive KYC" is not an option — must find \textbf{alternative} verification.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Refugee onboarding = \textbf{alternative verification from humanitarian sources}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 23: ONGOING TRAINING PROGRAM COMPONENTS
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Ongoing Training — The Past Violations Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which of the following are essential components of an ongoing compliance training program? (Select Three.)
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{1. Incorporating updates on recent regulatory changes. 2. Customizing training content based on employee roles. 3. Including metrics to assess participant comprehension.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Structuring training around past violations}
+				\item \wrong{Only past violations = \textbf{limits forward-looking risk awareness}.}
+				\item \correctanswer{Incorporating updates on recent regulatory changes}
+				\item \correctanswer{Customizing training content based on employee roles}
+				\item \correctanswer{Including metrics to assess participant comprehension}
+				\item \textbf{Key principle:} Ongoing training = \textbf{current + role-specific + measurable}.
+				\item \textbf{Exam Trap:} "Past violations" is reactive — training should be \textbf{forward-looking}.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Ongoing training = \textbf{regulatory updates + role-specific + comprehension metrics}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 24: WATCHLIST SCREENING — HUMAN REVIEW
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Watchlist Screening — The Automation Only Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Which approach is most effective for watchlist screening?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Leverage automated watchlist screening supplemented by analyst review.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{Automated screening only} — \textbf{NO.} Automation alone misses context.
+				\item \wrong{Manual screening only} — \textbf{NO.} Not scalable.
+				\item \correctanswer{Automated screening + analyst review}
+				\item \textbf{Key principle:} Best practice = \textbf{automation efficiency + human judgment}.
+				\item \textbf{Exam Trap:} "Automated only" ignores the need for human review.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Watchlist screening = \textbf{automated + analyst review} — not one or the other.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 25: INVESTIGATOR INTERVIEW — EVIDENCE FIRST
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Investigator Interview — The Timing Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			When tasked with investigating a mid-level manager suspected of assisting a client with circumventing internal AML controls, a team wants to interview the manager, but there are concerns about tipping the manager off. What approach should be taken?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{Delay the interview until after reviewing all documentary and transactional evidence.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \youanswered{Schedule the interview immediately}
+				\item \wrong{Immediate interview = \textbf{risks tipping off} and weak questioning.}
+				\item \correctanswer{Delay until after reviewing all evidence}
+				\item \textbf{Key principle:} Evidence first = \textbf{informed questions + reduced tipping risk}.
+				\item \textbf{Exam Trap:} "Immediate interview" seems proactive but is \textbf{premature} and risky.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Investigative interview = \textbf{evidence first} — then interview with informed questions.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 26: REGULATORY INCONSISTENCY
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Regulatory Reports — The Inconsistency Trap}}
+		\begin{block}{\fontsize{7}{9}\selectfont }
+			\scriptsize
+			Inconsistent across filings. One quarter, the report uses free-text formatting while the next quarter it uses structured tabular format. What is the most significant impact of this inconsistency?
+		\end{block}
+		\vspace{0.02cm}
+		\answerbox{\large \textbf{The institution reduces the efficiency of regulatory review.}}
+		\vspace{0.02cm}
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{Natural Explanation — Why You Got This Wrong}}
+			\scriptsize
+			\begin{itemize}
+				\item \wrong{Increases internal costs} — \textbf{NO.} The primary impact is on \textbf{regulators}.
+				\item \correctanswer{Reduces efficiency of regulatory review}
+				\item \textbf{Key principle:} Inconsistent reporting = \textbf{harder for regulators to review} = inefficiency.
+				\item \textbf{Exam Trap:} Internal costs are secondary — \textbf{regulatory review efficiency} is the main impact.
+			\end{itemize}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Key Rule:} Report inconsistency = \textbf{reduced regulatory review efficiency}.}
+	\end{frame}
+	
+	% ================================================================
+	% SLIDE 27: FINAL EXAM TIPS — DOMAIN C
+	% ================================================================
+	\begin{frame}
+		\frametitle{\fontsize{11}{13}\selectfont \textbf{Domain C — Complete Exam Traps Summary}}
+		\scriptsize
+		\begin{block}{\fontsize{7}{9}\selectfont \textbf{All Questions — Natural Explanations}}
+			\scriptsize
+			\begin{enumerate}
+				\item \textbf{SAR Narratives:} Observable facts only — no speculation or opinions.
+				\item \textbf{Transaction Monitoring:} Suspicious alert = escalate to Level 2.
+				\item \textbf{SAR for Law Enforcement:} Structured facts + context + deviation — no process details.
+				\item \textbf{AML Controls:} Trend analysis over time — not snapshots.
+				\item \textbf{Wire Investigation:} Corporate registries — not public news.
+				\item \textbf{Investigation Protection:} Confidentiality + escalation protocol.
+				\item \textbf{PEP Onboarding:} Source of wealth + sanctions + senior approval.
+				\item \textbf{Third-Party Tool:} Algorithm update likely cause.
+				\item \textbf{Perpetual KYC:} Continuous + trigger-based — not scheduled.
+				\item \textbf{ACF Strategy:} Centralized perpetual KYC.
+				\item \textbf{FATF Framework:} Environmental + horizon scanning + threat identification.
+				\item \textbf{Compliance Culture:} Training + dialogue + governance oversight.
+				\item \textbf{No SAR:} False positive after thorough review.
+				\item \textbf{Risk Assessment:} Must be current — biennial = deficiency.
+				\item \textbf{Financial Inclusion:} Access + poverty reduction + development.
+				\item \textbf{Board Oversight:} Reports + review management + challenge weakness.
+				\item \textbf{Employee Engagement:} Culture failure — not policy complexity.
+				\item \textbf{Data Requests:} Audit trail + version identifiers.
+				\item \textbf{Alert Closure:} Reproducible + documented + auditable.
+				\item \textbf{Investigation Docs:} Continuous + templates + jurisdictional.
+				\item \textbf{Refugee Onboarding:} Alternative verification from humanitarian sources.
+				\item \textbf{Training:} Regulatory updates + role-specific + comprehension metrics.
+				\item \textbf{Watchlist Screening:} Automated + analyst review.
+				\item \textbf{Interview Timing:} Evidence first — then interview.
+				\item \textbf{Report Consistency:} Regulatory review efficiency.
+			\end{enumerate}
+		\end{block}
+		\vspace{0.02cm}
+		\recallbox{\scriptsize \textbf{Final Rule:} Domain C tests \textbf{building and managing compliance programs}. Understand \textbf{best practices} and \textbf{why wrong answers are traps}.}
+	\end{frame}
+	
+	% ================================================================
+	% END SLIDE
+	% ================================================================
+	\begin{frame}
+		\centering
+		\vspace{1.5cm}
+		{\fontsize{18}{22}\selectfont \textbf{Domain C — Complete}}\\[0.2cm]
+		{\fontsize{11}{13}\selectfont Building a Compliance Program}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{8}{10}\selectfont SAR Narratives · Investigations · Training · Governance · Risk Assessment}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont PEP Onboarding · Financial Inclusion · Perpetual KYC · Data Governance}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont FATF Framework · Suspicious Activity Reporting · Compliance Culture}\\[0.05cm]
+		{\fontsize{8}{10}\selectfont Board Oversight · Employee Engagement · Third-Party Risk}\\[0.1cm]
+		\rule{4cm}{0.5pt}\\[0.1cm]
+		{\fontsize{8}{10}\selectfont \textit{All traps explained. All concepts covered. Ready for the exam.}}
+		\vspace{0.5cm}
+	\end{frame}
+	
+\end{document}
