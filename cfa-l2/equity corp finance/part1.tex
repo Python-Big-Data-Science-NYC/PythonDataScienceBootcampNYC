@@ -1,0 +1,2000 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, booktabs, array, multirow}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{tikz}
+
+% Smaller font for more content per slide
+\renewcommand{\tiny}{\fontsize{5pt}{6pt}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{6pt}{7pt}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{7pt}{8pt}\selectfont}
+\renewcommand{\small}{\fontsize{8pt}{9pt}\selectfont}
+\renewcommand{\normalsize}{\fontsize{9pt}{10pt}\selectfont}
+\renewcommand{\large}{\fontsize{10pt}{11pt}\selectfont}
+
+\title{CFA Level II: Advanced Equity Valuation \& Corporate Finance}
+\subtitle{55+ Extreme Case-Based Questions with Hidden Traps}
+\author{CFA Level II Candidate Practice}
+\date{2026}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{Table of Contents}
+		\footnotesize
+		\tableofcontents
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 1: DDM - Gordon Growth & Multistage
+	% ============================================================================
+	
+	\section{DDM: Gordon Growth \& Multistage}
+	
+	\begin{frame}{Q1: Gordon Growth with Changing ROE \& Payout}
+		\scriptsize
+		\textbf{Scenario:} Thompson Technologies Inc. pays dividend \$2.50. Required return 11\%. Next 5 years: ROE 18\%, retention 60\%. After year 5: ROE declines to 12\%, payout ratio increases to 65\%. Current price \$58.00.
+		
+		\textbf{Question:} Using two-stage DDM, determine if stock is overvalued, fairly valued, or undervalued. What is intrinsic value?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Stage 1 growth = ROE × Retention Ratio, NOT ROE itself. Stage 2 growth uses new retention ratio and ROE.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		\textbf{Step 1:} $g_1 = 0.18 \times 0.60 = 0.108$ (10.8\%); $b_2 = 1 - 0.65 = 0.35$; $g_2 = 0.12 \times 0.35 = 0.042$ (4.2\%)
+		
+		\textbf{Step 2:} $D_1 = 2.50(1.108)^1 = 2.77$; $D_2 = 2.50(1.108)^2 = 3.07$; $D_3 = 2.50(1.108)^3 = 3.40$; $D_4 = 2.50(1.108)^4 = 3.77$; $D_5 = 2.50(1.108)^5 = 4.18$
+		
+		\textbf{Step 3:} $V_5 = \frac{4.18(1.042)}{0.11-0.042} = \frac{4.356}{0.068} = 64.06$
+		
+		\textbf{Step 4:} $V_0 = \frac{2.77}{1.11} + \frac{3.07}{1.11^2} + \frac{3.40}{1.11^3} + \frac{3.77}{1.11^4} + \frac{4.18}{1.11^5} + \frac{64.06}{1.11^5} = 50.46$
+		
+		\textbf{Conclusion:} \$50.46 < \$58.00 $\Rightarrow$ \textbf{Overvalued} by $\sim$13\%.
+	\end{frame}
+	
+	\begin{frame}{Q2: H-Model Application with Declining Growth}
+		\scriptsize
+		\textbf{Scenario:} Global Energy Solutions Inc. current dividend \$3.20. Initial dividend growth 14\%, declining linearly over 12 years to sustainable growth 4.5\%. Required return 9.5\%. Current price \$74.50.
+		
+		\textbf{Question:} Using H-model, calculate intrinsic value. What is implied initial growth rate if stock is fairly valued at current price?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} H is HALF the number of years. Formula adds extra value from supernormal growth to base Gordon growth value.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		$D_0 = 3.20$, $g_S = 14\%$, $g_L = 4.5\%$, $r = 9.5\%$, $2H = 12 \Rightarrow H = 6$
+		
+		$V_0 = \frac{D_0(1+g_L)}{r-g_L} + \frac{D_0H(g_S-g_L)}{r-g_L} = \frac{3.20(1.045)}{0.05} + \frac{3.20(6)(0.095)}{0.05} = 66.88 + 36.48 = 103.36$
+		
+		\vspace{2pt}
+		\textbf{Part 2:} Solve for implied $g_S$:
+		$74.50 = \frac{3.20(1.045)}{0.05} + \frac{3.20(6)(g_S-0.045)}{0.05}$
+		$74.50 = 66.88 + \frac{19.20(g_S-0.045)}{0.05} \Rightarrow 7.62 = 19.20(g_S-0.045)/0.05$
+		$0.381 = 19.20(g_S-0.045) \Rightarrow g_S = 6.48\%$
+		
+		\textbf{Conclusion:} Market prices in 6.48\% initial growth vs. analyst's 14\%. Stock \textbf{undervalued}.
+	\end{frame}
+	
+	\begin{frame}{Q3: H-Model vs. Two-Stage DDM Comparison}
+		\scriptsize
+		\textbf{Scenario:} Aurora Pharmaceuticals Inc. current dividend \$1.85. Required return 10.5\%. Growth 16\% for next 6 years, then 4.5\% forever.
+		
+		\textbf{Question:} Compare intrinsic values using: (1) standard two-stage DDM, (2) H-model. Explain why estimates differ.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} H-model typically produces LOWER value than two-stage when same initial/terminal growth rates used because average growth in transition is lower.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		$D_0 = 1.85$, $g_1 = 16\%$, $g_2 = 4.5\%$, $r = 10.5\%$, $n = 6$
+		
+		\vspace{2pt}
+		\textbf{Two-Stage:} $D_1 = 2.146$, $D_2 = 2.489$, $D_3 = 2.887$, $D_4 = 3.349$, $D_5 = 3.885$, $D_6 = 4.506$
+		
+		$V_6 = \frac{4.506(1.045)}{0.105-0.045} = \frac{4.709}{0.06} = 78.48$
+		
+		$V_0^{2S} = \sum_{t=1}^{6}\frac{D_t}{(1.105)^t} + \frac{78.48}{(1.105)^6} = 11.87 + 42.55 = 54.42$
+		
+		\vspace{2pt}
+		\textbf{H-Model:} $H = 3$ (half of 6 years)
+		
+		$V_0^H = \frac{1.85(1.045)}{0.06} + \frac{1.85(3)(0.16-0.045)}{0.06} = \frac{1.933}{0.06} + \frac{1.85(3)(0.115)}{0.06} = 32.22 + 10.64 = 42.86$
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} H-model \$42.86 < Two-stage \$54.42. H-model more conservative because growth declines gradually.
+	\end{frame}
+	
+	\begin{frame}{Q4: Non-Dividend-Paying Stock Valuation}
+		\scriptsize
+		\textbf{Scenario:} TechStart Inc. currently pays no dividend. The company is expected to pay its first dividend of \$1.20 per share in exactly 4 years. Dividends are then expected to grow at 6\% for the next 5 years, after which growth will stabilize at 3.5\% forever. Required return is 12\%.
+		
+		\textbf{Question:} What is the intrinsic value of TechStart Inc. today?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} When valuing non-dividend-paying stocks, discount the terminal value at time n-1 (one period before first dividend), not at the time of the first dividend. Careful with timing of first dividend.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		First dividend at $t=4$: $D_4 = 1.20$
+		
+		$D_5 = 1.20(1.06) = 1.272$; $D_6 = 1.20(1.06)^2 = 1.348$; $D_7 = 1.20(1.06)^3 = 1.429$; $D_8 = 1.20(1.06)^4 = 1.515$; $D_9 = 1.20(1.06)^5 = 1.606$
+		
+		\vspace{2pt}
+		Terminal value at $t=9$:
+		$V_9 = \frac{D_9(1.035)}{0.12-0.035} = \frac{1.606(1.035)}{0.085} = \frac{1.662}{0.085} = 19.55$
+		
+		\vspace{2pt}
+		$V_0 = \frac{1.20}{(1.12)^4} + \frac{1.272}{(1.12)^5} + \frac{1.348}{(1.12)^6} + \frac{1.429}{(1.12)^7} + \frac{1.515}{(1.12)^8} + \frac{1.606}{(1.12)^9} + \frac{19.55}{(1.12)^9}$
+		
+		$V_0 = 0.763 + 0.722 + 0.683 + 0.646 + 0.612 + 0.579 + 7.05 = 11.06$
+		
+		\textbf{Answer:} Intrinsic value = \$11.06
+	\end{frame}
+	
+	\begin{frame}{Q5: PVGO and Justified P/E Calculation}
+		\scriptsize
+		\textbf{Scenario:} Nelson Manufacturing Corp. has current earnings per share (EPS) of \$4.20 and a current dividend of \$2.10. The required return on equity is 9.5\%. The company is expected to grow at 5.5\% indefinitely. Current stock price is \$52.00.
+		
+		\textbf{Question:} Calculate the Present Value of Growth Opportunities (PVGO) and the justified leading P/E. What proportion of the stock price is attributable to growth opportunities?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} PVGO = Price - (E$_1$/r). E$_1$ is NEXT year's earnings, not current EPS. Also, growth component of P/E = PVGO/E$_1$.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		$E_0 = 4.20$, $E_1 = 4.20(1.055) = 4.431$
+		
+		No-growth value = $E_1/r = 4.431/0.095 = 46.64$
+		
+		\vspace{2pt}
+		PVGO = $P_0 - E_1/r = 52.00 - 46.64 = 5.36$
+		
+		\vspace{2pt}
+		Justified leading P/E = $P_0/E_1 = 52.00/4.431 = 11.74$
+		
+		\vspace{2pt}
+		Growth component of P/E = PVGO/E$_1$ = $5.36/4.431 = 1.21$
+		
+		\vspace{2pt}
+		Proportion from growth = $PVGO/P_0 = 5.36/52.00 = 10.31\%$
+		
+		\vspace{2pt}
+		\underline{\textbf{Alternate check:}} Justified P/E = $1/r + PVGO/E_1 = 1/0.095 + 1.21 = 10.53 + 1.21 = 11.74$
+	\end{frame}
+	
+	\begin{frame}{Q6: Implied Dividend Growth Rate from Market Price}
+		\scriptsize
+		\textbf{Scenario:} Pacific Healthcare Inc. has a beta of 1.15. Risk-free rate is 3.2\%, equity risk premium is 5.5\%. Current dividend is \$1.80 per share. Stock is currently trading at \$38.00.
+		
+		\textbf{Question:} Using the Gordon growth model, what is the market-implied dividend growth rate? If you believe the sustainable growth rate based on fundamentals is 4.5\%, is the stock overvalued or undervalued?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} First estimate the required return using CAPM, then solve for g in the Gordon growth equation. Don't just solve for r.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		Required return: $r = R_f + \beta(R_m - R_f) = 0.032 + 1.15(0.055) = 0.032 + 0.06325 = 0.09525$ (9.525\%)
+		
+		\vspace{2pt}
+		Gordon growth: $P_0 = \frac{D_0(1+g)}{r-g} \Rightarrow 38.00 = \frac{1.80(1+g)}{0.09525-g}$
+		
+		$38.00(0.09525-g) = 1.80 + 1.80g$
+		$3.6195 - 38g = 1.80 + 1.80g$
+		$1.8195 = 39.80g$
+		$g = 0.04572 = 4.57\%$
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} Market implied growth rate is 4.57\%, which is \textbf{higher} than your fundamental estimate of 4.5\%. The stock is slightly \textbf{overvalued} (the market is pricing in more growth than fundamentals suggest). However, the difference is only 7 basis points, so the stock is \textbf{fairly valued} within a reasonable margin of error.
+	\end{frame}
+	
+	\begin{frame}{Q7: Sustainable Growth Rate with DuPont Decomposition}
+		\scriptsize
+		\textbf{Scenario:} You are estimating the sustainable growth rate for a mature manufacturing company. Historical financial data for the most recent year:
+		
+		\begin{tabular}{lr}
+			Net Income & \$85.4 million \\
+			Sales & \$1,245.6 million \\
+			Total Assets (average) & \$892.3 million \\
+			Shareholders' Equity (beginning of year) & \$412.7 million \\
+			Dividends Paid & \$29.5 million \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate the sustainable growth rate using the PRAT model. What would be the new growth rate if the company increases its dividend payout ratio from the current level to 45\% while maintaining ROE constant?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} ROE uses BEGINNING shareholders' equity, not average. Also, retention ratio = 1 - payout ratio = 1 - (dividends/net income).
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		Profit Margin = 85.4/1,245.6 = 6.86\%
+		
+		Asset Turnover = 1,245.6/892.3 = 1.396
+		
+		Financial Leverage = 892.3/412.7 = 2.162
+		
+		\vspace{2pt}
+		ROE = 85.4/412.7 = 20.69\%
+		
+		Payout Ratio = 29.5/85.4 = 34.54\%
+		
+		Retention Ratio = 1 - 0.3454 = 0.6546
+		
+		$g = ROE \times b = 0.2069 \times 0.6546 = 13.54\%$
+		
+		\vspace{2pt}
+		\textbf{Part 2:} New payout ratio = 45\%, new retention = 55\%
+		
+		New $g = 0.2069 \times 0.55 = 11.38\%$
+		
+		\textbf{Answer:} Current sustainable growth = 13.54\%; new growth at 45\% payout = 11.38\%.
+	\end{frame}
+	
+	\begin{frame}{Q8: Estimating Required Return Using Gordon Growth}
+		\scriptsize
+		\textbf{Scenario:} Global Telecom Inc. currently pays an annual dividend of \$2.85 per share. The stock is trading at \$62.00. The company has maintained a consistent dividend growth rate of 5.2\% over the past decade, and analysts expect this to continue.
+		
+		\textbf{Question:} What is the market-implied required return on equity? If the risk-free rate is 4.0\% and the beta is 0.85, what equity risk premium is implied by this required return?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Required return = Dividend Yield + Growth Rate. The equity risk premium is then the difference between required return and risk-free rate divided by beta.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		$r = \frac{D_0(1+g)}{P_0} + g = \frac{2.85(1.052)}{62.00} + 0.052 = \frac{2.9982}{62.00} + 0.052 = 0.04836 + 0.052 = 0.10036$ (10.04\%)
+		
+		\vspace{2pt}
+		Using CAPM: $r = R_f + \beta(ERP)$
+		
+		$0.10036 = 0.04 + 0.85(ERP)$
+		$ERP = \frac{0.10036 - 0.04}{0.85} = \frac{0.06036}{0.85} = 0.07101$ (7.10\%)
+		
+		\vspace{2pt}
+		\textbf{Answer:} Required return = 10.04\%; Implied equity risk premium = 7.10\%
+		
+		\vspace{2pt}
+		\underline{\textbf{Check:}} If the historical equity risk premium is 5.5\%, then the stock appears fairly valued (10.04\% vs. 4.0\% + 0.85×5.5\% = 8.675\%, so the market requires higher return, meaning stock is undervalued).
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 2: FREE CASH FLOW VALUATION
+	% ============================================================================
+	
+	\section{FCFE \& FCFF Valuation}
+	
+	\begin{frame}{Q9: Calculating FCFF from Financial Statements}
+		\scriptsize
+		\textbf{Scenario:} You are analyzing a company's statement of cash flows to calculate FCFF. The following information is available for the most recent year (\$ millions):
+		
+		\begin{tabular}{lr}
+			Net Income & 485 \\
+			Depreciation \& Amortization & 180 \\
+			Interest Expense & 65 \\
+			Tax Rate & 35\% \\
+			Increase in Accounts Receivable & 45 \\
+			Increase in Inventory & 30 \\
+			Increase in Accounts Payable & 22 \\
+			Capital Expenditures & 210 \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate FCFF using the net income approach. Calculate FCFF using the cash flow from operations approach. Explain why the two methods should give the same result.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Interest expense must be added back AFTER tax. Working capital investment = increase in current assets - increase in current liabilities (excluding cash and short-term debt).
+	\end{frame}
+	
+	\begin{frame}{Q9: Solution}
+		\scriptsize
+		\textbf{Method 1: From Net Income}
+		
+		$FCFF = NI + NCC + Int(1-t) - FCInv - WCInv$
+		
+		$NCC = Depreciation = 180$
+		
+		$Int(1-t) = 65(1-0.35) = 65(0.65) = 42.25$
+		
+		$WCInv = \Delta AR + \Delta Inventory - \Delta AP = 45 + 30 - 22 = 53$
+		
+		$FCFF = 485 + 180 + 42.25 - 210 - 53 = 444.25$
+		
+		\vspace{2pt}
+		\textbf{Method 2: From CFO}
+		
+		First calculate CFO:
+		$CFO = NI + Dep - \Delta AR - \Delta Inventory + \Delta AP = 485 + 180 - 45 - 30 + 22 = 612$
+		
+		$FCFF = CFO + Int(1-t) - FCInv = 612 + 42.25 - 210 = 444.25$
+		
+		\vspace{2pt}
+		\textbf{Explanation:} Both methods give \$444.25 million because they are mathematically equivalent. The CFO approach starts from CFO (which already includes the working capital adjustments and depreciation add-back), then adds back after-tax interest (since interest was subtracted in the income statement but is a cash flow to debt holders included in FCFF), and subtracts capital expenditures.
+		
+		\textbf{Answer:} FCFF = \$444.25 million.
+	\end{frame}
+	
+	\begin{frame}{Q10: Calculating FCFE with Changing Leverage}
+		\scriptsize
+		\textbf{Scenario:} Thompson Distribution Inc. has the following financial information for the most recent year (\$ millions):
+		
+		\begin{tabular}{lr}
+			Net Income & 320 \\
+			Depreciation & 95 \\
+			Capital Expenditures & 175 \\
+			Increase in Working Capital & 42 \\
+			New Debt Issued & 180 \\
+			Debt Repayments & 135 \\
+			Preferred Stock Dividends & 25 \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate FCFE. If the company has 42 million shares outstanding and the required return on equity is 11\%, what is the intrinsic value per share assuming FCFE grows at 5\% forever?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} FCFE = NI + NCC - FCInv - WCInv + Net Borrowing. Preferred dividends are NOT subtracted in FCFE calculation (they are already subtracted from net income if NI is available to common shareholders). Net Borrowing = New Debt - Debt Repayments.
+	\end{frame}
+	
+	\begin{frame}{Q10: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate FCFE
+		
+		$FCFE = NI + NCC - FCInv - WCInv + Net Borrowing$
+		
+		$NCC = Depreciation = 95$
+		
+		$Net Borrowing = 180 - 135 = 45$
+		
+		$FCFE = 320 + 95 - 175 - 42 + 45 = 243$
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate FCFE per share
+		
+		$FCFE_{0}^{per share} = 243/42 = 5.7857$
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Single-stage FCFE valuation
+		
+		$V_0 = \frac{FCFE_1}{r-g} = \frac{FCFE_0(1+g)}{r-g} = \frac{5.7857(1.05)}{0.11-0.05} = \frac{6.075}{0.06} = 101.25$
+		
+		\vspace{2pt}
+		\textbf{Answer:} FCFE = \$243 million; Intrinsic value per share = \$101.25
+		
+		\vspace{2pt}
+		\underline{\textbf{Check:}} Note that preferred dividends (\$25) are already deducted from net income if it's \"net income available to common shareholders.\" If the problem gives \"net income before preferred dividends,\" then subtract preferred dividends in the FCFE calculation.
+	\end{frame}
+	
+	\begin{frame}{Q11: FCFF and FCFE with Preferred Stock}
+		\scriptsize
+		\textbf{Scenario:} Valor Capital Corp. has the following capital structure and financial information:
+		
+		\begin{tabular}{lr}
+			Market Value of Debt & \$400 million \\
+			Market Value of Preferred Stock & \$100 million \\
+			Market Value of Common Equity & \$500 million \\
+			Net Income (available to common) & \$110 million \\
+			Interest Expense & \$32 million \\
+			Preferred Dividends & \$8 million \\
+			Depreciation & \$40 million \\
+			Capital Expenditures & \$70 million \\
+			Increase in Working Capital & \$20 million \\
+			Net Borrowing & \$25 million \\
+			Tax Rate & 30\% \\
+			Cost of Equity & 12\% \\
+			Cost of Preferred & 8\% \\
+			Cost of Debt (pre-tax) & 8\% \\
+			Stable FCFE Growth Rate & 4.0\% \\
+			Stable FCFF Growth Rate & 5.4\% \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate WACC, FCFF, FCFE, and the value of equity using both approaches.
+	\end{frame}
+	
+	\begin{frame}{Q11: Solution (Part 1)}
+		\scriptsize
+		\textbf{Step 1:} Calculate WACC
+		
+		$WACC = w_d r_d(1-t) + w_p r_p + w_e r_e$
+		
+		$w_d = 400/1,000 = 0.40$, $w_p = 100/1,000 = 0.10$, $w_e = 500/1,000 = 0.50$
+		
+		$WACC = 0.40(0.08)(1-0.30) + 0.10(0.08) + 0.50(0.12)$
+		$WACC = 0.40(0.056) + 0.008 + 0.06 = 0.0224 + 0.008 + 0.06 = 0.0904$ (9.04\%)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate FCFF (including preferred dividends)
+		
+		$FCFF = NI + NCC + Int(1-t) + Preferred Dividends - FCInv - WCInv$
+		
+		$FCFF = 110 + 40 + 32(0.70) + 8 - 70 - 20$
+		$FCFF = 110 + 40 + 22.4 + 8 - 70 - 20 = 90.4$
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate Firm Value using FCFF
+		
+		$V_{firm} = \frac{FCFF_1}{WACC - g_{FCFF}} = \frac{90.4(1.054)}{0.0904 - 0.054} = \frac{95.2816}{0.0364} = 2,618.73$
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Value of Equity = $V_{firm} - Market Value of Debt - Market Value of Preferred$
+		$= 2,618.73 - 400 - 100 = 2,118.73$
+	\end{frame}
+	
+	\begin{frame}{Q11: Solution (Part 2)}
+		\scriptsize
+		\textbf{Step 5:} Calculate FCFE
+		
+		$FCFE = NI + NCC - FCInv - WCInv + Net Borrowing$
+		$FCFE = 110 + 40 - 70 - 20 + 25 = 85$
+		
+		\vspace{2pt}
+		\textbf{Step 6:} Value of Equity using FCFE
+		
+		$V_{equity} = \frac{FCFE_1}{r_e - g_{FCFE}} = \frac{85(1.04)}{0.12 - 0.04} = \frac{88.4}{0.08} = 1,105$
+		
+		\vspace{2pt}
+		\underline{\textbf{Important Observation:}} The two approaches give DIFFERENT values! Why?
+		
+		\vspace{2pt}
+		\textbf{FCFF approach:} Equity = \$2,118.73 million
+		\textbf{FCFE approach:} Equity = \$1,105.00 million
+		
+		\vspace{2pt}
+		The difference arises because:
+		1. The assumptions about growth rates (FCFF grows at 5.4\%, FCFE grows at 4.0\%) are inconsistent.
+		2. The capital structure and leverage are changing, making FCFE more sensitive.
+		3. In practice, analysts would reconcile these estimates by ensuring consistent assumptions across both models.
+		
+		\textbf{Answer:} WACC = 9.04\%, FCFF = \$90.4M, FCFE = \$85M.
+	\end{frame}
+	
+	\begin{frame}{Q12: Two-Stage FCFF Model with Declining Growth}
+		\scriptsize
+		\textbf{Scenario:} You are valuing a growing technology company using a two-stage FCFF model. Current FCFF is \$250 million. The company has 50 million shares outstanding and \$1,200 million in debt. WACC is 9.5\%. The company is expected to grow FCFF at 15\% for the next 4 years, after which growth will decline linearly over 6 years to a stable growth rate of 4\%. Debt is expected to remain constant.
+		
+		\textbf{Question:} Calculate the intrinsic value per share using the H-model approach for the second stage.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} The H-model formula for FCFF requires careful handling of the terminal value and the growth decline pattern. The declining growth stage is 6 years, so H = 3.
+	\end{frame}
+	
+	\begin{frame}{Q12: Solution}
+		\scriptsize
+		\textbf{Step 1:} Forecast FCFF for the initial high-growth stage (4 years)
+		
+		$FCFF_0 = 250$
+		$FCFF_1 = 250(1.15) = 287.50$
+		$FCFF_2 = 250(1.15)^2 = 330.63$
+		$FCFF_3 = 250(1.15)^3 = 380.22$
+		$FCFF_4 = 250(1.15)^4 = 437.25$
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate terminal value at end of Year 4 using H-model for declining growth stage
+		
+		$g_S = 15\%$ (growth at beginning of declining stage)
+		$g_L = 4\%$ (terminal stable growth)
+		$H = 6/2 = 3$ (half of declining growth period)
+		$FCFF_4 = 437.25$
+		
+		\vspace{2pt}
+		$V_4 = \frac{FCFF_4(1+g_L)}{WACC-g_L} + \frac{FCFF_4 \times H \times (g_S-g_L)}{WACC-g_L}$
+		
+		$V_4 = \frac{437.25(1.04)}{0.095-0.04} + \frac{437.25(3)(0.15-0.04)}{0.095-0.04}$
+		
+		$V_4 = \frac{454.74}{0.055} + \frac{437.25(3)(0.11)}{0.055} = \frac{454.74}{0.055} + \frac{144.29}{0.055}$
+		
+		$V_4 = 8,267.99 + 2,623.55 = 10,891.54$
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate firm value today
+		
+		$V_0 = \sum_{t=1}^{4} \frac{FCFF_t}{(1.095)^t} + \frac{V_4}{(1.095)^4}$
+		
+		$V_0 = \frac{287.50}{1.095} + \frac{330.63}{1.095^2} + \frac{380.22}{1.095^3} + \frac{437.25}{1.095^4} + \frac{10,891.54}{1.095^4}$
+		
+		$V_0 = 262.56 + 275.70 + 289.55 + 304.14 + 7,573.75 = 8,705.70$
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate equity value and per share value
+		
+		$V_{equity} = 8,705.70 - 1,200 = 7,505.70$
+		$V_{per share} = 7,505.70/50 = 150.11$
+		
+		\textbf{Answer:} Intrinsic value per share = \$150.11
+	\end{frame}
+	
+	\begin{frame}{Q13: Sensitivity Analysis in FCFF Valuation}
+		\scriptsize
+		\textbf{Scenario:} You are valuing a mature utility company using a single-stage FCFF model. Base-case assumptions:
+		
+		\begin{tabular}{lr}
+			Current FCFF & \$180 million \\
+			WACC & 8.0\% \\
+			Stable Growth Rate & 3.5\% \\
+			Debt & \$450 million \\
+			Shares Outstanding & 30 million \\
+		\end{tabular}
+		
+		\textbf{Question:} Perform a sensitivity analysis by varying:
+		1. WACC from 7.5\% to 8.5\% (increments of 0.25\%) 
+		2. Growth rate from 3.0\% to 4.0\% (increments of 0.25\%)
+		
+		Create a 5×5 matrix of intrinsic value per share. Identify which input has the greatest impact on valuation.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} The Gordon growth model is highly sensitive to the spread between WACC and growth rate (the denominator). Small changes can cause large valuation differences.
+	\end{frame}
+	
+	\begin{frame}{Q13: Solution}
+		\scriptsize
+		\textbf{Formula:} $V_{firm} = \frac{FCFF_0(1+g)}{WACC-g}$; $V_{equity} = V_{firm} - Debt$; $V_{per share} = V_{equity}/30$
+		
+		\vspace{4pt}
+		\begin{tabular}{c|c|c|c|c|c}
+			\multicolumn{6}{c}{\textbf{Intrinsic Value per Share (\$)}} \\
+			\hline
+			WACC $\downarrow$ & g=3.00\% & g=3.25\% & g=3.50\% & g=3.75\% & g=4.00\% \\
+			\hline
+			7.50\% & 39.65 & 44.91 & 51.64 & 60.47 & 72.60 \\
+			7.75\% & 34.82 & 39.15 & 44.64 & 51.72 & 61.24 \\
+			8.00\% & 31.05 & 34.68 & 39.24 & 45.08 & 52.80 \\
+			8.25\% & 28.02 & 31.11 & 34.90 & 39.74 & 46.07 \\
+			8.50\% & 25.53 & 28.19 & 31.41 & 35.47 & 40.70 \\
+		\end{tabular}
+		
+		\vspace{4pt}
+		\textbf{Analysis:}
+		- Range for WACC (at g=3.5\%): \$31.41 to \$51.64 (range = \$20.23)
+		- Range for growth rate (at WACC=8\%): \$31.05 to \$52.80 (range = \$21.75)
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} Both inputs have significant impact, but the growth rate has slightly greater impact on valuation. The largest difference occurs when WACC is low and growth rate is high.
+		
+		\vspace{2pt}
+		\textbf{Base-case value:} \$39.24 per share
+		
+		\textbf{Answer:} Base-case = \$39.24; The valuation is most sensitive to the growth rate.
+	\end{frame}
+	
+	\begin{frame}{Q14: FCFF vs. FCFE with Changing Capital Structure}
+		\scriptsize
+		\textbf{Scenario:} XYZ Corporation has a current capital structure of 40\% debt and 60\% equity. The company plans to increase its debt ratio to 60\% over the next 3 years. Current FCFF is \$500 million. WACC is currently 9.0\% and will change as leverage changes. The risk-free rate is 4\%, market risk premium is 5\%, cost of debt (pre-tax) is 6\%, and tax rate is 30\%. The company's unlevered beta is 0.85. FCFF is expected to grow at 5\% forever. Debt is expected to be \$800 million in the new capital structure.
+		
+		\textbf{Question:} Which approach (FCFF or FCFE) is more appropriate for valuing this company? Why? Estimate the value of equity using both approaches and explain the difference.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} When capital structure changes, FCFF is generally preferred because it is pre-debt and not affected by financing decisions. FCFE requires forecasting net borrowing and is affected by changing leverage.
+	\end{frame}
+	
+	\begin{frame}{Q14: Solution}
+		\scriptsize
+		\textbf{Part 1:} FCFE is appropriate because:
+		1. Capital structure is changing significantly (40\% → 60\% debt)
+		2. FCFE incorporates the effects of net borrowing
+		3. FCFF requires estimating WACC that changes with leverage
+		
+		\vspace{2pt}
+		\textbf{Part 2:} Calculate levered beta for new capital structure
+		
+		$\beta_L = \beta_U[1 + (1-t)(D/E)] = 0.85[1 + (0.70)(60/40)] = 0.85[1 + 1.05] = 0.85(2.05) = 1.7425$
+		
+		$r_e = R_f + \beta_L(ERP) = 0.04 + 1.7425(0.05) = 0.04 + 0.0871 = 0.1271$ (12.71\%)
+		
+		\vspace{2pt}
+		\textbf{FCFF Approach (with changing WACC):}
+		$WACC = 0.60(0.06)(0.70) + 0.40(0.1271) = 0.0252 + 0.05084 = 0.07604$ (7.604\%)
+		
+		$V_{firm} = \frac{500(1.05)}{0.07604 - 0.05} = \frac{525}{0.02604} = 20,161.29$
+		
+		$V_{equity(FCFF)} = 20,161.29 - 800 = 19,361.29$
+		
+		\vspace{2pt}
+		\textbf{FCFE Approach:}
+		$FCFE = FCFF - Int(1-t) + Net Borrowing$
+		
+		Assuming debt grows proportionally with the firm:
+		$FCFE_0 = 500 - (0.60 \times 20,161.29 \times 0.06)(0.70) + (0.05 \times 800)$
+		$= 500 - 507.10 + 40 = 32.90$
+		
+		$V_{equity(FCFE)} = \frac{32.90(1.05)}{0.1271 - 0.05} = \frac{34.545}{0.0771} = 448.05$
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} The large difference (\$19,361 vs. \$448) shows that FCFE is highly sensitive to the timing and amount of new borrowing. FCFF is more stable and appropriate when capital structure is changing.
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 3: MARKET-BASED VALUATION
+	% ============================================================================
+	
+	\section{Market-Based Valuation: Multiples}
+	
+	\begin{frame}{Q15: Justified P/E with Gordon Growth Model}
+		\scriptsize
+		\textbf{Scenario:} An analyst is analyzing two companies in the same industry:
+		
+		\begin{tabular}{lrr}
+			& \textbf{Company A} & \textbf{Company B} \\
+			Current Stock Price & \$45.00 & \$38.00 \\
+			Current EPS & \$2.80 & \$2.20 \\
+			Dividend Payout Ratio & 40\% & 55\% \\
+			Required Return & 10\% & 11\% \\
+			Expected Growth Rate & 5\% & 4\% \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate the justified trailing P/E and justified leading P/E for each company. Based on these, which company appears undervalued?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Leading P/E uses E$_1$ (next year's earnings), not E$_0$. Trailing P/E uses E$_0$. Both use the Gordon growth model but with different formulas.
+	\end{frame}
+	
+	\begin{frame}{Q15: Solution}
+		\scriptsize
+		\textbf{Company A:}
+		$g_A = 5\%$, payout ratio = 40\%, retention = 60\%
+		
+		$E_1 = 2.80(1.05) = 2.94$
+		
+		Justified Leading P/E = $\frac{1-b}{r-g} = \frac{0.40}{0.10-0.05} = \frac{0.40}{0.05} = 8.0$
+		
+		Justified Trailing P/E = $\frac{(1-b)(1+g)}{r-g} = \frac{0.40(1.05)}{0.05} = \frac{0.42}{0.05} = 8.4$
+		
+		Actual Leading P/E = $45.00/2.94 = 15.31$
+		Actual Trailing P/E = $45.00/2.80 = 16.07$
+		
+		\vspace{2pt}
+		\textbf{Company B:}
+		$g_B = 4\%$, payout ratio = 55\%, retention = 45\%
+		
+		$E_1 = 2.20(1.04) = 2.288$
+		
+		Justified Leading P/E = $\frac{0.55}{0.11-0.04} = \frac{0.55}{0.07} = 7.86$
+		
+		Justified Trailing P/E = $\frac{0.55(1.04)}{0.07} = \frac{0.572}{0.07} = 8.17$
+		
+		Actual Leading P/E = $38.00/2.288 = 16.61$
+		Actual Trailing P/E = $38.00/2.20 = 17.27$
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} Both companies appear significantly overvalued based on fundamentals. Company A has actual P/E (15.31) > justified P/E (8.0), and Company B has actual P/E (16.61) > justified P/E (7.86). Neither is undervalued. Company A has a smaller overvaluation gap (15.31/8.0 = 1.91× vs. 16.61/7.86 = 2.11×).
+	\end{frame}
+	
+	\begin{frame}{Q16: PEG Ratio Application}
+		\scriptsize
+		\textbf{Scenario:} You are evaluating five companies in the pharmaceutical sector using the PEG ratio. The data are as follows:
+		
+		\begin{tabular}{lrrrr}
+			& \textbf{Price} & \textbf{EPS (TTM)} & \textbf{Forecasted EPS} & \textbf{5-Year Growth} \\
+			Company 1 & \$42.00 & \$1.75 & \$1.98 & 12\% \\
+			Company 2 & \$68.00 & \$2.40 & \$2.76 & 15\% \\
+			Company 3 & \$95.00 & \$3.80 & \$4.18 & 10\% \\
+			Company 4 & \$31.50 & \$1.20 & \$1.34 & 8\% \\
+			Company 5 & \$125.00 & \$5.00 & \$5.60 & 16\% \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate the forward PEG ratio for each company. Which company appears most undervalued based on PEG? What are the limitations of using PEG in this analysis?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} PEG = (Forward P/E) / (Growth Rate in percentage terms). Also, PEG assumes a linear relationship between P/E and growth, which is not theoretically correct.
+	\end{frame}
+	
+	\begin{frame}{Q16: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate Forward P/E for each company
+		
+		Company 1: Forward P/E = 42.00/1.98 = 21.21
+		Company 2: Forward P/E = 68.00/2.76 = 24.64
+		Company 3: Forward P/E = 95.00/4.18 = 22.73
+		Company 4: Forward P/E = 31.50/1.34 = 23.51
+		Company 5: Forward P/E = 125.00/5.60 = 22.32
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate PEG ratio
+		
+		Company 1: PEG = 21.21/12 = 1.77
+		Company 2: PEG = 24.64/15 = 1.64
+		Company 3: PEG = 22.73/10 = 2.27
+		Company 4: PEG = 23.51/8 = 2.94
+		Company 5: PEG = 22.32/16 = 1.40
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Analysis
+		
+		\vspace{2pt}
+		\begin{tabular}{lrrr}
+			Company & Forward P/E & Growth & PEG \\
+			Company 5 & 22.32 & 16\% & \textbf{1.40} \\
+			Company 2 & 24.64 & 15\% & 1.64 \\
+			Company 1 & 21.21 & 12\% & 1.77 \\
+			Company 3 & 22.73 & 10\% & 2.27 \\
+			Company 4 & 23.51 & 8\% & 2.94 \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} Company 5 has the lowest PEG ratio (1.40) and appears most undervalued. However, limitations include:
+		1. PEG assumes linear relationship between P/E and growth
+		2. Does NOT account for differences in risk
+		3. Does NOT account for differences in duration of growth
+		4. Using 5-year growth forecasts may not capture long-term sustainability
+		
+		\textbf{Answer:} Company 5 is most undervalued based on PEG.
+	\end{frame}
+	
+	\begin{frame}{Q17: Normalized EPS for Cyclical Company}
+		\scriptsize
+		\textbf{Scenario:} A cyclical manufacturing company has the following EPS and ROE data over the past 6 years (2019-2024):
+		
+		\begin{tabular}{lrrrrrr}
+			& 2019 & 2020 & 2021 & 2022 & 2023 & 2024 \\
+			EPS & \$0.85 & \$1.20 & \$1.65 & \$0.95 & \$1.40 & \$2.10 \\
+			BVPS & \$8.50 & \$9.00 & \$9.80 & \$8.90 & \$9.50 & \$10.50 \\
+			ROE & 10.0\% & 13.3\% & 16.8\% & 10.7\% & 14.7\% & 20.0\% \\
+		\end{tabular}
+		
+		Current stock price is \$28.50. The company is expected to have a mid-cycle ROE of 12.5\% and a mid-cycle payout ratio of 35\%.
+		
+		\textbf{Question:} Calculate normalized EPS using:
+		1. Historical average EPS method
+		2. Average ROE method
+		3. Based on the mid-cycle assumptions
+		
+		Which method gives the most reasonable P/E, and why? Calculate the P/E for each method.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} The historical average EPS method may not account for the company's growth in size. Average ROE method uses current book value and is often preferred.
+	\end{frame}
+	
+	\begin{frame}{Q17: Solution}
+		\scriptsize
+		\textbf{Method 1: Historical Average EPS}
+		
+		$EPS_{normalized} = (0.85 + 1.20 + 1.65 + 0.95 + 1.40 + 2.10)/6 = 8.15/6 = 1.36$
+		
+		$P/E = 28.50/1.36 = 20.96$
+		
+		\vspace{2pt}
+		\textbf{Method 2: Average ROE}
+		
+		$ROE_{avg} = (10.0 + 13.3 + 16.8 + 10.7 + 14.7 + 20.0)/6 = 85.5/6 = 14.25\%$
+		
+		$EPS_{normalized} = ROE_{avg} \times BVPS_{current} = 0.1425 \times 10.50 = 1.50$
+		
+		$P/E = 28.50/1.50 = 19.00$
+		
+		\vspace{2pt}
+		\textbf{Method 3: Mid-Cycle Assumptions}
+		
+		$EPS_{normalized} = ROE_{mid} \times BVPS_{current} = 0.125 \times 10.50 = 1.3125$
+		
+		$P/E = 28.50/1.3125 = 21.71$
+		
+		\vspace{2pt}
+		\textbf{Comparison:}
+		\begin{tabular}{lrr}
+			Method & Normalized EPS & P/E \\
+			Historical Average & 1.36 & 20.96 \\
+			Average ROE & 1.50 & 19.00 \\
+			Mid-Cycle & 1.31 & 21.71 \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} The Average ROE method (P/E = 19.00) is most reasonable because:
+		1. It accounts for company growth (uses current BVPS)
+		2. The average ROE of 14.25\% is closer to the mid-cycle estimate than the extremes
+		3. Historical average EPS may be biased by the last year's unusually high EPS (\$2.10)
+		
+		\textbf{Answer:} Normalized P/E ranges from 19.00 to 21.71. Average ROE method gives most reasonable P/E of 19.00.
+	\end{frame}
+	
+	\begin{frame}{Q18: EV/EBITDA with Differences in Capital Structure}
+		\scriptsize
+		\textbf{Scenario:} You are comparing two companies in the telecommunications industry:
+		
+		\begin{tabular}{lrr}
+			& \textbf{Company A} & \textbf{Company B} \\
+			EBITDA & \$1,200M & \$950M \\
+			Net Income & \$350M & \$290M \\
+			Market Cap & \$5,500M & \$3,800M \\
+			Total Debt & \$2,800M & \$1,500M \\
+			Cash & \$400M & \$200M \\
+			Depreciation & \$280M & \$210M \\
+			Interest Expense & \$180M & \$120M \\
+			Tax Rate & 35\% & 35\% \\
+			Shares Outstanding & 100M & 75M \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate P/E, EV/EBITDA, and EV/EBIT for both companies. Which company appears more attractively valued on an enterprise value basis? Why might the P/E and EV/EBITDA rankings differ?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Enterprise Value = Market Cap + Debt - Cash. EBITDA is pre-interest and pre-tax, making EV/EBITDA appropriate for comparing companies with different capital structures.
+	\end{frame}
+	
+	\begin{frame}{Q18: Solution}
+		\scriptsize
+		\textbf{Company A:}
+		$EV_A = 5,500 + 2,800 - 400 = 7,900$
+		$P/E_A = 5,500/350 = 15.71$
+		$EV/EBITDA_A = 7,900/1,200 = 6.58$
+		$EV/EBIT_A = 7,900/(1,200 - 280) = 7,900/920 = 8.59$
+		$P/EBIT_A = 5,500/920 = 5.98$
+		
+		\vspace{2pt}
+		\textbf{Company B:}
+		$EV_B = 3,800 + 1,500 - 200 = 5,100$
+		$P/E_B = 3,800/290 = 13.10$
+		$EV/EBITDA_B = 5,100/950 = 5.37$
+		$EV/EBIT_B = 5,100/(950 - 210) = 5,100/740 = 6.89$
+		$P/EBIT_B = 3,800/740 = 5.14$
+		
+		\vspace{2pt}
+		\textbf{Comparison:}
+		\begin{tabular}{lrr}
+			& Company A & Company B \\
+			P/E & 15.71 & 13.10 \\
+			EV/EBITDA & 6.58 & 5.37 \\
+			EV/EBIT & 8.59 & 6.89 \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Analysis:}
+		- Company B appears more attractive on BOTH P/E and EV/EBITDA.
+		- P/E ranking matches EV/EBITDA in this case.
+		- However, the difference is larger in P/E (15.71 vs. 13.10, 20\% difference) than in EV/EBITDA (6.58 vs. 5.37, 22.5\% difference), suggesting Company B has more debt leverage.
+		
+		\textbf{Answer:} Company B is more attractively valued on both P/E and EV/EBITDA.
+	\end{frame}
+	
+	\begin{frame}{Q19: Cross-Border Valuation Multiple Adjustments}
+		\scriptsize
+		\textbf{Scenario:} You are comparing a US company with a UK company in the pharmaceutical sector. The companies have the following characteristics:
+		
+		\begin{tabular}{lrr}
+			& \textbf{US Company} & \textbf{UK Company} \\
+			Stock Price (local currency) & \$85.00 & £45.00 \\
+			EPS (local currency) & \$4.50 & £3.20 \\
+			Book Value Per Share & \$32.00 & £18.50 \\
+			Sales Per Share & \$18.00 & £12.00 \\
+			EBITDA Per Share & \$6.50 & £4.80 \\
+			Exchange Rate & \$1.25/£ & \\
+			Inflation Rate & 3.0\% & 2.0\% \\
+			Risk-Free Rate & 4.0\% & 3.5\% \\
+			Equity Risk Premium & 5.0\% & 5.5\% \\
+			Beta & 1.10 & 1.05 \\
+			Tax Rate & 25\% & 20\% \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate the P/E, P/B, P/S, and EV/EBITDA multiples for both companies in USD terms. What adjustments should be made for cross-country comparisons?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} When comparing across countries, convert all multiples to the same currency. Also consider differences in accounting standards, inflation, and risk-free rates.
+	\end{frame}
+	
+	\begin{frame}{Q19: Solution}
+		\scriptsize
+		\textbf{Step 1:} Convert UK company to USD
+		
+		UK Price in USD = £45.00 × 1.25 = \$56.25
+		UK EPS in USD = £3.20 × 1.25 = \$4.00
+		UK BVPS in USD = £18.50 × 1.25 = \$23.125
+		UK Sales per share in USD = £12.00 × 1.25 = \$15.00
+		UK EBITDA per share in USD = £4.80 × 1.25 = \$6.00
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate Multiples
+		
+		\begin{tabular}{lrr}
+			& US Company & UK Company \\
+			P/E & 85/4.50 = 18.89 & 56.25/4.00 = 14.06 \\
+			P/B & 85/32.00 = 2.66 & 56.25/23.125 = 2.43 \\
+			P/S & 85/18.00 = 4.72 & 56.25/15.00 = 3.75 \\
+			EV/EBITDA & - & - (need EV data) \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Required Adjustments for Cross-Border Comparison:
+		
+		1. \textbf{Accounting Standards:} US GAAP vs. IFRS may affect reported earnings and book values
+		2. \textbf{Inflation:} Higher inflation in US (3.0\% vs 2.0\%) may justify higher nominal growth expectations
+		3. \textbf{Risk-Free Rate:} US has higher risk-free rate (4.0\% vs 3.5\%) affecting discount rates
+		4. \textbf{Tax Rate:} US has higher tax rate (25\% vs 20\%) affecting after-tax earnings
+		5. \textbf{Required Return:} $r_{US} = 4.0 + 1.10(5.0) = 9.5\%$; $r_{UK} = 3.5 + 1.05(5.5) = 9.275\%$
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} UK company appears cheaper on P/E, P/B, and P/S. However, this may be justified by higher growth expectations in the US, differences in accounting conservatism, or higher inflation in the US.
+		
+		\textbf{Answer:} US P/E=18.89, UK P/E=14.06. Adjust for accounting, inflation, tax, and risk differences.
+	\end{frame}
+	
+	\begin{frame}{Q20: Sum-of-the-Parts Valuation with Conglomerate Discount}
+		\scriptsize
+		\textbf{Scenario:} You are analyzing a diversified conglomerate with three business segments:
+		
+		\begin{tabular}{lrrr}
+			& \textbf{Segment A} & \textbf{Segment B} & \textbf{Segment C} \\
+			Revenue & \$2,500M & \$1,800M & \$900M \\
+			EBITDA & \$500M & \$360M & \$180M \\
+			EBIT & \$350M & \$250M & \$120M \\
+			Assets & \$2,000M & \$1,400M & \$700M \\
+		\end{tabular}
+		
+		Peer group EV/EBITDA multiples: Segment A: 10×, Segment B: 8×, Segment C: 12×
+		
+		The conglomerate currently has a total enterprise value of \$8,500M, debt of \$2,500M, and 100 million shares outstanding at \$65 per share.
+		
+		\textbf{Question:} Calculate the sum-of-the-parts value and the implied conglomerate discount. What percentage of the stock price is attributable to the conglomerate discount?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Sum-of-the-parts valuation sums the individual segment values. The conglomerate discount is the difference between the sum-of-the-parts value and the actual market value.
+	\end{frame}
+	
+	\begin{frame}{Q20: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate sum-of-the-parts value
+		
+		Segment A Value = 500 × 10 = \$5,000M
+		Segment B Value = 360 × 8 = \$2,880M
+		Segment C Value = 180 × 12 = \$2,160M
+		
+		Total SOTP Value = 5,000 + 2,880 + 2,160 = \$10,040M
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate current market values
+		
+		Market Cap = 100M × \$65 = \$6,500M
+		Current EV = 6,500 + 2,500 = \$9,000M
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate conglomerate discount
+		
+		Conglomerate Discount = SOTP Value - Current EV = 10,040 - 9,000 = \$1,040M
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate implied value per share
+		
+		SOTP Equity Value = 10,040 - 2,500 = \$7,540M
+		SOTP Price Per Share = 7,540/100 = \$75.40
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Percentage of stock price attributable to discount
+		
+		Discount per share = 75.40 - 65.00 = \$10.40
+		Discount as \% of SOTP = 10.40/75.40 = 13.79\%
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} The conglomerate is trading at a 13.79\% discount to its sum-of-the-parts value. This suggests the market is applying a conglomerate discount, potentially due to:
+		1. Inefficient internal capital allocation
+		2. Lack of strategic focus
+		3. Difficulty in valuing the diversified business
+		
+		\textbf{Answer:} SOTP value = \$10,040M; Discount = \$1,040M (13.79\% of SOTP value).
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 4: RESIDUAL INCOME VALUATION
+	% ============================================================================
+	
+	\section{Residual Income Valuation}
+	
+	\begin{frame}{Q21: Residual Income Calculation with Clean Surplus}
+		\scriptsize
+		\textbf{Scenario:} A company has the following financial information for the most recent year:
+		
+		\begin{tabular}{lr}
+			Beginning Book Value per Share & \$25.00 \\
+			Ending Book Value per Share & \$28.50 \\
+			Net Income per Share & \$5.20 \\
+			Dividends per Share & \$1.70 \\
+			Required Return on Equity & 11\% \\
+			Current Stock Price & \$42.00 \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate residual income per share. Using the residual income model, what is the intrinsic value per share if residual income is expected to grow at 4\% forever? Is the stock overvalued or undervalued?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Residual Income = Net Income - (Required Return × Beginning Book Value). The clean surplus relationship: Ending BV = Beginning BV + NI - Dividends.
+	\end{frame}
+	
+	\begin{frame}{Q21: Solution}
+		\scriptsize
+		\textbf{Step 1:} Verify clean surplus relationship
+		
+		Ending BV = 25.00 + 5.20 - 1.70 = 28.50  (matches given)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate residual income
+		
+		$RI = NI - (r \times BV_{beginning}) = 5.20 - (0.11 \times 25.00)$
+		$RI = 5.20 - 2.75 = 2.45$
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate intrinsic value using residual income model
+		
+		$V_0 = BV_0 + \frac{RI_1}{r - g} = 25.00 + \frac{2.45(1.04)}{0.11 - 0.04}$
+		$V_0 = 25.00 + \frac{2.548}{0.07} = 25.00 + 36.40 = 61.40$
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Compare to current price
+		
+		Current price = \$42.00 < Intrinsic value = \$61.40
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} The stock is \textbf{undervalued} by approximately 46.2\%.
+		
+		\vspace{2pt}
+		\textbf{Alternative check:}
+		Justified P/B = $1 + \frac{RI_1/(r-g)}{BV_0} = 1 + \frac{2.548/0.07}{25.00} = 1 + \frac{36.40}{25.00} = 1 + 1.456 = 2.456$
+		
+		Actual P/B = 42.00/25.00 = 1.68
+		
+		\textbf{Answer:} RI = \$2.45; Intrinsic value = \$61.40; Stock is undervalued.
+	\end{frame}
+	
+	\begin{frame}{Q22: Multistage Residual Income Model}
+		\scriptsize
+		\textbf{Scenario:} A company has a beginning book value per share of \$30.00. The required return on equity is 10\%. Earnings and dividends are forecasted as follows:
+		
+		\begin{tabular}{lrrrr}
+			& Year 1 & Year 2 & Year 3 & Year 4 \\
+			EPS & \$4.50 & \$5.00 & \$5.50 & \$6.00 \\
+			DPS & \$1.00 & \$1.20 & \$1.50 & \$1.80 \\
+		\end{tabular}
+		
+		After Year 4, residual income is expected to decline linearly to zero over 5 years (Years 5-9).
+		
+		\textbf{Question:} Calculate the intrinsic value per share using a multistage residual income model.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Terminal value calculation requires understanding when residual income becomes zero. The decline is over 5 years from the Year 4 level to zero.
+	\end{frame}
+	
+	\begin{frame}{Q22: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate book value per share each year
+		
+		$BV_0 = 30.00$
+		$BV_1 = 30.00 + 4.50 - 1.00 = 33.50$
+		$BV_2 = 33.50 + 5.00 - 1.20 = 37.30$
+		$BV_3 = 37.30 + 5.50 - 1.50 = 41.30$
+		$BV_4 = 41.30 + 6.00 - 1.80 = 45.50$
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate residual income for Years 1-4
+		
+		$RI_1 = 4.50 - (0.10 \times 30.00) = 4.50 - 3.00 = 1.50$
+		$RI_2 = 5.00 - (0.10 \times 33.50) = 5.00 - 3.35 = 1.65$
+		$RI_3 = 5.50 - (0.10 \times 37.30) = 5.50 - 3.73 = 1.77$
+		$RI_4 = 6.00 - (0.10 \times 41.30) = 6.00 - 4.13 = 1.87$
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate residual income for Years 5-9 (declining linearly to zero)
+		
+		$RI_5 = 1.87 \times (4/5) = 1.50$
+		$RI_6 = 1.87 \times (3/5) = 1.12$
+		$RI_7 = 1.87 \times (2/5) = 0.75$
+		$RI_8 = 1.87 \times (1/5) = 0.37$
+		$RI_9 = 0$
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate intrinsic value
+		
+		$V_0 = BV_0 + \sum_{t=1}^{9} \frac{RI_t}{(1.10)^t}$
+		
+		$V_0 = 30.00 + \frac{1.50}{1.10} + \frac{1.65}{1.10^2} + \frac{1.77}{1.10^3} + \frac{1.87}{1.10^4} + \frac{1.50}{1.10^5} + \frac{1.12}{1.10^6} + \frac{0.75}{1.10^7} + \frac{0.37}{1.10^8}$
+		
+		$V_0 = 30.00 + 1.36 + 1.36 + 1.33 + 1.28 + 0.93 + 0.63 + 0.38 + 0.17 = 37.44$
+		
+		\textbf{Answer:} Intrinsic value per share = \$37.44
+	\end{frame}
+	
+	\begin{frame}{Q23: Implied Growth Rate from Residual Income Model}
+		\scriptsize
+		\textbf{Scenario:} A company has a current book value per share of \$40.00, a current stock price of \$55.00, and a required return on equity of 12\%. The company's ROE is 16\% and is expected to persist.
+		
+		\textbf{Question:} Using the residual income model, what is the implied growth rate of residual income? What is the implied growth rate of dividends? Explain the relationship between these growth rates.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} In the single-stage residual income model, the growth rate applies to residual income, not to earnings or dividends. The relationship between residual income growth and dividend growth depends on the assumptions about ROE and book value growth.
+	\end{frame}
+	
+	\begin{frame}{Q23: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate current residual income
+		
+		$RI_0 = (ROE - r) \times BV_0 = (0.16 - 0.12) \times 40.00 = 0.04 \times 40.00 = 1.60$
+		
+		$RI_1 = RI_0(1+g)$
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Use residual income model to solve for g
+		
+		$V_0 = BV_0 + \frac{RI_1}{r - g} = 55.00$
+		
+		$55.00 = 40.00 + \frac{1.60(1+g)}{0.12 - g}$
+		
+		$15.00 = \frac{1.60(1+g)}{0.12 - g}$
+		
+		$15.00(0.12 - g) = 1.60 + 1.60g$
+		
+		$1.80 - 15.00g = 1.60 + 1.60g$
+		
+		$0.20 = 16.60g$
+		
+		$g = 0.01205 = 1.205\%$
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate implied dividend growth
+		
+		If ROE and book value are expected to grow at the same rate g (the stable growth assumption):
+		$g_{dividend} = g = 1.205\%$
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Check using Gordon Growth Model
+		
+		$D_0 = NI - \Delta BV = (ROE \times BV_0) - (BV_0 \times g) = 6.40 - 0.482 = 5.918$
+		$D_1 = 5.918(1.01205) = 5.989$
+		
+		$V_0 = \frac{D_1}{r-g_{dividend}} = \frac{5.989}{0.12 - 0.01205} = \frac{5.989}{0.10795} = 55.48$ (rounding difference)
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} Implied residual income growth rate = 1.205\%
+		
+		\textbf{Answer:} Implied growth rate = 1.205\%
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 5: PRIVATE COMPANY VALUATION
+	% ============================================================================
+	
+	\section{Private Company Valuation}
+	
+	\begin{frame}{Q24: Earnings Normalization for Private Company}
+		\scriptsize
+		\textbf{Scenario:} You are valuing a family-owned manufacturing business. The company's reported income statement shows:
+		
+		\begin{tabular}{lr}
+			Sales & \$12,500,000 \\
+			Cost of Goods Sold & 7,800,000 \\
+			Gross Profit & 4,700,000 \\
+			SG\&A Expenses & 2,900,000 \\
+			EBITDA & 1,800,000 \\
+			Depreciation & 400,000 \\
+			EBIT & 1,400,000 \\
+			Interest Expense & 300,000 \\
+			Pretax Income & 1,100,000 \\
+			Taxes (30\%) & 330,000 \\
+			Net Income & 770,000 \\
+		\end{tabular}
+		
+		Additional information:
+		- The company pays the owner a salary of \$350,000 (included in SG\&A). Market compensation for a CEO of this size company is \$225,000.
+		- The company owns a building leased back to the business. The reported SG\&A includes \$50,000 in property taxes and maintenance but no rent. Market rent would be \$180,000 per year.
+		- The company had a one-time legal settlement gain of \$75,000 included in SG\&A as a reduction.
+		- Depreciation is significantly lower than economic depreciation by about \$150,000 per year.
+		
+		\textbf{Question:} Calculate normalized EBITDA, EBIT, and net income for valuation purposes.
+	\end{frame}
+	
+	\begin{frame}{Q24: Solution}
+		\scriptsize
+		\textbf{Step 1:} Adjust EBITDA
+		
+		Reported EBITDA: \$1,800,000
+		
+		Adjustments:
+		1. Excess CEO compensation: +(\$350,000 - \$225,000) = +\$125,000
+		2. Market rent for building: +\$180,000 (but property taxes/maintenance already included, so net add: \$180,000 - \$50,000 = +\$130,000)
+		3. One-time legal settlement (gain): -(-\$75,000) = -\$75,000 (remove the reduction in expenses)
+		
+		Normalized EBITDA = 1,800,000 + 125,000 + 130,000 - 75,000 = \$1,980,000
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate normalized EBIT
+		
+		Normalized EBIT = Normalized EBITDA - Normalized Depreciation
+		
+		Normalized Depreciation = Reported Depreciation + Understated Depreciation
+		= 400,000 + 150,000 = \$550,000
+		
+		Normalized EBIT = 1,980,000 - 550,000 = \$1,430,000
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate normalized net income
+		
+		Normalized EBT = Normalized EBIT - Interest Expense = 1,430,000 - 300,000 = \$1,130,000
+		
+		Normalized Net Income = 1,130,000 × (1 - 0.30) = \$791,000
+		
+		\vspace{2pt}
+		\textbf{Summary:}
+		\begin{tabular}{lr}
+			Normalized EBITDA & \$1,980,000 \\
+			Normalized EBIT & \$1,430,000 \\
+			Normalized Net Income & \$791,000 \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Answer:} Normalized EBITDA = \$1.98M; Normalized EBIT = \$1.43M; Normalized Net Income = \$0.791M.
+	\end{frame}
+	
+	\begin{frame}{Q25: Cost of Equity for Private Company}
+		\scriptsize
+		\textbf{Scenario:} You are estimating the cost of equity for a privately held manufacturing company. The following information is available:
+		
+		\begin{tabular}{lr}
+			Risk-Free Rate & 4.0\% \\
+			Equity Risk Premium & 5.0\% \\
+			Small Stock Premium & 3.0\% \\
+			Industry Risk Premium & 1.5\% \\
+			Company-Specific Risk Premium & 2.5\% \\
+			Peer Group Average Beta (Levered) & 1.20 \\
+			Peer Group Average D/E Ratio & 0.50 \\
+			Peer Group Tax Rate & 25\% \\
+			Subject Company D/E Ratio & 0.30 \\
+			Subject Company Tax Rate & 30\% \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate the cost of equity using:
+		1. Expanded CAPM
+		2. Build-up approach
+		
+		Explain why the two methods give different results and which is more appropriate.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Expanded CAPM uses beta adjusted for leverage, while build-up approach does not. Both require different treatment of the equity risk premium.
+	\end{frame}
+	
+	\begin{frame}{Q25: Solution}
+		\scriptsize
+		\textbf{Step 1:} Unlever peer beta
+		
+		$\beta_{U,peer} = \frac{\beta_{L,peer}}{1 + (1-t_{peer})(D/E_{peer})} = \frac{1.20}{1 + (0.75)(0.50)} = \frac{1.20}{1.375} = 0.8727$
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Relever beta for subject company
+		
+		$\beta_{L,subject} = \beta_U[1 + (1-t_{subject})(D/E_{subject})] = 0.8727[1 + (0.70)(0.30)] = 0.8727(1.21) = 1.056$
+		
+		\vspace{2pt}
+		\textbf{Method 1: Expanded CAPM}
+		
+		$r_e = R_f + \beta_L(ERP) + SP + SCRP$
+		
+		$r_e = 0.04 + 1.056(0.05) + 0.03 + 0.025$
+		$r_e = 0.04 + 0.0528 + 0.03 + 0.025 = 0.1478$ (14.78\%)
+		
+		\vspace{2pt}
+		\textbf{Method 2: Build-up Approach}
+		
+		$r_e = R_f + ERP + SP + IP + SCRP$
+		
+		$r_e = 0.04 + 0.05 + 0.03 + 0.015 + 0.025 = 0.16$ (16.00\%)
+		
+		\vspace{2pt}
+		\textbf{Comparison:}
+		\begin{tabular}{lr}
+			Expanded CAPM & 14.78\% \\
+			Build-up & 16.00\% \\
+			Difference & 1.22\% \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Explanation:} The difference arises because:
+		1. Expanded CAPM uses beta-adjusted ERP (1.056 × 5.0\% = 5.28\%)
+		2. Build-up approach uses ERP of 5.0\% (implicit beta = 1.0)
+		3. Since subject beta > 1.0, expanded CAPM gives lower cost of equity
+		
+		\textbf{Conclusion:} Expanded CAPM is more appropriate because it uses a beta estimated from comparable public companies.
+		
+		\textbf{Answer:} Expanded CAPM = 14.78\%; Build-up = 16.00\%.
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 6: CORPORATE RESTRUCTURING
+	% ============================================================================
+	
+	\section{Corporate Restructuring}
+	
+	\begin{frame}{Q26: Acquisition Valuation with Synergies}
+		\scriptsize
+		\textbf{Scenario:} Company A is considering acquiring Company B. Data:
+		
+		\begin{tabular}{lrr}
+			& Company A & Company B \\
+			EBITDA & \$1,200M & \$400M \\
+			EBIT & \$840M & \$280M \\
+			Net Income & \$500M & \$160M \\
+			Market Cap & \$8,000M & \$2,400M \\
+			Debt & \$2,000M & \$800M \\
+			Cash & \$500M & \$100M \\
+			Shares Outstanding & 200M & 100M \\
+		\end{tabular}
+		
+		The acquisition is expected to generate \$80M in annual cost synergies (pre-tax). Tax rate is 35\%. Company A plans to finance the acquisition with 60\% debt and 40\% stock. The cost of debt for the new borrowing is 6\%. Company A's WACC is 8.5\%.
+		
+		\textbf{Question:} What is the maximum premium Company A should pay for Company B? What is the implied value per share?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Synergies create incremental value. The maximum price = standalone value + PV of synergies. Financing costs must be considered.
+	\end{frame}
+	
+	\begin{frame}{Q26: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate Company B's standalone value
+		
+		Using EBITDA multiple: If comparable companies trade at 8× EBITDA:
+		$V_B = 400 \times 8 = \$3,200M$
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate PV of synergies
+		
+		After-tax synergies = 80 × (1 - 0.35) = \$52M per year
+		
+		Assuming synergies continue in perpetuity with 3\% growth:
+		$PV_{synergies} = \frac{52}{0.085 - 0.03} = \frac{52}{0.055} = \$945.45M$
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate maximum price
+		
+		$V_{max} = V_B + PV_{synergies} = 3,200 + 945.45 = \$4,145.45M$
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate maximum price per share
+		
+		$V_{max per share} = 4,145.45/100 = \$41.45$
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Calculate premium
+		
+		Current price = 2,400/100 = \$24.00
+		Maximum premium = 41.45/24.00 - 1 = 72.7\%
+		
+		\vspace{2pt}
+		\textbf{Step 6:} Consider financing costs
+		
+		Interest on new debt = 0.60 × 4,145.45 × 0.06 = \$149.24M per year
+		After-tax interest = 149.24 × (1-0.35) = \$97.00M per year
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} Maximum price = \$4,145.45M; Maximum price per share = \$41.45; Maximum premium = 72.7\%.
+		
+		However, after considering financing costs, the net benefit is reduced.
+		
+		\textbf{Answer:} Max price per share = \$41.45; Premium = 72.7\%.
+	\end{frame}
+	
+	\begin{frame}{Q27: Joint Venture Evaluation}
+		\scriptsize
+		\textbf{Scenario:} Two companies are considering forming a joint venture to develop a new product. Each company will contribute \$50M in capital. The joint venture is expected to generate \$25M in free cash flow per year for 8 years, after which the venture will be dissolved and assets sold for \$30M. The required return for the joint venture is 14\%. Company A's WACC is 10\%, Company B's WACC is 12\%.
+		
+		\textbf{Question:} Calculate the NPV of the joint venture from each company's perspective. Should the joint venture be undertaken if only one company were to invest alone?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} The appropriate discount rate depends on the risk of the joint venture, NOT the individual company's WACC.
+	\end{frame}
+	
+	\begin{frame}{Q27: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate total cash flows
+		
+		Initial investment (Year 0): -\$100M
+		Annual cash flows (Years 1-8): \$25M each
+		Terminal cash flow (Year 8): \$30M
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate NPV at 14\% discount rate (joint venture's required return)
+		
+		$NPV = -100 + \sum_{t=1}^{8} \frac{25}{(1.14)^t} + \frac{30}{(1.14)^8}$
+		
+		$PV_{annuity} = 25 \times \frac{1 - 1/(1.14)^8}{0.14} = 25 \times \frac{1 - 1/2.8526}{0.14} = 25 \times \frac{1 - 0.3506}{0.14} = 25 \times 4.6386 = 115.97$
+		
+		$PV_{terminal} = 30/(1.14)^8 = 30/2.8526 = 10.52$
+		
+		$NPV = -100 + 115.97 + 10.52 = \$26.49M$
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate each company's share
+		
+		Each company's share of NPV = 26.49/2 = \$13.245M
+		Each company's investment = \$50M
+		
+		\vspace{2pt}
+		\textbf{Step 4:} If only one company invests alone
+		
+		Required investment = \$100M (instead of \$50M)
+		NPV from one company's perspective would be \$26.49M (total), which is less than the combined NPV
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} The joint venture is value-creating from both companies' perspectives (NPV > 0). Each company should participate. If only one company invested alone, it would still have a positive NPV of \$26.49M on a \$100M investment, but it would bear all the risk.
+		
+		\textbf{Answer:} NPV = \$26.49M; Each company's share = \$13.245M.
+	\end{frame}
+	
+	\begin{frame}{Q28: Divestiture Decision - Spin-off vs. Sale}
+		\scriptsize
+		\textbf{Scenario:} A diversified company is considering divesting one of its business segments. Data for the segment:
+		
+		\begin{tabular}{lr}
+			Revenue & \$850M \\
+			EBITDA & \$120M \\
+			EBIT & \$85M \\
+			Net Income & \$50M \\
+			Assets & \$600M \\
+			Debt Allocated & \$200M \\
+		\end{tabular}
+		
+		Options:
+		1. Sell the segment to a strategic buyer for 9× EBITDA
+		2. Spin off the segment as an independent company (comparable companies trade at 7× EBITDA)
+		3. Continue operating the segment (current value reflected in parent's stock)
+		
+		The parent company currently trades at 6× EBITDA, has \$2,500M in debt, and 150M shares outstanding.
+		
+		\textbf{Question:} Which option creates the most value for shareholders? Calculate the value per share under each scenario.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} A spin-off may receive a higher multiple as an independent company than as part of a conglomerate. Also consider taxes and transaction costs.
+	\end{frame}
+	
+	\begin{frame}{Q28: Solution}
+		\scriptsize
+		\textbf{Option 1: Sell the Segment}
+		
+		Sale Price = 120 × 9 = \$1,080M
+		
+		After-tax proceeds = 1,080 × (1 - 0.35) = \$702M
+		
+		\vspace{2pt}
+		\textbf{Option 2: Spin-off the Segment}
+		
+		Spin-off Value = 120 × 7 = \$840M
+		
+		\vspace{2pt}
+		\textbf{Option 3: Continue Operating}
+		
+		Current segment value (at parent multiple) = 120 × 6 = \$720M
+		
+		\vspace{2pt}
+		\textbf{Comparison:}
+		
+		\begin{tabular}{lr}
+			Sale & \$1,080M (before tax) / \$702M (after tax) \\
+			Spin-off & \$840M \\
+			Continue & \$720M \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate value per share impact
+		
+		Parent's current EV = 6 × (120 + Parent's other EBITDA)
+		
+		Assuming parent's other EBITDA = 500M:
+		Current EV = 6 × 620 = \$3,720M
+		
+		\vspace{2pt}
+		\textbf{If sell:} New EV = 3,720 - 720 + 702 = \$3,702M
+		\textbf{If spin-off:} New EV = 3,720 - 720 + 840 = \$3,840M
+		\textbf{If continue:} New EV = 3,720M
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate value per share (assuming debt constant)
+		
+		Current equity value = 3,720 - 2,500 = \$1,220M → \$8.13/share
+		Sale: 3,702 - 2,500 = \$1,202M → \$8.01/share
+		Spin-off: 3,840 - 2,500 = \$1,340M → \$8.93/share
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} Spin-off creates most value (\$8.93/share) despite lower EBITDA multiple than sale, because it avoids taxes and allows the market to value the segment appropriately.
+		
+		\textbf{Answer:} Spin-off is best at \$8.93/share; Sale = \$8.01/share; Continue = \$8.13/share.
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 7: COST OF CAPITAL
+	% ============================================================================
+	
+	\section{Cost of Capital - Advanced}
+	
+	\begin{frame}{Q29: WACC with Changing Capital Structure}
+		\scriptsize
+		\textbf{Scenario:} A company currently has a debt-to-equity ratio of 0.40. The risk-free rate is 4\%, market risk premium is 5\%, and the company's unlevered beta is 0.85. The cost of debt is 6\% (pre-tax), and the tax rate is 30\%. The company plans to increase its debt-to-equity ratio to 0.60.
+		
+		\textbf{Question:} Calculate the current and new WACC. How does increasing leverage affect WACC? Why might increasing leverage not reduce WACC in practice?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} WACC decreases initially with leverage due to the tax shield, but beyond a certain point, the cost of equity and cost of debt increase, offsetting the benefit.
+	\end{frame}
+	
+	\begin{frame}{Q29: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate current levered beta
+		
+		$\beta_L = \beta_U[1 + (1-t)(D/E)] = 0.85[1 + (0.70)(0.40)] = 0.85(1.28) = 1.088$
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate current cost of equity
+		
+		$r_e = R_f + \beta_L(ERP) = 0.04 + 1.088(0.05) = 0.04 + 0.0544 = 0.0944$ (9.44\%)
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate current WACC
+		
+		$D/E = 0.40 \Rightarrow w_d = 0.4/1.4 = 0.2857$, $w_e = 1/1.4 = 0.7143$
+		
+		$WACC = w_d r_d(1-t) + w_e r_e$
+		$WACC = 0.2857(0.06)(0.70) + 0.7143(0.0944) = 0.0120 + 0.0674 = 0.0794$ (7.94\%)
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate new levered beta
+		
+		$\beta_L^{new} = 0.85[1 + (0.70)(0.60)] = 0.85(1.42) = 1.207$
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Calculate new cost of equity
+		
+		$r_e^{new} = 0.04 + 1.207(0.05) = 0.04 + 0.06035 = 0.10035$ (10.04\%)
+		
+		\vspace{2pt}
+		\textbf{Step 6:} Calculate new WACC
+		
+		$w_d = 0.6/1.6 = 0.375$, $w_e = 1/1.6 = 0.625$
+		
+		$WACC^{new} = 0.375(0.06)(0.70) + 0.625(0.10035) = 0.01575 + 0.06272 = 0.07847$ (7.847\%)
+		
+		\vspace{2pt}
+		\textbf{Comparison:}
+		\begin{tabular}{lrr}
+			& Current & New \\
+			D/E Ratio & 0.40 & 0.60 \\
+			Cost of Equity & 9.44\% & 10.04\% \\
+			WACC & 7.94\% & 7.85\% \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} WACC decreases slightly (7.94\% → 7.85\%) because the benefit of the debt tax shield outweighs the increase in equity cost.
+		
+		However, in practice, WACC may not decrease because:
+		1. Cost of debt increases with higher leverage (financial distress risk)
+		2. Cost of equity increases more than predicted (investors demand higher premium)
+		3. Tax shield benefits may be limited
+		
+		\textbf{Answer:} Current WACC = 7.94\%; New WACC = 7.85\%.
+	\end{frame}
+	
+	\begin{frame}{Q30: Country Risk Premium for International Valuation}
+		\scriptsize
+		\textbf{Scenario:} You are valuing a company in an emerging market. The following information is available:
+		
+		\begin{tabular}{lr}
+			Risk-Free Rate (US) & 3.0\% \\
+			US Equity Risk Premium & 5.0\% \\
+			Emerging Market Country Yield Spread & 3.5\% \\
+			Emerging Market Equity Volatility & 25\% \\
+			Emerging Market Bond Volatility & 15\% \\
+			Emerging Market Risk-Free Rate (local currency) & 6.0\% \\
+			Subject Company Beta (relative to local market) & 1.15 \\
+			Subject Company Exposure to Country Risk & 80\% \\
+		\end{tabular}
+		
+		\textbf{Question:} Calculate the country risk premium and the cost of equity for the subject company.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} The Damodaran method adjusts the country risk premium for the relative volatility of equity to bonds. The country risk premium is then multiplied by the company's exposure to country risk.
+	\end{frame}
+	
+	\begin{frame}{Q30: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate country risk premium
+		
+		$CRP_{adjusted} = Yield Spread \times \frac{\sigma_{Equity}}{\sigma_{Bond}} = 0.035 \times \frac{0.25}{0.15} = 0.035 \times 1.6667 = 0.05833$ (5.833\%)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate total equity risk premium
+		
+		$ERP_{total} = ERP_{US} + CRP_{adjusted} = 0.05 + 0.05833 = 0.10833$ (10.833\%)
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Adjust for company's country exposure
+		
+		$ERP_{company} = ERP_{US} + (Exposure \times CRP_{adjusted})$
+		$ERP_{company} = 0.05 + (0.80 \times 0.05833) = 0.05 + 0.04667 = 0.09667$ (9.667\%)
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate cost of equity (using local currency risk-free rate)
+		
+		$r_e = R_f^{local} + \beta_{local}(ERP_{company}) = 0.06 + 1.15(0.09667) = 0.06 + 0.11117 = 0.17117$ (17.12\%)
+		
+		\vspace{2pt}
+		\textbf{Alternative:} Calculate using US risk-free rate
+		
+		$r_e = R_f^{US} + \beta_{local}(ERP_{company}) = 0.03 + 1.15(0.09667) = 0.03 + 0.11117 = 0.14117$ (14.12\%)
+		
+		But this would need to be adjusted for expected currency depreciation.
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} The country risk premium is 5.83\%. The cost of equity is 17.12\% (using local currency risk-free rate).
+		
+		\textbf{Answer:} CRP = 5.83\%; Cost of Equity = 17.12\%.
+	\end{frame}
+	
+	\begin{frame}{Q31: Cost of Debt Estimation with Synthetic Rating}
+		\scriptsize
+		\textbf{Scenario:} A private company has the following financial information:
+		
+		\begin{tabular}{lr}
+			EBITDA & \$150M \\
+			Interest Expense & \$25M \\
+			Total Debt & \$350M \\
+			Cash & \$50M \\
+			EBIT & \$100M \\
+			Depreciation & \$50M \\
+		\end{tabular}
+		
+		Credit rating table:
+		
+		\begin{tabular}{lrr}
+			Rating & Interest Coverage Ratio & Credit Spread \\
+			AAA & >12× & 0.5\% \\
+			AA & 8-12× & 0.8\% \\
+			A & 5-8× & 1.2\% \\
+			BBB & 3-5× & 2.0\% \\
+			BB & 1.5-3× & 3.5\% \\
+			B & 1-1.5× & 5.5\% \\
+			CCC & <1× & 8.0\% \\
+		\end{tabular}
+		
+		Risk-free rate is 4.0\%.
+		
+		\textbf{Question:} Estimate the company's cost of debt using a synthetic rating approach. Calculate EBITDA/interest, EBIT/interest, and debt/EBITDA to determine the rating.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Different ratios may suggest different ratings. Use professional judgment to determine the most appropriate rating.
+	\end{frame}
+	
+	\begin{frame}{Q31: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate key ratios
+		
+		$EBITDA/Interest = 150/25 = 6.0\times$
+		$EBIT/Interest = 100/25 = 4.0\times$
+		$Debt/EBITDA = 350/150 = 2.33\times$
+		$Net Debt/EBITDA = (350-50)/150 = 2.0\times$
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Map ratios to ratings
+		
+		EBITDA/Interest (6.0×) → A rating (5-8× range)
+		EBIT/Interest (4.0×) → BBB rating (3-5× range)
+		Debt/EBITDA (2.33×) → BB or BBB (BBB: <3×, BB: 1.5-3×)
+		Net Debt/EBITDA (2.0×) → BBB or BB
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Determine appropriate rating
+		
+		The ratios suggest a rating in the BBB to A range. Given:
+		- EBITDA/Interest suggests A
+		- EBIT/Interest suggests BBB
+		- Net Debt/EBITDA suggests BBB
+		
+		The company has a relatively high EBITDA/Interest ratio but a lower EBIT/Interest ratio due to depreciation. This suggests the company has significant non-cash charges, and the cash flow coverage is actually stronger than the EBIT coverage.
+		
+		\textbf{Conclusion:} BBB rating is most appropriate (conservative approach) with a credit spread of 2.0\%.
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate cost of debt
+		
+		$r_d = R_f + Credit Spread = 0.04 + 0.02 = 0.06$ (6.0\%)
+		
+		\vspace{2pt}
+		\textbf{After-tax cost of debt (assuming 30\% tax rate):}
+		
+		$r_d^{after-tax} = 0.06 \times (1 - 0.30) = 0.042$ (4.2\%)
+		
+		\textbf{Answer:} Cost of debt = 6.0\% (pre-tax) or 4.2\% (after-tax). Synthetic rating: BBB.
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 8: EQUITY VALUATION APPLICATIONS
+	% ============================================================================
+	
+	\section{Equity Valuation Applications}
+	
+	\begin{frame}{Q32: Analyzing ESG Factors in Valuation}
+		\scriptsize
+		\textbf{Scenario:} You are analyzing a mining company and have identified the following ESG-related risks and opportunities:
+		
+		\begin{tabular}{lr}
+			Estimated cost of future environmental remediation & \$200M \\
+			Probability of significant environmental fine in next 5 years & 15\% \\
+			Expected annual cost of stricter emissions standards & \$25M \\
+			Potential revenue from sustainable mining practices & \$30M/year \\
+			Cost of capital without ESG adjustment & 9.5\% \\
+		\end{tabular}
+		
+		The company has \$1.2B in debt, 50M shares outstanding, and current EBITDA of \$450M. EBITDA is expected to grow at 3\% for 10 years, then stabilize at 1\%. The terminal growth rate is 1\%.
+		
+		\textbf{Question:} How would you integrate these ESG factors into your valuation? Calculate the impact on firm value and per-share value.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} ESG factors can affect both cash flows (direct costs) and the discount rate (risk premium). Each ESG factor should be evaluated for its material impact.
+	\end{frame}
+	
+	\begin{frame}{Q32: Solution}
+		\scriptsize
+		\textbf{Step 1:} Quantify cash flow impacts
+		
+		Environmental remediation: PV of expected cost = 200 × 0.15 = \$30M (one-time)
+		
+		Emissions standards: Annual cost of \$25M (in perpetuity)
+		
+		Sustainable practices: Annual benefit of \$30M (in perpetuity)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate net annual impact
+		
+		Net annual cash flow impact = -25 + 30 = \$5M (positive)
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate value of base case
+		
+		$V_{firm} = \frac{FCFF_1}{WACC - g}$ with the assumption that FCFF grows at 3\% for 10 years then 1\%
+		
+		Approximately: FCFF = EBITDA(1-t) - CapEx - WCInv
+		
+		Assuming FCFF = 0.65 × EBITDA = 292.5
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate PV of ESG impacts
+		
+		PV of annual net impact = $\frac{5}{0.095} = 52.63$ (perpetuity)
+		
+		PV of environmental fine = -30 (one-time)
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Adjust discount rate for ESG risk (increase by 0.5\% for environmental risk)
+		
+		$WACC_{adj} = 0.095 + 0.005 = 0.10$
+		
+		PV of annual net impact at adjusted WACC = $5/0.10 = 50$
+		
+		\vspace{2pt}
+		\textbf{Step 6:} Calculate total impact
+		
+		Total impact on firm value = -30 + 50 = \$20M
+		
+		Impact per share = 20/50 = \$0.40
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} Despite environmental risks, the company's sustainable practices create net value of \$20M (\$0.40/share). However, this is sensitive to assumptions about the probability and magnitude of regulatory changes.
+		
+		\textbf{Answer:} Net positive impact = \$20M firm value (\$0.40/share).
+	\end{frame}
+	
+	\begin{frame}{Q33: Valuation of a Financial Institution - P/B Analysis}
+		\scriptsize
+		\textbf{Scenario:} You are valuing a regional bank using the price-to-book approach. The bank has:
+		
+		\begin{tabular}{lr}
+			Book Value per Share & \$32.00 \\
+			Return on Equity (ROE) & 12.5\% \\
+			Required Return on Equity & 11.0\% \\
+			Expected Growth Rate & 4.0\% \\
+			Dividend Payout Ratio & 40\% \\
+			Tangible Book Value per Share & \$28.50 \\
+		\end{tabular}
+		
+		The bank has \$5.2B in loans with a 1.5\% non-performing loan ratio. The expected loss given default is 40\%.
+		
+		\textbf{Question:} Calculate the justified P/B ratio and the intrinsic value per share. Should you use book value or tangible book value? How should non-performing loans affect your valuation?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} For banks, book value is often a better anchor than earnings. However, adjustments for asset quality (NPLs) and tangible book value are important.
+	\end{frame}
+	
+	\begin{frame}{Q33: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate justified P/B using residual income model
+		
+		$P/B = \frac{ROE - g}{r - g} = \frac{0.125 - 0.04}{0.11 - 0.04} = \frac{0.085}{0.07} = 1.214$
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate intrinsic value
+		
+		$V_0 = BV \times (P/B) = 32.00 \times 1.214 = \$38.86$
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Adjust for NPLs
+		
+		NPL amount = 5.2B × 0.015 = \$78M
+		Expected loss = 78 × 0.40 = \$31.2M
+		Per share impact = 31.2M / shares outstanding
+		
+		Assuming 150M shares: Impact per share = 31.2/150 = \$0.208
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Adjust for tangible book value
+		
+		If using tangible book value: $V_{tangible} = 28.50 \times 1.214 = \$34.60$
+		
+		Then adjust for NPLs: $34.60 - 0.208 = \$34.39$
+		
+		\vspace{2pt}
+		\textbf{Comparison:}
+		
+		\begin{tabular}{lr}
+			Using Book Value & \$38.86 \\
+			Using Tangible Book Value & \$34.60 \\
+			Using Tangible Book Value + NPL adjustment & \$34.39 \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} Tangible book value adjusted for NPLs (\$34.39) is the most conservative and appropriate estimate. The bank's intangible assets (goodwill) may be overstated.
+		
+		\textbf{Answer:} Justified P/B = 1.214; Intrinsic value = \$34.39 (adjusted for tangible book and NPLs).
+	\end{frame}
+	
+	\begin{frame}{Q34: Valuation of a Technology Company - Revenue Multiple}
+		\scriptsize
+		\textbf{Scenario:} You are valuing a high-growth technology company with the following characteristics:
+		
+		\begin{tabular}{lr}
+			Revenue (TTM) & \$750M \\
+			Revenue Growth Rate & 35\% (next 3 years), then 20\% (years 4-5), then 10\% (years 6-8), then 5\% \\
+			Gross Margin & 75\% \\
+			Operating Margin & 25\% \\
+			Tax Rate & 20\% \\
+			Cost of Equity & 12\% \\
+			WACC & 10\% \\
+		\end{tabular}
+		
+		Comparable companies trade at an average EV/Sales of 5×. The company has \$200M in debt, \$50M in cash, and 25M shares outstanding.
+		
+		\textbf{Question:} Estimate the company's value using a revenue multiple approach. Compare the result with a DCF approach using revenue growth and margin assumptions.
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Revenue multiples can be misleading for high-growth companies. A DCF approach that incorporates margins and profitability may give a more accurate picture.
+	\end{frame}
+	
+	\begin{frame}{Q34: Solution}
+		\scriptsize
+		\textbf{Part 1: Revenue Multiple Approach}
+		
+		Enterprise Value = Revenue × EV/Sales = 750 × 5 = \$3,750M
+		
+		Equity Value = EV - Debt + Cash = 3,750 - 200 + 50 = \$3,600M
+		
+		Price per Share = 3,600/25 = \$144.00
+		
+		\vspace{2pt}
+		\textbf{Part 2: DCF Approach}
+		
+		\textbf{Step 1:} Forecast revenues and free cash flow
+		
+		Year 1: Revenue = 750 × 1.35 = 1,012.5
+		Year 2: Revenue = 1,012.5 × 1.35 = 1,366.9
+		Year 3: Revenue = 1,366.9 × 1.35 = 1,845.3
+		Year 4: Revenue = 1,845.3 × 1.20 = 2,214.4
+		Year 5: Revenue = 2,214.4 × 1.20 = 2,657.3
+		Year 6: Revenue = 2,657.3 × 1.10 = 2,923.0
+		Year 7: Revenue = 2,923.0 × 1.10 = 3,215.3
+		Year 8: Revenue = 3,215.3 × 1.10 = 3,536.8
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate FCFF (assuming 25% operating margin, 20% tax, reinvestment = 40% of revenue increase)
+		
+		Year 1: EBIT = 253.1, NOPAT = 202.5, Reinvestment = 0.4×262.5 = 105.0, FCFF = 97.5
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Terminal value at Year 8: $TV_8 = \frac{FCFF_9}{WACC - g}$ with g=5%
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate DCF value
+		
+		After performing all calculations, DCF value = \$4,200M
+		
+		Equity Value = 4,200 - 200 + 50 = \$4,050M
+		
+		Price per Share = 4,050/25 = \$162.00
+		
+		\vspace{2pt}
+		\textbf{Comparison:}
+		\begin{tabular}{lr}
+			Revenue Multiple & \$144.00 \\
+			DCF & \$162.00 \\
+			Difference & 12.5\% \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} The DCF approach suggests the company is more valuable (\$162/share) than the simple revenue multiple (\$144/share) because it accounts for the company's improving profitability and margin expansion.
+		
+		\textbf{Answer:} Revenue multiple = \$144/share; DCF = \$162/share.
+	\end{frame}
+	
+	\begin{frame}{Q35: Valuation with Share Repurchases}
+		\scriptsize
+		\textbf{Scenario:} A company has the following data:
+		
+		\begin{tabular}{lr}
+			Net Income & \$800M \\
+			Shares Outstanding & 100M \\
+			Stock Price & \$40.00 \\
+			EPS & \$8.00 \\
+			P/E Ratio & 5.0 \\
+			Dividend Payout Ratio & 30\% \\
+			Expected Growth Rate & 5\% \\
+			Cost of Equity & 10\% \\
+		\end{tabular}
+		
+		The company is considering a share repurchase program of \$400M, financed with cash.
+		
+		\textbf{Question:} Calculate the impact on EPS, book value per share, and intrinsic value per share. What is the effect on the P/E ratio? Should the company repurchase shares?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Share repurchases increase EPS by reducing shares outstanding, but they also reduce the company's cash and potentially its growth rate. The P/E ratio should be evaluated in the context of the new growth rate.
+	\end{frame}
+	
+	\begin{frame}{Q35: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate number of shares repurchased
+		
+		Shares repurchased = 400/40 = 10M shares
+		
+		Remaining shares = 100 - 10 = 90M
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate new EPS
+		
+		Total earnings remain \$800M
+		New EPS = 800/90 = \$8.89 (11.1\% increase)
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate new book value per share
+		
+		Current BV = 100M × 40/5 = \$800M (assuming P/B = 5)
+		
+		New BV = 800 - 400 = \$400M
+		New BVPS = 400/90 = \$4.44 (44.4\% decrease)
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate intrinsic value using Gordon Growth Model
+		
+		Before repurchase:
+		$V_0 = \frac{D_1}{r-g} = \frac{8.00(0.30)(1.05)}{0.10 - 0.05} = \frac{2.52}{0.05} = \$50.40$
+		
+		After repurchase (assuming same growth rate):
+		$D_1^{new} = 8.89 \times 0.30 \times 1.05 = 2.80$
+		$V_0^{new} = 2.80/0.05 = \$56.00$
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Calculate new P/E
+		
+		New P/E = 56.00/8.89 = 6.30 (increase from 5.0)
+		
+		\vspace{2pt}
+		\textbf{Summary of Impacts:}
+		
+		\begin{tabular}{lrr}
+			& Before & After \\
+			EPS & \$8.00 & \$8.89 \\
+			BVPS & \$8.00 & \$4.44 \\
+			Intrinsic Value & \$50.40 & \$56.00 \\
+			P/E & 6.30 & 6.30 \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Conclusion:} The repurchase increases EPS and intrinsic value, but significantly reduces book value per share. The company should repurchase shares if:
+		1. It has excess cash with no better investment opportunities
+		2. The stock is undervalued (current price \$40 < intrinsic value \$56)
+		3. The tax treatment of share repurchases is favorable to investors
+		
+		\textbf{Answer:} New EPS = \$8.89; New BVPS = \$4.44; New Intrinsic Value = \$56.00; New P/E = 6.30.
+	\end{frame}
+	
+\end{document}

@@ -1,0 +1,1289 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, booktabs, array, multirow}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{tikz}
+
+% Smaller font for more content per slide
+\renewcommand{\tiny}{\fontsize{5pt}{6pt}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{6pt}{7pt}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{7pt}{8pt}\selectfont}
+\renewcommand{\small}{\fontsize{8pt}{9pt}\selectfont}
+\renewcommand{\normalsize}{\fontsize{9pt}{10pt}\selectfont}
+\renewcommand{\large}{\fontsize{10pt}{11pt}\selectfont}
+
+\title{CFA Level II: Capital Structure \& WACC}
+\subtitle{Advanced WACC, CAPM, Fama-French \& Capital Structure Theory}
+\author{CFA Level II Candidate Practice}
+\date{2026}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{Table of Contents}
+		\footnotesize
+		\tableofcontents
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 1: CAPITAL STRUCTURE THEORY - MM & TRADE-OFF
+	% ============================================================================
+	
+	\section{Capital Structure Theory: MM \& Trade-Off}
+	
+	\begin{frame}{Q1: Modigliani-Miller Proposition I with Taxes}
+		\scriptsize
+		\textbf{Scenario:} Company A is an all-equity firm valued at \$500 million. The company is considering changing its capital structure by issuing \$200 million in debt at 6\% and using the proceeds to repurchase equity. The corporate tax rate is 30\%. The company's unlevered cost of equity is 12\%.
+		
+		\textbf{Question:} Using MM Proposition I with corporate taxes, calculate:
+		1. The value of the levered firm
+		2. The value of equity after the recapitalization
+		3. The cost of equity after the recapitalization
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} MM Proposition I with taxes: V\_L = V\_U + tD. The value increases by the present value of the interest tax shield. Cost of equity increases with leverage: r\_e = r\_u + (r\_u - r\_d)(1-t)(D/E).
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		\textbf{Step 1:} Value of levered firm
+		V\_L = 500 + 0.30(200) = 500 + 60 = \$560M
+		
+		\textbf{Step 2:} Value of equity
+		E = V\_L - D = 560 - 200 = \$360M
+		
+		\textbf{Step 3:} Cost of equity
+		r\_e = 0.12 + (0.12 - 0.06)(0.70)(200/360)
+		r\_e = 0.12 + 0.06(0.70)(0.5556) = 0.12 + 0.02333 = 0.14333 (14.33\%)
+		
+		\textbf{Step 4:} WACC
+		WACC = (200/560)(0.06)(0.70) + (360/560)(0.1433)
+		WACC = 0.015 + 0.0921 = 0.1071 (10.71\%)
+		
+		\textbf{Answer:} V\_L = \$560M; E = \$360M; r\_e = 14.33\%; WACC = 10.71\%.
+	\end{frame}
+	
+	\begin{frame}{Q2: MM Proposition II with Bankruptcy Costs}
+		\scriptsize
+		\textbf{Scenario:} A company has an unlevered cost of equity of 10\%. The risk-free rate is 4\%, and the market risk premium is 6\%. The company is considering increasing its debt-to-equity ratio from 0.25 to 0.75. The cost of debt at the current leverage is 5\%, but increases to 7\% at the higher leverage. The tax rate is 35\%.
+		
+		\textbf{Question:}
+		1. Calculate the cost of equity at both leverage levels using MM Proposition II
+		2. Calculate WACC at both leverage levels
+		3. Explain why the cost of equity increases more than proportionally at higher leverage
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} MM Proposition II: r\_e = r\_u + (r\_u - r\_d)(1-t)(D/E). The cost of equity increases with leverage, but the increase is moderated by the tax shield. At higher leverage, the cost of debt also increases.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		\textbf{Step 1:} Current leverage (D/E = 0.25)
+		r\_e = 0.10 + (0.10 - 0.05)(0.65)(0.25) = 0.10 + 0.05(0.65)(0.25) = 0.10 + 0.008125 = 0.108125 (10.81\%)
+		
+		w\_d = 0.25/1.25 = 0.20, w\_e = 1.00/1.25 = 0.80
+		
+		WACC = 0.20(0.05)(0.65) + 0.80(0.108125) = 0.0065 + 0.0865 = 0.0930 (9.30\%)
+		
+		\textbf{Step 2:} Higher leverage (D/E = 0.75, r\_d = 7\%)
+		r\_e = 0.10 + (0.10 - 0.07)(0.65)(0.75) = 0.10 + 0.03(0.65)(0.75) = 0.10 + 0.014625 = 0.114625 (11.46\%)
+		
+		w\_d = 0.75/1.75 = 0.4286, w\_e = 1.00/1.75 = 0.5714
+		
+		WACC = 0.4286(0.07)(0.65) + 0.5714(0.114625) = 0.0195 + 0.0655 = 0.0850 (8.50\%)
+		
+		\textbf{Step 3:} Explanation
+		The cost of equity increases more at higher leverage because:
+		1. Financial risk increases with leverage
+		2. The cost of debt increases (5\% → 7\%) due to higher default risk
+		3. The tax shield benefit is partially offset by higher bankruptcy risk
+		
+		\textbf{Answer:} Current: r\_e = 10.81\%, WACC = 9.30\%; Higher: r\_e = 11.46\%, WACC = 8.50\%.
+	\end{frame}
+	
+	\begin{frame}{Q3: Optimal Capital Structure with Trade-Off Theory}
+		\scriptsize
+		\textbf{Scenario:} A company is evaluating its capital structure. The following data is available at different debt-to-equity ratios:
+		
+		\begin{tabular}{lrrrr}
+			D/E Ratio & 0.00 & 0.50 & 1.00 & 1.50 \\
+			Cost of Debt (pre-tax) & - & 5.0\% & 5.5\% & 6.5\% \\
+			Unlevered Cost of Equity & 12\% & 12\% & 12\% & 12\% \\
+			Tax Rate & 35\% & 35\% & 35\% & 35\% \\
+		\end{tabular}
+		
+		The company has \$50 million in unlevered value.
+		
+		\textbf{Question:}
+		1. Calculate the cost of equity, WACC, and firm value at each D/E ratio
+		2. Identify the optimal capital structure
+		3. Explain why increasing leverage beyond the optimal point destroys value
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Optimal capital structure balances the tax shield benefit against the costs of financial distress. WACC is minimized at the optimal point.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q3: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate for each D/E ratio
+		
+		\textbf{D/E = 0.00:}
+		r\_e = 12\%
+		WACC = 12\%
+		V\_L = V\_U = \$50M
+		
+		\textbf{D/E = 0.50:}
+		r\_e = 0.12 + (0.12 - 0.05)(0.65)(0.50) = 0.12 + 0.02275 = 0.14275 (14.275\%)
+		
+		w\_d = 0.50/1.50 = 0.3333, w\_e = 1.00/1.50 = 0.6667
+		
+		WACC = 0.3333(0.05)(0.65) + 0.6667(0.14275) = 0.01083 + 0.09517 = 0.1060 (10.60\%)
+		
+		V\_L = 50 + 0.35 × (50/1.50) = 50 + 11.67 = \$61.67M
+		
+		\textbf{D/E = 1.00:}
+		r\_e = 0.12 + (0.12 - 0.055)(0.65)(1.00) = 0.12 + 0.04225 = 0.16225 (16.225\%)
+		
+		w\_d = 1.00/2.00 = 0.50, w\_e = 1.00/2.00 = 0.50
+		
+		WACC = 0.50(0.055)(0.65) + 0.50(0.16225) = 0.017875 + 0.081125 = 0.0990 (9.90\%)
+		
+		V\_L = 50 + 0.35 × (50/2.00) = 50 + 8.75 = \$58.75M
+		
+		\textbf{D/E = 1.50:}
+		r\_e = 0.12 + (0.12 - 0.065)(0.65)(1.50) = 0.12 + 0.053625 = 0.173625 (17.3625\%)
+		
+		w\_d = 1.50/2.50 = 0.60, w\_e = 1.00/2.50 = 0.40
+		
+		WACC = 0.60(0.065)(0.65) + 0.40(0.173625) = 0.02535 + 0.06945 = 0.0948 (9.48\%)
+		
+		V\_L = 50 + 0.35 × (50/2.50) = 50 + 7.00 = \$57.00M
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Summary Table
+		
+		\begin{tabular}{lrrrr}
+			D/E & r\_e & WACC & V\_L (M) \\
+			0.00 & 12.00\% & 12.00\% & 50.00 \\
+			0.50 & 14.28\% & 10.60\% & 61.67 \\
+			1.00 & 16.23\% & 9.90\% & 58.75 \\
+			1.50 & 17.36\% & 9.48\% & 57.00 \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Optimal Capital Structure = D/E = 0.50 (highest firm value, lowest WACC)
+		
+		\textbf{Answer:} Optimal D/E = 0.50 with WACC = 10.60\% and V\_L = \$61.67M.
+	\end{frame}
+	
+	\begin{frame}{Q4: Static Trade-Off Theory with Financial Distress Costs}
+		\scriptsize
+		\textbf{Scenario:} A company is analyzing its capital structure. The following data is available:
+		
+		\begin{tabular}{lrrrr}
+			Debt (\$M) & 0 & 20 & 40 & 60 \\
+			Interest Rate & - & 5.0\% & 5.5\% & 7.0\% \\
+			Probability of Distress & 0\% & 5\% & 15\% & 30\% \\
+			Expected Distress Cost (\% of Firm Value) & 0\% & 10\% & 20\% & 40\% \\
+			Unlevered Firm Value & \$80M & - & - & - \\
+			Tax Rate & 35\% & - & - & - \\
+			Unlevered Cost of Equity & 11\% & - & - & - \\
+		\end{tabular}
+		
+		\textbf{Question:}
+		1. Calculate the levered firm value at each debt level considering both tax shields and distress costs
+		2. What is the optimal debt level?
+		3. Explain the implications of the static trade-off theory
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} V\_L = V\_U + PV(Tax Shield) - PV(Distress Costs). The optimal debt level balances the tax shield benefit against the expected distress costs.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q4: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate levered value at each debt level
+		
+		\textbf{Debt = \$20M:}
+		V\_tax = 80 + 0.35(20) = 87.00
+		PV(Distress) = 0.05 × 0.10 × 87.00 = 0.435
+		V\_L = 87.00 - 0.435 = \$86.565M
+		
+		r\_e = 0.11 + (0.11 - 0.05)(0.65)(20/66.565) = 0.11 + 0.06(0.65)(0.3005) = 0.11 + 0.01172 = 0.12172 (12.17\%)
+		
+		WACC = (20/86.565)(0.05)(0.65) + (66.565/86.565)(0.12172) = 0.0075 + 0.0936 = 0.1011 (10.11\%)
+		
+		\textbf{Debt = \$40M:}
+		V\_tax = 80 + 0.35(40) = 94.00
+		PV(Distress) = 0.15 × 0.20 × 94.00 = 2.82
+		V\_L = 94.00 - 2.82 = \$91.18M
+		
+		r\_e = 0.11 + (0.11 - 0.055)(0.65)(40/51.18) = 0.11 + 0.055(0.65)(0.7816) = 0.11 + 0.02794 = 0.13794 (13.79\%)
+		
+		WACC = (40/91.18)(0.055)(0.65) + (51.18/91.18)(0.13794) = 0.0157 + 0.0774 = 0.0931 (9.31\%)
+		
+		\textbf{Debt = \$60M:}
+		V\_tax = 80 + 0.35(60) = 101.00
+		PV(Distress) = 0.30 × 0.40 × 101.00 = 12.12
+		V\_L = 101.00 - 12.12 = \$88.88M
+		
+		r\_e = 0.11 + (0.11 - 0.07)(0.65)(60/28.88) = 0.11 + 0.04(0.65)(2.0776) = 0.11 + 0.0540 = 0.1640 (16.40\%)
+		
+		WACC = (60/88.88)(0.07)(0.65) + (28.88/88.88)(0.1640) = 0.0307 + 0.0533 = 0.0840 (8.40\%)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Summary Table
+		
+		\begin{tabular}{lrrrr}
+			Debt (M) & V\_L (M) & r\_e & WACC \\
+			0 & 80.00 & 11.00\% & 11.00\% \\
+			20 & 86.57 & 12.17\% & 10.11\% \\
+			40 & 91.18 & 13.79\% & 9.31\% \\
+			60 & 88.88 & 16.40\% & 8.40\% \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Optimal Debt Level = \$40M (highest firm value)
+		
+		\textbf{Answer:} Optimal debt = \$40M, V\_L = \$91.18M, WACC = 9.31\%.
+	\end{frame}
+	
+	\begin{frame}{Q5: Pecking Order Theory Application}
+		\scriptsize
+		\textbf{Scenario:} A company needs \$150 million in new capital for a positive NPV project. The company has the following characteristics:
+		
+		\begin{tabular}{lr}
+			Current Debt & \$200M \\
+			Current Equity & \$300M \\
+			Net Income & \$50M \\
+			Depreciation & \$30M \\
+			Cash & \$25M \\
+			Stock Price & \$20.00 \\
+			Flotation Cost - Equity & 7\% \\
+			Flotation Cost - Debt & 3\% \\
+			Tax Rate & 35\% \\
+			Cost of Debt (pre-tax) & 6\% \\
+			Cost of Equity & 12\% \\
+		\end{tabular}
+		
+		\textbf{Question:}
+		1. According to the pecking order theory, what order of financing should the company follow?
+		2. Calculate the effective cost of each financing source
+		3. Why might the company prefer internal financing over external debt?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Pecking order theory: Internal financing (retained earnings) first, then debt, then equity as a last resort due to asymmetric information costs.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+		
+		\textbf{Step 1:} Available internal funds
+		Retained Earnings = NI - Dividends = 50 - 20 = \$30M
+		Cash available = 30 + 25 = \$55M (limited by cash balance)
+		
+		\textbf{Step 2:} Financing Sources
+		1. Internal financing: \$55M (retained earnings + available cash)
+		2. Debt financing: Remaining \$95M
+		3. Equity financing: Not needed (last resort)
+		
+		\textbf{Step 3:} Effective cost of each source
+		Internal financing cost = Opportunity cost = 12\% (what shareholders could earn elsewhere)
+		
+		After-tax cost of debt = 6\%(1-0.35) = 3.9\%
+		Effective cost of debt with flotation = 3.9\%/(1-0.03) = 4.02\%
+		
+		Cost of equity with flotation = 12\%/(1-0.07) = 12.90\%
+		
+		\textbf{Step 4:} Pecking Order Preference
+		1. Internal financing (cost = 12\% but no asymmetric information cost)
+		2. Debt financing (cost = 4.02\%, lower information asymmetry)
+		3. Equity financing (cost = 12.90\%, highest information asymmetry)
+		
+		\textbf{Answer:} Use internal funds first (\$55M), then debt (\$95M). Avoid equity issuance.
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 2: WACC CALCULATION
+	% ============================================================================
+	
+	\section{WACC Calculation}
+	
+	\begin{frame}{Q6: WACC with Multiple Debt Issues}
+		\scriptsize
+		\textbf{Scenario:} A company has the following capital structure:
+		
+		\begin{tabular}{lrr}
+			& Market Value & Cost \\
+			Long-term Debt (Bonds) & \$150M & 6.5\% \\
+			Bank Loan & \$80M & 5.0\% \\
+			Preferred Stock & \$50M & 7.0\% \\
+			Common Equity & \$320M & 11.5\% \\
+		\end{tabular}
+		
+		The tax rate is 30\%. The company has 10 million shares outstanding at \$32 per share.
+		
+		\textbf{Question:}
+		1. Calculate the market value weights of each component
+		2. Calculate WACC
+		3. If the company issues \$40M in new debt at 7.5\%, how would WACC change if the proceeds are used to repurchase shares at \$32?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Use market value weights, not book values. WACC = w\_d r\_d(1-t) + w\_p r\_p + w\_e r\_e.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q6: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate market values and weights
+		
+		Total Market Value = 150 + 80 + 50 + 320 = \$600M
+		
+		Weights:
+		w\_bonds = 150/600 = 0.25 (25\%)
+		w\_bank = 80/600 = 0.1333 (13.33\%)
+		w\_p = 50/600 = 0.0833 (8.33\%)
+		w\_e = 320/600 = 0.5333 (53.33\%)
+		
+		\textbf{Step 2:} Combined debt cost and weight
+		
+		w\_d = 0.25 + 0.1333 = 0.3833 (38.33\%)
+		r\_d = (150/230)(0.065) + (80/230)(0.05) = 0.6522(0.065) + 0.3478(0.05) = 0.0424 + 0.0174 = 0.0598 (5.98\%)
+		
+		\textbf{Step 3:} Calculate WACC
+		
+		WACC = 0.3833(0.0598)(0.70) + 0.0833(0.07) + 0.5333(0.115)
+		WACC = 0.0161 + 0.0058 + 0.0613 = 0.0832 (8.32\%)
+		
+		\textbf{Step 4:} Impact of new debt issuance
+		
+		New debt = \$40M, new equity = 320 - 40 = \$280M
+		Total = 150 + 80 + 50 + 280 = \$560M
+		
+		New weights:
+		w\_d = 270/560 = 0.4821 (new total debt)
+		w\_p = 50/560 = 0.0893
+		w\_e = 280/560 = 0.5000
+		
+		New cost of debt (blended): r\_d = (150/270)(0.065) + (80/270)(0.05) + (40/270)(0.075)
+		r\_d = 0.5556(0.065) + 0.2963(0.05) + 0.1481(0.075) = 0.0361 + 0.0148 + 0.0111 = 0.0620 (6.20\%)
+		
+		New WACC = 0.4821(0.0620)(0.70) + 0.0893(0.07) + 0.50(0.115)
+		= 0.0209 + 0.0063 + 0.0575 = 0.0847 (8.47\%)
+		
+		\textbf{Answer:} Current WACC = 8.32\%; New WACC = 8.47\% (increases due to higher leverage).
+	\end{frame}
+	
+	\begin{frame}{Q7: WACC with Convertible Debt and Warrants}
+		\scriptsize
+		\textbf{Scenario:} A company has the following capital structure:
+		
+		\begin{tabular}{lr}
+			Convertible Debt (5\%, 10-year, convertible into 100 shares per \$1,000) & \$100M \\
+			Straight Debt (6\%, 10-year) & \$200M \\
+			Common Equity (20M shares at \$25) & \$500M \\
+			Preferred Stock (6\%) & \$50M \\
+			Tax Rate & 35\% \\
+			Risk-Free Rate & 3.5\% \\
+			Market Risk Premium & 6\% \\
+			Beta (Levered) & 1.15 \\
+		\end{tabular}
+		
+		\textbf{Question:}
+		1. Calculate the cost of convertible debt considering its equity component
+		2. Calculate WACC using the market value of the convertible debt
+		3. Adjust the calculation if 30\% of the convertible debt is expected to be converted
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Convertible debt has both debt and equity components. The cost should reflect the blended cost of the bond and conversion option.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q7: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate cost of equity
+		
+		r\_e = R\_f + beta(ERP) = 0.035 + 1.15(0.06) = 0.035 + 0.069 = 0.104 (10.4\%)
+		
+		\textbf{Step 2:} Calculate cost of convertible debt
+		
+		Convertible value per bond = Straight bond value + Option value
+		
+		Straight bond value: N=10, I/Y=6, PMT=50, FV=1000 → PV = 92.64
+		
+		Option value = 100 × \$25 - 92.64 = 2,407.36
+		
+		Market value of convertible debt = \$100M (given)
+		
+		Implied cost of convertible debt: Solve 100 = 50 × PVIFA(r,10) + 1000 × PVIF(r,10) + Option Value
+		
+		Since the option value is embedded, we use the yield-to-maturity approach:
+		r\_conv = 5.5\% (based on market price and conversion feature)
+		
+		\textbf{Step 3:} Calculate WACC with convertible debt as debt
+		
+		Total capital = 100 + 200 + 500 + 50 = \$850M
+		
+		w\_conv = 100/850 = 0.1176, w\_straight = 200/850 = 0.2353
+		w\_e = 500/850 = 0.5882, w\_p = 50/850 = 0.0588
+		
+		WACC = 0.1176(0.055)(0.65) + 0.2353(0.06)(0.65) + 0.5882(0.104) + 0.0588(0.06)
+		WACC = 0.0042 + 0.0092 + 0.0612 + 0.0035 = 0.0781 (7.81\%)
+		
+		\textbf{Step 4:} If 30\% of convertible debt is converted
+		
+		Converted portion: \$30M → equity; Remaining debt: \$70M
+		
+		New equity = 500 + 30 = \$530M; New debt = 70 + 200 = \$270M
+		
+		New weights: w\_d = 270/(270+530+50) = 270/850 = 0.3176; w\_e = 530/850 = 0.6235; w\_p = 0.0588
+		
+		WACC\_new = 0.3176(0.06)(0.65) + 0.6235(0.104) + 0.0588(0.06)
+		= 0.0124 + 0.0648 + 0.0035 = 0.0807 (8.07\%)
+		
+		\textbf{Answer:} Current WACC = 7.81\%; After conversion = 8.07\%.
+	\end{frame}
+	
+	\begin{frame}{Q8: Project-Specific WACC with Country Risk}
+		\scriptsize
+		\textbf{Scenario:} A US company is evaluating a project in Mexico. The company's domestic WACC is 8.5\%. The project has the following characteristics:
+		
+		\begin{tabular}{lr}
+			Risk-Free Rate (US) & 3.0\% \\
+			Risk-Free Rate (Mexico) & 6.0\% \\
+			Market Risk Premium (US) & 5.0\% \\
+			Market Risk Premium (Mexico) & 7.0\% \\
+			Project Beta (Unlevered) & 1.20 \\
+			Target D/E Ratio & 0.60 \\
+			Cost of Debt (Mexico) & 8.0\% \\
+			Tax Rate (Mexico) & 30\% \\
+			Country Risk Premium (Mexico) & 2.5\% \\
+			Inflation (US) & 2.0\% \\
+			Inflation (Mexico) & 4.5\% \\
+		\end{tabular}
+		
+		\textbf{Question:}
+		1. Calculate the project's WACC using the country risk adjustment
+		2. Should the project be evaluated using the domestic WACC? Why or why not?
+		3. How does inflation affect the WACC calculation?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Project-specific WACC should reflect the project's risk and location, not the company's domestic WACC. Country risk must be incorporated.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q8: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate levered beta considering country risk
+		
+		beta\_L = beta\_U[1 + (1-t)(D/E)] = 1.20[1 + (0.70)(0.60)] = 1.20(1.42) = 1.704
+		
+		\textbf{Step 2:} Calculate cost of equity with country risk
+		
+		r\_e = R\_f\^{US} + beta\_L(ERP\_US) + CRP
+		r\_e = 0.03 + 1.704(0.05) + 0.025 = 0.03 + 0.0852 + 0.025 = 0.1402 (14.02\%)
+		
+		\textbf{Alternative:} Using local risk-free rate
+		r\_e\^{local} = R\_f\^{Mexico} + beta\_L(ERP\_Mexico) = 0.06 + 1.704(0.07) = 0.06 + 0.1193 = 0.1793 (17.93\%)
+		
+		This should be converted to USD equivalent: r\_e\^{USD} = (1 + 0.1793)(1 + 0.02)/(1 + 0.045) - 1 = 0.1492 (14.92\%)
+		
+		\textbf{Step 3:} Calculate WACC
+		
+		WACC = w\_d r\_d(1-t) + w\_e r\_e
+		w\_d = 0.60/1.60 = 0.375, w\_e = 1.00/1.60 = 0.625
+		
+		WACC = 0.375(0.08)(0.70) + 0.625(0.1402) = 0.0210 + 0.0876 = 0.1086 (10.86\%)
+		
+		\textbf{Step 4:} Why not use domestic WACC?
+		- Domestic WACC (8.5\%) does not reflect:
+		1. Higher country risk (political, economic, currency)
+		2. Different inflation expectations
+		3. Different tax rates
+		4. Different market risk premiums
+		
+		\textbf{Step 5:} Inflation adjustment
+		The real WACC = (1 + WACC nominal)/(1 + Inflation) - 1
+		= (1.1086)/(1.045) - 1 = 0.0608 (6.08\%)
+		
+		\textbf{Answer:} Project WACC = 10.86\% (USD nominal). Use country-specific WACC, not domestic WACC.
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 3: FAMA-FRENCH MODELS
+	% ============================================================================
+	
+	\section{Fama-French Models}
+	
+	\begin{frame}{Q9: Fama-French Three-Factor Model Application}
+		\scriptsize
+		\textbf{Scenario:} You are analyzing a stock with the following characteristics:
+		
+		\begin{tabular}{lr}
+			Market Factor Beta & 1.20 \\
+			SMB Beta & 0.45 \\
+			HML Beta & -0.30 \\
+			Risk-Free Rate & 3.0\% \\
+			Expected Market Return & 9.0\% \\
+			Expected Size Premium (SMB) & 2.5\% \\
+			Expected Value Premium (HML) & 4.0\% \\
+			Current Stock Price & \$45.00 \\
+			Expected Dividend Next Year & \$2.00 \\
+			Expected Dividend Growth Rate & 5\% \\
+		\end{tabular}
+		
+		\textbf{Question:}
+		1. Calculate the expected return using the Fama-French Three-Factor Model
+		2. Compare with the CAPM expected return
+		3. Is the stock undervalued or overvalued based on the Fama-French model?
+		4. Why does the HML beta being negative affect the expected return?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} The Fama-French model adds size and value factors. A negative HML beta means the stock behaves like a growth stock, reducing expected returns.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q9: Solution}
+		\scriptsize
+		\textbf{Step 1:} Fama-French Three-Factor Model
+		
+		r\_e = R\_f + beta\_M(ERP) + beta\_SMB(SMB) + beta\_HML(HML)
+		
+		ERP = 0.09 - 0.03 = 0.06 (6\%)
+		
+		r\_e = 0.03 + 1.20(0.06) + 0.45(0.025) - 0.30(0.04)
+		r\_e = 0.03 + 0.072 + 0.01125 - 0.012 = 0.10125 (10.125\%)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} CAPM expected return
+		
+		r\_e\^{CAPM} = R\_f + beta(ERP) = 0.03 + 1.20(0.06) = 0.03 + 0.072 = 0.102 (10.2\%)
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Intrinsic value using Fama-French required return
+		
+		V\_0 = D\_1 / (r\_e - g) = 2.00 / (0.10125 - 0.05) = 2.00 / 0.05125 = \$39.02
+		
+		Current price = \$45.00 > \$39.02 → Stock is \textbf{overvalued}
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Why negative HML beta matters
+		
+		Negative HML beta means the stock has a negative exposure to the value premium:
+		- When value stocks outperform growth stocks (HML positive), this stock underperforms
+		- The stock behaves like a growth stock, which typically has lower expected returns
+		- This is why the expected return is lower than CAPM would predict
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Comparison
+		
+		\begin{tabular}{lrr}
+			& CAPM & FF3 \\
+			Required Return & 10.20\% & 10.125\% \\
+			Intrinsic Value & \$38.46 & \$39.02 \\
+			Valuation & Overvalued & Overvalued \\
+		\end{tabular}
+		
+		\textbf{Answer:} FF3 expected return = 10.125\%; Stock is overvalued at \$45.
+	\end{frame}
+	
+	\begin{frame}{Q10: Fama-French Five-Factor Model Application}
+		\scriptsize
+		\textbf{Scenario:} A company has the following factor exposures:
+		
+		\begin{tabular}{lr}
+			Market Beta & 0.95 \\
+			SMB Beta & -0.15 \\
+			HML Beta & 0.25 \\
+			RMW Beta (Profitability) & 0.60 \\
+			CMA Beta (Investment) & -0.40 \\
+		\end{tabular}
+		
+		Risk-Free Rate = 2.5\%
+		Expected Market Return = 8.0\%
+		Expected SMB Premium = 2.0\%
+		Expected HML Premium = 3.5\%
+		Expected RMW Premium = 4.0\%
+		Expected CMA Premium = 3.0\%
+		
+		The company has the following fundamentals:
+		- Current Dividend = \$1.50
+		- Expected Growth Rate = 4\%
+		- Current Stock Price = \$28.00
+		
+		\textbf{Question:}
+		1. Calculate the required return using the Fama-French Five-Factor Model
+		2. Estimate the intrinsic value of the stock
+		3. Compare with the Gordon growth model valuation
+		4. Explain the implications of the negative CMA beta
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} The Five-Factor Model adds profitability (RMW) and investment (CMA) factors. Negative CMA means conservative investment policy.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q10: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate ERP and individual factor premiums
+		
+		ERP = 0.08 - 0.025 = 0.055 (5.5\%)
+		
+		r\_e = R\_f + beta\_M(ERP) + beta\_SMB(SMB) + beta\_HML(HML) + beta\_RMW(RMW) + beta\_CMA(CMA)
+		
+		r\_e = 0.025 + 0.95(0.055) + (-0.15)(0.02) + 0.25(0.035) + 0.60(0.04) + (-0.40)(0.03)
+		r\_e = 0.025 + 0.05225 - 0.003 + 0.00875 + 0.024 - 0.012
+		r\_e = 0.0950 (9.50\%)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Intrinsic value using Five-Factor required return
+		
+		V\_0 = D\_0(1+g) / (r\_e - g) = 1.50(1.04) / (0.095 - 0.04) = 1.56 / 0.055 = \$28.36
+		
+		Current price = \$28.00 → Stock is \textbf{undervalued} by 1.3\%
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Compare with Gordon growth model (using CAPM)
+		
+		CAPM: r\_e = 0.025 + 0.95(0.055) = 0.07725 (7.725\%)
+		V\_0\^{GGM} = 1.56/(0.07725 - 0.04) = 1.56/0.03725 = \$41.88
+		
+		The GGM suggests the stock is significantly undervalued, but it ignores the size, value, profitability, and investment factors.
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Negative CMA beta implications
+		
+		Negative CMA beta (-0.40) means:
+		- The company has a conservative investment policy (low capital expenditures relative to growth)
+		- Conservative investment is typically associated with lower risk
+		- This reduces the required return (since CMA premium is positive, negative beta × positive premium = negative contribution)
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Factor Contribution Analysis
+		
+		\begin{tabular}{lrr}
+			Factor & Beta × Premium & Contribution \\
+			Market & 0.95 × 5.5\% & 5.225\% \\
+			SMB & -0.15 × 2.0\% & -0.300\% \\
+			HML & 0.25 × 3.5\% & 0.875\% \\
+			RMW & 0.60 × 4.0\% & 2.400\% \\
+			CMA & -0.40 × 3.0\% & -1.200\% \\
+			Total & - & 9.500\% \\
+		\end{tabular}
+		
+		\textbf{Answer:} FF5 required return = 9.50\%; Intrinsic value = \$28.36; Slight undervaluation.
+	\end{frame}
+	
+	\begin{frame}{Q11: Fama-French vs. CAPM in Valuation}
+		\scriptsize
+		\textbf{Scenario:} Two companies in the same industry:
+		
+		\begin{tabular}{lrr}
+			& Company X & Company Y \\
+			Market Beta & 1.10 & 1.05 \\
+			SMB Beta & 0.50 & -0.20 \\
+			HML Beta & 0.30 & 0.60 \\
+			RMW Beta & 0.20 & 0.80 \\
+			CMA Beta & 0.10 & -0.30 \\
+			Current Dividend & \$2.00 & \$1.50 \\
+			Growth Rate & 5\% & 4\% \\
+			Stock Price & \$40.00 & \$30.00 \\
+		\end{tabular}
+		
+		Risk-Free Rate = 3\%, ERP = 5.5\%, SMB = 2\%, HML = 3.5\%, RMW = 4\%, CMA = 3\%
+		
+		\textbf{Question:}
+		1. Calculate required returns using CAPM and Fama-French Five-Factor
+		2. Calculate intrinsic values using both models
+		3. Which company is more attractively valued? Why?
+		4. Explain the differences in factor exposures
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} The Fama-French model provides a more nuanced view of risk. Companies with different factor exposures may have different required returns even with similar betas.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q11: Solution}
+		\scriptsize
+		\textbf{Step 1:} CAPM Required Returns
+		
+		Company X: r\_e\^{CAPM} = 0.03 + 1.10(0.055) = 0.03 + 0.0605 = 0.0905 (9.05\%)
+		
+		Company Y: r\_e\^{CAPM} = 0.03 + 1.05(0.055) = 0.03 + 0.05775 = 0.08775 (8.775\%)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Fama-French Required Returns
+		
+		Company X:
+		r\_e\^{FF5} = 0.03 + 1.10(0.055) + 0.50(0.02) + 0.30(0.035) + 0.20(0.04) + 0.10(0.03)
+		= 0.03 + 0.0605 + 0.01 + 0.0105 + 0.008 + 0.003 = 0.1220 (12.20\%)
+		
+		Company Y:
+		r\_e\^{FF5} = 0.03 + 1.05(0.055) + (-0.20)(0.02) + 0.60(0.035) + 0.80(0.04) + (-0.30)(0.03)
+		= 0.03 + 0.05775 - 0.004 + 0.021 + 0.032 - 0.009 = 0.12775 (12.775\%)
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Intrinsic Values
+		
+		\textbf{Company X:}
+		D\_1 = 2.00(1.05) = 2.10
+		CAPM: V\_0 = 2.10/(0.0905 - 0.05) = 2.10/0.0405 = \$51.85
+		FF5: V\_0 = 2.10/(0.1220 - 0.05) = 2.10/0.072 = \$29.17
+		
+		\textbf{Company Y:}
+		D\_1 = 1.50(1.04) = 1.56
+		CAPM: V\_0 = 1.56/(0.08775 - 0.04) = 1.56/0.04775 = \$32.67
+		FF5: V\_0 = 1.56/(0.12775 - 0.04) = 1.56/0.08775 = \$17.78
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Summary
+		
+		\begin{tabular}{lrrrr}
+			& Price & CAPM Value & FF5 Value & CAPM vs FF5 \\
+			Company X & \$40.00 & \$51.85 (UV) & \$29.17 (OV) & Large difference \\
+			Company Y & \$30.00 & \$32.67 (UV) & \$17.78 (OV) & Large difference \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Analysis
+		
+		The FF5 model suggests both companies are overvalued because:
+		1. Company X has positive SMB (small cap premium) and positive CMA (conservative investment)
+		2. Company Y has positive RMW (high profitability) but negative CMA
+		3. The FF5 model captures additional risk factors that CAPM misses
+		
+		\textbf{Answer:} Both companies appear overvalued under FF5; CAPM would suggest undervaluation.
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 4: CAPITAL STRUCTURE DECISIONS
+	% ============================================================================
+	
+	\section{Capital Structure Decisions}
+	
+	\begin{frame}{Q12: Leverage and Cost of Capital Trade-Off}
+		\scriptsize
+		\textbf{Scenario:} A company is considering its optimal capital structure. The following data is available:
+		
+		\begin{tabular}{lrrrr}
+			Debt Ratio & 0\% & 20\% & 40\% & 60\% \\
+			Cost of Debt & - & 5.0\% & 5.5\% & 7.0\% \\
+			Beta (Levered) & 1.00 & 1.15 & 1.35 & 1.65 \\
+		\end{tabular}
+		
+		Risk-Free Rate = 4\%, Market Risk Premium = 5\%, Tax Rate = 35\%
+		
+		\textbf{Question:}
+		1. Calculate the cost of equity, WACC, and firm value at each debt ratio
+		2. What is the optimal capital structure?
+		3. How would the optimal capital structure change if the tax rate increases to 40\%?
+		4. Explain the impact of the Modigliani-Miller propositions on this analysis
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} The optimal capital structure minimizes WACC and maximizes firm value. The cost of equity increases with leverage due to financial risk.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q12: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate for each debt ratio
+		
+		\textbf{Debt Ratio = 0\%:}
+		r\_e = 0.04 + 1.00(0.05) = 0.09 (9.0\%)
+		WACC = 9.0\%
+		V\_L = V\_U = \$100M (assuming)
+		
+		\textbf{Debt Ratio = 20\%:}
+		r\_e = 0.04 + 1.15(0.05) = 0.04 + 0.0575 = 0.0975 (9.75\%)
+		w\_d = 0.20, w\_e = 0.80
+		WACC = 0.20(0.05)(0.65) + 0.80(0.0975) = 0.0065 + 0.078 = 0.0845 (8.45\%)
+		
+		V\_L = V\_U + tD = 100 + 0.35(20) = \$107.0M
+		
+		\textbf{Debt Ratio = 40\%:}
+		r\_e = 0.04 + 1.35(0.05) = 0.04 + 0.0675 = 0.1075 (10.75\%)
+		w\_d = 0.40, w\_e = 0.60
+		WACC = 0.40(0.055)(0.65) + 0.60(0.1075) = 0.0143 + 0.0645 = 0.0788 (7.88\%)
+		
+		V\_L = 100 + 0.35(40) = \$114.0M
+		
+		\textbf{Debt Ratio = 60\%:}
+		r\_e = 0.04 + 1.65(0.05) = 0.04 + 0.0825 = 0.1225 (12.25\%)
+		w\_d = 0.60, w\_e = 0.40
+		WACC = 0.60(0.07)(0.65) + 0.40(0.1225) = 0.0273 + 0.049 = 0.0763 (7.63\%)
+		
+		V\_L = 100 + 0.35(60) = \$121.0M
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Summary Table
+		
+		\begin{tabular}{lrrrr}
+			Debt Ratio & r\_e & WACC & V\_L & Optimal? \\
+			0\% & 9.00\% & 9.00\% & \$100M & No \\
+			20\% & 9.75\% & 8.45\% & \$107M & No \\
+			40\% & 10.75\% & 7.88\% & \$114M & No \\
+			60\% & 12.25\% & 7.63\% & \$121M & Yes (Highest V\_L) \\
+		\end{tabular}
+		
+		\vspace{2pt}
+		\textbf{Step 3:} If tax rate increases to 40\%
+		
+		WACC = w\_d r\_d(0.60) + w\_e r\_e
+		
+		New WACC at 60\% debt: 0.60(0.07)(0.60) + 0.40(0.1225) = 0.0252 + 0.049 = 0.0742 (7.42\%)
+		
+		V\_L = 100 + 0.40(60) = \$124M
+		
+		Higher tax rate increases the value of the tax shield, making higher leverage more attractive.
+		
+		\textbf{Step 4:} MM Propositions Impact
+		
+		MM Proposition I (with taxes): V\_L = V\_U + tD (value increases with debt)
+		MM Proposition II: r\_e = r\_u + (r\_u - r\_d)(1-t)(D/E) (cost of equity increases with leverage)
+		
+		The optimal capital structure balances the tax shield benefit against financial distress costs.
+		
+		\textbf{Answer:} Optimal debt ratio = 60\%; Higher tax rate increases optimal leverage.
+	\end{frame}
+	
+	\begin{frame}{Q13: Leveraged Buyout (LBO) Capital Structure}
+		\scriptsize
+		\textbf{Scenario:} A private equity firm is considering an LBO of a target company. The target has:
+		
+		\begin{tabular}{lr}
+			EBITDA (current) & \$200M \\
+			EBIT & \$150M \\
+			Debt (current) & \$300M \\
+			Equity Value & \$500M \\
+			Tax Rate & 35\% \\
+			Cost of Equity (unlevered) & 12\% \\
+		\end{tabular}
+		
+		The private equity firm plans to finance the acquisition with 70\% debt. The interest rate on the new debt is 7\%. The target is expected to grow at 5\% annually for 5 years, then stabilize at 3\%.
+		
+		\textbf{Question:}
+		1. Calculate the new capital structure and WACC
+		2. Estimate the enterprise value using the new capital structure
+		3. What is the maximum price the private equity firm can pay?
+		4. How does the increased leverage affect the cost of equity?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} In an LBO, the capital structure changes significantly. The WACC should reflect the new leverage ratio and the associated costs.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q13: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate new capital structure
+		
+		D/E = 0.70/0.30 = 2.333
+		
+		w\_d = 0.70, w\_e = 0.30
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate levered beta (assuming unlevered beta = 0.85)
+		
+		beta\_L = beta\_U[1 + (1-t)(D/E)] = 0.85[1 + (0.65)(2.333)] = 0.85(1 + 1.516) = 0.85(2.516) = 2.139
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate cost of equity
+		
+		r\_e = R\_f + beta\_L(ERP)
+		Assuming R\_f = 4\%, ERP = 5\%:
+		r\_e = 0.04 + 2.139(0.05) = 0.04 + 0.10695 = 0.14695 (14.695\%)
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Calculate WACC
+		
+		WACC = w\_d r\_d(1-t) + w\_e r\_e
+		WACC = 0.70(0.07)(0.65) + 0.30(0.14695) = 0.03185 + 0.044085 = 0.075935 (7.594\%)
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Estimate enterprise value
+		
+		FCFF\_0 = EBITDA(1-t) - CapEx - WCInv = 200(0.65) - 50 - 30 = 130 - 80 = \$50M
+		
+		Using two-stage growth: 5\% for 5 years, then 3\% forever
+		
+		V\_firm = sum\_t=1 to 5 of FCFF\_t/(1.07594)\^t + FCFF\_6/((0.07594-0.03)(1.07594)\^5)
+		
+		FCFF\_1 = 50(1.05) = 52.5, FCFF\_2 = 55.1, FCFF\_3 = 57.9, FCFF\_4 = 60.8, FCFF\_5 = 63.8
+		
+		FCFF\_6 = 63.8(1.03) = 65.7
+		
+		V\_firm = 48.8 + 47.6 + 46.5 + 45.4 + 44.3 + 65.7/(0.04594)(0.07594)\^5
+		= 232.6 + 65.7/(0.04594 × 0.680)
+		= 232.6 + 65.7/0.0312 = 232.6 + 2,105.8 = \$2,338.4M
+		
+		\vspace{2pt}
+		\textbf{Step 6:} Maximum price
+		
+		Maximum equity value = 2,338.4 - 0.70(2,338.4) = 701.5
+		
+		\textbf{Answer:} WACC = 7.594\%; Enterprise Value = \$2,338M; Maximum price = \$701.5M equity.
+	\end{frame}
+	
+	\begin{frame}{Q14: Capital Structure Arbitrage}
+		\scriptsize
+		\textbf{Scenario:} A company has the following capital structure:
+		
+		\begin{tabular}{lr}
+			Market Value of Debt & \$300M \\
+			Market Value of Equity & \$500M \\
+			Cost of Debt & 6\% \\
+			Cost of Equity & 12\% \\
+			Tax Rate & 35\% \\
+			Unlevered Cost of Equity & 10\% \\
+		\end{tabular}
+		
+		The company is considering increasing its debt by \$100M and using the proceeds to repurchase equity. After the recapitalization, the cost of debt is expected to increase to 6.5\%.
+		
+		\textbf{Question:}
+		1. Calculate the current and new WACC
+		2. Calculate the arbitrage profit opportunity if the company can increase leverage
+		3. What is the optimal capital structure if financial distress costs are 5\% of firm value at the new leverage level?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Capital structure arbitrage exploits differences between actual and theoretical values. Financial distress costs reduce the benefit of additional leverage.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q14: Solution}
+		\scriptsize
+		\textbf{Step 1:} Current WACC
+		
+		w\_d = 300/800 = 0.375, w\_e = 500/800 = 0.625
+		WACC = 0.375(0.06)(0.65) + 0.625(0.12) = 0.014625 + 0.075 = 0.089625 (8.9625\%)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} New capital structure
+		
+		New Debt = 400, New Equity = 400
+		w\_d = 400/800 = 0.50, w\_e = 400/800 = 0.50
+		
+		\vspace{2pt}
+		\textbf{Step 3:} New cost of equity using MM Proposition II
+		
+		r\_e\^{new} = r\_u + (r\_u - r\_d)(1-t)(D/E)\_new
+		r\_e\^{new} = 0.10 + (0.10 - 0.065)(0.65)(400/400) = 0.10 + 0.02275 = 0.12275 (12.275\%)
+		
+		\vspace{2pt}
+		\textbf{Step 4:} New WACC
+		
+		WACC\^{new} = 0.50(0.065)(0.65) + 0.50(0.12275) = 0.021125 + 0.061375 = 0.0825 (8.25\%)
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Arbitrage profit (without distress costs)
+		
+		Current value = 800, New value = Current + t(D\_new - D\_old) = 800 + 0.35(100) = \$835M
+		
+		Arbitrage profit = 835 - 800 = \$35M
+		
+		\vspace{2pt}
+		\textbf{Step 6:} With financial distress costs
+		
+		Distress costs = 5\% of 835 = \$41.75M
+		
+		New value after distress = 835 - 41.75 = \$793.25M
+		
+		This is LESS than the current value of \$800M, so the recapitalization would destroy value.
+		
+		\vspace{2pt}
+		\textbf{Step 7:} Optimal leverage
+		
+		Solve: V\_L = V\_U + tD - PV(Distress)
+		
+		At D = 400, V\_L = 800 + 35 - 41.75 = 793.25 < 800
+		
+		The optimal leverage is where tD = PV(Distress). This occurs at a lower debt level.
+		
+		\textbf{Answer:} Current WACC = 8.96\%; New WACC = 8.25\%; Arbitrage profit = \$35M (without distress); With distress costs, leverage should not be increased.
+	\end{frame}
+	
+	% ============================================================================
+	% SECTION 5: ADVANCED WACC APPLICATIONS
+	% ============================================================================
+	
+	\section{Advanced WACC Applications}
+	
+	\begin{frame}{Q15: WACC with Inflation and Real Options}
+		\scriptsize
+		\textbf{Scenario:} A company is evaluating a project with the following characteristics:
+		
+		\begin{tabular}{lr}
+			Project Life & 5 years \\
+			Initial Investment & \$100M \\
+			Expected Annual Cash Flow (Year 1) & \$30M \\
+			Real Growth Rate & 3\% \\
+			Nominal Growth Rate & 5.5\% \\
+			Risk-Free Rate (nominal) & 4\% \\
+			Market Risk Premium & 5\% \\
+			Project Beta & 1.20 \\
+			Tax Rate & 35\% \\
+			Target D/E Ratio & 0.50 \\
+			Cost of Debt (nominal) & 6.5\% \\
+		\end{tabular}
+		
+		\textbf{Question:}
+		1. Calculate the nominal and real WACC
+		2. Evaluate the project using both nominal and real cash flows
+		3. How would the presence of a real option (option to expand) affect the valuation?
+		4. What is the project's NPV?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Nominal WACC should be used with nominal cash flows; real WACC with real cash flows. The Fisher equation links nominal and real rates.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q15: Solution}
+		\scriptsize
+		\textbf{Step 1:} Calculate cost of equity
+		
+		r\_e = R\_f + beta(ERP) = 0.04 + 1.20(0.05) = 0.04 + 0.06 = 0.10 (10\%)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Calculate nominal WACC
+		
+		w\_d = 0.50/1.50 = 0.3333, w\_e = 1.00/1.50 = 0.6667
+		
+		WACC\_nominal = 0.3333(0.065)(0.65) + 0.6667(0.10)
+		= 0.01408 + 0.06667 = 0.08075 (8.075\%)
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Calculate real WACC using Fisher equation
+		
+		WACC\_real = (1 + WACC\_nominal)/(1 + Inflation) - 1
+		
+		Inflation = 5.5\% - 3\% = 2.5\%
+		
+		WACC\_real = 1.08075/1.025 - 1 = 1.05439 - 1 = 0.05439 (5.439\%)
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Nominal cash flows
+		
+		Year 1: 30.00
+		Year 2: 30(1.055) = 31.65
+		Year 3: 31.65(1.055) = 33.39
+		Year 4: 33.39(1.055) = 35.23
+		Year 5: 35.23(1.055) = 37.16
+		
+		NPV\_nominal = -100 + 30/1.08075 + 31.65/1.08075\^2 + 33.39/1.08075\^3 + 35.23/1.08075\^4 + 37.16/1.08075\^5
+		= -100 + 27.76 + 27.09 + 26.44 + 25.81 + 25.19 = 32.29 (\$M)
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Real cash flows
+		
+		Real cash flows = Nominal cash flows / (1.025)\^t
+		
+		Year 1: 29.27, Year 2: 30.12, Year 3: 31.00, Year 4: 31.90, Year 5: 32.82
+		
+		NPV\_real = -100 + 29.27/1.05439 + 30.12/1.05439\^2 + 31.00/1.05439\^3 + 31.90/1.05439\^4 + 32.82/1.05439\^5
+		= -100 + 27.76 + 27.09 + 26.44 + 25.81 + 25.19 = 32.29 (\$M)
+		
+		\vspace{2pt}
+		\textbf{Step 6:} Real option adjustment
+		
+		Option to expand adds value. If expansion value = \$15M, then:
+		NPV\_with\_option = 32.29 + 15 = \$47.29M
+		
+		\textbf{Answer:} Nominal WACC = 8.075\%; Real WACC = 5.439\%; NPV = \$32.29M; With real option = \$47.29M.
+	\end{frame}
+	
+	\begin{frame}{Q16: WACC and Business Risk vs. Financial Risk}
+		\scriptsize
+		\textbf{Scenario:} A company has the following characteristics:
+		
+		\begin{tabular}{lr}
+			Unlevered Beta & 0.90 \\
+			Risk-Free Rate & 3.5\% \\
+			Market Risk Premium & 5.5\% \\
+			D/E Ratio & 0.40 \\
+			Tax Rate & 30\% \\
+			Cost of Debt (pre-tax) & 5.5\% \\
+			Current WACC & 9.2\% \\
+		\end{tabular}
+		
+		The company is considering a project with higher business risk. The project has:
+		- Unlevered Beta = 1.20
+		- Project D/E Ratio = 0.60
+		- Project Cost of Debt = 6.5\%
+		
+		\textbf{Question:}
+		1. Decompose the current WACC into business risk and financial risk components
+		2. Calculate the project's cost of equity and WACC
+		3. Should the company use the project WACC or the corporate WACC?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} Business risk is reflected in the unlevered beta; financial risk is reflected in the leverage. Project-specific WACC should reflect the project's risk profile.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q16: Solution}
+		\scriptsize
+		\textbf{Step 1:} Current cost of equity
+		
+		beta\_L = beta\_U[1 + (1-t)(D/E)] = 0.90[1 + (0.70)(0.40)] = 0.90(1.28) = 1.152
+		
+		r\_e = 0.035 + 1.152(0.055) = 0.035 + 0.06336 = 0.09836 (9.836\%)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Verify WACC
+		
+		w\_d = 0.40/1.40 = 0.2857, w\_e = 1.00/1.40 = 0.7143
+		
+		WACC = 0.2857(0.055)(0.70) + 0.7143(0.09836) = 0.0110 + 0.0703 = 0.0813 (8.13\%)
+		
+		The given WACC is 9.2\%, indicating there may be additional company-specific risk.
+		
+		\vspace{2pt}
+		\textbf{Step 3:} Decompose WACC
+		
+		Business risk component (unlevered): r\_u = R\_f + beta\_U(ERP) = 0.035 + 0.90(0.055) = 0.0845 (8.45\%)
+		
+		Financial risk component: r\_e - r\_u = 0.09836 - 0.0845 = 0.01386 (1.386\%)
+		
+		Tax shield benefit: w\_d r\_d t = 0.2857(0.055)(0.30) = 0.00471 (0.471\%)
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Project cost of equity
+		
+		beta\_L\^{proj} = 1.20[1 + (0.70)(0.60)] = 1.20(1.42) = 1.704
+		
+		r\_e\^{proj} = 0.035 + 1.704(0.055) = 0.035 + 0.09372 = 0.12872 (12.872\%)
+		
+		w\_d = 0.60/1.60 = 0.375, w\_e = 1.00/1.60 = 0.625
+		
+		WACC\^{proj} = 0.375(0.065)(0.70) + 0.625(0.12872) = 0.01706 + 0.08045 = 0.09751 (9.751\%)
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Comparison and recommendation
+		
+		\begin{tabular}{lrr}
+			& Corporate & Project \\
+			WACC & 8.13\% - 9.2\% & 9.751\% \\
+		\end{tabular}
+		
+		The project has higher business risk (beta 1.20 vs 0.90) and higher financial risk (D/E 0.60 vs 0.40), so it requires a higher WACC.
+		
+		\textbf{Answer:} Use project WACC = 9.751\% (not corporate WACC). Business risk component = 8.45\%, financial risk = 1.386\%.
+	\end{frame}
+	
+	\begin{frame}{Q17: WACC and Marginal Cost of Capital}
+		\scriptsize
+		\textbf{Scenario:} A company has the following capital structure and costs:
+		
+		\begin{tabular}{lr}
+			Current Debt & \$200M at 5.5\% \\
+			Current Equity & \$300M at 11\% \\
+			Tax Rate & 35\% \\
+		\end{tabular}
+		
+		The company needs to raise \$100M for a new project. Financing options:
+		1. Additional debt at 6.0\%
+		2. Additional equity at 12.5\%
+		3. Preferred stock at 7.5\%
+		
+		The company has retained earnings of \$30M available for investment.
+		
+		\textbf{Question:}
+		1. Calculate the current WACC
+		2. Calculate the marginal cost of capital (MCC) for each financing option
+		3. Determine the optimal financing mix if the project has an IRR of 10\%
+		4. What is the breakpoint in the marginal cost of capital?
+		
+		\vspace{2pt}
+		\underline{\textbf{TRAP:}} The marginal cost of capital is the cost of raising additional capital. The MCC schedule can have breakpoints where the cost changes.
+		
+		\vspace{4pt}
+		\underline{\textbf{Solution:}}
+	\end{frame}
+	
+	\begin{frame}{Q17: Solution}
+		\scriptsize
+		\textbf{Step 1:} Current WACC
+		
+		w\_d = 200/500 = 0.40, w\_e = 300/500 = 0.60
+		WACC = 0.40(0.055)(0.65) + 0.60(0.11) = 0.0143 + 0.066 = 0.0803 (8.03\%)
+		
+		\vspace{2pt}
+		\textbf{Step 2:} Marginal cost of each option
+		
+		\textbf{Option A - Additional Debt:}
+		After-tax cost = 6.0\%(1-0.35) = 3.90\%
+		
+		\textbf{Option B - Additional Equity:}
+		Cost = 12.5\%
+		
+		\textbf{Option C - Preferred Stock:}
+		Cost = 7.5\%
+		
+		\textbf{Option D - Retained Earnings:}
+		Cost = 11\% (opportunity cost)
+		
+		\vspace{2pt}
+		\textbf{Step 3:} MCC Schedule with weights
+		
+		If using retained earnings first (\$30M):
+		MCC\_RE = 0.40(0.055)(0.65) + 0.60(0.11) = 0.0803 (8.03\%)
+		
+		If using debt for remaining \$70M:
+		MCC\_debt = 0.40(0.06)(0.65) + 0.60(0.11) = 0.0156 + 0.066 = 0.0816 (8.16\%)
+		
+		If using preferred stock:
+		MCC\_preferred = 0.40(0.055)(0.65) + 0.60(0.11) = 0.0803 (with preferred, weights may change)
+		
+		\vspace{2pt}
+		\textbf{Step 4:} Breakpoint Analysis
+		
+		Breakpoint = Amount of cheaper capital / Weight of that capital in capital structure
+		
+		Breakpoint = 30/0.60 = \$50M
+		
+		At \$50M, the MCC increases because retained earnings are exhausted.
+		
+		\vspace{2pt}
+		\textbf{Step 5:} Project Acceptance Decision
+		
+		Project IRR = 10\% > MCC = 8.16\%, so the project should be accepted.
+		
+		\vspace{2pt}
+		\textbf{Step 6:} Optimal Financing Mix
+		
+		1. Use \$30M retained earnings (cost = 11\% pre-tax)
+		2. Use \$70M debt (cost = 3.90\% after-tax)
+		3. Weighted MCC = 0.30(0.11) + 0.70(0.039) = 0.033 + 0.0273 = 0.0603 (6.03\%) after-tax
+		
+		\textbf{Answer:} Current WACC = 8.03\%; MCC increases after \$50M; Project should be accepted (IRR = 10\% > MCC).
+	\end{frame}
+	
+\end{document}
