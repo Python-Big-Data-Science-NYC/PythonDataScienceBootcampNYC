@@ -1,0 +1,843 @@
+\documentclass{beamer}
+
+% Option 1: Change the global font size at the document class level
+% \documentclass[10pt]{beamer}  % Options: 8pt, 9pt, 10pt, 11pt, 12pt
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+% Option 2: Change font size for specific elements
+\setbeamerfont{title}{size=\Huge}          % Title size
+\setbeamerfont{subtitle}{size=\large}      % Subtitle size
+\setbeamerfont{author}{size=\normalsize}   % Author size
+\setbeamerfont{date}{size=\small}          % Date size
+\setbeamerfont{frametitle}{size=\Large}    % Frame title size
+\setbeamerfont{framesubtitle}{size=\large} % Frame subtitle size
+
+% Option 3: Change font size for the entire presentation
+% \AtBeginDocument{\fontsize{12}{14}\selectfont}
+
+\title{Semi-Supervised Learning - Comprehensive Practice Questions}
+\subtitle{GARP RAI Exam Preparation - Detailed Explanations}
+\author{}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% SECTION: Multiple Choice Questions (40 Questions with Detailed Explanations)
+	\section{Multiple Choice Questions}
+	
+	\begin{frame}{Question 1}
+		% Option 4: Change font size for specific frame content
+		% \fontsize{10}{12}\selectfont  % Uncomment to change size for this frame only
+		
+		\textbf{A risk analyst at a large financial institution has access to a database of 500,000 customer transactions. Only 200 of these transactions have been manually reviewed and labeled as either "Suspicious" or "Normal" due to the high cost of expert review. The analyst wants to build a model to classify all transactions. Which of the following approaches would be most appropriate and why?}
+		\begin{enumerate}
+			\item Use supervised learning on the 200 labeled transactions and discard the rest, because labeled data is the only reliable source of information for classification tasks.
+			\item Use unsupervised learning on all 500,000 transactions to find natural clusters, because the labels are too few to be useful for any modeling purpose.
+			\item Use semi-supervised learning, specifically self-training, because it can leverage the 200 labeled transactions to iteratively generate pseudo-labels for the unlabeled data, thereby utilizing the underlying structure of the massive unlabeled dataset to improve classification accuracy.
+			\item Use a transductive method like label propagation, because the analyst is only interested in classifying the current 500,000 transactions and does not need a generalizable model for future transactions.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Semi-supervised learning is specifically designed for this scenario. Option A discards valuable structural information in the unlabeled data, leading to a model trained on a very small sample. Option B ignores the valuable hard-earned labels. Option D is plausible but less ideal than C; self-training is an inductive method that creates a generalizable model, which is usually preferred in a business context over a transductive method that cannot predict on new transactions. Self-training is a powerful and intuitive wrapper method that iteratively labels the most confident unlabeled instances and retrains the model, making it a strong choice for this problem.
+	\end{frame}
+	
+	\begin{frame}{Question 2}
+		\textbf{Consider the three core assumptions of semi-supervised learning: the Clustering Assumption, the Smoothness Assumption, and the Manifold Assumption. A data scientist is working with a dataset where the two classes are completely intermingled in the feature space, with no clear separation or dense regions. However, the data points lie on a complex, lower-dimensional spiral structure. Which of the following statements is most accurate regarding the applicability of semi-supervised learning to this dataset?}
+		\begin{enumerate}
+			\item Semi-supervised learning would be highly effective because the Manifold Assumption is satisfied, and it is the only assumption required for all semi-supervised methods.
+			\item Semi-supervised learning would likely fail because the Clustering and Smoothness assumptions are violated, which are necessary for the unlabeled data to provide meaningful information about class boundaries.
+			\item Semi-supervised learning would be partially effective; self-training would work well, but co-training would fail due to the lack of two independent feature views.
+			\item Semi-supervised learning would be effective only if the dataset is first transformed using PCA to satisfy the Smoothness Assumption.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} For semi-supervised learning to be effective, the class structure must be reflected in the data distribution. If classes are intermingled (violating the Clustering Assumption), and the decision boundary cannot be placed in a low-density region (violating the Smoothness Assumption), the unlabeled data provides no useful information about class separation. The Manifold Assumption alone is not sufficient; the classes must vary smoothly along the manifold. This is a common trap—students often think any structure is enough, but the structure must align with the classification task.
+	\end{frame}
+	
+	\begin{frame}{Question 3}
+		\textbf{In the context of semi-supervised learning, which of the following best describes the "Smoothness Assumption" and its practical implication for model development?}
+		\begin{enumerate}
+			\item The Smoothness Assumption states that the decision boundary should be as complex as possible to fit all labeled data points perfectly, ensuring high training accuracy.
+			\item The Smoothness Assumption implies that the model should be a simple linear classifier, because linear boundaries are inherently "smooth" and generalize well to unseen data.
+			\item The Smoothness Assumption suggests that the decision boundary should lie in a region of low data density, meaning that if two points are close in the feature space, they are likely to belong to the same class. This implies that the model should avoid placing the decision boundary through dense clusters of data points.
+			\item The Smoothness Assumption requires that all features be scaled to the same range before any semi-supervised learning technique is applied, to ensure that the notion of "closeness" is consistent across all dimensions.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option C correctly defines the Smoothness Assumption. Option A is incorrect because it describes overfitting, the opposite of the intended effect. Option B is incorrect because the assumption is about the data geometry, not the type of classifier. Option D is a practical preprocessing step but is not the definition of the Smoothness Assumption. The key insight is that the unlabeled data helps the model "see" where the dense regions are, so it can place the boundary in the sparse regions, leading to more robust and generalizable classifiers.
+	\end{frame}
+	
+	\begin{frame}{Question 4}
+		\textbf{A team of researchers is developing a semi-supervised learning model to classify medical images. They have a small set of labeled images (e.g., 100) and a large set of unlabeled images (e.g., 10,000). They decide to use an autoencoder for unsupervised pre-training before fine-tuning with the labeled data. What is the primary rationale behind this approach?}
+		\begin{enumerate}
+			\item The autoencoder pre-training allows the model to learn a lower-dimensional representation of the images that captures the most salient features, which serves as a better starting point for the supervised fine-tuning phase, reducing the risk of overfitting and improving generalization.
+			\item The autoencoder pre-training directly generates pseudo-labels for the unlabeled images, which are then used as the final classification output, bypassing the need for any supervised learning.
+			\item The autoencoder pre-training is used to increase the dimensionality of the data, making it easier for the supervised classifier to find a separating hyperplane.
+			\item The autoencoder pre-training is a transductive method that ensures the model can only classify the images it has seen during training, which is acceptable for the medical imaging domain.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Pre-training with an autoencoder (or other unsupervised methods) is a powerful semi-supervised strategy. The autoencoder learns a compressed, informative representation of the data distribution from the large unlabeled set. The supervised fine-tuning then uses this representation as a "head start," allowing the model to achieve better performance with limited labeled data. Option B is incorrect because autoencoders do not generate labels. Option C is incorrect because autoencoders reduce dimensionality. Option D is incorrect because pre-training is an inductive approach; the final fine-tuned model can generalize to new images.
+	\end{frame}
+	
+	\begin{frame}{Question 5}
+		\textbf{Which of the following is a key disadvantage of transductive semi-supervised learning methods, and how does this disadvantage manifest in a practical business application?}
+		\begin{enumerate}
+			\item Transductive methods are computationally expensive and cannot be applied to datasets with more than 1,000 observations, limiting their use in big data applications.
+			\item Transductive methods do not build a generalizable model, meaning they can only label the specific unlabeled instances provided during training. In a business context, this is a significant limitation because the model cannot be used to classify new, unseen data points that arrive after the initial analysis, requiring the entire process to be rerun from scratch.
+			\item Transductive methods require the feature set to be split into two independent views, which is often impossible in real-world datasets where features are highly correlated.
+			\item Transductive methods are highly sensitive to the initial labeled data, and a small change in the labeled set can lead to completely different predictions, making them unreliable for risk management.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The key disadvantage of transductive methods (e.g., label propagation) is their "closed-world" nature—they do not produce a function that can be applied to new data. In a business setting, this is a major drawback because models need to score new transactions, customers, or events continuously. Option A is incorrect because transductive methods can be applied to large datasets. Option C describes a requirement for co-training, not transductive methods. Option D describes a general sensitivity to initial conditions, which is not unique to transductive methods.
+	\end{frame}
+	
+	\begin{frame}{Question 6}
+		\textbf{Consider the following scenario: A data scientist is using self-training with a logistic regression classifier on a dataset with 1,000 labeled and 10,000 unlabeled instances. At each iteration, the scientist adds the single most confident prediction to the labeled set. After several iterations, the model's performance on a hold-out validation set starts to degrade significantly. What is the most likely cause of this degradation, and what strategy could mitigate it?}
+		\begin{enumerate}
+			\item The degradation is caused by overfitting, as the model is being retrained on a growing dataset that becomes increasingly homogeneous. To mitigate this, the scientist should add the top k (e.g., 100) most confident predictions at each iteration to speed up the process and reduce the number of retraining steps.
+			\item The degradation is caused by error amplification, where an early incorrect pseudo-label with high confidence biases subsequent iterations, leading to more errors. To mitigate this, the scientist could use co-training instead, which uses two different feature views to reduce error propagation, or add a confidence threshold to only add predictions above a certain probability.
+			\item The degradation is caused by the Smoothness Assumption being violated, as the data does not form distinct clusters. The only solution is to use an unsupervised pre-processing technique like PCA to enforce the assumption.
+			\item The degradation is caused by the logistic regression model being too simple to capture the complexity of the data. The scientist should switch to a deep neural network, which will automatically correct the errors through its hierarchical feature learning.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is a classic self-training pitfall. The model can amplify its own mistakes because it learns from its own predictions. Option B correctly identifies the cause and provides viable mitigation strategies. Option A misidentifies the cause; adding k observations at a time does not mitigate error amplification, it might worsen it. Option C is incorrect because the problem is not necessarily the violation of assumptions, but the self-reinforcing nature of the algorithm. Option D is an overkill and not a guaranteed fix; the issue is algorithmic, not model complexity.
+	\end{frame}
+	
+	\begin{frame}{Question 7}
+		\textbf{In the co-training algorithm, two classifiers are trained on two separate views of the data. The "most confident" predictions from each classifier are then exchanged and added to the other classifier's training set. What is the fundamental theoretical justification for why co-training is less prone to error amplification than self-training?}
+		\begin{enumerate}
+			\item Co-training uses two different learning algorithms, ensuring that the errors of one algorithm are canceled out by the strengths of the other.
+			\item Co-training leverages the conditional independence of the two views given the class label. If a prediction is confidently made by both classifiers using different, independent sets of features, it is highly likely to be correct, reducing the chance that a single erroneous model will introduce noise into the training process.
+			\item Co-training requires a much larger labeled dataset to start with, which ensures that the initial models are accurate and do not make early mistakes.
+			\item Co-training only adds predictions to the training set if both classifiers agree on the pseudo-label, which is a more conservative approach that reduces the number of labels added per iteration.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The theoretical foundation of co-training is that the two views are conditionally independent given the class. This means that if both classifiers, using different evidence, confidently agree on a label, the probability of that label being correct is very high. Option A is incorrect because co-training does not require different algorithms; it requires different feature views. Option C is incorrect because co-training is designed for scenarios with limited labeled data. Option D is a practical observation but not the fundamental theoretical justification.
+	\end{frame}
+	
+	\begin{frame}{Question 8}
+		\textbf{A data scientist is working on a text classification problem. They have a small set of labeled news articles and a large set of unlabeled articles. They decide to use co-training and split the features into two views: (1) the words in the article itself and (2) the metadata (e.g., author, publication date, length). However, the co-training model performs poorly. Which of the following is the most likely reason for this failure?}
+		\begin{enumerate}
+			\item The metadata view is too noisy and contains many missing values, which prevents the classifier from learning effectively.
+			\item The two views are not conditionally independent given the class label; the metadata is highly correlated with the words in the article (e.g., certain authors tend to write about certain topics), violating the core assumption of co-training.
+			\item The labeled set is too small to train even a single classifier, so splitting it into two views makes the problem even harder.
+			\item The co-training algorithm requires that both views be of equal dimensionality, which is not the case here (words vs. metadata).
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Co-training's success hinges on the two views being conditionally independent given the class. If the metadata (e.g., author) is strongly predictive of the topic and is correlated with the words used, the views are not independent, and the benefit of cross-teaching is lost. Option A might be a problem, but the fundamental assumption violation in B is the more critical and likely reason for failure. Option C is incorrect because co-training is designed for small labeled sets. Option D is incorrect; the views do not need to be of equal dimensionality.
+	\end{frame}
+	
+	\begin{frame}{Question 9}
+		\textbf{What is the "Cluster-then-Label" approach in semi-supervised learning, and what is a major limitation of this approach?}
+		\begin{enumerate}
+			\item The Cluster-then-Label approach involves first applying a clustering algorithm (e.g., K-means) to the entire dataset to identify natural groups, and then assigning labels to each cluster based on the majority class of labeled points within it. A major limitation is that if the clusters do not align with the true class boundaries, this approach will propagate errors to all unlabeled points in those clusters.
+			\item The Cluster-then-Label approach involves first training a supervised classifier on the labeled data and then using it to cluster the unlabeled data. A major limitation is that it is computationally expensive for large datasets.
+			\item The Cluster-then-Label approach is a transductive method that only works for the current dataset. A major limitation is that it cannot be used for new, unseen data.
+			\item The Cluster-then-Label approach involves splitting the data into clusters and then applying self-training within each cluster. A major limitation is that it requires a large labeled set to initialize the clusters accurately.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option A correctly describes the Cluster-then-Label strategy. The key limitation is that it relies entirely on the clustering assumption. If the natural clusters of the data do not correspond to the classes (i.e., the Clustering Assumption is violated), the entire unlabeled dataset will be mislabeled. Option B incorrectly describes the process. Option C incorrectly labels it as transductive; it is an inductive pre-processing step. Option D describes a different, non-standard process.
+	\end{frame}
+	
+	\begin{frame}{Question 10}
+		\textbf{Consider the self-training example from the chapter where logistic regression is used to classify borrowers as "Default" or "Non-Default." In the first iteration, Borrower 13 is assigned a pseudo-label of "Default" with a probability of 1.0000. In the second iteration, Borrower 11 is assigned "Non-Default" with a probability of 1.0000. What potential risk does the near-certainty of these predictions mask, and how does this relate to the concept of overfitting in self-training?}
+		\begin{enumerate}
+			\item The near-certainty indicates that the logistic regression model has perfectly separated the classes in the feature space, which is a desirable outcome. The risk is that the model might be underfitting, but this can be corrected by adding more features.
+			\item The near-certainty might be an artifact of the model's overconfidence, especially if the dataset is small or the features are highly predictive in the labeled set but not in the general population. This overconfidence can lead to overfitting, as the model effectively "memorizes" the pseudo-labels it creates, reinforcing its own biases and reducing its ability to generalize to new data.
+			\item The near-certainty is a sign that the Smoothness Assumption is strongly satisfied, so there is no risk. The model is correctly identifying clear-cut cases.
+			\item The near-certainty is due to the logistic regression model's inherent mathematical properties and does not indicate any risk. All logistic regression outputs are probabilistic and should be interpreted as confidence scores.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is a crucial nuance in self-training. Probabilities of 0 or 1 are often artifacts of overfitting, especially when the number of features is large relative to the number of labeled instances. The model becomes overconfident in its predictions. When these overconfident (and potentially incorrect) pseudo-labels are added to the training set, they reinforce the model's biases, leading to a feedback loop of overfitting. Option A is incorrect because perfect separation is not necessarily desirable; it suggests the model might be too complex. Option C ignores the risk. Option D incorrectly dismisses the risk.
+	\end{frame}
+	
+	\begin{frame}{Question 11}
+		\textbf{Which of the following statements accurately distinguishes between inductive and transductive semi-supervised learning methods?}
+		\begin{enumerate}
+			\item Inductive methods, such as self-training and co-training, build a model that can be applied to new, unseen data, while transductive methods, such as label propagation, only label the specific unlabeled data provided during training and do not generate a generalizable model.
+			\item Transductive methods are generally preferred in risk management because they are more accurate and require less computational power than inductive methods.
+			\item Inductive methods are only applicable when the labeled data is perfectly balanced, whereas transductive methods can handle imbalanced datasets.
+			\item There is no practical difference between inductive and transductive methods; the terms are used interchangeably in the literature.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option A is the correct distinction. Inductive methods aim to learn a general function (model) that maps inputs to outputs, which can then be used on any new data. Transductive methods are "closed-world" and only solve the problem of labeling the specific instances at hand. Option B is incorrect; transductive methods are not inherently more accurate or less computationally intensive. Option C is incorrect; both can handle imbalanced data with appropriate techniques. Option D is incorrect; they are distinct concepts.
+	\end{frame}
+	
+	\begin{frame}{Question 12}
+		\textbf{A portfolio manager wants to classify corporate bonds into "Investment Grade" and "High Yield" based on a set of financial ratios. She has a small set of bonds with known ratings (labeled data) and a large set of bonds without known ratings (unlabeled data). She is considering using label propagation. What is a critical limitation of using label propagation in this context, and how would this limitation affect her portfolio management decisions?}
+		\begin{enumerate}
+			\item Label propagation is an inductive method that will build a generalizable model. The limitation is that it requires a large set of labeled data to be effective, which defeats the purpose of using semi-supervised learning.
+			\item Label propagation is a transductive method that will only assign ratings to the current set of unlabeled bonds. It will not produce a model that can be used to classify new bonds that the portfolio manager might consider in the future. This is a significant limitation because the manager needs to continuously evaluate new bonds for potential investment.
+			\item Label propagation is a very fast algorithm but is highly sensitive to outliers. The limitation is that it might misclassify a few bonds, but the overall portfolio diversification strategy would mitigate this risk.
+			\item Label propagation requires the features to be split into two independent views. Since financial ratios are highly correlated, this assumption is violated, and the method would perform poorly.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Label propagation is a classic transductive method. It uses a graph-based approach to propagate labels from labeled to unlabeled instances based on proximity. It does not produce a function f(x) that can be applied to new points. In a portfolio management context, this is a major drawback because new bonds are constantly being issued and need to be classified. Option A incorrectly labels it as inductive. Option C downplays the limitation; the inability to generalize is a systemic issue, not just a sensitivity to outliers. Option D describes a requirement for co-training, not label propagation.
+	\end{frame}
+	
+	\begin{frame}{Question 13}
+		\textbf{A researcher is using the "Feature Extraction" unsupervised pre-processing strategy for a semi-supervised learning task. They apply Principal Component Analysis (PCA) to the entire dataset (both labeled and unlabeled) and then train a supervised classifier on the principal components using only the labeled data. Which of the following is a potential disadvantage of this approach?}
+		\begin{enumerate}
+			\item PCA is a linear method that may not capture the non-linear structure of the data, potentially discarding important class-discriminative information that is contained in the non-linear relationships between features.
+			\item PCA will always increase the number of features, making the supervised classifier slower and more prone to overfitting.
+			\item PCA requires the labels to be used in the transformation, which violates the principle of unsupervised pre-processing.
+			\item PCA is a transductive method, and the resulting model cannot be applied to new data.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} PCA is a linear dimensionality reduction technique. It finds the directions of maximum variance in the data. However, if the class separation is along a non-linear manifold, PCA's linear projections might collapse the classes together, making classification harder. Option B is incorrect; PCA reduces dimensionality. Option C is incorrect; PCA is unsupervised and does not use labels. Option D is incorrect; the final supervised classifier is inductive.
+	\end{frame}
+	
+	\begin{frame}{Question 14}
+		\textbf{The Manifold Assumption is a cornerstone of semi-supervised learning. Consider a dataset of high-resolution images of faces. Each image has millions of pixels (high-dimensional space). However, the set of all possible face images lies on a much lower-dimensional manifold (e.g., determined by pose, lighting, expression). How does the Manifold Assumption help in a semi-supervised learning context for a face recognition task?}
+		\begin{enumerate}
+			\item The Manifold Assumption allows the model to ignore the unlabeled data because the labeled data is sufficient to define the manifold.
+			\item The Manifold Assumption implies that if two face images are on the same connected manifold, they are likely to be of the same person. The unlabeled images can help map out the structure of this manifold, allowing the model to better understand how variations in pose, lighting, and expression relate to the identity, thereby improving classification with limited labeled images.
+			\item The Manifold Assumption states that all face images of the same person must be identical, which simplifies the classification task.
+			\item The Manifold Assumption is only relevant for unsupervised learning and does not apply to semi-supervised learning.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Manifold Assumption is key. It suggests that high-dimensional data (like images) often lies on a lower-dimensional structure. By using unlabeled data, the model can better "unroll" or understand this manifold, leading to better classification of the labeled points. Option A is incorrect; the unlabeled data is crucial for understanding the manifold. Option C is incorrect; the assumption is about structure, not identity. Option D is incorrect; it is a core semi-supervised assumption.
+	\end{frame}
+	
+	\begin{frame}{Question 15}
+		\textbf{A company has a large dataset of customer support tickets. A small subset has been labeled with the issue type (e.g., "Billing," "Technical," "Account"). They decide to use self-training with a support vector machine (SVM) classifier. After several iterations, they notice that the model is classifying almost all new tickets as "Billing," even though this is not the most common issue in the labeled set. What is the most likely explanation for this behavior?}
+		\begin{enumerate}
+			\item The SVM is a linear classifier and is not suitable for text data, which is inherently non-linear.
+			\item The self-training process has led to a class imbalance amplification. The model might have initially predicted a "Billing" label for an unlabeled ticket with high confidence (maybe due to a specific feature). This pseudo-label was added, reinforcing the model's bias towards "Billing" in subsequent iterations, eventually overwhelming the other classes.
+			\item The Smoothness Assumption is violated because the data does not form distinct clusters.
+			\item The company should have used co-training instead of self-training, as co-training handles class imbalance automatically.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is a common problem in self-training called "class imbalance amplification." If the model is slightly biased towards one class, its high-confidence predictions will often be from that class. Adding these to the training set amplifies the bias, leading to a runaway effect where one class dominates. Option A is incorrect; SVMs can be effective with text using appropriate kernels. Option C might be a contributing factor, but the amplification effect is the most direct explanation for the severe class imbalance. Option D is incorrect; co-training is not a guaranteed fix for class imbalance.
+	\end{frame}
+	
+	\begin{frame}{Question 16}
+		\textbf{What is the fundamental difference between self-training and co-training in terms of how they generate pseudo-labels for unlabeled data?}
+		\begin{enumerate}
+			\item Self-training uses a single classifier trained on all features, while co-training uses two classifiers trained on two disjoint subsets of features, and each classifier teaches the other.
+			\item Self-training uses a clustering algorithm to generate pseudo-labels, while co-training uses a supervised classifier.
+			\item Self-training generates pseudo-labels for all unlabeled data at once, while co-training generates them one at a time.
+			\item Self-training requires the data to satisfy the Manifold Assumption, while co-training requires the Smoothness Assumption.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option A correctly captures the core difference. Self-training is a "wrapper" method that uses a single classifier on the full feature set. Co-training explicitly requires two feature views and uses two classifiers that teach each other. Option B is incorrect; both can use supervised classifiers. Option C is incorrect; both can generate labels iteratively. Option D is incorrect; both rely on the core semi-supervised assumptions.
+	\end{frame}
+	
+	\begin{frame}{Question 17}
+		\textbf{In the co-training example with the borrowers, why was Borrower 13 added to Group B's training set and Borrower 11 added to Group A's training set in the first iteration?}
+		\begin{enumerate}
+			\item Because Group A predicted Borrower 13 as Default with the highest confidence, and Group B predicted Borrower 11 as Non-Default with the highest confidence. Each classifier's most confident prediction was used to augment the other classifier's training set.
+			\item Because Borrower 13 and Borrower 11 were outliers, and the models needed to be retrained to handle them.
+			\item Because both models agreed that Borrower 13 should be Default and Borrower 11 should be Non-Default, and a consensus was required.
+			\item Because the labels were assigned randomly to introduce diversity into the training process.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is the key step in co-training. Model A (trained on Balance) was most confident about Borrower 13 (Default), so that instance (with its pseudo-label) was added to the labeled set for Model B. Model B (trained on Income) was most confident about Borrower 11 (Non-Default), so that instance was added to Model A's training set. Option B is incorrect; they were not outliers. Option C is incorrect; co-training does not require agreement; it uses the most confident predictions from each model. Option D is incorrect; the process is based on confidence, not randomness.
+	\end{frame}
+	
+	\begin{frame}{Question 18}
+		\textbf{A risk management team is evaluating the use of semi-supervised learning for operational risk incident classification. They have a small set of incidents labeled with one of three risk categories (e.g., "Human Error," "System Failure," "External Event") and a large set of unlabeled incident reports. Which of the following statements about the potential benefits and risks of using co-training in this scenario is most accurate?}
+		\begin{enumerate}
+			\item Co-training would be beneficial only if the incident reports can be represented by two independent views of features, such as the textual description of the incident and the metadata (e.g., time, location, department). This could lead to a more robust model by reducing error amplification, but the risk is that these views might not be conditionally independent, limiting the effectiveness of the algorithm.
+			\item Co-training would be less beneficial than self-training because self-training is simpler and faster, and the risk of error amplification is minimal with a clear three-class classification problem.
+			\item Co-training should not be used because it requires the feature set to be split, which would reduce the amount of information available to each classifier, leading to poorer performance.
+			\item Co-training is the only semi-supervised method that can handle multi-class problems, so it is the clear choice for this three-class problem.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option A correctly outlines the benefits (reduced error amplification) and the key risk (violation of conditional independence) of co-training. For operational risk, a split into text and metadata might be a good view split if they are conditionally independent. Option B is incorrect; self-training is simpler but has a higher risk of error amplification. Option C is incorrect; the benefit of co-training is that it can work well even with feature splits, provided the assumptions hold. Option D is incorrect; self-training and other methods can also handle multi-class problems.
+	\end{frame}
+	
+	\begin{frame}{Question 19}
+		\textbf{Which of the following is a key assumption of the "Cluster-then-Label" approach, and what are the potential consequences if this assumption is violated?}
+		\begin{enumerate}
+			\item The key assumption is that the data forms distinct clusters that correspond to the true class labels. If this assumption is violated (i.e., the clusters do not correspond to the classes), the pseudo-labels assigned to unlabeled points will be incorrect, leading to a poor supervised model trained on noisy data.
+			\item The key assumption is that the labeled data is perfectly representative of the unlabeled data. If this is violated, the cluster assignments will be biased.
+			\item The key assumption is that the number of clusters is known in advance. If this is violated, the K-means algorithm will fail to converge.
+			\item The key assumption is that the features are all continuous and normally distributed. If this is violated, the clustering will be inaccurate.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Cluster-then-Label method explicitly relies on the Clustering Assumption. The algorithm finds clusters in the data and then uses the labeled points to assign labels to those clusters. If the clusters do not match the classes, the entire labeling process is flawed, and the final supervised model will be trained on a mislabeled dataset. Option B is not the core assumption; while representativeness is important, the cluster-class correspondence is the critical assumption. Option C is incorrect; while K-means requires a k, it's not the fundamental assumption of the approach. Option D is incorrect; clustering can work with various data types.
+	\end{frame}
+	
+	\begin{frame}{Question 20}
+		\textbf{A data scientist is using self-training with a neural network on a large dataset. They observe that the model's performance on the training set increases steadily, but the performance on a validation set decreases after a few iterations. This is a classic sign of overfitting. What is the primary mechanism by which self-training causes overfitting in this scenario?}
+		\begin{enumerate}
+			\item Self-training inherently leads to overfitting because it uses a complex model (neural network) that can memorize the pseudo-labels.
+			\item The iterative addition of pseudo-labels increases the size of the training set, which always increases the risk of overfitting.
+			\item The neural network is being retrained on data that it itself generated. This creates a feedback loop where the model effectively learns its own noise and biases, becoming increasingly specialized to its own predictions and losing the ability to generalize.
+			\item Self-training causes overfitting only if the labeled data is noisy. If the labeled data is clean, self-training is immune to overfitting.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is the core problem with self-training. The model learns from its own predictions. If it makes an error, that error is incorporated into the training set, and the model learns to make that same error again, but with even more confidence. This feedback loop is what drives overfitting. Option A is too simplistic; it's not the complexity of the model but the self-referential nature of the learning that causes the issue. Option B is incorrect; increasing training set size usually reduces overfitting. Option D is incorrect; self-training can overfit even with clean labeled data if the initial model is biased.
+	\end{frame}
+	
+	\begin{frame}{Question 21}
+		\textbf{Consider a scenario where the labeled data is scarce and the unlabeled data is abundant. A researcher is deciding between using a transductive method (like label propagation) and an inductive method (like self-training). Which of the following factors would most strongly favor the use of an inductive method?}
+		\begin{enumerate}
+			\item The need to classify new data points that were not in the original dataset.
+			\item The presence of a very large number of features.
+			\item The belief that the Clustering Assumption is strongly satisfied.
+			\item The need for extremely high classification accuracy on the current dataset, even if it means sacrificing generalizability.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The core advantage of inductive methods is their ability to generalize to new, unseen data. If the business requirement is to have a model that can be deployed to classify new observations, an inductive method is necessary. Transductive methods are "closed-world" and cannot handle new data. Option B is not a decisive factor; both types of methods can handle high-dimensional data. Option C might favor semi-supervised methods in general, but not specifically inductive vs. transductive. Option D describes a scenario where a transductive method might be preferred if only the current data matters.
+	\end{frame}
+	
+	\begin{frame}{Question 22}
+		\textbf{What is the role of "unsupervised pre-training" in deep learning-based semi-supervised learning, and how does it contrast with the "self-training" approach?}
+		\begin{enumerate}
+			\item Unsupervised pre-training involves training an autoencoder or a generative model on the unlabeled data to learn a good feature representation, which is then fine-tuned with labeled data. This contrasts with self-training, which iteratively generates pseudo-labels and retrains on them.
+			\item Unsupervised pre-training is exactly the same as self-training; both generate pseudo-labels for the unlabeled data.
+			\item Unsupervised pre-training involves training a supervised model on the labeled data first and then using it to initialize the unsupervised model.
+			\item Unsupervised pre-training is a transductive method, while self-training is an inductive method.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option A correctly describes unsupervised pre-training (learning a representation) and contrasts it with self-training (iterative pseudo-labeling). Option B is incorrect; they are distinct approaches. Option C reverses the order; unsupervised pre-training comes before supervised fine-tuning. Option D is incorrect; both are inductive methods.
+	\end{frame}
+	
+	\begin{frame}{Question 23}
+		\textbf{In the context of semi-supervised learning, what is the primary purpose of using pseudo-labels in self-training and co-training?}
+		\begin{enumerate}
+			\item Pseudo-labels are used to replace the original labels in the labeled dataset, as they are often more accurate.
+			\item Pseudo-labels are used to augment the training set by adding confidently predicted labels to unlabeled instances, thereby increasing the amount of labeled data available for training the model.
+			\item Pseudo-labels are used to evaluate the performance of the model on the unlabeled data.
+			\item Pseudo-labels are used to reduce the dimensionality of the data by selecting the most informative features.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The core purpose of pseudo-labels is to leverage the unlabeled data by treating the model's confident predictions as ground truth and adding them to the training set. Option A is incorrect; pseudo-labels do not replace original labels. Option C is incorrect; pseudo-labels are not used for evaluation. Option D is incorrect; pseudo-labels are not a dimensionality reduction technique.
+	\end{frame}
+	
+	\begin{frame}{Question 24}
+		\textbf{Which of the following scenarios would most likely violate the Smoothness Assumption in semi-supervised learning?}
+		\begin{enumerate}
+			\item The data points of different classes form distinct, well-separated clusters with large gaps between them.
+			\item The data points of different classes are intermingled, but there are clear linear separators between them.
+			\item The decision boundary passes through a region of high data density, with many points from both classes on either side of the boundary.
+			\item The data lies on a low-dimensional manifold, but the labels are constant along the manifold.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Smoothness Assumption states that the decision boundary should lie in a low-density region. If the boundary cuts through a dense cluster of points, it violates the assumption. Option A satisfies the Smoothness Assumption (boundaries would be in the gaps). Option B might satisfy it if the linear separators are in sparse regions. Option D satisfies the Manifold Assumption, which is aligned with smoothness.
+	\end{frame}
+	
+	\begin{frame}{Question 25}
+		\textbf{A data scientist has a dataset where the features can be naturally split into two independent views. The labeled data is limited, but the unlabeled data is abundant. Which of the following semi-supervised learning methods would be most appropriate, and what is its primary advantage?}
+		\begin{enumerate}
+			\item Self-training; its primary advantage is that it is simple and fast.
+			\item Co-training; its primary advantage is that it reduces the risk of error amplification by using two independent views to cross-teach.
+			\item Label propagation; its primary advantage is that it is a transductive method and does not require a model.
+			\item Cluster-then-Label; its primary advantage is that it uses clustering to directly assign labels.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Co-training is specifically designed for scenarios where two independent views exist. Its primary advantage over self-training is the reduced risk of error amplification because the two models learn from each other. Option A is appropriate in many cases, but co-training is more tailored to the described scenario. Option C is transductive and may not be appropriate if generalization is needed. Option D does not specifically leverage the two-view structure.
+	\end{frame}
+	
+	\begin{frame}{Question 26}
+		\textbf{In the self-training algorithm, what is the purpose of selecting the instance with the highest predicted probability (or highest confidence) at each iteration?}
+		\begin{enumerate}
+			\item To ensure that the model converges to the optimal solution in the fewest number of iterations.
+			\item To minimize the risk of adding a noisy pseudo-label to the training set, as high confidence predictions are more likely to be correct.
+			\item To maximize the diversity of the pseudo-labels added to the training set.
+			\item To reduce the computational cost of the algorithm by selecting the easiest instances first.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The rationale behind selecting the most confident prediction is to reduce the risk of error amplification. If the model is confident about a prediction, it is more likely to be correct, so adding it to the training set is less likely to introduce noise. Option A is not the primary purpose; convergence is not guaranteed. Option C is incorrect; the goal is to add high-confidence labels, not necessarily diverse ones. Option D is incorrect; computational cost is reduced by adding k instances, not by selecting high-confidence ones.
+	\end{frame}
+	
+	\begin{frame}{Question 27}
+		\textbf{A risk manager is building a model to predict whether a loan will default. They have 500 labeled loans (default/non-default) and 50,000 unlabeled loans. They decide to use self-training with a logistic regression model. Which of the following is a potential pitfall of this approach that the risk manager should be aware of?}
+		\begin{enumerate}
+			\item The logistic regression model may not be able to handle the high-dimensionality of the data.
+			\item The self-training algorithm will not work if the labeled and unlabeled data come from different distributions.
+			\item The risk manager might inadvertently introduce a "self-fulfilling prophecy" where the model's biases are amplified, leading to a model that is overly confident in its own predictions and may not generalize well to new loans.
+			\item The self-training algorithm will always outperform a supervised model trained only on the 500 labeled loans.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option C describes the core pitfall of self-training: error amplification and overfitting. The model learns from its own predictions, potentially reinforcing biases. Option A is not necessarily true; logistic regression can handle many features with regularization. Option B is a general risk for any machine learning model, but self-training is particularly sensitive to distribution shifts. Option D is incorrect; self-training can degrade performance if assumptions are violated.
+	\end{frame}
+	
+	\begin{frame}{Question 28}
+		\textbf{What is the main purpose of unsupervised pre-processing in semi-supervised learning, and how does it differ from the "Cluster-then-Label" approach?}
+		\begin{enumerate}
+			\item Unsupervised pre-processing aims to learn a better feature representation or data structure from the unlabeled data, which is then used in a supervised step. Cluster-then-Label uses clustering to directly assign pseudo-labels.
+			\item Both unsupervised pre-processing and Cluster-then-Label are the same technique.
+			\item Unsupervised pre-processing uses labels to guide the feature extraction, while Cluster-then-Label is entirely unsupervised.
+			\item Unsupervised pre-processing is a transductive method, while Cluster-then-Label is an inductive method.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option A correctly distinguishes the two. Unsupervised pre-processing (e.g., PCA, autoencoders) is about improving the feature representation for a subsequent supervised step. Cluster-then-Label is a two-stage process that directly assigns labels via clustering. Option B is incorrect; they are distinct. Option C is incorrect; unsupervised pre-processing does not use labels. Option D is incorrect; both are inductive pre-processing strategies.
+	\end{frame}
+	
+	\begin{frame}{Question 29}
+		\textbf{Consider a dataset where the labeled data is extremely scarce (only 10 instances), but the unlabeled data is abundant (10,000 instances). The data scientist believes that the data lies on a low-dimensional manifold. Which semi-supervised approach would be most suitable, and why?}
+		\begin{enumerate}
+			\item Self-training, because it is a wrapper method that can work with any classifier and is effective even with very few labeled instances.
+			\item Co-training, because it uses two views and is robust to small labeled sets.
+			\item Unsupervised pre-training with an autoencoder, followed by supervised fine-tuning, because the autoencoder can leverage the abundance of unlabeled data to learn the manifold structure, which then guides the supervised classifier with the very limited labeled data.
+			\item Label propagation, because it is a transductive method that works well with very small labeled sets.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} With only 10 labeled instances, self-training or co-training might be risky because the initial models will be extremely weak, and error amplification could be severe. Label propagation might work, but it does not build a generalizable model. Unsupervised pre-training (like an autoencoder) can use the massive unlabeled data to learn the manifold, and then the fine-tuning step uses the 10 labeled instances to map the manifold to classes. This is a robust approach when labeled data is extremely limited.
+	\end{frame}
+	
+	\begin{frame}{Question 30}
+		\textbf{Which of the following statements best describes the relationship between the Smoothness Assumption and the Manifold Assumption in semi-supervised learning?}
+		\begin{enumerate}
+			\item The Manifold Assumption is a stronger version of the Smoothness Assumption.
+			\item The Smoothness Assumption implies that the data lies on a manifold, but the Manifold Assumption does not require smoothness.
+			\item Both assumptions are independent and can be satisfied or violated independently of each other.
+			\item The Manifold Assumption provides a rationale for the Smoothness Assumption: if data lies on a low-dimensional manifold, then points close on the manifold should have the same label (smoothness on the manifold).
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: D}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option D correctly links the two assumptions. The Manifold Assumption provides the geometric justification: if the data is on a lower-dimensional structure, then smoothness (labels varying slowly) is a natural consequence. Option A is incorrect; they are not a hierarchy. Option B is incorrect; the Manifold Assumption is often used to justify smoothness. Option C is incorrect; they are conceptually related.
+	\end{frame}
+	
+	\begin{frame}{Question 31}
+		\textbf{A data scientist is using co-training with two classifiers: a logistic regression model and a decision tree. The results are poor. Which of the following is the most likely reason for the poor performance?}
+		\begin{enumerate}
+			\item Logistic regression and decision trees are not compatible algorithms for co-training.
+			\item Co-training requires the two classifiers to be of the same type.
+			\item Co-training's core assumption is about the feature views being conditionally independent, not about the types of classifiers used. The poor performance is more likely due to a violation of the conditional independence assumption or poor feature split.
+			\item The decision tree is overfitting, causing it to make poor predictions.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Co-training does not require specific classifier types; it can work with any classifiers. The critical requirement is the conditional independence of the feature views given the class. If the views are not independent, the cross-teaching will not be effective. Option A and B are incorrect. Option D might be a contributing factor, but the fundamental issue is more likely the view independence assumption.
+	\end{frame}
+	
+	\begin{frame}{Question 32}
+		\textbf{In the self-training algorithm, the model is retrained after each iteration. What is the primary computational challenge associated with this approach, and how can it be mitigated?}
+		\begin{enumerate}
+			\item The primary challenge is that retraining the model each time is computationally expensive, especially when there are many unlabeled instances. It can be mitigated by selecting the top k most confident predictions at each iteration and adding them all at once.
+			\item The primary challenge is that the model becomes unstable and changes drastically with each retraining. This can be mitigated by using a simpler model.
+			\item The primary challenge is that the model forgets previous knowledge when retrained. This can be mitigated by using a learning rate.
+			\item The primary challenge is that the labeled dataset becomes too large, causing memory issues. This can be mitigated by subsampling the labeled data.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option A correctly identifies the computational cost and the common mitigation strategy (adding k instances at a time). Option B is not a typical challenge; the model can be retrained from scratch. Option C is not applicable in this context. Option D is a potential issue, but the primary challenge is the computational cost of iterative retraining.
+	\end{frame}
+	
+	\begin{frame}{Question 33}
+		\textbf{Which of the following is a key difference between semi-supervised learning and active learning?}
+		\begin{enumerate}
+			\item Semi-supervised learning uses unlabeled data to improve the model, while active learning selects the most informative unlabeled instances to be labeled by an oracle.
+			\item Semi-supervised learning is a type of unsupervised learning, while active learning is a type of supervised learning.
+			\item Semi-supervised learning requires a human expert to label data, while active learning does not.
+			\item Semi-supervised learning is only applicable to classification problems, while active learning can be used for regression.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option A correctly distinguishes the two. Semi-supervised learning uses unlabeled data without human intervention to improve the model. Active learning is an iterative process where the model queries a human expert to label the most informative instances. Option B is incorrect; semi-supervised learning is a separate paradigm. Option C is incorrect; active learning requires human labeling, semi-supervised does not. Option D is incorrect; both can be applied to classification and regression.
+	\end{frame}
+	
+	\begin{frame}{Question 34}
+		\textbf{A researcher is working with a dataset where the Clustering Assumption is strongly satisfied. The data forms well-separated clusters, and each cluster corresponds to a class. The researcher wants to use a semi-supervised learning method that is computationally efficient. Which of the following methods would be the most efficient choice?}
+		\begin{enumerate}
+			\item Self-training, because it iteratively retrains the model, which is computationally intensive.
+			\item Co-training, because it requires two classifiers and two views.
+			\item Cluster-then-Label, because it involves a one-time clustering of the data and then assigns labels based on the labeled points, which is computationally less intensive than iterative methods.
+			\item Label propagation, because it is a transductive method that is computationally very efficient.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} If the Clustering Assumption is strongly satisfied, Cluster-then-Label is an efficient approach. It performs clustering once, which is typically O(n*k*iterations), and then labels the clusters. Self-training and co-training are iterative and require multiple rounds of model training, which is more computationally expensive. Label propagation is also efficient but is transductive and does not build a generalizable model. Option C is the best balance of efficiency and effectiveness.
+	\end{frame}
+	
+	\begin{frame}{Question 35}
+		\textbf{In the self-training example from the chapter, Borrower 13 was labeled as "Default" in the first iteration, and this label was never changed. What is a potential risk of this "one-way" labeling process?}
+		\begin{enumerate}
+			\item The risk is that if Borrower 13 was mislabeled, this error will propagate through all subsequent iterations, potentially degrading the model's performance.
+			\item The risk is that the model will become unstable because the label of Borrower 13 cannot be changed.
+			\item The risk is that the model will ignore the rest of the unlabeled data.
+			\item The risk is that the model will overfit to Borrower 13 because it is an outlier.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The key risk of self-training is that once a pseudo-label is assigned, it becomes part of the training set and is never corrected. If an early prediction is wrong (but made with high confidence), this error is propagated and reinforced in subsequent iterations. Option B is not a typical concern. Option C is incorrect; the model continues to process the rest of the data. Option D might be a factor, but the primary risk is error propagation.
+	\end{frame}
+	
+	\begin{frame}{Question 36}
+		\textbf{What is the fundamental difference between semi-supervised learning and supervised learning in terms of the data they use for training?}
+		\begin{enumerate}
+			\item Supervised learning uses only labeled data, while semi-supervised learning uses both labeled and unlabeled data.
+			\item Supervised learning uses both labeled and unlabeled data, while semi-supervised learning uses only labeled data.
+			\item Supervised learning requires all data to be labeled, while semi-supervised learning requires no labels.
+			\item Supervised learning is used for classification, while semi-supervised learning is used for regression.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option A correctly states the fundamental difference. Supervised learning relies entirely on labeled data. Semi-supervised learning is designed for scenarios where only a portion of the data is labeled, and it leverages the unlabeled data to improve the model. Option B reverses the definitions. Option C is incorrect; semi-supervised learning requires at least some labels. Option D is incorrect; both can be used for classification and regression.
+	\end{frame}
+	
+	\begin{frame}{Question 37}
+		\textbf{A company is building a model to classify emails as "Spam" or "Not Spam." They have 5,000 labeled emails and 500,000 unlabeled emails. The features are the words in the email. The data scientist wants to use a semi-supervised learning method. Which of the following methods would be most suitable, given the nature of the data?}
+		\begin{enumerate}
+			\item Co-training, because the features can be split into two views (e.g., words in subject line vs. words in body).
+			\item Self-training, because it is simple and can handle a large number of unlabeled instances.
+			\item Label propagation, because it is fast and can handle the large unlabeled dataset.
+			\item Cluster-then-Label, because it is computationally efficient.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Email classification is a classic application for co-training, as the data can be naturally split into two views: the words in the subject line and the words in the body of the email. These views are likely to be conditionally independent given the class (Spam/Not Spam). Self-training (B) is also possible, but co-training is more suited to the natural view split. Label propagation (C) is transductive and would not build a generalizable model. Cluster-then-Label (D) might work, but co-training better leverages the two-view structure.
+	\end{frame}
+	
+	\begin{frame}{Question 38}
+		\textbf{Which of the following is the most significant assumption of co-training, and what happens if this assumption is violated?}
+		\begin{enumerate}
+			\item The most significant assumption is that the two feature views are conditionally independent given the class label. If this assumption is violated, the two classifiers will not provide independent evidence, and cross-teaching will be less effective, potentially leading to poor performance.
+			\item The most significant assumption is that the two feature views are of equal size. If this is violated, co-training will not work.
+			\item The most significant assumption is that the two classifiers used are of the same type. If this is violated, the models will not be able to teach each other.
+			\item The most significant assumption is that the labeled data is perfectly balanced. If this is violated, the model will be biased.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The conditional independence of the views is the foundational assumption of co-training. Without it, the theoretical guarantee that co-training will improve performance is lost. Option B is incorrect; the views do not need to be of equal size. Option C is incorrect; the classifiers can be of different types. Option D is incorrect; co-training can handle imbalanced data.
+	\end{frame}
+	
+	\begin{frame}{Question 39}
+		\textbf{A data scientist is evaluating the performance of a semi-supervised learning model. They notice that the model performs well on the training set but poorly on a test set. This is a sign of overfitting. Which of the following semi-supervised learning methods is most prone to overfitting, and why?}
+		\begin{enumerate}
+			\item Self-training is most prone to overfitting because it learns from its own predictions, creating a feedback loop that can amplify errors and biases.
+			\item Co-training is most prone to overfitting because it uses two models, increasing the complexity.
+			\item Cluster-then-Label is most prone to overfitting because clustering is inherently unstable.
+			\item All semi-supervised methods are equally prone to overfitting.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Self-training is the most prone to overfitting because of the self-reinforcing feedback loop. The model learns from its own predictions, and if it makes a mistake, it reinforces that mistake. Co-training can mitigate this through cross-teaching. Cluster-then-Label is less prone because the clustering step is separate from the supervised training.
+	\end{frame}
+	
+	\begin{frame}{Question 40}
+		\textbf{Which of the following statements about the "Feature Extraction" unsupervised pre-processing strategy is most accurate?}
+		\begin{enumerate}
+			\item Feature extraction, such as PCA, is applied only to the labeled data to ensure that the extracted features are relevant to the classification task.
+			\item Feature extraction is applied to the entire dataset (labeled and unlabeled) to learn a more compact and informative representation, which is then used in a supervised step.
+			\item Feature extraction is a type of self-training where the features are extracted iteratively.
+			\item Feature extraction is a transductive method that cannot be applied to new data.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The key idea of unsupervised pre-processing is to use all the data (labeled and unlabeled) to learn a better representation. This representation is then used for supervised learning on the labeled portion. Option A is incorrect; it should be applied to all data. Option C is incorrect; it's not a type of self-training. Option D is incorrect; it is an inductive pre-processing step.
+	\end{frame}
+	
+	% SECTION: True/False Questions (20 Questions with Detailed Explanations)
+	\section{True or False Questions}
+	
+	\begin{frame}{True/False Question 1}
+		\textbf{Statement:} Semi-supervised learning is most valuable when the labeled data is abundant and the unlabeled data is scarce.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Semi-supervised learning is most valuable when labeled data is scarce and expensive to obtain, while unlabeled data is abundant. If labeled data is abundant, supervised learning would be sufficient. The whole point of semi-supervised learning is to leverage the abundance of unlabeled data to compensate for the lack of labeled data.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 2}
+		\textbf{Statement:} The Clustering Assumption in semi-supervised learning implies that each cluster in the data must correspond to exactly one class, and there can be no clusters that contain multiple classes.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: True}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Clustering Assumption states that data naturally forms distinct clusters, and each cluster corresponds to one class. If a cluster contained multiple classes, the assumption would be violated, and semi-supervised learning might fail because the unlabeled data would provide misleading information about class boundaries.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 3}
+		\textbf{Statement:} The Smoothness Assumption states that the decision boundary between classes should pass through regions of high data density.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Smoothness Assumption actually states the opposite: the decision boundary should lie in a region of low data density. If the boundary cut through a dense region, it would mean that points that are very close in the feature space are assigned different labels, violating the assumption that close points should have the same label.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 4}
+		\textbf{Statement:} Transductive semi-supervised learning methods build a generalizable model that can be applied to any new, unseen data points.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is a description of inductive methods. Transductive methods are "closed-world" and only label the specific unlabeled data provided during training. They do not produce a function that can be applied to new data. This is a key limitation of transductive methods in business applications where new data continuously arrives.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 5}
+		\textbf{Statement:} In self-training, the pseudo-labels generated in early iterations are always correct because the model uses the most confident predictions.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Confidence does not guarantee correctness. A model can be highly confident but still wrong, especially if the initial labeled data is biased or the model is overconfident. This is a key risk in self-training: early mistakes can be made with high confidence and then amplified in subsequent iterations.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 6}
+		\textbf{Statement:} Co-training reduces the risk of error amplification by using two different feature views to train two models that teach each other.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: True}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is the core advantage of co-training. Because the two models use different, conditionally independent views of the data, they are less likely to make the same errors. By cross-teaching, they can correct each other's mistakes, reducing the risk of error amplification that is present in self-training.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 7}
+		\textbf{Statement:} The Manifold Assumption suggests that high-dimensional data can often be represented on a lower-dimensional structure, and labels should vary smoothly along this structure.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: True}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is a correct description of the Manifold Assumption. It posits that high-dimensional data lies on or near a low-dimensional manifold, and if the data varies smoothly along the manifold, points close on the manifold are likely to share the same label. This provides a justification for using unlabeled data to map out the manifold structure.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 8}
+		\textbf{Statement:} In the "Cluster-then-Label" approach, the clustering step is performed using only the labeled data to ensure that the clusters align with the class labels.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The clustering step in "Cluster-then-Label" is performed on the entire dataset (both labeled and unlabeled) to find the natural clusters based on feature similarity. The labels are then used in the second step to assign class labels to each cluster. If clustering were done only on the labeled data, the unlabeled data would not contribute to the clustering structure, defeating the purpose of the approach.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 9}
+		\textbf{Statement:} Self-training is a transductive semi-supervised learning method because it only labels the current unlabeled data and does not build a generalizable model.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Self-training is an inductive method. Although it iteratively labels the current unlabeled data, it builds a classifier (model) that can be used to predict labels for new, unseen data. The model is retrained at each iteration, and the final model can be applied to any new instance. Transductive methods do not build a model.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 10}
+		\textbf{Statement:} One of the main drawbacks of co-training is that it requires the feature set to be split into two independent views, which may not always be possible in real-world datasets.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: True}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is a key limitation of co-training. The method explicitly requires two disjoint and conditionally independent feature views. In many real-world datasets, it is difficult to find such a natural split. For example, in a dataset of financial ratios, the features are often highly correlated, and finding two independent views is challenging. Self-training, on the other hand, does not have this requirement.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 11}
+		\textbf{Statement:} The "Feature Extraction" unsupervised pre-processing strategy uses the labels to guide the dimensionality reduction process.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} As the name "unsupervised pre-processing" suggests, this step is performed without using the labels. Techniques like PCA or autoencoders are applied to the entire dataset (both labeled and unlabeled) to learn a compressed representation. The labels are only used in the subsequent supervised step. Using labels in the pre-processing step would make it supervised, not unsupervised.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 12}
+		\textbf{Statement:} In semi-supervised learning, if the Clustering Assumption is violated, the unlabeled data can still be very helpful as long as the Smoothness Assumption is satisfied.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Clustering and Smoothness assumptions are closely related. If the Clustering Assumption is violated (i.e., data does not form distinct clusters corresponding to classes), the Smoothness Assumption is also likely to be violated. If points are intermingled, there is no low-density region to place the boundary. In practice, these assumptions often hold or fail together. The unlabeled data is only helpful if the class structure is reflected in the data distribution.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 13}
+		\textbf{Statement:} Unsupervised pre-training with an autoencoder is a form of transductive learning because it uses the unlabeled data to learn a representation.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Unsupervised pre-training is an inductive technique. The autoencoder learns a representation function (encoder) from the unlabeled data. This function can then be applied to any new data to extract features. Transductive methods do not learn a function; they only label the specific instances at hand. The fact that unlabeled data is used does not make it transductive; it is the ability to generalize to new data that defines an inductive method.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 14}
+		\textbf{Statement:} In co-training, if the two classifiers predict different labels for an unlabeled instance, this instance is added to both training sets with a consensus label.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is incorrect. In co-training, the most confident predictions from each classifier are added to the other classifier's training set, regardless of whether they agree. The process does not require consensus. If the two models disagree, the instance is not added; only the most confident predictions from each model are exchanged. The goal is cross-teaching, not consensus labeling.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 15}
+		\textbf{Statement:} A major advantage of self-training is that it is computationally inexpensive because it only requires training the model once.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Self-training is computationally expensive because the model is retrained in each iteration. If there are n unlabeled instances, the model is trained n times (or n/k times if k instances are added per iteration). This repeated training can be very costly, especially with large datasets or complex models. The computational cost is a recognized drawback of self-training.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 16}
+		\textbf{Statement:} The "Cluster-then-Label" approach is guaranteed to produce accurate labels for all unlabeled data if the clustering algorithm is correctly tuned.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Even with perfect clustering, the labels assigned to clusters depend on the labeled data points within them. If the labeled data is not representative (e.g., there is a mislabeled point, or the labeled points in a cluster are from multiple classes), the cluster will be mislabeled. Furthermore, the fundamental assumption is that clusters correspond to classes; if this is not true, tuning the clustering algorithm won't help. The approach is only as good as its assumptions.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 17}
+		\textbf{Statement:} In a risk management context, semi-supervised learning is particularly useful because labeled data (e.g., fraud cases, default events) is often rare and expensive to obtain, while unlabeled data is abundant.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: True}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is a key application area for semi-supervised learning. In many risk management scenarios, positive events (fraud, default, operational risk incidents) are rare, and labeling them requires expert investigation, which is costly and time-consuming. Semi-supervised learning allows practitioners to leverage the abundant unlabeled data to improve their models, making it a valuable tool in the risk professional's toolkit.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 18}
+		\textbf{Statement:} The Smoothness Assumption implies that a simple linear classifier is always the best choice for semi-supervised learning.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: False}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Smoothness Assumption is about the geometry of the data distribution, not the type of classifier. It states that the decision boundary should lie in low-density regions. This can be achieved with linear classifiers (if the boundary is linear and in a low-density region) or non-linear classifiers (if the boundary is complex but still in low-density regions). The choice of classifier depends on the data, not just the assumption.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 19}
+		\textbf{Statement:} In semi-supervised learning, the unlabeled data is only useful if it is from the same distribution as the labeled data.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: True}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} This is a critical point. Semi-supervised learning assumes that the labeled and unlabeled data are drawn from the same underlying distribution. If the unlabeled data comes from a different distribution (e.g., different time period, different customer segment), the structure learned from the unlabeled data may not correspond to the classification task, and the model's performance may degrade. This is known as "dataset shift" and is a serious concern in practice.
+	\end{frame}
+	
+	\begin{frame}{True/False Question 20}
+		\textbf{Statement:} Self-training can be applied with any supervised learning algorithm, making it a flexible and widely applicable semi-supervised learning method.
+		
+		\vspace{0.3cm}
+		\textbf{Is this statement True or False?}
+		
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Answer: True}}
+		\vspace{0.2cm}
+		\textcolor{blue}{\textbf{Explanation:}} Self-training is a "wrapper" method, meaning it can be used with any supervised classifier (e.g., logistic regression, SVM, decision trees, neural networks). This flexibility is one of its major advantages. The algorithm simply requires the classifier to provide a confidence measure (e.g., predicted probabilities) for its predictions. This makes self-training a popular and widely applicable technique.
+	\end{frame}
+	
+\end{document}

@@ -1,0 +1,335 @@
+\documentclass[10pt, aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Packages for functionality
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=cyan}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{caption}  % For figure/table numbering
+\usepackage{xcolor}   % For highlighting
+
+% Title Information
+\title[Confluence Maintenance SOP]{Standard Operating Procedure:\\Updating and Organizing Confluence Wiki Pages}
+\subtitle{Ensuring Accuracy, Accessibility, and Professional Formatting}
+\author{Your Team Name}
+\date{\today}
+
+\begin{document}
+	
+	% --- SLIDE 1: TITLE ---
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% --- SLIDE 2: TABLE OF CONTENTS ---
+	\begin{frame}{Agenda: The Broader Story}
+		\tableofcontents
+	\end{frame}
+	
+	% ============================================
+	% SECTION 1: INTRODUCTION & MASTER LINK
+	% ============================================
+	\section{Introduction \& Master Link}
+	\begin{frame}{1. Introduction \& Confluence Hierarchy}
+		\begin{block}{Goal}
+			Every Confluence page must serve a specific purpose and connect back to the central Space homepage.
+		\end{block}
+		\pause
+		\textbf{Action Item: Link to Master/Space Home}
+		\begin{itemize}
+			\item Every single Confluence page \textbf{must} contain a hyperlink back to the Space Homepage.
+			\item \textit{Example:} \href{https://confluence.yourcompany.com/display/SPACE}{\beamergotobutton{Return to Space Home}}
+		\end{itemize}
+		\pause
+		\begin{alertblock}{Why?}
+			Confluence relies on parent-child page hierarchies. Users often deep-link via search; they need a clear breadcrumb or explicit link back to the Space root.
+		\end{alertblock}
+	\end{frame}
+	
+	% ============================================
+	% SECTION 2: PAGE STRUCTURE (TOC & HEADINGS)
+	% ============================================
+	\section{Page Structure}
+	\begin{frame}[fragile]{2. Logical Reorganization}
+		\framesubtitle{Adding Headings and Table of Contents}
+		\begin{columns}[T]
+			\column{0.5\textwidth}
+			\textbf{Requirement:}
+			\begin{enumerate}
+				\item Add logical Headings (H1, H2, H3, H4).
+				\item Insert a dynamic \textbf{Table of Contents} (TOC) using Confluence's TOC macro.
+			\end{enumerate}
+			\column{0.5\textwidth}
+			\textbf{Confluence Best Practice:}
+			\begin{verbatim}
+				# Introduction (H1)
+				## Sub-section A (H2)
+				### Detailed Point 1 (H3)
+				#### Nested detail (H4)
+				## Sub-section B (H2)
+			\end{verbatim}
+		\end{columns}
+		\pause
+		\vfill
+		\textbf{Rule of Thumb:} If a section has more than 3 paragraphs, it needs a sub-heading to break the text. Use Confluence's built-in heading styles, not manual bold text.
+	\end{frame}
+	
+	% ============================================
+	% SECTION 3: THE DATE BLOCK
+	% ============================================
+	\section{Date Block}
+	\begin{frame}{3. The Date/Review Block}
+		\framesubtitle{Tracking Timeliness in Confluence}
+		\begin{block}{Requirement: Date Block}
+			We must place a date/review block prominently, preferably using Confluence's \textbf{Info} or \textbf{Note} macro.
+		\end{block}
+		\pause
+		\textbf{Scenario A (Date Available):}
+		\begin{itemize}
+			\item If tied to a specific release/event: \texttt{Last Updated: 2026-Q2}
+		\end{itemize}
+		\pause
+		\textbf{Scenario B (No Date Available - DEFAULT):}
+		\begin{itemize}
+			\item If no specific date exists, \textbf{you must add a review date block}.
+			\item \textit{Default Confluence Template:} \fcolorbox{red}{white}{Reviewed: \today \quad (Next Review: 3 Months)}
+		\end{itemize}
+		\pause
+		\begin{center}
+			\fbox{\Large \textbf{STATUS: [DRAFT -- REVIEW -- FINAL] - \today}}
+		\end{center}
+		\vspace{0.3cm}
+		\pause
+		\textbf{Pro Tip:} Use Confluence's \texttt{@mentions} in the date block to tag the page owner/reviewer.
+	\end{frame}
+	
+	% ============================================
+	% SECTION 4: HANDLING LINKS (CONFLUENCE, SHAREPOINT, REPO)
+	% ============================================
+	\section{Link Management}
+	\begin{frame}{4. Correcting and Categorizing Links}
+		\framesubtitle{No "Naked" Links Allowed}
+		\begin{block}{The Rule}
+			\textbf{Never} paste a raw URL. Always use Confluence's \textbf{Link} or \textbf{Link to Page} macro and provide context.
+		\end{block}
+		
+		\pause
+		\begin{tabular}{@{} >{\bfseries}l p{7cm} @{}}
+			\toprule
+			\textbf{Type} & \textbf{Format} \\
+			\midrule
+			\textit{Internal Confluence} & \href{run:./InternalPage}{\beamergotobutton{Link}} : "See the Design Spec (requires Confluence access)" \\
+			\textit{SharePoint} & \href{https://company.sharepoint.com}{\beamergotobutton{SharePoint}} : "Access the Project Drive (authenticate with corporate credentials)" \\
+			\textit{Repository (Git)} & \href{https://github.com/yourrepo}{\beamergotobutton{Repo}} : "Clone the Source Code (requires VPN access)" \\
+			\bottomrule
+		\end{tabular}
+		
+		\vfill
+		\pause
+		\textbf{Action:} For every link, write \textbf{2 lines} of description explaining:
+		\begin{enumerate}
+			\item What the link contains
+			\item Access requirements (VPN, authentication, permissions)
+		\end{enumerate}
+	\end{frame}
+	
+	% ============================================
+	% SECTION 5: EMBEDDED CONTENT & NUMBERING
+	% ============================================
+	\section{Embedded Content \& Numbering}
+	\begin{frame}[fragile]{5. Embedded Content, Figures \& Tables}
+		\framesubtitle{Fixing Unnumbered Media}
+		\begin{block}{Critical Issue Identified}
+			Many Confluence pages have embedded images and tables \textbf{without} figure/table numbers, making cross-referencing impossible.
+		\end{block}
+		
+		\pause
+		\textbf{Requirement 1: Figure Numbers}
+		\begin{itemize}
+			\item Every embedded image MUST have a figure number: \textbf{Figure 1:}, \textbf{Figure 2:}, etc.
+			\item Use Confluence's \textbf{Caption} feature or write it manually below the image.
+		\end{itemize}
+		\pause
+		
+		\textbf{Requirement 2: Table Numbers}
+		\begin{itemize}
+			\item Every table MUST have a table number: \textbf{Table 1:}, \textbf{Table 2:}, etc.
+			\item Always add a descriptive caption above or below the table.
+		\end{itemize}
+		\pause
+		
+		\textbf{Requirement 3: Embedded Items}
+		\begin{itemize}
+			\item Check for embedded \textbf{Excel sheets}, \textbf{PDFs}, \textbf{YouTube videos}, or \textbf{Jira issues}.
+			\item If embedded, ensure they have:
+			\begin{enumerate}
+				\item A numbered label (e.g., "Embedded Item 1: Jira Board")
+				\item A 1-2 sentence description of what the user should look for
+			\end{enumerate}
+		\end{itemize}
+	\end{frame}
+	
+	% ============================================
+	% SECTION 6: FORMATTING & FONT STANDARDS
+	% ============================================
+	\section{Formatting \& Fonts}
+	\begin{frame}{6. Corporate Formatting \& Font Standards}
+		\framesubtitle{Fixing the "Corporate Mess"}
+		\begin{block}{The Problem}
+			Corporate Confluence pages often have inconsistent fonts, sizes, and colors due to copy-paste from Word/Email.
+		\end{block}
+		
+		\pause
+		\textbf{Standardization Rules:}
+		\begin{enumerate}
+			\item \textbf{Body Text:} Arial / Helvetica (Confluence default) - \textit{Do not use Times New Roman or custom fonts}.
+			\item \textbf{Headings:} Use Confluence's built-in heading styles (\textbf{H1}, \textbf{H2}, \textbf{H3}) - \textit{Do not manually bold/underline/color text to simulate headings}.
+			\item \textbf{Code/Snippets:} Use Confluence's \textbf{Code Block} macro with proper syntax highlighting.
+			\item \textbf{Colors:} Stick to the corporate color palette (usually primary blue, gray, black). Avoid neon or random colors.
+			\item \textbf{Bullet Points:} Use Confluence's native bullet/numbered list buttons, not manual dashes or asterisks.
+		\end{enumerate}
+		\pause
+		\begin{alertblock}{Font Fix Action}
+			Select the entire page content and click \textbf{"Remove Formatting"} in Confluence (eraser icon), then re-apply correct heading styles.
+		\end{alertblock}
+	\end{frame}
+	
+	% ============================================
+	% SECTION 7: SUMMARY & TABLES
+	% ============================================
+	\section{Summary \& Tables}
+	\begin{frame}{7. Summaries and Tabular Data}
+		\framesubtitle{Adding Value at the Top}
+		\begin{columns}[T]
+			\column{0.6\textwidth}
+			\textbf{Introduction (Summary):}
+			\begin{itemize}
+				\item Each Confluence page must start with a 2 to 3-sentence \textbf{Introduction}.
+				\item It must answer: *"What is this page about and who is it for?"*
+			\end{itemize}
+			\pause
+			\textbf{Table Requirement:}
+			\begin{itemize}
+				\item If data exists, add a structured table with \textbf{Table 1:} caption.
+				\item If no data exists, create a placeholder table with \textbf{Table 1:} (Status/To-Do).
+			\end{itemize}
+			\column{0.4\textwidth}
+			\pause
+			\textbf{Example (Fixed):}
+			\begin{table}[]
+				\centering
+				\caption{\textbf{Table 1:} Page Update Status}
+				\begin{tabular}{|c|c|}
+					\hline
+					\textbf{Page} & \textbf{Status} \\
+					\hline
+					Notes & Pending \\
+					Links & Fixed \\
+					\hline
+				\end{tabular}
+			\end{table}
+		\end{columns}
+	\end{frame}
+	
+	% ============================================
+	% SECTION 8: MASTER CHECKLIST
+	% ============================================
+	\section{Final Checklist}
+	\begin{frame}{8. Final Confluence Update Checklist}
+		\framesubtitle{The "Go/No-Go" List}
+		Before saving the Confluence page, verify the following:
+		
+		\pause
+		\begin{enumerate}
+			\item \textbf{Language:} Grammar and spelling corrected? (No "wrong language").
+			\item \textbf{Headings:} Logical H1/H2/H3 structure using Confluence styles?
+			\item \textbf{TOC:} Table of Contents macro added at the top?
+			\item \textbf{Links:} 
+			\begin{itemize}
+				\item Are the hyperlinks \textbf{working}?
+				\item Are "naked" links replaced with descriptive text + 2 line summary?
+				\item Access requirements mentioned (VPN, permissions)?
+			\end{itemize}
+			\item \textbf{Date:} Date/Review block present using Info macro or manual?
+			\item \textbf{Master Link:} Is there a link \textbf{back} to the Space Homepage?
+			\item \textbf{Figures/Tables:} 
+			\begin{itemize}
+				\item Are all images numbered (Figure 1, Figure 2, ...)?
+				\item Are all tables numbered (Table 1, Table 2, ...)?
+			\end{itemize}
+			\item \textbf{Embedded Items:} Are Excel, PDF, video, or Jira embed links labeled and described?
+			\item \textbf{Formatting:} Consistent fonts, no manual bold/color for headings, code in Code Block macro?
+		\end{enumerate}
+		
+		\vfill
+		\pause
+		\begin{center}
+			\color{blue} \Huge \checkmark \quad All set!
+		\end{center}
+	\end{frame}
+	
+	% ============================================
+	% SECTION 9: CONFLUENCE MACROS QUICK REFERENCE
+	% ============================================
+	\section{Confluence Macros}
+	\begin{frame}{9. Quick Reference: Useful Confluence Macros}
+		\framesubtitle{Leverage Built-in Tools}
+		Instead of manual formatting, use these Confluence macros:
+		
+		\pause
+		\begin{table}[]
+			\centering
+			\caption{\textbf{Table 2:} Essential Confluence Macros}
+			\begin{tabular}{|p{3cm}|p{8cm}|}
+				\hline
+				\textbf{Macro} & \textbf{Use Case} \\
+				\hline
+				\texttt{\{toc\}} & Auto-generate Table of Contents \\
+				\hline
+				\texttt{\{info\}} & Highlight important information (blue box) \\
+				\hline
+				\texttt{\{warning\}} & Highlight critical alerts (red box) \\
+				\hline
+				\texttt{\{code\}} & Display code with syntax highlighting \\
+				\hline
+				\texttt{\{jira\}} & Embed live Jira issues \\
+				\hline
+				\texttt{\{gallery\}} & Display multiple images with captions \\
+				\hline
+				\texttt{\{excerpt\}} & Reuse content across multiple pages \\
+				\hline
+			\end{tabular}
+		\end{table}
+		
+		\vfill
+		\pause
+		\textbf{Remember:} Using macros ensures consistent formatting across the entire Confluence Space.
+	\end{frame}
+	
+	% ============================================
+	% SECTION 10: SUMMARY SLIDE
+	% ============================================
+	\section{Summary}
+	\begin{frame}{Summary: The Broader Story}
+		\begin{block}{Our Mantra}
+			"Every Confluence page is an entry point; every link is a doorway; every figure/table has a number."
+		\end{block}
+		\pause
+		\textbf{The Five Pillars of Confluence Updates:}
+		\begin{enumerate}
+			\item \textbf{Clarity:} Clear Intro, Summaries, and Headings.
+			\item \textbf{Connectivity:} Correct categorized links + Space Home link.
+			\item \textbf{Currency:} Always include a Date/Review block with @mentions.
+			\item \textbf{Consistency:} Standard fonts, colors, and macros.
+			\item \textbf{Cross-Reference:} Number all figures, tables, and embedded items.
+		\end{enumerate}
+		\vfill
+		\centering
+		\href{https://confluence.yourcompany.com/display/SPACE}{\beamergotobutton{Proceed to Update Confluence Now}}
+	\end{frame}
+	
+\end{document}

@@ -1,0 +1,30 @@
+\frametitle{Complete Sales Analysis Query}
+\begin{lstlisting}[language=SQL, caption=Complex Sales Analysis]
+			WITH sales_data AS (
+			SELECT s.SaleID, s.SaleDate,
+			s.CustomerID, s.ProductID,
+			s.Quantity, s.SaleAmount,
+			sb.RegionID, sb.StoreID
+			FROM Sales s
+			JOIN SalesBridge sb ON s.SaleID = sb.SaleID
+			WHERE s.SaleDate >= DATE '2024-01-01'
+			),
+			customer_info AS (
+			SELECT c.CustomerID, c.CustomerName,
+			c.AgeGroup, c.IncomeLevel,
+			r.RegionName
+			FROM Customers c
+			LEFT JOIN Regions r ON c.RegionID = r.RegionID
+			)
+			SELECT ci.RegionName, p.CategoryName,
+			DATE_TRUNC('month', sd.SaleDate) AS SaleMonth,
+			SUM(sd.SaleAmount) AS TotalRevenue,
+			COUNT(DISTINCT sd.CustomerID) AS UniqueCustomers
+			FROM sales_data sd
+			JOIN customer_info ci ON sd.CustomerID = ci.CustomerID
+			JOIN Products p ON sd.ProductID = p.ProductID
+			JOIN Categories cat ON p.CategoryID = cat.CategoryID
+			GROUP BY ci.RegionName, p.CategoryName,
+			DATE_TRUNC('month', sd.SaleDate)
+			ORDER BY SaleMonth DESC, TotalRevenue DESC;
+		\end{lstlisting}
