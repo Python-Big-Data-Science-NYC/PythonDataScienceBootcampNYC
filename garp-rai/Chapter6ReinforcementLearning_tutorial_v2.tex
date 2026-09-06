@@ -1,0 +1,2057 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings for tutorial format
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors for tutorial
+\definecolor{blue}{RGB}{0,0,255}
+\definecolor{red}{RGB}{255,0,0}
+\definecolor{green}{RGB}{0,128,0}
+\definecolor{orange}{RGB}{255,165,0}
+\definecolor{purple}{RGB}{128,0,128}
+\definecolor{gray}{RGB}{128,128,128}
+\definecolor{lightblue}{RGB}{173,216,230}
+\definecolor{lightyellow}{RGB}{255,255,224}
+\definecolor{lightgreen}{RGB}{144,238,144}
+\definecolor{lightred}{RGB}{255,182,193}
+
+\title{Reinforcement Learning}
+\subtitle{COMPLETE TUTORIAL: MAB, Monte Carlo, TD, DQN, Policy Methods}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% PART 1: INTRODUCTION - SLIDES 1-5
+	% ============================================================
+	
+	\begin{frame}{TUTORIAL OVERVIEW}
+		\fontsize{7}{8}\selectfont
+		\textbf{What You Will Learn in This Tutorial:}
+		
+		\vspace{0.2cm}
+		\begin{tabular}{|p{2.5cm}|p{5.5cm}|}
+			\hline
+			\textcolor{blue}{Topic} & \textcolor{blue}{Key Concepts Covered} \\
+			\hline
+			1. RL Fundamentals & Agent, Environment, State, Action, Reward, Policy, Value Functions \\
+			\hline
+			2. Multi-Armed Bandit & Exploration vs Exploitation, $\epsilon$-Greedy, Q-Value Updates \\
+			\hline
+			3. Monte Carlo Methods & Episode-based Learning, Full Returns, Bias-Variance Trade-off \\
+			\hline
+			4. Temporal Difference & Online Learning, Bootstrapping, Q-Learning, SARSA, TD Error \\
+			\hline
+			5. Deep RL \& DQN & Neural Networks, Experience Replay, Target Networks \\
+			\hline
+			6. Policy Methods & Value-based vs Policy-based, Actor-Critic, Continuous Actions \\
+			\hline
+			7. MDP \& Bellman & Markov Property, Dynamic Programming, Optimality Equations \\
+			\hline
+			8. Advanced Topics & RLHF, AlphaGo, Model-Based RL, Continuous RL \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Key to Success:}} Understand the \textcolor{blue}{"exploration vs exploitation"} trade-off!
+	\end{frame}
+	
+	\begin{frame}{RL - What Makes It Different?}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Reinforcement Learning vs Other Paradigms}}
+		
+		\begin{tabular}{|p{3.5cm}|p{5.5cm}|}
+			\hline
+			\textcolor{blue}{Paradigm} & \textcolor{blue}{Key Characteristic} \\
+			\hline
+			Supervised Learning & Learns from \textcolor{blue}{labeled data}; output = prediction/classification \\
+			\hline
+			Unsupervised Learning & Finds \textcolor{blue}{hidden patterns}; output = clusters/structures \\
+			\hline
+			Reinforcement Learning & Learns through \textcolor{blue}{trial and error}; output = policy/action \\
+			\hline
+		\end{tabular}
+		
+		\textbf{Core RL Concept:}
+		\begin{itemize}
+			\item Agent \textcolor{blue}{interacts} with environment
+			\item Takes \textcolor{blue}{actions}
+			\item Receives \textcolor{blue}{rewards} (positive or negative)
+			\item Goal: \textcolor{blue}{Maximize cumulative future reward}
+		\end{itemize}
+		
+		\textbf{Analogy - Dog Training:}
+		\begin{itemize}
+			\item Command $\rightarrow$ Dog takes action $\rightarrow$ Reward if correct
+			\item Over time, dog learns the \textcolor{blue}{policy}
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} RL uses \textcolor{blue}{rewards}, not labels!
+	\end{frame}
+	
+	\begin{frame}{RL - Key Terminology}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{The Language of Reinforcement Learning}}
+		
+		\begin{tabular}{|p{2.5cm}|p{5.5cm}|}
+			\hline
+			\textcolor{blue}{Term} & \textcolor{blue}{Definition} \\
+			\hline
+			Agent & The \textcolor{blue}{learner/decision-maker} who takes actions \\
+			\hline
+			Environment & The \textcolor{blue}{world} the agent interacts with \\
+			\hline
+			Action (a) & A \textcolor{blue}{choice} the agent can make \\
+			\hline
+			State (s) & The \textcolor{blue}{current situation} of the environment \\
+			\hline
+			Reward (R) & \textcolor{blue}{Feedback} from environment (positive or negative) \\
+			\hline
+			Policy ($\pi$) & The agent's \textcolor{blue}{strategy} - maps states to actions \\
+			\hline
+			Value Function V(s) & How \textcolor{blue}{good} it is to be in state s \\
+			\hline
+			Action-Value Q(s,a) & How \textcolor{blue}{good} it is to take action a in state s \\
+			\hline
+		\end{tabular}
+		
+		\textbf{Key Insight:}
+		\begin{itemize}
+			\item Optimal policy: $\pi^*(s) = \arg\max_a Q(s,a)$
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Policy $\neq$ Value Function!
+	\end{frame}
+	
+	\begin{frame}{RL - Mathematical Framework}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{The Mathematics of RL}}
+		
+		\textbf{Expected Future Return (G):}
+		\[
+		G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots
+		\]
+		$\gamma$ = \textcolor{blue}{discount factor} ($0 \leq \gamma \leq 1$)
+		
+		\textbf{State-Value Function V(s):}
+		\[
+		V_\pi(s) = E_\pi[G_t | S_t = s]
+		\]
+		
+		\textbf{Action-Value Function Q(s,a):}
+		\[
+		Q_\pi(s,a) = E_\pi[G_t | S_t = s, A_t = a]
+		\]
+		
+		\textbf{Relationship:}
+		\[
+		V_\pi(s) = \sum_a \pi(a|s) Q_\pi(s,a)
+		\]
+		\[
+		V^*(s) = \max_a Q^*(s,a)
+		\]
+		
+		\textcolor{red}{\textbf{Exam Trap:}} V(s) = expectation over actions; Q(s,a) = action-specific!
+	\end{frame}
+	
+	\begin{frame}{RL - Famous Applications}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Real-World RL Applications}}
+		
+		\textbf{AlphaGo / AlphaZero (DeepMind):}
+		\begin{itemize}
+			\item Superhuman performance in Go, Chess, Shogi
+			\item Played \textcolor{blue}{millions} of games against itself
+			\item Discovered \textcolor{blue}{novel strategies}
+		\end{itemize}
+		
+		\textbf{Robotics:}
+		\begin{itemize}
+			\item Complex manipulation tasks
+			\item Self-driving cars
+			\item Warehouse automation
+		\end{itemize}
+		
+		\textbf{Business:}
+		\begin{itemize}
+			\item Dynamic Pricing
+			\item Supply Chain Optimization
+			\item Algorithmic Trading
+			\item \textcolor{blue}{RLHF for ChatGPT} (Reinforcement Learning from Human Feedback)
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} RLHF is key for LLM fine-tuning!
+	\end{frame}
+	
+	% ============================================================
+	% PART 2: MAB - SLIDES 6-25
+	% ============================================================
+	
+	\begin{frame}{MAB - Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{The Multi-Armed Bandit Problem}}
+		
+		\textbf{The Scenario:}
+		\begin{itemize}
+			\item Gambler faces \textcolor{blue}{multiple slot machines}
+			\item Each machine has \textcolor{blue}{unknown} reward distribution
+			\item Goal: \textcolor{blue}{Maximize total winnings}
+		\end{itemize}
+		
+		\textbf{Key MAB Characteristics:}
+		\begin{enumerate}
+			\item \textcolor{blue}{Single state} - environment doesn't change
+			\item Actions don't affect future states
+			\item Each action gives \textcolor{blue}{immediate reward}
+			\item No long-term consequences
+		\end{enumerate}
+		
+		\textbf{The Core Dilemma:}
+		\begin{itemize}
+			\item \textcolor{blue}{Exploit}: Play best machine so far
+			\item \textcolor{blue}{Explore}: Try other machines to find better ones
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MAB has \textcolor{blue}{ONLY ONE STATE}!
+	\end{frame}
+	
+	\begin{frame}{MAB - The Three Strategies}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Three Strategies for MAB}}
+		
+		\textbf{Strategy 1: Greedy (Pure Exploitation)}
+		\begin{itemize}
+			\item Always choose \textcolor{blue}{highest Q-value}
+			\item Pros: Maximizes immediate reward
+			\item Cons: May miss better machine
+		\end{itemize}
+		
+		\textbf{Strategy 2: Random (Pure Exploration)}
+		\begin{itemize}
+			\item Always choose \textcolor{blue}{random} machine
+			\item Pros: Gathers information about all machines
+			\item Cons: Never uses knowledge
+		\end{itemize}
+		
+		\textbf{Strategy 3: $\epsilon$-Greedy (Balanced)}
+		\begin{itemize}
+			\item With probability $\epsilon$: \textcolor{blue}{Explore} (random)
+			\item With probability $1-\epsilon$: \textcolor{blue}{Exploit} (best)
+			\item \textcolor{green}{Balances} exploration and exploitation
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\epsilon$-greedy with decay is \textcolor{blue}{best practical}!
+	\end{frame}
+	
+	\begin{frame}{MAB - Q-Value Calculation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Q-Value = Average of Observed Rewards}}
+		
+		\[
+		Q_k^n = \frac{1}{n}\sum_{j=1}^n R_j
+		\]
+		
+		\textbf{Incremental Update:}
+		\[
+		Q_k^n = Q_k^{n-1} + \frac{1}{n}(R_n - Q_k^{n-1})
+		\]
+		
+		\textbf{Example: Machine A played 5 times:}
+		\begin{itemize}
+			\item Rewards: [1.2, 0.8, 1.5, 0.3, 1.1]
+			\item Q(A) = (1.2+0.8+1.5+0.3+1.1)/5 = 0.98
+		\end{itemize}
+		
+		\textbf{Step-by-Step:}
+		\begin{enumerate}
+			\item Play 1: R=1.2, Q=1.2
+			\item Play 2: R=0.8, Q=(1.2+0.8)/2=1.0
+			\item Play 3: R=1.5, Q=(1.2+0.8+1.5)/3=1.167
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q-values are \textcolor{blue}{averages}, not sums!
+	\end{frame}
+	
+	\begin{frame}{MAB - $\epsilon$ Decay}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{How $\epsilon$ Decays Over Time}}
+		
+		\[
+		\epsilon_t = \beta^{t-1}
+		\]
+		where $\beta$ = decay factor ($0 < \beta < 1$)
+		
+		\textbf{Example with $\beta = 0.85$:}
+		
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Trial} & \textbf{$\epsilon_t$} & \textbf{Decision} \\
+			\hline
+			1 & 1.00 & Always Explore \\
+			\hline
+			2 & 0.85 & 85\% Explore, 15\% Exploit \\
+			\hline
+			5 & 0.522 & 52.2\% Explore \\
+			\hline
+			10 & 0.232 & 23.2\% Explore \\
+			\hline
+			20 & 0.046 & 4.6\% Explore \\
+			\hline
+			50 & 0.0004 & Pure Exploit \\
+			\hline
+		\end{tabular}
+		
+		\textbf{Key Insight:}
+		\begin{itemize}
+			\item High $\epsilon$ early = More exploration
+			\item Low $\epsilon$ later = More exploitation
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\epsilon_t = \beta^{t-1}$, not $\beta^t$!
+	\end{frame}
+	
+	\begin{frame}{MAB - Worked Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{MAB - Step-by-Step Example}}
+		
+		\textbf{Setup:}
+		\begin{itemize}
+			\item 3 machines: A, B, C
+			\item True means: $\mu_A = 0.8$, $\mu_B = 0.5$, $\mu_C = 0.7$
+			\item $\beta = 0.85$
+		\end{itemize}
+		
+		\textbf{Trial 1:} $\epsilon = 1.00$, random=0.7 $\rightarrow$ Explore
+		\begin{itemize}
+			\item Choose A, Reward=1.2, Q(A)=1.2
+		\end{itemize}
+		
+		\textbf{Trial 2:} $\epsilon = 0.85$, random=0.99 $\rightarrow$ Exploit
+		\begin{itemize}
+			\item Choose A (best), Reward=0.8, Q(A)=1.0
+		\end{itemize}
+		
+		\textbf{Trial 3:} $\epsilon = 0.7225$, random=0.65 $\rightarrow$ Explore
+		\begin{itemize}
+			\item Choose B, Reward=1.7, Q(B)=1.7
+		\end{itemize}
+		
+		\textbf{After 10 Trials:}
+		\begin{tabular}{|c|c|}
+			\hline
+			Machine & Q-Value \\
+			\hline
+			A & 0.80 \\
+			\hline
+			B & 0.50 \\
+			\hline
+			C & 0.70 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Estimates may differ from true means due to sampling error!
+	\end{frame}
+	
+	\begin{frame}{MAB - Greedy Strategy Risk}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{The Risk of Pure Exploitation}}
+		
+		\textbf{Scenario:}
+		\begin{itemize}
+			\item Q(A) = 1.5 (lucky), Q(B) = 0, Q(C) = 0
+			\item True means: $\mu_A = 0.2$, $\mu_B = 2.0$, $\mu_C = 1.8$
+		\end{itemize}
+		
+		\textbf{Greedy Strategy:}
+		\begin{itemize}
+			\item Always plays A (Q=1.5)
+			\item Expected reward = 0.2 per play
+			\item Total reward = $0.2 \times 1000 = 200$
+		\end{itemize}
+		
+		\textbf{Optimal Strategy:}
+		\begin{itemize}
+			\item Always plays B (true mean = 2.0)
+			\item Total reward = $2.0 \times 1000 = 2000$
+		\end{itemize}
+		
+		\textbf{Regret:}
+		\begin{itemize}
+			\item Regret = 2000 - 200 = 1800 (huge loss!)
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Greedy can be \textcolor{red}{catastrophically suboptimal}!
+	\end{frame}
+	
+	\begin{frame}{MAB - Random Strategy Problem}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{The Problem of Pure Exploration}}
+		
+		\textbf{Scenario:}
+		\begin{itemize}
+			\item 3 machines: $\mu_A = 0.8$, $\mu_B = 0.5$, $\mu_C = 0.7$
+			\item 1000 plays
+		\end{itemize}
+		
+		\textbf{Random Strategy:}
+		\begin{itemize}
+			\item Expected reward = 0.667 per play
+			\item Total = $0.667 \times 1000 = 667$
+		\end{itemize}
+		
+		\textbf{Optimal:}
+		\begin{itemize}
+			\item Always plays A (0.8)
+			\item Total = $0.8 \times 1000 = 800$
+		\end{itemize}
+		
+		\textbf{Comparison:}
+		\begin{tabular}{|c|c|}
+			\hline
+			Strategy & Expected Reward \\
+			\hline
+			Optimal & 800 \\
+			\hline
+			$\epsilon$-greedy (0.1) & ~787 \\
+			\hline
+			Greedy (if lucky) & 800 \\
+			\hline
+			Greedy (if unlucky) & 200 \\
+			\hline
+			Random & 667 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Random \textcolor{red}{never exploits} - wastes knowledge!
+	\end{frame}
+	
+	\begin{frame}{MAB - $\epsilon$-Greedy Analysis}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{$\epsilon$-Greedy - The Balanced Approach}}
+		
+		\textbf{Setup:}
+		\begin{itemize}
+			\item $\epsilon = 0.10$ (constant)
+			\item 1000 plays
+		\end{itemize}
+		
+		\textbf{Expected Behavior:}
+		\begin{itemize}
+			\item 90\% plays: best machine (A) $\rightarrow$ reward ~0.8
+			\item 10\% plays: random $\rightarrow$ average ~0.667
+			\item Expected reward = 0.9(0.8) + 0.1(0.667) = 0.787
+			\item Total $\approx$ 787
+		\end{itemize}
+		
+		\textbf{With Decay:}
+		\begin{itemize}
+			\item Early: More exploration
+			\item Late: More exploitation
+			\item Often \textcolor{blue}{outperforms} constant $\epsilon$
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\epsilon$-greedy with decay is \textcolor{blue}{usually better}!
+	\end{frame}
+	
+	\begin{frame}{MAB - Decay Factor Analysis}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Choosing the Decay Factor $\beta$}}
+		
+		\textbf{Effect of Different $\beta$:}
+		
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			\textbf{Trial} & $\beta=0.85$ & $\beta=0.95$ & $\beta=0.99$ \\
+			\hline
+			1 & 1.00 & 1.00 & 1.00 \\
+			\hline
+			5 & 0.522 & 0.815 & 0.961 \\
+			\hline
+			10 & 0.232 & 0.630 & 0.914 \\
+			\hline
+			20 & 0.046 & 0.377 & 0.827 \\
+			\hline
+			50 & 0.0004 & 0.077 & 0.606 \\
+			\hline
+			100 & $\approx$0 & 0.006 & 0.366 \\
+			\hline
+		\end{tabular}
+		
+		\textbf{Interpretation:}
+		\begin{itemize}
+			\item $\beta = 0.85$: Fast decay, quick exploitation
+			\item $\beta = 0.95$: Moderate decay, balanced
+			\item $\beta = 0.99$: Slow decay, long exploration
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Smaller $\beta$ = faster decay = less exploration later!
+	\end{frame}
+	
+	\begin{frame}{MAB - Thompson Sampling}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Thompson Sampling - A Bayesian Alternative}}
+		
+		\textbf{The Concept:}
+		\begin{itemize}
+			\item Maintain \textcolor{blue}{probability distribution} for each machine
+			\item Sample from each distribution
+			\item Choose \textcolor{blue}{maximum sampled value}
+			\item Naturally balances exploration and exploitation
+		\end{itemize}
+		
+		\textbf{Example - Binary Rewards:}
+		\begin{itemize}
+			\item A: Beta(5,2) $\rightarrow$ mean=0.714
+			\item B: Beta(2,3) $\rightarrow$ mean=0.400
+			\item C: Beta(3,2) $\rightarrow$ mean=0.600
+			\item Sample: A=0.72, B=0.35, C=0.68 $\rightarrow$ Choose A
+		\end{itemize}
+		
+		\textbf{Advantages:}
+		\begin{itemize}
+			\item No $\epsilon$ parameter to tune
+			\item Balances based on uncertainty
+			\item Theoretically optimal (Bayesian)
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Thompson Sampling is \textcolor{blue}{Bayesian}!
+	\end{frame}
+	
+	\begin{frame}{MAB - Regret Analysis}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Regret - Measuring Performance}}
+		
+		\[
+		\text{Regret}(T) = T \times \mu^* - \sum_{t=1}^T \mu_{a_t}
+		\]
+		
+		\textbf{Interpretation:}
+		\begin{itemize}
+			\item Opportunity cost of not knowing the best machine
+			\item Cumulative loss from suboptimal choices
+			\item Goal: \textcolor{blue}{Minimize regret}
+		\end{itemize}
+		
+		\textbf{Example:}
+		\begin{itemize}
+			\item $\mu^* = 0.8$ (Machine A)
+			\item Play B 100 times $\rightarrow$ regret = 100(0.8-0.5) = 30
+		\end{itemize}
+		
+		\textbf{Expected Regret (T=1000):}
+		\begin{tabular}{|c|c|}
+			\hline
+			Strategy & Expected Regret \\
+			\hline
+			Optimal & 0 \\
+			\hline
+			$\epsilon$-greedy (0.1) & ~13 \\
+			\hline
+			Greedy (unlucky) & ~600 \\
+			\hline
+			Random & ~133 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Regret is cumulative loss - minimize it!
+	\end{frame}
+	
+	\begin{frame}{MAB - A/B Testing Application}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{A/B Testing as a Multi-Armed Bandit}}
+		
+		\textbf{Traditional A/B Testing:}
+		\begin{itemize}
+			\item Split traffic 50/50
+			\item Test for significance
+			\item Problem: \textcolor{red}{Wastes traffic} on inferior options
+		\end{itemize}
+		
+		\textbf{MAB Approach:}
+		\begin{itemize}
+			\item Each variant = \textcolor{blue}{slot machine}
+			\item Use $\epsilon$-greedy or Thompson Sampling
+			\item Dynamically allocate more traffic to better variants
+		\end{itemize}
+		
+		\textbf{Example - Ad CTR:}
+		\begin{itemize}
+			\item Variant A: 5\% CTR, B: 3\%, C: 4\%
+		\end{itemize}
+		
+		\textbf{Traditional (100,000 impressions):}
+		\begin{itemize}
+			\item Expected clicks = 0.05(33,333)+0.03(33,333)+0.04(33,333) = 4,000
+		\end{itemize}
+		
+		\textbf{MAB Approach:}
+		\begin{itemize}
+			\item Early: Explore all variants
+			\item Later: ~90\% to best (A)
+			\item Expected clicks $\approx$ 4,850
+			\item \textcolor{green}{21\% more clicks!}
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MAB significantly outperforms A/B testing!
+	\end{frame}
+	
+	\begin{frame}{MAB - Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{MAB - Key Takeaways}}
+		
+		\textbf{Key Concepts:}
+		\begin{enumerate}
+			\item \textcolor{blue}{MAB Characteristics:}
+			\begin{itemize}
+				\item Single state, immediate rewards, no future consequences
+			\end{itemize}
+			
+			\item \textcolor{blue}{Three Strategies:}
+			\begin{itemize}
+				\item Greedy = Pure exploitation
+				\item Random = Pure exploration
+				\item $\epsilon$-Greedy = Balanced (best)
+			\end{itemize}
+			
+			\item \textcolor{blue}{Q-Value:}
+			\[
+			Q_k^n = \frac{1}{n}\sum R_j
+			\]
+			
+			\item \textcolor{blue}{$\epsilon$ Decay:}
+			\[
+			\epsilon_t = \beta^{t-1}
+			\]
+			
+			\item \textcolor{blue}{Regret:}
+			\begin{itemize}
+				\item Loss from not knowing the optimal action
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Success:}} MAB is the foundation - master it!
+	\end{frame}
+	
+	% ============================================================
+	% PART 3: MONTE CARLO - SLIDES 26-40
+	% ============================================================
+	
+	\begin{frame}{Monte Carlo - Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Monte Carlo - Learning from Complete Episodes}}
+		
+		\textbf{What is Monte Carlo RL?}
+		\begin{itemize}
+			\item Learns from \textcolor{blue}{complete episodes}
+			\item Episode = full sequence from start to terminal state
+			\item Example: Complete game of chess
+		\end{itemize}
+		
+		\textbf{Key Characteristics:}
+		\begin{itemize}
+			\item \textcolor{blue}{Wait until episode ends} to update
+			\item Uses \textcolor{blue}{actual returns} ($G_t$)
+			\item \textcolor{green}{Unbiased} - learns from real experience
+		\end{itemize}
+		
+		\textbf{Update Formula:}
+		\[
+		Q(s,a) \leftarrow Q(s,a) + \alpha(G_t - Q(s,a))
+		\]
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC requires \textcolor{blue}{complete episodes}!
+	\end{frame}
+	
+	\begin{frame}{Monte Carlo - Episode Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{What is an Episode?}}
+		
+		\textbf{Definition:}
+		\begin{itemize}
+			\item Complete trajectory from start to terminal state
+			\item Sequence: $S_0, A_0, R_1, S_1, A_1, ..., S_T$
+		\end{itemize}
+		
+		\textbf{Examples:}
+		\begin{enumerate}
+			\item Nim: Start $\rightarrow$ coin removal $\rightarrow$ win/lose
+			\item Chess: Opening $\rightarrow$ moves $\rightarrow$ Checkmate
+			\item Board Game: Start $\rightarrow$ moves $\rightarrow$ End
+		\end{enumerate}
+		
+		\textbf{Return Calculation:}
+		\[
+		G_t = R_{t+1} + \gamma R_{t+2} + \cdots + \gamma^{T-t-1}R_T
+		\]
+		
+		\textbf{Update Only at Episode End:}
+		\begin{itemize}
+			\item No updates within episode
+			\item All state-action pairs updated at end
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC updates \textcolor{blue}{only at episode end}!
+	\end{frame}
+	
+	\begin{frame}{Monte Carlo - Return Calculation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Calculating Returns in MC}}
+		
+		\[
+		G_t = \sum_{k=0}^{T-t-1} \gamma^k R_{t+k+1}
+		\]
+		
+		\textbf{Example - Nim with $\gamma = 1$:}
+		\begin{itemize}
+			\item Episode: S=6 $\rightarrow$ S=3 $\rightarrow$ S=1 $\rightarrow$ S=0 (Win)
+			\item Rewards: $R_1=0, R_2=0, R_3=1$
+			\item $G_0 = 0 + 0 + 1 = 1$
+			\item $G_1 = 0 + 1 = 1$
+			\item $G_2 = 1$
+		\end{itemize}
+		
+		\textbf{Example - Nim with $\gamma = 0.9$:}
+		\begin{itemize}
+			\item $G_0 = 0 + 0 + 0.81 = 0.81$
+			\item $G_1 = 0 + 0.9 = 0.9$
+			\item $G_2 = 1$
+		\end{itemize}
+		
+		\textbf{Why Discount?}
+		\begin{itemize}
+			\item Future rewards less certain
+			\item More weight to immediate rewards
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC uses actual return $G_t$!
+	\end{frame}
+	
+	\begin{frame}{Monte Carlo - First-Visit vs Every-Visit}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{First-Visit vs Every-Visit MC}}
+		
+		\textbf{The Distinction:}
+		\begin{itemize}
+			\item Same state-action pair may be visited multiple times
+		\end{itemize}
+		
+		\textbf{First-Visit MC:}
+		\begin{itemize}
+			\item Only update \textcolor{blue}{first time} $(s,a)$ occurs
+			\item \textcolor{green}{Unbiased} estimate
+		\end{itemize}
+		
+		\textbf{Every-Visit MC:}
+		\begin{itemize}
+			\item Update \textcolor{blue}{every time} $(s,a)$ occurs
+			\item \textcolor{orange}{Slightly biased} but lower variance
+		\end{itemize}
+		
+		\textbf{Example:}
+		\begin{itemize}
+			\item Episode: (S1,A1), (S2,A2), (S1,A1), Terminal
+			\item First-visit: Update (S1,A1) once
+			\item Every-visit: Update (S1,A1) twice
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} First-visit = unbiased; Every-visit = lower variance!
+	\end{frame}
+	
+	\begin{frame}{Monte Carlo - NIM Example Step 1}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{MC NIM - First Episode}}
+		
+		\textbf{Setup:}
+		\begin{itemize}
+			\item 6 coins, remove 1, 2, or 3
+			\item $\alpha = 0.05$, $\gamma = 1$
+			\item Opponent plays randomly
+		\end{itemize}
+		
+		\textbf{Episode 1:}
+		\begin{enumerate}
+			\item S=6, A=3 $\rightarrow$ S'=3 (opponent picks 2)
+			\item S=1, A=1 $\rightarrow$ S'=0 (Player 1 wins!)
+			\item Return: $G = 1$
+		\end{enumerate}
+		
+		\textbf{MC Updates (Episode End):}
+		\begin{itemize}
+			\item Q(6,3) = 0 + 0.05(1-0) = 0.05
+			\item Q(1,1) = 0 + 0.05(1-0) = 0.05
+		\end{itemize}
+		
+		\textbf{After Episode 1 Q-Table:}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			Action & S=1 & S=2 & S=3 & S=4 & S=5 & S=6 \\
+			\hline
+			Pick 1 & 0.05 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+			Pick 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+			Pick 3 & 0 & 0 & 0 & 0 & 0 & 0.05 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC updates all pairs in episode with same G!
+	\end{frame}
+	
+	\begin{frame}{Monte Carlo - NIM Example Step 2}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{MC NIM - Second Episode}}
+		
+		\textbf{Episode 2:}
+		\begin{enumerate}
+			\item S=6, A=1 $\rightarrow$ S'=5 (opponent picks 1)
+			\item S=4, A=3 $\rightarrow$ S'=1 (opponent picks 1)
+			\item S=0 (Player 1 loses!)
+			\item Return: $G = -1$
+		\end{enumerate}
+		
+		\textbf{MC Updates:}
+		\begin{itemize}
+			\item Q(6,1) = 0 + 0.05(-1-0) = -0.05
+			\item Q(4,3) = 0 + 0.05(-1-0) = -0.05
+		\end{itemize}
+		
+		\textbf{After Episode 2:}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			Action & S=1 & S=2 & S=3 & S=4 & S=5 & S=6 \\
+			\hline
+			Pick 1 & 0.05 & 0 & 0 & 0 & 0 & -0.05 \\
+			\hline
+			Pick 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+			Pick 3 & 0 & 0 & 0 & -0.05 & 0 & 0.05 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Negative G updates Q-values downward!
+	\end{frame}
+	
+	\begin{frame}{Monte Carlo - NIM Example Step 3}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{MC NIM - Third Episode}}
+		
+		\textbf{Episode 3:}
+		\begin{enumerate}
+			\item S=6, A=3 $\rightarrow$ S'=3 (opponent picks 2)
+			\item S=1, A=1 $\rightarrow$ S'=0 (Player 1 wins!)
+			\item Return: $G = 1$
+		\end{enumerate}
+		
+		\textbf{MC Updates:}
+		\begin{itemize}
+			\item Q(6,3) = 0.05 + 0.05(1-0.05) = 0.0975
+			\item Q(1,1) = 0.05 + 0.05(1-0.05) = 0.0975
+		\end{itemize}
+		
+		\textbf{After Episode 3:}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			Action & S=1 & S=2 & S=3 & S=4 & S=5 & S=6 \\
+			\hline
+			Pick 1 & 0.0975 & 0 & 0 & 0 & 0 & -0.05 \\
+			\hline
+			Pick 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+			Pick 3 & 0 & 0 & 0 & -0.05 & 0 & 0.0975 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q-values gradually move toward true values!
+	\end{frame}
+	
+	\begin{frame}{Monte Carlo - NIM Final Results}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{MC NIM - After 1,000,000 Episodes}}
+		
+		\textbf{Final Q-Table:}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			Action & S=1 & S=2 & S=3 & S=4 & S=5 & S=6 \\
+			\hline
+			Pick 1 & 1 & -1 & -0.071 & 0.380 & 0 & 0.774 \\
+			\hline
+			Pick 2 & 0 & 1 & -1 & -0.110 & 0 & 1 \\
+			\hline
+			Pick 3 & 0 & 0 & 1 & -0.858 & 0 & 0.020 \\
+			\hline
+		\end{tabular}
+		
+		\textbf{Optimal Strategy:}
+		\begin{itemize}
+			\item S=6: Pick 2 (Q=1)
+			\item S=4: Pick 1 (Q=0.380)
+			\item S=3: Pick 3 (Q=1)
+			\item S=2: Pick 2 (Q=1)
+			\item S=1: Pick 1 (Q=1)
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q=1 = winning action; Q=-1 = losing action!
+	\end{frame}
+	
+	\begin{frame}{Monte Carlo - Advantages and Disadvantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{MC - Pros and Cons}}
+		
+		\textbf{Advantages:}
+		\begin{enumerate}
+			\item \textcolor{green}{Unbiased estimates} - uses actual returns
+			\item \textcolor{green}{Simple to understand}
+			\item \textcolor{green}{Works well with long episodes}
+			\item \textcolor{green}{No bootstrapping}
+		\end{enumerate}
+		
+		\textbf{Disadvantages:}
+		\begin{enumerate}
+			\item \textcolor{red}{High variance}
+			\item \textcolor{red}{Requires complete episodes}
+			\item \textcolor{red}{Slow learning} (wait until episode end)
+			\item \textcolor{red}{Inefficient for long episodes}
+		\end{enumerate}
+		
+		\textbf{Comparison:}
+		\begin{tabular}{|c|c|}
+			\hline
+			MC & TD \\
+			\hline
+			Unbiased & Biased \\
+			\hline
+			High variance & Low variance \\
+			\hline
+			Episode-end & Step-by-step \\
+			\hline
+			Episodic only & Episodic + Continuous \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC = unbiased but high variance!
+	\end{frame}
+	
+	\begin{frame}{Monte Carlo - Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Monte Carlo - Key Takeaways}}
+		
+		\textbf{Key Concepts:}
+		\begin{enumerate}
+			\item \textcolor{blue}{Definition:}
+			\begin{itemize}
+				\item Learns from complete episodes
+				\item Updates only at episode end
+				\item Uses actual returns ($G_t$)
+			\end{itemize}
+			
+			\item \textcolor{blue}{Update Formula:}
+			\[
+			Q(s,a) \leftarrow Q(s,a) + \alpha(G_t - Q(s,a))
+			\]
+			
+			\item \textcolor{blue}{Return Calculation:}
+			\[
+			G_t = R_{t+1} + \gamma R_{t+2} + \cdots
+			\]
+			
+			\item \textcolor{blue}{First-Visit vs Every-Visit:}
+			\begin{itemize}
+				\item First-visit: unbiased
+				\item Every-visit: lower variance
+			\end{itemize}
+			
+			\item \textcolor{blue}{Requirements:}
+			\begin{itemize}
+				\item \textcolor{red}{Must have} terminal states
+				\item Cannot handle continuous tasks
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Success:}} MC = episodic tasks only!
+	\end{frame}
+	
+	% ============================================================
+	% PART 4: TEMPORAL DIFFERENCE - SLIDES 41-60
+	% ============================================================
+	
+	\begin{frame}{TD - Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Temporal Difference - Learning Step by Step}}
+		
+		\textbf{What is TD Learning?}
+		\begin{itemize}
+			\item Learns from \textcolor{blue}{incomplete episodes}
+			\item Updates \textcolor{blue}{after each step}
+			\item Uses \textcolor{blue}{bootstrapping} - estimates of future values
+		\end{itemize}
+		
+		\textbf{Key Characteristic:}
+		\begin{itemize}
+			\item Doesn't wait for episode end
+			\item Updates using $R_{t+1} + \gamma V(s')$
+			\item \textcolor{orange}{Biased} but \textcolor{green}{lower variance}
+		\end{itemize}
+		
+		\textbf{TD Update:}
+		\[
+		V(s) \leftarrow V(s) + \alpha(R_{t+1} + \gamma V(s') - V(s))
+		\]
+		
+		\textbf{TD Error:}
+		\[
+		\delta = R_{t+1} + \gamma V(s') - V(s)
+		\]
+		= the \textcolor{blue}{"surprise"}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} TD uses bootstrapping!
+	\end{frame}
+	
+	\begin{frame}{TD - Bootstrapping Explained}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Bootstrapping - The Core of TD}}
+		
+		\textbf{What is Bootstrapping?}
+		\begin{itemize}
+			\item Using a \textcolor{blue}{current estimate} to update another estimate
+			\item "Pulling yourself up by your own bootstraps"
+			\item Instead of waiting for final outcome, use current best guess
+		\end{itemize}
+		
+		\textbf{MC vs TD Bootstrapping:}
+		\begin{itemize}
+			\item \textcolor{blue}{MC}: No bootstrapping - uses actual returns
+			\item \textcolor{blue}{TD}: Bootstrapping - uses estimates of future values
+		\end{itemize}
+		
+		\textbf{Example - Nim:}
+		\begin{itemize}
+			\item S=6, action leads to S'=1
+			\item MC: Wait until episode end to know $G$
+			\item TD: Use $V(1)$ (current estimate) + immediate reward
+		\end{itemize}
+		
+		\textbf{TD Target:}
+		\[
+		R_{t+1} + \gamma V(s')
+		\]
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Bootstrapping introduces bias but reduces variance!
+	\end{frame}
+	
+	\begin{frame}{TD - Q-Learning}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Q-Learning - The Most Popular TD Algorithm}}
+		
+		\textbf{Update Formula:}
+		\[
+		Q(s,a) \leftarrow Q(s,a) + \alpha(R_{t+1} + \gamma \max_{a'} Q(s',a') - Q(s,a))
+		\]
+		
+		\textbf{Key Features:}
+		\begin{enumerate}
+			\item \textcolor{blue}{Off-policy}: Learns optimal policy regardless of behavior
+			\item \textcolor{blue}{Model-free}: No environment model needed
+			\item \textcolor{blue}{TD method}: Uses bootstrapping
+		\end{enumerate}
+		
+		\textbf{Why Off-Policy?}
+		\begin{itemize}
+			\item Uses $\max_{a'} Q(s',a')$ (best possible action)
+			\item Doesn't matter which action was actually taken
+			\item Learns about \textcolor{blue}{optimal policy}
+		\end{itemize}
+		
+		\textbf{Algorithm:}
+		\begin{enumerate}
+			\item Initialize Q(s,a)
+			\item For each episode, for each step:
+			\begin{enumerate}
+				\item Choose a using $\epsilon$-greedy
+				\item Take action, observe R, s'
+				\item Update Q(s,a)
+				\item s $\leftarrow$ s'
+			\end{enumerate}
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q-learning is \textcolor{blue}{off-policy}!
+	\end{frame}
+	
+	\begin{frame}{TD - SARSA}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{SARSA - On-Policy TD Learning}}
+		
+		\textbf{Update Formula:}
+		\[
+		Q(s,a) \leftarrow Q(s,a) + \alpha(R_{t+1} + \gamma Q(s',a') - Q(s,a))
+		\]
+		where $a'$ is the \textcolor{blue}{actual action} taken in $s'$
+		
+		\textbf{Key Features:}
+		\begin{enumerate}
+			\item \textcolor{blue}{On-policy}: Learns the policy being followed
+			\item \textcolor{blue}{Model-free}
+			\item \textcolor{blue}{TD method}
+		\end{enumerate}
+		
+		\textbf{SARSA vs Q-Learning:}
+		\begin{tabular}{|c|c|}
+			\hline
+			Q-Learning & SARSA \\
+			\hline
+			Off-policy & On-policy \\
+			\hline
+			Uses $\max_{a'} Q(s',a')$ & Uses $Q(s',a')$ (actual) \\
+			\hline
+			More aggressive & More conservative \\
+			\hline
+			Learns optimal & Learns current \\
+			\hline
+		\end{tabular}
+		
+		\textbf{Algorithm:}
+		\begin{enumerate}
+			\item Choose a using policy
+			\item For each step:
+			\begin{enumerate}
+				\item Take action, observe R, s'
+				\item Choose a' from s' using policy
+				\item Update Q(s,a) using Q(s',a')
+			\end{enumerate}
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} SARSA is \textcolor{blue}{on-policy}; Q-learning is \textcolor{blue}{off-policy}!
+	\end{frame}
+	
+	\begin{frame}{TD - Q-Learning vs SARSA Comparison}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Q-Learning vs SARSA - Detailed Comparison}}
+		
+		\textbf{Key Difference:}
+		\begin{itemize}
+			\item Q-learning: $R + \gamma \max_{a'} Q(s',a')$
+			\item SARSA: $R + \gamma Q(s',a')$
+		\end{itemize}
+		
+		\textbf{Behavior:}
+		\begin{tabular}{|c|c|}
+			\hline
+			Q-Learning & SARSA \\
+			\hline
+			Best possible next action & Actual next action \\
+			\hline
+			More aggressive & More conservative \\
+			\hline
+			Learns risky policies & Learns safe policies \\
+			\hline
+		\end{tabular}
+		
+		\textbf{Example - Cliff Walking:}
+		\begin{itemize}
+			\item Agent walks along cliff to reach goal
+			\item Falling off cliff = large negative reward
+		\end{itemize}
+		
+		\textbf{Q-Learning:}
+		\begin{itemize}
+			\item Learns optimal path (right next to cliff)
+			\item Risky if agent makes mistakes
+		\end{itemize}
+		
+		\textbf{SARSA:}
+		\begin{itemize}
+			\item Learns safer path (further from cliff)
+			\item Accounts for suboptimal actions
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q-learning = aggressive; SARSA = conservative!
+	\end{frame}
+	
+	\begin{frame}{TD - NIM Example Step 1}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{TD NIM - First Episode}}
+		
+		\textbf{Setup:}
+		\begin{itemize}
+			\item 6 coins, remove 1, 2, or 3
+			\item $\alpha = 0.05$, $\gamma = 1$
+			\item Opponent plays randomly
+		\end{itemize}
+		
+		\textbf{Episode 1:}
+		\begin{enumerate}
+			\item S=6, A=3 $\rightarrow$ S'=3, R=0
+			\item S=1, A=1 $\rightarrow$ S'=0, R=1 (Win!)
+		\end{enumerate}
+		
+		\textbf{TD Updates:}
+		\begin{itemize}
+			\item \textbf{Step 1:} Q(6,3) = 0 + 0.05(0 + 1(0) - 0) = 0
+			\item \textbf{Step 2:} Q(1,1) = 0 + 0.05(1 + 1(0) - 0) = 0.05
+		\end{itemize}
+		V(1) = 0.05
+		
+		\textbf{After Episode 1:}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			Action & S=1 & S=2 & S=3 & S=4 & S=5 & S=6 \\
+			\hline
+			Pick 1 & 0.05 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+			Pick 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+			Pick 3 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} TD updates within episode using V(s')!
+	\end{frame}
+	
+	\begin{frame}{TD - NIM Example Step 2}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{TD NIM - Second Episode}}
+		
+		\textbf{Episode 2:}
+		\begin{enumerate}
+			\item S=6, A=1 $\rightarrow$ S'=5, R=0
+			\item S=4, A=3 $\rightarrow$ S'=1, R=0
+			\item S=0 (Player 1 loses!)
+		\end{enumerate}
+		
+		\textbf{TD Updates:}
+		\begin{itemize}
+			\item \textbf{Step 1:} Q(6,1) = 0 + 0.05(0 + 1(0) - 0) = 0
+			\item \textbf{Step 2:} Q(4,3) = 0 + 0.05(0 + 1(0.05) - 0) = 0.0025
+		\end{itemize}
+		V(4) = 0.0025
+		
+		\textbf{After Episode 2:}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			Action & S=1 & S=2 & S=3 & S=4 & S=5 & S=6 \\
+			\hline
+			Pick 1 & 0.05 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+			Pick 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+			Pick 3 & 0 & 0 & 0 & 0.0025 & 0 & 0 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} TD uses V(1) from previous episode!
+	\end{frame}
+	
+	\begin{frame}{TD - NIM Example Step 3}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{TD NIM - Third Episode}}
+		
+		\textbf{Episode 3:}
+		\begin{enumerate}
+			\item S=6, A=3 $\rightarrow$ S'=1, R=0
+			\item S=1, A=1 $\rightarrow$ S'=0, R=1 (Win!)
+		\end{enumerate}
+		
+		\textbf{TD Updates:}
+		\begin{itemize}
+			\item \textbf{Step 1:} Q(6,3) = 0 + 0.05(0 + 1(0.05) - 0) = 0.0025
+			\item \textbf{Step 2:} Q(1,1) = 0.05 + 0.05(1 + 1(0) - 0.05) = 0.0975
+		\end{itemize}
+		
+		\textbf{After Episode 3:}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			Action & S=1 & S=2 & S=3 & S=4 & S=5 & S=6 \\
+			\hline
+			Pick 1 & 0.0975 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+			Pick 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			\hline
+			Pick 3 & 0 & 0 & 0 & 0.0025 & 0 & 0.0025 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} TD values propagate backward through episode!
+	\end{frame}
+	
+	\begin{frame}{TD - NIM Final Results}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{TD NIM - After 1,000,000 Episodes}}
+		
+		\textbf{Final Q-Table:}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			Action & S=1 & S=2 & S=3 & S=4 & S=5 & S=6 \\
+			\hline
+			Pick 1 & 1 & -1 & -0.105 & 0.383 & 0 & 0.845 \\
+			\hline
+			Pick 2 & 0 & 1 & -1 & 0.058 & 0 & 1 \\
+			\hline
+			Pick 3 & 0 & 0 & 1 & -0.842 & 0 & 0.011 \\
+			\hline
+		\end{tabular}
+		
+		\textbf{Optimal Strategy:}
+		\begin{itemize}
+			\item S=6: Pick 2
+			\item S=4: Pick 1
+			\item S=3: Pick 3
+			\item S=2: Pick 2
+			\item S=1: Pick 1
+		\end{itemize}
+		
+		\textbf{Key Insight:}
+		\begin{itemize}
+			\item Both MC and TD converge to \textcolor{blue}{same optimal strategy}
+			\item TD learns faster than MC
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Both MC and TD converge to optimal policy!
+	\end{frame}
+	
+	\begin{frame}{TD - Advantages and Disadvantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{TD - Pros and Cons}}
+		
+		\textbf{Advantages:}
+		\begin{enumerate}
+			\item \textcolor{green}{Can learn online} - updates after each step
+			\item \textcolor{green}{Works for continuous tasks}
+			\item \textcolor{green}{Lower variance} than MC
+			\item \textcolor{green}{More sample efficient}
+			\item \textcolor{green}{Often converges faster}
+		\end{enumerate}
+		
+		\textbf{Disadvantages:}
+		\begin{enumerate}
+			\item \textcolor{red}{Biased} - uses estimates
+			\item \textcolor{red}{May propagate errors}
+			\item \textcolor{red}{Requires careful tuning}
+			\item \textcolor{red}{Can be unstable}
+		\end{enumerate}
+		
+		\textbf{Comparison:}
+		\begin{tabular}{|c|c|}
+			\hline
+			MC & TD \\
+			\hline
+			Unbiased & Biased \\
+			\hline
+			High variance & Low variance \\
+			\hline
+			Episode-end & Step-by-step \\
+			\hline
+			Episodic only & Episodic + Continuous \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} TD = biased but lower variance!
+	\end{frame}
+	
+	\begin{frame}{TD - TD($\lambda$) Unified View}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{TD($\lambda$) - Bridging MC and TD}}
+		
+		\textbf{The Idea:}
+		\begin{itemize}
+			\item MC = TD(1) - uses full return
+			\item TD(0) = One-step TD
+			\item TD($\lambda$) - combines many n-step returns
+		\end{itemize}
+		
+		\textbf{n-Step Returns:}
+		\[
+		G_t^{(n)} = R_{t+1} + \gamma R_{t+2} + \cdots + \gamma^{n-1}R_{t+n} + \gamma^n V(s_{t+n})
+		\]
+		
+		\textbf{$\lambda$-Return:}
+		\[
+		G_t^\lambda = (1-\lambda)\sum_{n=1}^{\infty} \lambda^{n-1} G_t^{(n)}
+		\]
+		\begin{itemize}
+			\item $\lambda = 0$: TD(0)
+			\item $\lambda = 1$: MC
+			\item $0 < \lambda < 1$: Mix of n-step returns
+		\end{itemize}
+		
+		\textbf{Update:}
+		\[
+		Q(s,a) \leftarrow Q(s,a) + \alpha(G_t^\lambda - Q(s,a))
+		\]
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\lambda=0$ = TD, $\lambda=1$ = MC!
+	\end{frame}
+	
+	\begin{frame}{TD - Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{TD - Key Takeaways}}
+		
+		\textbf{Key Concepts:}
+		\begin{enumerate}
+			\item \textcolor{blue}{TD Learning:}
+			\begin{itemize}
+				\item Learns online, updates after each step
+				\item Uses bootstrapping
+			\end{itemize}
+			
+			\item \textcolor{blue}{TD Update:}
+			\[
+			V(s) \leftarrow V(s) + \alpha(R_{t+1} + \gamma V(s') - V(s))
+			\]
+			
+			\item \textcolor{blue}{TD Error:}
+			\[
+			\delta = R_{t+1} + \gamma V(s') - V(s)
+			\]
+			
+			\item \textcolor{blue}{Q-Learning:}
+			\begin{itemize}
+				\item Off-policy, uses $\max_{a'} Q(s',a')$
+			\end{itemize}
+			
+			\item \textcolor{blue}{SARSA:}
+			\begin{itemize}
+				\item On-policy, uses $Q(s',a')$
+			\end{itemize}
+			
+			\item \textcolor{blue}{TD($\lambda$):}
+			\begin{itemize}
+				\item $\lambda=0$ = TD, $\lambda=1$ = MC
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Success:}} Understand the bias-variance trade-off!
+	\end{frame}
+	
+	% ============================================================
+	% PART 5: DEEP RL & DQN - SLIDES 61-75
+	% ============================================================
+	
+	\begin{frame}{Deep RL - Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Deep Reinforcement Learning - Scaling RL}}
+		
+		\textbf{The Problem with Tabular Methods:}
+		\begin{itemize}
+			\item Q-table stores Q(s,a) for every state-action pair
+			\item Number of states can be \textcolor{red}{enormous}
+			\item Example: Atari games have $10^{50}$ states!
+		\end{itemize}
+		
+		\textbf{The Solution: Deep RL}
+		\begin{itemize}
+			\item Use \textcolor{blue}{neural networks} to approximate Q(s,a)
+			\item $Q(s,a) \approx Q(s,a; \theta)$
+			\item Neural network takes state as input, outputs Q-values
+		\end{itemize}
+		
+		\textbf{Why Neural Networks?}
+		\begin{enumerate}
+			\item \textcolor{blue}{Generalization}: Similar states get similar Q-values
+			\item \textcolor{blue}{Compact representation}: No need to store all states
+			\item \textcolor{blue}{Continuous spaces}: Handle continuous inputs
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Deep RL needed for large state spaces!
+	\end{frame}
+	
+	\begin{frame}{DQN - Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Deep Q-Network - The Breakthrough}}
+		
+		\textbf{What is DQN?}
+		\begin{itemize}
+			\item Combines Q-learning with \textcolor{blue}{deep neural networks}
+			\item Developed by DeepMind (2015)
+			\item Human-level performance on Atari games
+		\end{itemize}
+		
+		\textbf{Three Key Innovations:}
+		\begin{enumerate}
+			\item \textcolor{blue}{Experience Replay}: Random sampling breaks correlation
+			\item \textcolor{blue}{Target Network}: Separate network for stable targets
+			\item \textcolor{blue}{$\epsilon$-Greedy}: Exploration/exploitation balance
+		\end{enumerate}
+		
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item Interact with environment, store experiences
+			\item Sample random mini-batch from replay memory
+			\item Update policy network using TD target from target network
+			\item Periodically copy weights to target network
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} DQN = Experience Replay + Target Network!
+	\end{frame}
+	
+	\begin{frame}{DQN - Experience Replay}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Experience Replay - Why It's Critical}}
+		
+		\textbf{The Problem:}
+		\begin{itemize}
+			\item Consecutive experiences are \textcolor{red}{highly correlated}
+			\item In games, consecutive frames are nearly identical
+			\item Correlated data breaks i.i.d. assumption
+		\end{itemize}
+		
+		\textbf{The Solution:}
+		\begin{enumerate}
+			\item Store experiences $(s,a,r,s')$ in \textcolor{blue}{replay memory}
+			\item Sample \textcolor{blue}{random mini-batches} from memory
+			\item Breaks temporal correlation
+		\end{enumerate}
+		
+		\textbf{Benefits:}
+		\begin{enumerate}
+			\item \textcolor{green}{Stable learning}: Breaks correlations
+			\item \textcolor{green}{Efficient}: Reuses experiences
+			\item \textcolor{green}{Reduces variance}: Averaging over random samples
+		\end{enumerate}
+		
+		\textbf{Replay Memory:}
+		\begin{itemize}
+			\item Fixed size (e.g., 1,000,000)
+			\item Oldest experiences discarded (FIFO)
+			\item Random sampling
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Experience replay breaks temporal correlation!
+	\end{frame}
+	
+	\begin{frame}{DQN - Target Network}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Target Network - Stabilizing Learning}}
+		
+		\textbf{The Problem:}
+		\begin{itemize}
+			\item Q-learning uses $R + \gamma \max_{a'} Q(s',a')$ as target
+			\item But $Q(s',a')$ is the \textcolor{red}{same network} being updated!
+			\item Creates \textcolor{red}{"chasing the moving target"} problem
+		\end{itemize}
+		
+		\textbf{The Solution:}
+		\begin{itemize}
+			\item Use \textcolor{blue}{separate network} for target
+			\item Target network weights: $\theta^-$
+			\item Policy network weights: $\theta$
+		\end{itemize}
+		
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item Policy network: selects actions
+			\item Target network: computes TD target
+			\item Update: $L = (Q(s,a;\theta) - (R + \gamma \max_{a'} Q(s',a';\theta^-)))^2$
+			\item Periodically copy: $\theta^- \leftarrow \theta$
+		\end{enumerate}
+		
+		\textbf{Benefits:}
+		\begin{itemize}
+			\item Stable targets
+			\item More stable learning
+			\item Helps convergence
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Target network updated periodically!
+	\end{frame}
+	
+	\begin{frame}{DQN - Loss Function}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{DQN Loss Function and Training}}
+		
+		\textbf{Loss Function (MSE):}
+		\[
+		L(\theta) = \mathbb{E}[(Q(s,a;\theta) - (R + \gamma \max_{a'} Q(s',a';\theta^-)))^2]
+		\]
+		
+		\textbf{Training Process:}
+		\begin{enumerate}
+			\item Sample random mini-batch from replay memory
+			\item For each experience:
+			\begin{enumerate}
+				\item Compute target: $y = R + \gamma \max_{a'} Q(s',a';\theta^-)$
+				\item Compute prediction: $Q(s,a;\theta)$
+				\item Compute loss: $(y - Q(s,a;\theta))^2$
+			\end{enumerate}
+			\item Average loss over mini-batch
+			\item Backpropagate and update $\theta$
+		\end{enumerate}
+		
+		\textbf{Hyperparameters:}
+		\begin{itemize}
+			\item Learning rate $\alpha$: 0.001
+			\item Mini-batch size: 32
+			\item Replay memory: 1,000,000
+			\item $\gamma = 0.99$
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} DQN loss is MSE between policy and target!
+	\end{frame}
+	
+	\begin{frame}{DQN - Training Algorithm}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{DQN Training - Step-by-Step}}
+		
+		\textbf{Algorithm:}
+		\begin{enumerate}
+			\item \textcolor{blue}{Initialize:}
+			\begin{itemize}
+				\item Policy network $Q(s,a;\theta)$ with random weights
+				\item Target network $Q(s,a;\theta^-)$ with same weights
+				\item Replay memory $D$
+			\end{itemize}
+			
+			\item \textcolor{blue}{For each episode:}
+			\begin{enumerate}
+				\item Initialize state $s$
+				\item For each step:
+				\begin{enumerate}
+					\item With probability $\epsilon$: choose random action
+					\item Otherwise: $a = \arg\max_a Q(s,a;\theta)$
+					\item Take action, observe $r$, $s'$
+					\item Store $(s,a,r,s')$ in $D$
+					\item Sample mini-batch from $D$
+					\item Compute loss and update $\theta$
+					\item Periodically update $\theta^- \leftarrow \theta$
+					\item $s \leftarrow s'$
+				\end{enumerate}
+			\end{enumerate}
+		\end{enumerate}
+		
+		\textbf{$\epsilon$ Decay:}
+		\begin{itemize}
+			\item Start $\epsilon = 1.0$, decay to $0.01$
+			\item Linear decay over 1,000,000 steps
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Two networks: policy and target!
+	\end{frame}
+	
+	\begin{frame}{DQN - Extensions}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{DQN Extensions - Making It Better}}
+		
+		\textbf{Double DQN:}
+		\begin{itemize}
+			\item Uses target network for action selection too
+			\item Reduces overestimation bias
+			\item $y = R + \gamma Q(s', \arg\max_{a'} Q(s',a';\theta); \theta^-)$
+		\end{itemize}
+		
+		\textbf{Dueling DQN:}
+		\begin{itemize}
+			\item Separate value and advantage streams
+			\item Better estimate of state values
+			\item $Q(s,a) = V(s) + (A(s,a) - \frac{1}{|\mathcal{A}|}\sum_{a'} A(s,a'))$
+		\end{itemize}
+		
+		\textbf{Prioritized Experience Replay:}
+		\begin{itemize}
+			\item Sample experiences with higher TD error more often
+			\item Focuses on most "surprising" experiences
+			\item Improves learning efficiency
+		\end{itemize}
+		
+		\textbf{Rainbow:}
+		\begin{itemize}
+			\item Combines multiple DQN improvements
+			\item State-of-the-art performance
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Double DQN and Dueling DQN are key extensions!
+	\end{frame}
+	
+	\begin{frame}{DQN - Limitations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{DQN Limitations}}
+		
+		\textbf{Limitations:}
+		\begin{enumerate}
+			\item \textcolor{red}{Discrete action spaces only}
+			\item \textcolor{red}{Computationally expensive}
+			\item \textcolor{red}{Sample inefficient}
+			\item \textcolor{red}{Can be unstable}
+			\item \textcolor{red}{Requires careful tuning}
+		\end{enumerate}
+		
+		\textbf{When to Use DQN:}
+		\begin{itemize}
+			\item Large discrete action spaces
+			\item High-dimensional state spaces (images)
+			\item When you have computational resources
+			\item When samples are plentiful
+		\end{itemize}
+		
+		\textbf{When NOT to Use DQN:}
+		\begin{itemize}
+			\item Small state spaces (tabular better)
+			\item Continuous action spaces (use policy methods)
+			\item When samples are expensive
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} DQN is only for discrete actions!
+	\end{frame}
+	
+	% ============================================================
+	% PART 6: POLICY METHODS - SLIDES 76-82
+	% ============================================================
+	
+	\begin{frame}{Policy Methods - Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Policy-Based Methods - Learning Strategy Directly}}
+		
+		\textbf{Value-Based vs Policy-Based:}
+		\begin{tabular}{|c|c|}
+			\hline
+			Value-Based & Policy-Based \\
+			\hline
+			Learn Q(s,a) & Learn $\pi(a|s)$ directly \\
+			\hline
+			Derive policy from Q & Policy is the output \\
+			\hline
+			Q-learning, SARSA & Policy Gradient \\
+			\hline
+			Discrete actions only & Continuous actions possible \\
+			\hline
+		\end{tabular}
+		
+		\textbf{Policy Representation:}
+		\begin{itemize}
+			\item Policy parameterized: $\pi_\theta(a|s)$
+			\item $\theta$ = parameters (neural network weights)
+			\item Output: probability distribution over actions
+		\end{itemize}
+		
+		\textbf{Why Policy Methods?}
+		\begin{enumerate}
+			\item \textcolor{blue}{Continuous action spaces}
+			\item \textcolor{blue}{Stochastic policies}
+			\item \textcolor{blue}{Better convergence}
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Policy methods for continuous actions!
+	\end{frame}
+	
+	\begin{frame}{REINFORCE Algorithm}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{REINFORCE - Monte Carlo Policy Gradient}}
+		
+		\textbf{Update Formula:}
+		\[
+		\theta \leftarrow \theta + \alpha \gamma^t G_t \nabla_\theta \log \pi_\theta(a_t|s_t)
+		\]
+		
+		\textbf{Intuition:}
+		\begin{itemize}
+			\item If $G_t$ positive: increase probability of action
+			\item If $G_t$ negative: decrease probability of action
+			\item Gradient points in direction to increase action probability
+		\end{itemize}
+		
+		\textbf{Advantages:}
+		\begin{itemize}
+			\item Simple to implement
+			\item Theoretically sound
+			\item Works for continuous actions
+		\end{itemize}
+		
+		\textbf{Disadvantages:}
+		\begin{itemize}
+			\item High variance (like MC)
+			\item Requires complete episodes
+			\item Slow convergence
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} REINFORCE is MC-based with high variance!
+	\end{frame}
+	
+	\begin{frame}{Actor-Critic Methods}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Actor-Critic - Best of Both Worlds}}
+		
+		\textbf{What is Actor-Critic?}
+		\begin{itemize}
+			\item Combines \textcolor{blue}{value-based} and \textcolor{blue}{policy-based}
+			\item \textcolor{blue}{Actor}: Learns the policy
+			\item \textcolor{blue}{Critic}: Learns the value function
+			\item Critic evaluates actor's actions
+		\end{itemize}
+		
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item Actor takes action based on current policy
+			\item Critic evaluates the action (TD error)
+			\item TD error: $\delta = R + \gamma V(s') - V(s)$
+			\item If $\delta > 0$: increase probability
+			\item If $\delta < 0$: decrease probability
+		\end{enumerate}
+		
+		\textbf{Advantages:}
+		\begin{enumerate}
+			\item \textcolor{green}{Lower variance} than policy gradient
+			\item \textcolor{green}{Can learn online} (TD-based)
+			\item \textcolor{green}{Continuous action spaces}
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Actor = policy; Critic = value!
+	\end{frame}
+	
+	% ============================================================
+	% PART 7: MDP & BELLMAN - SLIDES 83-88
+	% ============================================================
+	
+	\begin{frame}{MDP - Formal Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Markov Decision Processes}}
+		
+		\textbf{What is an MDP?}
+		\begin{itemize}
+			\item Mathematical framework for decision-making
+			\item Defined by: States, Actions, Transitions, Rewards
+			\item Assumes \textcolor{blue}{Markov property}
+		\end{itemize}
+		
+		\textbf{MDP Components:}
+		\begin{enumerate}
+			\item \textcolor{blue}{States ($S$)}: Set of all states
+			\item \textcolor{blue}{Actions ($A$)}: Set of all actions
+			\item \textcolor{blue}{Transition Probability}: $P(s'|s,a)$
+			\item \textcolor{blue}{Reward}: $R(s,a)$ or $R(s,a,s')$
+			\item \textcolor{blue}{Discount Factor}: $\gamma$
+		\end{enumerate}
+		
+		\textbf{Markov Property:}
+		\[
+		P(S_{t+1}|S_t, S_{t-1}, ..., S_1) = P(S_{t+1}|S_t)
+		\]
+		\begin{itemize}
+			\item Future depends only on \textcolor{blue}{current state}
+			\item "Memoryless" property
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MDPs assume Markov property!
+	\end{frame}
+	
+	\begin{frame}{Bellman Equations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Bellman Equations - The Recursive Foundation}}
+		
+		\textbf{For a Fixed Policy:}
+		\[
+		V(s) = \sum_a \pi(a|s) \sum_{s'} P(s'|s,a) [R(s,a) + \gamma V(s')]
+		\]
+		
+		\textbf{Bellman Optimality:}
+		\[
+		V^*(s) = \max_a \sum_{s'} P(s'|s,a) [R(s,a) + \gamma V^*(s')]
+		\]
+		
+		\textbf{For Q-Function:}
+		\[
+		Q(s,a) = \sum_{s'} P(s'|s,a) [R(s,a) + \gamma \max_{a'} Q(s',a')]
+		\]
+		
+		\textbf{Key Insight:}
+		\begin{itemize}
+			\item Value of state = immediate reward + discounted future value
+			\item \textcolor{blue}{Recursive} relationship
+			\item Can be solved with dynamic programming
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Bellman equations are recursive!
+	\end{frame}
+	
+	\begin{frame}{Bellman - Worked Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Bellman Equations - Worked Example}}
+		
+		\textbf{Simple 2-State MDP:}
+		\begin{itemize}
+			\item 2 states: S1, S2
+			\item 2 actions: A1, A2 (deterministic)
+			\item Rewards: R(S1,A1,S2)=10, R(S2,A2,S1)=5
+			\item $\gamma = 0.9$
+		\end{itemize}
+		
+		\textbf{Bellman Equations:}
+		\begin{itemize}
+			\item $V(S1) = 10 + \gamma V(S2)$
+			\item $V(S2) = 5 + \gamma V(S1)$
+		\end{itemize}
+		
+		\textbf{Solve:}
+		\begin{itemize}
+			\item $V(S1) = 10 + 0.9V(S2)$
+			\item $V(S2) = 5 + 0.9V(S1)$
+			\item Substitute: $V(S1) = 10 + 0.9(5 + 0.9V(S1))$
+			\item $0.19V(S1) = 14.5$
+			\item $V(S1) = 76.32$
+			\item $V(S2) = 5 + 0.9(76.32) = 73.69$
+		\end{itemize}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Bellman equations can be solved analytically!
+	\end{frame}
+	
+	% ============================================================
+	% PART 8: ADVANCED TOPICS - SLIDES 89-96
+	% ============================================================
+	
+	\begin{frame}{RLHF - Reinforcement Learning from Human Feedback}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{RLHF - The Secret Behind Modern LLMs}}
+		
+		\textbf{What is RLHF?}
+		\begin{itemize}
+			\item Uses \textcolor{blue}{human feedback} as reward signal
+			\item Humans rank or score model outputs
+			\item RL algorithm maximizes human scores
+		\end{itemize}
+		
+		\textbf{Why It Matters:}
+		\begin{itemize}
+			\item Key to ChatGPT and other LLMs
+			\item Improves \textcolor{blue}{instruction following}
+			\item Enforces \textcolor{blue}{policy constraints}
+			\item Enhances \textcolor{blue}{reasoning coherence}
+		\end{itemize}
+		
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item Train a reward model on human preferences
+			\item Fine-tune policy using RL (PPO)
+			\item Generate responses and get feedback
+			\item Update policy to maximize reward
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} RLHF is for LLM fine-tuning!
+	\end{frame}
+	
+	\begin{frame}{Model-Based vs Model-Free RL}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Model-Based vs Model-Free RL}}
+		
+		\textbf{Model-Based RL:}
+		\begin{itemize}
+			\item Uses \textcolor{blue}{model} of environment
+			\item Can plan ahead
+			\item More sample efficient
+			\item Risk: \textcolor{red}{Model bias}
+			\item Example: AlphaZero
+		\end{itemize}
+		
+		\textbf{Model-Free RL:}
+		\begin{itemize}
+			\item Learns directly from experience
+			\item No model needed
+			\item Less sample efficient
+			\item No model bias
+			\item Example: DQN, PPO
+		\end{itemize}
+		
+		\textbf{Comparison:}
+		\begin{tabular}{|c|c|}
+			\hline
+			Model-Based & Model-Free \\
+			\hline
+			Uses model & No model \\
+			\hline
+			More sample efficient & Less sample efficient \\
+			\hline
+			Risk of model bias & No model bias \\
+			\hline
+			Planning possible & No planning \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Model-based = more efficient but risk of bias!
+	\end{frame}
+	
+	\begin{frame}{RL - Complete Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Reinforcement Learning - Complete Summary}}
+		
+		\textbf{Core Concepts:}
+		\begin{itemize}
+			\item Agent learns through \textcolor{blue}{trial and error}
+			\item Goal: \textcolor{blue}{Maximize cumulative reward}
+			\item Policy: Strategy for choosing actions
+			\item Value functions: V(s) and Q(s,a)
+		\end{itemize}
+		
+		\textbf{Three Strategies (MAB):}
+		\begin{enumerate}
+			\item Greedy (Pure Exploitation)
+			\item Random (Pure Exploration)
+			\item $\epsilon$-Greedy (Balanced) - \textcolor{green}{Best}
+		\end{enumerate}
+		
+		\textbf{Two Main Approaches:}
+		\begin{enumerate}
+			\item \textcolor{blue}{Monte Carlo (MC):}
+			\begin{itemize}
+				\item Episode-end updates, actual returns
+				\item Unbiased, high variance, episodic only
+			\end{itemize}
+			\item \textcolor{blue}{Temporal Difference (TD):}
+			\begin{itemize}
+				\item Step-by-step updates, bootstrapping
+				\item Biased, low variance, episodic + continuous
+			\end{itemize}
+		\end{enumerate}
+		
+		\textbf{Two Families:}
+		\begin{enumerate}
+			\item \textcolor{blue}{Value-Based}: Q-learning, SARSA, DQN
+			\item \textcolor{blue}{Policy-Based}: REINFORCE, Actor-Critic
+		\end{enumerate}
+		
+		\textcolor{red}{\textbf{Exam Success:}} Master the exploration-exploitation trade-off!
+	\end{frame}
+	
+	\begin{frame}{FINAL EXAM TIPS - RL}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Top 15 RL Exam Traps}}
+		
+		\begin{enumerate}
+			\item RL output is a \textcolor{blue}{policy}, not a prediction
+			\item MAB has \textcolor{blue}{ONLY ONE state}
+			\item $\epsilon$-greedy: random $<$ $\epsilon$ $\rightarrow$ \textcolor{blue}{explore}
+			\item $\epsilon_t = \beta^{t-1}$ (not $\beta^t$)
+			\item MC updates \textcolor{blue}{at episode end} using $G_t$
+			\item TD updates \textcolor{blue}{every step} using $R_{t+1} + \gamma V(s')$
+			\item MC = \textcolor{blue}{unbiased but high variance}
+			\item TD = \textcolor{blue}{biased but low variance}
+			\item Q-learning is \textcolor{blue}{off-policy}
+			\item SARSA is \textcolor{blue}{on-policy}
+			\item $\alpha$ = learning rate, $\gamma$ = discount factor, $\epsilon$ = exploration rate
+			\item DQN uses \textcolor{blue}{experience replay} + \textcolor{blue}{target network}
+			\item Policy methods handle \textcolor{blue}{continuous action spaces}
+			\item MC requires \textcolor{blue}{episodic tasks}
+			\item Bellman equations are \textcolor{blue}{recursive}
+		\end{enumerate}
+		
+		\textcolor{blue}{\textbf{Remember:}} RL is about \textcolor{blue}{learning optimal behavior through experience}!
+	\end{frame}
+	
+\end{document}

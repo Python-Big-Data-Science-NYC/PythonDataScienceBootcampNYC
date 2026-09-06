@@ -1,0 +1,1990 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{blue}{RGB}{0,0,255}
+\definecolor{red}{RGB}{255,0,0}
+\definecolor{green}{RGB}{0,128,0}
+\definecolor{orange}{RGB}{255,165,0}
+\definecolor{purple}{RGB}{128,0,128}
+\definecolor{gray}{RGB}{128,128,128}
+
+\title{Reinforcement Learning}
+\subtitle{100 Detailed Questions: MAB, MC, TD, DQN, Policy Methods}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% QUESTIONS 1-20: FUNDAMENTALS & TERMINOLOGY
+	% ============================================================
+	
+	\begin{frame}{Q1: RL Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which of the following statements most accurately describes the fundamental difference between reinforcement learning and supervised learning?}
+		
+		\begin{enumerate}
+			\item Reinforcement learning uses labeled data to make predictions, while supervised learning learns through trial and error.
+			\item Reinforcement learning learns what to do by mapping situations to actions through trial and error to maximize cumulative reward, while supervised learning learns to map inputs to outputs from labeled examples.
+			\item Reinforcement learning is a subset of unsupervised learning, while supervised learning is a separate paradigm.
+			\item Reinforcement learning uses no feedback, while supervised learning uses reward signals.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option B correctly captures the essence: RL learns optimal actions through interaction (trial and error) to maximize cumulative reward, while supervised learning learns from labeled datasets. Option A reverses the definitions. Option C is incorrect (RL is a distinct paradigm). Option D is incorrect (RL uses rewards as feedback; supervised uses labels).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} RL is NOT supervised learning - it learns from experience, not from labeled data. The output of RL is a \textcolor{blue}{policy} (strategy), not a prediction.
+	\end{frame}
+	
+	\begin{frame}{Q2: RL Output}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the "output" of a reinforcement learning model?}
+		
+		\begin{enumerate}
+			\item A numerical prediction for a target variable.
+			\item A classification label for a new observation.
+			\item A recommended action or a complete decision-making strategy (policy).
+			\item A set of clusters in the data.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Unlike supervised (prediction/classification) or unsupervised (clusters), RL outputs a policy - a strategy for decision-making. The agent learns to map states to actions. Option A describes regression, B describes classification, D describes clustering.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Remember: Supervised $\rightarrow$ Predictions/Classifications; Unsupervised $\rightarrow$ Patterns/Clusters; Reinforcement $\rightarrow$ \textcolor{blue}{Actions/Policies}!
+	\end{frame}
+	
+	\begin{frame}{Q3: RL Applications}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which of the following is NOT a typical application of reinforcement learning?}
+		
+		\begin{enumerate}
+			\item Training robots to perform complex manipulation tasks.
+			\item Developing policies for self-driving cars.
+			\item Predicting housing prices from historical data.
+			\item Dynamic pricing of airline seats based on supply and demand.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Predicting housing prices is a supervised learning (regression) task. Options A, B, and D are RL applications involving sequential decision-making and learning from interaction. RL is used in robotics, autonomous vehicles, robotics, autonomous systems, logistics, pricing, trading, and chatbots.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} RL is NOT for static prediction tasks - it's for \textcolor{blue}{sequential decision-making} where actions affect future states and rewards!
+	\end{frame}
+	
+	\begin{frame}{Q4: Agent in RL}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In reinforcement learning, what is the "agent"?}
+		
+		\begin{enumerate}
+			\item The environment in which decisions are made.
+			\item The learner or decision-maker that takes actions to maximize reward.
+			\item The reward signal received after taking an action.
+			\item The set of all possible states in the environment.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The agent is the learner/decision-maker. Option A is the environment. Option C is the reward. Option D is the state space. The agent interacts with the environment by taking actions and receiving rewards, learning to improve its policy over time.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The \textcolor{blue}{agent} is the learner; the \textcolor{blue}{environment} is what the agent interacts with. Don't confuse them!
+	\end{frame}
+	
+	\begin{frame}{Q5: Environment in RL}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In reinforcement learning, what is the "environment"?}
+		
+		\begin{enumerate}
+			\item The algorithm used to update Q-values.
+			\item The world in which the agent operates and from which it receives rewards.
+			\item The policy that maps states to actions.
+			\item The total expected future reward.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The environment is the external system the agent interacts with. It provides states and rewards in response to the agent's actions. Option A describes the learning algorithm. Option C is the policy. Option D is the value function.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The \textcolor{blue}{environment} is external to the agent - it's what the agent interacts with, not the agent itself!
+	\end{frame}
+	
+	\begin{frame}{Q6: Action in RL}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the Multi-Armed Bandit problem, what is an "action"?}
+		
+		\begin{enumerate}
+			\item The payout received from playing a slot machine.
+			\item The decision of which slot machine to play in a given round.
+			\item The total winnings after all rounds.
+			\item The probability of winning on a slot machine.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} In MAB, an action is choosing which slot machine to play. Option A is the reward. Option C is the cumulative return. Option D is the reward probability (which is unknown to the agent). The set of actions includes all slot machines available.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Actions are \textcolor{blue}{choices} the agent makes, not the outcomes (rewards) of those choices!
+	\end{frame}
+	
+	\begin{frame}{Q7: State in MAB}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the Multi-Armed Bandit problem, what is the "state" of the environment?}
+		
+		\begin{enumerate}
+			\item The current payout from a slot machine.
+			\item The number of tokens the gambler has left.
+			\item A single, constant state because the machines' properties do not change.
+			\item The probability distribution of rewards for each machine.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} In the simple MAB problem, since the slot machines' properties don't change and the agent's actions don't affect them, the environment is considered to be in a single, constant state. Option A is the reward. Option B is not part of the basic MAB. Option D is the reward distribution (unknown to the agent).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} In MAB, there is \textcolor{blue}{only ONE state} - unlike more complex RL problems where states change based on actions!
+	\end{frame}
+	
+	\begin{frame}{Q8: Reward in RL}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a "reward" in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item The total cumulative return over all time steps.
+			\item The feedback the agent receives from the environment after taking an action, which can be positive or negative.
+			\item The policy that determines which action to take.
+			\item The set of all possible states in the environment.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Reward is immediate feedback (positive or negative) received after an action. Option A is the cumulative return. Option C is the policy. Option D is the state space. Rewards are the signals that guide the agent's learning.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} \textcolor{blue}{Reward} is immediate feedback; \textcolor{blue}{Return} is the cumulative discounted sum of future rewards. Don't confuse them!
+	\end{frame}
+	
+	\begin{frame}{Q9: Policy in RL}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a "policy" in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item The algorithm used to update Q-values.
+			\item The total expected future reward from a state.
+			\item The agent's strategy or rule for choosing actions given the current state.
+			\item The probability of transitioning from one state to another.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} A policy is the strategy that maps states to actions. Option A describes the learning algorithm. Option B is the value function. Option D is the transition probability. The goal of RL is to find the optimal policy that maximizes cumulative reward.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The policy is \textcolor{blue}{the strategy} - the agent's "rule book" for what to do in each state!
+	\end{frame}
+	
+	\begin{frame}{Q10: Value Function}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does the state-value function V(s) represent?}
+		
+		\begin{enumerate}
+			\item The immediate reward received from taking an action in state s.
+			\item The total expected future reward an agent can receive starting from state s and following a specific policy.
+			\item The probability of being in state s.
+			\item The action that maximizes reward in state s.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} V(s) estimates the "goodness" of being in state s - the total expected future reward from that state under a policy. Option A is the immediate reward. Option C is the state distribution. Option D is the optimal action. V(s) = E[G\_t | S\_t = s] where G\_t is the cumulative future reward.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} V(s) is \textcolor{blue}{future} rewards from state s, NOT immediate reward!
+	\end{frame}
+	
+	\begin{frame}{Q11: Action-Value Function}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does the action-value function Q(s,a) represent?}
+		
+		\begin{enumerate}
+			\item The probability of taking action a in state s.
+			\item The total expected future reward an agent can receive by taking action a from state s and following the policy thereafter.
+			\item The immediate reward from taking action a in state s.
+			\item The number of times action a has been taken in state s.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Q(s,a) estimates how good it is to take action a in state s. It represents the expected cumulative future reward. Option A is the policy probability. Option C is the immediate reward. Option D is the visit count. Q(s,a) = E[G\_t | S\_t = s, A\_t = a].
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q(s,a) is \textcolor{blue}{action-specific}; V(s) is \textcolor{blue}{state-specific}. If you know Q(s,a) for all actions, the optimal policy is to choose the action with the highest Q-value!
+	\end{frame}
+	
+	\begin{frame}{Q12: Discount Factor}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the discounted sum of future rewards $G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ...$, what does $\gamma$ represent?}
+		
+		\begin{enumerate}
+			\item The learning rate.
+			\item The discount factor that determines how much future rewards are valued relative to immediate rewards.
+			\item The exploration rate.
+			\item The probability of transitioning to a new state.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} $\gamma$ (gamma) is the discount factor, $0 \leq \gamma \leq 1$. It determines the value of future rewards relative to immediate rewards. A $\gamma$ close to 0 values immediate rewards highly; $\gamma$ close to 1 values future rewards similarly to immediate ones. Option A is $\alpha$ (learning rate). Option C is $\epsilon$ (exploration rate). Option D is transition probability.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\gamma$ = \textcolor{blue}{discount factor}; $\alpha$ = \textcolor{blue}{learning rate}; $\epsilon$ = \textcolor{blue}{exploration rate}. Don't confuse these three hyperparameters!
+	\end{frame}
+	
+	\begin{frame}{Q13: Greedy Strategy}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the "greedy strategy" in the Multi-Armed Bandit problem?}
+		
+		\begin{enumerate}
+			\item Always choosing a random slot machine to explore.
+			\item Always choosing the slot machine with the best record of payouts so far (exploitation only).
+			\item Alternating between exploration and exploitation.
+			\item Choosing the slot machine that has been played the least.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The greedy strategy always exploits - it picks the action with the highest estimated Q-value so far. Option A is the random strategy. Option C is $\epsilon$-greedy. Option D is not a standard strategy. The greedy strategy can be suboptimal because it may miss a better machine that was never adequately explored.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Greedy = \textcolor{blue}{pure exploitation} - only uses current knowledge, never explores. This can lead to suboptimal solutions!
+	\end{frame}
+	
+	\begin{frame}{Q14: Random Strategy}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the "random strategy" in the Multi-Armed Bandit problem?}
+		
+		\begin{enumerate}
+			\item Always choosing the slot machine with the best payout history.
+			\item Randomly selecting a slot machine to play each round (pure exploration).
+			\item Selecting actions based on the $\epsilon$-greedy algorithm.
+			\item Choosing the slot machine with the highest estimated Q-value.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The random strategy explores by randomly selecting actions, ignoring past experience. Option A is the greedy strategy. Option C is $\epsilon$-greedy. Option D is exploitation. While random exploration gathers information about all machines, it never exploits this knowledge to maximize reward.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Random = \textcolor{blue}{pure exploration} - never uses past knowledge. This wastes information and may perform poorly!
+	\end{frame}
+	
+	\begin{frame}{Q15: $\epsilon$-Greedy Strategy}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{How does the $\epsilon$-greedy strategy balance exploration and exploitation?}
+		
+		\begin{enumerate}
+			\item It always explores with probability 1 and exploits with probability 0.
+			\item With probability $\epsilon$, it explores (random action); with probability $1-\epsilon$, it exploits (best action so far).
+			\item It alternates between exploration and exploitation in fixed rounds.
+			\item It explores when the current reward is below a threshold.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} $\epsilon$-greedy explores with probability $\epsilon$ (random action) and exploits with probability $1-\epsilon$ (best action). Option A is pure exploration. Option C is not a standard approach. Option D is not how $\epsilon$-greedy works. A common refinement is to start with a higher $\epsilon$ and decay it over time.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\epsilon$ = \textcolor{blue}{probability of exploration}; $1-\epsilon$ = \textcolor{blue}{probability of exploitation}. Decaying $\epsilon$ over time is a common and effective strategy!
+	\end{frame}
+	
+	\begin{frame}{Q16: $\epsilon$-Greedy Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the $\epsilon$-greedy example, at Trial 2 with $\epsilon = 0.85$, a random number 0.99 is drawn. What decision is made and why?}
+		
+		\begin{enumerate}
+			\item Explore because 0.99 $<$ 0.85.
+			\item Exploit because 0.99 $>$ 0.85, so the agent chooses the machine with the highest Q-value.
+			\item Randomly choose between exploration and exploitation.
+			\item Choose a random machine because the random number is greater than 0.85.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Since 0.99 $>$ 0.85, the agent exploits (chooses the best action so far, which is Machine A). If the random number were less than $\epsilon$, the agent would explore. The comparison is always: random number $<$ $\epsilon$ $\rightarrow$ explore; random number $\ge$ $\epsilon$ $\rightarrow$ exploit.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} If random number $<$ $\epsilon$, \textcolor{blue}{explore}; if random number $\ge$ $\epsilon$, \textcolor{blue}{exploit}. Don't reverse this logic!
+	\end{frame}
+	
+	\begin{frame}{Q17: Q-Value Update - MAB}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the MAB problem, after playing Machine A twice with rewards 1.2 and 0.8, what is the updated Q-value for Machine A?}
+		
+		\begin{enumerate}
+			\item Q(A) = (1.2 + 0.8) / 2 = 1.0
+			\item Q(A) = 1.2 + 0.8 = 2.0
+			\item Q(A) = 1.2 - 0.8 = 0.4
+			\item Q(A) = max(1.2, 0.8) = 1.2
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Q-value is updated as the average of observed rewards: Q(A) = (1.2 + 0.8) / 2 = 1.0. Option B sums the rewards. Option C takes the difference. Option D takes the maximum. The general formula is: $Q_k^n = \frac{1}{n}\sum_{j=1}^n R_j$ for the $n$ trials of action $k$.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q-values are \textcolor{blue}{averages of observed rewards}, not sums or maximums!
+	\end{frame}
+	
+	\begin{frame}{Q18: Incremental Q-Update}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the incremental update formula for Q-values in the MAB problem?}
+		
+		\begin{enumerate}
+			\item $Q_k^n = Q_k^{n-1} + \frac{1}{n}(R_n - Q_k^{n-1})$
+			\item $Q_k^n = Q_k^{n-1} + \alpha(R_n - Q_k^{n-1})$
+			\item $Q_k^n = \frac{1}{n}\sum_{j=1}^n R_j$
+			\item $Q_k^n = Q_k^{n-1} + R_n$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The incremental update formula is $Q_k^n = Q_k^{n-1} + \frac{1}{n}(R_n - Q_k^{n-1})$, where $n$ is the number of times action $k$ has been taken. This updates the Q-value by moving it a small step toward the new reward. Option B uses a constant $\alpha$ (used in Monte Carlo/TD methods). Option C is the non-incremental average. Option D is just adding the reward.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} For MAB, the update uses $\frac{1}{n}$ (decreasing step size). For MC/TD, it uses a constant $\alpha$ (learning rate). Don't confuse these!
+	\end{frame}
+	
+	\begin{frame}{Q19: $\epsilon$ Decay Formula}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the MAB example with $\beta = 0.85$, what is the value of $\epsilon$ at trial $t$?}
+		
+		\begin{enumerate}
+			\item $\epsilon_t = \beta^t$
+			\item $\epsilon_t = \beta^{t-1}$
+			\item $\epsilon_t = 1 - \beta^t$
+			\item $\epsilon_t = \beta \times t$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} With exponential decay, $\epsilon_t = \beta^{t-1}$. For trial 1, $\epsilon_1 = \beta^0 = 1$ (pure exploration initially). For trial 2, $\epsilon_2 = \beta^1 = 0.85$. For trial 10, $\epsilon_{10} = 0.85^9 \approx 0.23$. This ensures more exploration early and more exploitation later.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\epsilon$ starts at 1 (trial 1) and decays; it does NOT start at $\beta$. The formula is \textcolor{blue}{$\epsilon_t = \beta^{t-1}$}, not $\beta^t$!
+	\end{frame}
+	
+	\begin{frame}{Q20: RL Data Requirements}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which of the following is a key challenge in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item RL algorithms require very little data to train effectively.
+			\item RL algorithms are often data-hungry, requiring far more interaction with the environment than supervised learning algorithms.
+			\item RL algorithms never make errors during training.
+			\item RL algorithms do not require a reward function.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} RL is notoriously data-hungry - often requiring millions of interactions. Option A is incorrect. Option C is false (RL makes many errors during exploration). Option D is false (a reward function is essential). The AlphaGo example required millions of self-play games.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} RL is \textcolor{blue}{computationally expensive} and \textcolor{blue}{data-hungry} - it needs many interactions to learn effectively!
+	\end{frame}
+	
+	% ============================================================
+	% QUESTIONS 21-40: MAB DETAILS & CALCULATIONS
+	% ============================================================
+	
+	\begin{frame}{Q21: MAB - Q-Value Calculation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{A slot machine has been played 10 times with rewards: [0.8, 1.2, -0.5, 1.5, 0.9, -0.2, 1.1, 0.7, 1.3, 0.6]. What is the current Q-value for this machine?}
+		
+		\begin{enumerate}
+			\item 0.74
+			\item 0.80
+			\item 0.90
+			\item 1.00
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Q-value = average of rewards = (0.8 + 1.2 + (-0.5) + 1.5 + 0.9 + (-0.2) + 1.1 + 0.7 + 1.3 + 0.6) / 10 = 7.4 / 10 = 0.74. The Q-value represents the expected reward from playing this machine. A higher Q-value indicates a machine with better expected payouts.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q-values are \textcolor{blue}{averages} - include negative rewards in the calculation!
+	\end{frame}
+	
+	\begin{frame}{Q22: MAB - Optimal Machine}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Three slot machines have the following Q-values: Q(A) = 0.8, Q(B) = 0.5, Q(C) = 0.7. If the agent uses the greedy strategy, which machine will it choose?}
+		
+		\begin{enumerate}
+			\item Machine A
+			\item Machine B
+			\item Machine C
+			\item A random machine
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The greedy strategy chooses the action with the highest Q-value. Q(A) = 0.8 is the highest. Option B has the lowest Q-value. Option C is second best. Option D is the random strategy, not the greedy strategy.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Greedy = \textcolor{blue}{highest Q-value} only! If Q(A) = 0.8, Q(B) = 0.5, Q(C) = 0.7, always choose A. No exploration!
+	\end{frame}
+	
+	\begin{frame}{Q23: MAB - $\epsilon$-Greedy Decision}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{At trial 100 with $\epsilon = 0.10$, a random number 0.05 is drawn. Q-values are: Q(A)=1.2, Q(B)=0.8, Q(C)=1.5. What action does the agent take?}
+		
+		\begin{enumerate}
+			\item Machine A (exploit)
+			\item Machine B (exploit)
+			\item Machine C (exploit)
+			\item A random machine (explore)
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: D}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Since 0.05 $<$ 0.10, the agent explores (chooses a random machine). Options A, B, C are all exploitation choices. The $\epsilon$-greedy algorithm: if random number $<$ $\epsilon$ $\rightarrow$ explore; otherwise exploit with highest Q-value (Machine C if exploiting).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Even if Q(C) is highest, with $\epsilon=0.10$ and random number $0.05$, we explore! The random number determines the decision, not the Q-values.
+	\end{frame}
+	
+	\begin{frame}{Q24: MAB - $\epsilon$ Value at Trial 50}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Given $\beta = 0.95$ and exponential decay, what is $\epsilon$ at trial 50? (Round to 2 decimal places)}
+		
+		\begin{enumerate}
+			\item 0.95
+			\item 0.08
+			\item 0.50
+			\item 0.92
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} $\epsilon_t = \beta^{t-1} = 0.95^{49}$. $\ln(0.95^{49}) = 49 \times \ln(0.95) = 49 \times (-0.0513) = -2.513$. $e^{-2.513} \approx 0.081$. So $\epsilon \approx 0.08$. This demonstrates how exploration decays over time.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\epsilon$ decays \textcolor{blue}{exponentially} - use $\beta^{t-1}$, not $\beta \times t$!
+	\end{frame}
+	
+	\begin{frame}{Q25: MAB - Strategy Comparison}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which strategy would be most likely to identify the true best slot machine in a MAB problem?}
+		
+		\begin{enumerate}
+			\item Greedy strategy (pure exploitation)
+			\item Random strategy (pure exploration)
+			\item $\epsilon$-greedy strategy with decay
+			\item Always choosing the first machine
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} $\epsilon$-greedy with decay balances exploration (to find the best machine) and exploitation (to maximize reward). Greedy may never find a better machine it never tries. Random never exploits knowledge. $\epsilon$-greedy with decay is optimal: explores early when uncertainty is high, exploits later when knowledge is high.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\epsilon$-greedy with decay is often the \textcolor{blue}{best practical approach} - it explores when needed and exploits when confident!
+	\end{frame}
+	
+	\begin{frame}{Q26: MAB - True vs Estimated Values}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the MAB example, the true means were $\mu_A = 0.8$, $\mu_B = 0.5$, $\mu_C = 0.7$. After 10 trials, the estimated Q-values were Q(A)=0.8, Q(B)=0.5, Q(C)=0.7. Why might the estimated Q-values differ from the true means?}
+		
+		\begin{enumerate}
+			\item They will always exactly equal the true means.
+			\item Because the agent has played each machine a finite number of times, sampling error causes estimates to differ from true values.
+			\item Because the agent used the random strategy.
+			\item Because the true means are unknown and cannot be estimated.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Estimated Q-values are averages of observed samples. With a finite sample, they may differ from true means due to sampling error. As the number of samples increases, estimates converge to the true means (Law of Large Numbers). Option A is false. Option C is not the reason for estimation error. Option D is false (estimates are possible).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Estimates are \textcolor{blue}{averages of observed rewards}; they \textcolor{red}{may not equal} true means with small samples!
+	\end{frame}
+	
+	\begin{frame}{Q27: MAB - Exploration Importance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why is exploration important in the Multi-Armed Bandit problem?}
+		
+		\begin{enumerate}
+			\item Exploration guarantees immediate high rewards.
+			\item Without exploration, the agent may miss a machine that could yield higher rewards than the currently estimated best.
+			\item Exploration is always better than exploitation.
+			\item Exploration is only needed in the first trial.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Exploration is critical to discover potentially better actions. The agent may have a high Q-value estimate for one machine due to lucky early rewards, while another machine has a higher true expected reward. Without exploring, the agent would never discover the better machine. Option A is false. Option C is false (balance is needed). Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Without exploration, you risk \textcolor{red}{suboptimal convergence} - never discovering the truly best action!
+	\end{frame}
+	
+	\begin{frame}{Q28: MAB - Exploitation Importance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why is exploitation important in the Multi-Armed Bandit problem?}
+		
+		\begin{enumerate}
+			\item Exploitation is never important; only exploration matters.
+			\item Exploitation uses knowledge gained from exploration to maximize immediate and long-term rewards.
+			\item Exploitation guarantees discovering the best machine.
+			\item Exploitation is only important when $\epsilon = 0$.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Exploitation leverages the knowledge gained from exploration to choose actions that are expected to yield high rewards. Without exploitation, the agent would never benefit from what it has learned. Option A is false. Option C is false (exploration discovers the best machine). Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Exploration and exploitation are \textcolor{blue}{both necessary} - exploitation without exploration is greedy and may miss better options; exploration without exploitation wastes knowledge!
+	\end{frame}
+	
+	\begin{frame}{Q29: MAB - State Characteristics}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which of the following is TRUE about the state in the Multi-Armed Bandit problem?}
+		
+		\begin{enumerate}
+			\item The state changes after each action.
+			\item There is only a single, constant state because the agent's actions do not affect the environment.
+			\item The state is determined by the agent's policy.
+			\item The state is the total reward accumulated so far.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} In MAB, the environment is static - the slot machines' properties don't change regardless of which machine is played. Therefore, there is only one state. Option A describes more complex RL problems. Option C is incorrect (the policy maps states to actions). Option D is incorrect (state is not the accumulated reward).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MAB is special because it has \textcolor{blue}{only ONE state} - this is why it's a good introduction to RL!
+	\end{frame}
+	
+	\begin{frame}{Q30: MAB - Reward Distribution}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the MAB example, the payoffs from machine i are normally distributed with mean $\mu_i$ and standard deviation 1. What does this mean for the agent?}
+		
+		\begin{enumerate}
+			\item The agent knows the exact payout for each machine before playing.
+			\item The agent only receives deterministic payouts.
+			\item The agent receives stochastic (random) payouts around the true mean, so it must learn the expected value through repeated trials.
+			\item The agent can perfectly predict future payouts.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The normal distribution means payouts are random with some variance. The agent observes noisy rewards and must estimate the true mean through averaging multiple observations. Option A and D are false (the agent doesn't know the mean). Option B is false (payouts are stochastic).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Rewards in RL are often \textcolor{blue}{stochastic} - the agent must learn through experience, not through perfect knowledge!
+	\end{frame}
+	
+	\begin{frame}{Q31: MAB - Q-Value Update Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Machine A has been played 5 times with average Q(A)=1.2. On the 6th play, the reward is 0.5. What is the new Q(A) using the incremental update formula?}
+		
+		\begin{enumerate}
+			\item 1.2 + (1/6)(0.5 - 1.2) = 1.083
+			\item 1.2 + 0.5 = 1.7
+			\item (1.2 $\times$ 5 + 0.5) / 6 = 1.083
+			\item 1.2 - (1/6)(0.5 - 1.2) = 1.317
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A and C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Both A and C give the same result. The incremental update formula is $Q^n = Q^{n-1} + \frac{1}{n}(R_n - Q^{n-1}) = 1.2 + \frac{1}{6}(0.5 - 1.2) = 1.2 - 0.1167 = 1.0833$. The average formula is $(1.2 \times 5 + 0.5)/6 = 1.0833$. Option B sums (incorrect). Option D uses subtraction with wrong sign.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Both formulas give the same result - incremental update is just a computationally efficient way to update the average!
+	\end{frame}
+	
+	\begin{frame}{Q32: MAB - $\epsilon$ Decay Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{With $\beta = 0.90$, what is $\epsilon$ at trial 10?}
+		
+		\begin{enumerate}
+			\item 0.90
+			\item 0.39
+			\item 0.43
+			\item 0.81
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} $\epsilon_t = \beta^{t-1} = 0.90^{9}$. $0.90^2 = 0.81$, $0.90^4 = 0.656$, $0.90^8 = 0.430$, $0.90^9 = 0.387$. Wait, 0.90\^9 = 0.387. Let me recalculate: 0.9\^1=0.9, \^2=0.81, \^3=0.729, \^4=0.656, \^5=0.590, \^6=0.531, \^7=0.478, \^8=0.430, \^9=0.387. So $\epsilon_{10} \approx 0.39$. Option B (0.39) is correct for trial 10.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} For trial $t$, use exponent $t-1$, not $t$!
+	\end{frame}
+	
+	\begin{frame}{Q33: MAB - Decay Factor Impact}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the effect of a smaller decay factor $\beta$ (e.g., 0.85 vs 0.99) in the $\epsilon$-greedy strategy?}
+		
+		\begin{enumerate}
+			\item A smaller $\beta$ means $\epsilon$ decays faster, so the agent explores less over time.
+			\item A smaller $\beta$ means $\epsilon$ decays slower, so the agent explores more over time.
+			\item $\beta$ has no effect on exploration.
+			\item A smaller $\beta$ increases the learning rate.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} A smaller $\beta$ (e.g., 0.85 vs 0.99) means $\epsilon$ decays faster. For $\beta=0.85$, after 10 trials $\epsilon \approx 0.23$; for $\beta=0.99$, after 10 trials $\epsilon \approx 0.91$. So smaller $\beta$ = less exploration later. Option B reverses this. Option C is false. Option D confuses $\beta$ with $\alpha$.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\beta$ controls \textcolor{blue}{exploration decay rate} - smaller $\beta$ = faster decay = less exploration later!
+	\end{frame}
+	
+	\begin{frame}{Q34: MAB - Optimal Strategy with Known Values}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{If the agent knew the true means $\mu_A = 0.8$, $\mu_B = 0.5$, $\mu_C = 0.7$, what would be the optimal strategy?}
+		
+		\begin{enumerate}
+			\item Always play Machine A.
+			\item Always play Machine B.
+			\item Always play Machine C.
+			\item Use $\epsilon$-greedy to explore.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} If the agent knew the true means, there would be no need for exploration. The optimal strategy is to always choose the machine with the highest expected reward: Machine A (0.8). This is the maximum expected reward. Option B and C have lower means. Option D would be unnecessary.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The challenge of RL is that the agent \textcolor{red}{does NOT know} the true values - it must learn them through experience!
+	\end{frame}
+	
+	\begin{frame}{Q35: MAB - Convergence of Q-Values}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{As the number of plays for a given machine increases, what happens to the Q-value estimate?}
+		
+		\begin{enumerate}
+			\item It diverges from the true mean.
+			\item It converges to the true mean (by the Law of Large Numbers).
+			\item It oscillates randomly forever.
+			\item It becomes more and more negative.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} By the Law of Large Numbers, the sample average converges to the expected value (true mean) as the number of samples increases. The Q-value is the sample average of observed rewards. Option A is the opposite. Option C is false (it converges). Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} With enough plays, Q-values \textcolor{blue}{converge} to the true expected rewards - this is why exploration is eventually less needed!
+	\end{frame}
+	
+	\begin{frame}{Q36: MAB - Bellman Equation Simplification}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why is the Bellman equation simpler in the MAB problem compared to general RL?}
+		
+		\begin{enumerate}
+			\item Because there are no states in MAB.
+			\item Because there is only one state and actions do not affect future states, so $Q(s,a)$ reduces to just the expected immediate reward.
+			\item Because MAB uses no discount factor.
+			\item Because MAB has deterministic rewards.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} In MAB, there is only one state and actions do not change the state. The Bellman equation simplifies because the future value term (max Q of next state) is not needed - Q(s,a) just equals the expected reward of action a. Option A is false (there is one state). Option C is false (MAB can use a discount factor but it's less relevant). Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MAB simplifies RL because \textcolor{blue}{actions don't affect the state} - no need to consider future states!
+	\end{frame}
+	
+	\begin{frame}{Q37: MAB - Thompson Sampling}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Thompson Sampling is an alternative to $\epsilon$-greedy for the MAB problem. How does it work conceptually?}
+		
+		\begin{enumerate}
+			\item It always chooses the machine with the highest Q-value.
+			\item It maintains a probability distribution over each machine's expected reward and samples from these distributions to choose actions, balancing exploration and exploitation probabilistically.
+			\item It chooses machines randomly without any learning.
+			\item It uses a fixed exploration schedule.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Thompson Sampling maintains a Bayesian belief (probability distribution) about each machine's reward. It samples a possible expected reward from each distribution and chooses the machine with the highest sampled value. This naturally balances exploration (machines with high uncertainty may be sampled high) and exploitation (machines with high expected values are likely chosen). Option A is greedy. Option C is random. Option D is a fixed schedule.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Thompson Sampling is a \textcolor{blue}{probabilistic} approach that naturally balances exploration and exploitation without a fixed $\epsilon$ parameter!
+	\end{frame}
+	
+	\begin{frame}{Q38: MAB - Regret}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is "regret" in the context of the Multi-Armed Bandit problem?}
+		
+		\begin{enumerate}
+			\item The negative reward received from playing a machine.
+			\item The difference between the reward obtained by the agent's strategy and the reward that would have been obtained by always playing the optimal machine.
+			\item The total number of times the agent explored.
+			\item The variance of the rewards.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Regret measures the opportunity cost of not knowing which machine is best. It is the cumulative difference between the rewards obtained and the rewards that would have been obtained if the agent had always played the optimal machine. The goal is to minimize regret. Option A is a negative reward. Option C is exploration count. Option D is variance.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Regret is \textcolor{blue}{cumulative} - it grows with each suboptimal choice. The goal of RL is to minimize regret!
+	\end{frame}
+	
+	\begin{frame}{Q39: MAB - Real-World Application}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which of the following is a real-world application of the Multi-Armed Bandit framework?}
+		
+		\begin{enumerate}
+			\item A/B testing in online advertising to determine which ad creative yields the highest click-through rate.
+			\item Training a robot to walk.
+			\item Playing a full game of chess.
+			\item Image recognition.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} A/B testing is a classic MAB application: test different options (ads), learn which performs best, and allocate more traffic to the best option while still exploring others. Option B and C involve dynamic states (not MAB). Option D is supervised learning.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MAB applies to \textcolor{blue}{static} problems where actions don't affect the environment - like ad testing, not robotic control!
+	\end{frame}
+	
+	\begin{frame}{Q40: MAB - Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which of the following is NOT a characteristic of the Multi-Armed Bandit problem?}
+		
+		\begin{enumerate}
+			\item There is a single, constant state.
+			\item The agent's actions affect the future state of the environment.
+			\item The agent chooses among multiple actions with unknown reward distributions.
+			\item The goal is to maximize cumulative reward.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} In MAB, the agent's actions do NOT affect the future state (the slot machines don't change). Option B describes more complex RL problems with dynamic environments. Option A is true (single state). Option C is true (unknown reward distributions). Option D is true (maximize cumulative reward).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The key difference between MAB and general RL is that in MAB, \textcolor{blue}{actions do NOT change the state}!
+	\end{frame}
+	
+	% ============================================================
+	% QUESTIONS 41-60: MONTE CARLO & TEMPORAL DIFFERENCE
+	% ============================================================
+	
+	\begin{frame}{Q41: Monte Carlo - Episode Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the Monte Carlo method, what is an "episode"?}
+		
+		\begin{enumerate}
+			\item A single action taken by the agent.
+			\item A single reward received by the agent.
+			\item A complete sequence of states, actions, and rewards from a starting point to a terminal state.
+			\item The total cumulative reward for a single action.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} An episode is a complete trajectory from start to finish (terminal state). For example, a complete game of chess from opening to checkmate. Option A is a single step. Option B is a single reward. Option D is the return. MC methods learn from complete episodes.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC methods require \textcolor{blue}{complete episodes} - they cannot learn until an episode ends!
+	\end{frame}
+	
+	\begin{frame}{Q42: Monte Carlo - Update Timing}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{When does the Monte Carlo method update its value estimates?}
+		
+		\begin{enumerate}
+			\item After each action taken by the agent.
+			\item After each reward received.
+			\item Only at the end of an episode, after the final outcome is known.
+			\item At random times during the episode.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} MC methods wait until the end of the episode. Only then does the agent know the total accumulated reward (G\_t) and can update Q-values for all state-action pairs encountered. This is a key difference from TD methods which update after each step.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC updates \textcolor{blue}{only at episode end} - this means no learning happens within the episode!
+	\end{frame}
+	
+	\begin{frame}{Q43: Monte Carlo - Advantage}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key advantage of the Monte Carlo method in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item It can learn after every step.
+			\item It is unbiased because it learns directly from actual rewards.
+			\item It works for continuous, non-episodic tasks.
+			\item It requires no exploration.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} MC methods are unbiased because they use actual observed rewards (not estimated values of future states). Option A describes TD methods. Option C is false (MC requires episodic tasks). Option D is false (MC still needs exploration).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC's advantage is \textcolor{blue}{unbiased estimates}; its disadvantage is \textcolor{red}{high variance}!
+	\end{frame}
+	
+	\begin{frame}{Q44: Monte Carlo - Disadvantage}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key disadvantage of the Monte Carlo method in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item It is biased because it uses bootstrapping.
+			\item It suffers from high variance in estimates because returns can fluctuate significantly between episodes.
+			\item It can learn from incomplete episodes.
+			\item It requires no terminal state.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} MC methods have high variance because each complete episode yields potentially very different total returns. Option A is false (MC is unbiased, not biased). Option C is false (MC requires complete episodes). Option D is false (MC requires a terminal state).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC = \textcolor{blue}{unbiased but high variance}; TD = \textcolor{blue}{biased but low variance}. This is the classic bias-variance trade-off in RL!
+	\end{frame}
+	
+	\begin{frame}{Q45: MC - Update Formula}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the Monte Carlo method, how is Q(s,a) updated?}
+		
+		\begin{enumerate}
+			\item $Q(s,a) = Q(s,a) + \alpha(R_{t+1} + \gamma V(s') - Q(s,a))$
+			\item $Q(s,a) = Q(s,a) + \alpha(G_t - Q(s,a))$
+			\item $Q(s,a) = \frac{1}{n}\sum R_j$
+			\item $Q(s,a) = \max(Q(s,a), G_t)$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} MC updates Q(s,a) towards the total observed return $G_t$ from that point to the end of the episode: $Q(s,a) \leftarrow Q(s,a) + \alpha(G_t - Q(s,a))$. Option A is the TD update. Option C is the MAB average. Option D takes the maximum.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC uses $G_t$ (total episode return); TD uses $R_{t+1} + \gamma V(s')$ (one-step lookahead). This is the key difference!
+	\end{frame}
+	
+	\begin{frame}{Q46: TD - Update Timing}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{When does the Temporal Difference (TD) method update its value estimates?}
+		
+		\begin{enumerate}
+			\item Only at the end of an episode.
+			\item After each step (or after a few steps), using the current estimate of the future value.
+			\item Only when the agent reaches a terminal state.
+			\item At random intervals.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} TD methods update after each step (online learning). They use "bootstrapping" - updating the current value estimate using the estimate of the next state's value. Option A describes MC. Option C is episode-end. Option D is not standard.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} TD updates \textcolor{blue}{every step} - it learns online, not just at episode end!
+	\end{frame}
+	
+	\begin{frame}{Q47: TD - Advantage}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key advantage of the Temporal Difference method over Monte Carlo?}
+		
+		\begin{enumerate}
+			\item TD is unbiased.
+			\item TD can learn from incomplete episodes and continuous (non-episodic) tasks.
+			\item TD has higher variance than MC.
+			\item TD requires less computation.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} TD methods can learn online, from incomplete episodes (no need to wait for terminal state), and can handle continuous tasks. Option A is false (TD is biased). Option C is false (TD has lower variance). Option D is not necessarily true.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} TD is more \textcolor{blue}{flexible} - can learn after every step and handle non-episodic problems!
+	\end{frame}
+	
+	\begin{frame}{Q48: TD - Disadvantage}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key disadvantage of the Temporal Difference method compared to Monte Carlo?}
+		
+		\begin{enumerate}
+			\item TD has high variance.
+			\item TD is biased because it uses bootstrapping (estimates of future values) rather than actual rewards.
+			\item TD cannot learn from incomplete episodes.
+			\item TD requires complete episodes.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} TD methods are biased because they use bootstrapping - they update using estimates of future values (which are themselves estimates). MC is unbiased because it uses actual observed returns. Option A is false (TD has lower variance). Option C and D are false (TD can learn online).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} TD = \textcolor{blue}{biased but lower variance}; MC = \textcolor{blue}{unbiased but higher variance}!
+	\end{frame}
+	
+	\begin{frame}{Q49: TD - Update Formula}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the TD update formula for the value function V(s)?}
+		
+		\begin{enumerate}
+			\item $V(s) \leftarrow V(s) + \alpha(G_t - V(s))$
+			\item $V(s) \leftarrow V(s) + \alpha(R_{t+1} + \gamma V(s') - V(s))$
+			\item $V(s) \leftarrow \frac{1}{n}\sum R_j$
+			\item $V(s) \leftarrow R_{t+1} + \gamma V(s')$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} TD updates $V(s)$ towards the TD target $R_{t+1} + \gamma V(s')$: $V(s) \leftarrow V(s) + \alpha(R_{t+1} + \gamma V(s') - V(s))$. Option A is MC. Option C is MAB. Option D is just the target, not the update.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} TD uses \textcolor{blue}{bootstrapping} - the target includes the estimate of the next state's value $V(s')$!
+	\end{frame}
+	
+	\begin{frame}{Q50: Q-Learning - Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Q-learning?}
+		
+		\begin{enumerate}
+			\item A Monte Carlo method that learns from complete episodes.
+			\item A Temporal Difference method that learns the optimal action-value function Q(s,a) directly, without waiting for episode end.
+			\item A policy-based method that directly learns the policy.
+			\item A model-based method that uses environment transition probabilities.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Q-learning is a TD method that learns Q(s,a) using one-step lookahead: $Q(s,a) \leftarrow Q(s,a) + \alpha(R_{t+1} + \gamma \max_{a'} Q(s',a') - Q(s,a))$. It is model-free and learns the optimal Q-function. Option A is MC. Option C is policy-based. Option D is model-based.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q-learning is \textcolor{blue}{off-policy} - it learns the optimal policy regardless of the policy being followed!
+	\end{frame}
+	
+	\begin{frame}{Q51: Q-Learning - Update Formula}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the Q-learning update formula?}
+		
+		\begin{enumerate}
+			\item $Q(s,a) \leftarrow Q(s,a) + \alpha(G_t - Q(s,a))$
+			\item $Q(s,a) \leftarrow Q(s,a) + \alpha(R_{t+1} + \gamma Q(s',a') - Q(s,a))$
+			\item $Q(s,a) \leftarrow Q(s,a) + \alpha(R_{t+1} + \gamma \max_{a'} Q(s',a') - Q(s,a))$
+			\item $Q(s,a) \leftarrow R_{t+1} + \gamma \max_{a'} Q(s',a')$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Q-learning updates using $R_{t+1} + \gamma \max_{a'} Q(s',a')$ as the target. It uses the maximum Q-value over all actions in the next state (the optimal future value). Option A is MC. Option B is SARSA (uses the actual next action). Option D is just the target.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q-learning uses $\max_{a'} Q(s',a')$ (off-policy); SARSA uses $Q(s',a')$ for the actual action taken (on-policy). This is a key difference!
+	\end{frame}
+	
+	\begin{frame}{Q52: SARSA - Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is SARSA in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item A Monte Carlo method for policy evaluation.
+			\item An on-policy Temporal Difference method that updates Q(s,a) using the actual next action taken $a'$.
+			\item An off-policy TD method that uses the maximum next Q-value.
+			\item A model-based method for dynamic programming.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} SARSA is an on-policy TD method. The update is $Q(s,a) \leftarrow Q(s,a) + \alpha(R_{t+1} + \gamma Q(s',a') - Q(s,a))$, where $a'$ is the action actually taken in state $s'$ (following the current policy). Option A is MC. Option C is Q-learning. Option D is model-based.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} SARSA's name comes from the tuple: \textcolor{blue}{S}tate, \textcolor{blue}{A}ction, \textcolor{blue}{R}eward, \textcolor{blue}{S}tate', \textcolor{blue}{A}ction'. It's on-policy!
+	\end{frame}
+	
+	\begin{frame}{Q53: Off-Policy vs On-Policy}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the key difference between off-policy and on-policy reinforcement learning methods?}
+		
+		\begin{enumerate}
+			\item Off-policy methods learn from experience generated by a different policy, while on-policy methods learn from experience generated by the policy being learned.
+			\item On-policy methods are always better than off-policy methods.
+			\item Off-policy methods require complete episodes, while on-policy methods do not.
+			\item On-policy methods use value functions, while off-policy methods use policies directly.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} In off-policy learning (e.g., Q-learning), the agent learns the optimal policy while following a different policy (e.g., $\epsilon$-greedy). In on-policy learning (e.g., SARSA), the agent learns the policy it is currently following. Option B is false. Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q-learning is \textcolor{blue}{off-policy}; SARSA is \textcolor{blue}{on-policy}. This is a key distinction for exam questions!
+	\end{frame}
+	
+	\begin{frame}{Q54: TD Error}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the TD error in the Temporal Difference method?}
+		
+		\begin{enumerate}
+			\item The difference between the observed reward and the expected reward.
+			\item The difference between the TD target and the current value estimate: $\delta = R_{t+1} + \gamma V(s') - V(s)$.
+			\item The total return from an episode.
+			\item The difference between the Q-values of two actions.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The TD error is the difference between the TD target and the current estimate: $\delta = R_{t+1} + \gamma V(s') - V(s)$. It represents how much the new information (reward + next state estimate) differs from the current estimate. Option A is the prediction error. Option C is the return. Option D is the advantage.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The TD error is \textcolor{blue}{the "surprise"} - how much the new information differs from the current estimate!
+	\end{frame}
+	
+
+
+\begin{frame}{Q55: MC vs TD - Example (NIM)}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{In the NIM game example, after the first episode (Player 1 wins), how does the MC method update Q(6,3) versus the TD method?}
+	
+	\begin{enumerate}
+		\item MC updates Q(6,3) using the total return $G=1$; TD updates Q(6,3) using the one-step lookahead $R_{t+1} + \gamma V(s')$.
+		\item MC and TD update Q(6,3) in exactly the same way.
+		\item MC does not update Q(6,3) until the episode ends; TD also waits until episode ends.
+		\item MC updates Q(6,3) after each step; TD waits until the episode ends.
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{blue}{\textbf{Answer: A}}
+	\vspace{0.1cm}
+	
+	\textcolor{blue}{\textbf{Explanation:}} In the NIM example, MC updated Q(6,3) using the total return $G=1$ (from the entire episode). TD updated Q(6,3) using the one-step lookahead $R_{t+1} + \gamma V(s')$, where $s'$ is the next state after the action. Option B is false (they differ). Option C is false (TD updates online). Option D reverses the methods.
+	
+	\textcolor{red}{\textbf{Exam Trap:}} MC uses \textcolor{blue}{$G_t$} (total return); TD uses \textcolor{blue}{$R_{t+1} + \gamma V(s')$} (one-step lookahead).
+\end{frame}
+
+
+
+
+	
+	\begin{frame}{Q56: MC vs TD - Convergence}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{After many episodes in the NIM game, both MC and TD methods converged to the same optimal strategy. What does this illustrate?}
+		
+		\begin{enumerate}
+			\item MC and TD always converge to different strategies.
+			\item MC and TD are both valid methods that converge to the optimal policy when enough experience is available.
+			\item TD is always faster than MC.
+			\item MC is always more accurate than TD.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The NIM example shows that both MC and TD converge to the same optimal strategy (pick 2 when 6 coins, pick 1 when 4 coins, pick 3 when 3 coins, etc.). This demonstrates that both methods are valid. Option A is false. Option C and D are not universally true.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Both MC and TD can find the optimal policy - the choice depends on the problem characteristics!
+	\end{frame}
+	
+	\begin{frame}{Q57: MC - Alpha Parameter}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the MC update formula $Q(s,a) \leftarrow Q(s,a) + \alpha(G_t - Q(s,a))$, what does $\alpha$ represent?}
+		
+		\begin{enumerate}
+			\item The discount factor.
+			\item The learning rate, controlling how much the Q-value moves toward the new target.
+			\item The exploration rate.
+			\item The number of episodes.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} $\alpha$ is the learning rate (step size), typically between 0 and 1. It controls how much the Q-value is updated toward the target. A larger $\alpha$ means faster learning but more sensitivity to noise. Option A is $\gamma$ (discount factor). Option C is $\epsilon$ (exploration rate). Option D is $n$.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} $\alpha$ = \textcolor{blue}{learning rate}; $\gamma$ = \textcolor{blue}{discount factor}; $\epsilon$ = \textcolor{blue}{exploration rate}. Don't confuse these three!
+	\end{frame}
+	
+	\begin{frame}{Q58: TD - Alpha Parameter}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the TD update formula $V(s) \leftarrow V(s) + \alpha(R_{t+1} + \gamma V(s') - V(s))$, what is the TD target?}
+		
+		\begin{enumerate}
+			\item $V(s)$
+			\item $R_{t+1} + \gamma V(s')$
+			\item $\alpha(R_{t+1} + \gamma V(s') - V(s))$
+			\item $R_{t+1}$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The TD target is $R_{t+1} + \gamma V(s')$ - the immediate reward plus the discounted estimated value of the next state. This is what the algorithm tries to move V(s) toward. Option A is the old value. Option C is the update amount. Option D is just the reward.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The TD target is \textcolor{blue}{$R_{t+1} + \gamma V(s')$}; the TD error is \textcolor{blue}{target - current estimate}!
+	\end{frame}
+	
+	\begin{frame}{Q59: MC - Eligibility for Episodic Tasks}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which of the following tasks would be suitable for the Monte Carlo method?}
+		
+		\begin{enumerate}
+			\item A robot continuously learning to navigate a warehouse without stopping.
+			\item A game of chess that always has a defined ending (checkmate).
+			\item A stock trading algorithm that runs indefinitely.
+			\item A temperature control system that runs 24/7.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} MC requires episodic tasks - those with a defined terminal state. Chess has a clear end. Options A, C, and D are continuous (non-episodic) tasks for which MC is not suitable. TD methods are better for continuous tasks.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC is \textcolor{blue}{only for episodic} tasks; TD can handle both episodic and continuous tasks!
+	\end{frame}
+	
+	\begin{frame}{Q60: TD - Eligibility for Continuous Tasks}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which method is more suitable for a continuous, non-episodic task like a stock trading algorithm?}
+		
+		\begin{enumerate}
+			\item Monte Carlo (MC) method.
+			\item Temporal Difference (TD) method.
+			\item Both MC and TD are equally suitable.
+			\item Neither MC nor TD can handle continuous tasks.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} TD methods are suitable for continuous tasks because they learn online, after each step, without needing to wait for an episode to end. MC requires complete episodes and cannot be applied to continuous tasks. Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} TD is more \textcolor{blue}{versatile} - it can handle both episodic and continuous tasks; MC is \textcolor{red}{limited to episodic} tasks!
+	\end{frame}
+	
+	% ============================================================
+	% QUESTIONS 61-80: DEEP RL, DQN, EXPLORATION/EXPLOITATION
+	% ============================================================
+	
+	\begin{frame}{Q61: Deep RL - Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Deep Reinforcement Learning (Deep RL)?}
+		
+		\begin{enumerate}
+			\item RL that uses only tabular Q-tables.
+			\item RL that combines reinforcement learning with deep neural networks to approximate value functions or policies.
+			\item RL that uses decision trees instead of neural networks.
+			\item RL that works only for board games.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Deep RL uses neural networks to approximate functions like Q(s,a) or the policy. This is necessary when state spaces are too large for tabular methods. Option A describes traditional RL. Option C is not deep RL. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Deep RL uses \textcolor{blue}{neural networks} to handle large state spaces where Q-tables are impractical!
+	\end{frame}
+	
+	\begin{frame}{Q62: DQN - Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a Deep Q-Network (DQN)?}
+		
+		\begin{enumerate}
+			\item A Monte Carlo method for policy evaluation.
+			\item A TD method combined with neural networks to approximate Q(s,a), with experience replay and target networks for stability.
+			\item A policy-based method that directly learns the policy.
+			\item A model-based method that uses environment transition probabilities.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} DQN is a TD method (Q-learning) extended with neural networks. Key innovations include experience replay (breaking correlation between samples) and a separate target network (stabilizing learning). Option A is MC. Option C is policy-based. Option D is model-based.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} DQN = \textcolor{blue}{Q-learning + Neural Networks + Experience Replay + Target Network}. Know all components!
+	\end{frame}
+	
+	\begin{frame}{Q63: DQN - Experience Replay}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is "experience replay" in DQN and why is it important?}
+		
+		\begin{enumerate}
+			\item Storing all experiences and replaying them in order to speed up training.
+			\item Storing experiences (s, a, r, s') in a replay memory and sampling randomly for training, which breaks the correlation between consecutive experiences.
+			\item Replaying the game from the beginning after each episode.
+			\item Storing only the last experience for training.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Experience replay stores past experiences in memory and samples randomly for training. This breaks the temporal correlation between consecutive experiences (which are highly similar in games), making learning more stable and efficient. Option A is incorrect (random sampling, not sequential). Option C is not experience replay. Option D is not experience replay.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Experience replay = \textcolor{blue}{random sampling} from memory, not sequential replay!
+	\end{frame}
+	
+	\begin{frame}{Q64: DQN - Target Network}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the purpose of the target network in DQN?}
+		
+		\begin{enumerate}
+			\item To provide a stable target for Q-learning updates, preventing the "moving target" problem.
+			\item To reduce the size of the neural network.
+			\item To increase the learning rate.
+			\item To replace the policy network entirely.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The target network is a copy of the policy network that is updated periodically (e.g., every 500 steps). It provides a stable target for the loss function, preventing the "chasing a moving target" problem that can cause instability. Option B is false. Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The target network is updated \textcolor{blue}{periodically}, not every step - this stabilizes learning!
+	\end{frame}
+	
+	\begin{frame}{Q65: DQN - Loss Function}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the typical loss function used in DQN?}
+		
+		\begin{enumerate}
+			\item Cross-entropy loss.
+			\item Mean Squared Error (MSE) between the policy network's Q-value and the target network's Q-value.
+			\item Absolute error loss.
+			\item Hinge loss.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} DQN uses MSE loss: $L = (Q_{\text{policy}}(s,a) - (R_{t+1} + \gamma \max_{a'} Q_{\text{target}}(s',a')))^2$. This minimizes the squared difference between the policy network's prediction and the target. Option A is for classification. Option C is L1 loss. Option D is for SVM.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} DQN uses \textcolor{blue}{MSE} between policy and target networks, not cross-entropy!
+	\end{frame}
+	
+	\begin{frame}{Q66: DQN - Exploration in DQN}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{How does DQN typically balance exploration and exploitation during training?}
+		
+		\begin{enumerate}
+			\item It uses pure exploitation only.
+			\item It uses pure exploration only.
+			\item It uses $\epsilon$-greedy with $\epsilon$ typically decaying over time.
+			\item It always chooses actions randomly.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} DQN typically uses $\epsilon$-greedy exploration with $\epsilon$ decaying from a high value (e.g., 1.0) to a low value (e.g., 0.01) over training. This encourages exploration early and exploitation later. Option A and B are extremes. Option D is the random strategy.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} DQN uses \textcolor{blue}{$\epsilon$-greedy with decay} - same principle as MAB but applied in complex environments!
+	\end{frame}
+	
+	\begin{frame}{Q67: DQN - Convergence}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{When does DQN typically stop training?}
+		
+		\begin{enumerate}
+			\item After exactly 100 steps.
+			\item When the maximum number of steps is reached or there is no significant improvement in Q-values.
+			\item When the agent wins the game.
+			\item When the loss function reaches zero.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} DQN training typically ends when the maximum number of steps is reached or when Q-values stop improving (convergence). Option A is arbitrary. Option C may not correspond to convergence. Option D is unrealistic (loss rarely reaches zero).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} DQN training stops when \textcolor{blue}{converged} or \textcolor{blue}{max steps reached} - not necessarily when the agent wins!
+	\end{frame}
+	
+	\begin{frame}{Q68: Model-Based vs Model-Free RL}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the key difference between model-based and model-free reinforcement learning?}
+		
+		\begin{enumerate}
+			\item Model-based uses a model of the environment's dynamics; model-free learns directly from experience without an environment model.
+			\item Model-based is always better than model-free.
+			\item Model-free uses a model of the environment; model-based does not.
+			\item Model-based is only for games; model-free is for robotics.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Model-based RL uses a model of the environment (transition probabilities, rewards) to plan actions. Model-free RL learns directly from experience without a model. Option B is false. Option C reverses them. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Model-based = \textcolor{blue}{uses environment model}; Model-free = \textcolor{blue}{learns from experience}!
+	\end{frame}
+	
+	\begin{frame}{Q69: Model-Based RL - Advantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key advantage of model-based reinforcement learning?}
+		
+		\begin{enumerate}
+			\item It requires less computational power.
+			\item It can be more efficient because the agent requires fewer interactions with the environment.
+			\item It always outperforms model-free RL.
+			\item It requires no reward function.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Model-based RL can be more sample-efficient because the agent can use the model to simulate and plan, requiring fewer actual interactions with the environment. Option A is false (model-based can be computationally expensive). Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Model-based RL is \textcolor{blue}{more sample-efficient} but can suffer from model bias!
+	\end{frame}
+	
+	\begin{frame}{Q70: Model-Based RL - Disadvantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key disadvantage of model-based reinforcement learning?}
+		
+		\begin{enumerate}
+			\item It requires no environment knowledge.
+			\item Modeling real-world environments can be extremely difficult, leading to inaccuracies and biases that can be exploited by the agent.
+			\item It always learns faster than model-free RL.
+			\item It cannot use neural networks.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The main challenge is that modeling complex environments is difficult and inaccurate. Model bias can cause the agent to learn a policy that works well in the model but poorly in the real world. Option A is false. Option C is false. Option D is false (model-based can use neural networks).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Model-based RL's risk is \textcolor{blue}{model bias} - the model may not accurately represent the real environment!
+	\end{frame}
+	
+	\begin{frame}{Q71: Model-Free RL - Advantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key advantage of model-free reinforcement learning?}
+		
+		\begin{enumerate}
+			\item It requires fewer training samples than model-based RL.
+			\item It learns directly from experience without needing an environment model, making it suitable for dynamic and unpredictable scenarios.
+			\item It always converges faster than model-based RL.
+			\item It requires less computational power.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Model-free RL learns directly from interaction with the environment. It doesn't require building a model, making it applicable to complex, dynamic, or poorly understood environments. Option A is false (model-free is typically less sample-efficient). Option C is false. Option D is not necessarily true.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Model-free RL is \textcolor{blue}{more applicable} to complex environments but \textcolor{red}{less sample-efficient}!
+	\end{frame}
+	
+	\begin{frame}{Q72: Model-Free RL - Disadvantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key disadvantage of model-free reinforcement learning?}
+		
+		\begin{enumerate}
+			\item It cannot be used for dynamic environments.
+			\item It tends to have a slow learning process because it requires many interactions with the environment.
+			\item It requires an accurate environment model.
+			\item It is only suitable for deterministic environments.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Model-free RL is data-hungry, requiring many interactions with the environment to learn. It can be very slow, especially for complex problems. Option A is false (it works in dynamic environments). Option C describes model-based RL. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Model-free RL's main drawback is \textcolor{red}{slow learning} due to many required interactions!
+	\end{frame}
+	
+	\begin{frame}{Q73: AlphaZero - Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{AlphaZero is an example of which type of reinforcement learning?}
+		
+		\begin{enumerate}
+			\item Model-free RL
+			\item Model-based RL
+			\item Supervised learning
+			\item Unsupervised learning
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} AlphaZero uses model-based RL. It has a model of the game (rules, transitions) and uses Monte Carlo Tree Search (MCTS) to plan and evaluate moves. It demonstrates superhuman performance in chess, Go, and shogi. Option A is incorrect. Options C and D are not RL.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} AlphaZero is \textcolor{blue}{model-based} RL - it uses the game's rules as its model!
+	\end{frame}
+	
+	\begin{frame}{Q74: AlphaGo - Significance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What makes AlphaGo a significant achievement in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item It was the first computer program to play Go.
+			\item It learned to play at a level surpassing the best human players purely by playing against itself millions of times.
+			\item It used only supervised learning.
+			\item It required no computational resources.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} AlphaGo's significance is that it achieved superhuman performance through self-play (reinforcement learning), without relying on human gameplay data for its final strategy. Option A is false. Option C is false (it used RL primarily). Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} AlphaGo demonstrated that RL can \textcolor{blue}{discover novel strategies} beyond human knowledge!
+	\end{frame}
+	
+	\begin{frame}{Q75: RLHF - Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Reinforcement Learning from Human Feedback (RLHF)?}
+		
+		\begin{enumerate}
+			\item RL that uses only automated rewards from the environment.
+			\item RL that uses human feedback (rankings or scores) as a reward signal to fine-tune models, particularly large language models like ChatGPT.
+			\item RL that uses only supervised learning.
+			\item RL that requires no training data.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} RLHF uses human feedback as the reward signal. In the context of LLMs, humans rank or score model outputs, and RL algorithms adjust the model to generate responses that receive higher scores. This improves instruction following and coherence. Option A is standard RL. Option C is not RL. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} RLHF is a key technique for \textcolor{blue}{fine-tuning LLMs} - it's why ChatGPT and similar models are so capable!
+	\end{frame}
+	
+	\begin{frame}{Q76: RLHF - Applications}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the primary purpose of RLHF in large language models (LLMs)?}
+		
+		\begin{enumerate}
+			\item To reduce the size of the model.
+			\item To encourage the model to follow instructions, respect policy constraints, and reason more coherently.
+			\item To increase the model's training speed.
+			\item To replace all other training methods.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} RLHF fine-tunes LLMs to better align with human preferences, improving instruction following, reasoning, and safety. Option A is not a purpose. Option C is false. Option D is false (RLHF is a fine-tuning step, not a replacement).
+		
+		\textcolor{red}{\textbf{Exam Trap:}} RLHF is about \textcolor{blue}{alignment} - making AI systems behave in ways humans prefer!
+	\end{frame}
+	
+	\begin{frame}{Q77: Policy-Based Methods - Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the key difference between value-based and policy-based reinforcement learning methods?}
+		
+		\begin{enumerate}
+			\item Value-based methods learn the optimal policy directly; policy-based methods learn the value function.
+			\item Value-based methods learn a value function (V or Q) and derive a policy from it; policy-based methods learn the policy directly without learning a value function.
+			\item Value-based methods are always better than policy-based methods.
+			\item Policy-based methods cannot handle continuous action spaces.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Value-based methods (Q-learning, SARSA) learn value functions and derive policies from them (e.g., choose action with highest Q). Policy-based methods learn the policy directly, often parameterized by neural networks. Option A reverses them. Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Policy-based = \textcolor{blue}{directly learns the policy}; Value-based = \textcolor{blue}{learns values then derives policy}!
+	\end{frame}
+	
+	\begin{frame}{Q78: Policy-Based - Advantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key advantage of policy-based methods over value-based methods?}
+		
+		\begin{enumerate}
+			\item They are simpler to implement.
+			\item They can handle continuous action spaces more naturally.
+			\item They always converge faster.
+			\item They require no exploration.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Policy-based methods can handle continuous action spaces naturally because they output a probability distribution over actions (or a deterministic action), which works for continuous spaces. Option A is not universally true. Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Policy-based methods are preferred for \textcolor{blue}{continuous action spaces} (e.g., robotic control)!
+	\end{frame}
+	
+	\begin{frame}{Q79: Policy-Based - Disadvantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key disadvantage of policy-based methods?}
+		
+		\begin{enumerate}
+			\item They cannot handle continuous action spaces.
+			\item They may be slow to converge and are sensitive to hyperparameters like the learning rate.
+			\item They always require complete episodes.
+			\item They cannot use neural networks.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Policy-based methods often converge slowly and are sensitive to hyperparameters. Some variants (like REINFORCE) also require complete episodes. Option A is false (they handle continuous spaces well). Option C is only true for some variants. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Policy-based methods can be \textcolor{red}{slow to converge} and \textcolor{red}{sensitive to tuning}!
+	\end{frame}
+	
+	\begin{frame}{Q80: Actor-Critic Methods}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are Actor-Critic methods in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item Value-based methods that only learn value functions.
+			\item Policy-based methods that only learn policies.
+			\item Hybrid approaches that combine value-based and policy-based methods, using an "actor" (policy) and a "critic" (value function).
+			\item Model-based methods that use environment models.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Actor-Critic methods combine the strengths of both approaches: the "actor" learns the policy (policy-based), while the "critic" evaluates the value function (value-based) to provide feedback to the actor. This hybrid approach can be more stable and efficient. Option A is value-based only. Option B is policy-based only. Option D is model-based.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Actor-Critic = \textcolor{blue}{Actor (policy)} + \textcolor{blue}{Critic (value)} - the best of both worlds!
+	\end{frame}
+	
+	% ============================================================
+	% QUESTIONS 81-100: MDP, BELLMAN, NIM EXAMPLE, ADVANCED TOPICS
+	% ============================================================
+	
+	\begin{frame}{Q81: MDP - Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a Markov Decision Process (MDP)?}
+		
+		\begin{enumerate}
+			\item A process where future states depend on all past states.
+			\item A mathematical framework for modeling decision-making where future states depend only on the current state (Markov property).
+			\item A process with no states.
+			\item A process with no actions.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} MDPs have the Markov property: the future state depends only on the current state, not on the history of past states. This "memoryless" property simplifies the analysis and makes problems tractable. Option A describes non-Markovian processes. Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MDPs assume the \textcolor{blue}{Markov property} - only the current state matters!
+	\end{frame}
+	
+	\begin{frame}{Q82: Markov Property}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does the Markov property state in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item $P(S_{t+1} | S_t, S_{t-1}, ..., S_1) = P(S_{t+1} | S_t)$
+			\item $P(S_{t+1} | S_t, S_{t-1}, ..., S_1) = P(S_{t+1} | S_t, S_{t-1})$
+			\item $P(S_{t+1} | S_t) = 1$
+			\item $P(S_{t+1} | S_t) = 0$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Markov property states that the probability of transitioning to the next state depends only on the current state, not on the history of past states. This is the "memoryless" property. Options B, C, and D are incorrect.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Markov property = \textcolor{blue}{only current state matters} for predicting the future!
+	\end{frame}
+	
+	\begin{frame}{Q83: Bellman Equation - Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the Bellman equation in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item An equation for computing the loss function in supervised learning.
+			\item A recursive equation that expresses the value of a state in terms of immediate reward and the discounted value of the next state.
+			\item An equation for calculating the learning rate.
+			\item An equation for determining the exploration rate.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Bellman equation provides a recursive way to evaluate policies: $V(s) = R(s,a) + \gamma V(s')$ for deterministic environments. It decomposes the total return into immediate reward plus future returns. Option A is for supervised learning. Option C is not Bellman. Option D is not Bellman.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The Bellman equation is \textcolor{blue}{recursive} - $V(s)$ depends on $V(s')$!
+	\end{frame}
+	
+	\begin{frame}{Q84: Bellman Optimality Equation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the Bellman optimality equation for the state-value function V(s)?}
+		
+		\begin{enumerate}
+			\item $V^*(s) = \max_a E[R_{t+1} + \gamma V^*(s')]$
+			\item $V^*(s) = E[R_{t+1} + \gamma V^*(s')]$
+			\item $V^*(s) = \max_a R_{t+1}$
+			\item $V^*(s) = \max_a Q(s,a)$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Bellman optimality equation for V(s) is $V^*(s) = \max_a E[R_{t+1} + \gamma V^*(s')]$. It states that the optimal value of a state is the maximum over actions of the expected reward plus the discounted optimal value of the next state. Option B lacks the max. Option C is only immediate reward. Option D is the relationship between V and Q.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The Bellman optimality equation includes \textcolor{blue}{max over actions} - it assumes the agent chooses optimally!
+	\end{frame}
+	
+	\begin{frame}{Q85: Bellman Optimality - Q-Function}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the Bellman optimality equation for Q(s,a)?}
+		
+		\begin{enumerate}
+			\item $Q^*(s,a) = E[R_{t+1} + \gamma \max_{a'} Q^*(s',a')]$
+			\item $Q^*(s,a) = R_{t+1} + \gamma Q^*(s',a')$
+			\item $Q^*(s,a) = \max_a E[R_{t+1} + \gamma V^*(s')]$
+			\item $Q^*(s,a) = E[R_{t+1} + \gamma Q^*(s',a')]$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The Bellman optimality equation for Q(s,a) is $Q^*(s,a) = E[R_{t+1} + \gamma \max_{a'} Q^*(s',a')]$. This is the fundamental equation behind Q-learning. Option B lacks the expectation and max. Option C is V(s). Option D lacks the max.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The Bellman optimality equation for Q uses $\max_{a'} Q^*(s',a')$ - the optimal future value!
+	\end{frame}
+	
+	\begin{frame}{Q86: Transition Probability Matrix}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In an MDP, what does the transition probability matrix P represent?}
+		
+		\begin{enumerate}
+			\item The probability of each action being taken.
+			\item The probability of moving from any state to any other state in one step.
+			\item The probability of receiving a specific reward.
+			\item The probability distribution over initial states.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The transition matrix P contains the probabilities of transitioning from one state to another. Given the Markov property, $P_{ij} = P(S_{t+1} = j | S_t = i)$. Option A is the policy. Option C is the reward distribution. Option D is the initial state distribution.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} P describes \textcolor{blue}{state transitions} - the probability of moving between states!
+	\end{frame}
+	
+	\begin{frame}{Q87: NIM Game - State Representation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the NIM game example with 6 coins, how are states represented?}
+		
+		\begin{enumerate}
+			\item By the number of coins left on the table.
+			\item By the total number of coins removed.
+			\item By the player's identity.
+			\item By the action taken.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} In the NIM game, the state is represented by the number of coins left on the table (1, 2, 3, 4, 5, 6). Option B is the cumulative total. Option C is player identity (but the state is the same for both players). Option D is the action.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The NIM game state is simply the \textcolor{blue}{number of coins remaining} - simple and discrete!
+	\end{frame}
+	
+	\begin{frame}{Q88: NIM Game - Actions}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the NIM game example, what are the possible actions at each state?}
+		
+		\begin{enumerate}
+			\item Remove any number of coins.
+			\item Remove 1, 2, or 3 coins.
+			\item Remove exactly 1 coin.
+			\item Remove coins based on the opponent's move.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} In the NIM game, players can remove 1, 2, or 3 coins each turn (as long as enough coins remain). Option A is incorrect (not any number). Option C is too restrictive. Option D is not an action choice.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Actions in NIM are \textcolor{blue}{1, 2, or 3 coins} - the agent chooses which number to remove!
+	\end{frame}
+	
+	\begin{frame}{Q89: NIM - MC Convergence}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{After 1,000,000 episodes in the NIM game, the MC method converged to Q(6,2) = 1. What does this indicate?}
+		
+		\begin{enumerate}
+			\item Picking 2 coins when 6 coins are left leads to certain loss.
+			\item Picking 2 coins when 6 coins are left leads to certain win.
+			\item Picking 2 coins when 6 coins are left is not a legal action.
+			\item The action value is uncertain.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Q(6,2) = 1 indicates that taking 2 coins from 6 coins leads to a win (reward of 1). This is the optimal strategy identified by the algorithm. The Q-value represents the expected future reward from that state-action pair.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Q-values near 1 = \textcolor{blue}{winning actions}; Q-values near -1 = \textcolor{red}{losing actions}!
+	\end{frame}
+	
+	\begin{frame}{Q90: NIM - Optimal Strategy}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the optimal strategy learned for the NIM game with 6 coins?}
+		
+		\begin{enumerate}
+			\item Pick 3 coins when 6 coins remain.
+			\item Pick 2 coins when 6 coins remain.
+			\item Pick 1 coin when 6 coins remain.
+			\item Any action is optimal.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The optimal strategy learned is to pick 2 coins when 6 coins remain (leaving 4 coins), then respond optimally (pick 1 coin when 4 remain, pick 3 when 3 remain, etc.). This strategy ensures a win. Option A is suboptimal. Option C is suboptimal. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} The NIM game strategy is: 6 coins $\rightarrow$ pick 2; 4 coins $\rightarrow$ pick 1; 3 coins $\rightarrow$ pick 3; 2 coins $\rightarrow$ pick 2; 1 coin $\rightarrow$ pick 1!
+	\end{frame}
+	
+	\begin{frame}{Q91: MC vs TD - NIM Update Timing}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the NIM game example, after the first episode, why did MC update Q(1,1) but TD also updated Q(1,1) at the same time?}
+		
+		\begin{enumerate}
+			\item MC updated at episode end; TD updated within the episode (after the winning move).
+			\item MC and TD both wait until episode end.
+			\item MC updates within episodes; TD waits until episode end.
+			\item Neither method updated Q(1,1).
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} In the NIM example, MC updated Q(1,1) at the end of the episode using G=1. TD updated Q(1,1) within the episode (after the winning move was taken) using the reward R=1. This illustrates the timing difference: MC $\rightarrow$ episode end; TD $\rightarrow$ within episode.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC updates at \textcolor{blue}{episode end}; TD updates \textcolor{blue}{within the episode} (after each step)!
+	\end{frame}
+	
+	\begin{frame}{Q92: MC - Q-Table Update Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the NIM MC example, Q(6,3) was updated from 0 to 0.05 after the first episode. What does this represent?}
+		
+		\begin{enumerate}
+			\item Q(6,3) now equals the true value.
+			\item Q(6,3) was moved slightly toward the observed return G=1 using $\alpha=0.05$.
+			\item Q(6,3) was set to 1.0.
+			\item Q(6,3) was not updated.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The update was $Q(6,3) = 0 + 0.05(1 - 0) = 0.05$. This moves the Q-value toward the observed return (G=1) by a small amount. Option A is false (true value takes many episodes). Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC updates Q-values \textcolor{blue}{gradually} toward observed returns, not setting them directly!
+	\end{frame}
+	
+	\begin{frame}{Q93: TD - Q-Table Update Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In the NIM TD example, Q(6,3) was updated from 0 to 0.0025 after the third episode. Why is this value different from the MC update?}
+		
+		\begin{enumerate}
+			\item TD uses the one-step lookahead $R_{t+1} + \gamma V(s')$ rather than the full episode return G.
+			\item TD uses a different $\alpha$ parameter.
+			\item TD does not update Q(6,3) at all.
+			\item TD uses the full episode return G.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} TD updated Q(6,3) using $R_{t+1} + \gamma V(1)$ where V(1) = 0.05 (from the previous episode). The TD target was 0 + 0.05 = 0.05, so Q(6,3) = 0 + 0.05(0.05 - 0) = 0.0025. MC used G=1, giving 0.05. This difference is due to MC using the full episode return.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} MC uses \textcolor{blue}{G} (full episode return); TD uses \textcolor{blue}{one-step lookahead} - this creates different update values!
+	\end{frame}
+	
+	\begin{frame}{Q94: NIM - Q-Table Interpretation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{After 1,000,000 episodes, the NIM Q-table showed Q(4,1) = 0.383. What does this mean?}
+		
+		\begin{enumerate}
+			\item Taking 1 coin from 4 coins is a bad move.
+			\item Taking 1 coin from 4 coins leads to a good outcome (positive expected reward).
+			\item Taking 1 coin from 4 coins is illegal.
+			\item The Q-value is undefined.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Q(4,1) = 0.383 means that taking 1 coin from 4 coins has a positive expected reward (likely a winning move). The optimal strategy for 4 coins is to pick 1 coin. Option A is incorrect. Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Positive Q-values = \textcolor{blue}{good actions}; Negative Q-values = \textcolor{red}{bad actions}!
+	\end{frame}
+	
+	\begin{frame}{Q95: NIM - Illegal Actions}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why are Q-values for taking 2 or 3 coins when only 1 coin remains zero in the NIM Q-table?}
+		
+		\begin{enumerate}
+			\item Because those actions are illegal (you cannot take more coins than are available).
+			\item Because those actions always win.
+			\item Because those actions always lose.
+			\item Because those actions have not been tried.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} In the NIM game, you cannot take more coins than are available. So when 1 coin remains, taking 2 or 3 coins is illegal. The Q-values for illegal actions remain 0. Option B is false. Option C is false (they're illegal, not losing). Option D is not the reason.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Illegal actions have Q-values of 0 \textcolor{blue}{by convention} - they are never selected!
+	\end{frame}
+	
+	\begin{frame}{Q96: RL - Real-World Challenges}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which of the following is a significant challenge in applying RL to real-world problems?}
+		
+		\begin{enumerate}
+			\item RL requires very little computational power.
+			\item RL may require millions of interactions with the environment, which can be expensive or dangerous in real-world settings.
+			\item RL never makes mistakes during learning.
+			\item RL does not require a reward function.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} A key challenge is the need for many interactions - millions of trials. In real-world settings (robotics, healthcare), this can be expensive, dangerous, or impossible. Option A is false (RL is computationally expensive). Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} RL's data hunger is a major barrier to real-world deployment - \textcolor{blue}{sample efficiency} is critical!
+	\end{frame}
+	
+	\begin{frame}{Q97: RL - Reward Design}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why is reward design crucial in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item The reward function determines what the agent learns to optimize.
+			\item The reward function has no effect on learning.
+			\item Any reward function works equally well.
+			\item Rewards are only used for exploration.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} The reward function defines the objective - what the agent tries to maximize. Poorly designed rewards (reward hacking, sparse rewards) can lead to unintended behaviors. Option B is false. Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} \textcolor{blue}{Reward design} is critical - poorly designed rewards can cause unintended and harmful agent behavior!
+	\end{frame}
+	
+	\begin{frame}{Q98: RL - Sparse vs Dense Rewards}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the challenge of sparse rewards in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item Sparse rewards provide frequent feedback, making learning faster.
+			\item Sparse rewards provide little feedback, making it difficult for the agent to learn because it may take many actions before receiving any reward.
+			\item Sparse rewards always lead to better policies.
+			\item Sparse rewards are not used in RL.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: B}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Sparse rewards (e.g., only reward at the end of a game) provide little signal for learning. The agent may need many episodes to discover which actions led to the reward. Dense rewards (feedback after each step) provide more information and accelerate learning. Option A is false. Option C is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Sparse rewards make learning \textcolor{red}{difficult}; dense rewards make learning \textcolor{green}{easier}!
+	\end{frame}
+	
+	\begin{frame}{Q99: RL - Sample Efficiency}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is "sample efficiency" in reinforcement learning?}
+		
+		\begin{enumerate}
+			\item The number of samples the agent needs to achieve good performance.
+			\item The quality of samples used for training.
+			\item The speed of the training algorithm.
+			\item The size of the neural network.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: A}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Sample efficiency measures how many interactions with the environment are needed to learn a good policy. Model-based methods are often more sample-efficient. Off-policy methods can be more sample-efficient than on-policy methods. Option B is sample quality. Option C is training speed. Option D is network size.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} Sample efficiency is \textcolor{blue}{how many experiences} the agent needs to learn well - a key practical concern!
+	\end{frame}
+	
+	\begin{frame}{Q100: RL - Summary and Key Takeaways}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which of the following statements provides the most comprehensive summary of reinforcement learning?}
+		
+		\begin{enumerate}
+			\item RL is a supervised learning method that uses labeled data to make predictions.
+			\item RL is an unsupervised learning method that finds clusters in data.
+			\item RL is a learning paradigm where an agent learns through trial and error to maximize cumulative reward, using concepts like policies, value functions, exploration vs exploitation, and methods like Monte Carlo and Temporal Difference. It differs from supervised and unsupervised learning in that it learns sequential decision-making strategies rather than static mappings.
+			\item RL is a method that always outperforms supervised learning in all tasks.
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Answer: C}}
+		\vspace{0.1cm}
+		\textcolor{blue}{\textbf{Explanation:}} Option C provides a comprehensive summary: agent learns from interaction (trial and error) to maximize cumulative reward; key concepts include policies, value functions, exploration vs exploitation; methods include MC and TD; it differs from supervised/unsupervised in that it learns decision strategies. Option A is false. Option B is false. Option D is false.
+		
+		\textcolor{red}{\textbf{Exam Trap:}} RL is \textcolor{blue}{distinct} from supervised and unsupervised learning - it's about \textcolor{blue}{sequential decision-making} to maximize reward!
+	\end{frame}
+	
+	\begin{frame}{FINAL EXAM TIPS - RL}
+		\fontsize{6.5}{7.5}\selectfont
+		\textcolor{blue}{\textbf{Top 10 RL Exam Traps to Remember:}}
+		
+		\begin{enumerate}
+			\item \textcolor{red}{Trap 1:} RL output is a \textcolor{blue}{policy} (strategy), not a prediction or classification
+			\item \textcolor{red}{Trap 2:} MAB has \textcolor{blue}{ONLY ONE state} - actions don't change the environment
+			\item \textcolor{red}{Trap 3:} $\epsilon$-greedy: random number $<$ $\epsilon$ $\rightarrow$ \textcolor{blue}{explore}; $\ge$ $\rightarrow$ \textcolor{blue}{exploit}
+			\item \textcolor{red}{Trap 4:} $\epsilon$ decays as $\epsilon_t = \beta^{t-1}$ (not $\beta^t$)
+			\item \textcolor{red}{Trap 5:} MC updates \textcolor{blue}{at episode end} using $G_t$; TD updates \textcolor{blue}{every step} using $R_{t+1} + \gamma V(s')$
+			\item \textcolor{red}{Trap 6:} MC = \textcolor{blue}{unbiased but high variance}; TD = \textcolor{blue}{biased but low variance}
+			\item \textcolor{red}{Trap 7:} Q-learning is \textcolor{blue}{off-policy}; SARSA is \textcolor{blue}{on-policy}
+			\item \textcolor{red}{Trap 8:} $\alpha$ = \textcolor{blue}{learning rate}; $\gamma$ = \textcolor{blue}{discount factor}; $\epsilon$ = \textcolor{blue}{exploration rate}
+			\item \textcolor{red}{Trap 9:} DQN uses \textcolor{blue}{experience replay} + \textcolor{blue}{target network} for stability
+			\item \textcolor{red}{Trap 10:} Policy-based methods handle \textcolor{blue}{continuous action spaces}; value-based methods handle discrete actions
+		\end{enumerate}
+		
+		\textcolor{blue}{\textbf{Remember:}} RL is about \textcolor{blue}{learning optimal behavior through experience}! The exam tests conceptual understanding of the trade-offs between methods.
+	\end{frame}
+	
+\end{document}

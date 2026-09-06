@@ -1,0 +1,3491 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Generative Artificial Intelligence}
+\subtitle{Complete Tutorial: GenAI, LLMs, Transformers, Word2Vec, RNNs, LSTM}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 1: INTRODUCTION TO GENAI - SLIDES 1-10
+	% ============================================================
+	
+	\begin{frame}{Slide 1: What is Generative AI?}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Definition:}
+		\begin{itemize}
+			\item Generative Artificial Intelligence (GenAI) is a branch of AI that employs models to generate text, sound, or videos
+			\item Creates new content rather than just analyzing existing data
+			\item Represents one of the most significant technological developments of the 2020s
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Milestone:}
+		\begin{itemize}
+			\item OpenAI released ChatGPT in November 2022
+			\item Reached 1 million users in just 5 days (fastest AI tool ever)
+			\item Facebook took almost a year to reach this milestone
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Impact:}
+		\begin{itemize}
+			\item Facilitated rapid adoption of Generative AI
+			\item Transformed how businesses and individuals interact with AI
+			\item Created new opportunities across all sectors
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI creates new content - not just analyzes!
+	\end{frame}
+	
+	\begin{frame}{Slide 2: GenAI vs Traditional AI}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Traditional AI/Machine Learning:}
+		\begin{itemize}
+			\item Analyzes existing data
+			\item Makes predictions or classifications
+			\item Examples: Regression, classification, clustering
+			\item Outputs are labels or numerical values
+			\item Deterministic (same input = same output)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Generative AI:}
+		\begin{itemize}
+			\item Creates new content
+			\item Generates text, images, audio, video
+			\item Examples: ChatGPT, DALL-E, Gemini
+			\item Outputs are novel, creative content
+			\item Probabilistic (same input may yield different outputs)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Difference:}
+		\begin{itemize}
+			\item Traditional AI: "What is this?"
+			\item Generative AI: "Create something new based on this"
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} GenAI creates; Traditional AI analyzes!
+	\end{frame}
+	
+	\begin{frame}{Slide 3: ChatGPT Overview}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is ChatGPT?}
+		\begin{itemize}
+			\item Chatbot based on GPT (Generative Pre-trained Transformer)
+			\item Developed by OpenAI
+			\item Uses transformer-based LLM technology
+			\item Mimics human conversation via text
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Features:}
+		\begin{enumerate}
+			\item Conversational interface
+			\item Can answer follow-up questions
+			\item Admits mistakes
+			\item Challenges incorrect premises
+			\item Rejects inappropriate requests
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Significance:}
+		\begin{itemize}
+			\item Made LLMs accessible to general public
+			\item Demonstrated practical applications of GenAI
+			\item Sparked widespread interest and adoption
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} ChatGPT popularized LLMs for everyday use!
+	\end{frame}
+	
+	\begin{frame}{Slide 4: GenAI Taxonomy - Content Modalities}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Five Major Content Modalities:}
+		\begin{enumerate}
+			\item \textbf{Text}
+			\begin{itemize}
+				\item Underlying technology: Transformers
+				\item Examples: ChatGPT, Claude, Gemini
+			\end{itemize}
+			\item \textbf{Image}
+			\begin{itemize}
+				\item Underlying technology: DALL-E, Stable Diffusion
+				\item Creates images from text prompts
+			\end{itemize}
+			\item \textbf{Audio}
+			\begin{itemize}
+				\item Includes speech, sound effects, music
+				\item Examples: Text-to-speech, music generation
+			\end{itemize}
+			\item \textbf{Video}
+			\begin{itemize}
+				\item Creates videos from prompts
+				\item Examples: Sora, RunwayML
+			\end{itemize}
+			\item \textbf{Multimodal}
+			\begin{itemize}
+				\item Takes multiple input types
+				\item Generates multiple output types
+				\item Examples: Gemini, GPT-4
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} GenAI works across multiple content types!
+	\end{frame}
+	
+	\begin{frame}{Slide 5: GenAI Taxonomy - Modeling Algorithms}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Modeling Algorithms:}
+		\begin{enumerate}
+			\item \textbf{Large Language Models (LLMs)}
+			\begin{itemize}
+				\item Billions of parameters
+				\item Trained on vast text corpora
+				\item Transformer-based architecture
+			\end{itemize}
+			\item \textbf{Transformers}
+			\begin{itemize}
+				\item Self-attention mechanism
+				\item Examples: BERT, GPT
+			\end{itemize}
+			\item \textbf{Stable Diffusion}
+			\begin{itemize}
+				\item Image generation
+				\item Probabilistic reconstruction
+			\end{itemize}
+			\item \textbf{Variational Autoencoders (VAE)}
+			\begin{itemize}
+				\item Deep neural networks
+				\item Image modification and generation
+			\end{itemize}
+			\item \textbf{Generative Adversarial Networks (GANs)}
+			\begin{itemize}
+				\item Generator + Discriminator
+				\item Creates realistic synthetic data
+			\end{itemize}
+			\item \textbf{Recurrent Neural Networks (RNNs)}
+			\begin{itemize}
+				\item Sequential data processing
+				\item Time series and text
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Different algorithms for different content types!
+	\end{frame}
+	
+	\begin{frame}{Slide 6: DALL-E and Image Generation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{DALL-E:}
+		\begin{itemize}
+			\item Popular image generator developed by OpenAI
+			\item Takes text prompts and creates images
+			\item Can generate novel, creative images
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example Prompt:}
+		\begin{itemize}
+			\item "Create an image that personifies the 'ups and downs' of financial markets as if it were investors sitting on a roller coaster"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Capabilities:}
+		\begin{enumerate}
+			\item Generate images from text descriptions
+			\item Modify existing images
+			\item Combine concepts in creative ways
+			\item Understand complex prompts
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Applications:}
+		\begin{itemize}
+			\item Marketing materials
+			\item Rapid prototyping
+			\item Creative projects
+			\item Presentations and illustrations
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} DALL-E creates images from text descriptions!
+	\end{frame}
+	
+	\begin{frame}{Slide 7: Stable Diffusion Model}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Stable Diffusion?}
+		\begin{itemize}
+			\item Developed by Stability AI (released 2022)
+			\item Powerful image generating technology
+			\item Trained on database of images
+			\item Uses probabilistic functions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item Start with random noise
+			\item Gradually refine to match text prompt
+			\item Uses diffusion process
+			\item Reconstructs images step by step
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Advantages:}
+		\begin{itemize}
+			\item Open source
+			\item Runs on consumer GPUs
+			\item High quality outputs
+			\item Customizable
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} Stable Diffusion reconstructs images from noise based on text!
+	\end{frame}
+	
+	\begin{frame}{Slide 8: Variational Autoencoders (VAE)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are VAEs?}
+		\begin{itemize}
+			\item Type of deep neural network
+			\item Multiple hidden layers
+			\item Used for image modality
+			\item Particularly useful for modifying existing images
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Architecture:}
+		\begin{enumerate}
+			\item \textbf{Encoding Layer}
+			\begin{itemize}
+				\item Compresses images
+				\item Reduces dimensionality
+			\end{itemize}
+			\item \textbf{Decoding Layer}
+			\begin{itemize}
+				\item Reconstructs images
+				\item Uses probabilistic inference
+				\item Fills in missing information
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Applications:}
+		\begin{itemize}
+			\item Image modification
+			\item Anomaly detection
+			\item Data generation
+			\item Feature extraction
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} VAEs are excellent for modifying existing images!
+	\end{frame}
+	
+	\begin{frame}{Slide 9: Generative Adversarial Networks (GANs)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are GANs?}
+		\begin{itemize}
+			\item Used to create images, audio, and video
+			\item Employs two competing neural networks
+			\item Generator creates simulated data
+			\item Discriminator distinguishes real from fake
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Architecture:}
+		\begin{enumerate}
+			\item \textbf{Generator}
+			\begin{itemize}
+				\item Creates simulated data
+				\item Learns to fool discriminator
+			\end{itemize}
+			\item \textbf{Discriminator}
+			\begin{itemize}
+				\item Identifies real vs fake data
+				\item Assigns probability scores
+				\item Sends feedback to generator
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Process:}
+		\begin{itemize}
+			\item Iterative competition
+			\item Generator improves over time
+			\item Eventually generates indistinguishable data
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GANs = two networks competing to create realistic content!
+	\end{frame}
+	
+	\begin{frame}{Slide 10: GenAI vs LLM Relationship}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Relationship Overview:}
+		\begin{itemize}
+			\item LLMs are a subset of GenAI
+			\item GenAI is broader - includes image, audio, video
+			\item LLMs specifically focus on text generation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{GenAI Includes:}
+		\begin{enumerate}
+			\item \textbf{Text Models (LLMs)}
+			\begin{itemize}
+				\item ChatGPT, Claude, Gemini
+			\end{itemize}
+			\item \textbf{Image Models}
+			\begin{itemize}
+				\item DALL-E, Stable Diffusion
+			\end{itemize}
+			\item \textbf{Audio Models}
+			\begin{itemize}
+				\item Text-to-speech, music generation
+			\end{itemize}
+			\item \textbf{Video Models}
+			\begin{itemize}
+				\item Sora, RunwayML
+			\end{itemize}
+			\item \textbf{Multimodal Models}
+			\begin{itemize}
+				\item Gemini, GPT-4
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} All LLMs are GenAI, but not all GenAI are LLMs!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 2: WORD EMBEDDINGS & WORD2VEC - SLIDES 11-25
+	% ============================================================
+	
+	\begin{frame}{Slide 11: BoW Limitations Review}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Three Major Limitations:}
+		\begin{enumerate}
+			\item \textbf{No Semantic Understanding}
+			\begin{itemize}
+				\item Cannot identify similar meanings
+				\item "Amazing" and "fantastic" treated differently
+			\end{itemize}
+			\item \textbf{Sparse Vectors}
+			\begin{itemize}
+				\item Vast vectors with mostly zeros
+				\item Inefficient storage and analysis
+				\item Computational burden
+			\end{itemize}
+			\item \textbf{No Context}
+			\begin{itemize}
+				\item Words treated independently
+				\item "Call option" vs "phone call" confused
+				\item Negation words not handled
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Why This Matters:}
+		\begin{itemize}
+			\item Limits analytical power
+			\item Misses important linguistic relationships
+			\item Creates computational inefficiency
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} BoW has fundamental limitations Word2Vec addresses!
+	\end{frame}
+	
+	\begin{frame}{Slide 12: Word2Vec Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Word2Vec?}
+		\begin{itemize}
+			\item NLP model created by Google team (2013)
+			\item Led by Tomas Mikolov
+			\item Alternative to conventional BoW
+			\item Represents text as numerical vectors
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Concept:}
+		\begin{itemize}
+			\item Each word has its own vector
+			\item Constructed by examining surrounding words
+			\item Measures "co-occurrence" of words
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Advantages Over BoW:}
+		\begin{enumerate}
+			\item Compressed representation
+			\item Dense vector representations
+			\item Reduces dimensionality
+			\item Captures semantic relationships
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Word2Vec creates dense, meaningful word representations!
+	\end{frame}
+	
+	\begin{frame}{Slide 13: Word Embeddings Explained}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are Word Embeddings?}
+		\begin{itemize}
+			\item Dense vector representations of words
+			\item Generated through neural network training
+			\item Encode semantic information
+			\item Position words in continuous vector space
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Characteristics:}
+		\begin{enumerate}
+			\item \textbf{Dense:} Fewer dimensions, mostly non-zero values
+			\item \textbf{Semantic:} Similar words have similar vectors
+			\item \textbf{Learnable:} Trained from data
+			\item \textbf{Contextual:} Capture word relationships
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Typical Dimensions:}
+		\begin{itemize}
+			\item Embedding layer often has 300 neurons
+			\item Much smaller than vocabulary size
+			\item Efficient representation
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} Embeddings = dense vectors capturing meaning!
+	\end{frame}
+	
+	\begin{frame}{Slide 14: Continuous Bag of Words (CBoW)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{CBoW Architecture:}
+		\begin{itemize}
+			\item "Fill in the blank" technique
+			\item Predicts missing word from context
+			\item Uses context words before and after
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item Set context window (size c)
+			\item Identify words before and after target (2c words)
+			\item Input: context words
+			\item Output: target word
+			\item Goal: $P(w_i | w_{i-c}, ..., w_{i+c})$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item Sentence: "bonds are less risky compared to stocks"
+			\item Target word: "risky"
+			\item Input: words preceding and following "risky"
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} CBoW predicts target from surrounding context!
+	\end{frame}
+	
+	\begin{frame}{Slide 15: Skip-gram Architecture}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Skip-gram Architecture:}
+		\begin{itemize}
+			\item "Word association" technique
+			\item Uses one word to predict surrounding words
+			\item Maximizes joint probability of context words
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item Input: target word
+			\item Output: context words (2c words)
+			\item Goal: $P(w_{i-c}, ..., w_{i+c} | w_i)$
+			\item Tries to predict surrounding words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item Sentence: "bonds are less risky compared to stocks"
+			\item Input: "risky"
+			\item Output: words preceding and following "risky"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Comparison with CBoW:}
+		\begin{itemize}
+			\item CBoW: context $\to$ target
+			\item Skip-gram: target $\to$ context
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Skip-gram predicts context from target word!
+	\end{frame}
+	
+	\begin{frame}{Slide 16: Word2Vec Neural Network Architecture}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Network Structure:}
+		\begin{itemize}
+			\item Similar to autoencoder
+			\item Single hidden layer (embedding layer)
+			\item Input: one-hot encoded vectors
+			\item Output: probability predictions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Components:}
+		\begin{enumerate}
+			\item \textbf{Input Layer}
+			\begin{itemize}
+				\item One-hot encoded vectors
+				\item Size: vocabulary size ($|W|$)
+			\end{itemize}
+			\item \textbf{Hidden Layer}
+			\begin{itemize}
+				\item Embedding layer
+				\item Typically 300 neurons
+				\item Learns word representations
+			\end{itemize}
+			\item \textbf{Output Layer}
+			\begin{itemize}
+				\item Probability distribution over words
+				\item Size: vocabulary size ($|W|$)
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Hidden layer creates the word embeddings!
+	\end{frame}
+	
+	\begin{frame}{Slide 17: Dimensionality Reduction with Word2Vec}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Comparison of Dimensions:}
+		
+		\begin{tabular}{|l|c|}
+			\hline
+			\textbf{Method} & \textbf{Dimensions} \\
+			\hline
+			Traditional BoW & $|W| \times |W|$ \\
+			Word2Vec & $|W| \times 300$ \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{Example Calculation:}
+		\begin{itemize}
+			\item Vocabulary size: 100,000 words
+			\item Traditional BoW: 100,000 $\times$ 100,000 = 10 billion weights
+			\item Word2Vec: 100,000 $\times$ 300 = 30 million weights
+			\item \textbf{Reduction:} 99.7\% fewer weights!
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Benefits of Reduction:}
+		\begin{enumerate}
+			\item Less memory required
+			\item Faster computation
+			\item Better generalization
+			\item More efficient training
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Word2Vec dramatically reduces dimensionality!
+	\end{frame}
+	
+	\begin{frame}{Slide 18: Training Word2Vec}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Training Process:}
+		\begin{enumerate}
+			\item \textbf{Feed neural network with text}
+			\begin{itemize}
+				\item Large corpus of documents
+				\item Process word by word
+			\end{itemize}
+			\item \textbf{Learn embedding weights}
+			\begin{itemize}
+				\item Through backpropagation
+				\item Using gradient descent
+			\end{itemize}
+			\item \textbf{Generate dense vectors}
+			\begin{itemize}
+				\item Each word gets vector representation
+				\item Semantic information encoded
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{What the Model Learns:}
+		\begin{itemize}
+			\item Co-occurrence patterns
+			\item Word relationships
+			\item Semantic meanings
+			\item Contextual information
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} Training learns embeddings from text data!
+	\end{frame}
+	
+	\begin{frame}{Slide 19: Cosine Similarity}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Definition:}
+		\begin{itemize}
+			\item Measures "distance" between words in embedding space
+			\item Similar words close together
+			\item Dissimilar words far apart
+			\item Range: [-1, 1]
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Formula:}
+		\begin{itemize}
+			\item $\cos(\theta) = \frac{P \cdot Q}{||P|| \times ||Q||}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Interpretation:}
+		\begin{tabular}{|c|c|}
+			\hline
+			\textbf{Cosine Similarity} & \textbf{Meaning} \\
+			\hline
+			1.0 & Identical (or very similar) \\
+			0.7 - 0.9 & Very similar \\
+			0.4 - 0.6 & Somewhat similar \\
+			0.0 - 0.3 & Dissimilar \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item China and Japan: 0.84
+			\item Gold and Silver: 0.95
+			\item Banana and Rose: 0.30
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Cosine similarity measures word closeness!
+	\end{frame}
+	
+	\begin{frame}{Slide 20: Word Similarity Examples}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Similar Word Pairs:}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Word 1} & \textbf{Word 2} & \textbf{Similarity} \\
+			\hline
+			China & Japan & 0.84 \\
+			King & Queen & 0.78 \\
+			Gold & Silver & 0.95 \\
+			Europe & Asia & 0.83 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{Dissimilar Word Pairs:}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Word 1} & \textbf{Word 2} & \textbf{Similarity} \\
+			\hline
+			Australia & Tokyo & 0.40 \\
+			King & Man & 0.53 \\
+			Gold & Dollar & 0.50 \\
+			Banana & Rose & 0.30 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{Key Observation:}
+		\begin{itemize}
+			\item Similar categories = high similarity
+			\item Different categories = low similarity
+			\item Embeddings capture meaningful relationships
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Embeddings distinguish similar and dissimilar words!
+	\end{frame}
+	
+	\begin{frame}{Slide 21: Word Analogies}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Word Analogies:}
+		\begin{itemize}
+			\item "a is to b" as "c is to d"
+			\item Captures relationships between word pairs
+			\item Operations in embedding space
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Examples:}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Operation} & \textbf{Closest Word} & \textbf{Similarity} \\
+			\hline
+			America - Washington + London & UK & 0.77 \\
+			King - Man + Woman & Queen & 0.86 \\
+			Gold - Dollar + Pound & Silver & 0.80 \\
+			Europe - Spain + China & Asia & 0.79 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item Embedding vectors capture relationships
+			\item Vector arithmetic preserves relationships
+			\item "king - man + woman equals queen"
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Vector arithmetic reveals semantic relationships!
+	\end{frame}
+	
+	\begin{frame}{Slide 22: Visualizing Embeddings}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{t-SNE Visualization:}
+		\begin{itemize}
+			\item t-SNE (t-distributed Stochastic Neighbor Embedding)
+			\item Reduces embeddings to 2 dimensions
+			\item Visualizes relationships between words
+			\item Clusters show semantic groups
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{What We See:}
+		\begin{enumerate}
+			\item \textbf{Europe and Asia} - close together (continents)
+			\item \textbf{Spain and China} - close together (countries)
+			\item \textbf{Europe-Spain relationship} $\approx$ Asia-China relationship
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Key Insights from Visualization:}
+		\begin{itemize}
+			\item Related words cluster together
+			\item Relationships are preserved in 2D
+			\item Reveals structure in embeddings
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} t-SNE visualizes embedding relationships!
+	\end{frame}
+	
+	\begin{frame}{Slide 23: Word Embedding Limitations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Major Limitations:}
+		\begin{enumerate}
+			\item \textbf{No Sentence-Level Context}
+			\begin{itemize}
+				\item Same word has different meanings
+				\item Example: "bat" (animal) vs "bat" (sports)
+				\item Word2Vec gives same vector for both
+			\end{itemize}
+			\item \textbf{Fixed Context Window}
+			\begin{itemize}
+				\item Must specify window size a priori
+				\item May miss distant relationships
+				\item Limited by window size
+			\end{itemize}
+			\item \textbf{Ignore Word Order}
+			\begin{itemize}
+				\item Within the context window
+				\item Loss of syntactic information
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Example:}}
+		\begin{itemize}
+			\item "The bat flew out of the cave" vs "He picked up the bat to play baseball"
+			\item Same embedding for both "bat" instances
+			\item Context-dependent meaning is lost
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Slide 24: Other Embedding Approaches}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Alternative Word Embeddings:}
+		\begin{enumerate}
+			\item \textbf{GloVe (Global Vectors)}
+			\begin{itemize}
+				\item Stanford University
+				\item Combines matrix factorization with word2vec
+				\item Uses global co-occurrence statistics
+			\end{itemize}
+			\item \textbf{Sentence Embeddings}
+			\begin{itemize}
+				\item SBert (Sentence BERT)
+				\item Captures sentence-level meaning
+				\item Better for sentence comparison
+			\end{itemize}
+			\item \textbf{Document Embeddings}
+			\begin{itemize}
+				\item Doc2Vec
+				\item Creates document-level vectors
+				\item Captures document meaning
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Gemini Embeddings:}
+		\begin{itemize}
+			\item Advanced embedding model
+			\item Part of Google's Gemini family
+			\item Multimodal capabilities
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Many embedding approaches exist for different needs!
+	\end{frame}
+	
+	\begin{frame}{Slide 25: Embedding Applications}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Standard Input for NLP Systems:}
+		\begin{enumerate}
+			\item \textbf{Clustering}
+			\begin{itemize}
+				\item Group similar documents
+				\item Topic identification
+				\item Document categorization
+			\end{itemize}
+			\item \textbf{Sentiment Analysis}
+			\begin{itemize}
+				\item Customer feedback analysis
+				\item Market sentiment detection
+				\item Social media monitoring
+			\end{itemize}
+			\item \textbf{Recurrent Models}
+			\begin{itemize}
+				\item LSTM and RNN inputs
+				\item Sequence processing
+				\item Text generation
+			\end{itemize}
+			\item \textbf{Transformer Models}
+			\begin{itemize}
+				\item Pre-trained embeddings
+				\item Transfer learning
+				\item Contextual embeddings
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Embeddings are foundation for modern NLP!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 3: RNNs AND LSTMs - SLIDES 26-35
+	% ============================================================
+	
+	\begin{frame}{Slide 26: RNN Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are RNNs?}
+		\begin{itemize}
+			\item Recurrent Neural Networks
+			\item Developed for sequential data
+			\item Handle text and speech
+			\item Laid groundwork for GenAI
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Features:}
+		\begin{enumerate}
+			\item \textbf{Memory Cell}
+			\begin{itemize}
+				\item Hidden cell stores information
+				\item Value at time t depends on previous values
+			\end{itemize}
+			\item \textbf{Sequential Processing}
+			\begin{itemize}
+				\item Processes one word at a time
+				\item Combines current inputs with memory
+			\end{itemize}
+			\item \textbf{Autoregressive Nature}
+			\begin{itemize}
+				\item Outputs become inputs for next step
+				\item Captures dependencies
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} RNNs process sequential data with memory!
+	\end{frame}
+	
+	\begin{frame}{Slide 27: RNN Architecture}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Basic RNN Structure:}
+		\begin{itemize}
+			\item Input at time t: $x_t$
+			\item Hidden state at time t: $h_t$
+			\item Output at time t: $y_t$
+			\item $h_t = f(W_{xh}x_t + W_{hh}h_{t-1} + b_h)$
+			\item $y_t = g(W_{hy}h_t + b_y)$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Diagram:}
+		\begin{itemize}
+			\item Input $\to$ Hidden Cell $\to$ Output
+			\item Hidden cell feeds back to itself
+			\item Previous hidden state influences current output
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Advantages:}
+		\begin{enumerate}
+			\item Handles variable length sequences
+			\item Captures order of words
+			\item Learns dependencies
+			\item Uses autoregressive structure
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} RNNs combine current input with previous state!
+	\end{frame}
+	
+	\begin{frame}{Slide 28: RNN vs Feedforward NN}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Feedforward Neural Network (FNN):}
+		\begin{itemize}
+			\item No memory
+			\item Input features flow one direction
+			\item Output depends only on current inputs
+			\item Used for static data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Recurrent Neural Network (RNN):}
+		\begin{itemize}
+			\item Has memory (hidden state)
+			\item Information can flow in loops
+			\item Output depends on current inputs AND previous states
+			\item Used for sequential data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Difference:}
+		\begin{itemize}
+			\item FNN: $y = f(x)$
+			\item RNN: $y_t = f(x_t, h_{t-1})$
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} RNNs have memory; FNNs do not!
+	\end{frame}
+	
+	\begin{frame}{Slide 29: Vanishing Gradient Problem in RNNs}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{The Problem:}
+		\begin{itemize}
+			\item Gradients become very small during backpropagation
+			\item Early layers receive tiny gradients
+			\item Weights in early layers barely update
+			\item Long-range dependencies are lost
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why It Happens:}
+		\begin{enumerate}
+			\item Gradients multiplied through many time steps
+			\item Each multiplication by $< 1$
+			\item Product approaches zero
+			\item Repeated with each time step
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item Sentence: "the analyst stopped using MGARCH because it is too hard to estimate"
+			\item "MGARCH" is 7 words away from "estimate"
+			\item RNN loses connection between them
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Vanishing gradients limit RNN effectiveness!
+	\end{frame}
+	
+	\begin{frame}{Slide 30: Long Short-Term Memory (LSTM)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is LSTM?}
+		\begin{itemize}
+			\item Special class of RNNs
+			\item Developed to address vanishing gradient problem
+			\item Uses layers/gates to regulate information flow
+			\item Can capture long-range dependencies
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Feature:}
+		\begin{itemize}
+			\item Learns what to remember
+			\item Learns what to forget
+			\item More sophisticated memory management
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Advantages:}
+		\begin{enumerate}
+			\item Handles long-term dependencies
+			\item More effective than basic RNNs
+			\item Successful in many applications
+			\item Used for time series, text, audio
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} LSTMs solve the vanishing gradient problem!
+	\end{frame}
+	
+	\begin{frame}{Slide 31: LSTM Architecture - The Gates}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Three Gates in LSTM:}
+		\begin{enumerate}
+			\item \textbf{Forget Gate}
+			\begin{itemize}
+				\item Determines what to discard from memory
+				\item Forgets irrelevant information
+				\item $f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)$
+			\end{itemize}
+			\item \textbf{Input Gate}
+			\begin{itemize}
+				\item Determines what new information to store
+				\item Updates memory with important information
+				\item $i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)$
+			\end{itemize}
+			\item \textbf{Output Gate}
+			\begin{itemize}
+				\item Determines what to output
+				\item Uses relevant memory for output
+				\item $o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o)$
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} Gates control information flow in LSTM!
+	\end{frame}
+	
+	\begin{frame}{Slide 32: LSTM Cell Diagram}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{LSTM Cell Components:}
+		\begin{itemize}
+			\item Input: $x_t$ (current input), $h_{t-1}$ (previous hidden state), $c_{t-1}$ (previous cell state)
+			\item Output: $h_t$ (current hidden state), $c_t$ (current cell state)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Gate Functions:}
+		\begin{enumerate}
+			\item \textbf{Cell State Update:}
+			\begin{itemize}
+				\item $\tilde{c}_t = \tanh(W_c \cdot [h_{t-1}, x_t] + b_c)$
+				\item Candidate values for new cell state
+			\end{itemize}
+			\item \textbf{Cell State:}
+			\begin{itemize}
+				\item $c_t = f_t \cdot c_{t-1} + i_t \cdot \tilde{c}_t$
+				\item Combines forgetting and new information
+			\end{itemize}
+			\item \textbf{Hidden State:}
+			\begin{itemize}
+				\item $h_t = o_t \cdot \tanh(c_t)$
+				\item Output based on filtered cell state
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} LSTM manages long-term memory effectively!
+	\end{frame}
+	
+	\begin{frame}{Slide 33: LSTM vs RNN Comparison}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Basic RNN:}
+		\begin{itemize}
+			\item Simple structure
+			\item Prone to vanishing gradients
+			\item Struggles with long-range dependencies
+			\item One activation function
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LSTM:}
+		\begin{itemize}
+			\item Complex structure with gates
+			\item Solves vanishing gradient
+			\item Handles long-range dependencies
+			\item Multiple activation functions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{When to Use Each:}
+		\begin{tabular}{|c|c|}
+			\hline
+			\textbf{RNN} & \textbf{LSTM} \\
+			\hline
+			Short sequences & Long sequences \\
+			Simple patterns & Complex patterns \\
+			Limited data & Large data \\
+			Quick prototyping & Production models \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} LSTM is more powerful but more complex!
+	\end{frame}
+	
+	\begin{frame}{Slide 34: RNNs and LSTMs Applications}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Applications in Finance:}
+		\begin{enumerate}
+			\item \textbf{Time Series Analysis}
+			\begin{itemize}
+				\item Stock price prediction
+				\item Volatility forecasting
+				\item Economic indicator forecasting
+			\end{itemize}
+			\item \textbf{Text Processing}
+			\begin{itemize}
+				\item Document classification
+				\item Sentiment analysis
+				\item Language modeling
+			\end{itemize}
+			\item \textbf{Speech Recognition}
+			\begin{itemize}
+				\item Audio-to-text conversion
+				\item Voice commands
+				\item Speech synthesis
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Why They Work:}
+		\begin{itemize}
+			\item Capture temporal dependencies
+			\item Handle variable length sequences
+			\item Learn from sequential patterns
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} RNNs/LSTMs excel at sequence-based tasks!
+	\end{frame}
+	
+	\begin{frame}{Slide 35: RNN Limitations Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Limitations:}
+		\begin{enumerate}
+			\item \textbf{Vanishing/Exploding Gradients}
+			\begin{itemize}
+				\item Limits long-range learning
+				\item Requires careful design
+			\end{itemize}
+			\item \textbf{Sequential Processing}
+			\begin{itemize}
+				\item Can't parallelize
+				\item Slower than transformers
+			\end{itemize}
+			\item \textbf{Memory Limitations}
+			\begin{itemize}
+				\item Forgets distant information
+				\item Limited context window
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{The Solution:}
+		\begin{itemize}
+			\item Transformers address these limitations
+			\item Self-attention mechanisms
+			\item Parallel processing
+			\item Better long-range dependencies
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Transformers overcame RNN limitations!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 4: TRANSFORMERS - SLIDES 36-50
+	% ============================================================
+	
+	\begin{frame}{Slide 36: Transformers Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are Transformers?}
+		\begin{itemize}
+			\item Next major development in NLP
+			\item Class of feedforward neural networks
+			\item Based on "attention" mechanism
+			\item Introduced in "Attention is All You Need" (2017)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Innovation:}
+		\begin{itemize}
+			\item Self-attention mechanism
+			\item Multi-head attention
+			\item Semantic understanding
+			\item Contextual relationships
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why Transformers Matter:}
+		\begin{enumerate}
+			\item Superior to RNNs for NLP tasks
+			\item Parallel processing
+			\item Captures long-range dependencies
+			\item Foundation for LLMs
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Transformers revolutionized NLP!
+	\end{frame}
+	
+	\begin{frame}{Slide 37: Transformer Architecture Overview}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Two Main Components:}
+		\begin{enumerate}
+			\item \textbf{Encoder}
+			\begin{itemize}
+				\item Processes input text
+				\item Converts to vectors
+				\item "Understands" the text
+			\end{itemize}
+			\item \textbf{Decoder}
+			\begin{itemize}
+				\item Generates output text
+				\item Based on input/prompt
+				\item Creates responses
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Evolution:}
+		\begin{itemize}
+			\item Some transformers specialize in encoding (BERT)
+			\item Some focus on decoding (GPT)
+			\item Some have both (BART)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Components:}
+		\begin{itemize}
+			\item Embedding layers
+			\item Positional encoding
+			\item Multi-head attention
+			\item Feed-forward networks
+			\item Layer normalization
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} Encoder processes; Decoder generates!
+	\end{frame}
+	
+	\begin{frame}{Slide 38: Self-Attention Mechanism}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Self-Attention?}
+		\begin{itemize}
+			\item Calculates relationships between all words
+			\item Creates semantic understanding
+			\item Captures long-range dependencies
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item \textbf{Query Vector}
+			\begin{itemize}
+				\item Current token being compared
+				\item Asks "what should I pay attention to?"
+			\end{itemize}
+			\item \textbf{Key Vector}
+			\begin{itemize}
+				\item Other tokens being compared
+				\item Response to the query
+			\end{itemize}
+			\item \textbf{Value Vector}
+			\begin{itemize}
+				\item Content of the token
+				\item Used to create context vector
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Attention determines what's important!
+	\end{frame}
+	
+	\begin{frame}{Slide 39: Attention Calculation Steps}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Step 1: Score Calculation}
+		\begin{itemize}
+			\item Compare query and key vectors
+			\item $score(q_i, k_j) = q_i \cdot k_j$
+			\item Higher score = more relevant
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Step 2: Softmax Normalization}
+		\begin{itemize}
+			\item $\alpha_{ij} = \text{softmax}(score(q_i, k_j))$
+			\item Normalizes scores to probabilities
+			\item Ensures gradients don't vanish
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Step 3: Context Vector}
+		\begin{itemize}
+			\item $c_i = \sum_{j=1}^n \alpha_{ij} v_j$
+			\item Weighted sum of value vectors
+			\item Context-enriched embedding
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item "debt is senior to equity, so it is less risky"
+			\item "it" has highest attention to "debt"
+			\item Model learns "it" refers to "debt"
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Attention = query-key similarity + weighted values!
+	\end{frame}
+	
+	\begin{frame}{Slide 40: Multi-Head Attention}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Multi-Head Attention?}
+		\begin{itemize}
+			\item Multiple attention heads in parallel
+			\item Each head focuses on different aspects
+			\item Captures different relationships
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item Partition input into sub-matrices
+			\item Each head processes independently
+			\item Combine results from all heads
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item GPT basic version has 12 heads
+			\item Each head captures different patterns
+			\item Syntax, semantics, context, etc.
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Benefits:}
+		\begin{itemize}
+			\item Richer representations
+			\item Multiple relationship types
+			\item Better understanding
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Multi-head captures diverse relationships!
+	\end{frame}
+	
+	\begin{frame}{Slide 41: Positional Embeddings}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why Positional Information Matters:}
+		\begin{itemize}
+			\item Word order is crucial for meaning
+			\item "dog bites man" $\neq$ "man bites dog"
+			\item Need to capture position in sequence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Two Approaches:}
+		\begin{enumerate}
+			\item \textbf{Absolute Positional Embeddings}
+			\begin{itemize}
+				\item Sine and cosine functions
+				\item $PE_{p,2i} = \sin(p/10000^{2i/d})$
+				\item $PE_{p,2i+1} = \cos(p/10000^{2i/d})$
+			\end{itemize}
+			\item \textbf{Relative Positional Embeddings}
+			\begin{itemize}
+				\item Adds position number to attention score
+				\item Focuses on relative distances
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Parametric Approach:}
+		\begin{itemize}
+			\item Initialize with random numbers
+			\item Learn during training
+			\item Flexible and adaptive
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Positional embeddings preserve word order!
+	\end{frame}
+	
+	\begin{frame}{Slide 42: Transformer Advantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Advantages over RNNs:}
+		\begin{enumerate}
+			\item \textbf{Parallel Processing}
+			\begin{itemize}
+				\item Processes entire sequence at once
+				\item Much faster training
+				\item Better hardware utilization
+			\end{itemize}
+			\item \textbf{Long-Range Dependencies}
+			\begin{itemize}
+				\item Direct connections between words
+				\item No information loss over distance
+				\item Better semantic understanding
+			\end{itemize}
+			\item \textbf{Contextualized Embeddings}
+			\begin{itemize}
+				\item Different vectors for different contexts
+				\item Same word, different meaning
+				\item Handles polysemy effectively
+			\end{itemize}
+			\item \textbf{Universal World Representations}
+			\begin{itemize}
+				\item General knowledge
+				\item Multiple tasks
+				\item Transfer learning
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Transformers are superior for most NLP tasks!
+	\end{frame}
+	
+	\begin{frame}{Slide 43: Transformer Disadvantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Disadvantages:}
+		\begin{enumerate}
+			\item \textbf{Computational Intensity}
+			\begin{itemize}
+				\item More computationally intensive than RNNs
+				\item Requires powerful hardware
+				\item Higher energy consumption
+				\item Longer training times
+			\end{itemize}
+			\item \textbf{Interpretability Challenges}
+			\begin{itemize}
+				\item Complex, multi-layered structure
+				\item Harder to understand decisions
+				\item Difficult to identify error sources
+				\item Opaque reasoning
+			\end{itemize}
+			\item \textbf{Data Requirements}
+			\begin{itemize}
+				\item Need huge training datasets
+				\item Billions of parameters
+				\item Extensive computation
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Transformers are powerful but resource-intensive!
+	\end{frame}
+	
+	\begin{frame}{Slide 44: Attention Types}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Self-Attention:}
+		\begin{itemize}
+			\item Words analyze other words in same sequence
+			\item Captures internal relationships
+			\item Example: "it" $\to$ "debt"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Cross-Attention:}
+		\begin{itemize}
+			\item Words analyze words in another sequence
+			\item Used in encoder-decoder models
+			\item Example: Translation tasks
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Masked Attention:}
+		\begin{itemize}
+			\item Blocks future tokens in decoder
+			\item Prevents cheating
+			\item Used for next-token prediction
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Historical Attention Methods:}
+		\begin{enumerate}
+			\item Additive Attention (Bahdanau)
+			\item Dot-Product Attention (Luong)
+			\item Scaled Dot-Product Attention (Vaswani)
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} Different attention types for different tasks!
+	\end{frame}
+	
+	\begin{frame}{Slide 45: Transformer Layers Architecture}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Encoder Layer:}
+		\begin{enumerate}
+			\item \textbf{Multi-Head Self-Attention}
+			\begin{itemize}
+				\item Captures relationships between input tokens
+				\item Produces context vectors
+			\end{itemize}
+			\item \textbf{Add \& Normalize}
+			\begin{itemize}
+				\item Residual connection
+				\item Prevents vanishing gradients
+			\end{itemize}
+			\item \textbf{Feed-Forward Network}
+			\begin{itemize}
+				\item Processes context vectors
+				\item Nonlinear transformations
+			\end{itemize}
+			\item \textbf{Add \& Normalize}
+			\begin{itemize}
+				\item Another residual connection
+				\item Layer normalization
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Decoder Layer:}
+		\begin{itemize}
+			\item Similar structure plus masked attention
+			\item Prevents seeing future tokens
+			\item Autoregressive generation
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Multiple layers with residual connections!
+	\end{frame}
+	
+	\begin{frame}{Slide 46: Transformer vs RNN Comparison}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Processing Style:}
+		\begin{itemize}
+			\item \textbf{RNN:} Sequential (word by word)
+			\item \textbf{Transformer:} Parallel (all words at once)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Memory/Context:}
+		\begin{itemize}
+			\item \textbf{RNN:} Limited by hidden state
+			\item \textbf{Transformer:} Direct connections to all words
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Training Speed:}
+		\begin{itemize}
+			\item \textbf{RNN:} Slow (sequential)
+			\item \textbf{Transformer:} Fast (parallel)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Long-Range Dependencies:}
+		\begin{itemize}
+			\item \textbf{RNN:} Struggles (vanishing gradients)
+			\item \textbf{Transformer:} Excels (attention)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Interpretability:}
+		\begin{itemize}
+			\item \textbf{RNN:} More interpretable
+			\item \textbf{Transformer:} Less interpretable
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Transformers win on performance; RNNs on interpretability!
+	\end{frame}
+	
+	\begin{frame}{Slide 47: BERT Architecture}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is BERT?}
+		\begin{itemize}
+			\item Bidirectional Encoder Representations from Transformers
+			\item Introduced by Google in 2018
+			\item Encoder-only architecture
+			\item ~100 million parameters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Features:}
+		\begin{enumerate}
+			\item \textbf{Bidirectional}
+			\begin{itemize}
+				\item Examines words before and after
+				\item Better context understanding
+				\item More accurate representations
+			\end{itemize}
+			\item \textbf{Training Methods}
+			\begin{itemize}
+				\item Masked Language Modeling (15\% masked)
+				\item Next Sentence Prediction
+			\end{itemize}
+			\item \textbf{Applications}
+			\begin{itemize}
+				\item Classification
+				\item Sentiment analysis
+				\item Question answering
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} BERT is encoder-only and bidirectional!
+	\end{frame}
+	
+	\begin{frame}{Slide 48: BERT Training}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Stage 1: Pre-training}
+		\begin{itemize}
+			\item Trained on large unlabeled corpus
+			\item Books and Wikipedia pages
+			\item Learned general language understanding
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Stage 2: Self-Supervision}
+		\begin{enumerate}
+			\item \textbf{Masked Language Modeling}
+			\begin{itemize}
+				\item 15\% of words randomly masked
+				\item Model predicts hidden words
+				\item Learns bidirectional context
+			\end{itemize}
+			\item \textbf{Next Sentence Prediction}
+			\begin{itemize}
+				\item Sentence pairs from documents
+				\item Predict if sentences are sequential
+				\item Understands relationships
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Result:}
+		\begin{itemize}
+			\item Deep language understanding
+			\item Transferable knowledge
+			\item Strong performance on NLP tasks
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} BERT learns from masked words and sentence pairs!
+	\end{frame}
+	
+	\begin{frame}{Slide 49: BERT Variants}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{RoBERTa:}
+		\begin{itemize}
+			\item Robustly Optimized BERT Pre-training Approach
+			\item Different masking patterns each cycle
+			\item Larger training dataset
+			\item More training cycles
+			\item Multi-language web crawled data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FinBERT:}
+		\begin{itemize}
+			\item Financial text specialization
+			\item Trained on Reuters financial documents
+			\item Corporate statements
+			\item Analyst reports
+			\item Optimal for financial sentiment analysis
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Difference:}
+		\begin{itemize}
+			\item RoBERTa: General improvement
+			\item FinBERT: Domain specialization
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Specialized BERT variants for specific tasks!
+	\end{frame}
+	
+	\begin{frame}{Slide 50: BART Architecture}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is BART?}
+		\begin{itemize}
+			\item Bidirectional and Auto-Regressive Transformer
+			\item Developed by Facebook (Meta) in 2019
+			\item Encoder-Decoder architecture
+			\item More versatile than BERT
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Features:}
+		\begin{enumerate}
+			\item \textbf{Bidirectional Encoder}
+			\begin{itemize}
+				\item Similar to BERT
+				\item Understands input
+			\end{itemize}
+			\item \textbf{Auto-Regressive Decoder}
+			\begin{itemize}
+				\item Similar to GPT
+				\item Generates text
+			\end{itemize}
+			\item \textbf{Training Method}
+			\begin{itemize}
+				\item Distorts blocks of text
+				\item Shuffles, removes, replaces words
+				\item Learns to generate original forms
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} BART combines BERT and GPT capabilities!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 5: LARGE LANGUAGE MODELS - SLIDES 51-70
+	% ============================================================
+	
+	\begin{frame}{Slide 51: LLM Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are Large Language Models?}
+		\begin{itemize}
+			\item Predominantly based on transformers
+			\item Pre-trained on vast textual datasets
+			\item Large neural networks with billions of parameters
+			\item Trained on very large corpora
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Characteristics:}
+		\begin{enumerate}
+			\item \textbf{Size}
+			\begin{itemize}
+				\item Billions to trillions of parameters
+				\item Huge computational requirements
+			\end{itemize}
+			\item \textbf{Training}
+			\begin{itemize}
+				\item Trained only once
+				\item On massive text corpus
+			\end{itemize}
+			\item \textbf{Storage}
+			\begin{itemize}
+				\item Cloud-based (too large for local)
+				\item Remote access
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} LLMs are huge transformer-based models!
+	\end{frame}
+	
+	\begin{frame}{Slide 52: LLM Types}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Autoencoding LLMs:}
+		\begin{itemize}
+			\item Encode sentences by masking input
+			\item Predict masked words
+			\item Example: BERT
+			\item Good for understanding
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Autoregressive LLMs:}
+		\begin{itemize}
+			\item Predicts next word/token
+			\item Generates text
+			\item Example: GPT family
+			\item Good for generation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Combination LLMs:}
+		\begin{itemize}
+			\item Both encoder and decoder
+			\item Most versatile
+			\item Example: BART
+			\item Good for many tasks
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Different LLM types for different purposes!
+	\end{frame}
+	
+	\begin{frame}{Slide 53: LLM Training Process}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Step 1: Data Preparation}
+		\begin{itemize}
+			\item Clean training data (corpus)
+			\item Filter and remove duplicates
+			\item Remove noisy data and punctuation
+			\item Resolve or remove ambiguous data
+			\item Balance class distributions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Step 2: Tokenization}
+		\begin{itemize}
+			\item Separate data into small parts (tokens)
+			\item Enable efficient processing
+			\item Store positional information
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Step 3: Pre-training}
+		\begin{itemize}
+			\item Train on unlabeled text
+			\item Understand word relationships
+			\item Learn language patterns
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Training requires massive data and compute!
+	\end{frame}
+	
+	\begin{frame}{Slide 54: LLM Training Process (continued)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Step 4: Fine-tuning}
+		\begin{itemize}
+			\item Transfer knowledge to specific tasks
+			\item Use labeled data
+			\item Low-shot task transfer
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Step 5: Alignment}
+		\begin{itemize}
+			\item Conform to human preferences
+			\item Reinforce with human feedback (RLHF)
+			\item Based on user feedback
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Step 6: Decoding}
+		\begin{itemize}
+			\item Generate output based on input
+			\item Different strategies
+			\item Quality optimization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Step 7: Production Optimization}
+		\begin{itemize}
+			\item Turn off lower-level layers
+			\item Drop unimportant weights
+			\item Reduce weight precision
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Multiple stages from training to production!
+	\end{frame}
+	
+	\begin{frame}{Slide 55: Cloud-based LLMs}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why Cloud-based?}
+		\begin{itemize}
+			\item Corpus is huge
+			\item Weight matrices are massive
+			\item Training only done once
+			\item Infeasible to store locally
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Access Methods:}
+		\begin{enumerate}
+			\item API access
+			\begin{itemize}
+				\item Web-based interfaces
+				\item Programmatic access
+			\end{itemize}
+			\item Remote storage
+			\begin{itemize}
+				\item Proprietary to developers
+				\item Regular updates
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Popular Cloud LLMs:}
+		\begin{itemize}
+			\item OpenAI GPT series
+			\item Google Gemini
+			\item Meta Llama
+			\item Anthropic Claude
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} LLMs reside in cloud due to size and proprietary nature!
+	\end{frame}
+	
+	\begin{frame}{Slide 56: GPT Family Overview}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{GPT-1 (2018):}
+		\begin{itemize}
+			\item ~100 million parameters
+			\item Pre-trained on unpublished books
+			\item Fine-tuned for specific tasks		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{GPT-2 (2019):}
+		\begin{itemize}
+			\item 124 million (base) to 774 million (large)
+			\item No-shot fine-tuning possible
+			\item Larger, more varied corpus
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{GPT-3 (2020):}
+		\begin{itemize}
+			\item 175 billion parameters
+			\item Vast web text, books, Wikipedia
+			\item Generative capacity
+			\item Synthetic news creation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{GPT-4 (2023):}
+		\begin{itemize}
+			\item Advanced capabilities
+			\item Multimodal
+			\item Improved reasoning
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Each generation significantly improved!
+	\end{frame}
+	
+	\begin{frame}{Slide 57: GPT Evolution}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Parameter Growth:}
+		\begin{itemize}
+			\item GPT-1: 100 million
+			\item GPT-2: 124-774 million
+			\item GPT-3: 175 billion
+			\item GPT-4: Estimated > 1 trillion
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Capability Growth:}
+		\begin{enumerate}
+			\item \textbf{Better Low-Shot Transfer}
+			\begin{itemize}
+				\item Fewer examples needed
+				\item Improved generalization
+			\end{itemize}
+			\item \textbf{No-Shot Fine-Tuning}
+			\begin{itemize}
+				\item No examples needed
+				\item Adapts to new situations
+			\end{itemize}
+			\item \textbf{Generative Capacity}
+			\begin{itemize}
+				\item Creates new text
+				\item Human-like quality
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Larger models = better performance!
+	\end{frame}
+	
+	\begin{frame}{Slide 58: Chatbots}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are Chatbots?}
+		\begin{itemize}
+			\item Software programs with conversational interface
+			\item Interact with human users
+			\item Web-based or phone-based
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Types of Chatbots:}
+		\begin{enumerate}
+			\item \textbf{FAQ-Based}
+			\begin{itemize}
+				\item Standard responses
+				\item Limited conversational ability
+				\item Simple information retrieval
+			\end{itemize}
+			\item \textbf{Flow-Based}
+			\begin{itemize}
+				\item Interactive conversations
+				\item Follow-up questions
+				\item Multi-step interactions
+			\end{itemize}
+			\item \textbf{LLM-Powered}
+			\begin{itemize}
+				\item Deep understanding
+				\item Informed answers
+				\item Human-like responses
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} LLMs significantly improve chatbot quality!
+	\end{frame}
+	
+	\begin{frame}{Slide 59: Prompt Engineering}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Prompt Engineering?}
+		\begin{itemize}
+			\item Art and science of designing prompts
+			\item Effective use of LLMs
+			\item Iterative process
+			\item Getting best results
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Guidelines for Good Prompts:}
+		\begin{enumerate}
+			\item Direct and concise
+			\item Provide context and reference material
+			\item Split tasks into smaller parts
+			\item Provide sufficient information
+			\item Be flexible for different models
+			\item Allow model time to find results
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Best Practice:}
+		\begin{itemize}
+			\item Use few-shot learning
+			\item Ask for structured output
+			\item Test different personas
+			\item Iterate and improve
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Good prompts = good responses!
+	\end{frame}
+	
+	\begin{frame}{Slide 60: Zero, One, and Few-Shot Learning}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Zero-Shot Prompting:}
+		\begin{itemize}
+			\item No examples provided
+			\item Most common type
+			\item User inputs question directly
+			\item Relies on model's training
+		\end{itemize}
+		\textbf{Example:} "What is the capital of France?"
+		
+		\vspace{0.1cm}
+		\textbf{One-Shot Prompting:}
+		\begin{itemize}
+			\item One example provided
+			\item Shows expected format
+			\item Guides model response
+		\end{itemize}
+		\textbf{Example:} "Question: What is 2+2? Answer: 4. Question: What is 3+3?"
+		
+		\vspace{0.1cm}
+		\textbf{Few-Shot Prompting:}
+		\begin{itemize}
+			\item Multiple examples provided
+			\item Better context
+			\item More accurate responses
+		\end{itemize}
+		\textbf{Example:} Several Q\&A pairs before the target question
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} More examples = better responses (usually)!
+	\end{frame}
+	
+	\begin{frame}{Slide 61: System Prompting}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{System Prompting:}
+		\begin{itemize}
+			\item Defines overall purpose
+			\item Sets limits and constraints
+			\item Specifies model role
+			\item Provides context
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Role Prompting:}
+		\begin{itemize}
+			\item Specifies persona for LLM
+			\item "You are a financial analyst..."
+			\item "You are an expert in risk management..."
+			\item Shapes response style and content
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Contextual Prompting:}
+		\begin{itemize}
+			\item Provides background information
+			\item Sets the scene
+			\item Informs the response
+		\end{itemize}
+		
+		\textbf{Example:}
+		"You are a risk manager at a large bank. Analyze the following credit risk scenario..."
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} System prompts shape LLM behavior!
+	\end{frame}
+	
+	\begin{frame}{Slide 62: Chain of Thought (CoT) Prompting}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is CoT Prompting?}
+		\begin{itemize}
+			\item Prompting with intermediate reasoning steps
+			\item Solves complex reasoning tasks
+			\item Improves multi-step reasoning
+			\item Better than direct prompting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example - Standard Prompting:}
+		Q: "A company sells a product for \$50 each. Fixed costs are \$10,000, variable costs are \$30 per product. How many units to break even?"
+		A: "10,000" (incorrect!)
+		
+		\vspace{0.1cm}
+		\textbf{Example - CoT Prompting:}
+		"Let's think step by step..."
+		The model then shows: Total Cost = \$10,000 + \$30x, Total Revenue = \$50x, Solve: \$50x = \$10,000 + \$30x, \$20x = \$10,000, x = 500 units
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Step-by-step reasoning yields correct answers!
+	\end{frame}
+	
+	\begin{frame}{Slide 63: CoT Variations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Zero-Shot CoT:}
+		\begin{itemize}
+			\item Model generates reasoning chain
+			\item No examples shown
+			\item Simple but effective
+			\item "Let's think step by step"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Few-Shot CoT:}
+		\begin{itemize}
+			\item Examples with reasoning shown
+			\item Guides model approach
+			\item Better for complex tasks
+		\end{itemize}
+		\textbf{Example:}
+		"Q1: If there are 3 red and 4 blue balls, probability red? A1: Total balls = 7, red = 3, probability = 3/7"
+		
+		\vspace{0.1cm}
+		\textbf{Auto-CoT:}
+		\begin{itemize}
+			\item Automates example creation
+			\item Clustering of questions
+			\item Representative selection
+			\item Generated reasoning chains
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} CoT works best for large models (>10B parameters)!
+	\end{frame}
+	
+	\begin{frame}{Slide 64: Self-Consistency and Tree of Thought}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Self-Consistency:}
+		\begin{itemize}
+			\item Generate multiple responses
+			\item Choose most consistent response
+			\item Improves reliability
+			\item Reduces randomness
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{How It Works:}
+		\begin{enumerate}
+			\item Generate several answers
+			\item Compare responses
+			\item Select most common/consistent
+			\item Better than single response
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Tree of Thought (ToT):}
+		\begin{itemize}
+			\item Generalization of CoT
+			\item Multiple reasoning threads
+			\item Explore different paths
+			\item Most consistent answer selected
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item CoT: One reasoning path
+			\item ToT: Multiple paths explored
+			\item Better for complex problems
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Multiple answers = more reliable results!
+	\end{frame}
+	
+	\begin{frame}{Slide 65: Context Length}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Context Length?}
+		\begin{itemize}
+			\item Maximum tokens in input/output sequence
+			\item Also called context window
+			\item Limits model's working memory
+			\item Important for long documents
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Evolution of Context Length:}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Model} & \textbf{Tokens} & \textbf{Approx. Pages} \\
+			\hline
+			GPT-1 & 512 & 1.5 \\
+			GPT-4 & 32k & 95 \\
+			Gemini 2.5 Pro & 1048k & 1,500 \\
+			Llama 4 & 10 million & Over 10,000 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{Important Notes:}
+		\begin{itemize}
+			\item Effective context length often shorter
+			\item Performance drops after effective range
+			\item Very long inputs not ideal for real-world
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Context length limits how much text model can process!
+	\end{frame}
+	
+	\begin{frame}{Slide 66: Statelessness}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Statelessness?}
+		\begin{itemize}
+			\item LLMs don't retain information between prompts
+			\item Each prompt processed independently
+			\item No memory of previous conversations
+			\item By design
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Implications:}
+		\begin{enumerate}
+			\item \textbf{No Memory}
+			\begin{itemize}
+				\item Cannot recall previous questions
+				\item Each interaction starts fresh
+			\end{itemize}
+			\item \textbf{Context Management}
+			\begin{itemize}
+				\item Must provide full context each time
+				\item Feed previous responses to maintain context
+			\end{itemize}
+			\item \textbf{User Responsibility}
+			\begin{itemize}
+				\item Must manage conversation flow
+				\item Provide relevant history
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Solution:}
+		\begin{itemize}
+			\item Users feed previous responses to LLM
+			\item Make it aware of conversation context
+			\item Maintain continuity
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} LLMs don't remember past conversations!
+	\end{frame}
+	
+	\begin{frame}{Slide 67: Temperature Parameter}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Temperature?}
+		\begin{itemize}
+			\item Controls randomness/creativity
+			\item Shapes probability distribution
+			\item Affects token selection
+			\item Range varies by model (e.g., 0-2 for OpenAI)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Effects:}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Temperature} & \textbf{Effect} & \textbf{Use Case} \\
+			\hline
+			Below 1 & Narrowed distribution & Predictable, deterministic \\
+			1 & Unaltered distribution & Balanced \\
+			Above 1 & Widened distribution & Creative, varied \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{Examples:}
+		\begin{itemize}
+			\item Temperature = 0: Always picks most likely token
+			\item Temperature = 0.5: Some variety, fairly predictable
+			\item Temperature = 1.0: Balanced creativity
+			\item Temperature = 2.0: Very creative, may be nonsensical
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Lower temperature = more predictable; higher = more creative!
+	\end{frame}
+	
+	\begin{frame}{Slide 68: Top-K and Top-P Sampling}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Top-K Sampling:}
+		\begin{itemize}
+			\item Limits to K most probable tokens
+			\item Restricts choices
+			\item Low K = less creativity
+			\item High K = more variety
+		\end{itemize}
+		\textbf{Example:} K=3 means only top 3 tokens considered
+		
+		\vspace{0.1cm}
+		\textbf{Top-P Sampling:}
+		\begin{itemize}
+			\item Selects smallest set with cumulative probability $\ge$ P
+			\item Dynamic selection
+			\item Low P = less creativity
+			\item High P = more variety
+		\end{itemize}
+		\textbf{Example:} P=0.85 includes tokens until probability sum reaches 85\%
+		
+		\vspace{0.1cm}
+		\textbf{Example Tokens:}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			\textbf{Token} & \textbf{Prob} & \textbf{K=3} & \textbf{P=0.85} \\
+			\hline
+			strong & 0.35 & $\checkmark$ & $\checkmark$ \\
+			positive & 0.25 & $\checkmark$ & $\checkmark$ \\
+			mixed & 0.15 & $\checkmark$ & $\checkmark$ \\
+			weak & 0.10 & - & $\checkmark$ \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Top-K/P control which tokens can be selected!
+	\end{frame}
+	
+	\begin{frame}{Slide 69: Temperature, Top-K, Top-P Combinations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Low Temperature + High K/P:}
+		\begin{itemize}
+			\item More predictable responses
+			\item Some variety in tokens
+			\item Good for consistent output
+			\item Recommended for most use cases
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{High Temperature + Low K/P:}
+		\begin{itemize}
+			\item Less predictable
+			\item Less variety in tokens
+			\item More creative within limited set
+			\item May be less coherent
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Other Parameters:}
+		\begin{itemize}
+			\item Model version selection
+			\item Penalty for repeated tokens
+			\item Frequency penalty
+			\item Presence penalty
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Best Practice:}
+		\begin{itemize}
+			\item Start with defaults
+			\item Adjust based on needs
+			\item Test different combinations
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Parameters work together to control output!
+	\end{frame}
+	
+	\begin{frame}{Slide 70: Agentic AI}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Agentic AI?}
+		\begin{itemize}
+			\item Next frontier in AI
+			\item AI agents that take inputs and perform actions autonomously
+			\item Operate using LLM outputs
+			\item Dynamic decision-making
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Features:}
+		\begin{enumerate}
+			\item \textbf{Autonomous Action}
+			\begin{itemize}
+				\item Takes actions without human input
+				\item Schedules meetings
+				\item Sends invites
+				\item Reschedules conflicts
+			\end{itemize}
+			\item \textbf{Environment Awareness}
+			\begin{itemize}
+				\item Observes environment
+				\item Takes decisions
+				\item Calls external resources
+			\end{itemize}
+			\item \textbf{Learning Capability}
+			\begin{itemize}
+				\item Learns on the job
+				\item Adjusts dynamically
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Agentic AI acts; Generative AI creates!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 6: GENAI PERFORMANCE ANALYSIS - SLIDES 71-85
+	% ============================================================
+	
+	\begin{frame}{Slide 71: GenAI Evaluation Challenges}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why GenAI Evaluation is Complex:}
+		\begin{enumerate}
+			\item \textbf{Open-Ended Output}
+			\begin{itemize}
+				\item Unstructured responses
+				\item No single correct answer
+				\item Many valid variations
+			\end{itemize}
+			\item \textbf{Factual Accuracy}
+			\begin{itemize}
+				\item Hallucination risk
+				\item May sound plausible but be wrong
+				\item Need verification
+			\end{itemize}
+			\item \textbf{Bias and Fairness}
+			\begin{itemize}
+				\item Potential for unethical output
+				\item Bias in training data
+				\item Fairness concerns
+			\end{itemize}
+			\item \textbf{Creativity vs Accuracy}
+			\begin{itemize}
+				\item Balancing creativity with correctness
+				\item Task-dependent requirements
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI evaluation is more complex than traditional ML!
+	\end{frame}
+	
+	\begin{frame}{Slide 72: Content Quality Metrics}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{With Reference Materials:}
+		\begin{itemize}
+			\item Compare output to reference
+			\item Check accuracy
+			\item May miss qualitative aspects
+			\item Limited to available references
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Without Reference Materials:}
+		\begin{enumerate}
+			\item \textbf{Quality-Based}
+			\begin{itemize}
+				\item Compare reconstructions
+				\item LLM-generated reference
+			\end{itemize}
+			\item \textbf{Entailment-Based}
+			\begin{itemize}
+				\item Check if text supports hypothesis
+				\item Contradiction detection
+			\end{itemize}
+			\item \textbf{Factuality-Based}
+			\begin{itemize}
+				\item Verify factual correctness
+				\item Check against knowledge bases
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Multiple approaches to assess quality!
+	\end{frame}
+	
+	\begin{frame}{Slide 73: Hallucination}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Hallucination?}
+		\begin{itemize}
+			\item Output appears reasonable but is factually incorrect
+			\item Not supported by input
+			\item Nonsensical or improbable scenarios
+			\item Caused by probabilistic generation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why It Happens:}
+		\begin{enumerate}
+			\item \textbf{Probabilistic Nature}
+			\begin{itemize}
+				\item Tokens chosen based on probabilities
+				\item Higher temperature = more variation
+				\item May pick incorrect tokens
+			\end{itemize}
+			\item \textbf{Knowledge Gaps}
+			\begin{itemize}
+				\item Model may not have information
+				\item Tries to fill gaps
+				\item Creates plausible answers
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Importance:}
+		\begin{itemize}
+			\item Must examine model for hallucination propensity
+			\item Critical for risk management applications
+			\item Need verification mechanisms
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Hallucination is a serious GenAI risk!
+	\end{frame}
+	
+	\begin{frame}{Slide 74: Robustness Evaluation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Out of Distribution (OOD) Robustness:}
+		\begin{itemize}
+			\item Performance on unseen data
+			\item Novel inputs
+			\item Tests generalization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Adversarial Robustness:}
+		\begin{itemize}
+			\item Resistance to attacks
+			\item Malicious inputs
+			\item Designed to cause errors
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Jailbreak Resistance:}
+		\begin{itemize}
+			\item Bypass safety features
+			\item Override policy constraints
+			\item Test model boundaries
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Prompt Sensitivity:}
+		\begin{itemize}
+			\item Sensitivity to prompt changes
+			\item Same question, different phrasing
+			\item Stability assessment
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Robustness tests model security and reliability!
+	\end{frame}
+	
+
+\begin{frame}{Slide 75: Bias and Fairness Metrics}
+	\fontsize{6.5}{7.5}\selectfont
+	
+	\textbf{Demographic Parity:}
+	\begin{itemize}
+		\item Positive predictions are the same across groups
+		\item Promotes fair representation
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textbf{WEAT (Word Embedding Association Test):}
+	\begin{itemize}
+		\item Measures bias using cosine similarity
+		\item Compares associations between sets of words
+		\item Produces a normalized score
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textbf{Gender Bias Score:}
+	\begin{itemize}
+		\item Indicates gender balance
+		\item $> 0$ = male bias
+		\item $< 0$ = female bias
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textbf{Stereotype Score:}
+	\begin{itemize}
+		\item Measures preference for stereotypical associations
+		\item $50$ = neutral
+		\item $100$ = strong stereotypical bias
+	\end{itemize}
+	
+	\textcolor{myblue}{\textbf{Key Insight:}}
+	Bias metrics help identify fairness issues!
+\end{frame}
+
+
+	
+	\begin{frame}{Slide 76: Operational Performance Metrics}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Time to First Token:}
+		\begin{itemize}
+			\item Time between request and first token
+			\item Perceived responsiveness
+			\item Important for user experience
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Time Between Tokens:}
+		\begin{itemize}
+			\item Average interval between tokens
+			\item Generation speed
+			\item Affects flow
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Latency:}
+		\begin{itemize}
+			\item Response time for query
+			\item Overall speed
+			\item Critical for real-time applications
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Throughput:}
+		\begin{itemize}
+			\item Number of queries processed
+			\item Per unit time
+			\item Capacity measure
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Speed matters for practical applications!
+	\end{frame}
+	
+	\begin{frame}{Slide 77: Hallucination Metrics}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Hallucination Rate:}
+		\begin{itemize}
+			\item Measures model's propensity for inaccurate output
+			\item Quantifies hallucination frequency
+			\item Essential risk metric
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Semantic Entropy:}
+		\begin{itemize}
+			\item Measures uncertainty/ambiguity
+			\item Higher entropy = more uncertainty
+			\item Indicates output confidence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{How to Measure:}
+		\begin{itemize}
+			\item Compare to known facts
+			\item Human evaluation
+			\item Automated fact-checking
+			\item Reference-based assessment
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Application Example:}
+		\begin{itemize}
+			\item TruthfulQA benchmark
+			\item Tests factual accuracy
+			\item Identifies hallucination patterns
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Hallucination metrics identify unreliable outputs!
+	\end{frame}
+	
+	\begin{frame}{Slide 78: Text Quality Metrics}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Exact Match:}
+		\begin{itemize}
+			\item Binary match/no match
+			\item Strictest metric
+			\item 0 = no match, 1 = perfect match
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BLEU (Bilingual Evaluation Understudy):}
+		\begin{itemize}
+			\item n-gram precision
+			\item Adds brevity penalty
+			\item 0-1 scale
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ROUGE (Recall-Oriented Understudy):}
+		\begin{itemize}
+			\item For summaries/translations
+			\item n-gram matching
+			\item 0-1 scale
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BERTScore:}
+		\begin{itemize}
+			\item BERT sentence embeddings
+			\item Compares to reference
+			\item Semantic similarity
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Multiple metrics for different evaluation needs!
+	\end{frame}
+	
+	\begin{frame}{Slide 79: Image Quality Metrics}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Inception Score:}
+		\begin{itemize}
+			\item Classifies generated images
+			\item Uses pre-trained Inception-V3
+			\item Measures image distinctiveness
+			\item Entropy of label distribution
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FID (Fréchet Inception Distance):}
+		\begin{itemize}
+			\item Compares generated vs real images
+			\item Distribution parameters
+			\item Mean and covariance
+			\item Lower FID = better quality
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Audio Quality Metrics:}
+		\begin{itemize}
+			\item Signal to noise ratio
+			\item Frequency response
+			\item Spectral convergence
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Different metrics for different content types!
+	\end{frame}
+	
+	\begin{frame}{Slide 80: Benchmarking LLMs}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Benchmarking?}
+		\begin{itemize}
+			\item Structured, repeatable tests
+			\item Assess abilities across domains
+			\item Enable model comparison
+			\item Standardized evaluation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Popular Benchmarks:}
+		\begin{enumerate}
+			\item \textbf{MMLU}
+			\begin{itemize}
+				\item 57 subjects
+				\item Multiple choice questions
+				\item Humanities, STEM, social sciences
+			\end{itemize}
+			\item \textbf{MATH}
+			\begin{itemize}
+				\item Mathematical capabilities
+				\item Problem solving
+			\end{itemize}
+			\item \textbf{GSM8K}
+			\begin{itemize}
+				\item Grade school math
+				\item Word problems
+			\end{itemize}
+			\item \textbf{HumanEval}
+			\begin{itemize}
+				\item Code generation
+				\item Programming tasks
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Benchmarks enable fair model comparison!
+	\end{frame}
+	
+	\begin{frame}{Slide 81: MMLU Example Questions}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{World Religions Example:}
+		"The Great Cloud Sutra prophesied the imminent arrival of which person?"
+		A) Maitreya (Milo) \checkmark
+		B) The Buddha
+		C) Zhou Dunyi
+		D) Wang Yangming
+		
+		\vspace{0.1cm}
+		\textbf{Sociology Example:}
+		"Which statement corresponds with differential association theory?"
+		A) "If all your friends jumped off a bridge, I suppose you would too." \checkmark
+		B) "You should be proud to be a part of this organization."
+		C) "If the door is closed, try the window."
+		D) "Once a thief, always a thief."
+		
+		\vspace{0.1cm}
+		\textbf{Physics Example:}
+		"A model airplane flies slower into the wind and faster with wind at its back. Launched at right angles to the wind, its groundspeed compared with flying in still air is:"
+		A) the same
+		B) greater \checkmark
+		C) less
+		D) either greater or less
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} MMLU tests broad knowledge across subjects!
+	\end{frame}
+	
+	\begin{frame}{Slide 82: LLM Leaderboards}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are Leaderboards?}
+		\begin{itemize}
+			\item Aggregate benchmark results
+			\item Show overall model performance
+			\item Easy comparison
+			\item Frequently updated
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Examples:}
+		\begin{enumerate}
+			\item \textbf{Hugging Face Open LLM Leaderboard}
+			\item \textbf{Chatbot Arena}
+			\item \textbf{HELM (Holistic Evaluation)}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{HELM Rankings (2025):}
+		\begin{tabular}{|c|c|}
+			\hline
+			\textbf{Model} & \textbf{Mean Win Rate} \\
+			\hline
+			GPT-4o (2024-05-13) & 0.938 \\
+			GPT-4o (2024-08-06) & 0.928 \\
+			DeepSeek v3 & 0.908 \\
+			Claude 3.5 Sonnet & 0.885 \\
+			Amazon Nova Pro & 0.885 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Leaderboards show model rankings!
+	\end{frame}
+	
+	\begin{frame}{Slide 83: Benchmark Issues}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data Leakage (Contamination):}
+		\begin{itemize}
+			\item Benchmark data in training
+			\item Model "memorizes" answers
+			\item Inflated performance
+			\item False indication of ability
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Benchmark Saturation:}
+		\begin{itemize}
+			\item Models reach maximum scores
+			\item Cannot differentiate performance
+			\item Benchmarks become outdated
+			\item Need new challenges
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Lack of Real-World Context:}
+		\begin{itemize}
+			\item Hypothetical scenarios
+			\item May not reflect actual use
+			\item Different from real problems
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Benchmarks have important limitations!
+	\end{frame}
+	
+	\begin{frame}{Slide 84: Benchmark Issues (continued)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Cherry Picking:}
+		\begin{itemize}
+			\item Only highlight good results
+			\item Omit weaker benchmarks
+			\item Misleading representation
+			\item Selective reporting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Incomplete Comparison:}
+		\begin{itemize}
+			\item Some leaderboards only show open-source models
+			\item Exclude proprietary models
+			\item Incomplete landscape
+			\item Limited comparison
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Impact:}
+		\begin{itemize}
+			\item Hard to assess true performance
+			\item Misleading comparisons
+			\item Need critical evaluation
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Be critical when interpreting benchmarks!
+	\end{frame}
+	
+	\begin{frame}{Slide 85: GenAI Performance Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Metrics Categories:}
+		\begin{enumerate}
+			\item \textbf{Content Quality}
+			\begin{itemize}
+				\item Accuracy, fluency, coherence
+				\item BLEU, ROUGE, BERTScore
+			\end{itemize}
+			\item \textbf{Hallucination}
+			\begin{itemize}
+				\item Factual accuracy
+				\item Semantic entropy
+			\end{itemize}
+			\item \textbf{Robustness}
+			\begin{itemize}
+				\item OOD performance
+				\item Adversarial resistance
+				\item Jailbreak resistance
+			\end{itemize}
+			\item \textbf{Bias and Fairness}
+			\begin{itemize}
+				\item Demographic parity
+				\item Gender bias
+				\item Stereotype scores
+			\end{itemize}
+			\item \textbf{Operational Performance}
+			\begin{itemize}
+				\item Latency, throughput, token efficiency
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Comprehensive evaluation requires multiple metrics!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 7: APPLICATIONS - SLIDES 86-100
+	% ============================================================
+	
+	\begin{frame}{Slide 86: GenAI Text Processing Applications}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Writing Assistance:}
+		\begin{itemize}
+			\item Report generation
+			\item Document summarization
+			\item Legal analysis support
+			\item Litigation support
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Risk Monitoring:}
+		\begin{itemize}
+			\item Monitor news feeds
+			\item Track customer opinions
+			\item Social media analysis
+			\item Identify potential risks
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Market Analysis:}
+		\begin{itemize}
+			\item Analyze incoming market information
+			\item Economic data analysis
+			\item News flow analysis
+			\item Predict short-term price movements
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI automates text-intensive tasks!
+	\end{frame}
+	
+	\begin{frame}{Slide 87: GenAI in Credit and Compliance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Credit Underwriting:}
+		\begin{itemize}
+			\item Process structured and unstructured data
+			\item Generate reports
+			\item In-depth borrower examination
+			\item Reduce decision time
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Compliance Monitoring:}
+		\begin{itemize}
+			\item Analyze SEC filings
+			\item Review company reports
+			\item Detect emerging risks
+			\item Regulatory compliance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Specialized LLMs:}
+		\begin{itemize}
+			\item Bloomberg GPT
+			\item FinGPT
+			\item Financial news analysis
+			\item Trading signal generation
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI transforms credit and compliance work!
+	\end{frame}
+	
+	\begin{frame}{Slide 88: Code Generation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Applications:}
+		\begin{itemize}
+			\item Generate code from descriptions
+			\item Debug existing code
+			\item Reduce development costs
+			\item Accelerate development
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Specialist Models:}
+		\begin{enumerate}
+			\item \textbf{Codex (OpenAI)}
+			\begin{itemize}
+				\item Code generation
+				\item Natural language to code
+			\end{itemize}
+			\item \textbf{GitHub Copilot (Microsoft)}
+			\begin{itemize}
+				\item AI pair programmer
+				\item Code suggestions
+			\end{itemize}
+			\item \textbf{Cursor}
+			\begin{itemize}
+				\item AI-powered IDE
+				\item Code assistance
+			\end{itemize}
+			\item \textbf{Claude Code (Anthropic)}
+			\begin{itemize}
+				\item Code generation
+				\item Analysis and debugging
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI is transforming software development!
+	\end{frame}
+	
+	\begin{frame}{Slide 89: Chatbots and Virtual Assistants}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Applications:}
+		\begin{enumerate}
+			\item \textbf{Customer Support}
+			\begin{itemize}
+				\item Online customer service
+				\item 24/7 availability
+				\item Quick responses
+			\end{itemize}
+			\item \textbf{Risk Management}
+			\begin{itemize}
+				\item Regulatory information
+				\item Compliance guidance
+				\item Professional support
+			\end{itemize}
+			\item \textbf{Healthcare}
+			\begin{itemize}
+				\item Symptom analysis
+				\item Medical information
+				\item Patient support
+			\end{itemize}
+			\item \textbf{Investment}
+			\begin{itemize}
+				\item Portfolio identification
+				\item Investment advice
+				\item Client support
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Chatbots improve customer and professional services!
+	\end{frame}
+	
+	\begin{frame}{Slide 90: Fraud and Anomaly Detection}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Capabilities:}
+		\begin{itemize}
+			\item Automate monitoring and processing
+			\item Compile transaction data
+			\item Scrutinize across departments
+			\item Identify anomalies/outliers
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Benefits:}
+		\begin{enumerate}
+			\item \textbf{Speed}
+			\begin{itemize}
+				\item Real-time detection
+				\item Immediate alerts
+			\end{itemize}
+			\item \textbf{Comprehensiveness}
+			\begin{itemize}
+				\item Cross-department analysis
+				\item Pattern identification
+			\end{itemize}
+			\item \textbf{Reduced False Positives}
+			\begin{itemize}
+				\item Better accuracy
+				\item Fewer false alarms
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item Mastercard's Decision Intelligence Pro
+			\item Dedicated GenAI fraud detection tool
+			\item Advanced pattern recognition
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI enhances fraud detection capabilities!
+	\end{frame}
+	
+	\begin{frame}{Slide 91: Cybersecurity Applications}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Threat Monitoring:}
+		\begin{itemize}
+			\item Monitor emails and data streams
+			\item Identify potential cyber threats
+			\item Cross-reference with system profile
+			\item Pinpoint specific vulnerabilities
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Automated Response:}
+		\begin{enumerate}
+			\item \textbf{Threat Identification}
+			\begin{itemize}
+				\item Real-time detection
+				\item Pattern recognition
+				\item Anomaly detection
+			\end{itemize}
+			\item \textbf{Aleriting}
+			\begin{itemize}
+				\item Risk managers notified
+				\item Real-time alerts
+				\item Immediate awareness
+			\end{itemize}
+			\item \textbf{Solution Sourcing}
+			\begin{itemize}
+				\item Proactive patch identification
+				\item Vendor-approved sources
+				\item Coordinated response
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI enables proactive cybersecurity!
+	\end{frame}
+	
+	\begin{frame}{Slide 92: Cybersecurity Examples}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Cisco Systems:}
+		\begin{itemize}
+			\item Custom LLM for malware detection
+			\item Security analysis
+			\item Threat identification
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CrowdStrike:}
+		\begin{itemize}
+			\item Charlotte AI for cybersecurity
+			\item Automated threat response
+			\item Security operations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Features:}
+		\begin{enumerate}
+			\item \textbf{Automated Analysis}
+			\begin{itemize}
+				\item Processes large data volumes
+				\item Identifies patterns
+				\item Reduces response time
+			\end{itemize}
+			\item \textbf{Proactive Defense}
+			\begin{itemize}
+				\item Pre-emptive identification
+				\item Automated patching
+				\item Coordinated response
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} LLMs strengthen cybersecurity defenses!
+	\end{frame}
+	
+	\begin{frame}{Slide 93: Image Generation Applications}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Rapid Prototyping:}
+		\begin{itemize}
+			\item Generate images from text
+			\item Quick concept visualization
+			\item Iterative design
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Applications:}
+		\begin{enumerate}
+			\item \textbf{Marketing Materials}
+			\begin{itemize}
+				\item Campaign visuals
+				\item Advertisements
+				\item Social media content
+			\end{itemize}
+			\item \textbf{Book Covers}
+			\begin{itemize}
+				\item Custom artwork
+				\item Quick generation
+			\end{itemize}
+			\item \textbf{Illustrations}
+			\begin{itemize}
+				\item Presentation graphics
+				\item Reports and documents
+				\item Educational materials
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Key Models:}
+		\begin{itemize}
+			\item DALL-E (OpenAI)
+			\item Stable Diffusion
+			\item Midjourney
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Image generation accelerates creative workflows!
+	\end{frame}
+	
+	\begin{frame}{Slide 94: Text, Speech, Video Conversion}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Multimodal Capabilities:}
+		\begin{enumerate}
+			\item \textbf{Text to Speech}
+			\begin{itemize}
+				\item OpenAI Whisper
+				\item Text-to-Speech (TTS)
+				\item Voice synthesis
+			\end{itemize}
+			\item \textbf{Speech to Text}
+			\begin{itemize}
+				\item Transcription
+				\item Meeting notes
+				\item Accessibility
+			\end{itemize}
+			\item \textbf{Text to Video}
+			\begin{itemize}
+				\item OpenAI's Sora
+				\item Google Gemini
+				\item Realistic video creation
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Applications:}
+		\begin{itemize}
+			\item Content creation
+			\item Accessibility services
+			\item Educational materials
+			\item Marketing and advertising
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Multimodal models convert between content types!
+	\end{frame}
+	
+	\begin{frame}{Slide 95: Autonomous Driving}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Development:}
+		\begin{itemize}
+			\item Under development since 1970s
+			\item AI is crucial component
+			\item Semi-autonomous systems deployed
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Current Systems:}
+		\begin{enumerate}
+			\item \textbf{Waymo (USA)}
+			\begin{itemize}
+				\item Advanced autonomous driving
+				\item Public deployment
+			\end{itemize}
+			\item \textbf{Pony.ai (China)}
+			\begin{itemize}
+				\item Semi-autonomous systems
+				\item Urban deployment
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Future Outlook:}
+		\begin{itemize}
+			\item More robust systems expected
+			\item Increased adoption
+			\item Continuous improvement
+			\item Safety remains concern
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} AI is essential for autonomous driving!
+	\end{frame}
+	
+	\begin{frame}{Slide 96: Insurance LLM Use Case}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{EXL Insurance LLM:}
+		\begin{itemize}
+			\item Built with NVIDIA AI Enterprise
+			\item Insurance-specific LLM
+			\item Customized with insurance data
+			\item Outperforms generic LLMs
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Applications:}
+		\begin{enumerate}
+			\item \textbf{Claims Processing}
+			\begin{itemize}
+				\item Streamline document review
+				\item Faster processing
+				\item Improved accuracy
+			\end{itemize}
+			\item \textbf{Underwriting}
+			\begin{itemize}
+				\item Better data interpretation
+				\item Informed decisions
+				\item Reduced workload
+			\end{itemize}
+			\item \textbf{Customer Service}
+			\begin{itemize}
+				\item Automated support
+				\item Quick responses
+				\item Consistent service
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Domain-specific LLMs outperform general models!
+	\end{frame}
+	
+	\begin{frame}{Slide 97: EXL Insurance LLM Results}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Performance Improvements:}
+		\begin{enumerate}
+			\item \textbf{30\% Reduction in Operational Costs}
+			\begin{itemize}
+				\item More efficient claims processing
+				\item Streamlined underwriting
+				\item Automated customer service
+			\end{itemize}
+			\item \textbf{Improved Accuracy}
+			\begin{itemize}
+				\item Better data interpretation
+				\item Enhanced decision-making
+				\item Reduced errors
+			\end{itemize}
+			\item \textbf{Reduced Manual Workload}
+			\begin{itemize}
+				\item Staff focus on complex tasks
+				\item Increased productivity
+				\item Better resource allocation
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Key Features:}
+		\begin{itemize}
+			\item Secure infrastructure
+			\item Regular audits
+			\item Regulatory compliance
+			\item Enterprise-ready
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Insurance LLMs deliver significant business value!
+	\end{frame}
+	
+	\begin{frame}{Slide 98: Investment Firms Using LLMs}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{BlackRock:}
+		\begin{itemize}
+			\item Using LLMs in investment process
+			\item Market analysis
+			\item Investment decisions
+			\item Portfolio management
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Bridgewater:}
+		\begin{itemize}
+			\item \$2 billion fund run by machine learning
+			\item Advanced analytics
+			\item Quantitative strategies
+			\item AI-driven decisions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{AQR:}
+		\begin{itemize}
+			\item LLM integration
+			\item Investment strategies
+			\item Risk management
+			\item Data analysis
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Leading firms are adopting LLMs for investment!
+	\end{frame}
+	
+	\begin{frame}{Slide 99: GenAI Impact Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Areas of Impact:}
+		\begin{enumerate}
+			\item \textbf{Fraud Detection}
+			\begin{itemize}
+				\item Automated monitoring
+				\item Pattern recognition
+				\item Real-time alerts
+			\end{itemize}
+			\item \textbf{Customer Service}
+			\begin{itemize}
+				\item Chatbots and virtual assistants
+				\item 24/7 availability
+				\item Improved response quality
+			\end{itemize}
+			\item \textbf{Document Processing}
+			\begin{itemize}
+				\item Summarization
+				\item Analysis
+				\item Compliance
+			\end{itemize}
+			\item \textbf{Investment}
+			\begin{itemize}
+				\item Market analysis
+				\item Trading signals
+				\item Portfolio management
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI is transforming every financial sector!
+	\end{frame}
+	
+
+\begin{frame}{Slide 100: Final Summary}
+	\fontsize{6.5}{7.5}\selectfont
+	
+	\textbf{\textcolor{myblue}{Generative AI Overview:}}
+	\begin{itemize}
+		\item Creates new content (text, images, audio, and video)
+		\item Rapidly evolving technology
+		\item Broad range of applications
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textbf{\textcolor{myblue}{Key Technologies:}}
+	\begin{itemize}
+		\item Word2Vec: Creates word embeddings
+		\item RNNs/LSTMs: Sequential data processing
+		\item Transformers: Attention-based, parallel processing
+		\item LLMs: Large-scale, pre-trained models
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textbf{\textcolor{myblue}{Performance Evaluation:}}
+	\begin{itemize}
+		\item Content quality metrics
+		\item Hallucination detection
+		\item Robustness and fairness
+		\item Operational performance
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textbf{\textcolor{myblue}{Applications in Finance:}}
+	\begin{itemize}
+		\item Fraud detection, customer service, and document analysis
+		\item Risk management, compliance, and investment
+		\item Credit underwriting and cybersecurity
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{Exam Success:}}
+	Understand the technology, evaluation, and applications!
+\end{frame}
+
+
+	
+\end{document}

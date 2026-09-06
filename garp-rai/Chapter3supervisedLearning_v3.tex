@@ -1,0 +1,3680 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Supervised Learning for Numerical Data}
+\subtitle{100 Questions: Linear Regression, Logistic Regression, LDA}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 1: INTRODUCTION TO LINEAR REGRESSION - QUESTIONS 1-10
+	% ============================================================
+	
+	\begin{frame}{Q1: Simple Linear Regression Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is simple linear regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A model with multiple features and one target
+			\item A model with one feature and one continuous target variable
+			\item A model with no features
+			\item A model for classification problems
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Simple linear regression is also called bivariate regression
+			\item It involves just two variables: one target (y) and one feature (x)
+			\item Models how y changes in response to changes in x
+			\item Example: Stock return (y) influenced by market return (x)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes MULTIPLE linear regression
+			\item \textcolor{myred}{C:} A model with no features would just be the mean
+			\item \textcolor{myred}{D:} Linear regression is for continuous targets, not classification
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Simple linear regression = \textcolor{myblue}{one feature + one continuous target}!
+	\end{frame}
+	
+
+
+	\begin{frame}{Q2: Linear Regression Equation - Tutorial}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{QUESTION: What is the equation for a simple linear regression model?}
+	
+	\vspace{0.1cm}
+	\textbf{OPTIONS:}
+	\begin{enumerate}
+		\item $y_i = \beta_0 + \beta_1 x_i + u_i$
+		\item $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i$
+		\item $y_i = \beta_0 + u_i$
+		\item $y_i = \beta_1 x_i + u_i$
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{myblue}{\textbf{ANSWER: A}}
+	
+	\vspace{0.1cm}
+	\textbf{DETAILED EXPLANATION:}
+	\begin{itemize}
+		\item $y_i$: Target variable (dependent variable)
+		\item $x_i$: Feature (independent variable)
+		\item $\beta_0$: Intercept (bias) - value of y when x=0
+		\item $\beta_1$: Slope (weight) - change in y for 1-unit change in x
+		\item $u_i$: Error term - captures unexplained variation
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+	\begin{itemize}
+		\item \textcolor{myred}{B:} This is MULTIPLE linear regression
+		\item \textcolor{myred}{C:} Missing the feature term
+		\item \textcolor{myred}{D:} Missing the intercept term
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{EXAM TRAP:}} Simple linear regression has \textcolor{myblue}{intercept + slope + error}!
+\end{frame}
+
+
+	
+	\begin{frame}{Q3: Error Term Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does the error term $u_i$ represent in a regression model?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The predicted value
+			\item The intercept of the model
+			\item Unexplained factors affecting y not in the model
+			\item The slope of the model
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Captures all other factors affecting y
+			\item Includes inherent randomness
+			\item Assumed to have mean of zero
+			\item Assumed to have constant variance
+			\item Assumed to be independent
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Predicted value is $\hat{y}_i$
+			\item \textcolor{myred}{B:} Intercept is $\beta_0$
+			\item \textcolor{myred}{D:} Slope is $\beta_1$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Error term captures \textcolor{myblue}{unexplained variation}!
+	\end{frame}
+	
+	\begin{frame}{Q4: Parameter Estimation Methods - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the three primary methods for estimating regression parameters?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Least Squares, Maximum Likelihood, Method of Moments
+			\item Gradient Descent, Backpropagation, Cross-Validation
+			\item LASSO, Ridge, Elastic Net
+			\item Linear, Logistic, Polynomial
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Least Squares:} Most common (OLS)
+			\item \textbf{Maximum Likelihood:} More general method
+			\item \textbf{Method of Moments:} Another statistical technique
+			\item OLS is most widely used for linear regression
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} These are optimization/ML techniques
+			\item \textcolor{myred}{C:} These are regularization methods
+			\item \textcolor{myred}{D:} These are model types, not estimation methods
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Three estimation methods = \textcolor{myblue}{OLS, MLE, Method of Moments}!
+	\end{frame}
+	
+	\begin{frame}{Q5: OLS Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is Ordinary Least Squares (OLS)?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A method that maximizes the likelihood of the data
+			\item A method that minimizes the sum of squared differences between actual and predicted values
+			\item A method that minimizes absolute errors
+			\item A method that randomly selects parameters
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Most common estimation method for linear regression
+			\item Finds $\beta_0$ and $\beta_1$ that minimize SSE
+			\item SSE = $\sum (y_i - \hat{y}_i)^2$
+			\item Squaring penalizes large errors more heavily
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes Maximum Likelihood Estimation
+			\item \textcolor{myred}{C:} This describes Least Absolute Deviations (LAD)
+			\item \textcolor{myred}{D:} This describes random search
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS minimizes \textcolor{myblue}{sum of squared errors}!
+	\end{frame}
+	
+	\begin{frame}{Q6: Multiple Linear Regression - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is multiple linear regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A model with one feature and one target
+			\item A model with multiple features and a continuous target
+			\item A model for classification problems
+			\item A model with no features
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Direct extension of simple linear regression
+			\item Includes multiple features ($x_1, x_2, ..., x_m$)
+			\item Equation: $y_i = \beta_0 + \beta_1 x_{1i} + ... + \beta_m x_{mi} + u_i$
+			\item Each coefficient measures partial effect
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes SIMPLE linear regression
+			\item \textcolor{myred}{C:} Multiple linear regression is for continuous targets
+			\item \textcolor{myred}{D:} A model with no features is just the mean
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Multiple linear regression = \textcolor{myblue}{multiple features + continuous target}!
+	\end{frame}
+	
+	\begin{frame}{Q7: Multiple Linear Regression Equation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the equation for multiple linear regression with m features?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $y_i = \beta_0 + \beta_1 x_i + u_i$
+			\item $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_m x_{mi} + u_i$
+			\item $y_i = \beta_0 + u_i$
+			\item $y_i = \beta_1 x_{1i} + \beta_2 x_{2i} + u_i$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $m$ features require $m+1$ parameters
+			\item $\beta_0$: intercept
+			\item $\beta_1, ..., \beta_m$: slope parameters
+			\item Each $\beta$ measures partial effect
+			\item OLS can still be used for estimation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is SIMPLE linear regression
+			\item \textcolor{myred}{C:} Missing all feature terms
+			\item \textcolor{myred}{D:} Missing the intercept
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Multiple regression has \textcolor{myblue}{m features + intercept} = m+1 parameters!
+	\end{frame}
+	
+	\begin{frame}{Q8: Partial Effect Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In multiple regression, what does each $\beta$ coefficient measure?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The total effect of a feature
+			\item The partial effect of a feature controlling for other features
+			\item The correlation between features
+			\item The error in the model
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Measures effect of one feature while holding others constant
+			\item "Ceteris paribus" interpretation
+			\item Controls for other variables in the model
+			\item Example: Effect of experience on salary holding degree constant
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Total effect is different from partial effect
+			\item \textcolor{myred}{C:} Correlation is a different concept
+			\item \textcolor{myred}{D:} Error is $u_i$, not $\beta$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} $\beta$ measures \textcolor{myblue}{partial effect} controlling for other variables!
+	\end{frame}
+	
+	\begin{frame}{Q9: Interaction Term - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is an interaction term in a regression model?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $x_1 + x_2$ where features are added
+			\item $x_1 \times x_2$ where features are multiplied
+			\item $x_1^2$ where a feature is squared
+			\item $\log(x_1)$ where a feature is transformed
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Equation: $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{1i} x_{2i} + u_i$
+			\item Captures complementarity between features
+			\item Effect of $x_1$ depends on $x_2$ and vice versa
+			\item Changes in both variables together impact y
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is addition, not interaction
+			\item \textcolor{myred}{C:} This is a quadratic term
+			\item \textcolor{myred}{D:} This is a log transformation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Interaction term = \textcolor{myblue}{features multiplied together}!
+	\end{frame}
+	
+	\begin{frame}{Q10: Quadratic Regression - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does adding a squared term to a regression allow?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A linear relationship
+			\item A U-shaped or inverted U-shaped relationship
+			\item No relationship between variables
+			\item A perfectly flat relationship
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Equation: $y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + u_i$
+			\item Allows for nonlinear relationships
+			\item U-shaped ($\beta_2 > 0$): decreases then increases
+			\item Inverted U-shaped ($\beta_2 < 0$): increases then decreases
+			\item Example: Experience and salary (diminishing returns)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Linear relationship is without squared term
+			\item \textcolor{myred}{C:} There is still a relationship
+			\item \textcolor{myred}{D:} Flat relationship would require $\beta_1 = \beta_2 = 0$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Quadratic term allows \textcolor{myblue}{U-shaped relationships}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 2: REGRESSION PROBLEMS - QUESTIONS 11-25
+	% ============================================================
+	
+	\begin{frame}{Q11: Omitting Relevant Features - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the consequence of omitting a relevant feature from a regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item No consequence
+			\item Biased parameter estimates for included features
+			\item Smaller standard errors
+			\item Better model fit
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Omitted variable bias
+			\item Estimates are systematically wrong
+			\item Bias does not disappear with larger samples
+			\item Model attributes influence of missing variable to included ones
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} There are significant consequences
+			\item \textcolor{myred}{C:} Standard errors may be biased too
+			\item \textcolor{myred}{D:} Model fit is compromised
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Omitting relevant features causes \textcolor{myblue}{biased estimates}!
+	\end{frame}
+	
+	\begin{frame}{Q12: Including Irrelevant Features - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the consequence of including an irrelevant feature?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Biased estimates for relevant features
+			\item Inefficient (less precise) parameter estimates
+			\item No consequence at all
+			\item Smaller standard errors
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Typically not biased for relevant variables
+			\item Causes inefficiency - larger standard errors
+			\item Model becomes overly complex
+			\item Risk of overfitting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Relevant estimates are usually unbiased
+			\item \textcolor{myred}{C:} There is a consequence (inefficiency)
+			\item \textcolor{myred}{D:} Standard errors increase, not decrease
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Irrelevant features cause \textcolor{myblue}{inefficiency} (larger standard errors)!
+	\end{frame}
+	
+	\begin{frame}{Q13: Incorrect Functional Form - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What happens if we assume a linear relationship when the true relationship is non-linear?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The model will fit perfectly
+			\item The model will be a poor representation of reality
+			\item The model will have no errors
+			\item The model will be more efficient
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Model misspecification
+			\item Biased predictions
+			\item Incorrect inferences about feature impacts
+			\item Example: Linear model for quadratic relationship
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Misspecified models don't fit perfectly
+			\item \textcolor{myred}{C:} There will be systematic errors
+			\item \textcolor{myred}{D:} Efficiency is compromised
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Wrong functional form = \textcolor{myblue}{poor model representation}!
+	\end{frame}
+	
+	\begin{frame}{Q14: Multicollinearity Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is multicollinearity in regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item When features are highly correlated with the target
+			\item When features are highly correlated with each other
+			\item When the error term has non-constant variance
+			\item When there are outliers in the data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Features (independent variables) are highly correlated
+			\item Makes it hard to isolate individual effects
+			\item Two types: perfect and imperfect
+			\item Example: Square footage and number of bedrooms
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Correlation with target is desirable
+			\item \textcolor{myred}{C:} This is heteroskedasticity
+			\item \textcolor{myred}{D:} This is a different problem
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Multicollinearity = \textcolor{myblue}{features correlated with each other}!
+	\end{frame}
+	
+	\begin{frame}{Q15: Perfect Multicollinearity - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What happens with perfect multicollinearity?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item OLS estimation works normally
+			\item OLS estimation breaks down; separate effects cannot be estimated
+			\item Standard errors become smaller
+			\item The model becomes more efficient
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Exact linear relationship between features
+			\item Example: Celsius and Fahrenheit included together
+			\item OLS cannot estimate separate coefficients
+			\item Must remove one or more features
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} OLS fails with perfect multicollinearity
+			\item \textcolor{myred}{C:} Standard errors are not valid
+			\item \textcolor{myred}{D:} Model is not efficient
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Perfect multicollinearity = \textcolor{myblue}{OLS breaks down}!
+	\end{frame}
+	
+	\begin{frame}{Q16: Imperfect Multicollinearity - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is imperfect multicollinearity?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Features are exactly linearly related
+			\item Features are very closely (but not perfectly) correlated
+			\item Features are completely uncorrelated
+			\item Features are correlated with the error term
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Correlation very high (e.g., 0.9 or -0.95)
+			\item More common than perfect collinearity
+			\item Causes large standard errors
+			\item Makes it hard to separate effects
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is perfect multicollinearity
+			\item \textcolor{myred}{C:} This is no multicollinearity
+			\item \textcolor{myred}{D:} This is endogeneity, not multicollinearity
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Imperfect multicollinearity = \textcolor{myblue}{very high but not perfect correlation}!
+	\end{frame}
+	
+	\begin{frame}{Q17: Outlier Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is an outlier in regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A data point that fits the pattern perfectly
+			\item An anomalous data point far from the bulk of observations
+			\item The mean of the data
+			\item The median of the data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Data point with large residual
+			\item Far from the regression line
+			\item Can be due to data entry errors
+			\item Or rare but genuine events
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is an inlier, not an outlier
+			\item \textcolor{myred}{C:} The mean is a summary statistic
+			\item \textcolor{myred}{D:} The median is a summary statistic
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Outliers are \textcolor{myblue}{anomalous data points far from others}!
+	\end{frame}
+	
+	\begin{frame}{Q18: Outlier Impact on OLS - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why can outliers have a large impact on OLS estimates?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item OLS ignores outliers
+			\item OLS minimizes squared residuals, so large residuals have disproportionate influence
+			\item OLS gives equal weight to all observations
+			\item OLS uses absolute residuals
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Squaring residuals amplifies large differences
+			\item Points far from line pull the line toward them
+			\item Can significantly change parameter estimates
+			\item Example: One machine with many failures
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} OLS does NOT ignore outliers
+			\item \textcolor{myred}{C:} Squaring gives more weight to large residuals
+			\item \textcolor{myred}{D:} OLS uses squared, not absolute residuals
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Outliers have \textcolor{myblue}{disproportionate influence} because of squared errors!
+	\end{frame}
+	
+	\begin{frame}{Q19: Cook's Distance - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does Cook's Distance measure?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The mean of the residuals
+			\item The effect of deleting an observation on all fitted values
+			\item The correlation between features
+			\item The variance of the error term
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Diagnostic for influential points
+			\item Measures how much fitted values change when point is removed
+			\item Large values indicate influential observations
+			\item Higher than others warrants investigation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Mean of residuals is different
+			\item \textcolor{myred}{C:} This is correlation
+			\item \textcolor{myred}{D:} This is error variance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Cook's Distance identifies \textcolor{myblue}{influential observations}!
+	\end{frame}
+	
+	\begin{frame}{Q20: Heteroskedasticity Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is heteroskedasticity in regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Constant variance of errors
+			\item Non-constant variance of errors
+			\item Zero mean of errors
+			\item Independence of errors
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Error variance is not constant
+			\item Opposite of homoskedasticity
+			\item Common in cross-sectional data
+			\item Example: Profits of small vs large companies
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is homoskedasticity
+			\item \textcolor{myred}{C:} This is an OLS assumption
+			\item \textcolor{myred}{D:} This is another OLS assumption
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Heteroskedasticity = \textcolor{myblue}{non-constant error variance}!
+	\end{frame}
+	
+	\begin{frame}{Q21: Heteroskedasticity Detection - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How can heteroskedasticity be detected?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Looking at residual plots for changing spread
+			\item Looking at the mean of residuals
+			\item Looking at the R-squared
+			\item Looking at the intercept
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Plot residuals vs fitted values
+			\item Look for funnel shape
+			\item Spread changes with fitted values
+			\item Formal test: White's Test
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Mean of residuals is usually zero
+			\item \textcolor{myred}{C:} R-squared doesn't detect heteroskedasticity
+			\item \textcolor{myred}{D:} Intercept doesn't detect heteroskedasticity
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Heteroskedasticity = \textcolor{myblue}{funnel shape in residual plot}!
+	\end{frame}
+	
+	\begin{frame}{Q22: White's Test - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is White's Test used for?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Detecting multicollinearity
+			\item Detecting heteroskedasticity
+			\item Detecting outliers
+			\item Detecting autocorrelation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Formal statistical test for heteroskedasticity
+			\item Standard option in most regression software
+			\item Significant result indicates heteroskedasticity
+			\item Produces White's heteroskedasticity-consistent errors
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Variance Inflation Factor (VIF) detects multicollinearity
+			\item \textcolor{myred}{C:} Cook's Distance detects outliers
+			\item \textcolor{myred}{D:} Durbin-Watson detects autocorrelation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} White's Test = \textcolor{myblue}{heteroskedasticity detection}!
+	\end{frame}
+	
+	\begin{frame}{Q23: Heteroskedasticity Remedies - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is one remedy for heteroskedasticity?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Add more features
+			\item Use Weighted Least Squares or robust standard errors
+			\item Remove all features
+			\item Ignore it
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{WLS:} Weight observations by inverse variance
+			\item \textbf{Robust errors:} White's heteroskedasticity-consistent errors
+			\item \textbf{Log transformation:} Of variables can help
+			\item Select "robust errors" option in software
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Adding features doesn't fix heteroskedasticity
+			\item \textcolor{myred}{C:} Removing all features removes the model
+			\item \textcolor{myred}{D:} Ignoring it is not a solution
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Remedies = \textcolor{myblue}{WLS, robust errors, or log transformation}!
+	\end{frame}
+	
+	\begin{frame}{Q24: Stepwise Regression Purpose - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the purpose of stepwise regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To estimate parameters
+			\item To automate feature selection
+			\item To create new features
+			\item To transform variables
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Selects subset of features from candidate pool
+			\item Reduces model complexity
+			\item Avoids redundant features
+			\item Uses AIC or other criteria
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Parameter estimation is OLS
+			\item \textcolor{myred}{C:} Feature creation is different
+			\item \textcolor{myred}{D:} Variable transformation is different
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stepwise regression = \textcolor{myblue}{automated feature selection}!
+	\end{frame}
+	
+	\begin{frame}{Q25: Forward vs Backward Selection - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How does forward selection differ from backward selection?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Forward starts with no features; backward starts with all features
+			\item Forward starts with all features; backward starts with no features
+			\item They are identical
+			\item Forward removes features; backward adds features
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Forward:} Start with intercept only, add features one by one
+			\item \textbf{Backward:} Start with all features, remove one by one
+			\item Both use AIC to decide
+			\item May yield different final models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is reversed
+			\item \textcolor{myred}{C:} They are different approaches
+			\item \textcolor{myred}{D:} Forward adds; backward removes
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Forward = \textcolor{myblue}{add features}; Backward = \textcolor{myblue}{remove features}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 3: LOGISTIC REGRESSION - QUESTIONS 26-45
+	% ============================================================
+	
+	\begin{frame}{Q26: Classification Problem - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a classification problem in machine learning?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Predicting a continuous numerical value
+			\item Assigning observations to predefined categories
+			\item Clustering similar observations
+			\item Reducing dimensionality
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Target is categorical (not continuous)
+			\item Binary: two categories (0/1)
+			\item Multi-class: more than two categories
+			\item Examples: Default/No Default, Fraud/Legitimate
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is regression
+			\item \textcolor{myred}{C:} This is unsupervised learning
+			\item \textcolor{myred}{D:} This is feature reduction
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Classification = \textcolor{myblue}{assigning to categories}!
+	\end{frame}
+	
+	\begin{frame}{Q27: Binary Classification Examples - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Which is NOT an example of binary classification in risk management?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Loan default (Yes/No)
+			\item Fraud detection (Fraudulent/Legitimate)
+			\item Predicting house prices
+			\item Cybersecurity threat (Malicious/Benign)
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Binary classification has two categories
+			\item Predicting house prices is regression (continuous)
+			\item Default prediction, fraud detection, threat detection are all binary
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Yes/No default is binary classification
+			\item \textcolor{myred}{B:} Fraudulent/Legitimate is binary classification
+			\item \textcolor{myred}{D:} Malicious/Benign is binary classification
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Predicting prices = \textcolor{myblue}{regression}, not classification!
+	\end{frame}
+	
+	\begin{frame}{Q28: Why Linear Regression Fails for Classification - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is linear regression inappropriate for binary classification?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Linear regression is too complex
+			\item Predictions can fall outside the 0-1 range
+			\item Linear regression requires categorical features
+			\item Linear regression is always accurate
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Linear regression can predict $< 0$ or $> 1$
+			\item No constraint to keep predictions between 0 and 1
+			\item 0 and 1 are not probabilities
+			\item Logistic regression solves this with sigmoid function
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Linear regression is actually simpler
+			\item \textcolor{myred}{C:} Linear regression doesn't require categorical features
+			\item \textcolor{myred}{D:} Linear regression is NOT accurate for binary outcomes
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Linear regression can give \textcolor{myblue}{probabilities outside 0-1} range!
+	\end{frame}
+	
+	\begin{frame}{Q29: Logistic Function - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the logistic function also called?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item ReLU function
+			\item Sigmoid function
+			\item Tanh function
+			\item Linear function
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Logistic function = Sigmoid function
+			\item Bounded between 0 and 1
+			\item S-shaped curve
+			\item Formula: $F(y) = \frac{1}{1 + e^{-y}}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} ReLU is a different activation function
+			\item \textcolor{myred}{C:} Tanh ranges from -1 to 1
+			\item \textcolor{myred}{D:} Linear function is unbounded
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logistic = \textcolor{myblue}{Sigmoid} function!
+	\end{frame}
+	
+	\begin{frame}{Q30: Logistic Regression Equation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the logistic regression model formula for $P(y_i = 1)$?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $P_i = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_{1i} + ... + \beta_m x_{mi})}}$
+			\item $P_i = \beta_0 + \beta_1 x_{1i} + ... + \beta_m x_{mi}$
+			\item $P_i = e^{(\beta_0 + \beta_1 x_{1i} + ... + \beta_m x_{mi})}$
+			\item $P_i = \frac{1}{1 + e^{(\beta_0 + \beta_1 x_{1i} + ... + \beta_m x_{mi})}}$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Logistic function applied to linear combination
+			\item Bounds probability between 0 and 1
+			\item $\beta_0 + \beta_1 x_{1i} + ... + \beta_m x_{mi}$ is the linear predictor
+			\item e is Euler's number ($\approx$ 2.718)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is linear regression, not logistic
+			\item \textcolor{myred}{C:} This is exponential, not logistic
+			\item \textcolor{myred}{D:} Wrong sign in the exponent (should be negative)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logistic regression = \textcolor{myblue}{1/(1 + e$^{-linear\_predictor}$)}!
+	\end{frame}
+	
+	\begin{frame}{Q31: Logistic Regression Output - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does logistic regression output?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A continuous value with no bounds
+			\item A probability between 0 and 1
+			\item Either 0 or 1 only
+			\item A negative number
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Outputs probability $P(y_i = 1)$
+			\item Always between 0 and 1
+			\item Can be thresholded to get binary prediction
+			\item Typically threshold = 0.5
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Linear regression gives unbounded output
+			\item \textcolor{myred}{C:} Output is probability, thresholding gives 0/1
+			\item \textcolor{myred}{D:} Probabilities are never negative
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logistic regression outputs \textcolor{myblue}{probabilities between 0 and 1}!
+	\end{frame}
+	
+	\begin{frame}{Q32: Logistic Regression Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How are logistic regression coefficients interpreted?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item As linear effects on the probability
+			\item As linear effects on the log-odds
+			\item As linear effects on the target directly
+			\item Coefficients cannot be interpreted
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Logistic transformation is nonlinear
+			\item Coefficients affect log-odds linearly
+			\item Log-odds = $\log(\frac{P}{1-P})$
+			\item Signs and significance are still informative
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Effect on probability is nonlinear
+			\item \textcolor{myred}{C:} Target is binary, not continuous
+			\item \textcolor{myred}{D:} Coefficients CAN be interpreted (log-odds)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logistic coefficients affect \textcolor{myblue}{log-odds}, not probability directly!
+	\end{frame}
+	
+	\begin{frame}{Q33: LendingClub Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the LendingClub example, which factors significantly affect default probability?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Amount and Income
+			\item Term and Interest Rate
+			\item Homeowner and Delinquent
+			\item Bankruptcies and Employment History
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Term: longer loans increase default probability
+			\item Interest rate: higher rates increase default probability
+			\item Both significant at 5% level
+			\item Mortgage has negative effect (significant)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Amount and Income are not significant
+			\item \textcolor{myred}{C:} Homeowner and Delinquent are not significant
+			\item \textcolor{myred}{D:} Bankruptcies and Employment are not significant
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Term and Interest Rate = \textcolor{myblue}{significant predictors} of default!
+	\end{frame}
+	
+	\begin{frame}{Q34: Mortgage Effect in LendingClub - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the LendingClub example, what does a negative coefficient on "Mortgage" mean?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Having a mortgage increases default probability
+			\item Having a mortgage decreases default probability
+			\item Mortgage has no effect on default
+			\item Mortgage is the most important factor
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Negative coefficient = lower default probability
+			\item Mortgage holders are less likely to default
+			\item Coefficient is significant at 5% level
+			\item May indicate financial stability
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Negative means decrease, not increase
+			\item \textcolor{myred}{C:} It is significant, so it has an effect
+			\item \textcolor{myred}{D:} Other factors may be more important
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Negative coefficient = \textcolor{myblue}{decrease in default probability}!
+	\end{frame}
+	
+	\begin{frame}{Q35: Statistical Significance - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does a coefficient with  denote in regression output?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The coefficient is zero
+			\item The coefficient is significant at 1% level
+			\item The coefficient is significant at 5% level
+			\item The coefficient is not significant
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item  significant at 5\% level
+			\item   significant at 1\% level
+			\item  significant at 10\% level
+			\item Indicates probability that coefficient is zero is low
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:}two  means not zero (significant)
+			\item \textcolor{myred}{B:} 3 is 1\% significance
+			\item \textcolor{myred}{D:} 2 means it IS significant
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} 2 = \textcolor{myblue}{5\% significance};  3 tar = \textcolor{myblue}{1\% significance}!
+	\end{frame}
+	
+	\begin{frame}{Q36: Use Case - Global Financial Company - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What was the outcome of the Global Financial Company's logistic regression application?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item 5\% increase in business
+			\item 9.8\% increase in business
+			\item 15\% increase in business
+			\item No change in business
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Used logistic regression to refine lending offers
+			\item Predicted likelihood of clients accepting loan proposals
+			\item Achieved 9.8\% increase in business
+			\item Enabled more targeted and effective offers
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Lower than actual increase
+			\item \textcolor{myred}{C:} Higher than actual increase
+			\item \textcolor{myred}{D:} There was a significant increase
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Global Financial Company achieved \textcolor{myblue}{9.8\% business increase}!
+	\end{frame}
+	
+	\begin{frame}{Q37: Multinomial Logit Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is multinomial logit used for?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Binary classification
+			\item Multi-class classification with unordered categories
+			\item Multi-class classification with ordered categories
+			\item Continuous prediction
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Extends logistic regression to >2 categories
+			\item Categories are nominal (no ordering)
+			\item One category is the baseline/reference
+			\item Estimates log-odds relative to baseline
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Binary is standard logistic regression
+			\item \textcolor{myred}{C:} Ordered logit is for ordered categories
+			\item \textcolor{myred}{D:} Regression is for continuous prediction
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Multinomial logit = \textcolor{myblue}{unordered multi-class classification}!
+	\end{frame}
+	
+	\begin{frame}{Q38: Discrete Choice Model Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Which is an example of a discrete choice problem?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Predicting house prices
+			\item Commuter choosing between car, bus, bicycle, walking
+			\item Predicting stock returns
+			\item Estimating company revenue
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Multiple unordered categories
+			\item No inherent ranking between options
+			\item Features: age, income, distance, fitness
+			\item Multinomial logit is appropriate
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} House price prediction is regression
+			\item \textcolor{myred}{C:} Stock return prediction is regression
+			\item \textcolor{myred}{D:} Revenue estimation is regression
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Discrete choice = \textcolor{myblue}{choosing among unordered categories}!
+	\end{frame}
+	
+	\begin{frame}{Q39: Ordered Logit Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is ordered logit used for?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Binary classification
+			\item Multi-class with ordered categories
+			\item Unordered multi-class classification
+			\item Continuous prediction
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Categories have natural ordering
+			\item Examples: Credit ratings (AAA, AA, A, BBB...)
+			\item Risk scores (Low, Medium, High)
+			\item Uses threshold/cutoff parameters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Binary is standard logistic regression
+			\item \textcolor{myred}{C:} Multinomial logit is for unordered
+			\item \textcolor{myred}{D:} Regression is for continuous prediction
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Ordered logit = \textcolor{myblue}{ordered multi-class classification}!
+	\end{frame}
+	
+	\begin{frame}{Q40: Ordinal Data Examples - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Which is an example of ordinal data?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Loan default (Yes/No)
+			\item Credit ratings (AAA, AA, A, BBB)
+			\item Commuter transport mode choice
+			\item House prices
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Ordinal data has natural ordering
+			\item AAA is better than AA, AA better than A
+			\item Ordered logit is appropriate
+			\item Other examples: survey responses, risk scores
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Binary (no ordering)
+			\item \textcolor{myred}{C:} Nominal (no ordering)
+			\item \textcolor{myred}{D:} Continuous (not categorical)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Credit ratings = \textcolor{myblue}{ordinal data} with natural ordering!
+	\end{frame}
+	
+	\begin{frame}{Q41: Log-Odds Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does a log-odds of zero indicate?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The category is infinitely more likely
+			\item The category is equally likely as the baseline
+			\item The category is impossible
+			\item The category is certain
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Log-odds = $\log(\frac{P}{1-P})$
+			\item Zero means $\frac{P}{1-P} = 1$
+			\item So $P = 0.5$
+			\item Equal probability of both outcomes
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Positive means more likely
+			\item \textcolor{myred}{C:} Zero means equal, not impossible
+			\item \textcolor{myred}{D:} Zero means equal, not certain
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Log-odds of 0 = \textcolor{myblue}{equal probability}!
+	\end{frame}
+	
+	\begin{frame}{Q42: Prior Probability in LDA - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the prior probability in LDA?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Probability of class before seeing data
+			\item Probability of class after seeing data
+			\item The feature distribution
+			\item The error term
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $\pi_j$ in LDA formula
+			\item Unconditional probability of each class
+			\item Can be assumed equal
+			\item Or estimated from training data frequencies
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is posterior probability
+			\item \textcolor{myred}{C:} This is likelihood
+			\item \textcolor{myred}{D:} This is different concept
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Prior = \textcolor{myblue}{probability before seeing data}!
+	\end{frame}
+	
+	\begin{frame}{Q43: Posterior Probability in LDA - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How is a new observation classified in LDA?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Randomly assigned
+			\item Assigned to class with highest discriminant score
+			\item Assigned to class with lowest discriminant score
+			\item Assigned to the majority class
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Calculate $\delta_j(x)$ for each class
+			\item Choose class with largest $\delta_j(x)$
+			\item This maximizes posterior probability
+			\item Discriminant score is linear function of x
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Classification is deterministic
+			\item \textcolor{myred}{C:} Highest score gives best class
+			\item \textcolor{myred}{D:} Uses discriminants, not just majority
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LDA assigns to \textcolor{myblue}{class with highest discriminant score}!
+	\end{frame}
+	
+	\begin{frame}{Q44: LDA Assumptions - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the key assumptions of LDA?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Features are independent and have equal means
+			\item Features are normally distributed with common covariance matrix
+			\item Features are uniformly distributed
+			\item Features are categorical
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Multivariate normal distribution for each class
+			\item Common covariance matrix across classes
+			\item Features are continuous
+			\item Different mean vectors for each class
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Means are different, not equal
+			\item \textcolor{myred}{C:} Features are normal, not uniform
+			\item \textcolor{myred}{D:} Features are continuous, not categorical
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LDA = \textcolor{myblue}{normal distributions + common covariance}!
+	\end{frame}
+	
+	\begin{frame}{Q45: LDA Robustness - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What happens if LDA assumptions are not perfectly met?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item LDA cannot be used at all
+			\item LDA often remains robust and performs well
+			\item LDA always fails completely
+			\item LDA requires no assumptions
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Assumptions are ideal conditions
+			\item In practice, often not perfectly met
+			\item LDA is quite robust to violations
+			\item Often performs well in practice
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} LDA can still be used
+			\item \textcolor{myred}{C:} LDA often works well
+			\item \textcolor{myred}{D:} LDA does have assumptions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LDA is \textcolor{myblue}{robust} even when assumptions are violated!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 4: LINEAR DISCRIMINANT ANALYSIS - QUESTIONS 46-55
+	% ============================================================
+	
+	\begin{frame}{Q46: LDA Purpose - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the primary purpose of Linear Discriminant Analysis (LDA)?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Regression analysis
+			\item Classification with multiple well-separated classes
+			\item Feature engineering
+			\item Error correction
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Finds linear combinations that best separate classes
+			\item Maximizes between-class separation
+			\item Minimizes within-class variance
+			\item Alternative to logistic regression for multi-class
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} LDA is for classification, not regression
+			\item \textcolor{myred}{C:} LDA is not for feature engineering
+			\item \textcolor{myred}{D:} LDA is not for error correction
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LDA is for \textcolor{myblue}{classification with multiple classes}!
+	\end{frame}
+	
+	\begin{frame}{Q47: LDA vs Logistic Regression - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a key advantage of LDA over logistic regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item LDA is always more accurate
+			\item LDA handles multi-class problems naturally
+			\item LDA requires no assumptions
+			\item LDA is faster to compute
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Logistic regression is naturally binary
+			\item LDA extends directly to multiple classes
+			\item Multi-class logistic regression requires extensions
+			\item LDA gives linear discriminant functions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Neither is always more accurate
+			\item \textcolor{myred}{C:} LDA has assumptions (normality, common covariance)
+			\item \textcolor{myred}{D:} Speed depends on implementation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LDA = \textcolor{myblue}{natural multi-class classification}!
+	\end{frame}
+	
+	\begin{frame}{Q48: LDA Discriminant Function - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the LDA discriminant function formula?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $\delta_j(x) = x^T \Sigma^{-1} \mu_j - \frac{1}{2}\mu_j^T \Sigma^{-1} \mu_j + \log(\pi_j)$
+			\item $\delta_j(x) = x^T \Sigma \mu_j$
+			\item $\delta_j(x) = \mu_j^T \Sigma^{-1} x$
+			\item $\delta_j(x) = \log(\pi_j) + \frac{1}{2}\mu_j^T \Sigma^{-1} \mu_j$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $x$: feature vector
+			\item $\mu_j$: mean vector for class j
+			\item $\Sigma$: common covariance matrix
+			\item $\pi_j$: prior probability of class j
+			\item First term: x's contribution, linear in x
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Missing important terms
+			\item \textcolor{myred}{C:} Missing important terms
+			\item \textcolor{myred}{D:} Missing the x term
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LDA discriminant function = \textcolor{myblue}{linear in x with prior adjustment}!
+	\end{frame}
+	
+	\begin{frame}{Q49: LDA Example - Training Data - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the LDA example, what are the prior probabilities for default/no-default?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item 0.5 and 0.5
+			\item 0.7 and 0.3
+			\item 0.8 and 0.2
+			\item 1.0 and 0.0
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item 7 out of 10 are no default (70%)
+			\item 3 out of 10 are default (30%)
+			\item Priors based on class frequencies
+			\item $\pi_0 = 0.7$ (no default), $\pi_1 = 0.3$ (default)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Not balanced (7 vs 3)
+			\item \textcolor{myred}{C:} Not 8 vs 2
+			\item \textcolor{myred}{D:} Not all one class\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Priors = \textcolor{myblue}{class frequencies in training data} (0.7, 0.3)!
+	\end{frame}
+	
+\begin{frame}{Q50: LDA Example - Class Means - Tutorial}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{QUESTION: In the LDA example, what is the mean balance for non-defaults?}
+	
+	\vspace{0.1cm}
+	\textbf{OPTIONS:}
+	\begin{enumerate}
+		\item 1.31
+		\item -0.56
+		\item -0.74
+		\item 0.32
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{myblue}{\textbf{ANSWER: B}}
+	
+	\vspace{0.1cm}
+	\textbf{DETAILED EXPLANATION:}
+	\begin{itemize}
+		\item $\mu_0 = \begin{pmatrix} -0.56 \\ 0.32 \end{pmatrix}$
+		\item First element is mean balance for non-defaults
+		\item Second element is mean income for non-defaults
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+	\begin{itemize}
+		\item \textcolor{myred}{A:} This is mean balance for defaults
+		\item \textcolor{myred}{C:} This is mean income for defaults
+		\item \textcolor{myred}{D:} This is mean income for non-defaults
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{EXAM TRAP:}} Non-default balance mean = \textcolor{myblue}{-0.56} (standardized)!
+\end{frame}
+
+\begin{frame}{Q51: LDA Example - Classification - Tutorial}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{QUESTION: In the LDA example, how is the new borrower classified?}
+	
+	\vspace{0.1cm}
+	\textbf{OPTIONS:}
+	\begin{enumerate}
+		\item Default
+		\item No default
+		\item Cannot be classified
+		\item Both classes equally likely
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{myblue}{\textbf{ANSWER: B}}
+	
+	\vspace{0.1cm}
+	\textbf{DETAILED EXPLANATION:}
+	\begin{itemize}
+		\item $\delta_0 = 0.30$ (no default)
+		\item $\delta_1 = -3.95$ (default)
+		\item Since $\delta_0 > \delta_1$, classify as no default
+		\item Discriminant score is much higher for no default
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+	\begin{itemize}
+		\item \textcolor{myred}{A:} Default score is lower
+		\item \textcolor{myred}{C:} We have enough information
+		\item \textcolor{myred}{D:} Scores are not equal (0.30 vs -3.95)
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{EXAM TRAP:}} Classify as \textcolor{myblue}{no default} (higher discriminant score)!
+\end{frame}
+
+\begin{frame}{Q52: Covariance Matrix in LDA - Tutorial}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{QUESTION: What does the covariance matrix in LDA measure?}
+	
+	\vspace{0.1cm}
+	\textbf{OPTIONS:}
+	\begin{enumerate}
+		\item The means of features
+		\item The spread and correlation structure of features
+		\item The class probabilities
+		\item The error term
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{myblue}{\textbf{ANSWER: B}}
+	
+	\vspace{0.1cm}
+	\textbf{DETAILED EXPLANATION:}
+	\begin{itemize}
+		\item Variances on the diagonal
+		\item Covariances off-diagonal
+		\item Assumed to be common across classes
+		\item $\Sigma$ in the discriminant function
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+	\begin{itemize}
+		\item \textcolor{myred}{A:} Means are $\mu_j$
+		\item \textcolor{myred}{C:} Probabilities are $\pi_j$
+		\item \textcolor{myred}{D:} Error is different concept
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{EXAM TRAP:}} Covariance matrix = \textcolor{myblue}{spread and correlation} of features!
+\end{frame}
+
+\begin{frame}{Q53: LDA Example - Standardized Data - Tutorial}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{QUESTION: Why are the features standardized in the LDA example?}
+	
+	\vspace{0.1cm}
+	\textbf{OPTIONS:}
+	\begin{enumerate}
+		\item To make them categorical
+		\item To ensure equal scale for LDA
+		\item To remove outliers
+		\item To make the data smaller
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{myblue}{\textbf{ANSWER: B}}
+	
+	\vspace{0.1cm}
+	\textbf{DETAILED EXPLANATION:}
+	\begin{itemize}
+		\item LDA assumes continuous features
+		\item Features may have different scales
+		\item Standardization gives mean 0, variance 1
+		\item Ensures features are comparable
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+	\begin{itemize}
+		\item \textcolor{myred}{A:} Standardization doesn't make categorical
+		\item \textcolor{myred}{C:} Standardization doesn't remove outliers
+		\item \textcolor{myred}{D:} Standardization doesn't change data size
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{EXAM TRAP:}} Standardization = \textcolor{myblue}{equal scales} for LDA!
+\end{frame}
+
+\begin{frame}{Q54: LDA and Dimensionality Reduction - Tutorial}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{QUESTION: What is another use of LDA beyond classification?}
+	
+	\vspace{0.1cm}
+	\textbf{OPTIONS:}
+	\begin{enumerate}
+		\item Feature engineering
+		\item Dimensionality reduction
+		\item Error detection
+		\item Data cleaning
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{myblue}{\textbf{ANSWER: B}}
+	
+	\vspace{0.1cm}
+	\textbf{DETAILED EXPLANATION:}
+	\begin{itemize}
+		\item Projects data to lower-dimensional space
+		\item Maximizes between-class separation
+		\item Similar to PCA but supervised
+		\item Can reduce to $K-1$ dimensions
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+	\begin{itemize}
+		\item \textcolor{myred}{A:} LDA uses features, doesn't engineer them
+		\item \textcolor{myred}{C:} LDA is not for error detection
+		\item \textcolor{myred}{D:} LDA is not for data cleaning
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{EXAM TRAP:}} LDA can be used for \textcolor{myblue}{dimensionality reduction}!
+\end{frame}
+
+\begin{frame}{Q55: LDA vs PCA - Tutorial}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{QUESTION: How does LDA differ from PCA for dimensionality reduction?}
+	
+	\vspace{0.1cm}
+	\textbf{OPTIONS:}
+	\begin{enumerate}
+		\item LDA is unsupervised; PCA is supervised
+		\item LDA is supervised; PCA is unsupervised
+		\item Both are supervised
+		\item Both are unsupervised
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{myblue}{\textbf{ANSWER: B}}
+	
+	\vspace{0.1cm}
+	\textbf{DETAILED EXPLANATION:}
+	\begin{itemize}
+		\item LDA uses class labels (supervised)
+		\item PCA ignores class labels (unsupervised)
+		\item LDA maximizes class separation
+		\item PCA maximizes variance
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+	\begin{itemize}
+		\item \textcolor{myred}{A:} LDA is supervised, not unsupervised
+		\item \textcolor{myred}{C:} PCA is unsupervised
+		\item \textcolor{myred}{D:} LDA is supervised
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{EXAM TRAP:}} LDA = \textcolor{myblue}{supervised}; PCA = \textcolor{myblue}{unsupervised}!
+\end{frame}
+
+
+	% ============================================================
+	% SECTION 5: PRACTICAL APPLICATIONS - QUESTIONS 56-70
+	% ============================================================
+	
+	\begin{frame}{Q56: Salary Prediction Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the salary example, what does the intercept of 16.88 mean?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Salary increases by \$16.88 per year
+			\item Expected salary with no experience is \$16.88/hr
+			\item Maximum possible salary is \$16.88/hr
+			\item Salary decreases by \$16.88 per year
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Intercept beta hat 0 = 16.88\$
+			\item Expected salary when experience = 0
+			\item "Someone just joining with no experience"
+			\item In dollars per hour
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is the slope (1.06)
+			\item \textcolor{myred}{C:} Not the maximum possible salary
+			\item \textcolor{myred}{D:} Salary increases, doesn't decrease
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Intercept = \textcolor{myblue}{expected value when feature = 0}!
+	\end{frame}
+	
+	\begin{frame}{Q57: Salary Slope Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the salary example, what does the slope of 1.06 mean?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Each year of experience increases salary by \$1.06/hr
+			\item Each year of experience decreases salary by 1.06/hr
+			\item Salary is \$1.06/hr with no experience
+			\item Maximum salary is \$1.06/hr
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Slope beta hat 1 = 1.06\$
+			\item For each additional year of experience
+			\item Salary increases by \$1.06 per hour
+			\item Linear relationship
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Slope is positive, so increases
+			\item \textcolor{myred}{C:} This is the intercept (16.88)
+			\item \textcolor{myred}{D:} Not a maximum
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Slope = \textcolor{myblue}{change in y for 1-unit change in x}!
+	\end{frame}
+	
+	\begin{frame}{Q58: Quadratic Salary Model - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why was a quadratic term added to the salary model?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To make the model linear
+			\item To capture a non-linear relationship between experience and salary
+			\item To add more features
+			\item To reduce model complexity
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Visual inspection suggested non-linearity
+			\item Salary increases quickly then plateaus
+			\item Quadratic term allows U-shaped relationship
+			\item Better fit to the data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Quadratic makes it non-linear
+			\item \textcolor{myred}{C:} It adds a feature but that's not the reason
+			\item \textcolor{myred}{D:} It increases complexity
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Quadratic term captures \textcolor{myblue}{non-linear relationships}!
+	\end{frame}
+	
+	\begin{frame}{Q59: Salary Maximization - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: At what experience level is salary maximized in the quadratic model?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item 10.3 years
+			\item 17.3 years
+			\item 25.0 years
+			\item 5.0 years
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Model: $\hat{y} = 11.82 + 2.77x - 0.08x^2$
+			\item Derivative: $\frac{dy}{dx} = 2.77 - 0.16x$
+			\item Set to zero: $2.77 - 0.16x = 0$
+			\item $x = 2.77 / 0.16 = 17.31$ years
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Too low
+			\item \textcolor{myred}{C:} Too high
+			\item \textcolor{myred}{D:} Too low
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Maximization occurs at \textcolor{myblue}{17.3 years} of experience!
+	\end{frame}
+	
+	\begin{frame}{Q60: Degree Dummy Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the salary model with degree dummy, what does 0.92 represent?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Salary increase of \$0.92/hr for having a degree
+			\item Salary decrease of \$0.92/hr for having a degree
+			\item Experience effect
+			\item Intercept
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Coefficient on degree dummy = 0.92
+			\item Degree holders earn \$0.92/hr more
+			\item Holding experience constant
+			\item "Compared with someone having identical experience but no degree"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Positive means increase
+			\item \textcolor{myred}{C:} This is the degree effect
+			\item \textcolor{myred}{D:} Intercept is 11.38
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dummy coefficient = \textcolor{myblue}{effect of category} compared to baseline!
+	\end{frame}
+	
+	\begin{frame}{Q61: Dummy Variable Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a dummy variable?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A continuous variable
+			\item A binary variable (0 or 1) representing categories
+			\item A variable with more than two categories
+			\item A variable that is always zero
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Takes values 0 or 1
+			\item Represents categorical data
+			\item Example: Degree (1 = has degree, 0 = no degree)
+			\item Can be used in regression models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Dummy variables are binary
+			\item \textcolor{myred}{C:} Multiple categories need multiple dummies
+			\item \textcolor{myred}{D:} Dummy variables can be 0 or 1
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dummy variables are \textcolor{myblue}{binary (0/1)}!
+	\end{frame}
+	
+	\begin{frame}{Q62: Dummy Variable Trap - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the dummy variable trap?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Including too many dummy variables
+			\item Including a set of dummies that sum to one along with an intercept
+			\item Not including enough dummy variables
+			\item Including only one dummy variable
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Example: Gender dummies (male, female) + intercept
+			\item Dummies sum to 1 for every observation
+			\item Perfect multicollinearity
+			\item OLS breaks down
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Too many is not the trap
+			\item \textcolor{myred}{C:} Not enough is not the trap
+			\item \textcolor{myred}{D:} One dummy is fine
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dummy variable trap = \textcolor{myblue}{perfect multicollinearity} with intercept!
+	\end{frame}
+	
+	\begin{frame}{Q63: Seasonal Dummies - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are seasonal dummies used for in time-series regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To remove seasonality
+			\item To capture patterns that repeat weekly, monthly, or quarterly
+			\item To make data stationary
+			\item To remove trends
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Capture repeating patterns
+			\item Weekly, monthly, quarterly effects
+			\item Example: Retail sales higher in December
+			\item Control for seasonal variation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} They capture, not remove, seasonality
+			\item \textcolor{myred}{C:} This is a different concept
+			\item \textcolor{myred}{D:} Trends are different from seasonality
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Seasonal dummies = \textcolor{myblue}{capture repeating patterns}!
+	\end{frame}
+	
+	\begin{frame}{Q64: LOG Transformations - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why might you apply a logarithmic transformation to variables?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To make the model non-linear
+			\item To handle different scales or non-linear relationships
+			\item To remove all variation
+			\item To make variables categorical
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Handles different scales
+			\item Can address heteroskedasticity
+			\item Changes interpretation of coefficients
+			\item Model remains linear in parameters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Model is still linear in parameters
+			\item \textcolor{myred}{C:} Variation remains, but transformed
+			\item \textcolor{myred}{D:} Variables remain continuous
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Log transformations = \textcolor{myblue}{handle different scales and non-linearity}!
+	\end{frame}
+	
+	\begin{frame}{Q65: R-squared Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does R-squared measure in regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The proportion of variance explained by the model
+			\item The significance of coefficients
+			\item The correlation between features
+			\item The error term
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Ranges from 0 to 1
+			\item Higher = better fit
+			\item Proportion of total variation explained
+			\item $R^2 = 1 - \frac{SSE}{SST}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Significance is p-values
+			\item \textcolor{myred}{C:} Correlation is different
+			\item \textcolor{myred}{D:} Error term is separate
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} R-squared = \textcolor{myblue}{variance explained by model}!
+	\end{frame}
+	
+	\begin{frame}{Q66: Adjusted R-squared - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why use adjusted R-squared instead of R-squared?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It is always larger than R-squared
+			\item It penalizes model complexity (number of features)
+			\item It measures significance
+			\item It is easier to calculate
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item R-squared always increases with more features
+			\item Adjusted R-squared penalizes adding features
+			\item Formula: $\bar{R}^2 = 1 - \frac{(1-R^2)(n-1)}{n-k-1}$
+			\item Helps prevent overfitting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Adjusted R-squared is usually smaller
+			\item \textcolor{myred}{C:} Significance is p-values
+			\item \textcolor{myred}{D:} R-squared is easier to calculate
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Adjusted R-squared = \textcolor{myblue}{penalizes model complexity}!
+	\end{frame}
+	
+	\begin{frame}{Q67: Overfitting Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is overfitting in regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Model fits training data perfectly
+			\item Model captures noise instead of true relationship
+			\item Model fits test data better
+			\item Model has too few features
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Too complex model
+			\item Fits noise in training data
+			\item Poor performance on new data
+			\item Caused by too many features or high-order terms
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Overfitting fits training perfectly but poorly generalizes
+			\item \textcolor{myred}{C:} Overfitting fails on test data
+			\item \textcolor{myred}{D:} Overfitting has too many features
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Overfitting = \textcolor{myblue}{capturing noise, not signal}!
+	\end{frame}
+	
+	\begin{frame}{Q68: Underfitting Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is underfitting in regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Model is too complex
+			\item Model is too simple to capture relationships
+			\item Model fits training data perfectly
+			\item Model has too many features
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Model is too simple
+			\item Cannot capture true relationship
+			\item High bias, low variance
+			\item Example: Linear model for quadratic data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is overfitting
+			\item \textcolor{myred}{C:} This is overfitting
+			\item \textcolor{myred}{D:} This is overfitting
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Underfitting = \textcolor{myblue}{model too simple}!
+	\end{frame}
+	
+	\begin{frame}{Q69: Bias-Variance Tradeoff - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the bias-variance tradeoff?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Tradeoff between model complexity and interpretability
+			\item Tradeoff between model simplicity (bias) and sensitivity to data (variance)
+			\item Tradeoff between training and test error
+			\item Tradeoff between features and observations
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Simple models: high bias, low variance
+			\item Complex models: low bias, high variance
+			\item Need to balance for optimal performance
+			\item Central to machine learning
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is accuracy-interpretability tradeoff
+			\item \textcolor{myred}{C:} This is a consequence, not definition
+			\item \textcolor{myred}{D:} This is different concept
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Bias-variance = \textcolor{myblue}{simplicity vs complexity}!
+	\end{frame}
+	
+	\begin{frame}{Q70: Regularization Introduction - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is regularization in regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Adding penalty terms to reduce overfitting
+			\item Removing all features
+			\item Increasing model complexity
+			\item Ignoring errors
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Adds penalty on coefficients
+			\item Reduces model complexity
+			\item Helps prevent overfitting
+			\item Examples: LASSO, Ridge (Chapter 7)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Regularization shrinks, doesn't remove all
+			\item \textcolor{myred}{C:} Regularization REDUCES complexity
+			\item \textcolor{myred}{D:} Regularization penalizes errors
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Regularization = \textcolor{myblue}{penalty to reduce overfitting}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 6: ADVANCED TOPICS - QUESTIONS 71-85
+	% ============================================================
+	
+	\begin{frame}{Q71: AIC Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does AIC measure in stepwise regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Model accuracy
+			\item Prediction error penalized for model complexity
+			\item Correlation between features
+			\item Significance of coefficients
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item AIC = Akaike Information Criterion
+			\item Measures prediction error
+			\item Penalizes models with more features
+			\item Lower AIC indicates better model
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} AIC is not directly accuracy
+			\item \textcolor{myred}{C:} Correlation is separate
+			\item \textcolor{myred}{D:} Significance is p-values
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} AIC = \textcolor{myblue}{prediction error + complexity penalty}!
+	\end{frame}
+	
+	\begin{frame}{Q72: Forward Selection Process - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In forward selection, when does the process stop?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item When all features are included
+			\item When adding any feature no longer improves the criterion
+			\item After exactly 3 steps
+			\item When AIC reaches zero
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Start with intercept only
+			\item Add features one by one
+			\item Stop when improvement stops
+			\item Or when AIC starts increasing
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} May stop before all features
+			\item \textcolor{myred}{C:} Not a fixed number of steps
+			\item \textcolor{myred}{D:} AIC is never zero in practice
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Forward selection stops when \textcolor{myblue}{no improvement in criterion}!
+	\end{frame}
+	
+	\begin{frame}{Q73: Backward Selection Process - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In backward selection, when does the process stop?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item When all features are removed
+			\item When removing any feature no longer improves the criterion
+			\item After exactly 3 steps
+			\item When AIC reaches zero
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Start with all features
+			\item Remove features one by one
+			\item Stop when removal worsens criterion
+			\item Or when AIC starts increasing
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} May stop before all removed
+			\item \textcolor{myred}{C:} Not a fixed number of steps
+			\item \textcolor{myred}{D:} AIC is never zero in practice
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Backward selection stops when \textcolor{myblue}{removal no longer improves}!
+	\end{frame}
+	
+	\begin{frame}{Q74: Stepwise Regression Limitation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a limitation of stepwise regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It always finds the best model
+			\item It may not find the absolute best model and explores limited paths
+			\item It is computationally impossible
+			\item It requires no domain knowledge
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Heuristic approach
+			\item May miss optimal combinations
+			\item Forward and backward may give different results
+			\item Not guaranteed to find absolute best subset
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} It may NOT find the best model
+			\item \textcolor{myred}{C:} It is computationally feasible
+			\item \textcolor{myred}{D:} Domain knowledge is still needed
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stepwise is \textcolor{myblue}{heuristic}, not guaranteed optimal!
+	\end{frame}
+	
+	\begin{frame}{Q75: Best Subset Selection - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is best subset selection impractical for many features?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Because it's too simple
+			\item Because there are $2^m$ possible models to evaluate
+			\item Because it uses no criteria
+			\item Because it requires no data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item For m features, $2^m$ possible models
+			\item With m=20, over 1 million models
+			\item Computationally expensive
+			\item Stepwise is a practical alternative
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} It is computationally complex
+			\item \textcolor{myred}{C:} It uses criteria like AIC
+			\item \textcolor{myred}{D:} It requires data
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Best subset has \textcolor{myblue}{$2^m$ models} to evaluate!
+	\end{frame}
+	
+	\begin{frame}{Q76: Binary Outcomes in Risk - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Which is NOT a binary outcome in risk management?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Loan defaults
+			\item Fraud detection
+			\item Employee salary
+			\item Equipment failure
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Employee salary is continuous
+			\item Default, fraud, failure are binary
+			\item Binary outcomes are Yes/No
+			\item Salary is a numerical value
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Default = Yes/No
+			\item \textcolor{myred}{B:} Fraud = Yes/No
+			\item \textcolor{myred}{D:} Failure = Yes/No
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Salary is \textcolor{myblue}{continuous}, not binary!
+	\end{frame}
+	
+	\begin{frame}{Q77: Logistic Regression Applications - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a common application of logistic regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Predicting house prices
+			\item Credit risk assessment (default prediction)
+			\item Stock return forecasting
+			\item Estimating company revenue
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Logistic regression for binary outcomes
+			\item Default prediction is binary (default/no default)
+			\item Credit risk is common application
+			\item Example: LendingClub case
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} House prices are continuous (regression)
+			\item \textcolor{myred}{C:} Stock returns are continuous (regression)
+			\item \textcolor{myred}{D:} Revenue is continuous (regression)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logistic regression = \textcolor{myblue}{binary classification} like default prediction!
+	\end{frame}
+	
+	\begin{frame}{Q78: Nominal Data - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is nominal data?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Data with natural ordering
+			\item Data with categories but no ordering
+			\item Continuous numerical data
+			\item Binary data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Categories have no inherent ranking
+			\item Example: Transport modes (car, bus, bicycle)
+			\item Multinomial logit is appropriate
+			\item Different from ordinal data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is ordinal data
+			\item \textcolor{myred}{C:} This is continuous data
+			\item \textcolor{myred}{D:} Binary is a special case
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Nominal = \textcolor{myblue}{categories without ordering}!
+	\end{frame}
+	
+	\begin{frame}{Q79: Ordinal Data Examples - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Which is an example of ordinal data?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Customer satisfaction (Very satisfied, Satisfied, Neutral, Unsatisfied)
+			\item Color of cars
+			\item City of residence
+			\item Employee ID number
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Has natural ordering
+			\item Very satisfied > Satisfied > Neutral > Unsatisfied
+			\item Ordered logit is appropriate
+			\item Other examples: credit ratings, risk scores
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Colors have no ordering (nominal)
+			\item \textcolor{myred}{C:} Cities have no ordering (nominal)
+			\item \textcolor{myred}{D:} IDs have no ordering (nominal)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Ordinal = \textcolor{myblue}{ordered categories}!
+	\end{frame}
+	
+	\begin{frame}{Q80: LDA Prior Probabilities - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How are prior probabilities estimated in LDA?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Always set to 0.5
+			\item Estimated from class frequencies in training data
+			\item Randomly assigned
+			\item Set to 1
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $\pi_j = \frac{n_j}{N}$
+			\item $n_j$: number of training observations in class j
+			\item $N$: total training observations
+			\item Can also be assumed equal if desired
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Not always 0.5
+			\item \textcolor{myred}{C:} Not random
+			\item \textcolor{myred}{D:} Not always 1
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Priors = \textcolor{myblue}{class frequencies} in training data!
+	\end{frame}
+	
+	\begin{frame}{Q81: LDA Discriminant Scores - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In LDA, what determines the classification?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The lowest discriminant score
+			\item The highest discriminant score
+			\item The mean of all scores
+			\item Random selection
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Calculate $\delta_j(x)$ for each class
+			\item Choose class with maximum $\delta_j(x)$
+			\item This maximizes posterior probability
+			\item Linear in features
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Lowest score would be worst
+			\item \textcolor{myred}{C:} Mean doesn't determine classification
+			\item \textcolor{myred}{D:} Classification is deterministic
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LDA chooses \textcolor{myblue}{highest discriminant score}!
+	\end{frame}
+	
+	\begin{frame}{Q82: Multinomial Logit vs Ordered Logit - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: When would you use ordered logit instead of multinomial logit?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item When categories have natural ordering
+			\item When categories are unordered
+			\item When predicting continuous values
+			\item When there are only two categories
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Ordered logit for ordinal data
+			\item Multinomial logit for nominal data
+			\item Ordered logit preserves ordering information
+			\item Example: Credit ratings (AAA, AA, A, BBB)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Multinomial is for unordered
+			\item \textcolor{myred}{C:} Neither is for continuous
+			\item \textcolor{myred}{D:} Binary logistic for two categories
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Ordered logit = \textcolor{myblue}{ordered categories}!
+	\end{frame}
+	
+\begin{frame}{Q83: LDA Example Calculation - Tutorial}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{QUESTION: In the LDA example, what is the inverse of the covariance matrix?}
+	
+	\vspace{0.1cm}
+	\textbf{OPTIONS:}
+	\begin{enumerate}
+		\item $\begin{pmatrix} 1 & 0.58 \\ 0.58 & 1 \end{pmatrix}$
+		\item $\begin{pmatrix} 1.52 & 0.88 \\ 0.88 & 1.52 \end{pmatrix}$
+		\item $\begin{pmatrix} -1.52 & -0.88 \\ -0.88 & -1.52 \end{pmatrix}$
+		\item $\begin{pmatrix} 0.88 & 1.52 \\ 1.52 & 0.88 \end{pmatrix}$
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{myblue}{\textbf{ANSWER: B}}
+	
+	\vspace{0.1cm}
+	\textbf{DETAILED EXPLANATION:}
+	\begin{itemize}
+		\item Original covariance: $\begin{pmatrix} 1 & -0.58 \\ -0.58 & 1 \end{pmatrix}$
+		\item Inverse: $\begin{pmatrix} 1.52 & 0.88 \\ 0.88 & 1.52 \end{pmatrix}$
+		\item Used in discriminant function
+		\item Features are standardized (variance = 1)
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+	\begin{itemize}
+		\item \textcolor{myred}{A:} This is the covariance matrix
+		\item \textcolor{myred}{C:} Wrong signs
+		\item \textcolor{myred}{D:} Wrong arrangement
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{EXAM TRAP:}} Inverse covariance matrix = \textcolor{myblue}{$\begin{pmatrix} 1.52 & 0.88 \\ 0.88 & 1.52 \end{pmatrix}$}!
+\end{frame}
+	
+	\begin{frame}{Q84: LDA New Observation Classification - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the LDA example, why is the new borrower classified as no default?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Because the default score is higher
+			\item Because the no-default score is higher (0.30 > -3.95)
+			\item Because of random chance
+			\item Because there are more non-defaults in training
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $\delta_0 = 0.30$ (no default)
+			\item $\delta_1 = -3.95$ (default)
+			\item $0.30 > -3.95$, so classify as no default
+			\item Discriminant score much higher for no default
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Default score is lower
+			\item \textcolor{myred}{C:} Classification is deterministic
+			\item \textcolor{myred}{D:} Priors help but scores determine
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Higher discriminant score = \textcolor{myblue}{preferred classification}!
+	\end{frame}
+	
+	\begin{frame}{Q85: LDA vs Logistic Regression Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: When is LDA preferred over logistic regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item For binary classification only
+			\item For multi-class classification with well-separated classes
+			\item For continuous prediction
+			\item For clustering
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item LDA handles multiple classes naturally
+			\item Works well when classes are well-separated
+			\item Logistic regression needs extension for multi-class
+			\item LDA is robust even when assumptions violated
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Logistic regression is for binary
+			\item \textcolor{myred}{C:} Neither is for continuous
+			\item \textcolor{myred}{D:} Neither is for clustering
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LDA = \textcolor{myblue}{multi-class with well-separated classes}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 7: CHAPTER QUESTIONS - QUESTIONS 86-100
+	% ============================================================
+	
+	\begin{frame}{Q86: Outlier Detection Methods - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are two methods to detect outliers in regression?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Examine residuals and Cook's distance
+			\item Examine R-squared and p-values
+			\item Examine correlation and covariance
+			\item Examine intercept and slope
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Residual plots: look for large residuals
+			\item Cook's distance: measures influence of each point
+			\item Large Cook's distance warrants investigation
+			\item Both help identify influential points
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} R-squared and p-values don't detect outliers
+			\item \textcolor{myred}{C:} Correlation doesn't detect outliers
+			\item \textcolor{myred}{D:} Intercept/slope don't detect outliers
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Outliers detected by \textcolor{myblue}{residuals and Cook's distance}!
+	\end{frame}
+	
+	\begin{frame}{Q87: Stepwise Regression Explanation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How does stepwise regression work?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It randomly selects features
+			\item It adds or removes features based on a criterion
+			\item It always includes all features
+			\item It never removes features
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Forward: start with no features, add best one each step
+			\item Backward: start with all features, remove worst one each step
+			\item Uses AIC or similar criterion
+			\item Stops when no improvement
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Stepwise is systematic, not random
+			\item \textcolor{myred}{C:} Stepwise selects subset, not all
+			\item \textcolor{myred}{D:} Stepwise can remove features
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stepwise = \textcolor{myblue}{systematic add/remove based on criterion}!
+	\end{frame}
+	
+	\begin{frame}{Q88: Linear Regression for Binary Data - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why can't linear regression be used for binary outcomes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Because it's too complex
+			\item Because predictions can fall outside 0-1 range
+			\item Because it always gives 0.5
+			\item Because it requires categorical features
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Linear regression gives unbounded predictions
+			\item Could predict negative probabilities
+			\item Could predict probabilities > 1
+			\item Logistic regression bounds output between 0 and 1
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Linear regression is simpler
+			\item \textcolor{myred}{C:} Linear regression doesn't always give 0.5
+			\item \textcolor{myred}{D:} Linear regression doesn't require categorical features
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Linear regression = \textcolor{myblue}{unbounded predictions} (can be outside 0-1)!
+	\end{frame}
+	
+	\begin{frame}{Q89: LDA Assumptions Detail - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the main assumptions underlying LDA?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Features are normally distributed with common covariance
+			\item Features are independent and identically distributed
+			\item Features are uniformly distributed
+			\item Features are categorical
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Multivariate normal for each class
+			\item Different mean vectors per class
+			\item Common covariance matrix
+			\item Features must be continuous
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Features need not be independent
+			\item \textcolor{myred}{C:} Normal, not uniform
+			\item \textcolor{myred}{D:} Features are continuous, not categorical
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LDA = \textcolor{myblue}{normal distributions + common covariance}!
+	\end{frame}
+	
+	\begin{frame}{Q90: ROA and SIZE Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the ROA and SIZE example, is the relationship linear?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Yes, it's perfectly linear
+			\item No, because the equation includes a squared term
+			\item Yes, because all coefficients are positive
+			\item No, because ROA is in percent
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Equation: $ROA = 2.6 + 4.22(SIZE) - 1.32(SIZE)^2$
+			\item Squared term creates non-linearity
+			\item Relationship changes with SIZE
+			\item Maximum at SIZE = 1.60
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Squared term makes it non-linear
+			\item \textcolor{myred}{C:} Positive coefficients don't imply linearity
+			\item \textcolor{myred}{D:} Units don't determine linearity
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Squared term = \textcolor{myblue}{non-linear relationship}!
+	\end{frame}
+	
+	\begin{frame}{Q91: ROA Calculation Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: For the ROA model, what is the expected ROA for SIZE = 1.0?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item 4.50\%
+			\item 5.50\%
+			\item 6.50\%
+			\item 7.50\%
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Equation: $ROA = 2.6 + 4.22(1.0) - 1.32(1.0)^2$
+			\item $ROA = 2.6 + 4.22 - 1.32$
+			\item $ROA = 5.50$
+			\item SIZE measured in hundreds of millions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Too low
+			\item \textcolor{myred}{C:} Too high
+			\item \textcolor{myred}{D:} Too high
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Plug SIZE = 1.0 into equation: \textcolor{myblue}{ROA = 5.50\%}!
+	\end{frame}
+	
+	\begin{frame}{Q92: Optimal SIZE Calculation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the ROA example, what SIZE maximizes ROA?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item 1.00
+			\item 1.60
+			\item 2.00
+			\item 0.50
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Derivative: $\frac{dROA}{dSIZE} = 4.22 - 2.64(SIZE)$
+			\item Set to zero: $4.22 - 2.64(SIZE) = 0$
+			\item $SIZE = 4.22 / 2.64 = 1.60$
+			\item This is \$160 million (since SIZE is in hundreds of millions)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Not the maximum
+			\item \textcolor{myred}{C:} Beyond the maximum
+			\item \textcolor{myred}{D:} Below the maximum
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Optimal SIZE = \textcolor{myblue}{1.60} (hundreds of millions)!
+	\end{frame}
+	
+	\begin{frame}{Q93: Maximum ROA Calculation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the maximum ROA in the example?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item 5.50\%
+			\item 6.03\%
+			\item 7.00\%
+			\item 8.50\%
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Plug SIZE = 1.60 into equation
+			\item $ROA = 2.6 + 4.22(1.60) - 1.32(1.60)^2$
+			\item $ROA = 2.6 + 6.752 - 3.3792$
+			\item $ROA = 6.03\%$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is ROA at SIZE = 1.0
+			\item \textcolor{myred}{C:} Too high
+			\item \textcolor{myred}{D:} Too high
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Maximum ROA = \textcolor{myblue}{6.03\%} at SIZE = 1.60!
+	\end{frame}
+	
+	\begin{frame}{Q94: Marketing Campaign LDA - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the marketing campaign example, what are the features?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Age and Income
+			\item Balance and Age
+			\item Balance and Income
+			\item Age and Gender
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Features: Balance (dollars) and Age (years)
+			\item Target: Subscribed (Yes/No)
+			\item Binary classification problem
+			\item LDA used to classify clients
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Income is not a feature
+			\item \textcolor{myred}{C:} Income is not a feature
+			\item \textcolor{myred}{D:} Gender is not a feature
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Features = \textcolor{myblue}{Balance and Age}!
+	\end{frame}
+	
+	\begin{frame}{Q95: LDA Prior in Marketing Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the marketing example, what are the prior probabilities?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item 0.5 and 0.5
+			\item 0.6 and 0.4
+			\item 0.7 and 0.3
+			\item 0.8 and 0.2
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item 6 out of 10 subscribed (60\%)
+			\item 4 out of 10 did not subscribe (40\%)
+			\item $\pi_1 = 0.6$ (subscribed)
+			\item $\pi_2 = 0.4$ (not subscribed)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Not balanced (6 vs 4)
+			\item \textcolor{myred}{C:} Not 7 vs 3
+			\item \textcolor{myred}{D:} Not 8 vs 2
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Priors = \textcolor{myblue}{0.6 and 0.4} from data!
+	\end{frame}
+	
+	\begin{frame}{Q96: Marketing Example Class Means - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the marketing example, what is the mean balance for subscribers?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item -0.44
+			\item 0.29
+			\item 0.00
+			\item 1.00
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $\mu_1 = \begin{pmatrix} 0.29 \\ 0.00 \end{pmatrix}$
+			\item First element: mean balance for subscribers
+			\item Second element: mean age for subscribers
+			\item Features are standardized
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is mean balance for non-subscribers
+			\item \textcolor{myred}{C:} This is mean age for subscribers
+			\item \textcolor{myred}{D:} Not correct
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Subscriber balance mean = \textcolor{myblue}{0.29} (standardized)!
+	\end{frame}
+	
+	\begin{frame}{Q97: Marketing Example Non-Subscriber Means - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the marketing example, what is the mean balance for non-subscribers?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item 0.29
+			\item -0.44
+			\item 0.00
+			\item -1.00
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $\mu_2 = \begin{pmatrix} -0.44 \\ 0.00 \end{pmatrix}$
+			\item First element: mean balance for non-subscribers
+			\item Second element: mean age for non-subscribers
+			\item Non-subscribers have lower average balance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is mean balance for subscribers
+			\item \textcolor{myred}{C:} This is mean age
+			\item \textcolor{myred}{D:} Not correct
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Non-subscriber balance mean = \textcolor{myblue}{-0.44} (standardized)!
+	\end{frame}
+	
+	\begin{frame}{Q98: Marketing Example Covariance - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the marketing example, what is the covariance between features?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item 0.33
+			\item 0.58
+			\item -0.58
+			\item 1.00
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Covariance matrix: $\begin{pmatrix} 1 & 0.33 \\ 0.33 & 1 \end{pmatrix}$
+			\item Variances = 1 (features standardized)
+			\item Covariance = 0.33
+			\item Positive correlation between balance and age
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is from LDA example
+			\item \textcolor{myred}{C:} This is from LDA example
+			\item \textcolor{myred}{D:} This is variance, not covariance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Covariance = \textcolor{myblue}{0.33} in marketing example!
+	\end{frame}
+	
+	\begin{frame}{Q99: Marketing Example Classification - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the marketing example, how would a 51-year-old with \$10,635 be classified?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Subscribed
+			\item Not subscribed
+			\item Cannot be determined
+			\item Both equally likely
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Standardized values: Age = 0.65, Balance = 1.64
+			\item LDA would classify based on discriminant scores
+			\item Higher balance and older age suggest subscription
+			\item Subscriber class has higher mean balance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Features suggest subscriber
+			\item \textcolor{myred}{C:} We have enough information
+			\item \textcolor{myred}{D:} Scores would not be equal
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Classification uses \textcolor{myblue}{discriminant scores} to decide!
+	\end{frame}
+	
+	\begin{frame}{Q100: Final Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the most comprehensive summary of supervised learning for numerical data?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only linear regression is used
+			\item Models include linear regression (continuous outcomes) and logistic regression/LDA (classification)
+			\item Only logistic regression is used
+			\item Only LDA is used
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Continuous outcomes:} Linear regression (simple, multiple)
+			\item \textbf{Classification:} Logistic regression, LDA
+			\item \textbf{Extensions:} Multinomial logit, ordered logit
+			\item \textbf{Key concepts:} OLS, AIC, stepwise, assumptions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Multiple techniques are used
+			\item \textcolor{myred}{C:} Linear regression and LDA also used
+			\item \textcolor{myred}{D:} Linear and logistic also used
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM SUCCESS:}} Understand \textcolor{myblue}{regression and classification} techniques!
+	\end{frame}
+	
+\end{document}

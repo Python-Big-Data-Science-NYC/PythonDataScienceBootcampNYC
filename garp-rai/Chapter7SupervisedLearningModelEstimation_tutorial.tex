@@ -1,0 +1,660 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Supervised Learning - Model Estimation}
+\subtitle{100 Questions: OLS, MLE, Gradient Descent, Regularization, Cross-Validation}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 1: ESTIMATION PARADIGMS - QUESTIONS 1-15
+	% ============================================================
+	
+	\begin{frame}{Q1: OLS Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Ordinary Least Squares (OLS) estimation in supervised learning?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - A method that minimizes the sum of squared errors between predicted and actual values.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item OLS is the foundational estimation method in regression analysis
+			\item Objective function: $\min \sum_{i=1}^N (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^N \varepsilon_i^2$
+			\item $\hat{y}_i = \beta_0 + \beta_1 x_{i1} + ... + \beta_p x_{ip}$ is the predicted value
+			\item $\varepsilon_i = y_i - \hat{y}_i$ is the residual (error)
+			\item OLS minimizes the Residual Sum of Squares (RSS)
+			\item Developed by Carl Friedrich Gauss in the 1790s
+			\item Has a closed-form solution: $\hat{\beta} = (X^TX)^{-1}X^Ty$
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes Least Absolute Deviations (LAD) - minimizes $\sum |\varepsilon_i|$ instead of $\sum \varepsilon_i^2$
+			\item \textcolor{myred}{C:} This describes Maximum Likelihood Estimation (MLE) - different paradigm entirely
+			\item \textcolor{myred}{D:} This describes regularization (L1/Lasso) - penalizes complexity
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS minimizes \textcolor{myblue}{squared errors}, NOT absolute errors! This is the most common confusion.
+	\end{frame}
+	
+	\begin{frame}{Q2: OLS Objective Function - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which is the correct objective function for OLS?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - $L = \sum_{i=1}^N (y_i - \hat{y}_i)^2$
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item The OLS objective function is the Sum of Squared Errors (SSE)
+			\item Also called Residual Sum of Squares (RSS) or Sum of Squared Residuals (SSR)
+			\item Mathematical notation: $L(\beta) = \sum_{i=1}^N (y_i - X_i\beta)^2$
+			\item This function is convex and differentiable $\Rightarrow$ has unique minimum
+			\item First derivative: $\frac{\partial L}{\partial \beta} = -2X^T(y - X\beta)$
+			\item Setting derivative to zero yields normal equations: $X^TX\beta = X^Ty$
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} L1 loss (Least Absolute Deviations) - not differentiable at zero
+			\item \textcolor{myred}{C:} L4 loss - rarely used, not OLS
+			\item \textcolor{myred}{D:} Chebyshev loss (minimax) - minimizes maximum error
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS = \textcolor{myblue}{RSS} = $\sum (y_i - \hat{y}_i)^2$! Know all three names (SSE, RSS, SSR).
+	\end{frame}
+	
+	\begin{frame}{Q3: OLS vs NLS - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key difference between OLS and Nonlinear Least Squares?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - OLS is used when model is linear in parameters; NLS when nonlinear in parameters.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Linear in parameters:} Model can be written as $\beta_0 + \beta_1 f_1(x) + \beta_2 f_2(x) + ...$
+			\begin{itemize}
+				\item Example: $y = \beta_0 + \beta_1 x + \beta_2 x^2$ (polynomial regression)
+				\item Even though nonlinear in x, it's linear in $\beta$s
+			\end{itemize}
+			\item \textbf{Nonlinear in parameters:} Parameters appear nonlinearly
+			\begin{itemize}
+				\item Example: $y = \beta_0 + \beta_1 e^{\beta_2 x}$
+				\item $\beta_2$ appears in exponent - nonlinear
+			\end{itemize}
+			\item OLS has closed-form solution: $\hat{\beta} = (X^TX)^{-1}X^Ty$
+			\item NLS requires iterative numerical optimization
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Both minimize squared errors - this is the similarity, not difference
+			\item \textcolor{myred}{C:} Actually reversed - OLS has closed-form, NLS needs iterative methods
+			\item \textcolor{myred}{D:} Both are regression methods (continuous dependent variables)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Difference is \textcolor{myblue}{linearity in parameters}, NOT in variables! $y = \beta_0 + \beta_1 x^2$ is OLS.
+	\end{frame}
+	
+	\begin{frame}{Q4: NLS Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which model requires Nonlinear Least Squares (NLS) estimation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - $y = \beta_0 + \beta_1 e^{\beta_2 x} + \varepsilon$
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Model C has $\beta_2$ in the exponent: $e^{\beta_2 x}$
+			\item This is nonlinear in parameter $\beta_2$ - cannot be transformed to linear form
+			\item Parameter $\beta_1$ multiplies the exponential term
+			\item NLS requires iterative methods like Gauss-Newton or Levenberg-Marquardt
+			\item The normal equations become nonlinear and cannot be solved directly
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2$ - linear in all parameters (OLS)
+			\item \textcolor{myred}{B:} $y = \beta_0 + \beta_1 x + \beta_2 x^2$ - linear in $\beta$s (polynomial regression, OLS)
+			\item \textcolor{myred}{D:} $y = \beta_0 + \beta_1 \ln(x)$ - linear in $\beta$s (OLS with transformed x)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLS is about \textcolor{myblue}{nonlinearity in parameters}, not variables! This is the most common mistake.
+	\end{frame}
+	
+	\begin{frame}{Q5: MLE Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Maximum Likelihood Estimation (MLE)?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Method that finds parameters maximizing probability (likelihood) of observing given data.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item MLE finds $\theta$ that maximizes $L(\theta) = P(\text{data} | \theta)$
+			\item \textbf{Intuition:} "What parameters make the observed data most probable?"
+			\item Likelihood function: $L(\theta) = \prod_{i=1}^N f(y_i | \theta)$ for i.i.d. data
+			\item Log-likelihood: $\ell(\theta) = \sum_{i=1}^N \log f(y_i | \theta)$
+			\item MLE is asymptotically consistent, efficient, and normally distributed
+			\item Under regularity conditions, MLE achieves Cramér-Rao lower bound asymptotically
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes OLS - different estimation paradigm
+			\item \textcolor{myred}{C:} This describes regularization (penalizing complexity)
+			\item \textcolor{myred}{D:} Minimizing error variance is related to efficiency but not MLE definition
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE maximizes \textcolor{myblue}{likelihood} $P(\text{data}|\theta)$, NOT $P(\theta|\text{data})$!
+	\end{frame}
+	
+	\begin{frame}{Q6: OLS vs MLE Equivalence - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{When do OLS and MLE produce same parameter estimates?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - When errors are normally distributed with constant variance.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Model: $y_i = X_i\beta + \varepsilon_i$, with $\varepsilon_i \sim N(0, \sigma^2)$
+			\item Likelihood: $L(\beta, \sigma^2) = \prod_{i=1}^N \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(y_i - X_i\beta)^2}{2\sigma^2}\right)$
+			\item Log-likelihood: $\ell(\beta) = -\frac{N}{2}\log(2\pi) - \frac{N}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^N (y_i - X_i\beta)^2$
+			\item Maximizing $\ell(\beta)$ is equivalent to minimizing $\sum (y_i - X_i\beta)^2$ (RSS)
+			\item The $\sigma^2$ term doesn't affect the $\beta$ estimates
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Independence alone insufficient - need normal distribution
+			\item \textcolor{myred}{C:} Uniform errors would give different estimator (MLE would minimize maximum absolute error)
+			\item \textcolor{myred}{D:} Autocorrelation violates OLS assumptions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS and MLE are \textcolor{myblue}{equivalent} under normal errors! This is a critical exam concept.
+	\end{frame}
+	
+	\begin{frame}{Q7: Logistic Regression Estimation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What estimation method is typically used for logistic regression?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Maximum Likelihood Estimation (MLE)
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Logistic regression: $\log\left(\frac{p_i}{1-p_i}\right) = X_i\beta$
+			\item $p_i = P(Y_i = 1 | X_i) = \frac{1}{1 + e^{-X_i\beta}}$
+			\item Target is binary: $Y_i \in \{0, 1\}$
+			\item Bernoulli likelihood: $L(\beta) = \prod_{i=1}^N p_i^{Y_i}(1-p_i)^{1-Y_i}$
+			\item Log-likelihood: $\ell(\beta) = \sum_{i=1}^N [Y_i\log(p_i) + (1-Y_i)\log(1-p_i)]$
+			\item No closed-form solution - requires numerical optimization (Newton-Raphson, IRLS)
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} OLS inappropriate - binary target, non-normal errors, heteroscedasticity
+			\item \textcolor{myred}{B:} NLS not standard - logistic regression's nonlinearity handled by MLE
+			\item \textcolor{myred}{D:} Method of Moments less common and less efficient
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logistic regression uses \textcolor{myblue}{MLE}, NOT OLS! Critical distinction.
+	\end{frame}
+	
+	\begin{frame}{Q8: Likelihood Function - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does $L(\theta | \text{data})$ represent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - The probability of the data given the parameters.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $L(\theta | \text{data}) = P(\text{data} | \theta)$
+			\item \textbf{Key distinction:} Likelihood vs Posterior
+			\begin{itemize}
+				\item Likelihood: $P(\text{data} | \theta)$ - frequentist paradigm
+				\item Posterior: $P(\theta | \text{data})$ - Bayesian paradigm
+			\end{itemize}
+			\item Likelihood treats $\theta$ as fixed unknown constant
+			\item Data is random; parameters are fixed
+			\item Uses Bayes' theorem: $P(\theta | \text{data}) \propto P(\text{data} | \theta) P(\theta)$
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes posterior distribution $P(\theta|\text{data})$ - Bayesian concept
+			\item \textcolor{myred}{C:} This is the OLS loss function (RSS) - different concept
+			\item \textcolor{myred}{D:} This describes estimator variance - different statistical concept
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Likelihood = $P(\text{data} | \theta)$, NOT $P(\theta | \text{data})$! This confusion is extremely common.
+	\end{frame}
+	
+	\begin{frame}{Q9: Log-Likelihood - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why is log-likelihood often used instead of likelihood?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Easier to maximize (products $\to$ sums, monotonic).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Mathematical convenience:}
+			\begin{itemize}
+				\item Likelihood involves products: $L(\theta) = \prod_{i=1}^N f(y_i|\theta)$
+				\item Log-likelihood involves sums: $\ell(\theta) = \sum_{i=1}^N \log f(y_i|\theta)$
+			\end{itemize}
+			\item \textbf{Monotonicity:} $\log$ is strictly increasing
+			\begin{itemize}
+				\item Maximizing $\ell(\theta)$ $\equiv$ maximizing $L(\theta)$
+				\item If $L(\theta_1) > L(\theta_2)$, then $\ell(\theta_1) > \ell(\theta_2)$
+			\end{itemize}
+			\item \textbf{Numerical stability:}
+			\begin{itemize}
+				\item Products of small probabilities can underflow to zero
+				\item Sums of logs are more numerically stable
+			\end{itemize}
+			\item \textbf{Derivative simplification:} Sums easier to differentiate than products
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} False - log-likelihood is often negative (probabilities < 1)
+			\item \textcolor{myred}{C:} False - usually requires numerical optimization
+			\item \textcolor{myred}{D:} False - doesn't affect parameter count (that's regularization)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Log-likelihood is \textcolor{myblue}{monotonic} - maximizing it $\equiv$ maximizing likelihood!
+	\end{frame}
+	
+	\begin{frame}{Q10: Closed-Form vs Numerical - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which estimation method typically has a closed-form solution?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Ordinary Least Squares for linear regression.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{OLS closed-form:} $\hat{\beta} = (X^TX)^{-1}X^Ty$
+			\begin{itemize}
+				\item Derived from normal equations: $X^TX\hat{\beta} = X^Ty$
+				\item Requires $X^TX$ to be invertible (no perfect multicollinearity)
+				\item Computational complexity: $O(p^2N + p^3)$
+			\end{itemize}
+			\item \textbf{Why others don't have closed-form:}
+			\begin{itemize}
+				\item Logistic regression: nonlinear in parameters (link function)
+				\item NLS: nonlinear in parameters
+				\item Neural networks: highly complex composition of functions
+			\end{itemize}
+			\item \textbf{When closed-form is not possible:}
+			\begin{itemize}
+				\item When normal equations are nonlinear
+				\item When likelihood has no analytical solution
+				\item When loss function is not convex
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Logistic regression MLE requires numerical optimization (Newton-Raphson)
+			\item \textcolor{myred}{B:} NLS requires iterative numerical optimization
+			\item \textcolor{myred}{D:} Neural networks use backpropagation (numerical)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Only \textcolor{myblue}{OLS for linear regression} has a closed-form solution!
+	\end{frame}
+	
+	\begin{frame}{Q11: OLS Assumptions - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which is NOT a standard OLS assumption?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: D}} - The errors are autocorrelated.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Standard OLS assumptions (Gauss-Markov):}
+			\begin{enumerate}
+				\item \textbf{Linearity in parameters:} $y = X\beta + \varepsilon$
+				\item \textbf{Zero conditional mean:} $E[\varepsilon | X] = 0$
+				\item \textbf{No perfect multicollinearity:} $X^TX$ invertible
+				\item \textbf{Homoscedasticity:} $Var(\varepsilon | X) = \sigma^2$ (constant)
+				\item \textbf{No autocorrelation:} $Cov(\varepsilon_i, \varepsilon_j | X) = 0$ for $i \neq j$
+				\item \textbf{Normality:} $\varepsilon \sim N(0, \sigma^2)$ (for inference)
+			\end{enumerate}
+			\item \textbf{Autocorrelation} is a violation of the independence assumption
+			\begin{itemize}
+				\item Common in time series data
+				\item Leads to inefficient estimates (not BLUE)
+				\item Standard errors are biased
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This IS an OLS assumption
+			\item \textcolor{myred}{B:} This IS an OLS assumption
+			\item \textcolor{myred}{C:} This IS an OLS assumption (for inference)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS assumes \textcolor{myblue}{no autocorrelation} in errors! Autocorrelation is a violation.
+	\end{frame}
+	
+	\begin{frame}{Q12: MLE Properties - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which is a desirable property of Maximum Likelihood Estimators?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - They are consistent (converge to true values as sample size increases).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Consistency:} $\hat{\theta}_{MLE} \xrightarrow{p} \theta_0$ as $n \to \infty$
+			\begin{itemize}
+				\item Under regularity conditions (identifiability, differentiability, etc.)
+				\item The estimator converges in probability to the true parameter
+			\end{itemize}
+			\item \textbf{Asymptotic Normality:} $\sqrt{n}(\hat{\theta}_{MLE} - \theta_0) \xrightarrow{d} N(0, I^{-1}(\theta_0))$
+			\begin{itemize}
+				\item $I(\theta)$ is the Fisher Information matrix
+				\item Achieves Cramér-Rao lower bound asymptotically
+			\end{itemize}
+			\item \textbf{Asymptotic Efficiency:} Minimum variance among regular estimators
+			\item \textbf{Invariance:} $\widehat{g(\theta)} = g(\hat{\theta})$ for continuous $g$
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} False - MLE can be biased (e.g., $\hat{\sigma}^2_{MLE}$ is biased for $\sigma^2$)
+			\item \textcolor{myred}{C:} False - asymptotically efficient, not always minimum variance in finite samples
+			\item \textcolor{myred}{D:} False - often requires numerical optimization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE is \textcolor{myblue}{consistent} but NOT necessarily unbiased!
+	\end{frame}
+	
+	\begin{frame}{Q13: NLS Optimization - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why does NLS require iterative numerical optimization?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - No closed-form solution for nonlinear-in-parameters models.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{The problem:} Normal equations are nonlinear
+			\begin{itemize}
+				\item OLS: $X^TX\beta = X^Ty$ $\Rightarrow$ linear system
+				\item NLS: $\frac{\partial S(\beta)}{\partial \beta} = 0$ where $S(\beta) = \sum (y_i - f(x_i, \beta))^2$
+				\item Partial derivatives $\frac{\partial S}{\partial \beta_j}$ are nonlinear functions of $\beta$
+			\end{itemize}
+			\item \textbf{Common NLS algorithms:}
+			\begin{itemize}
+				\item Gauss-Newton: Linearizes the model around current estimates
+				\item Levenberg-Marquardt: Combines Gauss-Newton and gradient descent
+				\item Gradient descent (first-order method)
+				\item Newton-Raphson (second-order method)
+			\end{itemize}
+			\item \textbf{Convergence issues:}
+			\begin{itemize}
+				\item Requires good starting values
+				\item May converge to local minima
+				\item May not converge at all if model is misspecified
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Multiple local minima are a concern but not the primary reason
+			\item \textcolor{myred}{C:} Error distribution doesn't determine need for numerical optimization
+			\item \textcolor{myred}{D:} Parameter count affects complexity but isn't fundamental
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} No closed-form solution exists for \textcolor{myblue}{nonlinear-in-parameters} models!
+	\end{frame}
+	
+	\begin{frame}{Q14: Gauss-Markov Theorem - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does the Gauss-Markov theorem state about OLS estimators?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - OLS estimators are the Best Linear Unbiased Estimators (BLUE) under certain conditions.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Gauss-Markov assumptions:}
+			\begin{enumerate}
+				\item Linearity in parameters
+				\item No perfect multicollinearity
+				\item Zero conditional mean: $E[\varepsilon | X] = 0$
+				\item Homoscedasticity: $Var(\varepsilon | X) = \sigma^2$
+				\item No autocorrelation: $Cov(\varepsilon_i, \varepsilon_j | X) = 0$
+			\end{enumerate}
+			\item \textbf{BLUE means:}
+			\begin{itemize}
+				\item \textbf{Best:} Minimum variance among all linear unbiased estimators
+				\item \textbf{Linear:} Estimator is a linear function of $y$
+				\item \textbf{Unbiased:} $E[\hat{\beta}] = \beta$
+				\item \textbf{Estimator:} $\hat{\beta} = (X^TX)^{-1}X^Ty$
+			\end{itemize}
+			\item \textbf{Important:} OLS is BLUE among \textit{linear} unbiased estimators
+			\begin{itemize}
+				\item Nonlinear estimators could have lower variance
+				\item Biased estimators could have lower MSE (bias-variance tradeoff)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Close but incomplete - misses "Best" (minimum variance)
+			\item \textcolor{myred}{C:} False - only among linear unbiased estimators
+			\item \textcolor{myred}{D:} False - consistency requires additional conditions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS is \textcolor{myblue}{BLUE} under Gauss-Markov assumptions! Not "always best" among all estimators.
+	\end{frame}
+	
+	\begin{frame}{Q15: Estimation Methods Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which estimation method for $y = \beta_0 + \beta_1 x_1^{\beta_2} + \varepsilon$?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: D}} - Both NLS and MLE would be appropriate.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Model analysis:}
+			\begin{itemize}
+				\item $y = \beta_0 + \beta_1 x_1^{\beta_2} + \varepsilon$
+				\item $\beta_2$ appears in the exponent of $x_1$
+				\item This is nonlinear in parameter $\beta_2$
+				\item Cannot be transformed to linear form (unlike $x^2$ which is linear in parameters)
+			\end{itemize}
+			\item \textbf{NLS approach:}
+			\begin{itemize}
+				\item Minimizes $\sum (y_i - \beta_0 - \beta_1 x_{1i}^{\beta_2})^2$
+				\item Requires numerical optimization
+				\item Equivalent to MLE if errors are normal
+			\end{itemize}
+			\item \textbf{MLE approach:}
+			\begin{itemize}
+				\item Defines likelihood: $L(\beta_0, \beta_1, \beta_2, \sigma^2)$
+				\item If $\varepsilon \sim N(0, \sigma^2)$, MLE $\equiv$ NLS
+				\item If errors not normal, MLE differs from NLS
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} OLS requires linearity in parameters - this model violates that
+			\item \textcolor{myred}{B:} NLS alone correct but incomplete - MLE also works
+			\item \textcolor{myred}{C:} MLE alone correct but incomplete - NLS also works
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} For nonlinear models, both \textcolor{myblue}{NLS and MLE} can be used!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 2: GRADIENT DESCENT - QUESTIONS 16-35
+	% ============================================================
+	
+	\begin{frame}{Q16: Gradient Descent Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is gradient descent in model estimation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Iterative optimization algorithm updating parameters in direction of negative gradient.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Core concept:} Iteratively move in the direction of steepest descent
+			\item \textbf{Update rule:} $\theta_{new} = \theta_{old} - \alpha \nabla L(\theta)$
+			\item \textbf{Components:}
+			\begin{itemize}
+				\item $\theta$: Parameters being optimized
+				\item $\alpha$: Learning rate (step size)
+				\item $\nabla L(\theta)$: Gradient (vector of partial derivatives)
+			\end{itemize}
+			\item \textbf{Intuition:}
+			\begin{itemize}
+				\item Gradient points in direction of steepest increase
+				\item Negative gradient points in direction of steepest decrease
+				\item Move in negative gradient direction to reduce loss
+			\end{itemize}
+			\item \textbf{Convergence conditions:}
+			\begin{itemize}
+				\item Loss function is differentiable
+				\item Learning rate is chosen appropriately
+				\item Function is convex for guaranteed global convergence
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} False - can get stuck in local minima
+			\item \textcolor{myred}{C:} This describes closed-form solutions
+			\item \textcolor{myred}{D:} This describes random search
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Gradient descent is \textcolor{myblue}{iterative} and uses \textcolor{myblue}{negative gradient}!
+	\end{frame}
+	
+	\begin{frame}{Q17: Gradient Descent Update Rule - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the general update rule for gradient descent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - $\theta_{new} = \theta_{old} - \alpha \nabla L(\theta)$
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Formula breakdown:}
+			\begin{itemize}
+				\item $\theta_{new}$: Updated parameter values
+				\item $\theta_{old}$: Current parameter values
+				\item $\alpha$: Learning rate (hyperparameter)
+				\item $\nabla L(\theta)$: Gradient of loss function
+			\end{itemize}
+			\item \textbf{Why subtract?}
+			\begin{itemize}
+				\item $\nabla L(\theta)$ points uphill (direction of increase)
+				\item $-\nabla L(\theta)$ points downhill (direction of decrease)
+				\item Subtracting moves toward lower loss
+			\end{itemize}
+			\item \textbf{Example for linear regression:}
+			\begin{itemize}
+				\item $L(\beta) = \sum (y_i - X_i\beta)^2$
+				\item $\nabla L(\beta) = -2X^T(y - X\beta)$
+				\item $\beta_{new} = \beta_{old} + 2\alpha X^T(y - X\beta)$
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is gradient ascent (moving to increase loss)
+			\item \textcolor{myred}{C:} Multiplication is not the correct operation
+			\item \textcolor{myred}{D:} Division is not the correct operation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Gradient descent uses \textcolor{myblue}{subtraction} of the gradient!
+	\end{frame}
+	
+	\begin{frame}{Q18: Learning Rate Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does the learning rate $\alpha

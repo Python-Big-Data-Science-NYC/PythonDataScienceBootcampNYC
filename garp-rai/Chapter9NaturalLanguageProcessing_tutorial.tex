@@ -1,0 +1,3088 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Natural Language Processing}
+\subtitle{Complete Tutorial: Pre-processing, BoW, TF-IDF, Naïve Bayes, Evaluation}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 1: INTRODUCTION TO NLP - SLIDES 1-10
+	% ============================================================
+	
+	\begin{frame}{Slide 1: What is Natural Language Processing?}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Definition:}
+		\begin{itemize}
+			\item NLP is an aspect of machine learning concerned with understanding and analyzing human language
+			\item Works with unstructured, free text format
+			\item Also known as: content analysis, text mining, computational linguistics
+			\item Enables computers to understand, interpret, and generate human language
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Insight:}
+		\begin{itemize}
+			\item Most information exists in unstructured text format
+			\item NLP is one of the most exciting and fast-developing applications of machine learning
+			\item Bridges the gap between human language and computer understanding
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Core Challenge:}} Converting unstructured text into structured data that machines can analyze!
+	\end{frame}
+	
+	\begin{frame}{Slide 2: Why is NLP Challenging?}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Challenges:}
+		\begin{enumerate}
+			\item \textbf{Ambiguity:} Same words have different meanings (polysemy)
+			\begin{itemize}
+				\item Example: "bank" (financial institution) vs "bank" (river edge)
+			\end{itemize}
+			\item \textbf{Context dependence:} Meaning depends on surrounding text
+			\begin{itemize}
+				\item "That's just great!" - sincere or sarcastic?
+			\end{itemize}
+			\item \textbf{Noise:} Spelling errors, abbreviations, colloquialisms
+			\begin{itemize}
+				\item "u r gr8" vs "you are great"
+			\end{itemize}
+			\item \textbf{Informal language:} Social media, text messages
+			\item \textbf{Sarcasm and tone:} Hard for machines to detect
+		\end{enumerate}
+		
+		\textcolor{myred}{\textbf{Impact:}} NLP may fail to fully capture document essence!
+	\end{frame}
+	
+	\begin{frame}{Slide 3: NLP Applications in Finance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Major Financial Applications:}
+		\begin{enumerate}
+			\item \textbf{Fraud Detection}
+			\begin{itemize}
+				\item SEC used NLP to detect accounting fraud
+				\item HSBC uses NLP for fraud detection
+			\end{itemize}
+			\item \textbf{Customer Service}
+			\begin{itemize}
+				\item Call routing based on keyword recognition
+				\item Bank of America chatbots
+			\end{itemize}
+			\item \textbf{Sentiment Analysis}
+			\begin{itemize}
+				\item Social media monitoring
+				\item Market reaction assessment
+				\item BlackRock sentiment analysis
+			\end{itemize}
+			\item \textbf{Document Analysis}
+			\begin{itemize}
+				\item Readability assessment (Fog index)
+				\item Document similarity
+				\item JPMorgan COiN platform
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Benefit:}} Processes thousands of documents faster than humans!
+	\end{frame}
+	
+	\begin{frame}{Slide 4: NLP vs Manual Reading}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Advantages of NLP Over Manual Reading:}
+		\begin{enumerate}
+			\item \textbf{Speed}
+			\begin{itemize}
+				\item Processes thousands of documents quickly
+				\item Enables real-time analysis
+			\end{itemize}
+			\item \textbf{Completeness}
+			\begin{itemize}
+				\item No scope to miss any aspects
+				\item Provided they are built into the design
+			\end{itemize}
+			\item \textbf{Consistency}
+			\begin{itemize}
+				\item All documents considered identically
+				\item No scope for biases or inconsistencies
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Important Note:}
+		\begin{itemize}
+			\item NLP may miss nuance that humans would catch
+			\item Ambiguity remains challenging
+			\item Requires careful design and validation
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} NLP = \textcolor{myblue}{speed + completeness + consistency}!
+	\end{frame}
+	
+	\begin{frame}{Slide 5: NLP Data Sources in Finance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Primary Data Sources:}
+		\begin{enumerate}
+			\item \textbf{Corporate Disclosures}
+			\begin{itemize}
+				\item Mandatory filings: 10-Q, 10-K
+				\item Equity and bond issue prospectuses
+				\item Formal, structured language
+			\end{itemize}
+			\item \textbf{Social Media Posts}
+			\begin{itemize}
+				\item Generalist: X (Twitter), Reddit
+				\item Financial: Stocktwits, Seeking Alpha
+				\item Informal, noisy, colloquial
+			\end{itemize}
+			\item \textbf{News Wires}
+			\begin{itemize}
+				\item Wall Street Journal
+				\item Dow Jones newswire
+				\item Formal, professional language
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Data Collection Methods:}} API, web scraping with Python, PDF extraction
+	\end{frame}
+	
+	\begin{frame}{Slide 6: The Corpus}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Definition:}
+		\begin{itemize}
+			\item From Latin "corpus" meaning "body"
+			\item Collection of all documents retrieved for analysis
+			\item May include hundreds or thousands of documents
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Characteristics:}
+		\begin{enumerate}
+			\item All documents in the corpus are processed together
+			\item Vocabulary is built from the corpus
+			\item Analysis results apply to the entire corpus
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item All 10-K filings of S\&P 500 companies
+			\item All tweets about a specific stock
+			\item All customer service emails from a bank
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Important:}} The corpus defines the scope of your NLP analysis!
+	\end{frame}
+	
+	\begin{frame}{Slide 7: JPMorgan Chase COiN Platform}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{COiN (Contract Intelligence) Platform:}
+		\begin{itemize}
+			\item Automated review of legal documents
+			\item Focus on commercial loan agreements
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Challenges Addressed:}
+		\begin{enumerate}
+			\item Manual review was time-consuming
+			\item Manual review was prone to errors
+			\item Extracting information from unstructured text
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Outcomes:}
+		\begin{enumerate}
+			\item Significantly reduced review time
+			\item Improved consistency in information extraction
+			\item Improved accuracy in information extraction
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} NLP models trained on annotated legal documents improve over time!
+	\end{frame}
+	
+	\begin{frame}{Slide 8: NLP Use Cases by Institution}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Financial Institutions Using NLP:}
+		\begin{enumerate}
+			\item \textbf{HSBC:} Fraud detection
+			\begin{itemize}
+				\item Analyze patterns in financial transactions
+			\end{itemize}
+			\item \textbf{Bank of America (BoA):} Customer service chatbots
+			\begin{itemize}
+				\item Automated customer interaction
+			\end{itemize}
+			\item \textbf{BlackRock:} Market sentiment analysis
+			\begin{itemize}
+				\item Analyze news and social media for trading insights
+			\end{itemize}
+			\item \textbf{JPMorgan Chase:} COiN platform for legal documents
+			\item \textbf{SEC:} Accounting fraud detection (early adopter)
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Common Theme:}} NLP is transforming financial services operations!
+	\end{frame}
+	
+	\begin{frame}{Slide 9: Document Similarity Applications}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Document Similarity?}
+		\begin{itemize}
+			\item Comparing two or more documents
+			\item Measuring how similar their content is
+			\item Using vector representations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Applications in Finance:}
+		\begin{enumerate}
+			\item \textbf{New Information Assessment}
+			\begin{itemize}
+				\item Determine if news article provides new information
+				\item Avoid redundant analysis
+			\end{itemize}
+			\item \textbf{Disclosure Tracking}
+			\begin{itemize}
+				\item Assess if tone of accounting disclosures has changed
+				\item Monitor consistency in communications
+				\item Detect significant changes
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Benefit:}} Identifies novel information and tracks changes over time!
+	\end{frame}
+	
+	\begin{frame}{Slide 10: Readability Assessment}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Fog Index for Readability:}
+		\begin{itemize}
+			\item Measures mean number of words per sentence
+			\item Measures proportion of "complex" words (more than two syllables)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Other Readability Measures:}
+		\begin{enumerate}
+			\item Passive voice usage
+			\item Technical terminology
+			\item Plain English compliance
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Why It Matters in Finance:}
+		\begin{itemize}
+			\item Organizations commit to plain English
+			\item Websites and materials should be accessible
+			\item Customer communications must be understandable
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Goal:}} Make financial communications accessible to all customers!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 2: DATA PRE-PROCESSING - SLIDES 11-25
+	% ============================================================
+	
+	\begin{frame}{Slide 11: Introduction to Pre-processing}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why Pre-processing Matters:}
+		\begin{itemize}
+			\item Raw text is messy and unstructured
+			\item Machines need clean, standardized input
+			\item Quality of pre-processing affects analysis quality
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Initial Steps:}
+		\begin{enumerate}
+			\item Extract text from PDFs or other formats
+			\item Remove HTML code and tags
+			\item Handle emojis (convert to text or numerical values)
+			\item Use tools like demoji module in Python
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Data Quality Depends on Source:}
+		\begin{itemize}
+			\item Newswires: Formal, error-free
+			\item Social media: Spelling errors, colloquialisms, abbreviations
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} Garbage in = garbage out!
+	\end{frame}
+	
+	\begin{frame}{Slide 12: Tokenization}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Tokenization?}
+		\begin{itemize}
+			\item Separating a document into sentences
+			\item Then splitting sentences into words
+			\item Removing punctuation, spacing, special symbols
+			\item Converting to lowercase
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Two Types:}
+		\begin{enumerate}
+			\item \textbf{Sentence Tokenization}
+			\begin{itemize}
+				\item Split at periods (.), question marks (?), exclamation marks (!)
+			\end{itemize}
+			\item \textbf{Word Tokenization}
+			\begin{itemize}
+				\item Split sentences into individual words
+				\item Remove punctuation and special characters
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Example:}} "Hello world!" $\to$ ["Hello", "world"] after tokenization!
+	\end{frame}
+	
+	\begin{frame}{Slide 13: Stop Word Removal}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are Stop Words?}
+		\begin{itemize}
+			\item Common words with little informational value
+			\item Included to make sentences flow
+			\item Examples: "has", "a", "the", "also", "and", "of"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why Remove Them?}
+		\begin{enumerate}
+			\item Add noise to analysis
+			\item Don't help distinguish documents
+			\item Increase vector size unnecessarily
+			\item Improve computational efficiency
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Important Caveat:}
+		\begin{itemize}
+			\item What constitutes a stop word varies by application
+			\item Words with no value in one context may be useful in another
+			\item Customization may be needed
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Stop words are context-dependent!
+	\end{frame}
+	
+	\begin{frame}{Slide 14: Stemming}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Stemming?}
+		\begin{itemize}
+			\item Reduces words to their core/root forms
+			\item Cuts off prefixes and suffixes
+			\item Crude, rule-based approach
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Examples:}
+		\begin{enumerate}
+			\item "disappointing" $\to$ "disappoint"
+			\item "disappointed" $\to$ "disappoint"
+			\item "running" $\to$ "run"
+			\item "jumping" $\to$ "jump"
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Advantages:}
+		\begin{itemize}
+			\item Fast
+			\item Simple to implement
+			\item Reduces vocabulary size
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Limitation:}} Can lose nuance and degrees of positivity/negativity!
+	\end{frame}
+	
+	\begin{frame}{Slide 15: Lemmatization}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Lemmatization?}
+		\begin{itemize}
+			\item Finds the dictionary form (lemma) of words
+			\item Considers word meaning and part of speech
+			\item More sophisticated than stemming
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Examples:}
+		\begin{enumerate}
+			\item "running" $\to$ "run" (lemma)
+			\item "better" $\to$ "good" (lemma)
+			\item "went" $\to$ "go" (lemma)
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Advantages:}
+		\begin{itemize}
+			\item More accurate than stemming
+			\item Always produces real words
+			\item Preserves meaning
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Disadvantage:}} Slower and more computationally expensive!
+	\end{frame}
+	
+	\begin{frame}{Slide 16: Stemming vs Lemmatization Comparison}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Stemming:}
+		\begin{itemize}
+			\item \textbf{Method:} Rule-based, cuts prefixes/suffixes
+			\item \textbf{Speed:} Very fast
+			\item \textbf{Accuracy:} Less accurate
+			\item \textbf{Output:} May create non-words
+			\item \textbf{Use when:} Speed is critical
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Lemmatization:}
+		\begin{itemize}
+			\item \textbf{Method:} Uses vocabulary and morphological analysis
+			\item \textbf{Speed:} Slower
+			\item \textbf{Accuracy:} More accurate
+			\item \textbf{Output:} Always produces real words
+			\item \textbf{Use when:} Accuracy is critical
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Tradeoff:}} Speed vs Accuracy!
+	\end{frame}
+	
+	\begin{frame}{Slide 17: Part-of-Speech (POS) Tagging}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is POS Tagging?}
+		\begin{itemize}
+			\item Labels each word with its grammatical category
+			\item Common tags: noun, verb, adjective, proper noun, adverb
+			\item Provides syntactic information
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why It's Useful:}
+		\begin{enumerate}
+			\item \textbf{Handles Ambiguity}
+			\begin{itemize}
+				\item "Reading" (town) = proper noun
+				\item "reading" (activity) = verb
+			\end{itemize}
+			\item \textbf{Handles Case Sensitivity}
+			\begin{itemize}
+				\item "Polish" (language) = proper noun
+				\item "polish" (to shine) = verb
+			\end{itemize}
+			\item \textbf{Improves Accuracy}
+			\begin{itemize}
+				\item Identifies proper nouns before lowercasing
+				\item Preserves important distinctions
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Best Practice:}} Apply POS tagging before lowercasing!
+	\end{frame}
+	
+	\begin{frame}{Slide 18: Lowercasing Issues}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Problems with Lowercasing:}
+		\begin{enumerate}
+			\item \textbf{Loss of Proper Noun Information}
+			\begin{itemize}
+				\item "Reading" (town) vs "reading" (activity)
+				\item Names of people, places, firms become indistinguishable
+			\end{itemize}
+			\item \textbf{Meaning Loss}
+			\begin{itemize}
+				\item "Polish" (language) vs "polish" (to shine)
+				\item Important distinctions are lost
+			\end{itemize}
+			\item \textbf{Misclassification}
+			\begin{itemize}
+				\item Can lead to incorrect analysis
+				\item Reduces accuracy
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Solution:}
+		\begin{itemize}
+			\item Apply POS tagging before lowercasing
+			\item Preserve proper noun information
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} Lowercasing can lose \textcolor{myblue}{proper noun distinctions}!
+	\end{frame}
+	
+	\begin{frame}{Slide 19: Punctuation Removal Effects}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Problems with Removing Punctuation:}
+		\begin{enumerate}
+			\item \textbf{Loss of Question Context}
+			\begin{itemize}
+				\item "Is the CEO performing well?" $\to$ may seem positive
+				\item Without "?", it's incorrectly classified as positive
+			\end{itemize}
+			\item \textbf{Loss of Exclamation Meaning}
+			\begin{itemize}
+				\item May denote humor or sarcasm
+				\item Tone indication is lost
+			\end{itemize}
+			\item \textbf{Loss of Emphasis}
+			\begin{itemize}
+				\item Exclamation marks indicate strong emotion
+				\item Important for sentiment analysis
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Solution:}
+		\begin{itemize}
+			\item Consider punctuation separately
+			\item Use as additional features
+			\item Context matters!
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Punctuation provides valuable context!
+	\end{frame}
+	
+	\begin{frame}{Slide 20: Vocabulary Building}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Vocabulary Creation Methods:}
+		\begin{enumerate}
+			\item \textbf{Exogenous Creation}
+			\begin{itemize}
+				\item Created ahead of time
+				\item Applied consistently to documents
+				\item Fixed and controlled
+			\end{itemize}
+			\item \textbf{Corpus-Based Creation}
+			\begin{itemize}
+				\item Every distinct word in all documents
+				\item Comprehensive and complete
+				\item May be very large
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Vocabulary Management:}
+		\begin{itemize}
+			\item Remove very frequent words (top 5\%)
+			\item Remove very rare words
+			\item Balance vocabulary size
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Tradeoff:}} Exogenous = Controlled; Corpus-based = Complete!
+	\end{frame}
+	
+	\begin{frame}{Slide 21: Feature Extraction Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Feature Extraction?}
+		\begin{itemize}
+			\item Turning processed text into numeric vectors
+			\item Also known as text representation
+			\item Foundation for all NLP analysis
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why It's Needed:}
+		\begin{enumerate}
+			\item Machine learning models need numeric inputs
+			\item Text must be converted to numbers
+			\item Enables statistical analysis
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Common Methods:}
+		\begin{enumerate}
+			\item Bag of Words (BoW)
+			\item TF-IDF
+			\item Word Embeddings (Word2Vec)
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} All texts become numbers!
+	\end{frame}
+	
+	\begin{frame}{Slide 22: Bag of Words (BoW) Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Bag of Words?}
+		\begin{itemize}
+			\item Treats each word distinctly and equally
+			\item Position and order are ignored
+			\item Counts occurrences in each document
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Characteristics:}
+		\begin{enumerate}
+			\item \textbf{Independence:} Each word considered separately
+			\item \textbf{Equal Treatment:} All words have same importance
+			\item \textbf{Simplification:} Removes complex language structure
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Limitations:}
+		\begin{itemize}
+			\item Loses context
+			\item Ignores negation words
+			\item Misses phrase meanings
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Example:}} "I like dogs" and "I don't like dogs" are different!
+	\end{frame}
+	
+	\begin{frame}{Slide 23: Binary vs Count BoW}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Binary BoW:}
+		\begin{itemize}
+			\item 1 if word appears in document
+			\item 0 if word does not appear
+			\item Presence/absence only
+		\end{itemize}
+		\textbf{Example:} [1, 0, 1, 0, ...]
+		
+		\vspace{0.1cm}
+		\textbf{Count BoW:}
+		\begin{itemize}
+			\item Counts how many times each word appears
+			\item Non-negative integers
+			\item Frequency matters
+		\end{itemize}
+		\textbf{Example:} [2, 0, 1, 0, ...]
+		
+		\vspace{0.1cm}
+		\textbf{When to Use Each:}
+		\begin{itemize}
+			\item \textbf{Binary:} When presence is enough
+			\item \textbf{Count:} When frequency matters
+			\item Count usually gives more information
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} Binary = presence/absence; Count = frequency!
+	\end{frame}
+	
+	\begin{frame}{Slide 24: Document Term Matrix (DTM)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is DTM?}
+		\begin{itemize}
+			\item Rows = documents
+			\item Columns = terms/words
+			\item Entries = word counts or frequencies
+			\item Dimensions: $|W| \times D$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Characteristics:}
+		\begin{enumerate}
+			\item \textbf{Sparse:} Many zeros
+			\item \textbf{Large:} Many columns (vocabulary size)
+			\item \textbf{Quantitative:} Enables analysis
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item 1,000 documents, 10,000 word vocabulary
+			\item Matrix: 1,000 $\times$ 10,000
+			\item Most entries are zero
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} DTM makes text analyzable mathematically!
+	\end{frame}
+	
+	\begin{frame}{Slide 25: Vector Normalization}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why Normalize?}
+		\begin{itemize}
+			\item Repeated words can skew analysis
+			\item Similar to outliers in econometrics
+			\item Need to equalize influence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{L2 Normalization:}
+		\begin{itemize}
+			\item Divide each element by L2 norm
+			\item $||v||_2 = \sqrt{\sum x_i^2}$
+			\item Scales elements between 0 and 1
+			\item All documents become unit length
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item Original: [2, 0, 1, 0, 1]
+			\item L2 norm: $\sqrt{4+0+1+0+1} = \sqrt{6} \approx 2.45$
+			\item Normalized: [0.82, 0, 0.41, 0, 0.41]
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Goal:}} Make all document vectors comparable!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 3: DICTIONARY APPROACH - SLIDES 26-40
+	% ============================================================
+	
+	\begin{frame}{Slide 26: Dictionary Approach Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the Dictionary Approach?}
+		\begin{itemize}
+			\item Pre-defined list of words sharing a common characteristic
+			\item Used to assess sentiment or topic
+			\item Most used way to analyze text in finance research
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Common Application:}
+		\begin{enumerate}
+			\item Count positive words
+			\item Count negative words
+			\item Calculate net sentiment = proportion positive - proportion negative
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Example Dictionary Categories:}
+		\begin{itemize}
+			\item Positive: "good", "great", "excellent"
+			\item Negative: "bad", "poor", "terrible"
+			\item Neutral: "the", "is", "a"
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} Simple word counting with pre-defined lists!
+	\end{frame}
+	
+	\begin{frame}{Slide 27: Dictionary Example - Newswire Analysis}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Sample Text:}
+		"Firm XYZ has just reported a year-on-year rise in earnings before tax of just 0.1\%, disappointing investors, despite total sales growth in double-digits. The company also highlighted that the previous safety worries with the new release had been resolved, which should underpin future growth. An analyst expressed relief, suggesting that there had been concerns that the accidents would have led to a decline in the firm's share of this competitive market."
+		
+		\vspace{0.1cm}
+		\textbf{Positive Words:}
+		\begin{itemize}
+			\item Rise, grow (twice), resolve, relief = 5 positives
+		\end{itemize}
+		
+		\textbf{Negative Words:}
+		\begin{itemize}
+			\item Disappoint, worry, concern, decline = 4 negatives
+		\end{itemize}
+		
+		\textbf{Net Sentiment:} 5 - 4 = +1 (slightly positive)
+		
+		\textcolor{myblue}{\textbf{Caveat:}} Counterfactual sentences complicate analysis!
+	\end{frame}
+	
+	\begin{frame}{Slide 28: Loughran-McDonald Dictionary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Loughran-McDonald Dictionary?}
+		\begin{itemize}
+			\item Developed specifically for financial text analysis
+			\item Based on extensive examination of 10-K filings
+			\item Categories: positive, negative, uncertain, litigious, strong modal, weak modal
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why It's Important:}
+		\begin{enumerate}
+			\item General dictionaries misclassify financial text
+			\item Financial words have specific meanings
+			\item "liability" is not negative in financial context
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Accuracy:}
+		\begin{itemize}
+			\item Around 75\% accuracy on Thomson Reuters news articles
+			\item Widely used in finance research
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Domain-specific dictionaries are more accurate!
+	\end{frame}
+	
+	\begin{frame}{Slide 29: Advantages of Dictionary Approach}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Primary Advantages:}
+		\begin{enumerate}
+			\item \textbf{Transparency}
+			\begin{itemize}
+				\item Word lists are explicit and clear
+				\item Easy to understand what's being measured
+				\item Results are interpretable
+			\end{itemize}
+			\item \textbf{Ease of Implementation}
+			\begin{itemize}
+				\item Simple word counting
+				\item No training required
+				\item Fast to apply
+			\end{itemize}
+			\item \textbf{Comparability}
+			\begin{itemize}
+				\item Same word lists across corpora
+				\item Consistent measurement across studies
+				\item Enables comparison
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Best For:}} Quick, transparent, comparable sentiment analysis!
+	\end{frame}
+	
+	\begin{frame}{Slide 30: Limitations of Dictionary Approach}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Limitations:}
+		\begin{enumerate}
+			\item \textbf{Quality Dependence}
+			\begin{itemize}
+				\item Only as good as word lists
+				\item Incomplete lists $\to$ poor accuracy
+				\item Ambiguities $\to$ misclassification
+			\end{itemize}
+			\item \textbf{Context Limitation}
+			\begin{itemize}
+				\item Designed for formal documents
+				\item Poor for social media
+				\item Colloquial language not captured
+			\end{itemize}
+			\item \textbf{Narrow Scope}
+			\begin{itemize}
+				\item Limited subjects available
+				\item Time-consuming to create new dictionaries
+			\end{itemize}
+			\item \textbf{Negation Issues}
+			\begin{itemize}
+				\item "Not good" should be negative
+				\item "Not bad" should be positive
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Remember:}} Dictionary approach has many limitations!
+	\end{frame}
+	
+	\begin{frame}{Slide 31: n-grams Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are n-grams?}
+		\begin{itemize}
+			\item n = 1: uni-gram (single word)
+			\item n = 2: bi-gram (two words)
+			\item n = 3: tri-gram (three words)
+			\item Treats contiguous words as single unit
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		"credit spreads narrowed today"
+		\begin{itemize}
+			\item Uni-grams: ["credit", "spreads", "narrowed", "today"]
+			\item Bi-grams: ["credit spreads", "spreads narrowed", "narrowed today"]
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Purpose:}
+		\begin{itemize}
+			\item Capture phrase meanings
+			\item Handle negation words
+			\item Address context issues
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} n contiguous words as one unit!
+	\end{frame}
+	
+	\begin{frame}{Slide 32: Why n-grams are Needed}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Basic BoW Limitations:}
+		\begin{enumerate}
+			\item \textbf{Loses Phrase Meaning}
+			\begin{itemize}
+				\item "red herring" $\neq$ red + herring
+				\item "San Diego" $\neq$ San + Diego
+				\item "credit spread" $\neq$ credit + spread
+			\end{itemize}
+			\item \textbf{Negation Words}
+			\begin{itemize}
+				\item "not good" $\neq$ not + good
+				\item "nothing useful" $\neq$ nothing + useful
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{How n-grams Help:}
+		\begin{enumerate}
+			\item Preserve phrase meaning
+			\item Handle negations correctly
+			\item Capture context
+			\item More accurate sentiment analysis
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Example:}} "not good" as bi-gram captures negation!
+	\end{frame}
+	
+	\begin{frame}{Slide 33: Negation Handling with n-grams}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{The Negation Problem:}
+		\begin{itemize}
+			\item "not good" $\to$ should be negative sentiment
+			\item Basic BoW sees "not" and "good" separately
+			\item Misses the negation effect
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{n-gram Solution:}
+		\begin{itemize}
+			\item Bi-grams capture "not good" as one unit
+			\item "not sufficient" as one unit
+			\item "never great" as one unit
+			\item Preserves negation meaning
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		"The service is not good"
+		\begin{itemize}
+			\item Bi-grams: ["The service", "service is", "is not", "not good"]
+			\item "not good" detected as negative phrase
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} n-grams pair negation + following word!
+	\end{frame}
+	
+	\begin{frame}{Slide 34: TF-IDF Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is TF-IDF?}
+		\begin{itemize}
+			\item Term Frequency - Inverse Document Frequency
+			\item Assigns higher weights to important words
+			\item Words frequent in document but rare in corpus = high score
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Components:}
+		\begin{enumerate}
+			\item \textbf{TF (Term Frequency):} How often word appears in document
+			\item \textbf{IDF (Inverse Document Frequency):} How rare the word is across documents
+			\item \textbf{TF-IDF:} TF $\times$ IDF = word importance score
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Intuition:}
+		\begin{itemize}
+			\item Common words ("the", "this") get zero weight
+			\item Rare but relevant words get high weight
+			\item Better than simple word counts
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Formula:}} TF-IDF = TF $\times$ IDF!
+	\end{frame}
+	
+	\begin{frame}{Slide 35: Term Frequency (TF) Formula}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TF Formula:}
+		\begin{itemize}
+			\item $TF_{i,j} = \frac{w_{i,j}}{|v_j|}$
+			\item $w_{i,j}$: number of times term i appears in document j
+			\item $|v_j|$: total number of terms in document j
+			\item Normalizes by document length
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why Normalize?}
+		\begin{itemize}
+			\item Longer documents have more words
+			\item Without normalization, longer documents dominate
+			\item Corrects for document length
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item Word appears 3 times in 100-word document
+			\item TF = 3/100 = 0.03
+			\item Word appears 3 times in 50-word document
+			\item TF = 3/50 = 0.06 (higher importance)
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} TF = word count / total words in document!
+	\end{frame}
+	
+	\begin{frame}{Slide 36: Inverse Document Frequency (IDF) Formula}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{IDF Formula:}
+		\begin{itemize}
+			\item $IDF_i = \ln(D / \sum_{j} d_{i,j})$
+			\item D = total number of documents
+			\item $\sum d_{i,j}$ = number of documents containing term i
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Interpretation:}
+		\begin{itemize}
+			\item Rare words: High IDF
+			\item Common words: Low IDF
+			\item Words in all documents: IDF = 0
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item 100 documents, word appears in 10 documents
+			\item IDF = ln(100/10) = ln(10) = 2.30 (high)
+			\item Word appears in 90 documents
+			\item IDF = ln(100/90) = ln(1.11) = 0.10 (low)
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} IDF rewards rare words!
+	\end{frame}
+	
+	\begin{frame}{Slide 37: TF-IDF Example - Data}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Four Documents:}
+		\begin{enumerate}
+			\item d1 = "this disappointing stock let me down"
+			\item d2 = "disappointing earnings, down for this stock"
+			\item d3 = "earnings down for this month"
+			\item d4 = "Fed hikes rates this month"
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{IDF Values:}
+		\begin{tabular}{|l|c|c|}
+			\hline
+			Word & Documents & IDF \\
+			\hline
+			disappointing & 2 & 0.69 \\
+			down & 3 & 0.29 \\
+			earnings & 2 & 0.69 \\
+			fed & 1 & 1.39 \\
+			hikes & 1 & 1.39 \\
+			month & 2 & 0.69 \\
+			stock & 2 & 0.69 \\
+			this & 4 & 0.00 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{myblue}{\textbf{Observation:}} "this" has zero IDF!
+	\end{frame}
+	
+	\begin{frame}{Slide 38: TF-IDF Example - Calculation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TF Calculation:}
+		\begin{itemize}
+			\item d1 has 6 words: each TF = 1/6 = 0.17
+			\item d3 has 5 words: each TF = 1/5 = 0.20
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{TF-IDF Scores:}
+		\begin{tabular}{|l|c|c|c|c|}
+			\hline
+			Word & d1 & d2 & d3 & d4 \\
+			\hline
+			this & 0.00 & 0.00 & 0.00 & 0.00 \\
+			down & 0.05 & 0.05 & 0.06 & - \\
+			fed & - & - & - & 0.28 \\
+			hikes & - & - & - & 0.28 \\
+			month & - & - & 0.14 & 0.14 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{Key Insights:}
+		\begin{itemize}
+			\item "this" = 0 (appears in all documents)
+			\item Rare words in short documents = highest scores
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Conclusion:}} Rare words get highest TF-IDF!
+	\end{frame}
+	
+	\begin{frame}{Slide 39: TF-IDF Variations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Common TF Variations:}
+		\begin{enumerate}
+			\item \textbf{Binary TF:} 1 if word appears, 0 otherwise
+			\item \textbf{Raw count:} $w_{i,j}$ (no normalization)
+			\item \textbf{Log normalization:} ln(1 + $w_{i,j}$)
+			\item \textbf{Normalized:} $w_{i,j} / |v_j|$ (standard)
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Common IDF Variations:}
+		\begin{enumerate}
+			\item \textbf{Smooth IDF:} ln((D+1)/($\sum d_{i,j}$+1)) + 1
+			\item \textbf{Standard IDF:} ln(D/$\sum d_{i,j}$)
+			\item \textbf{Probabilistic IDF:} log((D - $\sum d_{i,j}$)/$\sum d_{i,j}$)
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Why Variations Exist:}
+		\begin{itemize}
+			\item Different applications need different emphasis
+			\item Some handle document length better
+			\item Some are more robust
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Important:}} Different software may use different variations!
+	\end{frame}
+	
+	\begin{frame}{Slide 40: TF-IDF Key Takeaways}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What TF-IDF Does:}
+		\begin{enumerate}
+			\item \textbf{Weights rare words higher}
+			\begin{itemize}
+				\item Words in few documents get high IDF
+				\item More discriminatory power
+			\end{itemize}
+			\item \textbf{Weights common words lower}
+			\begin{itemize}
+				\item Words in all documents get low IDF
+				\item Reduced noise
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{When to Use TF-IDF:}
+		\begin{itemize}
+			\item Document classification
+			\item Information retrieval
+			\item Keyword extraction
+			\item Feature selection
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Comparison:}
+		\begin{itemize}
+			\item Simple word count: treats all words equally
+			\item TF-IDF: distinguishes important from common words
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} TF-IDF = better feature representation!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 4: NAÏVE BAYES CLASSIFIER - SLIDES 41-60
+	% ============================================================
+	
+	\begin{frame}{Slide 41: Naïve Bayes Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Naïve Bayes?}
+		\begin{itemize}
+			\item Classification algorithm based on Bayes' theorem
+			\item Assumes features are independent (naïve assumption)
+			\item Popular for text classification
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why "Naïve"?}
+		\begin{itemize}
+			\item Assumes word independence
+			\item In reality, words are not independent
+			\item Still works well in practice
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Advantages:}
+		\begin{enumerate}
+			\item Simple and fast
+			\item Solid classification accuracy
+			\item Works well with high-dimensional data
+			\item Easy to implement
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Despite unrealistic assumptions, it works well!
+	\end{frame}
+	
+	\begin{frame}{Slide 42: Bayes' Theorem}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Bayes' Theorem:}
+		\begin{itemize}
+			\item $P(c|d) = \frac{P(d|c) \times P(c)}{P(d)}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Components:}
+		\begin{enumerate}
+			\item \textbf{Posterior:} $P(c|d)$
+			\begin{itemize}
+				\item Probability of class given document
+				\item What we want to calculate
+			\end{itemize}
+			\item \textbf{Likelihood:} $P(d|c)$
+			\begin{itemize}
+				\item Probability of document given class
+				\item Estimated from training data
+			\end{itemize}
+			\item \textbf{Prior:} $P(c)$
+			\begin{itemize}
+				\item Unconditional probability of class
+				\item Prior knowledge about class distribution
+			\end{itemize}
+			\item \textbf{Evidence:} $P(d)$
+			\begin{itemize}
+				\item Normalizing constant
+				\item Cancels across classes
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Idea:}} Posterior = Likelihood $\times$ Prior!
+	\end{frame}
+	
+	\begin{frame}{Slide 43: Naïve Independence Assumption}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Independence Assumption:}
+		\begin{itemize}
+			\item $P(w_1, w_2, ..., w_n | c) = P(w_1|c) \times P(w_2|c) \times ...$
+			\item Words are conditionally independent given class
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why It's Naïve:}
+		\begin{itemize}
+			\item In reality, words are not independent
+			\item "good" and "great" often appear together
+			\item "not" and "good" are related
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why It Works:}
+		\begin{itemize}
+			\item Despite unrealistic assumption
+			\item Works well in practice
+			\item Simple and effective
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Simplified Classification:}
+		\begin{itemize}
+			\item $\hat{c} = \arg\max_{c} P(c) \times \prod P(w_i|c)$
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} Naïve = independence assumption!
+	\end{frame}
+	
+	\begin{frame}{Slide 44: Prior Probability Calculation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Prior Probability Formula:}
+		\begin{itemize}
+			\item $P(c_i) = \frac{n(c_i)}{N}$
+			\item $n(c_i)$: number of documents labeled as class i
+			\item $N$: total number of documents
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example - Customer Service:}
+		\begin{itemize}
+			\item 4 good reviews
+			\item 2 bad reviews
+			\item 2 indifferent reviews
+			\item Total: 8 reviews
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Calculations:}
+		\begin{itemize}
+			\item $P(good) = 4/8 = 0.5$
+			\item $P(bad) = 2/8 = 0.25$
+			\item $P(indifferent) = 2/8 = 0.25$
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Prior = class count / total documents!
+	\end{frame}
+	
+	\begin{frame}{Slide 45: Likelihood Calculation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Likelihood Formula:}
+		\begin{itemize}
+			\item $P(w_i | c_j) = \frac{\text{count of } w_i \text{ in class } c_j}{\text{total words in class } c_j}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example - Customer Service:}
+		\begin{itemize}
+			\item Class "good": 4 documents
+			\item Word 2 appears in 1 of 4 good documents
+			\item $P(w_2 | good) = 1/4 = 0.25$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Conditional Probabilities Table:}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Word & Good & Bad & Indifferent \\
+			\hline
+			w1=1 & 0/4 & 2/2 & 1/2 \\
+			w2=1 & 1/4 & 2/2 & 2/2 \\
+			w3=0 & 2/4 & 1/2 & 1/2 \\
+			w4=0 & 0/4 & 1/2 & 1/2 \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{myblue}{\textbf{Note:}} Zero probabilities are a problem!
+	\end{frame}
+	
+	\begin{frame}{Slide 46: Posterior Probability Calculation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Posterior Calculation:}
+		\begin{itemize}
+			\item $P(c|d) \propto P(d|c) \times P(c)$
+			\item Compute for each class
+			\item Choose class with highest posterior
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example - Customer Service:}
+		\begin{itemize}
+			\item New document: words 1 and 2 present; words 3 and 4 absent
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Calculations:}
+		\begin{itemize}
+			\item $P(good|words) = 0 \times 0.25 \times 0.5 \times 0 \times 0.5 = 0$
+			\item $P(bad|words) = 1 \times 1 \times 0.5 \times 0.5 \times 0.25 = 0.0625$
+			\item $P(indifferent|words) = 0.5 \times 1 \times 0.5 \times 0.5 \times 0.25 = 0.03125$
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Result:}} "Bad" has highest posterior probability!
+	\end{frame}
+	
+	\begin{frame}{Slide 47: Maximum A Posteriori (MAP)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{MAP Definition:}
+		\begin{itemize}
+			\item $\hat{c} = \arg\max_{c \in C} P(c|d)$
+			\item Choose class that maximizes posterior
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Simplified Form:}
+		\begin{itemize}
+			\item $\hat{c} = \arg\max_{c \in C} P(d|c) \times P(c)$
+			\item $P(d)$ cancels out
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item $P(bad|words) = 0.67$
+			\item $P(indifferent|words) = 0.33$
+			\item $P(good|words) = 0$
+		\end{itemize}
+		
+		\textbf{MAP Class:} "Bad" (0.67 > 0.33 > 0)
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} MAP = class with highest posterior!
+	\end{frame}
+	
+	\begin{frame}{Slide 48: Zero Probability Problem}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{The Problem:}
+		\begin{itemize}
+			\item Word doesn't appear in training data for a class
+			\item $P(w|c) = 0$
+			\item Product becomes zero: $\prod P(w_i|c) = 0$
+			\item Class probability becomes zero
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item No "good" reviews contain word "slow"
+			\item New document has "slow" and otherwise positive words
+			\item Probability of "good" = 0
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Consequences:}
+		\begin{itemize}
+			\item Overly draconian
+			\item Unrealistic zero probabilities
+			\item Can misclassify documents
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Solution Needed:}} Smoothing!
+	\end{frame}
+	
+	\begin{frame}{Slide 49: Laplace Smoothing}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Laplace Smoothing?}
+		\begin{itemize}
+			\item Adds 1 to all counts
+			\item Ensures all probabilities are non-zero
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Formula:}
+		\begin{itemize}
+			\item $P(w|c) = \frac{\text{count}(w,c) + 1}{\text{total words in c} + |V|}$
+			\item $|V|$ = vocabulary size
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item Before: $P(w|c) = 0/4 = 0$
+			\item After: $P(w|c) = 1/6 = 0.167$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Effect:}
+		\begin{itemize}
+			\item Zero probabilities become positive
+			\item All probabilities pushed toward uniform
+			\item Larger $\lambda$ = stronger smoothing
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} Laplace smoothing = add 1 to all counts!
+	\end{frame}
+	
+	\begin{frame}{Slide 50: Smoothing Impact Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Before Smoothing:}
+		\begin{itemize}
+			\item $P(good|words) = 0$
+			\item $P(bad|words) = 0.67$
+			\item $P(indifferent|words) = 0.33$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{After Laplace Smoothing ($\lambda = 1$):}
+		\begin{itemize}
+			\item $P(good|words) = 0.029$ (increased from 0)
+			\item $P(bad|words) = 0.583$ (decreased)
+			\item $P(indifferent|words) = 0.388$ (increased slightly)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Observations:}
+		\begin{enumerate}
+			\item Zero probabilities eliminated
+			\item Classification unchanged (still "bad")
+			\item More realistic probability estimates
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Important:}} Smoothing may not change classification!
+	\end{frame}
+	
+	\begin{frame}{Slide 51: Underflow Problem}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Underflow?}
+		\begin{itemize}
+			\item Multiplying many probabilities $< 1$
+			\item Product becomes extremely small
+			\item Below computer precision
+			\item Rounds to zero
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item $0.5^{100} \approx 7.9 \times 10^{-31}$
+			\item $0.9^{100} \approx 2.7 \times 10^{-5}$
+			\item For long documents, product $\to 0$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Solution:}
+		\begin{itemize}
+			\item Take logarithms
+			\item $\log(P_1 \times P_2 \times ...) = \log(P_1) + \log(P_2) + ...$
+			\item Products become sums
+			\item Computationally stable
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Use logs to avoid underflow!
+	\end{frame}
+	
+	\begin{frame}{Slide 52: Log Transformation Benefits}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Products to Sums:}
+		\begin{itemize}
+			\item $\log(P_1 \times P_2) = \log(P_1) + \log(P_2)$
+			\item Avoids multiplication of small numbers
+			\item Computationally stable
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Preserves Ordering:}
+		\begin{itemize}
+			\item Log is monotonic
+			\item Class with highest probability = class with highest log probability
+			\item Results unchanged
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Simplified MAP:}
+		\begin{itemize}
+			\item $\hat{c} = \arg\max_{c} [\log(P(c)) + \sum \log(P(w_i|c))]$
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Example:}}
+		\begin{itemize}
+			\item Instead of: $0.5 \times 0.25 \times 0.33$
+			\item Use: $\log(0.5) + \log(0.25) + \log(0.33)$
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Slide 53: Handling Unknown Words}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{The Problem:}
+		\begin{itemize}
+			\item Words in test data not in training vocabulary
+			\item No information about their distribution
+			\item Cannot calculate $P(w|c)$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Solution:}
+		\begin{itemize}
+			\item Ignore unknown words
+			\item Remove from test document
+			\item They cannot help with classification
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why Ignore Them?}
+		\begin{enumerate}
+			\item No information about their distribution
+			\item Cannot calculate likelihood
+			\item Would cause problems
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Best Practice:}
+		\begin{itemize}
+			\item Build vocabulary from training data
+			\item Only use known words for classification
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} Unknown words = no classification information!
+	\end{frame}
+	
+	\begin{frame}{Slide 54: Naïve Bayes Assumptions Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Assumption 1: Independence}
+		\begin{itemize}
+			\item Each word is independent of others
+			\item $P(w_1, w_2, ..., w_n|c) = \prod P(w_i|c)$
+			\item Simplifies calculations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Assumption 2: Equal Weighting}
+		\begin{itemize}
+			\item Each word has equal information value
+			\item No word is more important than others
+			\item After stop word removal
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why These Assumptions:}
+		\begin{itemize}
+			\item Make problem tractable
+			\item Work surprisingly well
+			\item Simple and fast
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Naïve = independence + equal weighting!
+	\end{frame}
+	
+	\begin{frame}{Slide 55: Generative vs Discriminative}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Generative Classifiers (Naïve Bayes):}
+		\begin{itemize}
+			\item Model the joint distribution $P(d,c)$
+			\item Learn how data is generated
+			\item Can generate new examples
+			\item Examples: Naïve Bayes, Hidden Markov Models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Discriminative Classifiers:}
+		\begin{itemize}
+			\item Model the decision boundary $P(c|d)$ directly
+			\item Only care about classification
+			\item Examples: Logistic regression, SVM
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Difference:}
+		\begin{itemize}
+			\item Generative: Complete model of data
+			\item Discriminative: Only classification boundary
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} Naïve Bayes = generative classifier!
+	\end{frame}
+	
+	\begin{frame}{Slide 56: Naïve Bayes Example - Setup}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Customer Service Example:}
+		\begin{itemize}
+			\item 8 customer feedback forms
+			\item 4 good, 2 bad, 2 indifferent
+			\item 4 words: "slow", "inefficient", "helpful", "great"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Data Table:}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+			\hline
+			Customer & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+			\hline
+			Word1 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 1 \\
+			Word2 & 1 & 1 & 0 & 0 & 1 & 0 & 1 & 1 \\
+			Word3 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 0 \\
+			Word4 & 1 & 0 & 1 & 1 & 1 & 1 & 0 & 1 \\
+			Label & G & B & G & G & I & G & I & B \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{myblue}{\textbf{New Document:}} Words 1 and 2 present; words 3 and 4 absent!
+	\end{frame}
+	
+	\begin{frame}{Slide 57: Naïve Bayes Example - Calculations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Priors:}
+		\begin{itemize}
+			\item $P(good) = 4/8 = 0.5$
+			\item $P(bad) = 2/8 = 0.25$
+			\item $P(indifferent) = 2/8 = 0.25$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Conditional Probabilities:}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Word & Good & Bad & Indifferent \\
+			\hline
+			w1=1 & 0/4 & 2/2 & 1/2 \\
+			w2=1 & 1/4 & 2/2 & 2/2 \\
+			w3=0 & 2/4 & 1/2 & 1/2 \\
+			w4=0 & 0/4 & 1/2 & 1/2 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{Posteriors (Without Smoothing):}
+		\begin{itemize}
+			\item $P(good|words) = 0$
+			\item $P(bad|words) = 0.67$
+			\item $P(indifferent|words) = 0.33$
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Classification:}} Bad!
+	\end{frame}
+	
+	\begin{frame}{Slide 58: Multi-class Classification}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Multi-class Extension:}
+		\begin{itemize}
+			\item Natural extension of binary case
+			\item Compute $P(c|d)$ for each class
+			\item Select class with highest probability
+			\item No limitation on number of classes
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example (3 classes):}
+		\begin{itemize}
+			\item $P(good|d) = 0.029$
+			\item $P(bad|d) = 0.583$
+			\item $P(indifferent|d) = 0.388$
+			\item Select "bad" (highest probability)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Applications:}
+		\begin{itemize}
+			\item Sentiment: positive, negative, neutral
+			\item Topic classification: finance, politics, sports
+			\item Document categorization
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Point:}} Choose class with highest posterior!
+	\end{frame}
+	
+	\begin{frame}{Slide 59: Naïve Bayes Advantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Simplicity:}
+		\begin{itemize}
+			\item Easy to understand
+			\item Easy to implement
+			\item Few parameters to tune
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Speed:}
+		\begin{itemize}
+			\item Fast training
+			\item Fast prediction
+			\item Scales to large datasets
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Accuracy:}
+		\begin{itemize}
+			\item Solid classification accuracy
+			\item Works well despite assumptions
+			\item Competitive with more complex models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{When to Use:}
+		\begin{itemize}
+			\item High-dimensional data
+			\item Text classification
+			\item Quick baseline models
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Summary:}} Simple, fast, and accurate!
+	\end{frame}
+	
+	\begin{frame}{Slide 60: Appendix Problem Walkthrough}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data:}
+		\begin{itemize}
+			\item 5 buys, 5 sells
+			\item Prior: $P(buy) = 0.5$, $P(sell) = 0.5$
+			\item New document: words 1, 2, 3 present; words 4, 5 absent
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Conditional Probabilities:}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Word & P(w=1|buy) & P(w=1|sell) \\
+			\hline
+			1 & 4/5 & 1/5 \\
+			2 & 5/5 & 2/5 \\
+			3 & 2/5 & 3/5 \\
+			4 & 1/5 & 3/5 \\
+			5 & 2/5 & 4/5 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{Result:}
+		\begin{itemize}
+			\item $P(buy|words) = 0.98$
+			\item $P(sell|words) = 0.02$
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Classification:}} Buy (98\% probability)!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 5: WORD EMBEDDINGS & ADVANCED - SLIDES 61-70
+	% ============================================================
+	
+	\begin{frame}{Slide 61: Word Embeddings Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are Word Embeddings?}
+		\begin{itemize}
+			\item Represent words as dense vectors
+			\item Capture semantic meaning
+			\item Similar words have similar vectors
+			\item Based on distributional hypothesis
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Distributional Hypothesis:}
+		\begin{itemize}
+			\item "You shall know a word by the company it keeps"
+			\item Similar meanings appear in similar contexts
+			\item Words appearing together are related
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Advantages over BoW:}
+		\begin{itemize}
+			\item Captures meaning
+			\item Dense vectors (not sparse)
+			\item Similar words close in space
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} Words as vectors in semantic space!
+	\end{frame}
+	
+	\begin{frame}{Slide 62: Word2Vec Algorithm}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Word2Vec?}
+		\begin{itemize}
+			\item Developed by Google (Mikolov et al., 2013)
+			\item Neural network-based algorithm
+			\item Generates word embeddings
+			\item Reduces dimensionality
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Two Architectures:}
+		\begin{enumerate}
+			\item \textbf{CBOW (Continuous Bag of Words)}
+			\begin{itemize}
+				\item Predict target word from context
+				\item Faster to train
+				\item Better for frequent words
+			\end{itemize}
+			\item \textbf{Skip-gram}
+			\begin{itemize}
+				\item Predict context from target word
+				\item Better for rare words
+				\item More computationally expensive
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Capability:}} "king - man + woman equals queen"!
+	\end{frame}
+	
+	\begin{frame}{Slide 63: How Embeddings Capture Context}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Context Capture Methods:}
+		\begin{enumerate}
+			\item \textbf{Position Information}
+			\begin{itemize}
+				\item Track which words appear together
+				\item Window-based co-occurrence
+			\end{itemize}
+			\item \textbf{Surrounding Words}
+			\begin{itemize}
+				\item Consider words before and after
+				\item Skip-gram uses surrounding context
+				\item CBOW uses context to predict target
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{One-hot Limitation:}
+		\begin{itemize}
+			\item Large and sparse
+			\item No notion of similarity
+			\item Each word independent
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Embedding Advantage:}}
+		\begin{itemize}
+			\item Dense vectors
+			\item Similar contexts = similar vectors
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Slide 64: Skip-gram vs CBOW Comparison}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{CBOW (Continuous Bag of Words):}
+		\begin{itemize}
+			\item Input: context words
+			\item Output: target word
+			\item Faster to train
+			\item Better for frequent words
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Skip-gram:}
+		\begin{itemize}
+			\item Input: target word
+			\item Output: context words
+			\item Better for rare words
+			\item More computationally expensive
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Choice Depends On:}
+		\begin{itemize}
+			\item Data size
+			\item Word frequency distribution
+			\item Computational resources
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} Skip-gram = target $\to$ context; CBOW = context $\to$ target!
+	\end{frame}
+	
+	\begin{frame}{Slide 65: One-Hot Encoding}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is One-Hot Encoding?}
+		\begin{itemize}
+			\item Vector length = vocabulary size
+			\item One position = 1 (the word's position)
+			\item All other positions = 0
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item Vocabulary: ["apple", "banana", "orange"]
+			\item "banana" = [0, 1, 0]
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Limitations:}
+		\begin{itemize}
+			\item Very sparse
+			\item No semantic meaning
+			\item All words equidistant
+			\item Cannot capture relationships
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Comparison with Embeddings:}
+		\begin{itemize}
+			\item One-hot: Sparse, no meaning
+			\item Embeddings: Dense, captures meaning
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} One-hot has no semantic information!
+	\end{frame}
+	
+	\begin{frame}{Slide 66: Dimensionality Reduction in NLP}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{The Problem:}
+		\begin{itemize}
+			\item Vocabulary can have 10,000+ words
+			\item Vectors are very long
+			\item Very sparse (many zeros)
+			\item Slow and inefficient
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Reduction Methods:}
+		\begin{enumerate}
+			\item \textbf{PCA:} Principal Component Analysis
+			\item \textbf{SVD:} Singular Value Decomposition
+			\item \textbf{Word2Vec:} Neural network-based
+			\item \textbf{t-SNE:} For visualization
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Benefits:}
+		\begin{itemize}
+			\item Dense representations
+			\item Faster computation
+			\item Better performance
+			\item Captures relationships
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Goal:}} Sparse $\to$ Dense representations!
+	\end{frame}
+	
+	\begin{frame}{Slide 67: BoW vs Word Embeddings}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{BoW Limitations:}
+		\begin{itemize}
+			\item Loses context
+			\item No semantic meaning
+			\item Sparse vectors
+			\item Ignores word relationships
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Embedding Advantages:}
+		\begin{enumerate}
+			\item \textbf{Semantic Meaning}
+			\begin{itemize}
+				\item Similar words close in space
+				\item Captures relationships
+				\item Analogies possible
+			\end{itemize}
+			\item \textbf{Dense Vectors}
+			\begin{itemize}
+				\item Lower dimensional
+				\item More efficient
+				\item Better for downstream tasks
+			\end{itemize}
+			\item \textbf{Context Awareness}
+			\begin{itemize}
+				\item Considers surrounding words
+				\item Better representation
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Difference:}} Embeddings capture meaning; BoW doesn't!
+	\end{frame}
+	
+	\begin{frame}{Slide 68: Skip-gram Details}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Skip-gram Architecture:}
+		\begin{itemize}
+			\item Input: target word
+			\item Output: context words (surrounding words)
+			\item Uses neural network
+			\item Predicts probability of context words
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Training Objective:}
+		\begin{itemize}
+			\item Maximize probability of context words
+			\item Given target word
+			\item Slide window over text
+			\item Learn embeddings
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Window Size:}
+		\begin{itemize}
+			\item Typically 2-5 words each side
+			\item Larger window = more global context
+			\item Smaller window = more syntactic
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Skip-gram learns from surrounding words!
+	\end{frame}
+	
+	\begin{frame}{Slide 69: Word2Vec Semantic Relationships}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Famous Analogy:}
+		\begin{itemize}
+			\item $v_{king} - v_{man} + v_{woman} \approx v_{queen}$
+			\item Captures gender relationship
+			\item Preserves arithmetic operations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Other Examples:}
+		\begin{itemize}
+			\item "Paris - France + Italy equals Rome"
+			\item "walking - walk + run equals running"
+			\item "sister - woman + man equals brother"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why It Works:}
+		\begin{itemize}
+			\item Vector space captures semantic relationships
+			\item Similar relationships have similar vector offsets
+			\item Enables analogical reasoning
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} Vector arithmetic captures meaning!
+	\end{frame}
+	
+	\begin{frame}{Slide 70: NLP Evaluation Introduction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Evaluation Approaches:}
+		\begin{enumerate}
+			\item \textbf{Labeled Data}
+			\begin{itemize}
+				\item Compare against known labels
+				\item Use confusion matrix
+				\item Compute accuracy, precision, recall, F1
+			\end{itemize}
+			\item \textbf{Unlabeled Data}
+			\begin{itemize}
+				\item Unsupervised evaluation methods
+				\item Qualitative assessment
+				\item Subject matter expert review
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Other Considerations:}
+		\begin{itemize}
+			\item Speed of algorithm
+			\item Data requirements
+			\item Computational resources
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Important:}} Evaluation depends on available labels!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 6: EVALUATION & PRACTICAL - SLIDES 71-80
+	% ============================================================
+	
+	\begin{frame}{Slide 71: Confusion Matrix for NLP}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Confusion Matrix Structure:}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			& Predicted Positive & Predicted Negative \\
+			\hline
+			Actual Positive & True Positive (TP) & False Negative (FN) \\
+			Actual Negative & False Positive (FP) & True Negative (TN) \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{Metrics:}
+		\begin{enumerate}
+			\item \textbf{Accuracy:} $(TP + TN) / (TP + TN + FP + FN)$
+			\item \textbf{Precision:} $TP / (TP + FP)$
+			\item \textbf{Recall:} $TP / (TP + FN)$
+			\item \textbf{F1:} $2 \times (Precision \times Recall) / (Precision + Recall)$
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Foundation for all classification metrics!
+	\end{frame}
+	
+	\begin{frame}{Slide 72: Accuracy in NLP Classification}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Accuracy Formula:}
+		\begin{itemize}
+			\item $Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Interpretation:}
+		\begin{itemize}
+			\item "Percentage of all predictions that were correct"
+			\item Most intuitive classification metric
+			\item Easy to communicate
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Limitations:}
+		\begin{itemize}
+			\item Doesn't distinguish between error types
+			\item Misleading for imbalanced datasets
+			\item Doesn't account for costs of errors
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item 98\% legitimate, 2\% fraud
+			\item Model predicts "legitimate" always
+			\item Accuracy = 98\% (seems great!)
+			\item But catches zero fraud!
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Warning:}} Accuracy can be misleading!
+	\end{frame}
+	
+	\begin{frame}{Slide 73: Precision in NLP}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Precision Formula:}
+		\begin{itemize}
+			\item $Precision = \frac{TP}{TP + FP}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Managerial Question:}
+		\begin{itemize}
+			\item "Of all the alerts our model generated, how many were actually real issues?"
+			\item "If we act on this prediction, how often will we be right?"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{When Precision Matters:}
+		\begin{itemize}
+			\item High cost of investigation (AML alerts)
+			\item Customer friction concerns
+			\item Operational resource constraints
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item 432 true positives, 121 false positives
+			\item Precision = 432 / 553 = 78.1\%
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Precision = "of predicted positives, how many were right?"
+	\end{frame}
+	
+	\begin{frame}{Slide 74: Recall in NLP}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Recall Formula:}
+		\begin{itemize}
+			\item $Recall = \frac{TP}{TP + FN}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Also Known As:}
+		\begin{itemize}
+			\item Sensitivity
+			\item True Positive Rate
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Managerial Question:}
+		\begin{itemize}
+			\item "Of all real issues that occurred, how many did we catch?"
+			\item "What percentage of actual positives did we identify?"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{When Recall Matters:}
+		\begin{itemize}
+			\item Missing a positive has severe consequences
+			\item Fraud detection, default prediction
+			\item Compliance monitoring
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Recall = "of actual positives, how many did we catch?"
+	\end{frame}
+	
+	\begin{frame}{Slide 75: F1 Score in NLP}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{F1 Score Formula:}
+		\begin{itemize}
+			\item $F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why Harmonic Mean?}
+		\begin{itemize}
+			\item Harmonic mean penalizes imbalance
+			\item Low precision or low recall $\to$ Low F1
+			\item Better than arithmetic mean
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Interpretation:}
+		\begin{itemize}
+			\item Bounded between 0 and 1
+			\item Close to 1 = high precision and high recall
+			\item Low score = poor precision, poor recall, or both
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example:}
+		\begin{itemize}
+			\item Precision = 78.1\%, Recall = 72.0\%
+			\item F1 = 2 × (0.781 × 0.720) / (0.781 + 0.720) = 74.9\%
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} F1 balances precision and recall!
+	\end{frame}
+	
+	\begin{frame}{Slide 76: Labeled vs Unlabeled Evaluation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Labeled Data Evaluation:}
+		\begin{itemize}
+			\item Documents have known labels
+			\item Compare machine classifications with labels
+			\item Use confusion matrix metrics
+			\item Accuracy, Precision, Recall, F1
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Unlabeled Data Evaluation:}
+		\begin{itemize}
+			\item No "right answer" to compare
+			\item Need different evaluation approaches
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Methods for Unlabeled Data:}
+		\begin{enumerate}
+			\item \textbf{Subject Matter Experts}
+			\begin{itemize}
+				\item Manually review sample
+				\item Assess accuracy qualitatively
+			\end{itemize}
+			\item \textbf{Unsupervised Metrics}
+			\begin{itemize}
+				\item Cohesion and separation
+				\item Silhouette score
+			\end{itemize}
+			\item \textbf{Indirect Validation}
+			\begin{itemize}
+				\item Check if results make sense
+				\item Correlation with known variables
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Unlabeled data requires alternative evaluation!
+	\end{frame}
+	
+	\begin{frame}{Slide 77: Speed and Data Requirements}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Practical Considerations:}
+		\begin{enumerate}
+			\item \textbf{Data Volume}
+			\begin{itemize}
+				\item NLP datasets can be enormous
+				\item Millions of documents
+				\item Billions of words
+			\end{itemize}
+			\item \textbf{Sparsity}
+			\begin{itemize}
+				\item Sparse vectors are inefficient
+				\item Slow to process
+				\item Memory intensive
+			\end{itemize}
+			\item \textbf{Model Complexity}
+			\begin{itemize}
+				\item Neural networks are slow to train
+				\item Require large amounts of data
+				\item May be impractical
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Tradeoffs:}
+		\begin{itemize}
+			\item Accuracy vs speed
+			\item Complexity vs feasibility
+			\item Resource constraints matter
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} NLP can be computationally expensive!
+	\end{frame}
+	
+	\begin{frame}{Slide 78: BoW Limitations Recap}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Loss of Context:}
+		\begin{itemize}
+			\item Word order ignored
+			\item Phrase meaning lost
+			\item No understanding of relationships
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{No Semantic Meaning:}
+		\begin{itemize}
+			\item Words independent
+			\item No concept of similarity
+			\item "good" and "great" treated equally
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Negation Issues:}
+		\begin{itemize}
+			\item "not good" vs "good" both contain "good"
+			\item Sentiment is reversed but BoW doesn't know
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Advanced Solutions:}
+		\begin{itemize}
+			\item n-grams
+			\item Skip-grams
+			\item Word embeddings
+			\item Contextual embeddings (BERT)
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} BoW fails to capture context and meaning!
+	\end{frame}
+	
+	\begin{frame}{Slide 79: Advanced Context Techniques}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{n-grams:}
+		\begin{itemize}
+			\item n contiguous words as one unit
+			\item Captures phrase meaning
+			\item Handles negations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Skip-grams:}
+		\begin{itemize}
+			\item Predict context from target
+			\item Captures semantic relationships
+			\item Word2Vec uses this
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Word Embeddings:}
+		\begin{itemize}
+			\item Dense vector representations
+			\item Similar words close together
+			\item Captures meaning
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Contextual Embeddings:}
+		\begin{itemize}
+			\item BERT, GPT, etc.
+			\item Context-dependent representations
+			\item State-of-the-art
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Evolution:}} BoW $\to$ n-grams $\to$ Embeddings $\to$ Contextual!
+	\end{frame}
+	
+	\begin{frame}{Slide 80: NLP Challenges Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Challenges:}
+		\begin{enumerate}
+			\item \textbf{Ambiguity}
+			\begin{itemize}
+				\item Same words have different meanings
+				\item Polysemy and homonymy
+			\end{itemize}
+			\item \textbf{Context Dependence}
+			\begin{itemize}
+				\item Meaning depends on surrounding words
+				\item Need to capture relationships
+			\end{itemize}
+			\item \textbf{Noise}
+			\begin{itemize}
+				\item Spelling errors
+				\item Abbreviations
+				\item Colloquialisms
+			\end{itemize}
+			\item \textbf{Tone Detection}
+			\begin{itemize}
+				\item Sarcasm hard to detect
+				\item Sentiment nuances
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Remember:}} NLP is challenging but improving rapidly!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 7: CHAPTER SUMMARY - SLIDES 81-100
+	% ============================================================
+	
+	\begin{frame}{Slide 81: Complete NLP Pipeline}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{NLP Pipeline Steps:}
+		\begin{enumerate}
+			\item \textbf{Data Collection}
+			\begin{itemize}
+				\item API, web scraping, PDF extraction
+				\item Build corpus
+			\end{itemize}
+			\item \textbf{Pre-processing}
+			\begin{itemize}
+				\item Tokenization
+				\item Stop word removal
+				\item Stemming/Lemmatization
+			\end{itemize}
+			\item \textbf{Feature Extraction}
+			\begin{itemize}
+				\item BoW, TF-IDF, Embeddings
+				\item Document Term Matrix
+			\end{itemize}
+			\item \textbf{Modeling}
+			\begin{itemize}
+				\item Dictionary-based or Machine Learning
+				\item Naïve Bayes, SVM, Neural Networks
+			\end{itemize}
+			\item \textbf{Evaluation}
+			\begin{itemize}
+				\item Confusion Matrix
+				\item Accuracy, Precision, Recall, F1
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Concept:}} End-to-end process from text to insights!
+	\end{frame}
+	
+	\begin{frame}{Slide 82: Data Pre-processing Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Steps:}
+		\begin{enumerate}
+			\item \textbf{Tokenization}
+			\begin{itemize}
+				\item Sentence tokenization
+				\item Word tokenization
+			\end{itemize}
+			\item \textbf{Stop Word Removal}
+			\begin{itemize}
+				\item Remove common words
+				\item Context-dependent
+			\end{itemize}
+			\item \textbf{Stemming}
+			\begin{itemize}
+				\item Fast, less accurate
+				\item Rule-based
+			\end{itemize}
+			\item \textbf{Lemmatization}
+			\begin{itemize}
+				\item Slower, more accurate
+				\item Uses dictionary
+			\end{itemize}
+			\item \textbf{Feature Extraction}
+			\begin{itemize}
+				\item Convert to vectors
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Remember:}} Quality pre-processing is essential!
+	\end{frame}
+	
+	\begin{frame}{Slide 83: Feature Extraction Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Methods:}
+		\begin{enumerate}
+			\item \textbf{Bag of Words (BoW)}
+			\begin{itemize}
+				\item Binary or Count
+				\item Ignores order
+				\item Simple but limited
+			\end{itemize}
+			\item \textbf{TF-IDF}
+			\begin{itemize}
+				\item TF $\times$ IDF
+				\item Weights rare words higher
+				\item Better than simple counts
+			\end{itemize}
+			\item \textbf{Word Embeddings}
+			\begin{itemize}
+				\item Dense vectors
+				\item Captures meaning
+				\item Word2Vec, GloVe
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Evolution:}} BoW $\to$ TF-IDF $\to$ Embeddings!
+	\end{frame}
+	
+	\begin{frame}{Slide 84: Dictionary Approach Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Points:}
+		\begin{enumerate}
+			\item \textbf{Definition}
+			\begin{itemize}
+				\item Pre-defined word lists
+				\item Share common characteristics
+			\end{itemize}
+			\item \textbf{Advantages}
+			\begin{itemize}
+				\item Transparent
+				\item Easy and fast
+				\item Comparable
+			\end{itemize}
+			\item \textbf{Limitations}
+			\begin{itemize}
+				\item Only as good as word lists
+				\item Formal documents only
+				\item Narrow scope
+				\item Negation issues
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Example:} Loughran-McDonald financial dictionary (75\% accuracy)
+		
+		\textcolor{myblue}{\textbf{Best For:}} Quick, transparent sentiment analysis!
+	\end{frame}
+	
+	\begin{frame}{Slide 85: n-grams Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Points:}
+		\begin{enumerate}
+			\item \textbf{Definition}
+			\begin{itemize}
+				\item n contiguous words as one unit
+				\item Uni-grams, bi-grams, tri-grams
+			\end{itemize}
+			\item \textbf{Why Use Them}
+			\begin{itemize}
+				\item Capture phrase meaning
+				\item Handle negations
+				\item Address context issues
+			\end{itemize}
+			\item \textbf{Example}
+			\begin{itemize}
+				\item "not good" as bi-gram
+				\item "credit spreads" as bi-gram
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{BoN (Bag of n-grams):}
+		\begin{itemize}
+			\item BoW applied to n-grams
+			\item More context-aware than BoW
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} n-grams capture phrase-level meaning!
+	\end{frame}
+	
+	\begin{frame}{Slide 86: TF-IDF Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Points:}
+		\begin{enumerate}
+			\item \textbf{TF = Term Frequency}
+			\begin{itemize}
+				\item $TF_{i,j} = \frac{w_{i,j}}{|v_j|}$
+				\item Word count / total words
+			\end{itemize}
+			\item \textbf{IDF = Inverse Document Frequency}
+			\begin{itemize}
+				\item $IDF_i = \ln(D / \sum d_{i,j})$
+				\item Rewards rare words
+			\end{itemize}
+			\item \textbf{TF-IDF = TF $\times$ IDF}
+			\begin{itemize}
+				\item Higher weight for rare, frequent words
+				\item Zero for words in all documents
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Use Cases:}
+		\begin{itemize}
+			\item Document classification
+			\item Information retrieval
+			\item Keyword extraction
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} TF-IDF identifies important words!
+	\end{frame}
+	
+	\begin{frame}{Slide 87: Naïve Bayes Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Points:}
+		\begin{enumerate}
+			\item \textbf{Based on Bayes' Theorem}
+			\begin{itemize}
+				\item $P(c|d) \propto P(d|c) \times P(c)$
+			\end{itemize}
+			\item \textbf{Naïve Assumptions}
+			\begin{itemize}
+				\item Independence of words
+				\item Equal weighting of words
+			\end{itemize}
+			\item \textbf{Pros}
+			\begin{itemize}
+				\item Simple and fast
+				\item Solid accuracy
+				\item Works with high-dimensional data
+			\end{itemize}
+			\item \textbf{Cons}
+			\begin{itemize}
+				\item Unrealistic assumptions
+				\item Zero probability problem
+				\item Requires smoothing
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Best For:}} Text classification, quick baselines!
+	\end{frame}
+	
+	\begin{frame}{Slide 88: Smoothing Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why Smoothing is Needed:}
+		\begin{itemize}
+			\item Zero probability problem
+			\item Word missing from training class
+			\item Unrealistic zero probabilities
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Laplace Smoothing:}
+		\begin{itemize}
+			\item Add 1 to all counts
+			\item $P(w|c) = \frac{\text{count}(w,c) + 1}{\text{total words in c} + |V|}$
+			\item Ensures all probabilities $> 0$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Effects:}
+		\begin{itemize}
+			\item Zero probabilities eliminated
+			\item Pushed toward uniform distribution
+			\item Similar to regularization
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} $\lambda = 1$ is most common (Laplace smoothing)!
+	\end{frame}
+	
+	\begin{frame}{Slide 89: Word Embeddings Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Points:}
+		\begin{enumerate}
+			\item \textbf{Definition}
+			\begin{itemize}
+				\item Dense vector representations
+				\item Capture semantic meaning
+			\end{itemize}
+			\item \textbf{Word2Vec}
+			\begin{itemize}
+				\item Google-developed algorithm
+				\item CBOW or Skip-gram
+			\end{itemize}
+			\item \textbf{Advantages}
+			\begin{itemize}
+				\item Captures meaning
+				\item Dense vectors
+				\item Semantic relationships
+			\end{itemize}
+			\item \textbf{Limitations}
+			\begin{itemize}
+				\item Requires large corpus
+				\item Computationally expensive
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Embeddings enable "king - man + woman equals queen"!
+	\end{frame}
+	
+	\begin{frame}{Slide 90: Evaluation Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Points:}
+		\begin{enumerate}
+			\item \textbf{Labeled Data}
+			\begin{itemize}
+				\item Confusion Matrix
+				\item Accuracy, Precision, Recall, F1
+			\end{itemize}
+			\item \textbf{Unlabeled Data}
+			\begin{itemize}
+				\item Subject matter experts
+				\item Unsupervised metrics
+				\item Indirect validation
+			\end{itemize}
+			\item \textbf{Other Considerations}
+			\begin{itemize}
+				\item Speed of algorithm
+				\item Data requirements
+				\item Resource constraints
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Remember:}
+		\begin{itemize}
+			\item Evaluation depends on available labels
+			\item Multiple metrics provide complete picture
+			\item Speed and resources matter
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Choose evaluation method based on data and needs!
+	\end{frame}
+	
+	\begin{frame}{Slide 91: NLP Applications in Finance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Applications:}
+		\begin{enumerate}
+			\item \textbf{Fraud Detection}
+			\begin{itemize}
+				\item SEC, HSBC
+				\item Analyze financial reports
+			\end{itemize}
+			\item \textbf{Customer Service}
+			\begin{itemize}
+				\item Call routing
+				\item Chatbots (BoA)
+			\end{itemize}
+			\item \textbf{Sentiment Analysis}
+			\begin{itemize}
+				\item Social media monitoring
+				\item BlackRock
+			\end{itemize}
+			\item \textbf{Document Analysis}
+			\begin{itemize}
+				\item Legal document review (JPMorgan COiN)
+				\item Readability assessment
+				\item Document similarity
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} NLP is transforming financial services!
+	\end{frame}
+	
+	\begin{frame}{Slide 92: Common NLP Pitfalls}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Pitfall 1: Ignoring Context}
+		\begin{itemize}
+			\item BoW loses meaning
+			\item Solution: n-grams, embeddings
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Pitfall 2: Negation Handling}
+		\begin{itemize}
+			\item "not good" misclassified
+			\item Solution: n-grams
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Pitfall 3: Case Sensitivity}
+		\begin{itemize}
+			\item "Reading" vs "reading"
+			\item Solution: POS tagging
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Pitfall 4: Over-smoothing}
+		\begin{itemize}
+			\item Too much smoothing loses signal
+			\item Solution: Balance $\lambda$
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Remember:}} Consider context and assumptions carefully!
+	\end{frame}
+	
+	\begin{frame}{Slide 93: Choosing the Right Approach}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{When to Use Dictionary Approach:}
+		\begin{itemize}
+			\item Formal documents
+			\item Quick analysis
+			\item Transparency required
+			\item Known categories
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{When to Use Machine Learning:}
+		\begin{itemize}
+			\item Informal text (social media)
+			\item Complex classification
+			\item New categories
+			\item Large datasets
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{When to Use Word Embeddings:}
+		\begin{itemize}
+			\item Capturing meaning
+			\item Semantic relationships
+			\item Large corpus available
+			\item Advanced applications
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Choose approach based on your specific needs!
+	\end{frame}
+	
+	\begin{frame}{Slide 94: NLP Best Practices}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data Quality:}
+		\begin{itemize}
+			\item Use appropriate data sources
+			\item Clean text carefully
+			\item Document pre-processing steps
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Model Selection:}
+		\begin{itemize}
+			\item Start simple (dictionary)
+			\item Progress to complex (ML, embeddings)
+			\item Validate with test data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Evaluation:}
+		\begin{itemize}
+			\item Use multiple metrics
+			\item Consider business context
+			\item Document choices
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Regulatory Compliance:}
+		\begin{itemize}
+			\item Ensure transparency
+			\item Document methodology
+			\item Be ready for audit
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Rigorous methodology is essential!
+	\end{frame}
+	
+	\begin{frame}{Slide 95: NLP Future Trends}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Emerging Trends:}
+		\begin{enumerate}
+			\item \textbf{Large Language Models}
+			\begin{itemize}
+				\item GPT, BERT, LLaMA
+				\item Contextual understanding
+			\end{itemize}
+			\item \textbf{Multilingual NLP}
+			\begin{itemize}
+				\item Cross-language applications
+				\item Global finance
+			\end{itemize}
+			\item \textbf{Fine-tuning}
+			\begin{itemize}
+				\item Domain-specific models
+				\item Financial NLP
+			\end{itemize}
+			\item \textbf{Explainable AI}
+			\begin{itemize}
+				\item Interpretability
+				\item Regulatory compliance
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} NLP is rapidly evolving!
+	\end{frame}
+	
+	\begin{frame}{Slide 96: NLP in Risk Management}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Applications:}
+		\begin{enumerate}
+			\item \textbf{Credit Risk}
+			\begin{itemize}
+				\item Analyze financial reports
+				\item Assess management quality
+			\end{itemize}
+			\item \textbf{Market Risk}
+			\begin{itemize}
+				\item Sentiment analysis
+				\item News impact assessment
+			\end{itemize}
+			\item \textbf{Operational Risk}
+			\begin{itemize}
+				\item Compliance monitoring
+				\item Fraud detection
+			\end{itemize}
+			\item \textbf{Regulatory Compliance}
+			\begin{itemize}
+				\item Document review
+				\item Regulatory filings
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} NLP is critical for modern risk management!
+	\end{frame}
+	
+	\begin{frame}{Slide 97: Implementation Considerations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Technical Considerations:}
+		\begin{enumerate}
+			\item \textbf{Data Pipeline}
+			\begin{itemize}
+				\item Collection
+				\item Storage
+				\item Processing
+			\end{itemize}
+			\item \textbf{Infrastructure}
+			\begin{itemize}
+				\item Computing resources
+				\item Cloud vs on-premise
+			\end{itemize}
+			\item \textbf{Maintenance}
+			\begin{itemize}
+				\item Model updates
+				\item Performance monitoring
+			\end{itemize}
+			\item \textbf{Integration}
+			\begin{itemize}
+				\item API design
+				\item Workflow integration
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Implementation requires careful planning!
+	\end{frame}
+	
+	\begin{frame}{Slide 98: Regulatory Considerations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Regulatory Areas:}
+		\begin{enumerate}
+			\item \textbf{Model Governance}
+			\begin{itemize}
+				\item Documentation
+				\item Validation
+				\item Monitoring
+			\end{itemize}
+			\item \textbf{Fairness and Bias}
+			\begin{itemize}
+				\item Avoid discrimination
+				\item Equal treatment
+			\end{itemize}
+			\item \textbf{Transparency}
+			\begin{itemize}
+				\item Explainable decisions
+				\item Audit trail
+			\end{itemize}
+			\item \textbf{Data Privacy}
+			\begin{itemize}
+				\item GDPR, CCPA
+				\item Data protection
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Regulatory compliance is non-negotiable!
+	\end{frame}
+	
+	\begin{frame}{Slide 99: Chapter Learning Objectives Review}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Learning Objectives:}
+		\begin{enumerate}
+			\item Discuss applications of NLP
+			\begin{itemize}
+				\item Fraud detection, sentiment analysis, document review
+			\end{itemize}
+			\item Describe pre-processing steps
+			\begin{itemize}
+				\item Tokenization, stop words, stemming/lemmatization
+			\end{itemize}
+			\item Discuss BoW and n-grams
+			\begin{itemize}
+				\item Word counting, context capture
+			\end{itemize}
+			\item Explain dictionary vs ML approaches
+			\begin{itemize}
+				\item Advantages and limitations of each
+			\end{itemize}
+			\item Illustrate TF-IDF
+			\begin{itemize}
+				\item Word importance weighting
+			\end{itemize}
+			\item Explain Naïve Bayes
+			\begin{itemize}
+				\item Classification for documents
+			\end{itemize}
+			\item Discuss evaluation
+			\begin{itemize}
+				\item Metrics, speed, data requirements
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{All objectives covered in this chapter!}}
+	\end{frame}
+	
+	\begin{frame}{Slide 100: Final Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{\textcolor{myblue}{NLP Overview:}}
+		\begin{itemize}
+			\item NLP enables computers to understand human language
+			\item Pre-processing converts raw text to analyzable format
+			\item Feature extraction creates numeric vectors (BoW, TF-IDF, Embeddings)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{\textcolor{myblue}{Key Techniques:}}
+		\begin{itemize}
+			\item Dictionary approach: Simple, transparent, fast
+			\item Naïve Bayes: Simple, fast, generative classifier
+			\item Word Embeddings: Captures meaning and relationships
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{\textcolor{myblue}{Evaluation:}}
+		\begin{itemize}
+			\item Confusion matrix metrics (Accuracy, Precision, Recall, F1)
+			\item Consider speed and data requirements
+			\item Unlabeled data requires alternative approaches
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{\textcolor{myblue}{Financial Applications:}}
+		\begin{itemize}
+			\item Fraud detection, sentiment analysis, document review, compliance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{Exam Success:}} Understand the complete pipeline from text to insights!
+	\end{frame}
+	
+\end{document}

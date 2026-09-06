@@ -1,0 +1,3677 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Unsupervised Learning}
+\subtitle{100 Questions: K-means, Hierarchical, DBSCAN, Evaluation Metrics}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 1: INTRODUCTION TO UNSUPERVISED LEARNING - QUESTIONS 1-10
+	% ============================================================
+	
+	\begin{frame}{Q1: Unsupervised Learning Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is unsupervised learning?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Learning with labeled data where the outcome is known
+			\item Learning with unlabeled data to find hidden patterns and structures
+			\item Learning that only uses numerical features
+			\item Learning that requires human supervision
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Unsupervised learning navigates datasets with only features/characteristics
+			\item No predefined labels or outcomes
+			\item Goal: uncover hidden patterns, structures, or insights
+			\item Primary application: clustering/segmentation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes SUPERVISED learning
+			\item \textcolor{myred}{C:} Unsupervised can use any type of features
+			\item \textcolor{myred}{D:} Unsupervised learning does NOT require human supervision
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Unsupervised learning = \textcolor{myblue}{unlabeled data to find patterns}!
+	\end{frame}
+	
+	\begin{frame}{Q2: Clustering Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the fundamental goal of clustering analysis?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To predict future outcomes
+			\item To group data points so similar items are together and different items are apart
+			\item To reduce the number of features
+			\item To classify data into predefined categories
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Arrange data points into groups (clusters)
+			\item Within-group similarity is high
+			\item Between-group similarity is low
+			\item Also called segmentation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is prediction/regression (supervised)
+			\item \textcolor{myred}{C:} This is dimensionality reduction
+			\item \textcolor{myred}{D:} This is classification (supervised)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Clustering = \textcolor{myblue}{group similar items together}! 
+	\end{frame}
+	
+	\begin{frame}{Q3: Clustering Applications - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Which is an application of clustering in risk management?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Customer risk profiling
+			\item Predictive maintenance
+			\item Cybersecurity threat identification
+			\item All of the above
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: D}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Customer risk profiling:} Identify customer segments for tailored strategies
+			\item \textbf{Operational risk:} Detect anomalies in machinery sensor data
+			\item \textbf{Cybersecurity:} Identify unusual network traffic patterns
+			\item \textbf{Regulatory compliance:} Group similar documents for review
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Correct but incomplete
+			\item \textcolor{myred}{B:} Correct but incomplete
+			\item \textcolor{myred}{C:} Correct but incomplete
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Clustering has \textcolor{myblue}{many risk management applications}!
+	\end{frame}
+	
+	\begin{frame}{Q4: Clustering as Preliminary Step - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why might clustering be used before supervised learning?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To increase the number of features
+			\item To understand the inherent structure of features
+			\item To remove all labels
+			\item To make the data smaller
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Temporarily ignore labels to understand data structure
+			\item Gain insights into feature characteristics
+			\item Can improve supervised model performance
+			\item Exploratory data analysis
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Clustering doesn't increase features
+			\item \textcolor{myred}{C:} Labels are only temporarily ignored
+			\item \textcolor{myred}{D:} Clustering doesn't reduce data size
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Clustering helps \textcolor{myblue}{understand feature structure} before supervised learning!
+	\end{frame}
+	
+	\begin{frame}{Q5: Data Scaling Importance - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is data scaling critical before clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To make data categorical
+			\item Because all clustering methods rely on distance/similarity measures
+			\item To remove all outliers
+			\item To increase data size
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Features on different scales skew distance calculations
+			\item Large-scale features disproportionately influence results
+			\item Example: Age (years) vs Wealth (hundreds of thousands)
+			\item Standardization or normalization ensures fair contribution
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Scaling doesn't make data categorical
+			\item \textcolor{myred}{C:} Scaling doesn't remove outliers
+			\item \textcolor{myred}{D:} Scaling doesn't increase data size
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Scaling is essential because clustering uses \textcolor{myblue}{distance measures}!
+	\end{frame}
+	
+	\begin{frame}{Q6: Partitional Clustering - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is partitional clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Clustering that creates a tree-like structure
+			\item Clustering that divides data into a predetermined number of non-overlapping groups
+			\item Clustering based on density of data points
+			\item Clustering that starts with each point as its own cluster
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Each data point belongs to a single cluster
+			\item Non-overlapping groups
+			\item Example: K-means clustering
+			\item Based on proximity to centroid
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is hierarchical clustering
+			\item \textcolor{myred}{C:} This is density-based clustering
+			\item \textcolor{myred}{D:} This is agglomerative hierarchical clustering
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Partitional clustering = \textcolor{myblue}{non-overlapping groups with predetermined K}!
+	\end{frame}
+	
+	\begin{frame}{Q7: Hierarchical Clustering - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does hierarchical clustering construct?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A flat structure of clusters
+			\item A tree-like structure (dendrogram) of clusters
+			\item A set of centroids
+			\item A density map
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Builds a hierarchy of clusters
+			\item Visualized as a dendrogram
+			\item Two approaches: divisive and agglomerative
+			\item Does not require pre-specifying K
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is partitional clustering
+			\item \textcolor{myred}{C:} This is K-means centroids
+			\item \textcolor{myred}{D:} This is density-based clustering
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Hierarchical clustering creates \textcolor{myblue}{tree-like dendrograms}!
+	\end{frame}
+	
+	\begin{frame}{Q8: Divisive Clustering - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is divisive clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Bottom-up approach starting with each point as its own cluster
+			\item Top-down approach starting with all points in one cluster
+			\item Clustering based on density
+			\item Clustering with predefined number of clusters
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Top-down approach
+			\item All data points in a single cluster initially
+			\item Iteratively splits into smaller, more distinct clusters
+			\item Continues until stopping criterion is met
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is agglomerative clustering
+			\item \textcolor{myred}{C:} This is density-based clustering
+			\item \textcolor{myred}{D:} This is partitional clustering
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Divisive = \textcolor{myblue}{top-down} (split from one cluster)!
+	\end{frame}
+	
+	\begin{frame}{Q9: Agglomerative Clustering - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is agglomerative clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Top-down approach starting with all points in one cluster
+			\item Bottom-up approach starting with each point as its own cluster
+			\item Clustering based on density of points
+			\item Clustering with predefined centroids
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Bottom-up approach
+			\item Each data point starts as its own cluster
+			\item Merges closest clusters iteratively
+			\item Continues until one cluster remains
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is divisive clustering
+			\item \textcolor{myred}{C:} This is density-based clustering
+			\item \textcolor{myred}{D:} This is partitional clustering
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Agglomerative = \textcolor{myblue}{bottom-up} (merge from individual points)!
+	\end{frame}
+	
+	\begin{frame}{Q10: Density-Based Clustering - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How does density-based clustering define clusters?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item By distance to centroids
+			\item By dense regions of data points separated by low-density regions
+			\item By hierarchical merging
+			\item By predefined number of groups
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Defines clusters as dense regions
+			\item Separated by regions of lower point density
+			\item Can find non-spherical clusters
+			\item More robust to outliers
+			\item Example: DBSCAN
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is K-means/partitional
+			\item \textcolor{myred}{C:} This is hierarchical
+			\item \textcolor{myred}{D:} This is partitional
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Density-based clustering = \textcolor{myblue}{dense regions separated by low density}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 2: K-MEANS CLUSTERING - QUESTIONS 11-35
+	% ============================================================
+	
+	\begin{frame}{Q11: K-means Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the K-means algorithm?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A hierarchical clustering method
+			\item A partitional clustering method that groups data into K clusters based on centroids
+			\item A density-based clustering method
+			\item A classification algorithm
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Partitions N observations into K clusters
+			\item Groups based on proximity to centroids
+			\item Iterative process
+			\item Requires pre-specifying K
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} K-means is partitional, not hierarchical
+			\item \textcolor{myred}{C:} K-means is centroid-based, not density-based
+			\item \textcolor{myred}{D:} K-means is unsupervised clustering, not classification
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means = \textcolor{myblue}{partitional clustering based on centroids}!
+	\end{frame}
+	
+	\begin{frame}{Q12: K-means Requirement - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What must be specified before running K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The number of features
+			\item The number of clusters K
+			\item The distance metric only
+			\item The number of iterations
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item K (number of clusters) must be specified
+			\item Analyst determines this beforehand
+			\item Often experiment with different K values
+			\item Use evaluation techniques to select optimal K
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Features are given, not specified
+			\item \textcolor{myred}{C:} Distance metric is chosen, but K must be specified
+			\item \textcolor{myred}{D:} Iterations are determined by convergence
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means requires \textcolor{myblue}{pre-specifying K} (number of clusters)!
+	\end{frame}
+	
+	\begin{frame}{Q13: K-means Algorithm Steps - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the iterative steps of K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Assign points to nearest centroid, update centroids, repeat
+			\item Calculate WCSS, find elbow, choose K
+			\item Create dendrogram, merge clusters
+			\item Identify core points, border points, noise
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Step 1:} Randomly select K initial centroids
+			\item \textbf{Step 2:} Assign each data point to nearest centroid
+			\item \textbf{Step 3:} Update centroids to mean of assigned points
+			\item \textbf{Step 4:} Repeat until convergence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is for choosing K, not the algorithm
+			\item \textcolor{myred}{C:} This is hierarchical clustering
+			\item \textcolor{myred}{D:} This is DBSCAN
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means = \textcolor{myblue}{assign $\to$ update $\to$ repeat}!
+	\end{frame}
+	
+	\begin{frame}{Q14: K-means Convergence - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: When does the K-means algorithm stop?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item After a fixed number of iterations
+			\item When centroids no longer change or points stop switching clusters
+			\item When WCSS reaches zero
+			\item When all points are in one cluster
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Algorithm has converged
+			\item Centroids stabilize
+			\item Cluster assignments no longer change
+			\item Called Lloyd's algorithm
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Converges based on stability, not iterations
+			\item \textcolor{myred}{C:} WCSS reaches zero only when K=N
+			\item \textcolor{myred}{D:} This would be one cluster (K=1)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means converges when \textcolor{myblue}{centroids stabilize and assignments stop changing}!
+	\end{frame}
+	
+	\begin{frame}{Q15: Euclidean Distance Formula - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the Euclidean distance between two points?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $d_E = |x_1 - x_2| + |y_1 - y_2|$
+			\item $d_E = \sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}$
+			\item $d_E = (x_1 - x_2)^2 + (y_1 - y_2)^2$
+			\item $d_E = \max(|x_1 - x_2|, |y_1 - y_2|)$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Straight-line ("as the crow flies") distance
+			\item Also called L2-norm
+			\item Sum of squared differences, then square root
+			\item Most common distance measure in K-means
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is Manhattan distance (L1-norm)
+			\item \textcolor{myred}{C:} This is squared distance without square root
+			\item \textcolor{myred}{D:} This is Chebyshev distance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Euclidean distance = \textcolor{myblue}{$\sqrt{\sum (x_i - y_i)^2}$}!
+	\end{frame}
+	
+	\begin{frame}{Q16: Manhattan Distance Formula - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the Manhattan distance between two points?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $d_M = \sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}$
+			\item $d_M = |x_1 - x_2| + |y_1 - y_2|$
+			\item $d_M = (x_1 - x_2)^2 + (y_1 - y_2)^2$
+			\item $d_M = \max(|x_1 - x_2|, |y_1 - y_2|)$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Also called L1-norm
+			\item Sum of absolute differences
+			\item Like driving in a city with rectangular grid
+			\item Alternative to Euclidean distance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is Euclidean distance
+			\item \textcolor{myred}{C:} This is squared distance
+			\item \textcolor{myred}{D:} This is Chebyshev distance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Manhattan distance = \textcolor{myblue}{sum of absolute differences}!
+	\end{frame}
+	
+	\begin{frame}{Q17: Euclidean vs Manhattan - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Which distance measure is also known as L1-norm?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Euclidean distance
+			\item Manhattan distance
+			\item Chebyshev distance
+			\item Cosine distance
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Manhattan distance = L1-norm
+			\item Euclidean distance = L2-norm
+			\item L1-norm: sum of absolute differences
+			\item L2-norm: square root of sum of squared differences
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Euclidean is L2-norm
+			\item \textcolor{myred}{C:} Chebyshev is Linfinity-norm
+			\item \textcolor{myred}{D:} Cosine is based on angles
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Manhattan = \textcolor{myblue}{L1-norm}; Euclidean = \textcolor{myblue}{L2-norm}!
+	\end{frame}
+	
+	\begin{frame}{Q18: K-means Example - Assignment Step - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In K-means example, what determines which cluster a point belongs to?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Random assignment
+			\item The closer centroid based on distance
+			\item The centroid with larger coordinates
+			\item The first centroid encountered
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Each point assigned to nearest centroid
+			\item Distance measured using Euclidean or Manhattan
+			\item Point assigned to cluster with minimum distance
+			\item Creates Voronoi partitioning of space
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Assignment is deterministic based on distance
+			\item \textcolor{myred}{C:} Distance to centroid determines assignment
+			\item \textcolor{myred}{D:} Assignment is based on distance, not order
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Assignment = \textcolor{myblue}{nearest centroid} based on distance!
+	\end{frame}
+	
+	\begin{frame}{Q19: K-means Example - Update Step - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How is the centroid updated in K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Randomly repositioned
+			\item Set to the mean/average of all points in its cluster
+			\item Set to the median of all points in its cluster
+			\item Moved to the farthest point in its cluster
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Centroid becomes mean of assigned points
+			\item Average of all features for points in cluster
+			\item Minimizes WCSS for that cluster
+			\item New centroid position reflects cluster center
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Update is deterministic, not random
+			\item \textcolor{myred}{C:} K-means uses mean, not median
+			\item \textcolor{myred}{D:} Centroid moves to center, not farthest point
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Centroid update = \textcolor{myblue}{mean of points in cluster}!
+	\end{frame}
+	
+	\begin{frame}{Q20: K-means Example - Iteration - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What happens during each iteration of K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only centroids are updated
+			\item Points are assigned and centroids are updated
+			\item Only points are assigned
+			\item Random points are selected
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Each iteration has two steps
+			\item \textbf{Assignment step:} Points assigned to nearest centroid
+			\item \textbf{Update step:} Centroids recalculated
+			\item Repeated until convergence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Both assignment and update happen
+			\item \textcolor{myred}{C:} Both assignment and update happen
+			\item \textcolor{myred}{D:} Selection happens only at initialization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Each iteration = \textcolor{myblue}{assignment + update}!
+	\end{frame}
+	
+	\begin{frame}{Q21: WCSS Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does WCSS (Within-Cluster Sum of Squares) measure?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Distance between clusters
+			\item Compactness of clusters (how close points are to their centroids)
+			\item Number of data points
+			\item Overall variance of data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Sum of squared distances from each point to its centroid
+			\item Lower WCSS = more compact clusters
+			\item Also called inertia
+			\item Key metric for evaluating K-means performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is BCSS (Between-Cluster Sum of Squares)
+			\item \textcolor{myred}{C:} This is count of data points
+			\item \textcolor{myred}{D:} This is total variance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} WCSS = \textcolor{myblue}{compactness of clusters} (within-cluster distance)!
+	\end{frame}
+	
+	\begin{frame}{Q22: WCSS Formula - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the formula for WCSS of a single cluster?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $WCSS_k = \sum_{j=1}^{n_k} d_j$
+			\item $WCSS_k = \sum_{j=1}^{n_k} d_j^2$
+			\item $WCSS_k = \frac{1}{n_k} \sum_{j=1}^{n_k} d_j$
+			\item $WCSS_k = \sum_{j=1}^{n_k} |d_j|$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $d_j$ = distance from point j to centroid
+			\item Sum of squared distances
+			\item $n_k$ = number of points in cluster k
+			\item Squaring penalizes larger distances
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Uses squared distances, not just distances
+			\item \textcolor{myred}{C:} This is average distance, not sum
+			\item \textcolor{myred}{D:} Uses squared, not absolute
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} WCSS = \textcolor{myblue}{sum of squared distances} to centroid!
+	\end{frame}
+	
+	\begin{frame}{Q23: Total WCSS Formula - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How is total WCSS calculated for all clusters?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $WCSS = \sum_{k=1}^K WCSS_k$
+			\item $WCSS = \frac{1}{K} \sum_{k=1}^K WCSS_k$
+			\item $WCSS = \max(WCSS_k)$
+			\item $WCSS = \min(WCSS_k)$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Sum of WCSS across all K clusters
+			\item Measures overall compactness
+			\item Total within-cluster variation
+			\item Used for scree plot and evaluation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is average WCSS
+			\item \textcolor{myred}{C:} This is maximum WCSS
+			\item \textcolor{myred}{D:} This is minimum WCSS
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Total WCSS = \textcolor{myblue}{sum of WCSS over all clusters}!
+	\end{frame}
+	
+	\begin{frame}{Q24: BCSS Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does BCSS (Between-Cluster Sum of Squares) measure?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Compactness of clusters
+			\item Separation between clusters
+			\item Number of data points
+			\item Within-cluster variation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Sum of squared distances of cluster centroids to overall centroid
+			\item Weighted by number of points in each cluster
+			\item Higher BCSS = better separated clusters
+			\item Measures inter-cluster dissimilarity
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is WCSS (within-cluster)
+			\item \textcolor{myred}{C:} This is count of data points
+			\item \textcolor{myred}{D:} This is within-cluster variation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} BCSS = \textcolor{myblue}{separation between clusters}!
+	\end{frame}
+	
+	\begin{frame}{Q25: WCSS and BCSS Relationship - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the relationship between WCSS and BCSS?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Minimizing WCSS implies maximizing BCSS
+			\item They are independent
+			\item Maximizing WCSS implies maximizing BCSS
+			\item There is no relationship
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item More compact clusters (low WCSS) tend to be more separated (high BCSS)
+			\item Total sum of squares = WCSS + BCSS (for fixed data)
+			\item Minimizing WCSS implicitly maximizes BCSS
+			\item Both are important for good clustering
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} They are related through total variance
+			\item \textcolor{myred}{C:} Maximizing WCSS would mean poor clusters
+			\item \textcolor{myred}{D:} They are mathematically related
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Lower WCSS $\to$ \textcolor{myblue}{higher BCSS} (better separation)!
+	\end{frame}
+	
+	\begin{frame}{Q26: Scree Plot Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a scree plot in K-means clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Plot of WCSS vs number of clusters (K)
+			\item Plot of data points in 2D
+			\item Plot of centroids
+			\item Plot of silhouette scores vs K
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item x-axis: number of clusters (K)
+			\item y-axis: total WCSS (inertia)
+			\item Used to find optimal K via "elbow method"
+			\item Named after scree in PCA
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is a scatter plot
+			\item \textcolor{myred}{C:} This is centroid visualization
+			\item \textcolor{myred}{D:} This is silhouette plot
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Scree plot = \textcolor{myblue}{WCSS vs K}!
+	\end{frame}
+	
+	\begin{frame}{Q27: Elbow Method - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the elbow method, what is the "elbow" point?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The point where WCSS is lowest
+			\item The point where adding clusters gives diminishing returns
+			\item The point where WCSS starts increasing
+			\item The point with highest WCSS
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Rate of WCSS decrease sharply changes
+			\item Before elbow: rapid decrease
+			\item After elbow: slow decrease
+			\item Represents trade-off between fit and complexity
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} WCSS is lowest at highest K
+			\item \textcolor{myred}{C:} WCSS never increases with K
+			\item \textcolor{myred}{D:} Highest WCSS is at K=1
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Elbow = \textcolor{myblue}{diminishing returns from adding clusters}!
+	\end{frame}
+	
+	\begin{frame}{Q28: Elbow Method Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the stock/bond example, what was the optimal K?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item K=1
+			\item K=2
+			\item K=3
+			\item K=4
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Scree plot showed sharp change at K=2
+			\item Rate of WCSS decrease changed dramatically
+			\item Two distinct clusters identified
+			\item Corresponds to market regimes (bull/bear)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} K=1 has highest WCSS
+			\item \textcolor{myred}{C:} K=3 showed diminishing returns
+			\item \textcolor{myred}{D:} K=4 had minimal improvement
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Elbow at K=2 in stock/bond example!
+	\end{frame}
+	
+	\begin{frame}{Q29: Silhouette Score Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does the silhouette score measure?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Distance from points to centroids
+			\item How similar a point is to its own cluster compared to others
+			\item The number of clusters
+			\item The overall variance
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Compares intra-cluster cohesion vs inter-cluster separation
+			\item For each point: $s_i = \frac{b_i - a_i}{\max(a_i, b_i)}$
+			\item $a_i$: mean distance to points in own cluster
+			\item $b_i$: mean distance to points in closest other cluster
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is WCSS/distance to centroid
+			\item \textcolor{myred}{C:} This is K (number of clusters)
+			\item \textcolor{myred}{D:} This is total variance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Silhouette score = \textcolor{myblue}{cohesion vs separation}!
+	\end{frame}
+	
+	\begin{frame}{Q30: Silhouette Score Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does a silhouette score close to 1 indicate?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Poor clustering
+			\item Excellent clustering (points close to own cluster, far from others)
+			\item Overlapping clusters
+			\item All points are outliers
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $s \to 1$: points very close to own cluster centroid
+			\item $s \to 0$: clusters significantly overlapping
+			\item $s < 0$: points may be mis-clustered
+			\item Range: [-1, 1]
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Close to 1 means GOOD clustering
+			\item \textcolor{myred}{C:} Overlapping clusters give scores near 0
+			\item \textcolor{myred}{D:} Outliers would have low or negative scores
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} $s \approx 1$ = \textcolor{myblue}{excellent clustering}!
+	\end{frame}
+	
+	\begin{frame}{Q31: Silhouette Score Range - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the range of silhouette scores?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item [0, 1]
+			\item [-1, 1]
+			\item [-infinity, infinity]
+			\item [0, infinity]
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Range: [-1, 1]
+			\item $s = 1$: perfect clustering (points at centroids)
+			\item $s = 0$: overlapping clusters
+			\item $s < 0$: mis-clustered points (empirically unlikely)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Range includes negative values
+			\item \textcolor{myred}{C:} Range is bounded
+			\item \textcolor{myred}{D:} Range includes negative values
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Silhouette score range = \textcolor{myblue}{[-1, 1]}!
+	\end{frame}
+	
+	\begin{frame}{Q32: Silhouette Score to Choose K - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What K is optimal based on silhouette scores?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The K with the lowest average silhouette score
+			\item The K with the highest average silhouette score
+			\item Any K with score above 0
+			\item The K where scores start decreasing
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Compute average silhouette score for each K
+			\item Choose K with highest average score
+			\item Higher score = better-defined clusters
+			\item Alternative to elbow method
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Lowest score indicates poor clustering
+			\item \textcolor{myred}{C:} Need to compare across K values
+			\item \textcolor{myred}{D:} Choose highest, not where it starts decreasing
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Optimal K = \textcolor{myblue}{highest silhouette score}!
+	\end{frame}
+	
+	\begin{frame}{Q33: K-means Advantages - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is an advantage of K-means clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It always finds the optimal solution
+			\item It is intuitive, computationally efficient, and guaranteed to converge
+			\item It handles non-spherical clusters well
+			\item It automatically determines the number of clusters
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Intuitive:} Easy to understand and communicate
+			\item \textbf{Computationally efficient:} Scales well to large datasets
+			\item \textbf{Guaranteed convergence:} Always reaches a solution
+			\item \textbf{Visualizable:} Works well with 2-3 features
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} May find local optimum, not global
+			\item \textcolor{myred}{C:} K-means struggles with non-spherical clusters
+			\item \textcolor{myred}{D:} K must be specified beforehand
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means = \textcolor{myblue}{intuitive, efficient, guaranteed convergence}!
+	\end{frame}
+	
+	\begin{frame}{Q34: K-means Disadvantages - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a disadvantage of K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It requires K to be specified in advance
+			\item It works well with non-spherical clusters
+			\item It is robust to outliers
+			\item It handles high-dimensional data well
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{K must be pre-specified:} Analyst must choose K
+			\item \textbf{Sensitive to outliers:} Can distort centroids
+			\item \textbf{Curse of dimensionality:} Poor with many features
+			\item \textbf{Spherical clusters:} Assumes roughly spherical clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} K-means struggles with non-spherical clusters
+			\item \textcolor{myred}{C:} K-means is sensitive to outliers
+			\item \textcolor{myred}{D:} K-means suffers from curse of dimensionality
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means disadvantages = \textcolor{myblue}{requires K, sensitive to outliers, spherical assumption}!
+	\end{frame}
+	
+	\begin{frame}{Q35: K-means and Spherical Clusters - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What cluster shape does K-means tend to produce?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Arbitrary shapes
+			\item Spherical (circular in 2D) clusters
+			\item Elongated clusters
+			\item Irregular clusters
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Based on Euclidean distances from centroids
+			\item Creates roughly spherical clusters
+			\item Assumes clusters are isotropic
+			\item Fails when clusters have non-spherical shapes
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} K-means cannot handle arbitrary shapes well
+			\item \textcolor{myred}{C:} K-means struggles with elongated clusters
+			\item \textcolor{myred}{D:} Irregular clusters cause problems
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means produces \textcolor{myblue}{spherical clusters}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 3: K-MEANS PROBLEMS - QUESTIONS 36-50
+	% ============================================================
+	
+	\begin{frame}{Q36: Outlier Sensitivity - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How do outliers affect K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They have no effect
+			\item They can distort centroids or form their own clusters
+			\item They improve clustering quality
+			\item They are automatically removed
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Outliers can pull centroids away from true centers
+			\item In extreme cases, outliers may form their own clusters
+			\item Particularly problematic with large K (overfitting)
+			\item Scaling helps but may not eliminate issue
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Outliers have significant effect
+			\item \textcolor{myred}{C:} Outliers degrade clustering quality
+			\item \textcolor{myred}{D:} Outliers are not automatically removed
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Outliers \textcolor{myblue}{distort centroids} in K-means!
+	\end{frame}
+	
+	\begin{frame}{Q37: Curse of Dimensionality - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the "curse of dimensionality" in K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Too many data points
+			\item As features increase, data becomes sparse and distances become similar
+			\item Too few features
+			\item Too many clusters
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Data points become increasingly spread out
+			\item Distances between points and centroids become similar
+			\item Harder to identify distinct clusters
+			\item K-means converges very slowly
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Curse is about features, not observations
+			\item \textcolor{myred}{C:} Curse is about too MANY features
+			\item \textcolor{myred}{D:} Curse is about features, not clusters
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Curse of dimensionality = \textcolor{myblue}{many features make distances similar}!
+	\end{frame}
+	
+	\begin{frame}{Q38: Curse of Dimensionality Solution - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How can the curse of dimensionality be addressed?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Use more data points
+			\item Remove features or use PCA to reduce dimensions
+			\item Use more clusters
+			\item Use a smaller distance measure
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Remove features:} Eliminate irrelevant features
+			\item \textbf{PCA:} Transform to smaller subset of components
+			\item \textbf{Alternative distances:} Use cosine distance
+			\item \textbf{Feature selection:} Keep only important features
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} More data doesn't solve high dimensionality
+			\item \textcolor{myred}{C:} More clusters worsens the problem
+			\item \textcolor{myred}{D:} Distance measure choice is a consideration
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Solutions = \textcolor{myblue}{remove features or use PCA}!
+	\end{frame}
+	
+	\begin{frame}{Q39: Non-Spherical Clusters Problem - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a pathological case for K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Data with two spherical clusters
+			\item Data with concentric rings or elongated clusters
+			\item Data with outliers removed
+			\item Data with equal cluster sizes
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item K-means fails with non-spherical shapes
+			\item Example: Two concentric rings (inner and outer)
+			\item Example: Elongated clusters (oval shapes)
+			\item K-means cannot form appropriate clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} K-means works well with spherical clusters
+			\item \textcolor{myred}{C:} Outliers should be handled separately
+			\item \textcolor{myred}{D:} Equal sizes are not a problem
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means fails with \textcolor{myblue}{non-spherical shapes} like concentric rings!
+	\end{frame}
+	
+	\begin{frame}{Q40: Concentric Rings Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why does K-means fail with concentric rings?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Centroids would be in the same place
+			\item There are too many points
+			\item Distances to centroids are equal
+			\item There is no data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Optimal centroids would be at center for both clusters
+			\item Both centroids would be in the same position
+			\item Distances to each centroid would be identical
+			\item Algorithm cannot form two distinct clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Number of points doesn't cause failure
+			\item \textcolor{myred}{C:} Distances are similar, not equal
+			\item \textcolor{myred}{D:} There is data in both rings
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Concentric rings = \textcolor{myblue}{centroids would be in same place}!
+	\end{frame}
+	
+	\begin{frame}{Q41: Elongated Clusters Problem - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How does K-means misallocate points in elongated clusters?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Points at the edge may be closer to the other cluster's centroid
+			\item All points are correctly allocated
+			\item Only outliers are misallocated
+			\item No misallocation occurs
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Elongated clusters have points far from their centroid
+			\item Points at the edge may be closer to other cluster's centroid
+			\item Results in misallocation
+			\item Example: Orange point in oval cluster
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Misallocation does occur
+			\item \textcolor{myred}{C:} Not just outliers are misallocated
+			\item \textcolor{myred}{D:} Misallocation is a known problem
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Elongated clusters cause \textcolor{myblue}{edge points to be misallocated}!
+	\end{frame}
+	
+	\begin{frame}{Q42: K-means++ - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is K-means++?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A faster version of K-means
+			\item An initialization method that spreads centroids far apart
+			\item A version that uses Manhattan distance
+			\item A version that automatically determines K
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Smarter initialization than random
+			\item First centroid chosen randomly from data points
+			\item Subsequent centroids chosen far from existing ones
+			\item Probability proportional to squared distance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} It's about initialization, not speed
+			\item \textcolor{myred}{C:} Uses Euclidean distance by default
+			\item \textcolor{myred}{D:} K still must be specified
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means++ = \textcolor{myblue}{spreads initial centroids apart}!
+	\end{frame}
+	
+	\begin{frame}{Q43: K-means++ Advantages - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the benefit of using K-means++?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It always finds the global optimum
+			\item It improves clustering results and speeds convergence
+			\item It eliminates the need for scaling
+			\item It works with any number of clusters
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Better initial centroids = better final clusters
+			\item Reduces chance of poor local optima
+			\item Often converges more quickly
+			\item Reduces sensitivity to initialization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} No method guarantees global optimum
+			\item \textcolor{myred}{C:} Scaling is still needed
+			\item \textcolor{myred}{D:} K must still be specified
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means++ = \textcolor{myblue}{better initialization, faster convergence}!
+	\end{frame}
+	
+	\begin{frame}{Q44: Multiple Initializations - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is K-means often run multiple times?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To increase computation time
+			\item Because initial centroids are random, different runs give different results
+			\item To use more data
+			\item To automatically determine K
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Random initialization affects final solution
+			\item Different runs may find different local optima
+			\item Choose run with lowest inertia (WCSS)
+			\item Standard practice to run multiple times
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Not the purpose of multiple runs
+			\item \textcolor{myred}{C:} Data is the same for each run
+			\item \textcolor{myred}{D:} K must still be specified
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Multiple runs needed because \textcolor{myblue}{initialization affects results}!
+	\end{frame}
+	
+	\begin{frame}{Q45: Choosing Between Initializations - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How to choose between different K-means initializations?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Choose the one with highest WCSS
+			\item Choose the one with lowest inertia (WCSS)
+			\item Choose the one with most clusters
+			\item Choose the one with fastest convergence
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Lower WCSS = better fit
+			\item More compact clusters
+			\item Represents best clustering solution
+			\item Standard practice in K-means
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Higher WCSS means poorer fit
+			\item \textcolor{myred}{C:} K is fixed across runs
+			\item \textcolor{myred}{D:} Convergence speed is secondary
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Choose initialization with \textcolor{myblue}{lowest WCSS}!
+	\end{frame}
+	
+	\begin{frame}{Q46: K-means Rule of Thumb - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a rough rule of thumb for choosing K?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $K = \sqrt{N}$
+			\item $K \approx \sqrt{N/2}$
+			\item $K = N/2$
+			\item $K = \log(N)$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Rule of thumb: $K \approx \sqrt{N/2}$
+			\item Very rough guideline only
+			\item Doesn't consider data characteristics
+			\item Better to use elbow method or silhouette scores
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is a different rule
+			\item \textcolor{myred}{C:} This is too large
+			\item \textcolor{myred}{D:} This is too small
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Rule of thumb: $K \approx$ \textcolor{myblue}{$\sqrt{N/2}$}!
+	\end{frame}
+	
+	\begin{frame}{Q47: K=1 in K-means - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What happens when K=1 in K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Each point is its own cluster
+			\item All points in one cluster
+			\item The algorithm fails
+			\item Clusters are well-separated
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item All data points in a single cluster
+			\item Centroid is the global mean
+			\item WCSS is total variance
+			\item Usually not a meaningful solution
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This occurs when K=N
+			\item \textcolor{myred}{C:} K=1 is valid but uninformative
+			\item \textcolor{myred}{D:} With K=1, there is only one cluster
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K=1 = \textcolor{myblue}{all points in one cluster}!
+	\end{frame}
+	
+	\begin{frame}{Q48: K=N in K-means - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What happens when K=N in K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item All points in one cluster
+			\item Each point is its own cluster
+			\item The algorithm fails
+			\item Clusters are optimal
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Each data point is its own cluster
+			\item WCSS = 0 (perfect fit)
+			\item Entirely uninformative
+			\item Classic case of overfitting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This happens when K=1
+			\item \textcolor{myred}{C:} Algorithm works but is useless
+			\item \textcolor{myred}{D:} K=N is overfitting, not optimal
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K=N = \textcolor{myblue}{each point is its own cluster} (overfitting)!
+	\end{frame}
+	
+	\begin{frame}{Q49: Overfitting in K-means - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: When does overfitting occur in K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item When K is too small
+			\item When K is too large (approaching N)
+			\item When features are scaled
+			\item When K=2
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Too many clusters = K close to N
+			\item Each point becomes its own cluster
+			\item WCSS approaches zero
+			\item Model is uninformative
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} K too small is underfitting
+			\item \textcolor{myred}{C:} Scaling prevents bias, not overfitting
+			\item \textcolor{myred}{D:} K=2 is usually not overfitting
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Overfitting = \textcolor{myblue}{K too large} (approaching N)!
+	\end{frame}
+	
+	\begin{frame}{Q50: K-means Performance Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the most comprehensive summary of K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It always works perfectly
+			\item It is intuitive, efficient, but has limitations (requires K, sensitive to outliers, spherical assumption)
+			\item It is only useful for small datasets
+			\item It has no limitations
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Advantages:} Intuitive, efficient, guaranteed convergence
+			\item \textbf{Limitations:} Requires K, sensitive to outliers, spherical assumption
+			\item \textbf{Applications:} Customer segmentation, anomaly detection
+			\item \textbf{Evaluation:} WCSS, elbow method, silhouette scores
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} K-means has limitations
+			\item \textcolor{myred}{C:} K-means scales well to large datasets
+			\item \textcolor{myred}{D:} K-means has several limitations
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means = \textcolor{myblue}{powerful but with important limitations}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 4: HIERARCHICAL CLUSTERING - QUESTIONS 51-65
+	% ============================================================
+	
+	\begin{frame}{Q51: Hierarchical Clustering Advantage - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a key advantage of hierarchical clustering over K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It is faster than K-means
+			\item It does not require pre-specifying the number of clusters
+			\item It always produces spherical clusters
+			\item It handles outliers better
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item No need to specify K in advance
+			\item Builds hierarchy of all possible clusters
+			\item From 1 cluster to N clusters
+			\item Dendrogram shows all levels
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Hierarchical is often slower for large datasets
+			\item \textcolor{myred}{C:} Can handle various shapes
+			\item \textcolor{myred}{D:} DBSCAN handles outliers better
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Hierarchical clustering = \textcolor{myblue}{no need to pre-specify K}!
+	\end{frame}
+	
+	\begin{frame}{Q52: Dendrogram Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a dendrogram in hierarchical clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A scatter plot of data points
+			\item A tree-like diagram showing cluster hierarchy
+			\item A bar chart of cluster sizes
+			\item A plot of WCSS vs K
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Visual representation of hierarchical clustering
+			\item Tree-like structure
+			\item Data points on x-axis
+			\item Distance/dissimilarity on y-axis
+			\item Shows merging or splitting process
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is a scatter plot
+			\item \textcolor{myred}{C:} This is a bar chart
+			\item \textcolor{myred}{D:} This is a scree plot
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dendrogram = \textcolor{myblue}{tree diagram of cluster hierarchy}!
+	\end{frame}
+	
+	\begin{frame}{Q53: Dendrogram Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What do the heights of vertical lines in a dendrogram represent?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Number of data points
+			\item Distance at which clusters are merged or split
+			\item Cluster sizes
+			\item Feature values
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Vertical lines show merge distance
+			\item Longer lines = greater cluster dissimilarity
+			\item Higher merges = less similar clusters
+			\item Helps determine appropriate number of clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Number of points shown on x-axis
+			\item \textcolor{myred}{C:} Size is shown by branch thickness
+			\item \textcolor{myred}{D:} Feature values are not shown
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dendrogram height = \textcolor{myblue}{distance at which clusters merge/split}!
+	\end{frame}
+	
+	\begin{frame}{Q54: Single Linkage - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How does single linkage define distance between clusters?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Distance between farthest points in clusters
+			\item Distance between closest points in clusters
+			\item Distance between centroids
+			\item Average distance between all points
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $d_{single}(A,B) = \min_{a \in A, b \in B} d(a,b)$
+			\item Based on closest points between clusters
+			\item Also called nearest-neighbor linkage
+			\item Tends to produce elongated clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is complete linkage
+			\item \textcolor{myred}{C:} This is centroid linkage
+			\item \textcolor{myred}{D:} This is average linkage
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Single linkage = \textcolor{myblue}{closest points between clusters}!
+	\end{frame}
+	
+	\begin{frame}{Q55: Complete Linkage - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How does complete linkage define distance between clusters?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Distance between closest points in clusters
+			\item Distance between farthest points in clusters
+			\item Distance between centroids
+			\item Average distance between all points
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $d_{complete}(A,B) = \max_{a \in A, b \in B} d(a,b)$
+			\item Based on farthest points between clusters
+			\item Also called farthest-neighbor linkage
+			\item Tends to produce compact, spherical clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is single linkage
+			\item \textcolor{myred}{C:} This is centroid linkage
+			\item \textcolor{myred}{D:} This is average linkage
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Complete linkage = \textcolor{myblue}{farthest points between clusters}!
+	\end{frame}
+	
+	\begin{frame}{Q56: Single vs Complete Linkage - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How do single and complete linkage differ?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Single uses closest points; complete uses farthest points
+			\item Single uses farthest points; complete uses closest points
+			\item Both use the same method
+			\item Single is faster than complete
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Single:} closest points (nearest neighbors)
+			\item \textbf{Complete:} farthest points (most distant)
+			\item \textbf{Single:} elongated clusters possible
+			\item \textbf{Complete:} spherical clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is reversed
+			\item \textcolor{myred}{C:} They are different methods
+			\item \textcolor{myred}{D:} Speed difference is not the key distinction
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Single = \textcolor{myblue}{closest}; Complete = \textcolor{myblue}{farthest}!
+	\end{frame}
+	
+	\begin{frame}{Q57: Hierarchical Clustering Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the hierarchical clustering example, what was the first merge?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A and D
+			\item B and C
+			\item E and F
+			\item A and B
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Smallest distance in distance matrix was 3
+			\item Between objects B and C
+			\item B and C merged first
+			\item Distance at merge = 3
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} A and D merged later (distance 4)
+			\item \textcolor{myred}{C:} E and F had distance 18
+			\item \textcolor{myred}{D:} A and B had distance 5
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} First merge = \textcolor{myblue}{closest pair} (B and C)!
+	\end{frame}
+	
+	\begin{frame}{Q58: Distance Matrix - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does a distance matrix show in hierarchical clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Similarity between each pair of data points
+			\item Distance between each pair of data points
+			\item Cluster assignments
+			\item Centroids of clusters
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Matrix of pairwise distances
+			\item Used to identify closest clusters
+			\item Symmetric matrix
+			\item Diagonal entries are zero
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Distance, not similarity (though related)
+			\item \textcolor{myred}{C:} Cluster assignments are from algorithm
+			\item \textcolor{myred}{D:} Centroids are from K-means
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Distance matrix shows \textcolor{myblue}{pairwise distances}!
+	\end{frame}
+	
+	\begin{frame}{Q59: Distance Matrix Update - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How is the distance matrix updated after merging clusters?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It is not updated
+			\item Using the chosen linkage criterion (single, complete, etc.)
+			\item By averaging all distances
+			\item By taking the maximum distance
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item New distances computed using linkage criterion
+			\item Single linkage: min distance
+			\item Complete linkage: max distance
+			\item Process repeats iteratively
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Matrix must be updated
+			\item \textcolor{myred}{C:} Depends on linkage criterion
+			\item \textcolor{myred}{D:} Only for complete linkage
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Distance matrix updated using \textcolor{myblue}{linkage criterion}!
+	\end{frame}
+	
+	\begin{frame}{Q60: Hierarchical vs K-means - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a key difference between hierarchical and K-means clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Hierarchical requires specifying K; K-means does not
+			\item Hierarchical does not require specifying K; K-means does
+			\item Both require specifying K
+			\item Neither requires specifying K
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item K-means: K must be pre-specified
+			\item Hierarchical: No need to pre-specify K
+			\item Hierarchical builds complete hierarchy
+			\item Can choose any K from dendrogram
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is reversed
+			\item \textcolor{myred}{C:} K-means requires K, hierarchical does not
+			\item \textcolor{myred}{D:} K-means requires K
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Hierarchical = \textcolor{myblue}{no K needed}; K-means = \textcolor{myblue}{K required}!
+	\end{frame}
+	
+	\begin{frame}{Q61: Hierarchical Advantages - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are advantages of hierarchical clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Faster than K-means
+			\item No need to specify K and reveals nested relationships
+			\item Always finds global optimum
+			\item Works well with high-dimensional data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{No K needed:} Does not require pre-specifying clusters
+			\item \textbf{Nested relationships:} Reveals hierarchical structure
+			\item \textbf{Dendrogram:} Easy to interpret
+			\item \textbf{Flexible:} Can choose any K from dendrogram
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Hierarchical is often slower
+			\item \textcolor{myred}{C:} No method guarantees global optimum
+			\item \textcolor{myred}{D:} Hierarchical also suffers from curse of dimensionality
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Hierarchical advantages = \textcolor{myblue}{no K needed + nested relationships}!
+	\end{frame}
+	
+	\begin{frame}{Q62: Choosing K from Dendrogram - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How can K be chosen from a dendrogram?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Count the number of branches at the top
+			\item Make a horizontal cut at a chosen distance
+			\item Count the number of leaves
+			\item Use the elbow method
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Draw horizontal line at chosen distance
+			\item Number of vertical lines it crosses = K
+			\item Lower cut = more clusters
+			\item Higher cut = fewer clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Top has one cluster
+			\item \textcolor{myred}{C:} Leaves = N (all points)
+			\item \textcolor{myred}{D:} Elbow method is for K-means
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Choose K by \textcolor{myblue}{cutting dendrogram at chosen height}!
+	\end{frame}
+	
+	\begin{frame}{Q63: Long Vertical Lines in Dendrogram - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does a long vertical line in a dendrogram indicate?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Clusters are very similar
+			\item Clusters are very different (large distance between merges)
+			\item Many data points in the cluster
+			\item Few data points in the cluster
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Long vertical line = large merge distance
+			\item Clusters being merged are very different
+			\item Suggests adding this cluster is important
+			\item Helps identify optimal K
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Short lines indicate similarity
+			\item \textcolor{myred}{C:} Number of points shown by branch thickness
+			\item \textcolor{myred}{D:} Number of points shown by branch thickness
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Long vertical line = \textcolor{myblue}{large cluster separation}!
+	\end{frame}
+	
+	\begin{frame}{Q64: Hierarchical with Distance Matrix - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In agglomerative clustering, when does the algorithm stop?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item When K clusters are formed
+			\item When all points are in one cluster
+			\item When WCSS is minimized
+			\item When centroids stabilize
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Starts with N clusters (each point)
+			\item Merges until one cluster remains
+			\item Complete hierarchy formed
+			\item Stopping at one cluster is natural end
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Can stop at any K, but natural end is one cluster
+			\item \textcolor{myred}{C:} WCSS is for K-means
+			\item \textcolor{myred}{D:} Centroids are for K-means
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Agglomerative stops when \textcolor{myblue}{all points in one cluster}!
+	\end{frame}
+	
+	\begin{frame}{Q65: Dendrogram Leaf Order - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What do the leaves in a dendrogram represent?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Clusters at final level
+			\item Individual data points
+			\item Centroids
+			\item Distance values
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Leaves represent individual observations
+			\item Each leaf = one data point
+			\item Labels on x-axis are data point names
+			\item Internal nodes represent merged clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Clusters are internal nodes
+			\item \textcolor{myred}{C:} Centroids are from K-means
+			\item \textcolor{myred}{D:} Distances are on y-axis
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dendrogram leaves = \textcolor{myblue}{individual data points}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 5: DENSITY-BASED CLUSTERING - QUESTIONS 66-75
+	% ============================================================
+	
+	\begin{frame}{Q66: DBSCAN Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does DBSCAN stand for?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Density-Based Spatial Clustering of Applications with Noise
+			\item Distance-Based Spatial Clustering of Applications with Noise
+			\item Data-Based Spatial Clustering of Applications with Noise
+			\item Density-Based Spectral Clustering of Applications with Noise
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item DBSCAN = Density-Based Spatial Clustering of Applications with Noise
+			\item Popular density-based clustering algorithm
+			\item Groups dense regions of data points
+			\item Separated by low-density regions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} DBSCAN is density-based, not distance-based
+			\item \textcolor{myred}{C:} "Spatial" not "Spectral"
+			\item \textcolor{myred}{D:} DBSCAN is density-based
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} DBSCAN = \textcolor{myblue}{Density-Based Spatial Clustering of Applications with Noise}!
+	\end{frame}
+	
+	\begin{frame}{Q67: DBSCAN Core Point - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a core point in DBSCAN?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A point with no neighbors
+			\item A point with at least a minimum number of points within a radius
+			\item A point on the edge of a cluster
+			\item A point that is isolated
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Core point has $\ge$ MinPts points in its neighborhood
+			\item Within radius $\varepsilon$ (epsilon)
+			\item Interior of dense region
+			\item Forms the foundation of clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes a noise point
+			\item \textcolor{myred}{C:} This describes a border point
+			\item \textcolor{myred}{D:} This describes a noise point
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Core point = \textcolor{myblue}{dense neighborhood} with $\ge$ MinPts!
+	\end{frame}
+	
+	\begin{frame}{Q68: DBSCAN Border Point - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a border point in DBSCAN?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A point with at least a minimum number of points within a radius
+			\item A point on the edge/fringe of a cluster
+			\item A point with no neighbors
+			\item A point at the center of a cluster
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Not a core point itself
+			\item Falls within radius of a core point
+			\item On the fringe of a dense region
+			\item Still part of the cluster
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes a core point
+			\item \textcolor{myred}{C:} This describes a noise point
+			\item \textcolor{myred}{D:} This describes a core point
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Border point = \textcolor{myblue}{edge of cluster}, not core!
+	\end{frame}
+	
+	\begin{frame}{Q69: DBSCAN Noise Point - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a noise point in DBSCAN?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A point with at least a minimum number of points within a radius
+			\item A point on the edge of a cluster
+			\item A point that is neither core nor border
+			\item A point at the center of a cluster
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Does not meet core point criteria
+			\item Not within radius of any core point
+			\item In low-density region
+			\item Treated as outlier/noise
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes a core point
+			\item \textcolor{myred}{B:} This describes a border point
+			\item \textcolor{myred}{D:} This describes a core point
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Noise point = \textcolor{myblue}{neither core nor border}!
+	\end{frame}
+	
+	\begin{frame}{Q70: DBSCAN Parameters - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the two key parameters for DBSCAN?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item K and number of iterations
+			\item Epsilon (radius) and MinPts (minimum points)
+			\item Number of features and number of clusters
+			\item WCSS and BCSS
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Epsilon ($\epsilon$):} Radius of neighborhood
+			\item \textbf{MinPts:} Minimum points to form dense region
+			\item Both must be specified by analyst
+			\item Choice affects clustering results
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} K is for K-means
+			\item \textcolor{myred}{C:} Features are data, not parameters
+			\item \textcolor{myred}{D:} WCSS/BCSS are evaluation metrics
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} DBSCAN parameters = \textcolor{myblue}{epsilon and MinPts}!
+	\end{frame}
+	
+	\begin{frame}{Q71: DBSCAN Advantages - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is an advantage of DBSCAN over K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It requires specifying K
+			\item It can find clusters of arbitrary shapes
+			\item It is faster for all datasets
+			\item It requires scaling
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Can find non-spherical clusters
+			\item Elongated, irregular shapes
+			\item Concentric rings (K-means fails)
+			\item Based on density, not distance to centroid
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} DBSCAN does NOT require K
+			\item \textcolor{myred}{C:} DBSCAN can be slower
+			\item \textcolor{myred}{D:} DBSCAN still benefits from scaling
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} DBSCAN = \textcolor{myblue}{arbitrary shape clusters}!
+	\end{frame}
+	
+	\begin{frame}{Q72: DBSCAN Outlier Handling - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How does DBSCAN handle outliers?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They are forced into clusters
+			\item They are classified as noise and excluded
+			\item They are removed from the dataset
+			\item They become their own clusters
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Points in low-density regions = noise
+			\item Automatically excluded from clusters
+			\item Does not distort clusters
+			\item Better than K-means for outlier handling
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} DBSCAN does not force outliers into clusters
+			\item \textcolor{myred}{C:} Outliers are identified, not removed
+			\item \textcolor{myred}{D:} Outliers may become noise, not their own clusters
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} DBSCAN outliers = \textcolor{myblue}{noise} (excluded from clusters)!
+	\end{frame}
+	
+	\begin{frame}{Q73: DBSCAN Limitation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a limitation of DBSCAN?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It requires specifying K
+			\item It struggles with clusters of widely varying densities
+			\item It always finds spherical clusters
+			\item It cannot handle outliers
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Single $\epsilon$ and MinPts for all clusters
+			\item Different densities require different parameters
+			\item May miss low-density clusters
+			\item May merge high-density clusters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} DBSCAN does NOT require K
+			\item \textcolor{myred}{C:} DBSCAN finds arbitrary shapes
+			\item \textcolor{myred}{D:} DBSCAN handles outliers well
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} DBSCAN struggles with \textcolor{myblue}{varying density clusters}!
+	\end{frame}
+	
+	\begin{frame}{Q74: DBSCAN vs K-means - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: When should DBSCAN be preferred over K-means?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item When clusters are spherical and well-separated
+			\item When clusters have non-spherical shapes and outliers are present
+			\item When K is known
+			\item When data is low-dimensional
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Non-spherical shapes (elongated, irregular)
+			\item Outliers/noise in the data
+			\item Unknown number of clusters
+			\item Examples: geographical data, anomaly detection
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} K-means works well for spherical clusters
+			\item \textcolor{myred}{C:} DBSCAN doesn't require K
+			\item \textcolor{myred}{D:} Both can work with low-dimensional data
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} DBSCAN for \textcolor{myblue}{non-spherical shapes + outliers}!
+	\end{frame}
+	
+	\begin{frame}{Q75: Density-Based Clustering Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the key concept behind density-based clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Distance to centroids
+			\item Dense regions separated by low-density regions
+			\item Hierarchical merging
+			\item Predefined number of groups
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Clusters = dense regions of data points
+			\item Separated by regions of lower density
+			\item Can find arbitrary shapes
+			\item Robust to outliers
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is K-means/centroid-based
+			\item \textcolor{myred}{C:} This is hierarchical
+			\item \textcolor{myred}{D:} This is partitional
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Density-based = \textcolor{myblue}{dense regions separated by low density}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 6: CLUSTERING EVALUATION - QUESTIONS 76-85
+	% ============================================================
+	
+	\begin{frame}{Q76: Clustering Evaluation Challenge - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is evaluating clustering more challenging than supervised learning?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Clustering is computationally more expensive
+			\item There is no predefined "right answer" or labels to compare against
+			\item Clustering requires more data
+			\item Clustering has fewer metrics available
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item No known outcomes/labels
+			\item Cannot compare to ground truth
+			\item Clusters are subjective
+			\item Need internal validation metrics
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Computational cost is not the key issue
+			\item \textcolor{myred}{C:} Data requirements vary
+			\item \textcolor{myred}{D:} Many metrics exist (WCSS, silhouette)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Clustering has \textcolor{myblue}{no predefined "right answer"} to compare against!
+	\end{frame}
+	
+	\begin{frame}{Q77: Internal vs External Validation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What type of validation is used in clustering (no labels)?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item External validation (comparing to labels)
+			\item Internal validation (using metrics like WCSS, silhouette)
+			\item Cross-validation
+			\item Hold-out validation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Internal validation = uses only the data
+			\item No external labels needed
+			\item Metrics: WCSS, silhouette score, BCSS
+			\item Assesses compactness and separation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} External validation requires labels (supervised)
+			\item \textcolor{myred}{C:} Cross-validation is for supervised learning
+			\item \textcolor{myred}{D:} Hold-out is for supervised learning
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Clustering uses \textcolor{myblue}{internal validation} (no labels)!
+	\end{frame}
+	
+	\begin{frame}{Q78: WCSS as Evaluation Metric - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does a lower WCSS indicate?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Worse clustering
+			\item Better clustering (more compact)
+			\item More clusters
+			\item Fewer clusters
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Lower WCSS = points closer to centroids
+			\item Clusters are more compact
+			\item Better fit to the data
+			\item Goal is to minimize WCSS
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Lower WCSS means BETTER clustering
+			\item \textcolor{myred}{C:} WCSS typically decreases with more clusters
+			\item \textcolor{myred}{D:} WCSS doesn't directly indicate K
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Lower WCSS = \textcolor{myblue}{better/more compact clusters}!
+	\end{frame}
+	
+	\begin{frame}{Q79: WCSS Limitation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a limitation of using WCSS alone?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It always decreases with K, leading to potential overfitting
+			\item It always increases with K
+			\item It is difficult to calculate
+			\item It cannot be used with large datasets
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item WCSS never increases with K
+			\item Adding clusters always improves WCSS
+			\item K=N gives WCSS=0 (overfitting)
+			\item Must balance with interpretability
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} WCSS decreases, not increases
+			\item \textcolor{myred}{C:} WCSS is straightforward to calculate
+			\item \textcolor{myred}{D:} WCSS works with large datasets
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} WCSS always decreases with K $\to$ \textcolor{myblue}{overfitting risk}!
+	\end{frame}
+	
+	\begin{frame}{Q80: Silhouette Score Advantage - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is an advantage of silhouette scores over WCSS?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It always increases with K
+			\item It balances within-cluster and between-cluster distances
+			\item It is easier to calculate
+			\item It does not require scaling
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Considers both cohesion (within) and separation (between)
+			\item Higher score = better clustering
+			\item Does not monotonically increase with K
+			\item Better at identifying optimal K
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Silhouette score may decrease
+			\item \textcolor{myred}{C:} WCSS is simpler to calculate
+			\item \textcolor{myred}{D:} Both require scaling
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Silhouette score balances \textcolor{myblue}{cohesion and separation}!
+	\end{frame}
+	
+	\begin{frame}{Q81: Silhouette Score Interpretation Values - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does a silhouette score of 0 indicate?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Perfect clustering
+			\item Clusters are significantly overlapping
+			\item Mis-clustered points
+			\item All points are outliers
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $s = 0$: clusters are overlapping
+			\item Points are equally close to own and other clusters
+			\item No clear separation
+			\item Not good clustering
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} $s = 1$ indicates perfect clustering
+			\item \textcolor{myred}{C:} $s < 0$ indicates mis-clustering
+			\item \textcolor{myred}{D:} Outliers would have low/negative scores
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} $s = 0$ = \textcolor{myblue}{overlapping clusters}!
+	\end{frame}
+	
+	\begin{frame}{Q82: Silhouette Score vs Elbow Method - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How do elbow method and silhouette scores compare for choosing K?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They always agree
+			\item Elbow uses WCSS (inertia); silhouette uses cohesion vs separation
+			\item Elbow is always better
+			\item Silhouette is always better
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Elbow:} Visual inspection of WCSS vs K
+			\item \textbf{Silhouette:} Numerical score [-1, 1]
+			\item Both can be used together
+			\item May not always agree
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} They may not agree
+			\item \textcolor{myred}{C:} Neither is universally better
+			\item \textcolor{myred}{D:} Neither is universally better
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Elbow = \textcolor{myblue}{WCSS}; Silhouette = \textcolor{myblue}{cohesion vs separation}!
+	\end{frame}
+	
+	\begin{frame}{Q83: Silhouette Plots - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In a silhouette plot, what does a negative value indicate?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Well-clustered points
+			\item Points are likely mis-clustered
+			\item Perfect clustering
+			\item Clusters are well-separated
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Negative silhouette score ($s < 0$)
+			\item Point is closer to other clusters than own
+			\item Suggests mis-clustering
+			\item Empirically unlikely but possible
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Negative means POOR clustering
+			\item \textcolor{myred}{C:} $s = 1$ is perfect
+			\item \textcolor{myred}{D:} Positive values indicate separation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Negative silhouette = \textcolor{myblue}{mis-clustered points}!
+	\end{frame}
+	
+	\begin{frame}{Q84: Stock/Bond Clustering Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the stock/bond example, what did the data represent?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Daily stock prices
+			\item Annual value-weighted stock returns and Treasury bill yields (1927-2021)
+			\item Monthly bond yields
+			\item Quarterly earnings
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Annual data from 1927 to 2021
+			\item Two features: stock returns and T-bill yields
+			\item Two distinct clusters identified
+			\item Corresponds to different market regimes
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Not daily prices
+			\item \textcolor{myred}{C:} Annual, not monthly
+			\item \textcolor{myred}{D:} Not quarterly earnings
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stock/bond data = \textcolor{myblue}{annual returns and yields 1927-2021}!
+	\end{frame}
+	
+	\begin{frame}{Q85: Clustering Evaluation Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the most comprehensive approach to evaluate clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Use only WCSS
+			\item Use only silhouette scores
+			\item Use multiple metrics (WCSS, silhouette, BCSS) and visualization
+			\item Use supervised learning metrics
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item No single metric tells the whole story
+			\item Combine WCSS (compactness), silhouette (cohesion/separation), BCSS
+			\item Visualize clusters when possible
+			\item Consider domain knowledge
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} WCSS alone can lead to overfitting
+			\item \textcolor{myred}{B:} Silhouette alone may miss some aspects
+			\item \textcolor{myred}{D:} Supervised metrics require labels
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Use \textcolor{myblue}{multiple metrics} + visualization for comprehensive evaluation!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 7: CHAPTER QUESTIONS - QUESTIONS 86-100
+	% ============================================================
+	
+	\begin{frame}{Q86: Choosing K in Unsupervised Learning - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How do you choose the number of clusters in unsupervised learning?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Use a fixed K for all datasets
+			\item Use scree plot (elbow method) and/or silhouette scores
+			\item Always use K=2
+			\item Use the square root of N
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Scree plot:} Look for elbow in WCSS vs K
+			\item \textbf{Silhouette scores:} Choose K with highest score
+			\item Use domain knowledge
+			\item Combine multiple methods
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Optimal K varies by dataset
+			\item \textcolor{myred}{C:} K=2 may not be optimal
+			\item \textcolor{myred}{D:} Rule of thumb is only a rough guide
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Choose K using \textcolor{myblue}{elbow method and/or silhouette scores}!
+	\end{frame}
+	
+	\begin{frame}{Q87: K-means Steps - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the correct steps for K-means clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Scale features, choose K, initialize centroids, assign points, update centroids, repeat
+			\item Choose K, assign points, scale features, update centroids
+			\item Assign points, update centroids, choose K
+			\item Scale features, assign points, choose K, update centroids
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{enumerate}
+			\item Scale features (essential for distance-based)
+			\item Choose K (number of clusters)
+			\item Initialize K centroids
+			\item Assign points to nearest centroid
+			\item Update centroids (mean of assigned points)
+			\item Repeat until convergence
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Scaling should come BEFORE choosing K
+			\item \textcolor{myred}{C:} K must be chosen before assignment
+			\item \textcolor{myred}{D:} Scaling should come first
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Correct order: \textcolor{myblue}{scale, choose K, initialize, assign, update, repeat}!
+	\end{frame}
+	
+	\begin{frame}{Q88: Choosing Between Initializations - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How to choose between multiple K-means initializations?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Choose the one with highest WCSS
+			\item Choose the one with lowest WCSS (inertia)
+			\item Choose the one with highest silhouette score
+			\item Choose the one with fastest convergence
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Lower WCSS = better fit
+			\item More compact clusters
+			\item Run multiple times with different initializations
+			\item Select best based on lowest WCSS
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Higher WCSS = worse fit
+			\item \textcolor{myred}{C:} Silhouette can also be used, but WCSS is standard
+			\item \textcolor{myred}{D:} Quality matters more than speed
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Select initialization with \textcolor{myblue}{lowest WCSS}!
+	\end{frame}
+	
+	\begin{frame}{Q89: Scree Plot Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How do you use a scree plot to choose K?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Choose the K with the lowest WCSS
+			\item Look for the "elbow" where WCSS decrease slows
+			\item Choose the K with the highest WCSS
+			\item Choose K=2 always
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item x-axis: K (number of clusters)
+			\item y-axis: WCSS (inertia)
+			\item Elbow: point where slope changes from steep to flat
+			\item Diminishing returns after elbow
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} WCSS always decreases with K (overfitting)
+			\item \textcolor{myred}{C:} Highest WCSS is at K=1
+			\item \textcolor{myred}{D:} Optimal K varies by dataset
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Elbow = \textcolor{myblue}{point where WCSS decrease slows}!
+	\end{frame}
+	
+	\begin{frame}{Q90: Hierarchical Types - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the two types of hierarchical clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Partitional and Density-based
+			\item Divisive (top-down) and Agglomerative (bottom-up)
+			\item Single and Complete linkage
+			\item K-means and DBSCAN
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Divisive:} Top-down (split from one cluster)
+			\item \textbf{Agglomerative:} Bottom-up (merge from individual points)
+			\item Both create hierarchical structure
+			\item Visualized using dendrogram
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} These are different clustering categories
+			\item \textcolor{myred}{C:} These are linkage criteria
+			\item \textcolor{myred}{D:} These are different algorithms
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Hierarchical = \textcolor{myblue}{divisive and agglomerative}!
+	\end{frame}
+	
+	\begin{frame}{Q91: Hierarchical Advantages Detailed - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are advantages of hierarchical clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item No need to specify K, reveals nested relationships, dendrograms are interpretable
+			\item Always finds global optimum
+			\item Faster than K-means
+			\item Works well with high-dimensional data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{No K needed:} Does not require pre-specifying clusters
+			\item \textbf{Nested relationships:} Shows hierarchy of clusters
+			\item \textbf{Dendrogram:} Easy to interpret visually
+			\item \textbf{Flexible:} Can choose any K from dendrogram
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} No method guarantees global optimum
+			\item \textcolor{myred}{C:} Hierarchical is often slower
+			\item \textcolor{myred}{D:} Hierarchical suffers from curse of dimensionality
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Hierarchical = \textcolor{myblue}{no K, nested relationships, interpretable}!
+	\end{frame}
+	
+	\begin{frame}{Q92: K-means Spherical Assumption - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Is the statement "K-means with Euclidean distance can only be used when clusters are approximately spherical" true?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item True
+			\item False
+			\item Only true with Manhattan distance
+			\item Only false with scaling
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item K-means based on Euclidean distance
+			\item Tends to produce spherical clusters
+			\item Fails with elongated or irregular shapes
+			\item Manhattan distance produces rhombus shapes
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Statement is true
+			\item \textcolor{myred}{C:} Manhattan also has shape limitations
+			\item \textcolor{myred}{D:} Scaling doesn't change spherical assumption
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-means assumes \textcolor{myblue}{approximately spherical clusters}!
+	\end{frame}
+	
+	\begin{frame}{Q93: WCSS and K Relationship - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Is the statement "WCSS will never rise when K increases" true?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item True
+			\item False
+			\item It rises when K is too large
+			\item It only rises when K=1
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item WCSS cannot increase with K
+			\item More clusters = better fit
+			\item K=N gives WCSS=0
+			\item Similar to R² in regression
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Statement is true
+			\item \textcolor{myred}{C:} WCSS always decreases or stays same
+			\item \textcolor{myred}{D:} Always true for all K
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} WCSS \textcolor{myblue}{never increases} with K!
+	\end{frame}
+	
+	\begin{frame}{Q94: Dendrogram Interpretation Detailed - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a dendrogram and how is it interpreted?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A bar chart of cluster sizes
+			\item A tree diagram showing cluster hierarchy; heights show merge distances
+			\item A scatter plot of data points
+			\item A plot of WCSS vs K
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Visual representation of hierarchical clustering
+			\item Data points on x-axis
+			\item Distance/dissimilarity on y-axis
+			\item Heights show merge distances
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is a bar chart
+			\item \textcolor{myred}{C:} This is a scatter plot
+			\item \textcolor{myred}{D:} This is a scree plot
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dendrogram = \textcolor{myblue}{tree diagram showing cluster hierarchy}!
+	\end{frame}
+	
+	\begin{frame}{Q95: Centroid Calculation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Given three banks with features, how is the centroid calculated?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item By taking the median of each feature
+			\item By taking the average (mean) of each feature across banks
+			\item By taking the maximum of each feature
+			\item By taking the minimum of each feature
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Centroid = mean (average) of all points in cluster
+			\item Average each feature separately
+			\item Example: (1.2+6.0+0.5)/3 = 2.567
+			\item Similarly for each feature
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} K-means uses mean, not median
+			\item \textcolor{myred}{C:} Max would be extreme
+			\item \textcolor{myred}{D:} Min would be extreme
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Centroid = \textcolor{myblue}{mean (average) of feature values}!
+	\end{frame}
+	
+	\begin{frame}{Q96: Bank Centroid Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: For three banks, what is the centroid coordinate?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item (2.567, 12.333, 176.667)
+			\item (1.200, 5.000, 80.000)
+			\item (6.000, 25.000, 400.000)
+			\item (0.500, 7.000, 50.000)
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Bank A: (1.2, 5, 80)
+			\item Bank B: (6.0, 25, 400)
+			\item Bank C: (0.5, 7, 50)
+			\item Average each coordinate: ((1.2+6.0+0.5)/3, (5+25+7)/3, (80+400+50)/3) = (2.567, 12.333, 176.667)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is Bank A's values
+			\item \textcolor{myred}{C:} This is Bank B's values
+			\item \textcolor{myred}{D:} This is Bank C's values
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Centroid = \textcolor{myblue}{average of all points in cluster}!
+	\end{frame}
+	
+	\begin{frame}{Q97: Scaling Methods - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why use standardization vs normalization for clustering?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They are the same
+			\item Standardization gives mean 0, variance 1; normalization scales to [0,1]
+			\item Normalization gives mean 0; standardization scales to [0,1]
+			\item Neither is needed
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Standardization:} mean=0, variance=1
+			\item \textbf{Normalization:} scale to [0,1] range
+			\item Both make features comparable
+			\item Choice depends on data characteristics
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} They are different methods
+			\item \textcolor{myred}{C:} This is reversed
+			\item \textcolor{myred}{D:} Scaling is essential for clustering
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Standardization = \textcolor{myblue}{mean 0, variance 1}; Normalization = \textcolor{myblue}{[0,1] range}!
+	\end{frame}
+	
+	\begin{frame}{Q98: Clustering vs Classification - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How does clustering differ from classification?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Clustering is supervised; classification is unsupervised
+			\item Clustering is unsupervised; classification is supervised
+			\item Both are supervised
+			\item Both are unsupervised
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Clustering:} Unsupervised (no labels)
+			\item \textbf{Classification:} Supervised (known labels)
+			\item Clustering discovers groups
+			\item Classification assigns to known groups
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is reversed
+			\item \textcolor{myred}{C:} Clustering is unsupervised
+			\item \textcolor{myred}{D:} Classification is supervised
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Clustering = \textcolor{myblue}{unsupervised}; Classification = \textcolor{myblue}{supervised}!
+	\end{frame}
+	
+	\begin{frame}{Q99: Clustering as Exploratory Analysis - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why use clustering before supervised learning?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To remove all features
+			\item To understand data structure and potentially improve feature engineering
+			\item To label the data
+			\item To increase data size
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Exploratory data analysis
+			\item Understand inherent structure
+			\item May reveal patterns
+			\item Can improve feature engineering
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Clustering doesn't remove features
+			\item \textcolor{myred}{C:} Clustering doesn't label data
+			\item \textcolor{myred}{D:} Clustering doesn't increase data size
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Clustering helps \textcolor{myblue}{understand structure} before supervised learning!
+	\end{frame}
+	
+	\begin{frame}{Q100: Final Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the most comprehensive summary of unsupervised learning?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only K-means is used for clustering
+			\item Unsupervised learning includes K-means, hierarchical, and DBSCAN, each with different strengths and evaluation methods
+			\item Only hierarchical clustering is used
+			\item Clustering doesn't require evaluation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{K-means:} Partitional, centroid-based, requires K
+			\item \textbf{Hierarchical:} Tree-based, no K needed, dendrogram
+			\item \textbf{DBSCAN:} Density-based, arbitrary shapes, noise handling
+			\item \textbf{Evaluation:} WCSS, elbow method, silhouette scores
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Multiple methods exist beyond K-means
+			\item \textcolor{myred}{C:} Multiple methods exist beyond hierarchical
+			\item \textcolor{myred}{D:} Evaluation is essential for clustering
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM SUCCESS:}} Understand \textcolor{myblue}{K-means, hierarchical, DBSCAN, and evaluation methods}!
+	\end{frame}
+	
+\end{document}

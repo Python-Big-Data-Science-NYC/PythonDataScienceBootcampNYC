@@ -1,0 +1,4701 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Natural Language Processing}
+\subtitle{100 Questions: Pre-processing, BoW, TF-IDF, Naïve Bayes, Evaluation}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 1: INTRODUCTION TO NLP - QUESTIONS 1-10
+	% ============================================================
+	
+	\begin{frame}{Q1: NLP Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is Natural Language Processing (NLP)?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A technique for processing numerical data
+			\item An aspect of machine learning concerned with understanding and analyzing human language, both written and spoken
+			\item A method for image recognition
+			\item A database management technique
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Definition:} NLP is the intersection of computer science, artificial intelligence, and linguistics
+			\item \textbf{Core purpose:} Enable computers to understand, interpret, and generate human language
+			\item \textbf{Key challenge:} Most information exists in unstructured, free text format
+			\item \textbf{Alternative names:} Content analysis, text mining, computational linguistics
+			\item \textbf{Why it's important:}
+			\begin{itemize}
+				\item Unstructured text is the most abundant form of data
+				\item Manual analysis is slow, expensive, and inconsistent
+				\item NLP enables automated analysis at scale
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLP is about \textcolor{myblue}{understanding human language} - not just processing text!
+	\end{frame}
+	
+	\begin{frame}{Q2: NLP vs Numerical Data - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is NLP more challenging than modeling purely numerical data?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Numerical data is always larger
+			\item Textual data is often noisy with errors and ambiguities
+			\item NLP requires more computing power
+			\item Numerical data is more interesting
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Key challenges in NLP:}
+			\begin{enumerate}
+				\item \textbf{Ambiguity:} Same words have different meanings (polysemy)
+				\item \textbf{Context dependence:} Meaning depends on surrounding text
+				\item \textbf{Noise:} Spelling errors, abbreviations, colloquialisms
+				\item \textbf{Informal language:} Social media, text messages
+				\item \textbf{Sarcasm and tone:} Hard for machines to detect
+			\end{enumerate}
+			\item \textbf{Examples:}
+			\begin{itemize}
+				\item "u r gr8" vs "you are great"
+				\item "lol" can mean different things in different contexts
+				\item "That's just great!" - could be sincere or sarcastic
+			\end{itemize}
+			\item \textbf{Impact:}
+			\begin{itemize}
+				\item NLP may fail to fully capture document essence
+				\item Power and flexibility are improving rapidly
+				\item Advances in computational capacity help
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLP challenges include \textcolor{myblue}{ambiguity, noise, and context} - not just technical issues!
+	\end{frame}
+	
+	\begin{frame}{Q3: NLP Applications in Finance - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Which of the following is an NLP application in finance?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Fraud detection using SEC filings
+			\item Customer service call routing
+			\item Sentiment analysis from social media
+			\item All of the above
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: D}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Key NLP applications in finance:}
+			\begin{enumerate}
+				\item \textbf{Fraud detection:}
+				\begin{itemize}
+					\item SEC used NLP to detect accounting fraud
+					\item Analyze financial reports for inconsistencies
+				\end{itemize}
+				\item \textbf{Call routing:}
+				\begin{itemize}
+					\item Keyword recognition for customer inquiries
+					\item Automated triage to appropriate departments
+				\end{itemize}
+				\item \textbf{Sentiment analysis:}
+				\begin{itemize}
+					\item Social media monitoring
+					\item Market reaction assessment
+					\item Academic studies on asset prices and sentiment
+				\end{itemize}
+				\item \textbf{Readability assessment:}
+				\begin{itemize}
+					\item Fog index measurement
+					\item Plain English compliance
+				\end{itemize}
+				\item \textbf{Document similarity:}
+				\begin{itemize}
+					\item Assessing new information content
+					\item Tracking disclosure changes
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLP has \textcolor{myblue}{many financial applications} - fraud detection, sentiment, customer service!
+	\end{frame}
+	
+	\begin{frame}{Q4: NLP vs Manual Reading - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the main benefits of NLP over manual document reading?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item NLP is always more accurate than humans
+			\item Superior speed, no scope to miss aspects, and consistent application
+			\item NLP is cheaper than human labor
+			\item NLP doesn't make mistakes
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Key advantages of NLP:}
+			\begin{enumerate}
+				\item \textbf{Speed:}
+				\begin{itemize}
+					\item Processes thousands of documents quickly
+					\item Far faster than human reading
+					\item Enables real-time analysis
+				\end{itemize}
+				\item \textbf{Completeness:}
+				\begin{itemize}
+					\item No scope to miss any aspects
+					\item Provided they are built into the design
+					\item Consistent across all documents
+				\end{itemize}
+				\item \textbf{Consistency:}
+				\begin{itemize}
+					\item All documents considered identically
+					\item No scope for biases
+					\item No inconsistencies in application
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Limitations:}
+			\begin{itemize}
+				\item NLP may miss nuance
+				\item Ambiguity remains challenging
+				\item Requires careful design
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLP advantages = \textcolor{myblue}{speed, completeness, and consistency}!
+	\end{frame}
+	
+	\begin{frame}{Q5: NLP Data Sources - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the most common NLP data sources in finance?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only financial statements
+			\item Corporate disclosures, social media posts, and news wires
+			\item Only social media
+			\item Only news articles
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Primary data sources:}
+			\begin{enumerate}
+				\item \textbf{Corporate disclosures:}
+				\begin{itemize}
+					\item Mandatory filings (10-Q, 10-K)
+					\item Equity and bond issue prospectuses
+					\item Formal, structured language
+				\end{itemize}
+				\item \textbf{Social media posts:}
+				\begin{itemize}
+					\item Generalist: X (Twitter), Reddit
+					\item Focused financial: Stocktwits, Seeking Alpha
+					\item Informal, noisy, colloquial
+				\end{itemize}
+				\item \textbf{News wires:}
+				\begin{itemize}
+					\item Wall Street Journal
+					\item Dow Jones newswire
+					\item Formal, professional language
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Data collection methods:}
+			\begin{itemize}
+				\item API (Application Programming Interface)
+				\item Web scraping with Python
+				\item Batch downloads of PDFs
+			\end{itemize}
+			\item \textbf{Corpus:} Collection of all retrieved documents
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Common sources = \textcolor{myblue}{corporate disclosures, social media, and news wires}!
+	\end{frame}
+	
+	\begin{frame}{Q6: JPMorgan COiN Platform - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What did JPMorgan Chase's COiN platform achieve?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It made no significant impact
+			\item Significantly reduced time required to review legal documents
+			\item It replaced all human reviewers
+			\item It only worked for English documents
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{COiN (Contract Intelligence) Platform:}
+			\begin{itemize}
+				\item Automated review of legal documents
+				\item Focus on commercial loan agreements
+			\end{itemize}
+			\item \textbf{Challenges addressed:}
+			\begin{itemize}
+				\item Manual review was time-consuming
+				\item Manual review was prone to errors
+				\item Extracting information from unstructured text
+			\end{itemize}
+			\item \textbf{Outcomes:}
+			\begin{itemize}
+				\item Significantly reduced review time
+				\item Improved consistency in information extraction
+				\item Improved accuracy in information extraction
+			\end{itemize}
+			\item \textbf{Training:}
+			\begin{itemize}
+				\item NLP models trained on annotated legal documents
+				\item Performance improved over time
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} COiN reduced \textcolor{myblue}{legal document review time} significantly!
+	\end{frame}
+	
+	\begin{frame}{Q7: Other NLP Use Cases - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Which institutions use NLP for fraud detection?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only JPMorgan Chase
+			\item HSBC uses NLP for fraud detection
+			\item Only the SEC uses NLP
+			\item No financial institutions use NLP for fraud detection
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{NLP use cases in banking:}
+			\begin{enumerate}
+				\item \textbf{Fraud detection:}
+				\begin{itemize}
+					\item HSBC uses NLP for fraud detection
+					\item Analyze patterns in financial transactions
+				\end{itemize}
+				\item \textbf{Customer service:}
+				\begin{itemize}
+					\item Bank of America (BoA) chatbots
+					\item Automated customer interaction
+				\end{itemize}
+				\item \textbf{Market sentiment:}
+				\begin{itemize}
+					\item BlackRock uses NLP for sentiment analysis
+					\item Analyze market sentiment from news and social media
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Early examples:}
+			\begin{itemize}
+				\item SEC used NLP to detect accounting fraud
+				\item Pioneered the use of NLP in finance
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} HSBC = \textcolor{myblue}{fraud detection}, BoA = \textcolor{myblue}{chatbots}, BlackRock = \textcolor{myblue}{sentiment analysis}!
+	\end{frame}
+	
+	\begin{frame}{Q8: Corpus Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a corpus in the context of NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A single document
+			\item The collection of all documents retrieved for analysis
+			\item A type of machine learning algorithm
+			\item A data pre-processing technique
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Definition:}
+			\begin{itemize}
+				\item From Latin "corpus" meaning "body"
+				\item Collection of all documents available for analysis
+				\item May include hundreds or thousands of documents
+			\end{itemize}
+			\item \textbf{Characteristics:}
+			\begin{itemize}
+				\item All documents in the corpus are processed together
+				\item Vocabulary built from the corpus
+				\item Analysis results apply to the corpus
+			\end{itemize}
+			\item \textbf{Examples:}
+			\begin{itemize}
+				\item All 10-K filings of S\&P 500 companies
+				\item All tweets about a specific stock
+				\item All customer service emails
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Corpus = \textcolor{myblue}{collection of all documents} - not a single document!
+	\end{frame}
+	
+	\begin{frame}{Q9: NLP Pre-processing Importance - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is data pre-processing important in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It's not important
+			\item To convert raw text into a format suitable for analysis
+			\item To make documents shorter
+			\item To remove all words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Purpose of pre-processing:}
+			\begin{enumerate}
+				\item Convert text to machine-readable format
+				\item Remove non-textual information (HTML, tags)
+				\item Standardize the text
+				\item Reduce noise and improve accuracy
+			\end{enumerate}
+			\item \textbf{Initial cleaning steps:}
+			\begin{itemize}
+				\item Extract text from PDFs
+				\item Remove HTML code
+				\item Handle emojis (convert to text or numerical values)
+				\item Use tools like demoji module in Python
+			\end{itemize}
+			\item \textbf{Why quality matters:}
+			\begin{itemize}
+				\item Newswires: formal, error-free
+				\item Social media: spelling errors, colloquialisms, abbreviations
+				\item Editing needed for most common issues
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Pre-processing converts \textcolor{myblue}{raw text to analyzable format}!
+	\end{frame}
+	
+	\begin{frame}{Q10: Document Similarity - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a practical use of document similarity in finance?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To make documents longer
+			\item To assess whether a news article constitutes new information
+			\item To delete duplicate documents
+			\item To remove all documents
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Document similarity applications:}
+			\begin{enumerate}
+				\item \textbf{New information assessment:}
+				\begin{itemize}
+					\item Determine if news article provides new information
+					\item Avoid redundant analysis
+					\item Focus on novel content
+				\end{itemize}
+				\item \textbf{Disclosure tracking:}
+				\begin{itemize}
+					\item Assess if tone of accounting disclosures has changed
+					\item Monitor consistency in communications
+					\item Detect significant changes
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{How it works:}
+			\begin{itemize}
+				\item Compare document vectors
+				\item Compute similarity scores
+				\item Identify duplicates or near-duplicates
+				\item Track evolution of content
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Document similarity helps assess \textcolor{myblue}{new information content}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 2: DATA PRE-PROCESSING - QUESTIONS 11-25
+	% ============================================================
+	
+	\begin{frame}{Q11: Tokenization Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is tokenization in NLP pre-processing?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Removing all punctuation from text
+			\item Separating a document into sentences and then into words
+			\item Converting all text to lowercase
+			\item Removing stop words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Tokenization process:}
+			\begin{enumerate}
+				\item \textbf{Sentence tokenization:}
+				\begin{itemize}
+					\item Split document at periods, question marks, exclamation marks
+					\item Creates sentence boundaries
+				\end{itemize}
+				\item \textbf{Word tokenization:}
+				\begin{itemize}
+					\item Split sentences into words
+					\item Remove punctuation, spacing, special symbols
+					\item Convert to lowercase
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Importance:}
+			\begin{itemize}
+				\item Creates individual text units for analysis
+				\item Foundation for all subsequent NLP steps
+				\item Enables counting and vectorization
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Tokenization = \textcolor{myblue}{splitting into sentences and words}!
+	\end{frame}
+	
+	\begin{frame}{Q12: Stop Words Removal - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are stop words and why are they removed?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Important words that convey meaning
+			\item Common words with no informational value (e.g., "the", "a", "also")
+			\item All nouns and verbs
+			\item All proper nouns
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Stop words definition:}
+			\begin{itemize}
+				\item Words that have little informational value
+				\item Included to make sentences flow
+				\item Examples: "has", "a", "the", "also", "and", "of"
+				\item Common in all documents
+			\end{itemize}
+			\item \textbf{Why remove them:}
+			\begin{itemize}
+				\item They add noise to analysis
+				\item They don't help distinguish documents
+				\item They increase vector size unnecessarily
+				\item Improve computational efficiency
+			\end{itemize}
+			\item \textbf{Caveat:}
+			\begin{itemize}
+				\item What constitutes a stop word varies by application
+				\item Words with no value in one context may be useful in another
+				\item Customization may be needed
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stop words = \textcolor{myblue}{common words with no informational value}!
+	\end{frame}
+	
+	\begin{frame}{Q13: Stemming Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is stemming in NLP pre-processing?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Removing all words from a document
+			\item Replacing words with their core/root forms by cutting prefixes and suffixes
+			\item Converting all text to uppercase
+			\item Removing all punctuation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Stemming definition:}
+			\begin{itemize}
+				\item Reduces words to their root forms
+				\item Cuts off prefixes and suffixes
+				\item Crude, rule-based approach
+			\end{itemize}
+			\item \textbf{Examples:}
+			\begin{itemize}
+				\item "disappointing" $\rightarrow$ "disappoint"
+				\item "disappointed" $\rightarrow$ "disappoint"
+				\item "running" $\rightarrow$ "run"
+				\item "jumping" $\rightarrow$ "jump"
+			\end{itemize}
+			\item \textbf{Purpose:}
+			\begin{itemize}
+				\item Treat similar words equally in analysis
+				\item Reduce vocabulary size
+				\item Simplify analysis
+			\end{itemize}
+			\item \textbf{Limitation:}
+			\begin{itemize}
+				\item Can lose nuance and degrees of positivity/negativity
+				\item May create non-words
+				\item Less accurate than lemmatization
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stemming = \textcolor{myblue}{cutting prefixes/suffixes to root form}!
+	\end{frame}
+	
+	\begin{frame}{Q14: Lemmatization Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is lemmatization and how does it differ from stemming?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Lemmatization is the same as stemming
+			\item Lemmatization finds the dictionary form (lemma) considering word meaning and part of speech
+			\item Lemmatization removes stop words
+			\item Lemmatization converts text to lowercase
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Lemmatization definition:}
+			\begin{itemize}
+				\item Finds the dictionary form (lemma) of words
+				\item Considers word meaning and part of speech
+				\item More sophisticated than stemming
+			\end{itemize}
+			\item \textbf{Comparison with stemming:}
+			\begin{itemize}
+				\item \textbf{Stemming:}
+				\begin{itemize}
+					\item Rule-based, cuts prefixes/suffixes
+					\item Fast, but can be inaccurate
+					\item May create non-words
+				\end{itemize}
+				\item \textbf{Lemmatization:}
+				\begin{itemize}
+					\item Uses vocabulary and morphological analysis
+					\item Slower but more accurate
+					\item Always produces real words
+				\end{itemize}
+			\end{itemize}
+			\item \textbf{Examples:}
+			\begin{itemize}
+				\item "running" $\rightarrow$ "run" (lemma)
+				\item "better" $\rightarrow$ "good" (lemma)
+				\item "went" $\rightarrow$ "go" (lemma)
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Lemmatization = \textcolor{myblue}{dictionary form considering meaning and POS}!
+	\end{frame}
+	
+
+
+\begin{frame}{Q15: POS Tagging Purpose - Tutorial}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{QUESTION: What is Part-of-Speech (POS) tagging and why is it useful?}
+	
+	\vspace{0.1cm}
+	\textbf{OPTIONS:}
+	\begin{enumerate}
+		\item Identifying all verbs in a document
+		\item Labelling each word by its class (noun, verb, adjective, proper noun, etc.)
+		\item Removing all adjectives from a document
+		\item Counting the number of sentences
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{myblue}{\textbf{ANSWER: B}}
+	
+	\vspace{0.1cm}
+	\textbf{DETAILED TUTORIAL:}
+	\begin{itemize}
+		\item \textbf{POS tagging definition:}
+		\begin{itemize}
+			\item Labels each word with its grammatical category
+			\item Common tags: noun, verb, adjective, proper noun, adverb
+			\item Provides syntactic information
+		\end{itemize}
+		
+		\item \textbf{Why it's useful:}
+		\begin{itemize}
+			\item \textbf{Handles ambiguity:}
+			\begin{itemize}
+				\item ``Reading'' (town) = proper noun
+				\item ``reading'' (activity) = verb
+			\end{itemize}
+			
+			\item \textbf{Handles case sensitivity:}
+			\begin{itemize}
+				\item ``Polish'' (language) = proper noun
+				\item ``polish'' (to shine) = verb
+			\end{itemize}
+			
+			\item \textbf{Improves accuracy:}
+			\begin{itemize}
+				\item Identifies proper nouns before lowercasing
+				\item Preserves important distinctions
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{EXAM TRAP:}} POS tagging labels
+	\textcolor{myblue}{each word by grammatical class}!
+\end{frame}
+
+
+
+
+
+	
+	\begin{frame}{Q16: Lowercasing Issues - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What problem can lowercasing cause in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It makes text harder to read
+			\item It can cause inaccuracies by removing case-based distinctions (proper nouns, different meanings)
+			\item It doesn't affect NLP
+			\item It makes words longer
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Lowercasing problems:}
+			\begin{enumerate}
+				\item \textbf{Proper nouns:}
+				\begin{itemize}
+					\item "Reading" (town) vs "reading" (activity)
+					\item "Polish" (language) vs "polish" (to shine)
+					\item Names of people, places, firms
+				\end{itemize}
+				\item \textbf{Meaning loss:}
+				\begin{itemize}
+					\item Important distinctions are lost
+					\item Can lead to misclassification
+					\item Reduces accuracy
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Solution:}
+			\begin{itemize}
+				\item Apply POS tagging before lowercasing
+				\item Preserve proper noun information
+				\item Maintain case-based distinctions
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Lowercasing can lose \textcolor{myblue}{proper noun distinctions} - use POS tagging first!
+	\end{frame}
+	
+	\begin{frame}{Q17: Punctuation Removal Effects - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a limitation of removing punctuation?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It doesn't affect NLP
+			\item It can cause loss of valuable context (questions, exclamations, sarcasm)
+			\item It makes text shorter
+			\item It removes all verbs
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Punctuation problems:}
+			\begin{enumerate}
+				\item \textbf{Questions:}
+				\begin{itemize}
+					\item "Is the CEO performing well?" $\rightarrow$ may seem positive
+					\item Without "?", classified as positive
+					\item Actually a question (little information content)
+				\end{itemize}
+				\item \textbf{Exclamations:}
+				\begin{itemize}
+					\item May denote humor or sarcasm
+					\item Different information value than period
+					\item Tone indication is lost
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Solution:}
+			\begin{itemize}
+				\item Consider punctuation separately
+				\item Identify question marks, exclamation points
+				\item Use as additional features
+				\item Context matters
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Removing punctuation loses \textcolor{myblue}{context and tone} information!
+	\end{frame}
+	
+
+
+
+\begin{frame}{Q18: Stemming vs Lemmatization Usage - Tutorial}
+	\fontsize{6.5}{7.5}\selectfont
+	\textbf{QUESTION: When might lemmatization be preferred over stemming?}
+	
+	\vspace{0.1cm}
+	\textbf{OPTIONS:}
+	\begin{enumerate}
+		\item When speed is the only concern
+		\item When accuracy and preserving meaning are important
+		\item When working with very short documents
+		\item When speed is critical
+	\end{enumerate}
+	
+	\vspace{0.1cm}
+	\textcolor{myblue}{\textbf{ANSWER: B}}
+	
+	\vspace{0.1cm}
+	\textbf{DETAILED TUTORIAL:}
+	\begin{itemize}
+		\item \textbf{When to use lemmatization:}
+		\begin{itemize}
+			\item \textbf{Accuracy is critical:}
+			\begin{itemize}
+				\item Financial documents need precise analysis
+				\item Proper word forms matter
+				\item Avoid non-words
+			\end{itemize}
+			\item \textbf{Meaning preservation:}
+			\begin{itemize}
+				\item Different forms of same word
+				\item Irregular verbs
+				\item Context-specific forms
+			\end{itemize}
+		\end{itemize}
+		\item \textbf{When to use stemming:}
+		\begin{itemize}
+			\item \textbf{Speed is critical:}
+			\begin{itemize}
+				\item Very large documents
+				\item Real-time processing
+				\item Simpler analysis
+			\end{itemize}
+		\end{itemize}
+		\item \textbf{Tradeoff:}
+		\begin{itemize}
+			\item Stemming: faster, less accurate
+			\item Lemmatization: slower, more accurate
+		\end{itemize}
+	\end{itemize}
+	
+	\textcolor{myred}{\textbf{EXAM TRAP:}} Lemmatization preferred for \textcolor{myblue}{accuracy}, stemming for \textcolor{myblue}{speed}!
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+	
+	\begin{frame}{Q19: Vocabulary Building - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How is the vocabulary for BoW determined?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only using pre-existing dictionaries
+			\item Either imposed exogenously or created from every distinct word in the corpus
+			\item Only using the most common words
+			\item Only using the rarest words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Vocabulary creation methods:}
+			\begin{enumerate}
+				\item \textbf{Exogenous creation:}
+				\begin{itemize}
+					\item Created ahead of time
+					\item Applied to documents
+					\item Fixed and consistent
+				\end{itemize}
+				\item \textbf{Corpus-based creation:}
+				\begin{itemize}
+					\item Every distinct word in all documents
+					\item Comprehensive and complete
+					\item May be very large
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Tradeoffs:}
+			\begin{itemize}
+				\item \textbf{Exogenous:} Controlled but may miss domain-specific words
+				\item \textbf{Corpus-based:} Complete but may be too large
+			\end{itemize}
+			\item \textbf{Processing:}
+			\begin{itemize}
+				\item Remove very frequent words (top 5\%) 
+				\item Remove very rare words
+				\item Balance vocabulary size
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Vocabulary = \textcolor{myblue}{pre-defined OR from corpus words}!
+	\end{frame}
+	
+	\begin{frame}{Q20: Bag of Words Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the Bag of Words (BoW) approach?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Analyzing words in their original order
+			\item Treating each word in a document independently, ignoring order
+			\item Counting only the longest words
+			\item Removing all words from documents
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{BoW definition:}
+			\begin{itemize}
+				\item Treats each word distinctly and equally
+				\item Position and order are ignored
+				\item Counts occurrences in each document
+			\end{itemize}
+			\item \textbf{Key characteristics:}
+			\begin{itemize}
+				\item \textbf{Independence:} Each word considered separately
+				\item \textbf{Equal treatment:} All words have same importance (in basic version)
+				\item \textbf{Simplification:} Removes complex language structure
+			\end{itemize}
+			\item \textbf{Limitations:}
+			\begin{itemize}
+				\item Loses context
+				\item Ignores negation words
+				\item Misses phrase meanings
+				\item n-grams can help address this
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} BoW ignores \textcolor{myblue}{word order and position}!
+	\end{frame}
+	
+	\begin{frame}{Q21: Binary vs Count BoW - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the difference between binary and count Bag of Words?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Binary uses 1/0, count uses frequency counts
+			\item Binary is more accurate than count
+			\item Count ignores word frequencies
+			\item There is no difference
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Binary BoW:}
+			\begin{itemize}
+				\item 1 if word appears in document
+				\item 0 if word does not appear
+				\item Presence/absence only
+				\item \textbf{Example:} [1, 0, 1, 0, ...]
+			\end{itemize}
+			\item \textbf{Count BoW:}
+			\begin{itemize}
+				\item Counts how many times each word appears
+				\item Non-negative integers
+				\item Frequency matters
+				\item \textbf{Example:} [2, 0, 1, 0, ...]
+			\end{itemize}
+			\item \textbf{When to use each:}
+			\begin{itemize}
+				\item \textbf{Binary:} When presence is enough
+				\item \textbf{Count:} When frequency matters
+				\item Usually count BoW gives more information
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Binary = \textcolor{myblue}{presence/absence}, Count = \textcolor{myblue}{frequency counts}!
+	\end{frame}
+	
+	\begin{frame}{Q22: Document Term Matrix - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a Document Term Matrix (DTM)?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A matrix of document titles
+			\item A collection of document vectors with rows as documents and columns as terms
+			\item A matrix of document dates
+			\item A matrix of document authors
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{DTM definition:}
+			\begin{itemize}
+				\item Rows = documents
+				\item Columns = terms/words
+				\item Entries = word counts or frequencies
+				\item Dimensions: $|W| \times D$
+			\end{itemize}
+			\item \textbf{Characteristics:}
+			\begin{itemize}
+				\item \textbf{Sparse:} Many zeros
+				\item \textbf{Large:} Many columns (vocabulary size)
+				\item \textbf{Quantitative:} Enables analysis
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item 1,000 documents, 10,000 word vocabulary
+				\item Matrix: 1,000 × 10,000
+				\item Most entries are zero
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} DTM = \textcolor{myblue}{documents as rows, terms as columns}!
+	\end{frame}
+	
+	\begin{frame}{Q23: Sparse Vectors Problem - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why are document word vectors described as sparse?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They contain many non-zero values
+			\item They contain many zeros
+			\item They are all the same length
+			\item They are very small
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Sparsity definition:}
+			\begin{itemize}
+				\item Most words don't appear in each document
+				\item Vector entries are mostly zero
+				\item Common in NLP due to large vocabularies
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Vocabulary: 10,000 words
+				\item Document: 100 unique words
+				\item 9,900 zeros in vector
+				\item 99\% sparsity
+			\end{itemize}
+			\item \textbf{Problems:}
+			\begin{itemize}
+				\item \textbf{Computational inefficiency:}
+				\begin{itemize}
+					\item Slow processing
+					\item Memory intensive
+				\end{itemize}
+				\item \textbf{Statistical issues:}
+				\begin{itemize}
+					\item Curse of dimensionality
+					\item Hard to find patterns
+				\end{itemize}
+			\end{itemize}
+			\item \textbf{Solutions:}
+			\begin{itemize}
+				\item Dimensionality reduction
+				\item Feature selection
+				\item Sparse matrix representations
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Sparse = \textcolor{myblue}{many zeros} - makes modeling inefficient!
+	\end{frame}
+	
+	\begin{frame}{Q24: Vector Normalization - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is vector normalization needed in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To make vectors longer
+			\item To prevent repeated words from skewing analysis
+			\item To remove all words
+			\item To make vectors shorter
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Why normalize:}
+			\begin{itemize}
+				\item Repeated words can skew analysis
+				\item Example: "Bad" repeated multiple times
+				\item Similar to outliers in econometrics
+				\item Need to equalize influence
+			\end{itemize}
+			\item \textbf{L2 normalization:}
+			\begin{itemize}
+				\item Divide each element by the square root of sum of squares
+				\item $||v||_2 = \sqrt{\sum x_i^2}$
+				\item Scales elements between 0 and 1
+				\item All documents become unit length
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Original: [2, 0, 1, 0, 1]
+				\item L2 norm: $2^2 + 0 + 1 + 0 + 1 = 6$
+				\item Normalized: [2/$\sqrt{6}$, 0, 1/$\sqrt{6}$, 0, 1/$\sqrt{6}$]
+				\item $\approx$ [0.82, 0, 0.41, 0, 0.41]
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} L2 normalization = \textcolor{myblue}{scale to unit length}!
+	\end{frame}
+	
+	\begin{frame}{Q25: L2 Norm Formula - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the formula for the L2 norm of a vector?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $||X||_2 = \sum x_i$
+			\item $||X||_2 = \sqrt{\sum x_i^2}$
+			\item $||X||_2 = \sum x_i^2$
+			\item $||X||_2 = \max(x_i)$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{L2 norm formula:}
+			\begin{itemize}
+				\item $||X||_2 = \sqrt{\sum_{i=1}^n x_i^2}$
+				\item Where $x_i$ are elements of the vector
+				\item Also called Euclidean norm
+			\end{itemize}
+			\item \textbf{Application in NLP:}
+			\begin{itemize}
+				\item Normalize document vectors
+				\item Each vector becomes unit length
+				\item Comparable across documents
+			\end{itemize}
+			\item \textbf{Example calculation:}
+			\begin{itemize}
+				\item Vector: [2, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1]
+				\item Sum of squares = 4 + 1 + 1 + 1 + 1 = 8
+				\item L2 norm = $\sqrt{8} = 2.83$
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} L2 norm = \textcolor{myblue}{square root of sum of squared elements}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 3: DICTIONARY APPROACH - QUESTIONS 26-40
+	% ============================================================
+	
+	\begin{frame}{Q26: Dictionary Approach Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the dictionary approach in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A machine learning algorithm
+			\item A pre-defined list of words sharing a common characteristic used for text analysis
+			\item A method for removing stop words
+			\item A way to tokenize documents
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Dictionary approach definition:}
+			\begin{itemize}
+				\item Pre-defined list of words
+				\item Words share a common characteristic
+				\item Used to assess sentiment or topic
+			\end{itemize}
+			\item \textbf{Common application:}
+			\begin{itemize}
+				\item Sentiment analysis
+				\item Separate positive and negative words
+				\item Count occurrences in documents
+			\end{itemize}
+			\item \textbf{Net sentiment score:}
+			\begin{itemize}
+				\item Proportion positive - proportion negative
+				\item Divide each by total words
+				\item Neutral words can be ignored
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dictionary = \textcolor{myblue}{pre-defined word lists with common characteristics}!
+	\end{frame}
+	
+	\begin{frame}{Q27: Dictionary Approach Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the newswire example, how is sentiment determined?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Count only positive words
+			\item Count only negative words
+			\item Count positive and negative words, subtract negatives from positives
+			\item Count all words equally
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Sentiment calculation:}
+			\begin{itemize}
+				\item Count positive words: rise, grow, resolve, relief (4 positives)
+				\item Count negative words: disappoint, worry, concern, decline (4 negatives)
+				\item Net sentiment = 4 - 4 = 0 (neutral)
+			\end{itemize}
+			\item \textbf{Example text:}
+			\begin{itemize}
+				\item "Firm XYZ reported rise in earnings, disappointing investors"
+				\item "Previous safety worries resolved, should underpin growth"
+				\item "Analyst expressed relief, concerns about decline"
+			\end{itemize}
+			\item \textbf{Challenges:}
+			\begin{itemize}
+				\item Counterfactual sentences ("would have led to decline")
+				\item Complex sentence structure
+				\item Negation words can reverse meaning
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Net sentiment = \textcolor{myblue}{positive count - negative count}!
+	\end{frame}
+	
+	\begin{frame}{Q28: Loughran-McDonald Dictionary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the Loughran-McDonald dictionary known for?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Being the largest dictionary
+			\item Being specifically designed for financial text analysis
+			\item Being the oldest dictionary
+			\item Only containing positive words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Loughran-McDonald dictionary:}
+			\begin{itemize}
+				\item Developed for financial text analysis
+				\item Based on extensive examination of 10-K filings
+				\item Categories: positive, negative, uncertain, litigious, strong modal, weak modal
+			\end{itemize}
+			\item \textbf{Accuracy:}
+			\begin{itemize}
+				\item Around 75\% accuracy on Thomson Reuters news articles
+				\item Widely used in finance research
+			\end{itemize}
+			\item \textbf{Importance:}
+			\begin{itemize}
+				\item General dictionaries misclassify financial text
+				\item Financial words have specific meanings
+				\item Example: "liability" is not negative in financial context
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Loughran-McDonald = \textcolor{myblue}{financial text dictionary} - 75\% accuracy!
+	\end{frame}
+	
+	\begin{frame}{Q29: Dictionary Approach Advantages - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the primary advantages of the dictionary approach?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It's always 100\% accurate
+			\item Transparency, ease and speed of implementation
+			\item It works for all types of text
+			\item It requires no pre-processing
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Key advantages:}
+			\begin{enumerate}
+				\item \textbf{Transparency:}
+				\begin{itemize}
+					\item Word lists are explicit and clear
+					\item Easy to understand what's being measured
+					\item Results are interpretable
+				\end{itemize}
+				\item \textbf{Ease of implementation:}
+				\begin{itemize}
+					\item Simple word counting
+					\item No training required
+					\item Fast to apply
+				\end{itemize}
+				\item \textbf{Comparability:}
+				\begin{itemize}
+					\item Same word lists across corpora
+					\item Consistent measurement
+					\item Enables comparison
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Advantages = \textcolor{myblue}{transparency, ease, speed, comparability}!
+	\end{frame}
+	
+	\begin{frame}{Q30: Dictionary Approach Limitations - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a key limitation of the dictionary approach?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It's too fast
+			\item Dictionaries are only as good as the word lists they are built on
+			\item It always overestimates sentiment
+			\item It always underestimates sentiment
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Key limitations:}
+			\begin{enumerate}
+				\item \textbf{Quality dependence:}
+				\begin{itemize}
+					\item Only as good as word lists
+					\item Incomplete lists $\rightarrow$ poor accuracy
+					\item Ambiguities $\rightarrow$ misclassification
+					\item Errors propagate
+				\end{itemize}
+				\item \textbf{Context limitation:}
+				\begin{itemize}
+					\item Designed for formal documents
+					\item Poor for social media
+					\item Colloquial language not captured
+					\item "Moon" not in financial dictionaries
+				\end{itemize}
+				\item \textbf{Narrow scope:}
+				\begin{itemize}
+					\item Limited subjects available
+					\item Time-consuming to create new dictionaries
+					\item Machine learning often preferred for new applications
+				\end{itemize}
+				\item \textbf{Negation issues:}
+				\begin{itemize}
+					\item "Not good" $\rightarrow$ should be negative
+					\item "Not bad" $\rightarrow$ should be positive
+					\item Negations away from objects are hard
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dictionary = \textcolor{myblue}{only as good as word lists} - has many limitations!
+	\end{frame}
+	
+	\begin{frame}{Q31: n-gram Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is an n-gram in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A single word
+			\item A sequence of n contiguous words treated as a single unit
+			\item A type of machine learning algorithm
+			\item A pre-processing technique
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{n-gram definition:}
+			\begin{itemize}
+				\item n = 1: uni-gram (single word)
+				\item n = 2: bi-gram (two words)
+				\item n = 3: tri-gram (three words)
+				\item Treats contiguous words as single unit
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Document: "credit spreads narrowed today"
+				\item Uni-grams: ["credit", "spreads", "narrowed", "today"]
+				\item Bi-grams: ["credit spreads", "spreads narrowed", "narrowed today"]
+			\end{itemize}
+			\item \textbf{Purpose:}
+			\begin{itemize}
+				\item Capture phrase meanings
+				\item Handle negation words
+				\item Address context issues
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} n-gram = \textcolor{myblue}{n contiguous words as one unit}!
+	\end{frame}
+	
+	\begin{frame}{Q32: Why Use n-grams? - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why are n-grams needed beyond basic BoW?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To make analysis faster
+			\item Because some words have specific meaning when placed together
+			\item Because basic BoW is too accurate
+			\item To count words more precisely
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Limitations of basic BoW:}
+			\begin{enumerate}
+				\item \textbf{Loses phrase meaning:}
+				\begin{itemize}
+					\item "red herring" $\neq$ red + herring
+					\item "San Diego" $\neq$ San + Diego
+					\item "credit spread" $\neq$ credit + spread
+				\end{itemize}
+				\item \textbf{Negation words:}
+				\begin{itemize}
+					\item "not good" $\neq$ not + good
+					\item "nothing useful" $\neq$ nothing + useful
+					\item "neither up nor down" $\neq$ neither + up + nor + down
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{How n-grams help:}
+			\begin{itemize}
+				\item Preserve phrase meaning
+				\item Handle negations correctly
+				\item Capture context
+				\item More accurate sentiment analysis
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} n-grams capture \textcolor{myblue}{phrase meaning and negation context}!
+	\end{frame}
+	
+	\begin{frame}{Q33: Negation Handling with n-grams - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How can n-grams help with negation words?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item By removing all negation words
+			\item By treating "not" + following word as a single unit
+			\item By ignoring negations
+			\item By making negations positive
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Negation problem:}
+			\begin{itemize}
+				\item "not good" $\rightarrow$ should be negative sentiment
+				\item Basic BoW sees "not" and "good" separately
+				\item Misses the negation effect
+			\end{itemize}
+			\item \textbf{n-gram solution:}
+			\begin{itemize}
+				\item Bi-grams capture "not good" as one unit
+				\item "not sufficient" as one unit
+				\item "never great" as one unit
+				\item Preserves negation meaning
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item "The service is not good"
+				\item Bi-grams: ["The service", "service is", "is not", "not good"]
+				\item "not good" detected as negative phrase
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} n-grams pair \textcolor{myblue}{negation + following word} as one unit!
+	\end{frame}
+	
+	\begin{frame}{Q34: TF-IDF Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What does TF-IDF stand for and what does it measure?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Term Frequency - Inverse Document Frequency; weights words by importance
+			\item Total Frequency - Integrated Document Frequency; measures total occurrences
+			\item Text Frequency - Inverse Data Frequency; measures text length
+			\item Term Frequency - Inverse Data Frequency; measures document similarity
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{TF-IDF definition:}
+			\begin{itemize}
+				\item \textbf{TF (Term Frequency):} How often word appears in document
+				\item \textbf{IDF (Inverse Document Frequency):} How rare the word is across documents
+				\item \textbf{TF-IDF:} TF $\times$ IDF = word importance score
+			\end{itemize}
+			\item \textbf{Purpose:}
+			\begin{itemize}
+				\item Assign higher weights to important words
+				\item Words frequent in document but rare in corpus = high score
+				\item Words frequent everywhere = low score
+			\end{itemize}
+			\item \textbf{Intuition:}
+			\begin{itemize}
+				\item Common words ("the", "this") get zero weight
+				\item Rare but relevant words get high weight
+				\item Better than simple word counts
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} TF-IDF = \textcolor{myblue}{Term Frequency $\times$ Inverse Document Frequency}!
+	\end{frame}
+	
+	\begin{frame}{Q35: Term Frequency Formula - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the formula for Term Frequency (TF)?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $TF_{i,j} = w_{i,j} \times |v_j|$
+			\item $TF_{i,j} = w_{i,j} / |v_j|$
+			\item $TF_{i,j} = |v_j| / w_{i,j}$
+			\item $TF_{i,j} = \log(w_{i,j})$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{TF Formula:}
+			\begin{itemize}
+				\item $TF_{i,j} = \frac{w_{i,j}}{|v_j|}$
+				\item $w_{i,j}$: number of times term i appears in document j
+				\item $|v_j|$: total number of terms in document j
+				\item Normalizes by document length
+			\end{itemize}
+			\item \textbf{Why normalize:}
+			\begin{itemize}
+				\item Longer documents have more words
+				\item Without normalization, longer documents dominate
+				\item Corrects for document length
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Word appears 3 times in 100-word document
+				\item TF = 3/100 = 0.03
+				\item Word appears 3 times in 50-word document
+				\item TF = 3/50 = 0.06 (higher importance)
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} TF = \textcolor{myblue}{word count / total words in document}!
+	\end{frame}
+	
+	\begin{frame}{Q36: Inverse Document Frequency Formula - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the formula for Inverse Document Frequency (IDF)?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $IDF_i = \ln(D / \sum d_{i,j})$
+			\item $IDF_i = D / \sum d_{i,j}$
+			\item $IDF_i = \sum d_{i,j} / D$
+			\item $IDF_i = \ln(\sum d_{i,j} / D)$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{IDF Formula:}
+			\begin{itemize}
+				\item $IDF_i = \ln(D / \sum_{j} d_{i,j})$
+				\item D = total number of documents
+				\item $\sum d_{i,j}$ = number of documents containing term i
+				\item Uses natural logarithm
+			\end{itemize}
+			\item \textbf{Interpretation:}
+			\begin{itemize}
+				\item Rare words: High IDF
+				\item Common words: Low IDF
+				\item Words in all documents: IDF = 0
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item 100 documents, word appears in 10 documents
+				\item IDF = ln(100/10) = ln(10) = 2.30
+				\item Word appears in 90 documents
+				\item IDF = ln(100/90) = ln(1.11) = 0.10
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} IDF = \textcolor{myblue}{ln(total documents / documents containing word)}!
+	\end{frame}
+	
+	\begin{frame}{Q37: Zero TF-IDF Value - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why do some words have zero TF-IDF values?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Because they are not in the vocabulary
+			\item Because they appear in every document (no discriminatory power)
+			\item Because they are too long
+			\item Because they are too short
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Zero IDF explanation:}
+			\begin{itemize}
+				\item IDF = ln(D / $\sum d_{i,j}$)
+				\item If word appears in all documents: $\sum d_{i,j} = D$
+				\item IDF = ln(D/D) = ln(1) = 0
+				\item TF-IDF = TF $\times$ 0 = 0
+			\end{itemize}
+			\item \textbf{Why this matters:}
+			\begin{itemize}
+				\item Word has no discriminatory power
+				\item Cannot distinguish between documents
+				\item No value for classification
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item "this" appears in all 4 documents in Box 9.2
+				\item IDF = ln(4/4) = 0
+				\item TF-IDF = 0
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Zero TF-IDF = \textcolor{myblue}{word appears in all documents} - no discriminatory power!
+	\end{frame}
+	
+	\begin{frame}{Q38: TF-IDF Variation by Document - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why does the same word have different TF-IDF values across documents?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item IDF varies by document
+			\item TF varies by document (due to different lengths and frequencies)
+			\item TF-IDF is always constant
+			\item Vocabulary changes
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Why TF varies:}
+			\begin{enumerate}
+				\item \textbf{Document length:}
+				\begin{itemize}
+					\item TF depends on document length
+					\item Longer documents have smaller TFs
+					\item Same word count, different TF
+				\end{itemize}
+				\item \textbf{Frequency:}
+				\begin{itemize}
+					\item Word may appear multiple times in one document
+					\item Once in another document
+					\item TF changes accordingly
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{IDF is constant:}
+			\begin{itemize}
+				\item IDF depends only on corpus
+				\item Same for all documents
+				\item TF varies by document
+				\item TF-IDF = TF $\times$ IDF $\Rightarrow$ varies by document
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} IDF is \textcolor{myblue}{constant across documents}; TF varies $\Rightarrow$ TF-IDF varies!
+	\end{frame}
+	
+	\begin{frame}{Q39: TF-IDF Variations - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are common variations in TF-IDF implementation?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only one formula exists
+			\item Variations include binary TF, log normalization, and different IDF formulas
+			\item TF-IDF is always the same
+			\item TF-IDF cannot be modified
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Common variations:}
+			\begin{enumerate}
+				\item \textbf{TF variations:}
+				\begin{itemize}
+					\item Binary TF: 1 if word appears, 0 otherwise
+					\item Raw count: $w_{i,j}$ (no normalization)
+					\item Log normalization: ln(1 + $w_{i,j}$)
+					\item Normalized: $w_{i,j} / |v_j|$ (standard)
+				\end{itemize}
+				\item \textbf{IDF variations:}
+				\begin{itemize}
+					\item Smooth IDF: ln((D+1)/($\sum d_{i,j}$+1)) + 1
+					\item Standard IDF: ln(D/$\sum d_{i,j}$)
+					\item Probabilistic IDF: log((D - $\sum d_{i,j}$)/$\sum d_{i,j}$)
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Why variations exist:}
+			\begin{itemize}
+				\item Different applications need different emphasis
+				\item Some handle document length better
+				\item Some are more robust
+				\item Different software implementations
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} TF-IDF has \textcolor{myblue}{many implementation variations} - be aware!
+	\end{frame}
+	
+	\begin{frame}{Q40: TF-IDF Example Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the TF-IDF example, which word has the highest score and why?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item "this" - because it appears in all documents
+			\item "fed" - because it appears in only one short document
+			\item "down" - because it appears frequently
+			\item "stock" - because it appears in two documents
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Highest scores:}
+			\begin{itemize}
+				\item "fed" = 0.28 (TF-IDF)
+				\item "hikes" = 0.28 (TF-IDF)
+				\item "rates" = 0.28 (TF-IDF)
+			\end{itemize}
+			\item \textbf{Why they're highest:}
+			\begin{itemize}
+				\item Appear in only 1 out of 4 documents
+				\item IDF = ln(4/1) = 1.39 (high)
+				\item Document length = 5 (short)
+				\item TF = 1/5 = 0.20
+				\item TF-IDF = 0.20 $\times$ 1.39 = 0.28
+			\end{itemize}
+			\item \textbf{Lowest scores:}
+			\begin{itemize}
+				\item "this" = 0 (appears in all documents)
+				\item "down" = 0.05 (appears in 3 of 4 documents)
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Rare words in short documents = \textcolor{myblue}{highest TF-IDF}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 4: NAÏVE BAYES CLASSIFIER - QUESTIONS 41-60
+	% ============================================================
+	
+	\begin{frame}{Q41: Naïve Bayes Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the Naïve Bayes classifier?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A regression algorithm
+			\item A classification algorithm based on Bayes' theorem with independence assumption
+			\item A clustering algorithm
+			\item A dimensionality reduction technique
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Naïve Bayes definition:}
+			\begin{itemize}
+				\item Based on Bayes' theorem
+				\item Assumes features are independent (naïve assumption)
+				\item Used for classification tasks
+				\item Popular for text classification
+			\end{itemize}
+			\item \textbf{Why "naïve":}
+			\begin{itemize}
+				\item Assumes word independence
+				\item In reality, words are not independent
+				\item Still works well in practice
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item Simple and fast
+				\item Solid classification accuracy
+				\item Works well with high-dimensional data
+				\item Easy to implement
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Naïve = \textcolor{myblue}{independence assumption} - words treated independently!
+	\end{frame}
+	
+	\begin{frame}{Q42: Bayes' Theorem - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is Bayes' theorem in the context of classification?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $P(c|d) = P(d|c)P(c) / P(d)$
+			\item $P(c|d) = P(d|c) + P(c)$
+			\item $P(c|d) = P(c) / P(d)$
+			\item $P(c|d) = P(d) / P(c)$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Bayes' Theorem:}
+			\begin{itemize}
+				\item $P(c|d) = \frac{P(d|c) \times P(c)}{P(d)}$
+				\item $P(c|d)$: Posterior probability (probability of class given document)
+				\item $P(d|c)$: Likelihood (probability of document given class)
+				\item $P(c)$: Prior probability (unconditional probability of class)
+				\item $P(d)$: Predictor prior probability (normalizing constant)
+			\end{itemize}
+			\item \textbf{Application:}
+			\begin{itemize}
+				\item Calculate probability for each class
+				\item Assign document to class with highest probability
+				\item $P(d)$ cancels across classes (can be ignored)
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Bayes = \textcolor{myblue}{posterior = likelihood $\times$ prior / evidence}!
+	\end{frame}
+	
+	\begin{frame}{Q43: Naïve Independence Assumption - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the independence assumption in Naïve Bayes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Documents are independent of each other
+			\item Each word in a document is independent of all other words
+			\item Classes are independent of documents
+			\item All documents have the same length
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Independence assumption:}
+			\begin{itemize}
+				\item $P(w_1, w_2, ..., w_n | c) = P(w_1|c) \times P(w_2|c) \times ... \times P(w_n|c)$
+				\item Words are assumed conditionally independent
+				\item Given the class, word probabilities multiply
+			\end{itemize}
+			\item \textbf{Why it's naïve:}
+			\begin{itemize}
+				\item In reality, words are not independent
+				\item "good" and "great" often appear together
+				\item "not" and "good" are related
+			\end{itemize}
+			\item \textbf{Why it works:}
+			\begin{itemize}
+				\item Despite unrealistic assumption
+				\item Works well in practice
+				\item Simple and effective
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Independence = \textcolor{myblue}{words treated as independent} - unrealistic but works!
+	\end{frame}
+	
+	\begin{frame}{Q44: Prior Probability - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How is prior probability $P(c)$ calculated in Naïve Bayes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $P(c) = n(c) / N$ (documents in class / total documents)
+			\item $P(c) = N / n(c)$
+			\item $P(c) = n(c) \times N$
+			\item $P(c) = 1 / N$
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Prior probability formula:}
+			\begin{itemize}
+				\item $P(c_i) = \frac{n(c_i)}{N}$
+				\item $n(c_i)$: number of documents labeled as class i
+				\item $N$: total number of documents
+				\item Unconditional probability of each class
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item 8 total documents
+				\item 4 good, 2 bad, 2 indifferent
+				\item $P(good) = 4/8 = 0.5$
+				\item $P(bad) = 2/8 = 0.25$
+				\item $P(indifferent) = 2/8 = 0.25$
+			\end{itemize}
+			\item \textbf{Importance:}
+			\begin{itemize}
+				\item Prior knowledge about class frequencies
+				\item Updates to posterior probability
+				\item Helps when likelihoods are similar
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Prior = \textcolor{myblue}{class count / total documents}!
+	\end{frame}
+	
+	\begin{frame}{Q45: Likelihood Calculation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How is the likelihood $P(w|c)$ calculated in Naïve Bayes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Count of word occurrences in class / total words in class
+			\item Count of documents in class / total documents
+			\item Word count / total words in corpus
+			\item Always 0.5
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Likelihood calculation:}
+			\begin{itemize}
+				\item $P(w_i | c_j) = \frac{\text{count of } w_i \text{ in class } c_j}{\text{total words in class } c_j}$
+				\item Conditional probability of word given class
+				\item Estimated from labeled training data
+			\end{itemize}
+			\item \textbf{Example from customer service:}
+			\begin{itemize}
+				\item Class 1 (good): 4 documents
+				\item Word 2 appears in 1 of 4 good documents
+				\item $P(w_2 | good) = 1/4 = 0.25$
+			\end{itemize}
+			\item \textbf{Important:}
+			\begin{itemize}
+				\item Zero probabilities are problematic
+				\item Need smoothing to avoid zeros
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Likelihood = \textcolor{myblue}{word count in class / total words in class}!
+	\end{frame}
+	
+	\begin{frame}{Q46: Posterior Probability - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the posterior probability in Naïve Bayes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item The probability of a document given its class
+			\item The probability of a class given the document
+			\item The probability of a word given its class
+			\item The unconditional class probability
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Posterior definition:}
+			\begin{itemize}
+				\item $P(c|d)$
+				\item Probability that document d belongs to class c
+				\item Updated after seeing the document
+				\item Combines prior and likelihood
+			\end{itemize}
+			\item \textbf{Calculation:}
+			\begin{itemize}
+				\item $P(c|d) \propto P(d|c) \times P(c)$
+				\item Compute for each class
+				\item Choose class with highest posterior
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item After seeing words 1 and 2
+				\item $P(bad|words) = 0.67$
+				\item $P(indifferent|words) = 0.33$
+				\item $P(good|words) = 0$
+				\item Classify as "bad"
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Posterior = \textcolor{myblue}{probability of class given document}!
+	\end{frame}
+	
+	\begin{frame}{Q47: Maximum A Posteriori - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is Maximum A Posteriori (MAP) classification?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Assign document to the class with the highest posterior probability
+			\item Assign document to the class with the highest prior probability
+			\item Assign document to the class with the highest likelihood
+			\item Random classification
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{MAP definition:}
+			\begin{itemize}
+				\item $\hat{c} = \arg\max_{c \in C} P(c|d)$
+				\item Choose class that maximizes posterior
+				\item "Maximum A Posteriori"
+			\end{itemize}
+			\item \textbf{Simplified form:}
+			\begin{itemize}
+				\item $\hat{c} = \arg\max_{c \in C} P(d|c) \times P(c)$
+				\item $P(d)$ cancels out
+				\item Only need likelihood and prior
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item $P(bad|words) = 0.67$
+				\item $P(indifferent|words) = 0.33$
+				\item $P(good|words) = 0$
+				\item MAP class = "bad"
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MAP = \textcolor{myblue}{class with highest posterior probability}!
+	\end{frame}
+	
+	\begin{frame}{Q48: Zero Probability Problem - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the zero probability problem in Naïve Bayes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item When a word appears in all documents
+			\item When a word does not appear in a class in the training data, making the class probability zero
+			\item When all words have zero frequency
+			\item When no documents exist
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Zero probability problem:}
+			\begin{itemize}
+				\item Word doesn't appear in training data for a class
+				\item $P(w|c) = 0$
+				\item Product becomes zero: $\prod P(w_i|c) = 0$
+				\item Class probability becomes zero
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item No "good" reviews contain word "slow"
+				\item New document has "slow" and otherwise positive words
+				\item Probability of "good" = 0
+				\item But review could still be good!
+			\end{itemize}
+			\item \textbf{Consequences:}
+			\begin{itemize}
+				\item Overly draconian
+				\item Unrealistic zero probabilities
+				\item Can misclassify documents
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Zero probability = \textcolor{myblue}{word missing in training class} - need smoothing!
+	\end{frame}
+	
+	\begin{frame}{Q49: Laplace Smoothing - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is Laplace smoothing in Naïve Bayes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A method to remove stop words
+			\item Adding 1 to all counts to avoid zero probabilities
+			\item A technique to stem words
+			\item A method to normalize vectors
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Laplace smoothing:}
+			\begin{itemize}
+				\item Adds 1 (or $\lambda$) to all counts
+				\item Ensures all probabilities are non-zero
+				\item $P(w|c) = \frac{\text{count}(w,c) + 1}{\text{total words in c} + |V|}$
+			\end{itemize}
+			\item \textbf{Effect:}
+			\begin{itemize}
+				\item Zero probabilities become positive
+				\item All probabilities pushed toward uniform
+				\item Larger $\lambda$ = stronger smoothing
+				\item Impact decreases with sample size
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Before: $P(w|c) = 0/4 = 0$
+				\item After: $P(w|c) = 1/6 = 0.167$
+				\item Probability increases from 0 to small positive value
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Laplace smoothing = \textcolor{myblue}{add 1 to all counts to avoid zeros}!
+	\end{frame}
+	
+	\begin{frame}{Q50: Smoothing Impact on Probabilities - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How does smoothing affect the estimated probabilities?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It makes probabilities more extreme
+			\item It pushes probabilities toward a uniform distribution
+			\item It has no effect on probabilities
+			\item It makes probabilities negative
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Effect of smoothing:}
+			\begin{itemize}
+				\item Prevents zero probabilities
+				\item Shrinks probabilities toward uniform
+				\item Reduces extreme values
+				\item Similar to regularization (Lasso/Ridge)
+			\end{itemize}
+			\item \textbf{Impact of $\lambda$:}
+			\begin{itemize}
+				\item $\lambda = 0$: No smoothing (original)
+				\item $\lambda = 1$: Laplace smoothing (common)
+				\item $\lambda > 1$: Stronger smoothing
+				\item Larger $\lambda$ = more uniform probabilities
+			\end{itemize}
+			\item \textbf{Sample size effect:}
+			\begin{itemize}
+				\item Small sample: Smoothing has large impact
+				\item Large sample: Smoothing has small impact
+				\item Effect diminishes with more data
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Smoothing = \textcolor{myblue}{shrinks toward uniform distribution} - similar to regularization!
+	\end{frame}
+	
+	\begin{frame}{Q51: Underflow Problem - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the underflow problem in Naïve Bayes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item When probabilities become too large
+			\item When multiplying many small probabilities results in numbers too small for computers to handle
+			\item When documents are too long
+			\item When vocabulary is too small
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Underflow definition:}
+			\begin{itemize}
+				\item Multiplying many probabilities $< 1$
+				\item Product becomes extremely small
+				\item Below computer precision
+				\item Rounds to zero
+			\end{itemize}
+			\item \textbf{Cause:}
+			\begin{itemize}
+				\item $P(w_1|c) \times P(w_2|c) \times ... \times P(w_n|c)$
+				\item Each term $< 1$
+				\item For long documents, product $\to 0$
+				\item Example: $0.5^{100} \approx 7.9 \times 10^{-31}$
+			\end{itemize}
+			\item \textbf{Solution:}
+			\begin{itemize}
+				\item Take logarithms
+				\item $\log(P(w_1|c) \times ...) = \sum \log(P(w_i|c))$
+				\item Sums instead of products
+				\item Computationally stable
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Underflow = \textcolor{myblue}{multiplying small probabilities} - use logarithms!
+	\end{frame}
+	
+	\begin{frame}{Q52: Log Transformation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is log transformation used in Naïve Bayes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To make probabilities larger
+			\item To convert products to sums and avoid underflow
+			\item To remove stop words
+			\item To normalize the data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Log transformation benefits:}
+			\begin{enumerate}
+				\item \textbf{Products to sums:}
+				\begin{itemize}
+					\item $\log(P_1 \times P_2 \times ...) = \log(P_1) + \log(P_2) + ...$
+					\item Avoids multiplication of small numbers
+					\item Computationally stable
+				\end{itemize}
+				\item \textbf{Preserves ordering:}
+				\begin{itemize}
+					\item Log is monotonic
+					\item Class with highest probability = class with highest log probability
+					\item Results unchanged
+				\end{itemize}
+				\item \textbf{Simplifies calculations:}
+				\begin{itemize}
+					\item Sums are easier to compute
+					\item Less risk of numerical issues
+					\item More efficient
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Instead of: $0.5 \times 0.25 \times 0.33$
+				\item Use: $\log(0.5) + \log(0.25) + \log(0.33)$
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Log = \textcolor{myblue}{products to sums} - avoids underflow!
+	\end{frame}
+	
+	\begin{frame}{Q53: Unknown Words Handling - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How are words in test data that were not in training data handled?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They are added to the vocabulary
+			\item They are ignored because they cannot help classify the document
+			\item They cause the classification to fail
+			\item They are treated as stop words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Unknown word handling:}
+			\begin{itemize}
+				\item Words not in training vocabulary
+				\item No information about their distribution
+				\item Cannot help with classification
+				\item Must be removed from test document
+			\end{itemize}
+			\item \textbf{Why ignore them:}
+			\begin{itemize}
+				\item $P(w|c)$ unknown
+				\item Cannot calculate likelihood
+				\item Would cause problems
+				\item Better to exclude them
+			\end{itemize}
+			\item \textbf{Solution:}
+			\begin{itemize}
+				\item Build vocabulary from training data
+				\item Only use known words for classification
+				\item Unknown words provide no discriminatory power
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Unknown words = \textcolor{myblue}{ignored} - they provide no classification information!
+	\end{frame}
+	
+	\begin{frame}{Q54: Naïve Bayes Assumptions - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the two key assumptions of Naïve Bayes for document classification?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Words are dependent and have different weights
+			\item Words are independent and have equal weighting
+			\item Words are ordered and have different weights
+			\item Words are random and have no weights
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Assumption 1: Independence}
+			\begin{itemize}
+				\item Each word is independent of others
+				\item $P(w_1, w_2, ..., w_n|c) = \prod P(w_i|c)$
+				\item Simplifies calculations
+			\end{itemize}
+			\item \textbf{Assumption 2: Equal weighting}
+			\begin{itemize}
+				\item Each word has equal information value
+				\item No word is more important than others
+				\item After stop word removal
+			\end{itemize}
+			\item \textbf{Why these assumptions:}
+			\begin{itemize}
+				\item Make problem tractable
+				\item Work surprisingly well
+				\item Simple and fast
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Naïve Bayes = \textcolor{myblue}{independence + equal weighting}!
+	\end{frame}
+	
+	\begin{frame}{Q55: Generative vs Discriminative - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What makes Naïve Bayes a generative classifier?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It can generate new documents
+			\item It learns the joint distribution $P(d,c)$ and can create new classifications
+			\item It only learns decision boundaries
+			\item It doesn't use probabilities
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Generative classifiers:}
+			\begin{itemize}
+				\item Model the joint distribution $P(d,c)$
+				\item Learn how data is generated
+				\item Can generate new examples
+				\item Examples: Naïve Bayes, Hidden Markov Models
+			\end{itemize}
+			\item \textbf{Discriminative classifiers:}
+			\begin{itemize}
+				\item Model the decision boundary $P(c|d)$ directly
+				\item Only care about classification
+				\item Examples: Logistic regression, SVM
+			\end{itemize}
+			\item \textbf{Difference:}
+			\begin{itemize}
+				\item Generative: Complete model of data
+				\item Discriminative: Only classification boundary
+				\item Generative can create new classifications
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Naïve Bayes = \textcolor{myblue}{generative} - learns joint distribution!
+	\end{frame}
+	
+	\begin{frame}{Q56: Customer Service Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the customer service example, what classification is made and why?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item "Good" because it has the highest prior
+			\item "Bad" because it has the highest posterior probability
+			\item "Indifferent" because it's the middle class
+			\item Cannot be classified
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Data:}
+			\begin{itemize}
+				\item 4 good, 2 bad, 2 indifferent (8 total)
+				\item New document: words 1 and 2 present, words 3 and 4 absent
+			\end{itemize}
+			\item \textbf{Calculated probabilities:}
+			\begin{itemize}
+				\item $P(good|words) = 0$ (without smoothing)
+				\item $P(bad|words) = 0.67$ (highest)
+				\item $P(indifferent|words) = 0.33$
+			\end{itemize}
+			\item \textbf{Classification:}
+			\begin{itemize}
+				\item "Bad" because 0.67 > 0.33 > 0
+				\item Even though prior for "good" was highest (0.5)
+				\item Likelihood updates prior to posterior
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Classification = \textcolor{myblue}{highest posterior probability} - not just prior!
+	\end{frame}
+	
+	\begin{frame}{Q57: Smoothing Effect Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How did Laplace smoothing change the classification in the customer service example?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It didn't change the classification
+			\item It changed "Good" from 0 to 2.9\% probability
+			\item It made "Bad" the lowest probability
+			\item It made classification impossible
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Before smoothing:}
+			\begin{itemize}
+				\item $P(good|words) = 0$
+				\item $P(bad|words) = 0.67$
+				\item $P(indifferent|words) = 0.33$
+			\end{itemize}
+			\item \textbf{After smoothing ($\lambda = 1$):}
+			\begin{itemize}
+				\item $P(good|words) = 0.029$ (increased from 0)
+				\item $P(bad|words) = 0.583$ (decreased)
+				\item $P(indifferent|words) = 0.388$ (increased slightly)
+			\end{itemize}
+			\item \textbf{Classification unchanged:}
+			\begin{itemize}
+				\item "Bad" still highest (0.583 > 0.388 > 0.029)
+				\item But probability of "Good" no longer zero
+				\item More realistic estimates
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Smoothing \textcolor{myblue}{eliminates zero probabilities} but may not change classification!
+	\end{frame}
+	
+	\begin{frame}{Q58: Multi-class Classification - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How does Naïve Bayes handle more than two classes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It cannot handle more than two classes
+			\item It computes posterior probability for each class and selects the highest
+			\item It only uses binary classification
+			\item It combines classes
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Multi-class extension:}
+			\begin{itemize}
+				\item Natural extension of binary case
+				\item Compute $P(c|d)$ for each class
+				\item Select class with highest probability
+				\item No limitation on number of classes
+			\end{itemize}
+			\item \textbf{Example (3 classes):}
+			\begin{itemize}
+				\item $P(good|d) = 0.029$
+				\item $P(bad|d) = 0.583$
+				\item $P(indifferent|d) = 0.388$
+				\item Select "bad" (highest probability)
+			\end{itemize}
+			\item \textbf{Applications:}
+			\begin{itemize}
+				\item Sentiment: positive, negative, neutral
+				\item Topic classification: finance, politics, sports, etc.
+				\item Document categorization
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Multi-class = \textcolor{myblue}{choose class with highest posterior}!
+	\end{frame}
+	
+	\begin{frame}{Q59: Naïve Bayes Advantages - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the main advantages of Naïve Bayes?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It always has 100\% accuracy
+			\item Simplicity, speed, and solid classification accuracy
+			\item It works without any assumptions
+			\item It requires no training data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Key advantages:}
+			\begin{enumerate}
+				\item \textbf{Simplicity:}
+				\begin{itemize}
+					\item Easy to understand
+					\item Easy to implement
+					\item Few parameters to tune
+				\end{itemize}
+				\item \textbf{Speed:}
+				\begin{itemize}
+					\item Fast training
+					\item Fast prediction
+					\item Scales to large datasets
+				\end{itemize}
+				\item \textbf{Accuracy:}
+				\begin{itemize}
+					\item Solid classification accuracy
+					\item Works well despite assumptions
+					\item Competitive with more complex models
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{When to use:}
+			\begin{itemize}
+				\item High-dimensional data
+				\item Text classification
+				\item Quick baseline models
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Naïve Bayes advantages = \textcolor{myblue}{simple, fast, and accurate}!
+	\end{frame}
+	
+	\begin{frame}{Q60: Appendix Problem - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the appendix problem, what classification is made for the new instance?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Buy (probability = 0.98)
+			\item Sell (probability = 0.02)
+			\item Cannot be classified
+			\item Both equally likely
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Data:}
+			\begin{itemize}
+				\item 5 buys, 5 sells
+				\item Prior: $P(buy) = 0.5$, $P(sell) = 0.5$
+				\item New document: words 1, 2, 3 present; words 4, 5 absent
+			\end{itemize}
+			\item \textbf{Conditional probabilities:}
+			\begin{itemize}
+				\item $P(buy) \times \prod P(w_i|buy) = 0.0768$
+				\item $P(sell) \times \prod P(w_i|sell) = 0.00192$
+			\end{itemize}
+			\item \textbf{Posterior probabilities:}
+			\begin{itemize}
+				\item $P(buy|words) = 0.0768 / (0.0768 + 0.00192) = 0.98$
+				\item $P(sell|words) = 0.00192 / (0.0768 + 0.00192) = 0.02$
+			\end{itemize}
+			\item \textbf{Classification:} Buy
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Posterior normalization = \textcolor{myblue}{divide by sum of all posteriors}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 5: WORD EMBEDDINGS & ADVANCED - QUESTIONS 61-70
+	% ============================================================
+	
+	\begin{frame}{Q61: Word Embedding Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is word embedding in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A method to remove words
+			\item A technique to capture word meaning by representing words in a continuous vector space
+			\item A method to count word frequencies
+			\item A technique to stem words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Word embedding definition:}
+			\begin{itemize}
+				\item Represents words as dense vectors
+				\item Captures semantic meaning
+				\item Similar words have similar vectors
+				\item Based on distributional hypothesis
+			\end{itemize}
+			\item \textbf{Distributional hypothesis:}
+			\begin{itemize}
+				\item "You shall know a word by the company it keeps"
+				\item Similar meanings appear in similar contexts
+				\item Words appearing together are related
+			\end{itemize}
+			\item \textbf{Advantages over BoW:}
+			\begin{itemize}
+				\item Captures meaning
+				\item Dense vectors (not sparse)
+				\item Similar words close in space
+				\item Better for downstream tasks
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Word embeddings = \textcolor{myblue}{capture meaning in dense vectors}!
+	\end{frame}
+	
+	\begin{frame}{Q62: Word2Vec Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is Word2Vec?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A word stemming algorithm
+			\item A Google-developed algorithm for generating word embeddings using neural networks
+			\item A dictionary approach to NLP
+			\item A pre-processing technique
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Word2Vec definition:}
+			\begin{itemize}
+				\item Developed by Google (Mikolov et al., 2013)
+				\item Neural network-based algorithm
+				\item Generates word embeddings
+				\item Reduces dimensionality
+			\end{itemize}
+			\item \textbf{Two architectures:}
+			\begin{enumerate}
+				\item \textbf{CBOW (Continuous Bag of Words):}
+				\begin{itemize}
+					\item Predict target word from context
+					\item Faster to train
+				\end{itemize}
+				\item \textbf{Skip-gram:}
+				\begin{itemize}
+					\item Predict context words from target word
+					\item Better for rare words
+					\item More computationally expensive
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Capabilities:}
+			\begin{itemize}
+				\item Captures semantic relationships
+				\item "king - man + woman equals queen"
+				\item Semantic analogies
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Word2Vec equal \textcolor{myblue}{Google algorithm for word embeddings}!
+	\end{frame}
+	
+	\begin{frame}{Q63: Context in Word Embeddings - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How do word embeddings capture context?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item By ignoring context
+			\item By paying attention to positions of words and their surrounding words
+			\item By counting all words equally
+			\item By removing all punctuation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Context capture methods:}
+			\begin{enumerate}
+				\item \textbf{Position information:}
+				\begin{itemize}
+					\item Track which words appear together
+					\item Window-based co-occurrence
+					\item Similar words appear in similar positions
+				\end{itemize}
+				\item \textbf{Surrounding words:}
+				\begin{itemize}
+					\item Consider words before and after
+					\item Skip-gram uses surrounding context
+					\item CBOW uses context to predict target
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{One-hot encoding limitation:}
+			\begin{itemize}
+				\item Large and sparse
+				\item No notion of similarity
+				\item Each word independent
+			\end{itemize}
+			\item \textbf{Embedding solution:}
+			\begin{itemize}
+				\item Dense vectors
+				\item Similar contexts = similar vectors
+				\item Captures semantic meaning
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Word embeddings capture context by \textcolor{myblue}{analyzing surrounding words}!
+	\end{frame}
+	
+	\begin{frame}{Q64: Skip-gram vs CBOW - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the difference between Skip-gram and CBOW?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They are the same algorithm
+			\item Skip-gram predicts context from target; CBOW predicts target from context
+			\item Skip-gram is for English only
+			\item CBOW is for English only
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{CBOW (Continuous Bag of Words):}
+			\begin{itemize}
+				\item Input: context words
+				\item Output: target word
+				\item Faster to train
+				\item Better for frequent words
+				\item "Given surrounding words, what's the missing word?"
+			\end{itemize}
+			\item \textbf{Skip-gram:}
+			\begin{itemize}
+				\item Input: target word
+				\item Output: context words
+				\item Better for rare words
+				\item More computationally expensive
+				\item "Given a word, what words surround it?"
+			\end{itemize}
+			\item \textbf{Choice depends on:}
+			\begin{itemize}
+				\item Data size
+				\item Word frequency distribution
+				\item Computational resources
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Skip-gram = \textcolor{myblue}{target $\to$ context}; CBOW = \textcolor{myblue}{context $\to$ target}!
+	\end{frame}
+	
+	\begin{frame}{Q65: One-Hot Encoding - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is one-hot encoding in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A technique to encode temperature
+			\item Representing words as binary vectors with a 1 in the position of that word and 0 elsewhere
+			\item A method to count word frequencies
+			\item A technique to remove stop words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{One-hot encoding:}
+			\begin{itemize}
+				\item Vector length = vocabulary size
+				\item One position = 1 (the word's position)
+				\item All other positions = 0
+				\item Example: [0, 0, 1, 0, 0, ...]
+			\end{itemize}
+			\item \textbf{Limitations:}
+			\begin{itemize}
+				\item Very sparse
+				\item No semantic meaning
+				\item All words equidistant
+				\item Cannot capture relationships
+			\end{itemize}
+			\item \textbf{Comparison with embeddings:}
+			\begin{itemize}
+				\item One-hot: Sparse, no meaning
+				\item Embeddings: Dense, captures meaning
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} One-hot = \textcolor{myblue}{binary vector with one 1} - no semantic meaning!
+	\end{frame}
+	
+	\begin{frame}{Q66: Dimensionality Reduction in NLP - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is dimensionality reduction important in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To make documents longer
+			\item To reduce sparse, high-dimensional vectors to dense, lower-dimensional representations
+			\item To add more features
+			\item To increase computation time
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{The problem:}
+			\begin{itemize}
+				\item Vocabulary can have 10,000+ words
+				\item Vectors are very long
+				\item Very sparse (many zeros)
+				\item Slow and inefficient
+			\end{itemize}
+			\item \textbf{Reduction methods:}
+			\begin{enumerate}
+				\item \textbf{PCA:} Principal Component Analysis
+				\item \textbf{SVD:} Singular Value Decomposition
+				\item \textbf{Word2Vec:} Neural network-based
+				\item \textbf{t-SNE:} For visualization
+			\end{enumerate}
+			\item \textbf{Benefits:}
+			\begin{itemize}
+				\item Dense representations
+				\item Faster computation
+				\item Better performance
+				\item Captures relationships
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dimensionality reduction = \textcolor{myblue}{sparse $\to$ dense} representations!
+	\end{frame}
+	
+	\begin{frame}{Q67: BoW vs Word Embeddings - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a key advantage of word embeddings over BoW?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Embeddings are sparser
+			\item Embeddings capture semantic meaning and relationships between words
+			\item Embeddings are faster to compute
+			\item Embeddings don't require pre-processing
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{BoW limitations:}
+			\begin{itemize}
+				\item Loses context
+				\item No semantic meaning
+				\item Sparse vectors
+				\item Ignores word relationships
+			\end{itemize}
+			\item \textbf{Embedding advantages:}
+			\begin{enumerate}
+				\item \textbf{Semantic meaning:}
+				\begin{itemize}
+					\item Similar words close in space
+					\item Captures relationships
+					\item Analogies possible
+				\end{itemize}
+				\item \textbf{Dense vectors:}
+				\begin{itemize}
+					\item Lower dimensional
+					\item More efficient
+					\item Better for downstream tasks
+				\end{itemize}
+				\item \textbf{Context awareness:}
+				\begin{itemize}
+					\item Considers surrounding words
+					\item Better representation
+					\item More accurate
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Embeddings = \textcolor{myblue}{capture semantic meaning} - BoW doesn't!
+	\end{frame}
+	
+	\begin{frame}{Q68: Skip-gram Details - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is Skip-gram used for in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To remove stop words
+			\item To predict surrounding words given a target word
+			\item To count word frequencies
+			\item To stem words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Skip-gram architecture:}
+			\begin{itemize}
+				\item Input: target word
+				\item Output: context words (surrounding words)
+				\item Uses neural network
+				\item Predicts probability of context words
+			\end{itemize}
+			\item \textbf{Training objective:}
+			\begin{itemize}
+				\item Maximize probability of context words
+				\item Given target word
+				\item Slide window over text
+				\item Learn embeddings
+			\end{itemize}
+			\item \textbf{Window size:}
+			\begin{itemize}
+				\item Typically 2-5 words each side
+				\item Larger window = more global context
+				\item Smaller window = more syntactic
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Skip-gram = \textcolor{myblue}{target word $\to$ predict context words}!
+	\end{frame}
+	
+	\begin{frame}{Q69: Word2Vec Application - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a famous semantic relationship captured by Word2Vec?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item "king - man + woman equals queen"
+			\item "king + man + woman equals queen"
+			\item "king - queen equals man - woman"
+			\item All words are equally related
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Famous analogy:}
+			\begin{itemize}
+				\item $v_{king} - v_{man} + v_{woman} \approx v_{queen}$
+				\item Captures gender relationship
+				\item Preserves arithmetic operations
+			\end{itemize}
+			\item \textbf{Other examples:}
+			\begin{itemize}
+				\item "Paris - France + Italy equals Rome"
+				\item "walking - walk + run equals running"
+				\item Captures multiple relationships
+			\end{itemize}
+			\item \textbf{Why it works:}
+			\begin{itemize}
+				\item Vector space captures semantic relationships
+				\item Similar relationships have similar vector offsets
+				\item Enables analogical reasoning
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Word2Vec captures \textcolor{myblue}{semantic relationships} via vector arithmetic!
+	\end{frame}
+	
+	\begin{frame}{Q70: NLP Evaluation Overview - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How are NLP models evaluated?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only by accuracy
+			\item Using confusion matrices, accuracy, precision, recall, F1 when labels exist
+			\item Only by speed
+			\item Only by data requirements
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Labeled data evaluation:}
+			\begin{enumerate}
+				\item \textbf{Confusion Matrix:} TP, TN, FP, FN
+				\item \textbf{Accuracy:} Overall correctness
+				\item \textbf{Precision:} Of predicted positives, how many were right?
+				\item \textbf{Recall:} Of actual positives, how many did we catch?
+				\item \textbf{F1:} Harmonic mean of precision and recall
+			\end{enumerate}
+			\item \textbf{Unlabeled data evaluation:}
+			\begin{itemize}
+				\item Use unsupervised evaluation methods
+				\item Qualitative assessment
+				\item Subject matter expert review
+			\end{itemize}
+			\item \textbf{Other considerations:}
+			\begin{itemize}
+				\item Speed of algorithm
+				\item Data requirements
+				\item Computational resources
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Evaluation = \textcolor{myblue}{confusion matrix metrics} when labels exist!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 6: EVALUATION & PRACTICAL - QUESTIONS 71-80
+	% ============================================================
+	
+	\begin{frame}{Q71: NLP Model Evaluation Metrics - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What metrics are used to evaluate NLP classification models?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only accuracy
+			\item Accuracy, precision, recall, and F1 from confusion matrix
+			\item Only precision
+			\item Only recall
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Standard evaluation metrics:}
+			\begin{enumerate}
+				\item \textbf{Accuracy:}
+				\begin{itemize}
+					\item $(TP + TN) / (TP + TN + FP + FN)$
+					\item Overall correctness
+				\end{itemize}
+				\item \textbf{Precision:}
+				\begin{itemize}
+					\item $TP / (TP + FP)$
+					\item "Of documents predicted as class X, how many were correct?"
+				\end{itemize}
+				\item \textbf{Recall:}
+				\begin{itemize}
+					\item $TP / (TP + FN)$
+					\item "Of documents actually in class X, how many did we catch?"
+				\end{itemize}
+				\item \textbf{F1:}
+				\begin{itemize}
+					\item Harmonic mean of precision and recall
+					\item Balances both metrics
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Use \textcolor{myblue}{multiple metrics} - not just accuracy!
+	\end{frame}
+	
+	\begin{frame}{Q72: Labeled vs Unlabeled Data - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How is NLP evaluation different for unlabeled data?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item No evaluation is possible
+			\item Use unsupervised evaluation methods or qualitative assessment
+			\item Use the same metrics as labeled data
+			\item Evaluation is not needed
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Unlabeled data challenges:}
+			\begin{itemize}
+				\item No "right answer" to compare against
+				\item Cannot compute confusion matrix
+				\item Need different evaluation approaches
+			\end{itemize}
+			\item \textbf{Evaluation methods:}
+			\begin{enumerate}
+				\item \textbf{Subject matter experts:}
+				\begin{itemize}
+					\item Manually review sample of classifications
+					\item Assess accuracy qualitatively
+					\item Expensive but reliable
+				\end{itemize}
+				\item \textbf{Unsupervised metrics:}
+				\begin{itemize}
+					\item Cohesion and separation
+					\item Silhouette score
+					\item Domain-specific validation
+				\end{itemize}
+				\item \textbf{Indirect validation:}
+				\begin{itemize}
+					\item Check if results make sense
+					\item Correlation with known variables
+					\item Predictive power for other tasks
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Unlabeled data requires \textcolor{myblue}{alternative evaluation methods}!
+	\end{frame}
+	
+	\begin{frame}{Q73: Speed and Data Requirements - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why should speed and data requirements be considered in NLP evaluation?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They are not important
+			\item Textual databases can be vast and sparse vectors are hard to handle efficiently
+			\item Speed is never a concern
+			\item All NLP models are equally fast
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Practical considerations:}
+			\begin{enumerate}
+				\item \textbf{Data volume:}
+				\begin{itemize}
+					\item NLP datasets can be enormous
+					\item Millions of documents
+					\item Billions of words
+				\end{itemize}
+				\item \textbf{Sparsity:}
+				\begin{itemize}
+					\item Sparse vectors are inefficient
+					\item Slow to process
+					\item Memory intensive
+				\end{itemize}
+				\item \textbf{Model complexity:}
+				\begin{itemize}
+					\item Neural networks are slow to train
+					\item Require large amounts of data
+					\item May be impractical for some applications
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Tradeoffs:}
+			\begin{itemize}
+				\item Accuracy vs speed
+				\item Complexity vs feasibility
+				\item Resource constraints matter
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLP can be \textcolor{myblue}{computationally expensive} - speed and data matter!
+	\end{frame}
+	
+	\begin{frame}{Q74: BoW Limitations - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is a major limitation of simple BoW methods?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They are too fast
+			\item They are not useful for determining context or intended meaning
+			\item They are too accurate
+			\item They require too much data
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{BoW limitations:}
+			\begin{enumerate}
+				\item \textbf{Loss of context:}
+				\begin{itemize}
+					\item Word order ignored
+					\item Phrase meaning lost
+					\item No understanding of relationships
+				\end{itemize}
+				\item \textbf{No semantic meaning:}
+				\begin{itemize}
+					\item Words independent
+					\item No concept of similarity
+					\item "good" and "great" treated equally
+				\end{itemize}
+				\item \textbf{Negation issues:}
+				\begin{itemize}
+					\item "not good" vs "good" both contain "good"
+					\item Sentiment is reversed but BoW doesn't know
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Advanced solutions:}
+			\begin{itemize}
+				\item n-grams
+				\item Skip-grams
+				\item Word embeddings
+				\item Contextual embeddings (BERT)
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} BoW fails to capture \textcolor{myblue}{context and meaning}!
+	\end{frame}
+	
+	\begin{frame}{Q75: Advanced NLP Techniques - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What advanced techniques help determine word context?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only BoW
+			\item n-grams, Skip-grams, and word embeddings
+			\item Only stop word removal
+			\item Only stemming
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Context-aware techniques:}
+			\begin{enumerate}
+				\item \textbf{n-grams:}
+				\begin{itemize}
+					\item n contiguous words as one unit
+					\item Captures phrase meaning
+					\item Handles negations
+				\end{itemize}
+				\item \textbf{Skip-grams:}
+				\begin{itemize}
+					\item Predict context from target
+					\item Captures semantic relationships
+					\item Word2Vec uses this
+				\end{itemize}
+				\item \textbf{Word embeddings:}
+				\begin{itemize}
+					\item Dense vector representations
+					\item Similar words close together
+					\item Captures meaning
+				\end{itemize}
+				\item \textbf{Contextual embeddings:}
+				\begin{itemize}
+					\item BERT, GPT, etc.
+					\item Context-dependent representations
+					\item State-of-the-art
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} \textcolor{myblue}{n-grams, Skip-grams, and embeddings} capture context!
+	\end{frame}
+	
+	\begin{frame}{Q76: TF-IDF vs Word Counts - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the advantage of TF-IDF over simple word counts?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item TF-IDF is faster to compute
+			\item TF-IDF assigns higher weights to rare but important words
+			\item TF-IDF counts all words equally
+			\item TF-IDF doesn't require a corpus
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{TF-IDF advantages:}
+			\begin{enumerate}
+				\item \textbf{Weights rare words higher:}
+				\begin{itemize}
+					\item Words appearing in few documents get high IDF
+					\item More discriminatory power
+					\item Better for distinguishing documents
+				\end{itemize}
+				\item \textbf{Weights common words lower:}
+				\begin{itemize}
+					\item Words in all documents get low IDF
+					\item No discriminatory power
+					\item Reduced noise
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Comparison:}
+			\begin{itemize}
+				\item Simple word count: treats all words equally
+				\item TF-IDF: distinguishes important from common words
+				\item Better feature representation
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} TF-IDF = \textcolor{myblue}{higher weight for rare words}!
+	\end{frame}
+	
+	\begin{frame}{Q77: Document Similarity Use - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: How is document similarity measured in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item By comparing document titles
+			\item By comparing document vectors using similarity metrics (cosine similarity)
+			\item By counting words in each document
+			\item By comparing document lengths
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Similarity measurement:}
+			\begin{enumerate}
+				\item \textbf{Document vectors:}
+				\begin{itemize}
+					\item Create vectors for each document
+					\item Using BoW, TF-IDF, or embeddings
+					\item Vectors represent document content
+				\end{itemize}
+				\item \textbf{Similarity metrics:}
+				\begin{itemize}
+					\item Cosine similarity: $\cos(\theta) = \frac{v_1 \cdot v_2}{||v_1|| \times ||v_2||}$
+					\item Jaccard similarity
+					\item Euclidean distance
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Applications:}
+			\begin{itemize}
+				\item Duplicate detection
+				\item Plagiarism detection
+				\item Document clustering
+				\item Information retrieval
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Document similarity = \textcolor{myblue}{comparing document vectors} - often cosine similarity!
+	\end{frame}
+	
+	\begin{frame}{Q78: Cosine Similarity - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is cosine similarity used for in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To count word frequencies
+			\item To measure similarity between two document vectors
+			\item To remove stop words
+			\item To stem words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Cosine similarity formula:}
+			\begin{itemize}
+				\item $\cos(\theta) = \frac{v_1 \cdot v_2}{||v_1|| \times ||v_2||}$
+				\item $v_1 \cdot v_2$: dot product
+				\item $||v||$: magnitude of vector
+				\item Range: -1 to 1
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item Scale-invariant
+				\item Works well with high-dimensional vectors
+				\item Common in text analysis
+				\item Easy to interpret
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Document vectors are very similar → cosine equals 1
+				\item Document vectors are different → cosine equals 0
+				\item Opposite → cosine equals -1
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Cosine similarity = \textcolor{myblue}{measures document vector similarity}!
+	\end{frame}
+	
+	\begin{frame}{Q79: Stemming vs Lemmatization Tradeoff - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the tradeoff between stemming and lemmatization?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item No tradeoff - they are the same
+			\item Stemming is faster but less accurate; lemmatization is slower but more accurate
+			\item Stemming is more accurate
+			\item Lemmatization is faster
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Stemming:}
+			\begin{itemize}
+				\item \textbf{Advantages:}
+				\begin{itemize}
+					\item Very fast
+					\item Simple rules
+					\item Low computational cost
+				\end{itemize}
+				\item \textbf{Disadvantages:}
+				\begin{itemize}
+					\item Less accurate
+					\item May create non-words
+					\item Loses meaning
+				\end{itemize}
+			\end{itemize}
+			\item \textbf{Lemmatization:}
+			\begin{itemize}
+				\item \textbf{Advantages:}
+				\begin{itemize}
+					\item More accurate
+					\item Always produces real words
+					\item Preserves meaning
+				\end{itemize}
+				\item \textbf{Disadvantages:}
+				\begin{itemize}
+					\item Slower
+					\item More computationally expensive
+					\item Requires dictionary lookup
+				\end{itemize}
+			\end{itemize}
+			\item \textbf{Choice depends on:}
+			\begin{itemize}
+				\item Speed requirements
+				\item Accuracy requirements
+				\item Application context
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stemming = \textcolor{myblue}{fast but less accurate}; Lemmatization = \textcolor{myblue}{slow but more accurate}!
+	\end{frame}
+	
+	\begin{frame}{Q80: NLP Challenges Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the main challenges in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only computational speed
+			\item Ambiguity, context dependence, noise, and sarcasm/detecting tone
+			\item Only data size
+			\item Only language barriers
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Key challenges:}
+			\begin{enumerate}
+				\item \textbf{Ambiguity:}
+				\begin{itemize}
+					\item Same words have different meanings
+					\item Polysemy and homonymy
+					\item Context determines meaning
+				\end{itemize}
+				\item \textbf{Context dependence:}
+				\begin{itemize}
+					\item Meaning depends on surrounding words
+					\item Need to capture relationships
+					\item Complex language structure
+				\end{itemize}
+				\item \textbf{Noise:}
+				\begin{itemize}
+					\item Spelling errors
+					\item Abbreviations
+					\item Colloquialisms
+					\item Social media language
+				\end{itemize}
+				\item \textbf{Tone detection:}
+				\begin{itemize}
+					\item Sarcasm hard to detect
+					\item Sentiment nuances
+					\item Emotional content
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLP challenges include \textcolor{myblue}{ambiguity, context, noise, and tone}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 7: CHAPTER QUESTIONS - QUESTIONS 81-100
+	% ============================================================
+	
+	\begin{frame}{Q81: Sentiment Analysis Steps - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the basic steps for sentiment analysis using a dictionary approach?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only count positive words
+			\item Establish dictionary, pre-process text, replace with stems/lemmas, calculate proportions
+			\item Only count negative words
+			\item Use machine learning only
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Sentiment analysis steps:}
+			\begin{enumerate}
+				\item \textbf{Establish dictionary:}
+				\begin{itemize}
+					\item Three lists: positive, negative, neutral
+					\item Loughran-McDonald for financial text
+					\item Pre-defined word lists
+				\end{itemize}
+				\item \textbf{Pre-process text:}
+				\begin{itemize}
+					\item Remove punctuation, symbols
+					\item Remove stop words
+					\item Convert to lowercase
+				\end{itemize}
+				\item \textbf{Replace with stems/lemmas:}
+				\begin{itemize}
+					\item Standardize word forms
+					\item Reduce vocabulary
+					\item Treat similar words equally
+				\end{itemize}
+				\item \textbf{Calculate proportions:}
+				\begin{itemize}
+					\item Proportion positive words
+					\item Proportion negative words
+					\item Proportion neutral words
+					\item Net sentiment = positive - negative
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Steps = \textcolor{myblue}{dictionary, pre-process, stem, calculate proportions}!
+	\end{frame}
+	
+	\begin{frame}{Q82: BoW Model Explanation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Explain how a bag of words model is used in NLP.}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It preserves word order
+			\item It treats each term identically, counts frequencies, stores in vectors for analysis
+			\item It removes all words
+			\item It only works for numbers
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{BoW process:}
+			\begin{enumerate}
+				\item \textbf{Treat terms identically:}
+				\begin{itemize}
+					\item Ignore word order and position
+					\item Each word considered separately
+					\item No context information
+				\end{itemize}
+				\item \textbf{Count frequencies:}
+				\begin{itemize}
+					\item Count occurrences of each word
+					\item Binary (presence/absence) or count
+					\item Store in vector
+				\end{itemize}
+				\item \textbf{Store in vectors:}
+				\begin{itemize}
+					\item Each document = one vector
+					\item Vocabulary defines vector dimensions
+					\item Can be analyzed statistically
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Applications:}
+			\begin{itemize}
+				\item Dictionary-based sentiment analysis
+				\item Machine learning classification
+				\item Feature extraction for other models
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} BoW = \textcolor{myblue}{treats each word identically, counts, stores in vectors}!
+	\end{frame}
+	
+	\begin{frame}{Q83: Naïve Bayes Assumptions - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the two assumptions of Naïve Bayes for document grouping?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Words are ordered and have different weights
+			\item Each word is independent of others and each word has equal weighting
+			\item Words are dependent and have different weights
+			\item Words are random
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Assumption 1: Independence:}
+			\begin{itemize}
+				\item $P(w_1, w_2, ..., w_n|c) = P(w_1|c) \times P(w_2|c) \times ... \times P(w_n|c)$
+				\item Each word independent of all others
+				\item Conditional independence given class
+			\end{itemize}
+			\item \textbf{Assumption 2: Equal weighting:}
+			\begin{itemize}
+				\item Each word has equal information value
+				\item After removing stop words
+				\item No word is more important than others
+			\end{itemize}
+			\item \textbf{Why these assumptions:}
+			\begin{itemize}
+				\item Make the problem tractable
+				\item Work well in practice
+				\item Simplify calculations significantly
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Naïve Bayes = \textcolor{myblue}{independence + equal weighting} - two key assumptions!
+	\end{frame}
+	
+	\begin{frame}{Q84: Negation Problem and Solution - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why do negation words cause problems in document classification and how can they be handled?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They don't cause problems
+			\item Negations reverse meaning; use n-grams to pair negation with following words
+			\item Remove all negation words
+			\item Treat negation as positive
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{The negation problem:}
+			\begin{itemize}
+				\item Example: "not adequate" vs "adequate"
+				\item BoW sees "adequate" in both
+				\item Meaning is opposite
+				\item Incorrect sentiment classification
+			\end{itemize}
+			\item \textbf{n-gram solution:}
+			\begin{itemize}
+				\item Use bi-grams or higher-order n-grams
+				\item Treat "not adequate" as one unit
+				\item "not sufficient" as one unit
+				\item "isn't good" as one unit
+			\end{itemize}
+			\item \textbf{Alternative solutions:}
+			\begin{itemize}
+				\item Negation detection algorithms
+				\item Dependency parsing
+				\item Identify scope of negation
+				\item Negation word + following word(s)
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Negation problem = \textcolor{myblue}{solved with n-grams} pairing negation + following word!
+	\end{frame}
+	
+	\begin{frame}{Q85: Zero TF-IDF Explanation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why do some words have zero TF-IDF values?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Because they are misspelled
+			\item Because they appear in every document and have no discriminatory power
+			\item Because they are too long
+			\item Because they are not in the vocabulary
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{TF-IDF = 0 condition:}
+			\begin{itemize}
+				\item IDF = ln(D / $\sum d_{i,j}$)
+				\item If word appears in all D documents: $\sum d_{i,j} = D$
+				\item IDF = ln(D/D) = ln(1) = 0
+				\item TF-IDF = TF $\times$ 0 = 0
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item "this" appears in all 4 documents in Box 9.2
+				\item Zero discriminatory power
+				\item Cannot help distinguish documents
+			\end{itemize}
+			\item \textbf{Implication:}
+			\begin{itemize}
+				\item Common words carry no weight
+				\item Only rare words matter
+				\item Stop words often have zero TF-IDF
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Zero TF-IDF = \textcolor{myblue}{word appears in all documents} - no discriminatory power!
+	\end{frame}
+	
+	\begin{frame}{Q86: TF-IDF Variation by Document - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why does the same word have different TF-IDF scores in different documents?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Because IDF varies by document
+			\item Because TF varies by document (document length and frequency differences)
+			\item Because vocabulary changes
+			\item Because documents have different authors
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{TF variation:}
+			\begin{itemize}
+				\item $TF = w_{i,j} / |v_j|$
+				\item $w_{i,j}$ = frequency of word in document
+				\item $|v_j|$ = total words in document
+				\item Different lengths $\Rightarrow$ different TFs
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Word appears 3 times in 100-word document: TF = 0.03
+				\item Word appears 3 times in 50-word document: TF = 0.06
+				\item Same word count, different TF
+			\end{itemize}
+			\item \textbf{IDF is constant:}
+			\begin{itemize}
+				\item IDF depends only on corpus
+				\item Same for all documents
+				\item TF varies $\Rightarrow$ TF-IDF varies
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} TF varies by document (length, frequency) $\Rightarrow$ \textcolor{myblue}{TF-IDF varies by document}!
+	\end{frame}
+	
+	\begin{frame}{Q87: Appendix Problem Unknown Words - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: If new words appear in test documents not in the training sample, how should they be treated?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Add them to the vocabulary
+			\item Ignore them because they cannot help with classification
+			\item Remove the entire document
+			\item Use them as stop words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Unknown word handling:}
+			\begin{itemize}
+				\item Words not in training vocabulary
+				\item No information about their distribution
+				\item Cannot calculate $P(w|c)$
+				\item Cannot contribute to classification
+			\end{itemize}
+			\item \textbf{Why ignore them:}
+			\begin{itemize}
+				\item They provide no discriminatory information
+				\item Would cause the model to fail
+				\item Better to exclude than to guess
+			\end{itemize}
+			\item \textbf{Possible solution:}
+			\begin{itemize}
+				\item Extend labeled sample to include new words
+				\item Use out-of-vocabulary handling
+				\item Build larger training vocabulary
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Unknown words = \textcolor{myblue}{ignored} - no information about them!
+	\end{frame}
+	
+	\begin{frame}{Q88: Smoothing Explanation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is smoothing required in Naïve Bayes applications and how does it work?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item It's not required
+			\item To avoid zero probability problems by adding a positive integer to all counts
+			\item To remove stop words
+			\item To stem words
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Why smoothing is needed:}
+			\begin{itemize}
+				\item Zero probability problem
+				\item Word not in training class $\rightarrow$ P = 0
+				\item Product becomes zero
+				\item Unrealistic and draconian
+			\end{itemize}
+			\item \textbf{How smoothing works:}
+			\begin{itemize}
+				\item Add $\lambda$ to all counts
+				\item $\lambda = 1$: Laplace smoothing (most common)
+				\item $P(w|c) = \frac{\text{count}(w,c) + \lambda}{\text{total words in c} + \lambda \times |V|}$
+				\item Ensures all probabilities $> 0$
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Before: 0/4 = 0
+				\item After: 1/6 = 0.167
+				\item Small positive probability
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Smoothing = \textcolor{myblue}{add to counts to avoid zero probabilities}!
+	\end{frame}
+	
+	\begin{frame}{Q89: Laplace Smoothing Impact - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What happens to the probabilities under Laplace smoothing?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They become more extreme
+			\item They are pushed toward a uniform distribution
+			\item They become negative
+			\item They don't change
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Effect of Laplace smoothing:}
+			\begin{itemize}
+				\item Adds counts to all classes
+				\item All probabilities become positive
+				\item Shrinks toward uniform distribution
+				\item Reduces extreme values
+			\end{itemize}
+			\item \textbf{How it works:}
+			\begin{itemize}
+				\item Similar to regularization (Lasso/Ridge)
+				\item $\lambda$ controls strength of smoothing
+				\item Larger $\lambda$ = more smoothing
+				\item Smaller $\lambda$ = less smoothing
+			\end{itemize}
+			\item \textbf{Sample size effect:}
+			\begin{itemize}
+				\item Small sample: large impact
+				\item Large sample: small impact
+				\item Effect diminishes with more data
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Laplace smoothing = \textcolor{myblue}{shrinks toward uniform distribution}!
+	\end{frame}
+	
+	\begin{frame}{Q90: Appendix Problem Classification - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the appendix problem, what is the most likely recommendation?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Buy (probability = 0.98)
+			\item Sell (probability = 0.02)
+			\item Hold
+			\item Cannot be determined
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Given data:}
+			\begin{itemize}
+				\item 5 buys, 5 sells (prior = 0.5 each)
+				\item New document: words 1, 2, 3 present; words 4, 5 absent
+			\end{itemize}
+			\item \textbf{Conditional probabilities matrix:}
+			\begin{itemize}
+				\item Word 1: P=4/5 (buy), 1/5 (sell)
+				\item Word 2: P=5/5 (buy), 2/5 (sell)
+				\item Word 3: P=2/5 (buy), 3/5 (sell)
+				\item Word 4: P=4/5 (buy, absent), 2/5 (sell, absent)
+				\item Word 5: P=3/5 (buy, absent), 1/5 (sell, absent)
+			\end{itemize}
+			\item \textbf{Calculations:}
+			\begin{itemize}
+				\item Buy likelihood = 0.8 $\times$ 1.0 $\times$ 0.4 $\times$ 0.8 $\times$ 0.6 $\times$ 0.5 = 0.0768
+				\item Sell likelihood = 0.2 $\times$ 0.4 $\times$ 0.6 $\times$ 0.4 $\times$ 0.2 $\times$ 0.5 = 0.00192
+			\end{itemize}
+			\item \textbf{Result:} Buy (98\% probability)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Work through the full calculation - \textcolor{myblue}{buy is much more likely}!
+	\end{frame}
+	
+	\begin{frame}{Q91: NLP Pre-processing Steps - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the main pre-processing steps in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only tokenization
+			\item Tokenization, stop word removal, stemming/lemmatization, and feature extraction
+			\item Only stemming
+			\item Only stop word removal
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Pre-processing steps:}
+			\begin{enumerate}
+				\item \textbf{Tokenization:}
+				\begin{itemize}
+					\item Split into sentences and words
+					\item Remove punctuation
+					\item Convert to lowercase
+				\end{itemize}
+				\item \textbf{Stop word removal:}
+				\begin{itemize}
+					\item Remove common words with no value
+					\item "the", "a", "and", etc.
+				\end{itemize}
+				\item \textbf{Stemming/Lemmatization:}
+				\begin{itemize}
+					\item Reduce words to root form
+					\item Standardize vocabulary
+				\end{itemize}
+				\item \textbf{Feature extraction:}
+				\begin{itemize}
+					\item Convert to numeric vectors
+					\item BoW, TF-IDF, embeddings
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Pre-processing = \textcolor{myblue}{tokenization, stop words, stemming/lemmatization, feature extraction}!
+	\end{frame}
+	
+	\begin{frame}{Q92: Tokenization Detail - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the difference between sentence tokenization and word tokenization?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item They are the same thing
+			\item Sentence tokenization splits at punctuation; word tokenization splits into words
+			\item Sentence tokenization removes words
+			\item Word tokenization removes sentences
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Sentence tokenization:}
+			\begin{itemize}
+				\item Splits document at periods (.)
+				\item Question marks (?)
+				\item Exclamation marks (!)
+				\item Creates sentence boundaries
+			\end{itemize}
+			\item \textbf{Word tokenization:}
+			\begin{itemize}
+				\item Splits sentences into words
+				\item Removes punctuation
+				\item Removes spacing and special symbols
+				\item Converts to lowercase
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Document: "Hello world. How are you?"
+				\item Sentence tokens: ["Hello world.", "How are you?"]
+				\item Word tokens: ["hello", "world", "how", "are", "you"]
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Sentence = \textcolor{myblue}{splitting at punctuation}; Word = \textcolor{myblue}{splitting into words}!
+	\end{frame}
+	
+	\begin{frame}{Q93: Stop Words Importance - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why do stop words vary across applications?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item All stop words are the same
+			\item Words with no value in one context may be useful in another
+			\item Stop words are always removed
+			\item Stop words never matter
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Context-dependent stop words:}
+			\begin{itemize}
+				\item Some words may be useful in specific domains
+				\item Example: "bank" is common but important in financial text
+				\item "stock" is common but important in market analysis
+			\end{itemize}
+			\item \textbf{Why customization matters:}
+			\begin{itemize}
+				\item Standard stop word lists may remove important words
+				\item Domain-specific vocabulary is important
+				\item Need to consider the application
+			\end{itemize}
+			\item \textbf{Examples:}
+			\begin{itemize}
+				\item Medical NLP: preserve all medical terms
+				\item Financial NLP: preserve financial terms
+				\item Legal NLP: preserve legal terms
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stop words are \textcolor{myblue}{context-dependent} - not one-size-fits-all!
+	\end{frame}
+	
+	\begin{frame}{Q94: DTM Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In Figure 9.1, what does the Document Term Matrix show?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Document titles and authors
+			\item Rows as documents, columns as words, entries as word counts
+			\item Document dates
+			\item Document sources
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{DTM structure:}
+			\begin{itemize}
+				\item \textbf{Rows:} Each row = one document
+				\item \textbf{Columns:} Each column = one word from vocabulary
+				\item \textbf{Entries:} Word counts or frequencies
+				\item Dimensions: $|W| \times D$
+			\end{itemize}
+			\item \textbf{Example from Figure 9.1:}
+			\begin{itemize}
+				\item Vocabulary: 15 words (high, low, buy, sell, etc.)
+				\item Documents: d1 and d2
+				\item d1: high appears twice, stock appears once, etc.
+				\item d2: bond appears once, volatility appears once, etc.
+			\end{itemize}
+			\item \textbf{Key features:}
+			\begin{itemize}
+				\item Same number of columns for each document
+				\item Enables quantitative analysis
+				\item Sparse (many zeros)
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} DTM = \textcolor{myblue}{documents $\times$ words matrix with counts}!
+	\end{frame}
+	
+	\begin{frame}{Q95: Feature Extraction Purpose - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: Why is feature extraction (text representation) important in NLP?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item To make text longer
+			\item To convert text into numeric vectors for machine learning analysis
+			\item To remove words
+			\item To make text more readable
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Feature extraction purpose:}
+			\begin{itemize}
+				\item Machine learning models need numeric inputs
+				\item Text must be converted to numbers
+				\item Enables statistical analysis
+				\item Foundation for all ML-based NLP
+			\end{itemize}
+			\item \textbf{Common methods:}
+			\begin{enumerate}
+				\item \textbf{Bag of Words:}
+				\begin{itemize}
+					\item Simple word counts
+					\item Binary or count
+				\end{itemize}
+				\item \textbf{TF-IDF:}
+				\begin{itemize}
+					\item Weighted word importance
+					\item Rare words get higher weight
+				\end{itemize}
+				\item \textbf{Word embeddings:}
+				\begin{itemize}
+					\item Dense vector representations
+					\item Captures semantic meaning
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Feature extraction = \textcolor{myblue}{text $\to$ numeric vectors}!
+	\end{frame}
+	
+	\begin{frame}{Q96: Document Term Matrix Dimensions - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the dimensions of a Document Term Matrix?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item $D \times W$ (documents $\times$ words)
+			\item $W \times D$ (words $\times$ documents)
+			\item $D \times D$ (documents $\times$ documents)
+			\item $W \times W$ (words $\times$ words)
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{DTM dimensions:}
+			\begin{itemize}
+				\item Rows: D = number of documents
+				\item Columns: W = number of words in vocabulary
+				\item Dimensions: D $\times$ W
+				\item Entry: word count or frequency
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item 100 documents
+				\item 10,000 word vocabulary
+				\item Matrix size: 100 $\times$ 10,000
+				\item 1,000,000 entries
+			\end{itemize}
+			\item \textbf{Implications:}
+			\begin{itemize}
+				\item Very large matrices
+				\item Sparse (mostly zeros)
+				\item Need efficient storage
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} DTM dimensions = \textcolor{myblue}{documents $\times$ words}!
+	\end{frame}
+	
+	\begin{frame}{Q97: BoW Vector Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In the BoW example, why does d1 have a 2 for "high" in the count vector?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Because "high" is the most important word
+			\item Because "high" appears twice in the document
+			\item Because "high" is a stop word
+			\item Because "high" is the first word
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Example text:}
+			\begin{itemize}
+				\item d1: "... reaching a high of 1550 ... with a high of 1560"
+				\item "high" appears twice
+				\item Count vector records 2
+			\end{itemize}
+			\item \textbf{Count vs Binary:}
+			\begin{itemize}
+				\item \textbf{Count:} 2 (frequency)
+				\item \textbf{Binary:} 1 (presence)
+				\item Count gives more information
+			\end{itemize}
+			\item \textbf{Other words:}
+			\begin{itemize}
+				\item "stock" appears once → 1
+				\item "profit" appears once → 1
+				\item "rise" appears once → 1
+				\item "fall" appears once → 1
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Count BoW = \textcolor{myblue}{actual frequency} - not just presence!
+	\end{frame}
+	
+	\begin{frame}{Q98: Bag of n-grams - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What is the Bag of n-grams (BoN) approach?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item A method to count single words
+			\item Applying BoW to n-grams (n contiguous words as units)
+			\item A method to remove n-grams
+			\item A method to count only bigrams
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{BoN definition:}
+			\begin{itemize}
+				\item Extends BoW to n-grams
+				\item n contiguous words = one unit
+				\item Example: "credit spreads" as one unit
+				\item Handles phrases and negations
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Document: "The bank is not profitable"
+				\item Bi-grams: ["The bank", "bank is", "is not", "not profitable"]
+				\item "not profitable" as one unit
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item Captures phrase meaning
+				\item Handles negations
+				\item Better context information
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} BoN = \textcolor{myblue}{BoW applied to n-grams} - captures phrases!
+	\end{frame}
+	
+	\begin{frame}{Q99: Cosine Similarity Application - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: In document similarity, what does a cosine similarity close to 1 indicate?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Documents are very different
+			\item Documents are very similar (vectors point in same direction)
+			\item Documents are opposite
+			\item Documents are unrelated
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Cosine similarity interpretation:}
+			\begin{itemize}
+				\item \textbf{cos equals 1:} Very similar documents
+				\item \textbf{cos equals 0:} Unrelated documents
+				\item \textbf{cos equals -1:} Opposite documents
+				\item Range: [-1, 1]
+			\end{itemize}
+			\item \textbf{Why it works:}
+			\begin{itemize}
+				\item Vectors point in same direction
+				\item Similar word distributions
+				\item Angle between vectors is small
+				\item Magnitude doesn't matter (scale-invariant)
+			\end{itemize}
+			\item \textbf{Applications:}
+			\begin{itemize}
+				\item Finding duplicate documents
+				\item Information retrieval
+				\item Document clustering
+				\item Plagiarism detection
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} cos equals 1 = \textcolor{myblue}{very similar documents}!
+	\end{frame}
+	
+	\begin{frame}{Q100: NLP Chapter Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{QUESTION: What are the key takeaways from the NLP chapter?}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIONS:}
+		\begin{enumerate}
+			\item Only BoW is used in NLP
+			\item NLP involves pre-processing, feature extraction, dictionary or ML approaches, and careful evaluation
+			\item Only machine learning is used
+			\item NLP doesn't require pre-processing
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}}
+		
+		\vspace{0.1cm}
+		\textbf{DETAILED TUTORIAL:}
+		\begin{itemize}
+			\item \textbf{Key takeaways:}
+			\begin{enumerate}
+				\item \textbf{Pre-processing:}
+				\begin{itemize}
+					\item Tokenization
+					\item Stop word removal
+					\item Stemming/lemmatization
+					\item Feature extraction
+				\end{itemize}
+				\item \textbf{Feature extraction:}
+				\begin{itemize}
+					\item Bag of Words (BoW)
+					\item n-grams
+					\item TF-IDF weighting
+				\end{itemize}
+				\item \textbf{Approaches:}
+				\begin{itemize}
+					\item Dictionary-based (heuristic)
+					\item Machine learning (Naïve Bayes, SVM, neural networks)
+					\item Word embeddings
+				\end{itemize}
+				\item \textbf{Evaluation:}
+				\begin{itemize}
+					\item Confusion matrix metrics
+					\item Speed and data requirements
+					\item Context-aware techniques
+				\end{itemize}
+			\end{enumerate}
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLP = \textcolor{myblue}{pre-processing + feature extraction + modeling + evaluation}!
+	\end{frame}
+	
+	% ============================================================
+	% SUMMARY SLIDE
+	% ============================================================
+	
+	\begin{frame}{Summary: Complete NLP Review}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{\textcolor{myblue}{Pre-processing:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{Tokenization:} Sentences $\to$ words
+			\item \textcolor{myblue}{Stop Words:} Remove common words with no value
+			\item \textcolor{myblue}{Stemming:} Cut prefixes/suffixes (fast, less accurate)
+			\item \textcolor{myblue}{Lemmatization:} Dictionary form (slow, more accurate)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{\textcolor{myblue}{Feature Extraction:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{BoW:} Binary (presence) or Count (frequency)
+			\item \textcolor{myblue}{n-grams:} Contiguous word sequences
+			\item \textcolor{myblue}{TF-IDF:} $TF \times IDF$ - weights rare words higher
+			\item \textcolor{myblue}{Embeddings:} Dense vectors capturing meaning (Word2Vec)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{\textcolor{myblue}{Classification:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{Dictionary:} Pre-defined word lists (sentiment analysis)
+			\item \textcolor{myblue}{Naïve Bayes:} Simple, fast, generative classifier
+			\item \textcolor{myblue}{Smoothing:} Laplace smoothing to avoid zero probabilities
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{\textcolor{myblue}{Evaluation:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{Confusion Matrix:} TP, TN, FP, FN
+			\item \textcolor{myblue}{Metrics:} Accuracy, Precision, Recall, F1
+			\item \textcolor{myblue}{Challenges:} Ambiguity, context, negation, sarcasm
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{Exam Success:}} Understand the process from raw text to classification and evaluation!
+	\end{frame}
+	
+\end{document}

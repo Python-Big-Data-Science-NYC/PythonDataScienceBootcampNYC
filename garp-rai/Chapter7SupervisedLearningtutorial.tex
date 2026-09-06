@@ -1,0 +1,4776 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Supervised Learning - Model Estimation}
+\subtitle{100 Questions: OLS, MLE, Gradient Descent, Regularization, Cross-Validation}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 1: ESTIMATION PARADIGMS - QUESTIONS 1-15
+	% ============================================================
+	
+	\begin{frame}{Q1: OLS Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Ordinary Least Squares (OLS) estimation in supervised learning?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - A method that minimizes the sum of squared errors between predicted and actual values.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item OLS is the foundational estimation method in regression analysis
+			\item Objective function: $\min \sum_{i=1}^N (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^N \varepsilon_i^2$
+			\item $\hat{y}_i = \beta_0 + \beta_1 x_{i1} + ... + \beta_p x_{ip}$ is the predicted value
+			\item $\varepsilon_i = y_i - \hat{y}_i$ is the residual (error)
+			\item OLS minimizes the Residual Sum of Squares (RSS)
+			\item Developed by Carl Friedrich Gauss in the 1790s
+			\item Has a closed-form solution: $\hat{\beta} = (X^TX)^{-1}X^Ty$
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes Least Absolute Deviations (LAD) - minimizes $\sum |\varepsilon_i|$ instead of $\sum \varepsilon_i^2$
+			\item \textcolor{myred}{C:} This describes Maximum Likelihood Estimation (MLE) - different paradigm entirely
+			\item \textcolor{myred}{D:} This describes regularization (L1/Lasso) - penalizes complexity
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS minimizes \textcolor{myblue}{squared errors}, NOT absolute errors! This is the most common confusion.
+	\end{frame}
+	
+	\begin{frame}{Q2: OLS Objective Function - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which is the correct objective function for OLS?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - $L = \sum_{i=1}^N (y_i - \hat{y}_i)^2$
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item The OLS objective function is the Sum of Squared Errors (SSE)
+			\item Also called Residual Sum of Squares (RSS) or Sum of Squared Residuals (SSR)
+			\item Mathematical notation: $L(\beta) = \sum_{i=1}^N (y_i - X_i\beta)^2$
+			\item This function is convex and differentiable $\Rightarrow$ has unique minimum
+			\item First derivative: $\frac{\partial L}{\partial \beta} = -2X^T(y - X\beta)$
+			\item Setting derivative to zero yields normal equations: $X^TX\beta = X^Ty$
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} L1 loss (Least Absolute Deviations) - not differentiable at zero
+			\item \textcolor{myred}{C:} L4 loss - rarely used, not OLS
+			\item \textcolor{myred}{D:} Chebyshev loss (minimax) - minimizes maximum error
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS = \textcolor{myblue}{RSS} = $\sum (y_i - \hat{y}_i)^2$! Know all three names (SSE, RSS, SSR).
+	\end{frame}
+	
+	\begin{frame}{Q3: OLS vs NLS - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key difference between OLS and Nonlinear Least Squares?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - OLS is used when model is linear in parameters; NLS when nonlinear in parameters.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Linear in parameters:} Model can be written as $\beta_0 + \beta_1 f_1(x) + \beta_2 f_2(x) + ...$
+			\begin{itemize}
+				\item Example: $y = \beta_0 + \beta_1 x + \beta_2 x^2$ (polynomial regression)
+				\item Even though nonlinear in x, it's linear in $\beta$s
+			\end{itemize}
+			\item \textbf{Nonlinear in parameters:} Parameters appear nonlinearly
+			\begin{itemize}
+				\item Example: $y = \beta_0 + \beta_1 e^{\beta_2 x}$
+				\item $\beta_2$ appears in exponent - nonlinear
+			\end{itemize}
+			\item OLS has closed-form solution: $\hat{\beta} = (X^TX)^{-1}X^Ty$
+			\item NLS requires iterative numerical optimization
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Both minimize squared errors - this is the similarity, not difference
+			\item \textcolor{myred}{C:} Actually reversed - OLS has closed-form, NLS needs iterative methods
+			\item \textcolor{myred}{D:} Both are regression methods (continuous dependent variables)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Difference is \textcolor{myblue}{linearity in parameters}, NOT in variables! $y = \beta_0 + \beta_1 x^2$ is OLS.
+	\end{frame}
+	
+	\begin{frame}{Q4: NLS Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which model requires Nonlinear Least Squares (NLS) estimation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - $y = \beta_0 + \beta_1 e^{\beta_2 x} + \varepsilon$
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Model C has $\beta_2$ in the exponent: $e^{\beta_2 x}$
+			\item This is nonlinear in parameter $\beta_2$ - cannot be transformed to linear form
+			\item Parameter $\beta_1$ multiplies the exponential term
+			\item NLS requires iterative methods like Gauss-Newton or Levenberg-Marquardt
+			\item The normal equations become nonlinear and cannot be solved directly
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2$ - linear in all parameters (OLS)
+			\item \textcolor{myred}{B:} $y = \beta_0 + \beta_1 x + \beta_2 x^2$ - linear in $\beta$s (polynomial regression, OLS)
+			\item \textcolor{myred}{D:} $y = \beta_0 + \beta_1 \ln(x)$ - linear in $\beta$s (OLS with transformed x)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLS is about \textcolor{myblue}{nonlinearity in parameters}, not variables! This is the most common mistake.
+	\end{frame}
+	
+	\begin{frame}{Q5: MLE Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Maximum Likelihood Estimation (MLE)?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Method that finds parameters maximizing probability (likelihood) of observing given data.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item MLE finds $\theta$ that maximizes $L(\theta) = P(\text{data} | \theta)$
+			\item \textbf{Intuition:} "What parameters make the observed data most probable?"
+			\item Likelihood function: $L(\theta) = \prod_{i=1}^N f(y_i | \theta)$ for i.i.d. data
+			\item Log-likelihood: $\ell(\theta) = \sum_{i=1}^N \log f(y_i | \theta)$
+			\item MLE is asymptotically consistent, efficient, and normally distributed
+			\item Under regularity conditions, MLE achieves Cramér-Rao lower bound asymptotically
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes OLS - different estimation paradigm
+			\item \textcolor{myred}{C:} This describes regularization (penalizing complexity)
+			\item \textcolor{myred}{D:} Minimizing error variance is related to efficiency but not MLE definition
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE maximizes \textcolor{myblue}{likelihood} $P(\text{data}|\theta)$, NOT $P(\theta|\text{data})$!
+	\end{frame}
+	
+	\begin{frame}{Q6: OLS vs MLE Equivalence - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{When do OLS and MLE produce same parameter estimates?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - When errors are normally distributed with constant variance.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Model: $y_i = X_i\beta + \varepsilon_i$, with $\varepsilon_i \sim N(0, \sigma^2)$
+			\item Likelihood: $L(\beta, \sigma^2) = \prod_{i=1}^N \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(y_i - X_i\beta)^2}{2\sigma^2}\right)$
+			\item Log-likelihood: $\ell(\beta) = -\frac{N}{2}\log(2\pi) - \frac{N}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^N (y_i - X_i\beta)^2$
+			\item Maximizing $\ell(\beta)$ is equivalent to minimizing $\sum (y_i - X_i\beta)^2$ (RSS)
+			\item The $\sigma^2$ term doesn't affect the $\beta$ estimates
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Independence alone insufficient - need normal distribution
+			\item \textcolor{myred}{C:} Uniform errors would give different estimator (MLE would minimize maximum absolute error)
+			\item \textcolor{myred}{D:} Autocorrelation violates OLS assumptions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS and MLE are \textcolor{myblue}{equivalent} under normal errors! This is a critical exam concept.
+	\end{frame}
+	
+	\begin{frame}{Q7: Logistic Regression Estimation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What estimation method is typically used for logistic regression?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Maximum Likelihood Estimation (MLE)
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item Logistic regression: $\log\left(\frac{p_i}{1-p_i}\right) = X_i\beta$
+			\item $p_i = P(Y_i = 1 | X_i) = \frac{1}{1 + e^{-X_i\beta}}$
+			\item Target is binary: $Y_i \in \{0, 1\}$
+			\item Bernoulli likelihood: $L(\beta) = \prod_{i=1}^N p_i^{Y_i}(1-p_i)^{1-Y_i}$
+			\item Log-likelihood: $\ell(\beta) = \sum_{i=1}^N [Y_i\log(p_i) + (1-Y_i)\log(1-p_i)]$
+			\item No closed-form solution - requires numerical optimization (Newton-Raphson, IRLS)
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} OLS inappropriate - binary target, non-normal errors, heteroscedasticity
+			\item \textcolor{myred}{B:} NLS not standard - logistic regression's nonlinearity handled by MLE
+			\item \textcolor{myred}{D:} Method of Moments less common and less efficient
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logistic regression uses \textcolor{myblue}{MLE}, NOT OLS! Critical distinction.
+	\end{frame}
+	
+	\begin{frame}{Q8: Likelihood Function - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does $L(\theta | \text{data})$ represent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - The probability of the data given the parameters.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item $L(\theta | \text{data}) = P(\text{data} | \theta)$
+			\item \textbf{Key distinction:} Likelihood vs Posterior
+			\begin{itemize}
+				\item Likelihood: $P(\text{data} | \theta)$ - frequentist paradigm
+				\item Posterior: $P(\theta | \text{data})$ - Bayesian paradigm
+			\end{itemize}
+			\item Likelihood treats $\theta$ as fixed unknown constant
+			\item Data is random; parameters are fixed
+			\item Uses Bayes' theorem: $P(\theta | \text{data}) \propto P(\text{data} | \theta) P(\theta)$
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes posterior distribution $P(\theta|\text{data})$ - Bayesian concept
+			\item \textcolor{myred}{C:} This is the OLS loss function (RSS) - different concept
+			\item \textcolor{myred}{D:} This describes estimator variance - different statistical concept
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Likelihood = $P(\text{data} | \theta)$, NOT $P(\theta | \text{data})$! This confusion is extremely common.
+	\end{frame}
+	
+	\begin{frame}{Q9: Log-Likelihood - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why is log-likelihood often used instead of likelihood?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Easier to maximize (products $\to$ sums, monotonic).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Mathematical convenience:}
+			\begin{itemize}
+				\item Likelihood involves products: $L(\theta) = \prod_{i=1}^N f(y_i|\theta)$
+				\item Log-likelihood involves sums: $\ell(\theta) = \sum_{i=1}^N \log f(y_i|\theta)$
+			\end{itemize}
+			\item \textbf{Monotonicity:} $\log$ is strictly increasing
+			\begin{itemize}
+				\item Maximizing $\ell(\theta)$ $\equiv$ maximizing $L(\theta)$
+				\item If $L(\theta_1) > L(\theta_2)$, then $\ell(\theta_1) > \ell(\theta_2)$
+			\end{itemize}
+			\item \textbf{Numerical stability:}
+			\begin{itemize}
+				\item Products of small probabilities can underflow to zero
+				\item Sums of logs are more numerically stable
+			\end{itemize}
+			\item \textbf{Derivative simplification:} Sums easier to differentiate than products
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} False - log-likelihood is often negative (probabilities < 1)
+			\item \textcolor{myred}{C:} False - usually requires numerical optimization
+			\item \textcolor{myred}{D:} False - doesn't affect parameter count (that's regularization)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Log-likelihood is \textcolor{myblue}{monotonic} - maximizing it $\equiv$ maximizing likelihood!
+	\end{frame}
+	
+	\begin{frame}{Q10: Closed-Form vs Numerical - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which estimation method typically has a closed-form solution?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Ordinary Least Squares for linear regression.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{OLS closed-form:} $\hat{\beta} = (X^TX)^{-1}X^Ty$
+			\begin{itemize}
+				\item Derived from normal equations: $X^TX\hat{\beta} = X^Ty$
+				\item Requires $X^TX$ to be invertible (no perfect multicollinearity)
+				\item Computational complexity: $O(p^2N + p^3)$
+			\end{itemize}
+			\item \textbf{Why others don't have closed-form:}
+			\begin{itemize}
+				\item Logistic regression: nonlinear in parameters (link function)
+				\item NLS: nonlinear in parameters
+				\item Neural networks: highly complex composition of functions
+			\end{itemize}
+			\item \textbf{When closed-form is not possible:}
+			\begin{itemize}
+				\item When normal equations are nonlinear
+				\item When likelihood has no analytical solution
+				\item When loss function is not convex
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Logistic regression MLE requires numerical optimization (Newton-Raphson)
+			\item \textcolor{myred}{B:} NLS requires iterative numerical optimization
+			\item \textcolor{myred}{D:} Neural networks use backpropagation (numerical)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Only \textcolor{myblue}{OLS for linear regression} has a closed-form solution!
+	\end{frame}
+	
+	\begin{frame}{Q11: OLS Assumptions - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which is NOT a standard OLS assumption?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: D}} - The errors are autocorrelated.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Standard OLS assumptions (Gauss-Markov):}
+			\begin{enumerate}
+				\item \textbf{Linearity in parameters:} $y = X\beta + \varepsilon$
+				\item \textbf{Zero conditional mean:} $E[\varepsilon | X] = 0$
+				\item \textbf{No perfect multicollinearity:} $X^TX$ invertible
+				\item \textbf{Homoscedasticity:} $Var(\varepsilon | X) = \sigma^2$ (constant)
+				\item \textbf{No autocorrelation:} $Cov(\varepsilon_i, \varepsilon_j | X) = 0$ for $i \neq j$
+				\item \textbf{Normality:} $\varepsilon \sim N(0, \sigma^2)$ (for inference)
+			\end{enumerate}
+			\item \textbf{Autocorrelation} is a violation of the independence assumption
+			\begin{itemize}
+				\item Common in time series data
+				\item Leads to inefficient estimates (not BLUE)
+				\item Standard errors are biased
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This IS an OLS assumption
+			\item \textcolor{myred}{B:} This IS an OLS assumption
+			\item \textcolor{myred}{C:} This IS an OLS assumption (for inference)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS assumes \textcolor{myblue}{no autocorrelation} in errors! Autocorrelation is a violation.
+	\end{frame}
+	
+	\begin{frame}{Q12: MLE Properties - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which is a desirable property of Maximum Likelihood Estimators?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - They are consistent (converge to true values as sample size increases).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Consistency:} $\hat{\theta}_{MLE} \xrightarrow{p} \theta_0$ as $n \to \infty$
+			\begin{itemize}
+				\item Under regularity conditions (identifiability, differentiability, etc.)
+				\item The estimator converges in probability to the true parameter
+			\end{itemize}
+			\item \textbf{Asymptotic Normality:} $\sqrt{n}(\hat{\theta}_{MLE} - \theta_0) \xrightarrow{d} N(0, I^{-1}(\theta_0))$
+			\begin{itemize}
+				\item $I(\theta)$ is the Fisher Information matrix
+				\item Achieves Cramér-Rao lower bound asymptotically
+			\end{itemize}
+			\item \textbf{Asymptotic Efficiency:} Minimum variance among regular estimators
+			\item \textbf{Invariance:} $\widehat{g(\theta)} = g(\hat{\theta})$ for continuous $g$
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} False - MLE can be biased (e.g., $\hat{\sigma}^2_{MLE}$ is biased for $\sigma^2$)
+			\item \textcolor{myred}{C:} False - asymptotically efficient, not always minimum variance in finite samples
+			\item \textcolor{myred}{D:} False - often requires numerical optimization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE is \textcolor{myblue}{consistent} but NOT necessarily unbiased!
+	\end{frame}
+	
+	\begin{frame}{Q13: NLS Optimization - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why does NLS require iterative numerical optimization?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - No closed-form solution for nonlinear-in-parameters models.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{The problem:} Normal equations are nonlinear
+			\begin{itemize}
+				\item OLS: $X^TX\beta = X^Ty$ $\Rightarrow$ linear system
+				\item NLS: $\frac{\partial S(\beta)}{\partial \beta} = 0$ where $S(\beta) = \sum (y_i - f(x_i, \beta))^2$
+				\item Partial derivatives $\frac{\partial S}{\partial \beta_j}$ are nonlinear functions of $\beta$
+			\end{itemize}
+			\item \textbf{Common NLS algorithms:}
+			\begin{itemize}
+				\item Gauss-Newton: Linearizes the model around current estimates
+				\item Levenberg-Marquardt: Combines Gauss-Newton and gradient descent
+				\item Gradient descent (first-order method)
+				\item Newton-Raphson (second-order method)
+			\end{itemize}
+			\item \textbf{Convergence issues:}
+			\begin{itemize}
+				\item Requires good starting values
+				\item May converge to local minima
+				\item May not converge at all if model is misspecified
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Multiple local minima are a concern but not the primary reason
+			\item \textcolor{myred}{C:} Error distribution doesn't determine need for numerical optimization
+			\item \textcolor{myred}{D:} Parameter count affects complexity but isn't fundamental
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} No closed-form solution exists for \textcolor{myblue}{nonlinear-in-parameters} models!
+	\end{frame}
+	
+	\begin{frame}{Q14: Gauss-Markov Theorem - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does the Gauss-Markov theorem state about OLS estimators?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - OLS estimators are the Best Linear Unbiased Estimators (BLUE) under certain conditions.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Gauss-Markov assumptions:}
+			\begin{enumerate}
+				\item Linearity in parameters
+				\item No perfect multicollinearity
+				\item Zero conditional mean: $E[\varepsilon | X] = 0$
+				\item Homoscedasticity: $Var(\varepsilon | X) = \sigma^2$
+				\item No autocorrelation: $Cov(\varepsilon_i, \varepsilon_j | X) = 0$
+			\end{enumerate}
+			\item \textbf{BLUE means:}
+			\begin{itemize}
+				\item \textbf{Best:} Minimum variance among all linear unbiased estimators
+				\item \textbf{Linear:} Estimator is a linear function of $y$
+				\item \textbf{Unbiased:} $E[\hat{\beta}] = \beta$
+				\item \textbf{Estimator:} $\hat{\beta} = (X^TX)^{-1}X^Ty$
+			\end{itemize}
+			\item \textbf{Important:} OLS is BLUE among \textit{linear} unbiased estimators
+			\begin{itemize}
+				\item Nonlinear estimators could have lower variance
+				\item Biased estimators could have lower MSE (bias-variance tradeoff)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Close but incomplete - misses "Best" (minimum variance)
+			\item \textcolor{myred}{C:} False - only among linear unbiased estimators
+			\item \textcolor{myred}{D:} False - consistency requires additional conditions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS is \textcolor{myblue}{BLUE} under Gauss-Markov assumptions! Not "always best" among all estimators.
+	\end{frame}
+	
+	\begin{frame}{Q15: Estimation Methods Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which estimation method for $y = \beta_0 + \beta_1 x_1^{\beta_2} + \varepsilon$?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: D}} - Both NLS and MLE would be appropriate.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Model analysis:}
+			\begin{itemize}
+				\item $y = \beta_0 + \beta_1 x_1^{\beta_2} + \varepsilon$
+				\item $\beta_2$ appears in the exponent of $x_1$
+				\item This is nonlinear in parameter $\beta_2$
+				\item Cannot be transformed to linear form (unlike $x^2$ which is linear in parameters)
+			\end{itemize}
+			\item \textbf{NLS approach:}
+			\begin{itemize}
+				\item Minimizes $\sum (y_i - \beta_0 - \beta_1 x_{1i}^{\beta_2})^2$
+				\item Requires numerical optimization
+				\item Equivalent to MLE if errors are normal
+			\end{itemize}
+			\item \textbf{MLE approach:}
+			\begin{itemize}
+				\item Defines likelihood: $L(\beta_0, \beta_1, \beta_2, \sigma^2)$
+				\item If $\varepsilon \sim N(0, \sigma^2)$, MLE $\equiv$ NLS
+				\item If errors not normal, MLE differs from NLS
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} OLS requires linearity in parameters - this model violates that
+			\item \textcolor{myred}{B:} NLS alone correct but incomplete - MLE also works
+			\item \textcolor{myred}{C:} MLE alone correct but incomplete - NLS also works
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} For nonlinear models, both \textcolor{myblue}{NLS and MLE} can be used!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 2: GRADIENT DESCENT - QUESTIONS 16-35
+	% ============================================================
+	
+	\begin{frame}{Q16: Gradient Descent Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is gradient descent in model estimation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Iterative optimization algorithm updating parameters in direction of negative gradient.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Core concept:} Iteratively move in the direction of steepest descent
+			\item \textbf{Update rule:} $\theta_{new} = \theta_{old} - \alpha \nabla L(\theta)$
+			\item \textbf{Components:}
+			\begin{itemize}
+				\item $\theta$: Parameters being optimized
+				\item $\alpha$: Learning rate (step size)
+				\item $\nabla L(\theta)$: Gradient (vector of partial derivatives)
+			\end{itemize}
+			\item \textbf{Intuition:}
+			\begin{itemize}
+				\item Gradient points in direction of steepest increase
+				\item Negative gradient points in direction of steepest decrease
+				\item Move in negative gradient direction to reduce loss
+			\end{itemize}
+			\item \textbf{Convergence conditions:}
+			\begin{itemize}
+				\item Loss function is differentiable
+				\item Learning rate is chosen appropriately
+				\item Function is convex for guaranteed global convergence
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} False - can get stuck in local minima
+			\item \textcolor{myred}{C:} This describes closed-form solutions
+			\item \textcolor{myred}{D:} This describes random search
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Gradient descent is \textcolor{myblue}{iterative} and uses \textcolor{myblue}{negative gradient}!
+	\end{frame}
+	
+	\begin{frame}{Q17: Gradient Descent Update Rule - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the general update rule for gradient descent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - $\theta_{new} = \theta_{old} - \alpha \nabla L(\theta)$
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Formula breakdown:}
+			\begin{itemize}
+				\item $\theta_{new}$: Updated parameter values
+				\item $\theta_{old}$: Current parameter values
+				\item $\alpha$: Learning rate (hyperparameter)
+				\item $\nabla L(\theta)$: Gradient of loss function
+			\end{itemize}
+			\item \textbf{Why subtract?}
+			\begin{itemize}
+				\item $\nabla L(\theta)$ points uphill (direction of increase)
+				\item $-\nabla L(\theta)$ points downhill (direction of decrease)
+				\item Subtracting moves toward lower loss
+			\end{itemize}
+			\item \textbf{Example for linear regression:}
+			\begin{itemize}
+				\item $L(\beta) = \sum (y_i - X_i\beta)^2$
+				\item $\nabla L(\beta) = -2X^T(y - X\beta)$
+				\item $\beta_{new} = \beta_{old} + 2\alpha X^T(y - X\beta)$
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is gradient ascent (moving to increase loss)
+			\item \textcolor{myred}{C:} Multiplication is not the correct operation
+			\item \textcolor{myred}{D:} Division is not the correct operation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Gradient descent uses \textcolor{myblue}{subtraction} of the gradient!
+	\end{frame}
+	
+	\begin{frame}{Q18: Learning Rate Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does the learning rate $\alpha$ control in gradient descent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - The step size of each parameter update.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Step size control:}
+			\begin{itemize}
+				\item $\alpha$ determines how far we move in the gradient direction
+				\item Larger $\alpha$: larger steps, faster potential convergence
+				\item Smaller $\alpha$: smaller steps, slower but more stable
+			\end{itemize}
+			\item \textbf{Effects of learning rate:}
+			\begin{itemize}
+				\item \textbf{Too large:} Oscillation, divergence, failure to converge
+				\item \textbf{Too small:} Very slow convergence, getting stuck in plateaus
+				\item \textbf{Just right:} Efficient convergence to minimum
+			\end{itemize}
+			\item \textbf{Common learning rate values:}
+			\begin{itemize}
+				\item Typical range: $10^{-6}$ to $10^{-1}$
+				\item Often use learning rate schedules (decay over time)
+				\item Adaptive methods (Adam) adjust per parameter
+			\end{itemize}
+			\item \textbf{Learning rate vs other hyperparameters:}
+			\begin{itemize}
+				\item Different from number of epochs (iterations)
+				\item Different from batch size
+				\item Different from regularization parameter $\lambda$
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Direction determined by gradient sign, not $\alpha$
+			\item \textcolor{myred}{C:} Number of iterations is a different hyperparameter
+			\item \textcolor{myred}{D:} Initialization is a different step
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Learning rate controls \textcolor{myblue}{step size}, NOT direction!
+	\end{frame}
+	
+	\begin{frame}{Q19: Learning Rate Too Large - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What happens if learning rate is set too large?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Algorithm may oscillate or diverge.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Consequences of large $\alpha$:}
+			\begin{enumerate}
+				\item \textbf{Oscillation:} Parameter jumps back and forth across minimum
+				\item \textbf{Divergence:} Loss increases without bound
+				\item \textbf{Instability:} Updates become erratic and unpredictable
+			\end{enumerate}
+			\item \textbf{Mathematical explanation:}
+			\begin{itemize}
+				\item Consider quadratic: $f(\theta) = \frac{1}{2}\theta^2$
+				\item Gradient descent: $\theta_{t+1} = \theta_t - \alpha \theta_t = (1-\alpha)\theta_t$
+				\item Convergence requires $|1-\alpha| < 1$ $\Rightarrow$ $0 < \alpha < 2$
+				\item If $\alpha > 2$: divergence (oscillating with increasing magnitude)
+				\item If $\alpha = 2$: oscillation between $\theta$ and $-\theta$
+			\end{itemize}
+			\item \textbf{Visual analogy:} Like walking down a hill with too large steps
+			\begin{itemize}
+				\item Overshoot the bottom
+				\item End up higher than where you started
+				\item Keep oscillating or fall off the mountain
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Too small learning rate causes slow convergence
+			\item \textcolor{myred}{C:} Too large prevents convergence
+			\item \textcolor{myred}{D:} Algorithm already deterministic with fixed initialization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Too large learning rate $\rightarrow$ \textcolor{myred}{divergence or oscillation}!
+	\end{frame}
+	
+	\begin{frame}{Q20: Learning Rate Too Small - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What happens if learning rate is set too small?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Algorithm converges very slowly and may get stuck.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Consequences of small $\alpha$:}
+			\begin{enumerate}
+				\item \textbf{Slow convergence:} Tiny steps require many iterations
+				\item \textbf{Getting stuck:} May stop in plateaus or local minima
+				\item \textbf{Wasted computation:} Many iterations with little progress
+			\end{enumerate}
+			\item \textbf{Mathematical explanation:}
+			\begin{itemize}
+				\item For convex function: $\theta_{t+1} = \theta_t - \alpha \nabla f(\theta_t)$
+				\item If $\alpha$ is very small, $\theta_t$ changes very slowly
+				\item Convergence rate $O(1/t)$ for gradient descent
+				\item Small $\alpha$ increases the constant in $O(1/t)$
+			\end{itemize}
+			\item \textbf{Visual analogy:} Like walking down a hill with tiny steps
+			\begin{itemize}
+				\item Make very slow progress
+				\item May appear to stop on flat ground (plateau)
+				\item Will eventually reach bottom but takes forever
+			\end{itemize}
+			\item \textbf{Diagnosis:}
+			\begin{itemize}
+				\item Loss decreases very slowly
+				\item Requires many more epochs than expected
+				\item Often confused with convergence
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Too small gives slow convergence, not quick
+			\item \textcolor{myred}{C:} No algorithm finds global minimum instantly
+			\item \textcolor{myred}{D:} Too small is stable but slow
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Too small learning rate $\rightarrow$ \textcolor{myred}{slow convergence and getting stuck}!
+	\end{frame}
+	
+	\begin{frame}{Q21: Batch Gradient Descent - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Batch Gradient Descent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Uses entire training dataset per update.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Computes gradient using all N training samples
+			\begin{itemize}
+				\item $\nabla L(\theta) = \frac{1}{N}\sum_{i=1}^N \nabla L_i(\theta)$
+				\item One update per epoch (full pass through data)
+			\end{itemize}
+			\item \textbf{Characteristics:}
+			\begin{itemize}
+				\item \textbf{Accurate gradient:} Uses all data, no sampling noise
+				\item \textbf{Stable:} Smooth convergence path
+				\item \textbf{Slow:} Each update requires O(N) computation
+				\item \textbf{Memory intensive:} May need to store all data
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item Guaranteed convergence for convex functions
+				\item No random noise in gradient estimates
+				\item Easier to analyze theoretically
+			\end{itemize}
+			\item \textbf{Disadvantages:}
+			\begin{itemize}
+				\item Impractical for large datasets ($N > 10^5$)
+				\item Redundant computations
+				\item Cannot escape local minima easily
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is SGD (Stochastic Gradient Descent)
+			\item \textcolor{myred}{C:} This is Mini-Batch Gradient Descent
+			\item \textcolor{myred}{D:} This is random search
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Batch GD uses \textcolor{myblue}{ALL data} for each update!
+	\end{frame}
+	
+	\begin{frame}{Q22: Stochastic Gradient Descent - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Stochastic Gradient Descent (SGD)?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Uses a single randomly selected data point per iteration.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Computes gradient using one randomly chosen sample
+			\begin{itemize}
+				\item $\nabla L(\theta) \approx \nabla L_i(\theta)$ for random $i$
+				\item One update per data point (or per mini-batch)
+				\item Many updates per epoch
+			\end{itemize}
+			\item \textbf{Characteristics:}
+			\begin{itemize}
+				\item \textbf{Noisy gradient:} High variance in gradient estimates
+				\item \textbf{Fast:} Each update is O(1) computation
+				\item \textbf{Escapes local minima:} Noise helps explore the landscape
+				\item \textbf{Converges to optimum:} With decreasing learning rate
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item Scalable to huge datasets
+				\item Can escape shallow local minima
+				\item Online learning possible (streaming data)
+			\end{itemize}
+			\item \textbf{Disadvantages:}
+			\begin{itemize}
+				\item Noisy convergence (doesn't settle at exact minimum)
+				\item Requires careful learning rate scheduling
+				\item Harder to analyze theoretically
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is Batch GD (uses all data)
+			\item \textcolor{myred}{C:} This is Mini-Batch GD (uses subset)
+			\item \textcolor{myred}{D:} This describes learning rate scheduling
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} SGD uses \textcolor{myblue}{ONE data point} per update!
+	\end{frame}
+	
+	\begin{frame}{Q23: Mini-Batch Gradient Descent - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Mini-Batch Gradient Descent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Uses a small random subset (batch) of data per update.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Computes gradient using a small batch of size $b$
+			\begin{itemize}
+				\item $\nabla L(\theta) \approx \frac{1}{b}\sum_{i \in \text{batch}} \nabla L_i(\theta)$
+				\item Typical batch sizes: 32, 64, 128, 256
+				\item One update per batch, multiple batches per epoch
+			\end{itemize}
+			\item \textbf{Characteristics:}
+			\begin{itemize}
+				\item \textbf{Balanced:} Compromise between Batch GD and SGD
+				\item \textbf{Less noisy than SGD:} Averaging reduces variance
+				\item \textbf{Faster than Batch GD:} Smaller computation per update
+				\item \textbf{Better than SGD:} More stable convergence
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item Efficient for GPU processing (batch matrix operations)
+				\item Better gradient estimates than SGD
+				\item Faster convergence than Batch GD
+				\item Most common in deep learning practice
+			\end{itemize}
+			\item \textbf{Batch size choice:}
+			\begin{itemize}
+				\item Power of 2 for hardware efficiency (32, 64, 128)
+				\item Too small: noisy like SGD
+				\item Too large: slow like Batch GD
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is Batch GD (all data)
+			\item \textcolor{myred}{B:} This is SGD (one data point)
+			\item \textcolor{myred}{D:} This describes a stopping criterion
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Mini-Batch GD uses a \textcolor{myblue}{small random subset} of data!
+	\end{frame}
+	
+	\begin{frame}{Q24: SGD Advantage - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why is SGD often preferred over Batch GD for large datasets?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Computationally cheaper per iteration (fewer data points).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Computational cost comparison:}
+			\begin{itemize}
+				\item Batch GD: $O(N)$ per update (entire dataset)
+				\item SGD: $O(1)$ per update (one data point)
+				\item Mini-batch: $O(b)$ per update (batch size $b$)
+			\end{itemize}
+			\item \textbf{Scaling to big data:}
+			\begin{itemize}
+				\item $N = 10^6$: Batch GD update requires 1M gradient computations
+				\item SGD update requires 1 gradient computation
+				\item With SGD, can make 1M updates in the time of one Batch update
+			\end{itemize}
+			\item \textbf{SGD convergence properties:}
+			\begin{itemize}
+				\item May require more iterations to converge
+				\item But each iteration is much cheaper
+				\item Total time often much less than Batch GD
+			\end{itemize}
+			\item \textbf{Additional benefits:}
+			\begin{itemize}
+				\item Can escape local minima due to noise
+				\item Enables online learning
+				\item Works with streaming data
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Not always - SGD converges noisily
+			\item \textcolor{myred}{C:} False - SGD doesn't guarantee global minimum
+			\item \textcolor{myred}{D:} False - SGD requires a loss function
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} SGD preferred for large datasets due to \textcolor{myblue}{lower computational cost per iteration}!
+	\end{frame}
+	
+	\begin{frame}{Q25: Local Minima - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a local minimum in gradient descent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Gradient is zero but function value higher than at other nearby points.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:}
+			\begin{itemize}
+				\item Point $\theta^*$ where $\nabla L(\theta^*) = 0$
+				\item $L(\theta^*) < L(\theta)$ for all $\theta$ in neighborhood
+				\item But not necessarily the lowest point overall
+			\end{itemize}
+			\item \textbf{Mathematical characterization:}
+			\begin{itemize}
+				\item First-order condition: $\nabla L(\theta^*) = 0$
+				\item Second-order condition: Hessian $H(\theta^*)$ is positive semidefinite
+				\item All eigenvalues of $H$ are $\geq 0$
+			\end{itemize}
+			\item \textbf{Why problematic:}
+			\begin{itemize}
+				\item Gradient descent stops (or slows) at local minima
+				\item Cannot distinguish from global minimum
+				\item May not find the best solution
+			\end{itemize}
+			\item \textbf{Local vs Global minimum:}
+			\begin{itemize}
+				\item Local minimum: best in local neighborhood
+				\item Global minimum: best overall
+				\item Convex functions: every local minimum is global
+				\item Non-convex functions: multiple local minima possible
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is global minimum (lowest overall)
+			\item \textcolor{myred}{C:} Gradient is zero at minima, not infinite
+			\item \textcolor{myred}{D:} This is a maximum (gradient zero, higher than neighbors)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Local minima are \textcolor{myred}{traps} where gradient descent can get stuck!
+	\end{frame}
+	
+	\begin{frame}{Q26: Saddle Points - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a saddle point in gradient descent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Gradient zero but curves upward in some directions and downward in others.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:}
+			\begin{itemize}
+				\item Point $\theta^*$ where $\nabla L(\theta^*) = 0$
+				\item Not a local minimum or maximum
+				\item Hessian has both positive and negative eigenvalues
+			\end{itemize}
+			\item \textbf{Mathematical characterization:}
+			\begin{itemize}
+				\item First-order: $\nabla L(\theta^*) = 0$
+				\item Second-order: Hessian $H(\theta^*)$ is indefinite
+				\item Some eigenvalues $> 0$ (upward curves)
+				\item Some eigenvalues $< 0$ (downward curves)
+			\end{itemize}
+			\item \textbf{Why important:}
+			\begin{itemize}
+				\item More common than local minima in high dimensions
+				\item Gradient descent slows down near saddle points
+				\item Requires momentum or noise to escape
+			\end{itemize}
+			\item \textbf{Comparison to local minima:}
+			\begin{itemize}
+				\item Local minima: all eigenvalues positive
+				\item Saddle points: mixed eigenvalues
+				\item In high dimensions, saddle points dominate
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes a local minimum
+			\item \textcolor{myred}{C:} Gradient is zero at saddle points
+			\item \textcolor{myred}{D:} This is global minimum
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Saddle points have \textcolor{myblue}{zero gradient} but are neither minima nor maxima!
+	\end{frame}
+	
+	\begin{frame}{Q27: Momentum - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the purpose of momentum in gradient descent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Accelerate convergence and reduce oscillations by accumulating past gradients.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Momentum adds fraction of previous update to current update
+			\begin{itemize}
+				\item $v_t = \beta v_{t-1} + (1-\beta)\nabla L(\theta_t)$
+				\item $\theta_{t+1} = \theta_t - \alpha v_t$
+				\item $\beta$ is momentum parameter (typically 0.9)
+			\end{itemize}
+			\item \textbf{How it works:}
+			\begin{itemize}
+				\item Accumulates gradient history
+				\item Accelerates in consistent gradient directions
+				\item Dampens oscillations in perpendicular directions
+			\end{itemize}
+			\item \textbf{Benefits:}
+			\begin{itemize}
+				\item \textbf{Faster convergence:} Smooths out zigzagging
+				\item \textbf{Better local minima:} Can roll past shallow minima
+				\item \textbf{Escape saddle points:} Built-up momentum pushes through
+			\end{itemize}
+			\item \textbf{Analogy:} Ball rolling down a hill
+			\begin{itemize}
+				\item Gains speed as it rolls
+				\item Overcomes small bumps
+				\item Doesn't stop at first flat spot
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Learning rate decay is separate concept
+			\item \textcolor{myred}{C:} Batch size is separate concept
+			\item \textcolor{myred}{D:} Initialization is separate step
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Momentum uses \textcolor{myblue}{past gradients} to smooth updates!
+	\end{frame}
+	
+	\begin{frame}{Q28: Adam Optimizer - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the Adam optimizer?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Adaptive learning rate optimizer combining momentum and RMSprop.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Adaptive Moment Estimation
+			\begin{itemize}
+				\item Combines advantages of two methods
+				\item Momentum: tracks first moment (mean of gradients)
+				\item RMSprop: tracks second moment (variance of gradients)
+			\end{itemize}
+			\item \textbf{Update formulas:}
+			\begin{itemize}
+				\item $m_t = \beta_1 m_{t-1} + (1-\beta_1)\nabla L(\theta_t)$
+				\item $v_t = \beta_2 v_{t-1} + (1-\beta_2)(\nabla L(\theta_t))^2$
+				\item $\hat{m}_t = m_t / (1-\beta_1^t)$ (bias correction)
+				\item $\hat{v}_t = v_t / (1-\beta_2^t)$ (bias correction)
+				\item $\theta_{t+1} = \theta_t - \alpha \hat{m}_t / (\sqrt{\hat{v}_t} + \varepsilon)$
+			\end{itemize}
+			\item \textbf{Key features:}
+			\begin{itemize}
+				\item Adaptive learning rate per parameter
+				\item Handles sparse gradients well
+				\item Requires minimal tuning
+				\item Most popular optimizer in deep learning
+			\end{itemize}
+			\item \textbf{Default hyperparameters:}
+			\begin{itemize}
+				\item $\alpha = 0.001$ (learning rate)
+				\item $\beta_1 = 0.9$ (momentum decay)
+				\item $\beta_2 = 0.999$ (RMSprop decay)
+				\item $\varepsilon = 10^{-8}$ (small constant for stability)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Adam adapts learning rate dynamically
+			\item \textcolor{myred}{C:} Adam uses first AND second moments
+			\item \textcolor{myred}{D:} Adam is an optimizer, not initialization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Adam is \textcolor{myblue}{adaptive} - adjusts learning rates per parameter!
+	\end{frame}
+	
+	\begin{frame}{Q29: Learning Rate Scheduling - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is learning rate scheduling?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Adjusts learning rate during training according to predefined schedule.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Systematic reduction of learning rate over time
+			\begin{itemize}
+				\item Larger learning rates initially (exploration)
+				\item Smaller learning rates later (fine-tuning)
+			\end{itemize}
+			\item \textbf{Why schedule is needed:}
+			\begin{itemize}
+				\item Large LR: make progress quickly, explore the space
+				\item Small LR: settle into minimum, avoid oscillation
+				\item Both are needed but at different times
+			\end{itemize}
+			\item \textbf{Common schedules:}
+			\begin{enumerate}
+				\item \textbf{Step decay:} Reduce by factor at fixed intervals
+				\item \textbf{Exponential decay:} $\alpha_t = \alpha_0 \times \gamma^t$
+				\item \textbf{Cosine annealing:} Smooth cyclical variation
+				\item \textbf{Warmup:} Increase then decrease
+			\end{enumerate}
+			\item \textbf{Practical advice:}
+			\begin{itemize}
+				\item Start with larger learning rate
+				\item Reduce when validation loss plateaus
+				\item Different schedules work for different problems
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Random changes are not a "schedule"
+			\item \textcolor{myred}{C:} Constant LR is the opposite of scheduling
+			\item \textcolor{myred}{D:} Batch size is a different hyperparameter
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Learning rate schedules \textcolor{myblue}{adjust learning rate over time}!
+	\end{frame}
+	
+	\begin{frame}{Q30: Step Decay - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is step decay in learning rate scheduling?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Learning rate decreases by factor at specific intervals.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Piecewise constant reduction
+			\begin{itemize}
+				\item $\alpha_t = \alpha_0 \times \gamma^{\lfloor t/T \rfloor}$
+				\item $\gamma$: decay factor (e.g., 0.1 or 0.5)
+				\item $T$: interval size (e.g., every 10 epochs)
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item $\alpha_0 = 0.01$, $\gamma = 0.1$, $T = 10$
+				\item Epochs 0-9: $\alpha = 0.01$
+				\item Epochs 10-19: $\alpha = 0.001$
+				\item Epochs 20-29: $\alpha = 0.0001$
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item Simple and easy to implement
+				\item Predictable behavior
+				\item Works well for many problems
+			\end{itemize}
+			\item \textbf{Disadvantages:}
+			\begin{itemize}
+				\item Abrupt changes in learning rate
+				\item Requires choosing interval and factor
+				\item Not adaptive to data
+			\end{itemize}
+			\item \textbf{When to use:}
+			\begin{itemize}
+				\item When training loss plateaus
+				\item When model is stable
+				\item Common in practice
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Continuous decrease is exponential decay
+			\item \textcolor{myred}{C:} Increasing LR is a different strategy
+			\item \textcolor{myred}{D:} Random changes are not step decay
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Step decay reduces learning rate \textcolor{myblue}{at specific intervals}!
+	\end{frame}
+	
+	\begin{frame}{Q31: Exponential Decay - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is exponential decay in learning rate scheduling?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - $\alpha_t = \alpha_0 \times \gamma^{t}$
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Continuous multiplicative decay
+			\begin{itemize}
+				\item $\alpha_t = \alpha_0 \times \gamma^{t}$
+				\item $\gamma \in (0, 1)$: decay rate
+				\item $\alpha_0$: initial learning rate
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item $\alpha_0 = 0.01$, $\gamma = 0.95$
+				\item Epoch 0: $\alpha = 0.01$
+				\item Epoch 10: $\alpha = 0.01 \times 0.95^{10} \approx 0.006$
+				\item Epoch 100: $\alpha = 0.01 \times 0.95^{100} \approx 0.00006$
+			\end{itemize}
+			\item \textbf{Properties:}
+			\begin{itemize}
+				\item \textbf{Smooth decay:} No abrupt changes
+				\item \textbf{Consistent:} Same relative decrease each step
+				\item \textbf{Long tail:} Never reaches zero (asymptotically)
+			\end{itemize}
+			\item \textbf{Choosing $\gamma$:}
+			\begin{itemize}
+				\item $\gamma = 0.9$: faster decay
+				\item $\gamma = 0.99$: slower decay
+				\item $\gamma = 0.95$: common default
+			\end{itemize}
+			\item \textbf{Comparison to step decay:}
+			\begin{itemize}
+				\item Step decay: discrete jumps
+				\item Exponential decay: smooth continuous decrease
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is inverse time decay ($\alpha_t = \alpha_0 / t$)
+			\item \textcolor{myred}{C:} This is linear decay
+			\item \textcolor{myred}{D:} This is constant learning rate
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Exponential decay: $\alpha_t = \alpha_0 \times \gamma^{t}$!
+	\end{frame}
+	
+	\begin{frame}{Q32: Convergence Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does convergence mean in gradient descent?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Loss has stopped decreasing significantly (or gradient near zero).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Algorithm has reached a stationary point
+			\begin{itemize}
+				\item Gradient norm $\|\nabla L(\theta)\| < \varepsilon$
+				\item Loss change $\Delta L < \delta$
+				\item Parameter change $\|\theta_t - \theta_{t-1}\| < \tau$
+			\end{itemize}
+			\item \textbf{Convergence criteria:}
+			\begin{enumerate}
+				\item \textbf{Gradient norm:} $\|\nabla L(\theta_t)\| < 10^{-5}$
+				\item \textbf{Loss change:} $|L(\theta_t) - L(\theta_{t-1})| < 10^{-6}$
+				\item \textbf{Parameter change:} $\|\theta_t - \theta_{t-1}\| < 10^{-5}$
+				\item \textbf{Validation loss:} Stopping when validation loss increases
+			\end{enumerate}
+			\item \textbf{Convergence vs global minimum:}
+			\begin{itemize}
+				\item Convergence $\neq$ global minimum
+				\item Could be local minimum or saddle point
+				\item Function is convex: convergence $\Rightarrow$ global minimum
+			\end{itemize}
+			\item \textbf{Stopping vs convergence:}
+			\begin{itemize}
+				\item Max iterations: stopping criterion, not convergence
+				\item Convergence: based on progress, not iteration count
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Ideal case but not guaranteed
+			\item \textcolor{myred}{B:} Could be due to zero learning rate
+			\item \textcolor{myred}{D:} This is a stopping criterion, not convergence
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Convergence means \textcolor{myblue}{loss has stopped decreasing} significantly!
+	\end{frame}
+	
+	\begin{frame}{Q33: Loss Landscape - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In high-dimensional spaces, which is more common: local minima or saddle points?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Saddle points are more common.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Theoretical result:} Saddle points dominate in high dimensions
+			\begin{itemize}
+				\item For a random function in $d$ dimensions
+				\item Probability of a critical point being local minimum: $2^{-d}$
+				\item Probability of being saddle point: $1 - 2^{-d}$
+				\item For $d = 100$: $P(\text{local min}) \approx 10^{-30}$
+			\end{itemize}
+			\item \textbf{Intuition:}
+			\begin{itemize}
+				\item Local minimum requires all directions to be upward
+				\item Saddle point has some up and some down directions
+				\item More likely to have mixed directions in high dimensions
+			\end{itemize}
+			\item \textbf{Implications for deep learning:}
+			\begin{itemize}
+				\item Local minima are not the main problem
+				\item Saddle points are more common
+				\item Gradient descent can escape saddle points
+				\item Momentum and noise help escape
+			\end{itemize}
+			\item \textbf{Recent research findings:}
+			\begin{itemize}
+				\item Deep networks have many saddle points
+				\item Most local minima are nearly global
+				\item The loss landscape is surprisingly well-behaved
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} False - local minima are rare in high dimensions
+			\item \textcolor{myred}{C:} False - no guarantee of global minimum
+			\item \textcolor{myred}{D:} False - both exist but saddle points more common
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Saddle points are \textcolor{myblue}{more common} than local minima in high dimensions!
+	\end{frame}
+	
+	\begin{frame}{Q34: Vanishing Gradients - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the vanishing gradient problem?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Gradients become very small during backpropagation, preventing early layers from learning.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Gradients shrink exponentially as they propagate backward
+			\begin{itemize}
+				\item Early layers receive very small gradients
+				\item Weights in early layers barely update
+				\item Network stops learning effectively
+			\end{itemize}
+			\item \textbf{Causes:}
+			\begin{itemize}
+				\item Activation functions with small derivatives
+				\item \textbf{Sigmoid:} derivative $\sigma(x)(1-\sigma(x)) \leq 0.25$
+				\item \textbf{tanh:} derivative $\text{sech}^2(x) \to 0$ for large $|x|$
+				\item Deep networks (many layers multiply small values)
+			\end{itemize}
+			\item \textbf{Signs of vanishing gradients:}
+			\begin{itemize}
+				\item Early layers have very small gradient norms
+				\item Training loss doesn't decrease
+				\item Early layers look like random initialization
+			\end{itemize}
+			\item \textbf{Solutions:}
+			\begin{itemize}
+				\item ReLU activation (derivative 1 for positive inputs)
+				\item Residual connections (skip connections)
+				\item Batch normalization
+				\item Careful weight initialization (Xavier, He)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes exploding gradients
+			\item \textcolor{myred}{C:} This describes oscillations
+			\item \textcolor{myred}{D:} Extreme case, not the general problem
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Vanishing gradients = \textcolor{myblue}{very small gradients} in early layers!
+	\end{frame}
+	
+	\begin{frame}{Q35: Exploding Gradients - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the exploding gradient problem?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Gradients become very large during backpropagation, causing unstable updates.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Gradients grow exponentially as they propagate backward
+			\begin{itemize}
+				\item Large gradients lead to large parameter updates
+				\item Parameters become very large
+				\item Training becomes unstable or diverges
+			\end{itemize}
+			\item \textbf{Causes:}
+			\begin{itemize}
+				\item Large initial weights
+				\item Poor weight initialization
+				\item Long sequences (RNNs)
+				\item Repeated multiplication of values $> 1$
+			\end{itemize}
+			\item \textbf{Signs of exploding gradients:}
+			\begin{itemize}
+				\item Gradients become extremely large ($> 10^6$)
+				\item Loss becomes NaN (not a number)
+				\item Parameters become extremely large
+				\item Training diverges (loss increases)
+			\end{itemize}
+			\item \textbf{Solutions:}
+			\begin{itemize}
+				\item \textbf{Gradient clipping:} Cap gradients at threshold
+				\begin{itemize}
+					\item Norm clipping: $\nabla L \leftarrow \frac{\nabla L}{\|\nabla L\|} \times \text{threshold}$
+					\item Value clipping: $\nabla L \leftarrow \min(\max(\nabla L, -\text{threshold}), \text{threshold})$
+				\end{itemize}
+				\item Careful weight initialization
+				\item Smaller learning rates
+				\item L2 regularization (weight decay)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes vanishing gradients
+			\item \textcolor{myred}{C:} This is opposite (zero gradients)
+			\item \textcolor{myred}{D:} This describes a different phenomenon
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Exploding gradients = \textcolor{myblue}{very large gradients} causing instability!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 3: BACKPROPAGATION - QUESTIONS 36-45
+	% ============================================================
+	
+	\begin{frame}{Q36: Backpropagation Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is backpropagation in neural networks?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Algorithm that computes gradients of loss with respect to all weights using chain rule.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Efficient algorithm for computing gradients
+			\begin{itemize}
+				\item Uses chain rule of calculus
+				\item Propagates errors backward from output to input
+				\item Computes $\frac{\partial L}{\partial w_i}$ for every weight
+			\end{itemize}
+			\item \textbf{Algorithm steps:}
+			\begin{enumerate}
+				\item \textbf{Forward pass:} Compute predictions and loss
+				\item \textbf{Backward pass:} Compute gradients of loss
+				\item \textbf{Update:} Use gradients to update weights
+			\end{enumerate}
+			\item \textbf{Key insight:}
+			\begin{itemize}
+				\item Reuses computations efficiently
+				\item Each gradient computed once
+				\item O(N) complexity for N parameters
+			\end{itemize}
+			\item \textbf{Historical context:}
+			\begin{itemize}
+				\item Invented independently multiple times
+				\item Popularized by Rumelhart, Hinton, Williams (1986)
+				\item Made deep learning possible
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Initialization is a separate step
+			\item \textcolor{myred}{C:} Architecture selection is separate
+			\item \textcolor{myred}{D:} Activation function selection is separate
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Backpropagation uses \textcolor{myblue}{chain rule} to compute gradients!
+	\end{frame}
+	
+	\begin{frame}{Q37: Chain Rule - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which mathematical rule is the foundation of backpropagation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - The chain rule.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Chain rule in calculus:}
+			\begin{itemize}
+				\item For composite functions: $\frac{d}{dx} f(g(x)) = f'(g(x)) g'(x)$
+				\item Neural networks are compositions of many functions
+				\item Loss $L = f_N(f_{N-1}(... f_1(x)...))$
+			\end{itemize}
+			\item \textbf{Backpropagation application:}
+			\begin{itemize}
+				\item $\frac{\partial L}{\partial w_{ij}^{(l)}} = \frac{\partial L}{\partial z_i^{(l+1)}} \cdot \frac{\partial z_i^{(l+1)}}{\partial z_j^{(l)}} \cdot ...$
+				\item Each layer contributes one factor
+				\item Gradients are multiplied backward
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item $z = w_2 \cdot \sigma(w_1 x)$
+				\item $\frac{\partial L}{\partial w_1} = \frac{\partial L}{\partial z} \cdot \frac{\partial z}{\partial a} \cdot \frac{\partial a}{\partial w_1}$
+				\item $a = \sigma(w_1 x)$
+			\end{itemize}
+			\item \textbf{Why not other rules:}
+			\begin{itemize}
+				\item Product rule: for products, not compositions
+				\item Quotient rule: for ratios
+				\item Power rule: for powers
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Product rule applies to products of functions
+			\item \textcolor{myred}{B:} Quotient rule applies to ratios
+			\item \textcolor{myred}{D:} Power rule applies to powers
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Backpropagation = \textcolor{myblue}{chain rule} applied to neural networks!
+	\end{frame}
+	
+	\begin{frame}{Q38: Forward Pass - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What happens during forward pass in backpropagation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Input data passed through network to compute output and loss.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Forward pass steps:}
+			\begin{enumerate}
+				\item Input data enters the network
+				\item Passed through hidden layers
+				\item Each layer applies: $z^{(l)} = W^{(l)} a^{(l-1)} + b^{(l)}$
+				\item Activation: $a^{(l)} = \sigma(z^{(l)})$
+				\item Output layer produces predictions $\hat{y}$
+				\item Loss $L$ is computed: $L = \text{Loss}(y, \hat{y})$
+			\end{enumerate}
+			\item \textbf{What is stored:}
+			\begin{itemize}
+				\item Inputs to each layer $z^{(l)}$
+				\item Activations $a^{(l)}$
+				\item Loss value
+				\item Used in backward pass for gradient computation
+			\end{itemize}
+			\item \textbf{Complexity:}
+			\begin{itemize}
+				\item One forward pass per batch
+				\item O(N) operations where N = number of parameters
+				\item Must be computed before backward pass
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is backward pass (gradients and updates)
+			\item \textcolor{myred}{C:} Optimization happens over many iterations
+			\item \textcolor{myred}{D:} Initialization happens before training
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Forward pass computes \textcolor{myblue}{output and loss}; backward pass computes gradients!
+	\end{frame}
+	
+	\begin{frame}{Q39: Backward Pass - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What happens during backward pass in backpropagation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Gradients of loss with respect to each weight computed using chain rule.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Backward pass steps:}
+			\begin{enumerate}
+				\item Start from output layer
+				\item Compute $\delta^{(L)} = \frac{\partial L}{\partial a^{(L)}} \odot \sigma'(z^{(L)})$
+				\item Propagate backward: $\delta^{(l)} = (W^{(l+1)})^T \delta^{(l+1)} \odot \sigma'(z^{(l)})$
+				\item Compute weight gradients: $\frac{\partial L}{\partial W^{(l)}} = \delta^{(l)} (a^{(l-1)})^T$
+				\item Compute bias gradients: $\frac{\partial L}{\partial b^{(l)}} = \delta^{(l)}$
+			\end{enumerate}
+			\item \textbf{What is used:}
+			\begin{itemize}
+				\item Activations from forward pass
+				\item Loss gradient
+				\item Chain rule applied layer by layer
+			\end{itemize}
+			\item \textbf{Complexity:}
+			\begin{itemize}
+				\item One backward pass per batch
+				\item O(N) operations
+				\item Computes gradients for all parameters
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes forward pass
+			\item \textcolor{myred}{C:} Learning rate adjustment is separate
+			\item \textcolor{myred}{D:} Loss evaluation happens during forward pass
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Backward pass computes \textcolor{myblue}{gradients} of all weights!
+	\end{frame}
+	
+	\begin{frame}{Q40: Weight Update - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{After computing gradients, how are weights updated?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - $w_{new} = w_{old} - \alpha \nabla L(w)$
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Update rule:}
+			\begin{itemize}
+				\item $w_{new} = w_{old} - \alpha \nabla L(w)$
+				\item $\alpha$: learning rate
+				\item $\nabla L(w)$: gradient computed by backpropagation
+			\end{itemize}
+			\item \textbf{Why this form:}
+			\begin{itemize}
+				\item Gradient points uphill (direction of increasing loss)
+				\item Negative gradient points downhill (decreasing loss)
+				\item Move in direction of decreasing loss
+			\end{itemize}
+			\item \textbf{Example for simple network:}
+			\begin{itemize}
+				\item $w_{new} = w_{old} - \alpha \frac{\partial L}{\partial w}$
+				\item Applied to every weight and bias
+				\item Update after each batch (or epoch)
+			\end{itemize}
+			\item \textbf{Variations:}
+			\begin{itemize}
+				\item Momentum: include previous updates
+				\item Adam: adaptive learning rates
+				\item Weight decay: add regularization
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is gradient ascent (increases loss)
+			\item \textcolor{myred}{C:} Ignores learning rate and old weights
+			\item \textcolor{myred}{D:} Multiplication alone ignores gradient
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Weights updated by \textcolor{myblue}{subtracting} gradient $\times$ learning rate!
+	\end{frame}
+	
+	\begin{frame}{Q41: Computational Graph - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a computational graph in backpropagation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Graph representing forward computation as DAG enabling efficient gradient computation.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Directed Acyclic Graph (DAG) of operations
+			\begin{itemize}
+				\item Nodes: operations (add, multiply, activation)
+				\item Edges: data flow (tensors)
+				\item Represents the entire computation
+			\end{itemize}
+			\item \textbf{Forward pass in graph:}
+			\begin{itemize}
+				\item Input nodes $x_1, x_2, ...$
+				\item Operation nodes: $+$, $\times$, $\sigma$, ...
+				\item Output: loss value
+				\item Traverse forward from inputs to outputs
+			\end{itemize}
+			\item \textbf{Backward pass in graph:}
+			\begin{itemize}
+				\item Start from loss node
+				\item Traverse backward using chain rule
+				\item Each node computes gradient of its output
+				\item Gradients propagate backward
+			\end{itemize}
+			\item \textbf{Frameworks using this:}
+			\begin{itemize}
+				\item TensorFlow (static graphs)
+				\item PyTorch (dynamic graphs)
+				\item JAX, Theano, etc.
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is architecture diagram
+			\item \textcolor{myred}{C:} This is data distribution
+			\item \textcolor{myred}{D:} This is loss function plot
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Computational graphs enable \textcolor{myblue}{automatic differentiation} and backpropagation!
+	\end{frame}
+	
+	\begin{frame}{Q42: Automatic Differentiation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is automatic differentiation in deep learning frameworks?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Automatic computation of gradients using chain rule on computational graphs.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} "Autodiff" = automatic gradient computation
+			\begin{itemize}
+				\item Uses computational graph
+				\item Applies chain rule automatically
+				\item Framework handles the details
+			\end{itemize}
+			\item \textbf{How it works:}
+			\begin{enumerate}
+				\item Build computational graph
+				\item Forward pass computes outputs
+				\item Backward pass computes gradients
+				\item Returns gradients for all parameters
+			\end{enumerate}
+			\item \textbf{Modes of autodiff:}
+			\begin{itemize}
+				\item \textbf{Forward mode:} Compute derivatives with respect to inputs
+				\item \textbf{Reverse mode:} Compute derivatives with respect to outputs (backpropagation)
+				\item Reverse mode is more efficient for many parameters
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item No manual derivative derivation
+				\item Less error-prone
+				\item Works for complex architectures
+				\item Enables rapid prototyping
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Learning rate selection is separate
+			\item \textcolor{myred}{C:} Architecture selection is separate
+			\item \textcolor{myred}{D:} Data preprocessing is separate
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Automatic differentiation is how frameworks implement \textcolor{myblue}{backpropagation}!
+	\end{frame}
+	
+	\begin{frame}{Q43: Memory Requirements - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a key memory requirement for backpropagation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - Requires storing all intermediate activations from forward pass.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why activations must be stored:}
+			\begin{itemize}
+				\item Backward pass needs them to compute gradients
+				\item $\frac{\partial L}{\partial w^{(l)}} = \delta^{(l)} (a^{(l-1)})^T$
+				\item $a^{(l-1)}$ comes from forward pass
+			\end{itemize}
+			\item \textbf{Memory breakdown:}
+			\begin{itemize}
+				\item Model parameters: $O(p)$ memory
+				\item Activations: $O(N \times \text{batch\_size} \times \text{layers})$
+				\item Gradients: $O(p)$ memory
+				\item Total: often dominated by activations
+			\end{itemize}
+			\item \textbf{Memory optimization techniques:}
+			\begin{itemize}
+				\item Checkpointing: recompute activations when needed
+				\item Mixed precision: use lower precision storage
+				\item Gradient checkpointing: trade compute for memory
+				\item Smaller batch sizes
+			\end{itemize}
+			\item \textbf{Why this matters:}
+			\begin{itemize}
+				\item Limits batch size
+				\item Limits model size
+				\item Affects training speed
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} False - activations are needed
+			\item \textcolor{myred}{C:} False - final loss alone is insufficient
+			\item \textcolor{myred}{D:} False - gradients are computed during backward pass
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Backpropagation requires storing \textcolor{myblue}{all intermediate activations}!
+	\end{frame}
+	
+	\begin{frame}{Q44: Training Loop Order - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is correct order of operations in training loop?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - Forward pass $\to$ Compute loss $\to$ Backward pass $\to$ Update weights
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Step-by-step breakdown:}
+			\begin{enumerate}
+				\item \textbf{Forward pass:}
+				\begin{itemize}
+					\item Input data through network
+					\item Compute predictions $\hat{y}$
+					\item Store activations
+				\end{itemize}
+				\item \textbf{Compute loss:}
+				\begin{itemize}
+					\item Compare $\hat{y}$ to actual $y$
+					\item $L = \text{Loss}(y, \hat{y})$
+				\end{itemize}
+				\item \textbf{Backward pass:}
+				\begin{itemize}
+					\item Compute $\frac{\partial L}{\partial w}$ for all weights
+					\item Use chain rule
+					\item Propagate gradients backward
+				\end{itemize}
+				\item \textbf{Update weights:}
+				\begin{itemize}
+					\item $w_{new} = w_{old} - \alpha \nabla L(w)$
+					\item Apply gradient descent step
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Why this order:}
+			\begin{itemize}
+				\item Need predictions before loss
+				\item Need loss before gradients
+				\item Need gradients before updates
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Backward pass cannot happen before forward pass
+			\item \textcolor{myred}{C:} Loss cannot be computed before forward pass
+			\item \textcolor{myred}{D:} Updates cannot happen before gradients
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Forward $\to$ Loss $\to$ Backward $\to$ Update!
+	\end{frame}
+	
+	\begin{frame}{Q45: Backpropagation Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which statement about backpropagation is FALSE?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: D}} - Backpropagation always finds the global minimum of the loss function.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why D is false:}
+			\begin{itemize}
+				\item No guarantee of global minimum
+				\item Can get stuck in local minima
+				\item Can get trapped in saddle points
+				\item Only guaranteed for convex functions
+				\item Neural networks are non-convex
+			\end{itemize}
+			\item \textbf{What backpropagation actually does:}
+			\begin{itemize}
+				\item Computes gradients efficiently
+				\item Enables gradient descent
+				\item Finds a local minimum (often good enough)
+				\item Converges to stationary point
+			\end{itemize}
+			\item \textbf{Why other statements are true:}
+			\begin{itemize}
+				\item \textcolor{mygreen}{A:} True - computes gradients for all weights
+				\item \textcolor{mygreen}{B:} True - uses chain rule
+				\item \textcolor{mygreen}{C:} True - requires storing activations
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is exactly what backpropagation does
+			\item \textcolor{myred}{B:} This is the mathematical foundation
+			\item \textcolor{myred}{C:} This is the memory requirement
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Backpropagation does \textcolor{myred}{NOT} guarantee finding the global minimum!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 4: BIAS-VARIANCE TRADEOFF - QUESTIONS 46-60
+	% ============================================================
+	
+	\begin{frame}{Q46: Bias-Variance Tradeoff - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the bias-variance tradeoff in supervised learning?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Tradeoff between model's ability to fit training data (bias) and generalize to new data (variance).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Mathematical decomposition:}
+			\begin{itemize}
+				\item $E[(Y - \hat{f}(X))^2] = \text{Bias}^2 + \text{Variance} + \text{Irreducible Error}$
+				\item Bias$^2$: $[E[\hat{f}(X)] - f(X)]^2$
+				\item Variance: $E[(\hat{f}(X) - E[\hat{f}(X)])^2]$
+				\item Irreducible: $\sigma^2$ (noise in data)
+			\end{itemize}
+			\item \textbf{Intuition:}
+			\begin{itemize}
+				\item \textbf{Bias:} How wrong the model is on average
+				\item \textbf{Variance:} How much the model changes with different training data
+				\item Tradeoff: Can't reduce both simultaneously
+			\end{itemize}
+			\item \textbf{Model complexity relationship:}
+			\begin{itemize}
+				\item Simple models: High bias, Low variance
+				\item Complex models: Low bias, High variance
+				\item Optimal: Balance between the two
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is accuracy-interpretability tradeoff
+			\item \textcolor{myred}{C:} This is speed-accuracy tradeoff
+			\item \textcolor{myred}{D:} This is curse of dimensionality
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Bias = error from assumptions; Variance = error from sensitivity to training data!
+	\end{frame}
+	
+	\begin{frame}{Q47: Bias Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does "bias" refer to in the bias-variance tradeoff?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - Error introduced by the model's assumptions and limitations.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Error due to model's simplifying assumptions
+			\begin{itemize}
+				\item Assumption of linearity when relationship is nonlinear
+				\item Assumption of independence when data has structure
+				\item Limited capacity of the model
+			\end{itemize}
+			\item \textbf{Mathematical definition:}
+			\begin{itemize}
+				\item $\text{Bias} = E[\hat{f}(X)] - f(X)$
+				\item Expected difference between predicted and true function
+				\item Over multiple training sets
+			\end{itemize}
+			\item \textbf{High bias characteristics:}
+			\begin{itemize}
+				\item Underfitting
+				\item Poor performance on training data
+				\item Poor performance on test data
+				\item Simple model (linear, shallow)
+			\end{itemize}
+			\item \textbf{Examples of high bias models:}
+			\begin{itemize}
+				\item Linear regression for nonlinear data
+				\item Logistic regression for complex classification
+				\item Small decision trees
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This describes variance (sensitivity to training data)
+			\item \textcolor{myred}{C:} This describes irreducible error
+			\item \textcolor{myred}{D:} This describes optimization error
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Bias = error from model assumptions (underfitting)!
+	\end{frame}
+	
+	\begin{frame}{Q48: Variance Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What does "variance" refer to in the bias-variance tradeoff?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Error introduced by model's sensitivity to fluctuations in training data.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Error due to sensitivity to training data
+			\begin{itemize}
+				\item Different training sets produce different models
+				\item High variance models change a lot with data
+				\item Captures noise as well as signal
+			\end{itemize}
+			\item \textbf{Mathematical definition:}
+			\begin{itemize}
+				\item $\text{Variance} = E[(\hat{f}(X) - E[\hat{f}(X)])^2]$
+				\item Variability of predictions around expected prediction
+				\item Over multiple training sets
+			\end{itemize}
+			\item \textbf{High variance characteristics:}
+			\begin{itemize}
+				\item Overfitting
+				\item Excellent performance on training data
+				\item Poor performance on test data
+				\item Complex model (deep, many parameters)
+			\end{itemize}
+			\item \textbf{Examples of high variance models:}
+			\begin{itemize}
+				\item High-degree polynomial with too many terms
+				\item Deep neural networks on small datasets
+				\item Random forests with deep trees (without regularization)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes bias (model assumptions)
+			\item \textcolor{myred}{C:} This describes irreducible error
+			\item \textcolor{myred}{D:} This describes a different type of error
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Variance = error from sensitivity to training data (overfitting)!
+	\end{frame}
+	
+	\begin{frame}{Q49: High Bias Characteristics - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which is a characteristic of a model with high bias?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Performs poorly on both training and test data (underfitting).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{High bias pattern:}
+			\begin{itemize}
+				\item Training error: HIGH
+				\item Test error: HIGH
+				\item Both errors are similar
+				\item Model is too simple
+			\end{itemize}
+			\item \textbf{Why this happens:}
+			\begin{itemize}
+				\item Model makes strong assumptions
+				\item Cannot capture underlying patterns
+				\item Underfits the data
+			\end{itemize}
+			\item \textbf{Diagnosing high bias:}
+			\begin{itemize}
+				\item Low training accuracy (for classification)
+				\item High training loss
+				\item No improvement with more data
+				\item Model predictions are overly smooth
+			\end{itemize}
+			\item \textbf{Examples of high bias:}
+			\begin{itemize}
+				\item Linear regression on quadratic data
+				\item Logistic regression with too few features
+				\item Shallow decision trees
+				\item Underparameterized neural networks
+			\end{itemize}
+			\item \textbf{Fixing high bias:}
+			\begin{itemize}
+				\item Increase model complexity
+				\item Add more features
+				\item Use more expressive model
+				\item Reduce regularization
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is low bias (fits training data well)
+			\item \textcolor{myred}{C:} This is high variance (overfitting)
+			\item \textcolor{myred}{D:} High bias is associated with low variance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} High bias = poor performance on both training and test!
+	\end{frame}
+	
+	\begin{frame}{Q50: High Variance Characteristics - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which is a characteristic of a model with high variance?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Performs very well on training data but poorly on test data (overfitting).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{High variance pattern:}
+			\begin{itemize}
+				\item Training error: LOW
+				\item Test error: HIGH
+				\item Large gap between errors
+				\item Model is too complex
+			\end{itemize}
+			\item \textbf{Why this happens:}
+			\begin{itemize}
+				\item Model memorizes training data
+				\item Learns noise in addition to signal
+				\item Overfits to specific patterns
+			\end{itemize}
+			\item \textbf{Diagnosing high variance:}
+			\begin{itemize}
+				\item High training accuracy, low test accuracy
+				\item Model performance drops significantly on new data
+				\item Large coefficients (for linear models)
+				\item Complex decision boundaries
+			\end{itemize}
+			\item \textbf{Examples of high variance:}
+			\begin{itemize}
+				\item High-degree polynomial on small dataset
+				\item Deep neural networks with too many parameters
+				\item Decision trees with unlimited depth
+				\item Any model with too many parameters for data size
+			\end{itemize}
+			\item \textbf{Fixing high variance:}
+			\begin{itemize}
+				\item Add regularization (L1, L2, dropout)
+				\item Get more training data
+				\item Reduce model complexity
+				\item Use cross-validation
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is high bias (underfitting)
+			\item \textcolor{myred}{C:} High variance is associated with high complexity
+			\item \textcolor{myred}{D:} High variance is associated with low bias
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} High variance = good training, poor test (overfitting)!
+	\end{frame}
+	
+	\begin{frame}{Q51: Underfitting Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is underfitting in supervised learning?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Model is too simple to capture underlying patterns in data.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Model fails to capture data's underlying structure
+			\begin{itemize}
+				\item Too simple for the task
+				\item Cannot represent the true function
+				\item Makes overly strong assumptions
+			\end{itemize}
+			\item \textbf{Signs of underfitting:}
+			\begin{itemize}
+				\item High training error
+				\item High test error
+				\item No significant gap between training and test error
+				\item Predictions are too simplistic
+			\end{itemize}
+			\item \textbf{Causes:}
+			\begin{itemize}
+				\item Model is too simple (linear for nonlinear data)
+				\item Too few features
+				\item Too much regularization (too large $\lambda$)
+				\item Insufficient training (early stopping too early)
+			\end{itemize}
+			\item \textbf{Fixing underfitting:}
+			\begin{itemize}
+				\item Increase model complexity (more parameters)
+				\item Add more features
+				\item Decrease regularization
+				\item Train for more iterations
+			\end{itemize}
+			\item \textbf{Analogy:} Trying to fit a sine wave with a straight line
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes overfitting
+			\item \textcolor{myred}{C:} This describes overfitting
+			\item \textcolor{myred}{D:} Too many parameters leads to overfitting
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Underfitting = model too simple = poor training and test performance!
+	\end{frame}
+	
+	\begin{frame}{Q52: Overfitting Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is overfitting in supervised learning?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Model is too complex and learns the noise in the training data.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Model fits training data too well, including noise
+			\begin{itemize}
+				\item Memorizes training examples
+				\item Cannot generalize to new data
+				\item Captures random fluctuations
+			\end{itemize}
+			\item \textbf{Signs of overfitting:}
+			\begin{itemize}
+				\item Very low training error
+				\item High test error
+				\item Large gap between training and test error
+				\item Model has many parameters relative to data
+			\end{itemize}
+			\item \textbf{Causes:}
+			\begin{itemize}
+				\item Model is too complex
+				\item Too many features
+				\item Too little regularization (too small $\lambda$)
+				\item Too little training data
+			\end{itemize}
+			\item \textbf{Fixing overfitting:}
+			\begin{itemize}
+				\item Add regularization (L1, L2, dropout)
+				\item Get more training data
+				\item Reduce model complexity
+				\item Use cross-validation
+				\item Early stopping
+			\end{itemize}
+			\item \textbf{Analogy:} Memorizing answers instead of learning concepts
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes underfitting
+			\item \textcolor{myred}{C:} This describes underfitting
+			\item \textcolor{myred}{D:} Too few parameters leads to underfitting
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Overfitting = model too complex = good training, poor test!
+	\end{frame}
+	
+	\begin{frame}{Q53: Causes of Overfitting - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which is a common cause of overfitting?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Too many parameters relative to number of training samples.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{The core issue:} $p \gg N$ (more parameters than samples)
+			\begin{itemize}
+				\item More parameters than constraints
+				\item Infinite solutions that fit data perfectly
+				\item Model can memorize individual examples
+			\end{itemize}
+			\item \textbf{Example scenarios:}
+			\begin{itemize}
+				\item 100 parameters with 50 samples
+				\item High-degree polynomial (degree 20) with 30 points
+				\item Deep neural network on small dataset
+			\end{itemize}
+			\item \textbf{Other contributing factors:}
+			\begin{itemize}
+				\item Too many features (high-dimensional)
+				\item Little or no regularization
+				\item Training for too many iterations
+				\item Data with high noise
+			\end{itemize}
+			\item \textbf{Prevention strategies:}
+			\begin{itemize}
+				\item Use cross-validation
+				\item Apply regularization
+				\item Reduce model complexity
+				\item Get more training data
+				\item Use feature selection
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Too few features leads to underfitting
+			\item \textcolor{myred}{C:} Too much regularization leads to underfitting
+			\item \textcolor{myred}{D:} Too simple a model leads to underfitting
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Overfitting happens when too many parameters for too few samples!
+	\end{frame}
+	
+	\begin{frame}{Q54: Causes of Underfitting - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which is a common cause of underfitting?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Insufficient model complexity (e.g., linear for nonlinear data).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{The core issue:} Model cannot represent true function
+			\begin{itemize}
+				\item Model class is too restrictive
+				\item Cannot capture the data's patterns
+				\item Relationship is more complex than model allows
+			\end{itemize}
+			\item \textbf{Common scenarios:}
+			\begin{itemize}
+				\item Linear regression for quadratic relationship
+				\item Logistic regression for complex decision boundary
+				\item Shallow network for deep patterns
+				\item Too few features
+			\end{itemize}
+			\item \textbf{Other contributing factors:}
+			\begin{itemize}
+				\item Too much regularization ($\lambda$ too large)
+				\item Stopping training too early
+				\item Poor feature engineering
+				\item Too simple model architecture
+			\end{itemize}
+			\item \textbf{Fixing underfitting:}
+			\begin{itemize}
+				\item Choose more expressive model
+				\item Add more features
+				\item Decrease regularization
+				\item Train for more iterations
+				\item Use better feature engineering
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Too many parameters leads to overfitting
+			\item \textcolor{myred}{C:} Too little regularization leads to overfitting
+			\item \textcolor{myred}{D:} More training data generally helps
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Underfitting happens when model is too simple for the data!
+	\end{frame}
+	
+	\begin{frame}{Q55: Bias-Variance Tradeoff - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{As model complexity increases, what happens to bias and variance?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Bias decreases and variance increases.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Relationship:}
+			\begin{itemize}
+				\item \textbf{Bias:} $\downarrow$ as complexity increases
+				\item \textbf{Variance:} $\uparrow$ as complexity increases
+				\item \textbf{Total error:} U-shaped curve
+			\end{itemize}
+			\item \textbf{Why bias decreases:}
+			\begin{itemize}
+				\item More flexible model captures more patterns
+				\item Can represent more complex functions
+				\item Assumptions are less restrictive
+			\end{itemize}
+			\item \textbf{Why variance increases:}
+			\begin{itemize}
+				\item Model becomes more sensitive to data
+				\item More parameters mean more degrees of freedom
+				\item Can fit noise as well as signal
+			\end{itemize}
+			\item \textbf{The optimal point:}
+			\begin{itemize}
+				\item Minimum of bias$^2$ + variance
+				\item Balance between underfitting and overfitting
+				\item Tradeoff is fundamental
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Both decrease is incorrect
+			\item \textcolor{myred}{C:} This is the opposite direction
+			\item \textcolor{myred}{D:} Both increase is incorrect
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} More complexity $\to$ lower bias, higher variance!
+	\end{frame}
+	
+	\begin{frame}{Q56: Optimal Complexity - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Where is the optimal model complexity located?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Where total error (bias$^2$ + variance + irreducible) is minimized.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Total error decomposition:}
+			\begin{itemize}
+				\item Total Error = Bias$^2$ + Variance + Irreducible Error
+				\item Bias$^2$: decreases with complexity
+				\item Variance: increases with complexity
+				\item Irreducible: constant
+			\end{itemize}
+			\item \textbf{Shape of error curve:}
+			\begin{itemize}
+				\item Low complexity: High bias, Low variance $\to$ High total error
+				\item High complexity: Low bias, High variance $\to$ High total error
+				\item Optimal: Sweet spot in between
+			\end{itemize}
+			\item \textbf{Finding optimal complexity:}
+			\begin{itemize}
+				\item Use cross-validation
+				\item Track validation error
+				\item Choose model with lowest validation error
+			\end{itemize}
+			\item \textbf{Practical considerations:}
+			\begin{itemize}
+				\item Optimal complexity depends on data size
+				\item More data allows for more complex models
+				\item Regularization helps shift the optimal point
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Highest variance = overfitting (too complex)
+			\item \textcolor{myred}{C:} Lowest bias = overfitting (too complex)
+			\item \textcolor{myred}{D:} Highest bias = underfitting (too simple)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Optimal complexity = minimum total error (bias$^2$ + variance)!
+	\end{frame}
+	
+	\begin{frame}{Q57: Bias-Variance Example - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Simple linear regression for nonlinear relationship would likely have:}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - High bias, low variance (underfitting).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why high bias:}
+			\begin{itemize}
+				\item Linear model assumes linear relationship
+				\item True relationship is nonlinear
+				\item Model cannot capture curvature
+				\item Systematically wrong predictions
+			\end{itemize}
+			\item \textbf{Why low variance:}
+			\begin{itemize}
+				\item Linear model is very simple
+				\item Few parameters (slope and intercept)
+				\item Not sensitive to training data
+				\item Stable predictions across datasets
+			\end{itemize}
+			\item \textbf{Result:} Underfitting
+			\begin{itemize}
+				\item High training error
+				\item High test error
+				\item Model is too simple
+			\end{itemize}
+			\item \textbf{Fix:} Use polynomial regression or other nonlinear model
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This describes complex model (overfitting)
+			\item \textcolor{myred}{C:} Ideal but unrealistic for mismatched model
+			\item \textcolor{myred}{D:} Unlikely combination
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Too simple $\to$ high bias, low variance (underfitting)!
+	\end{frame}
+	
+	\begin{frame}{Q58: High-Degree Polynomial - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{High-degree polynomial on small dataset would likely have:}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Low bias, high variance (overfitting).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why low bias:}
+			\begin{itemize}
+				\item High-degree polynomial is very flexible
+				\item Can fit any finite set of points
+				\item Captures all patterns in training data
+				\item Very expressive model
+			\end{itemize}
+			\item \textbf{Why high variance:}
+			\begin{itemize}
+				\item Many parameters (degree + 1)
+				\item Very sensitive to training data
+				\item Different dataset $\to$ very different fit
+				\item Oscillates between data points
+			\end{itemize}
+			\item \textbf{Result:} Overfitting
+			\begin{itemize}
+				\item Very low training error
+				\item High test error
+				\item Model is too complex
+			\end{itemize}
+			\item \textbf{Fix:} Use regularization or simpler model
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes simple model (underfitting)
+			\item \textcolor{myred}{C:} Ideal but unrealistic for complex model on small dataset
+			\item \textcolor{myred}{D:} Unlikely combination
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Too complex $\to$ low bias, high variance (overfitting)!
+	\end{frame}
+	
+	\begin{frame}{Q59: Irreducible Error - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is irreducible error in the bias-variance decomposition?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Error due to noise in data that cannot be reduced by any model.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Inherent noise in the data
+			\begin{itemize}
+				\item Measurement errors
+				\item Unobserved variables
+				\item Inherent randomness
+				\item Natural variation
+			\end{itemize}
+			\item \textbf{Mathematical notation:}
+			\begin{itemize}
+				\item $Y = f(X) + \varepsilon$
+				\item $\varepsilon \sim \text{some distribution}$
+				\item Var$(\varepsilon) = \sigma^2$ = irreducible error
+			\end{itemize}
+			\item \textbf{Why irreducible:}
+			\begin{itemize}
+				\item No model can eliminate this error
+				\item Even if we knew true $f(X)$, still have $\varepsilon$
+				\item Best possible model still has error $\sigma^2$
+			\end{itemize}
+			\item \textbf{Practical implications:}
+			\begin{itemize}
+				\item There is always a limit to predictive accuracy
+				\item Cannot achieve zero error
+				\item Need to accept some level of error
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This describes bias (reducible error)
+			\item \textcolor{myred}{B:} This describes variance (reducible error)
+			\item \textcolor{myred}{D:} Loss function choice is a modeling decision
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Irreducible error = noise in data - cannot be eliminated!
+	\end{frame}
+	
+	\begin{frame}{Q60: Bias-Variance Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which statement about the bias-variance tradeoff is TRUE?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - The optimal model balances bias and variance to minimize total error.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Key concept:} Balance is the goal
+			\begin{itemize}
+				\item Not too simple (high bias)
+				\item Not too complex (high variance)
+				\item Find the sweet spot
+			\end{itemize}
+			\item \textbf{Why other options are false:}
+			\begin{itemize}
+				\item \textcolor{myred}{A:} Simple models have high bias, low variance (opposite)
+				\item \textcolor{myred}{B:} Complex models have low bias, high variance (opposite)
+				\item \textcolor{myred}{D:} Bias and variance are related through complexity
+			\end{itemize}
+			\item \textbf{How to balance:}
+			\begin{itemize}
+				\item Use cross-validation to select model
+				\item Use regularization to control complexity
+				\item Monitor training and validation error
+			\end{itemize}
+			\item \textbf{Real-world implications:}
+			\begin{itemize}
+				\item No single best model for all problems
+				\item Tradeoff is fundamental
+				\item Choice depends on problem and data
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Simple models have high bias, low variance
+			\item \textcolor{myred}{B:} Complex models have low bias, high variance
+			\item \textcolor{myred}{D:} Bias and variance are related through model complexity
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Optimal model balances bias and variance!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 5: REGULARIZATION - QUESTIONS 61-75
+	% ============================================================
+	
+	\begin{frame}{Q61: Regularization Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is regularization in supervised learning?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Technique to reduce overfitting by adding a penalty term to the loss function.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Adding penalty to prevent overfitting
+			\begin{itemize}
+				\item $\tilde{L}(\theta) = L(\theta) + \lambda \cdot \text{Penalty}(\theta)$
+				\item $L(\theta)$: original loss
+				\item $\lambda$: regularization strength
+				\item Penalty: encourages simpler models
+			\end{itemize}
+			\item \textbf{Why it works:}
+			\begin{itemize}
+				\item Penalizes large parameters
+				\item Reduces model complexity
+				\item Improves generalization
+				\item Controls the bias-variance tradeoff
+			\end{itemize}
+			\item \textbf{Types of regularization:}
+			\begin{itemize}
+				\item L1 (Lasso): $\lambda \sum |w_i|$
+				\item L2 (Ridge): $\lambda \sum w_i^2$
+				\item Elastic Net: combination
+				\item Dropout (neural networks)
+				\item Early stopping
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is the opposite (increasing complexity)
+			\item \textcolor{myred}{C:} This is data augmentation
+			\item \textcolor{myred}{D:} This is feature selection (related but distinct)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Regularization adds a penalty to the loss function!
+	\end{frame}
+	
+	\begin{frame}{Q62: L1 Regularization (Lasso) - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is L1 regularization (Lasso) and its key property?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Adds $\lambda \sum |w_i|$ to loss; can set weights to exactly zero (feature selection).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Lasso objective:}
+			\begin{itemize}
+				\item $\tilde{L}(\theta) = L(\theta) + \lambda \sum_{j=1}^p |w_j|$
+				\item $L(\theta)$: original loss (e.g., MSE)
+				\item $\lambda$: regularization strength
+			\end{itemize}
+			\item \textbf{Key property: Feature selection}
+			\begin{itemize}
+				\item Can set weights to exactly zero
+				\item Effectively removes features
+				\item Sparse solutions
+				\item Identifies important features
+			\end{itemize}
+			\item \textbf{Why it works:}
+			\begin{itemize}
+				\item L1 penalty is non-differentiable at zero
+				\item Creates "corners" where weights become zero
+				\item Geometry: diamond-shaped constraint region
+			\end{itemize}
+			\item \textbf{When to use:}
+			\begin{itemize}
+				\item Many features, few important ones
+				\item Want interpretable model
+				\item Feature selection needed
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is L2 regularization (Ridge)
+			\item \textcolor{myred}{C:} Linear penalty is not standard
+			\item \textcolor{myred}{D:} Cubic penalty is not standard regularization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} L1 regularization can set weights to zero (feature selection)!
+	\end{frame}
+	
+	\begin{frame}{Q63: L2 Regularization (Ridge) - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is L2 regularization (Ridge) and its key property?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Adds $\lambda \sum w_i^2$ to loss; shrinks weights toward zero but does not set them to zero.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Ridge objective:}
+			\begin{itemize}
+				\item $\tilde{L}(\theta) = L(\theta) + \lambda \sum_{j=1}^p w_j^2$
+				\item $L(\theta)$: original loss (e.g., MSE)
+				\item $\lambda$: regularization strength
+			\end{itemize}
+			\item \textbf{Key property: Weight shrinkage}
+			\begin{itemize}
+				\item Shrinks weights toward zero
+				\item Never exactly zero (unless $\lambda = \infty$)
+				\item Dense solutions
+				\item All features retained
+			\end{itemize}
+			\item \textbf{Why it works:}
+			\begin{itemize}
+				\item L2 penalty is differentiable everywhere
+				\item Geometry: circular constraint region
+				\item Smooth shrinkage
+			\end{itemize}
+			\item \textbf{When to use:}
+			\begin{itemize}
+				\item Many features, all potentially important
+				\item Multicollinearity present
+				\item Want to keep all features
+				\item Better predictive performance than L1 sometimes
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is L1 regularization (Lasso)
+			\item \textcolor{myred}{C:} Linear penalty is not standard
+			\item \textcolor{myred}{D:} Cubic penalty is not standard regularization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} L2 regularization shrinks weights but does not set them to zero!
+	\end{frame}
+	
+	\begin{frame}{Q64: Elastic Net - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Elastic Net regularization?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - Combination of L1 and L2: $\lambda_1 \sum |w_i| + \lambda_2 \sum w_i^2$
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Elastic Net objective:}
+			\begin{itemize}
+				\item $\tilde{L}(\theta) = L(\theta) + \lambda_1 \sum |w_i| + \lambda_2 \sum w_i^2$
+				\item Combines L1 and L2 penalties
+				\item Two hyperparameters: $\lambda_1$ and $\lambda_2$
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item \textbf{Feature selection} (from L1)
+				\item \textbf{Group selection}: Correlated features enter together
+				\item \textbf{Better than Lasso} when features are correlated
+				\item \textbf{Better than Ridge} when only some features important
+			\end{itemize}
+			\item \textbf{Why it's needed:}
+			\begin{itemize}
+				\item Lasso struggles with correlated features (selects one randomly)
+				\item Ridge keeps all features
+				\item Elastic Net: correlation-aware feature selection
+			\end{itemize}
+			\item \textbf{Common parameterization:}
+			\begin{itemize}
+				\item $\alpha$: L1 ratio ($\alpha = 1$ = Lasso, $\alpha = 0$ = Ridge)
+				\item $\lambda$: overall regularization strength
+				\item Penalty: $\lambda(\alpha \sum |w_i| + (1-\alpha)\sum w_i^2)$
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is Lasso (L1 only)
+			\item \textcolor{myred}{C:} This is Ridge (L2 only)
+			\item \textcolor{myred}{D:} This is no regularization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Elastic Net = L1 + L2 regularization!
+	\end{frame}
+	
+	\begin{frame}{Q65: Regularization Parameter $\lambda$ - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What happens as the regularization parameter $\lambda$ increases?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - The model becomes simpler (weights shrink more toward zero).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Effect of increasing $\lambda$:}
+			\begin{itemize}
+				\item Stronger penalty on large weights
+				\item Weights shrink closer to zero
+				\item Model becomes more constrained
+				\item Bias increases, variance decreases
+			\end{itemize}
+			\item \textbf{Extreme cases:}
+			\begin{itemize}
+				\item $\lambda = 0$: No regularization (standard OLS)
+				\item $\lambda \to \infty$: All weights $\to 0$ (underfitting)
+			\end{itemize}
+			\item \textbf{Choosing $\lambda$:}
+			\begin{itemize}
+				\item Use cross-validation
+				\item Balance between underfitting and overfitting
+				\item Typically choose $\lambda$ that minimizes validation error
+			\end{itemize}
+			\item \textbf{Model complexity relationship:}
+			\begin{itemize}
+				\item $\lambda$ controls model complexity
+				\item Larger $\lambda$ $\to$ simpler model
+				\item Smaller $\lambda$ $\to$ more complex model
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Larger $\lambda$ means more regularization = simpler model
+			\item \textcolor{myred}{C:} Larger $\lambda$ reduces overfitting
+			\item \textcolor{myred}{D:} $\lambda$ definitely changes the model
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Larger $\lambda$ $\to$ simpler model (more regularization)!
+	\end{frame}
+	
+	\begin{frame}{Q66: Regularization Overfitting Prevention - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{How does regularization prevent overfitting?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - By penalizing large parameter values, reducing model complexity and sensitivity to training data.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Mechanism:}
+			\begin{itemize}
+				\item Large weights $\to$ complex decision boundaries
+				\item Large weights $\to$ high sensitivity to inputs
+				\item Penalty discourages large weights
+				\item Result: smoother, simpler models
+			\end{itemize}
+			\item \textbf{Why this prevents overfitting:}
+			\begin{itemize}
+				\item Model cannot fit noise (requires large weights)
+				\item Less sensitive to training data fluctuations
+				\item Better generalization to new data
+			\end{itemize}
+			\item \textbf{Examples:}
+			\begin{itemize}
+				\item L2: $\lambda \sum w_i^2$ penalizes squared weights
+				\item L1: $\lambda \sum |w_i|$ penalizes absolute weights
+				\item Both discourage large weights
+			\end{itemize}
+			\item \textbf{Analogy:} Occam's Razor - prefer simpler explanations
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Increasing features increases overfitting
+			\item \textcolor{myred}{C:} This is data augmentation
+			\item \textcolor{myred}{D:} More complex loss isn't regularization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Regularization = penalizes large weights to reduce overfitting!
+	\end{frame}
+	
+	\begin{frame}{Q67: Dropout as Regularization - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Is dropout a form of regularization? If so, how does it work?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Yes, randomly drops neurons during training, creating ensemble effect and preventing co-adaptation.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Dropout is a regularization technique for neural networks
+			\begin{itemize}
+				\item Randomly sets a fraction of neurons to zero
+				\item During each training iteration
+				\item Typical dropout rate: 0.2 to 0.5
+			\end{itemize}
+			\item \textbf{How it works:}
+			\begin{itemize}
+				\item \textbf{During training:} Each neuron has probability $p$ of being dropped
+				\item \textbf{During testing:} All neurons active, scaled by $(1-p)$
+				\item Prevents co-adaptation of neurons
+			\end{itemize}
+			\item \textbf{Why it's effective:}
+			\begin{itemize}
+				\item Creates an ensemble effect (many subnetworks)
+				\item Forces network to learn robust features
+				\item Prevents over-reliance on specific neurons
+				\item Acts as regularization (increases bias, decreases variance)
+			\end{itemize}
+			\item \textbf{Practical notes:}
+			\begin{itemize}
+				\item Used with large neural networks
+				\item Particularly effective in deep networks
+				\item Often combined with L2 regularization
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} False - dropout IS regularization
+			\item \textcolor{myred}{C:} False - dropout doesn't add penalty term
+			\item \textcolor{myred}{D:} False - dropout affects both forward and backward passes
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dropout is a regularization technique for neural networks!
+	\end{frame}
+	
+	\begin{frame}{Q68: Early Stopping as Regularization - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Is early stopping a form of regularization? If so, how does it work?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Yes, stops training before convergence, limiting model complexity and preventing overfitting.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Early stopping stops training early
+			\begin{itemize}
+				\item Monitor validation error
+				\item Stop when validation error starts increasing
+				\item Prevents overfitting
+			\end{itemize}
+			\item \textbf{How it works:}
+			\begin{itemize}
+				\item Track training and validation error
+				\item Validation error typically: decreases then increases
+				\item Stop at minimum validation error
+				\item Use parameters from best validation performance
+			\end{itemize}
+			\item \textbf{Why it's regularization:}
+			\begin{itemize}
+				\item Limits the number of training iterations
+				\item Equivalent to early stopping in optimization
+				\item Prevents fitting noise
+				\item Controls model complexity implicitly
+			\end{itemize}
+			\item \textbf{Practical implementation:}
+			\begin{itemize}
+				\item Patience parameter: wait for $k$ epochs before stopping
+				\item Save best model checkpoint
+				\item Return to best checkpoint after stopping
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} False - early stopping IS regularization
+			\item \textcolor{myred}{C:} False - early stopping doesn't add penalty term
+			\item \textcolor{myred}{D:} False - early stopping affects model (prevents overfitting)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Early stopping is a regularization technique!
+	\end{frame}
+	
+	\begin{frame}{Q69: Regularization Bias-Variance - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{How does regularization affect the bias-variance tradeoff?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Regularization increases bias and decreases variance.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Effect on bias:}
+			\begin{itemize}
+				\item Regularization makes model simpler
+				\item Model may not fit training data perfectly
+				\item Systematic error (bias) increases
+			\end{itemize}
+			\item \textbf{Effect on variance:}
+			\begin{itemize}
+				\item Regularization constrains weights
+				\item Model is less sensitive to training data
+				\item Variability (variance) decreases
+			\end{itemize}
+			\item \textbf{The tradeoff:}
+			\begin{itemize}
+				\item Regularization shifts towards simpler models
+				\item Reduces overfitting (decreases variance)
+				\item Increases underfitting risk (increases bias)
+				\item Optimal $\lambda$ balances the two
+			\end{itemize}
+			\item \textbf{Visual representation:}
+			\begin{itemize}
+				\item No regularization: low bias, high variance
+				\item Too much regularization: high bias, low variance
+				\item Optimal: balanced
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Variance decreases, not increases
+			\item \textcolor{myred}{B:} This is the opposite direction
+			\item \textcolor{myred}{D:} Regularization definitely affects both
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Regularization $\to$ increases bias, decreases variance!
+	\end{frame}
+	
+	\begin{frame}{Q70: When to Use Regularization - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{When should regularization be applied in supervised learning?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - When the model is overfitting (high variance).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Indications for regularization:}
+			\begin{itemize}
+				\item Training error much lower than validation error
+				\item Model performs well on training, poorly on test
+				\item Large coefficients (for linear models)
+				\item Complex model with limited data
+			\end{itemize}
+			\item \textbf{Why it works:}
+			\begin{itemize}
+				\item Regularization reduces variance
+				\item Prevents model from fitting noise
+				\item Improves generalization
+			\end{itemize}
+			\item \textbf{When NOT to use regularization:}
+			\begin{itemize}
+				\item Model is underfitting (high bias)
+				\item Training error is already high
+				\item Data is large enough for model complexity
+				\item Model is interpretable and simple
+			\end{itemize}
+			\item \textbf{Practical advice:}
+			\begin{itemize}
+				\item Always consider regularization for high-dimensional data
+				\item Use cross-validation to select $\lambda$
+				\item Start with no regularization, add if needed
+				\item Balance bias and variance
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Underfitting would be worsened by regularization
+			\item \textcolor{myred}{C:} Too few parameters = underfitting
+			\item \textcolor{myred}{D:} Perfectly clean data still may benefit from regularization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Use regularization when overfitting (high variance)!
+	\end{frame}
+	
+	\begin{frame}{Q71: L1 vs L2 Feature Selection - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which regularization method is more likely to perform feature selection?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - L1 regularization (Lasso)
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why L1 performs feature selection:}
+			\begin{itemize}
+				\item L1 penalty = $\lambda \sum |w_i|$
+				\item Non-differentiable at zero
+				\item Creates sparse solutions
+				\item Weights exactly zero $\Rightarrow$ features removed
+			\end{itemize}
+			\item \textbf{Why L2 doesn't:}
+			\begin{itemize}
+				\item L2 penalty = $\lambda \sum w_i^2$
+				\item Differentiable everywhere
+				\item Shrinks weights but never to zero
+				\item All features retained
+			\end{itemize}
+			\item \textbf{Geometric intuition:}
+			\begin{itemize}
+				\item L1 constraint: diamond shape
+				\item L2 constraint: circle shape
+				\item Diamond has corners on axes $\Rightarrow$ sparse solutions
+			\end{itemize}
+			\item \textbf{Practical implications:}
+			\begin{itemize}
+				\item Lasso for feature selection
+				\item Ridge for shrinkage
+				\item Elastic Net for both
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} L2 only shrinks weights
+			\item \textcolor{myred}{C:} They are not equal
+			\item \textcolor{myred}{D:} L1 does perform feature selection
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} L1 (Lasso) = feature selection; L2 (Ridge) = weight shrinkage!
+	\end{frame}
+	
+	\begin{frame}{Q72: Weight Zero Interpretation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In regularization, what does a weight of zero indicate?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - The feature is not used by the model (feature selection).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Weight interpretation:}
+			\begin{itemize}
+				\item Weight $w_j$ multiplies feature $x_j$
+				\item $w_j = 0 \Rightarrow$ feature $x_j$ contributes nothing
+				\item Feature is effectively removed
+			\end{itemize}
+			\item \textbf{Why this happens:}
+			\begin{itemize}
+				\item L1 regularization encourages sparsity
+				\item Feature is not predictive enough
+				\item Feature is redundant
+				\item Regularization selects better features
+			\end{itemize}
+			\item \textbf{Benefit:}
+			\begin{itemize}
+				\item Simpler model
+				\item Better interpretability
+				\item Reduced overfitting
+				\item Faster prediction (fewer features)
+			\end{itemize}
+			\item \textbf{Caveat:}
+			\begin{itemize}
+				\item Zero weights don't mean feature has no predictive power
+				\item Feature may be correlated with others
+				\item Feature may be less important than others
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Zero weight means no importance
+			\item \textcolor{myred}{C:} Weight doesn't indicate variance
+			\item \textcolor{myred}{D:} Weight doesn't indicate bias
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Weight = 0 $\to$ feature not used (feature selection)!
+	\end{frame}
+	
+	\begin{frame}{Q73: $\lambda$ Too Large - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{If $\lambda$ is too large in regularization, what happens?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - The model underfits.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Effect of large $\lambda$:}
+			\begin{itemize}
+				\item Penalty dominates the loss function
+				\item All weights shrink toward zero
+				\item Model becomes too simple
+				\item Cannot capture data patterns
+			\end{itemize}
+			\item \textbf{Symptoms of underfitting:}
+			\begin{itemize}
+				\item High training error
+				\item High test error
+				\item Model predictions are too simple
+				\item Weights all close to zero
+			\end{itemize}
+			\item \textbf{Comparison:}
+			\begin{itemize}
+				\item $\lambda = 0$: No regularization (may overfit)
+				\item $\lambda$ small: Some regularization (balance)
+				\item $\lambda$ large: Too much regularization (underfit)
+				\item $\lambda \to \infty$: All weights $\to 0$ (extreme underfit)
+			\end{itemize}
+			\item \textbf{Fixing:}
+			\begin{itemize}
+				\item Decrease $\lambda$
+				\item Use cross-validation to find optimal $\lambda$
+				\item Start with small $\lambda$ and increase as needed
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Too small $\lambda$ leads to overfitting
+			\item \textcolor{myred}{C:} Optimal requires balanced $\lambda$
+			\item \textcolor{myred}{D:} $\lambda$ definitely affects model
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Too large $\lambda$ $\to$ underfitting!
+	\end{frame}
+	
+	\begin{frame}{Q74: Regularization Forms - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which of the following is a form of regularization?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: D}} - All of the above (L1, L2, Dropout)
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{L1 regularization (Lasso):}
+			\begin{itemize}
+				\item Adds $\lambda \sum |w_i|$ to loss
+				\item Performs feature selection
+				\item Sparse solutions
+			\end{itemize}
+			\item \textbf{L2 regularization (Ridge):}
+			\begin{itemize}
+				\item Adds $\lambda \sum w_i^2$ to loss
+				\item Shrinks weights
+				\item Dense solutions
+			\end{itemize}
+			\item \textbf{Dropout:}
+			\begin{itemize}
+				\item Randomly drops neurons
+				\item Ensemble effect
+				\item Prevents co-adaptation
+			\end{itemize}
+			\item \textbf{Other forms not listed:}
+			\begin{itemize}
+				\item Early stopping
+				\item Batch normalization (has regularization effect)
+				\item Data augmentation
+				\item Weight decay (same as L2 in many frameworks)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Correct but incomplete
+			\item \textcolor{myred}{B:} Correct but incomplete
+			\item \textcolor{myred}{C:} Correct but incomplete
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Many techniques are forms of regularization!
+	\end{frame}
+	
+	\begin{frame}{Q75: $\lambda$ Purpose - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the purpose of the regularization parameter $\lambda$?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - To control the tradeoff between fitting the training data and keeping the model simple.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Role of $\lambda$:}
+			\begin{itemize}
+				\item Balances two competing objectives
+				\item Fit training data well (small $\lambda$)
+				\item Keep model simple (large $\lambda$)
+				\item Tradeoff controlled by $\lambda$
+			\end{itemize}
+			\item \textbf{Extreme cases:}
+			\begin{itemize}
+				\item $\lambda = 0$: Minimizes only training error
+				\item $\lambda \to \infty$: Minimizes only penalty (weights $\to 0$)
+			\end{itemize}
+			\item \textbf{Choosing $\lambda$:}
+			\begin{itemize}
+				\item Must be selected carefully
+				\item Use cross-validation
+				\item Tradeoff between bias and variance
+				\item Problem-specific
+			\end{itemize}
+			\item \textbf{Relationship to other hyperparameters:}
+			\begin{itemize}
+				\item Different from learning rate ($\alpha$)
+				\item Different from number of epochs
+				\item Different from batch size
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Learning rate is $\alpha$
+			\item \textcolor{myred}{C:} Number of epochs is different
+			\item \textcolor{myred}{D:} Batch size is different
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} $\lambda$ controls the bias-variance tradeoff in regularization!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 6: CROSS-VALIDATION - QUESTIONS 76-90
+	% ============================================================
+	
+	\begin{frame}{Q76: Cross-Validation Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is cross-validation in supervised learning?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Resampling technique used to evaluate model performance and select hyperparameters.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Technique for assessing model generalization
+			\begin{itemize}
+				\item Partitions data into training and validation sets
+				\item Multiple partitions for reliable estimate
+				\item Uses all data for both training and validation
+			\end{itemize}
+			\item \textbf{Key purposes:}
+			\begin{itemize}
+				\item \textbf{Model evaluation:} Estimate test performance
+				\item \textbf{Hyperparameter tuning:} Select best parameters
+				\item \textbf{Model comparison:} Choose between models
+			\end{itemize}
+			\item \textbf{Why it's needed:}
+			\begin{itemize}
+				\item Single train/test split is unreliable
+				\item Limited data: want to use all for training
+				\item Avoid overfitting to a specific split
+			\end{itemize}
+			\item \textbf{Common methods:}
+			\begin{itemize}
+				\item k-fold cross-validation
+				\item Leave-one-out cross-validation (LOOCV)
+				\item Stratified cross-validation
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is data augmentation
+			\item \textcolor{myred}{C:} This is regularization
+			\item \textcolor{myred}{D:} This is initialization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Cross-validation evaluates model performance and selects hyperparameters!
+	\end{frame}
+	
+	\begin{frame}{Q77: K-Fold Cross-Validation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{How does k-fold cross-validation work?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Split into k parts, train on k-1 parts and validate on remaining 1 part, repeat k times.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Step-by-step:}
+			\begin{enumerate}
+				\item Randomly split data into $k$ folds of equal size
+				\item For $i = 1$ to $k$:
+				\begin{itemize}
+					\item Use fold $i$ as validation set
+					\item Use remaining $k-1$ folds as training set
+					\item Train model and evaluate
+				\end{itemize}
+				\item Average performance over all $k$ iterations
+			\end{enumerate}
+			\item \textbf{Example (k=5):}
+			\begin{itemize}
+				\item 1000 samples, 5 folds of 200 each
+				\item Iteration 1: Train on 800, Validate on 200
+				\item Repeat 5 times
+				\item Average of 5 validation scores
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item All data used for training (k-1 times)
+				\item All data used for validation (once)
+				\item Reliable performance estimate
+				\item Reduces overfitting to validation set
+			\end{itemize}
+			\item \textbf{Common choices:}
+			\begin{itemize}
+				\item k=5, k=10 (most common)
+				\item k=3 for very small datasets
+				\item k=10 for moderate datasets
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Reverses training and validation
+			\item \textcolor{myred}{C:} All training = no validation
+			\item \textcolor{myred}{D:} All validation = no training
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-fold CV = train on k-1 folds, validate on 1 fold, repeat k times!
+	\end{frame}
+	
+	\begin{frame}{Q78: Stratified Cross-Validation - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is stratified cross-validation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Each fold preserves the same class distribution as the full dataset.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} CV with class balance preservation
+			\begin{itemize}
+				\item Each fold has same proportion of each class
+				\item Matches the overall class distribution
+				\item Ensures representative validation sets
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Dataset: 90\% class A, 10\% class B
+				\item k=5 folds: each fold has 90\% A, 10\% B
+				\item Without stratification: some folds might have no B
+			\end{itemize}
+			\item \textbf{When to use:}
+			\begin{itemize}
+				\item Imbalanced datasets
+				\item Classification problems
+				\item When class proportions matter
+			\end{itemize}
+			\item \textbf{Benefits:}
+			\begin{itemize}
+				\item More reliable performance estimates
+				\item Avoids extreme validation sets
+				\item Better for rare classes
+				\item Reduces variance of estimates
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Equal fold sizes is standard k-fold
+			\item \textcolor{myred}{C:} Random folds may not preserve distribution
+			\item \textcolor{myred}{D:} Sequential folds may introduce bias
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stratified CV preserves class proportions in each fold!
+	\end{frame}
+	
+	\begin{frame}{Q79: Stratified CV - When to Use - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{When is stratified cross-validation particularly important?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - When the dataset is imbalanced (one class is much rarer than others).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Imbalanced dataset example:}
+			\begin{itemize}
+				\item 95\% negative class, 5\% positive class
+				\item Without stratification: some folds may have 0\% positive
+				\item Validation performance varies wildly
+				\item Estimates are unreliable
+			\end{itemize}
+			\item \textbf{Why it's important:}
+			\begin{itemize}
+				\item Rare class performance matters (fraud detection)
+				\item AUC, F1 need proper class representation
+				\item Avoids optimistic performance estimates
+				\item Better model selection
+			\end{itemize}
+			\item \textbf{Without stratification:}
+			\begin{itemize}
+				\item Fold may have no rare class samples
+				\item Cannot evaluate rare class performance
+				\item Model selection may choose wrong model
+			\end{itemize}
+			\item \textbf{Practical advice:}
+			\begin{itemize}
+				\item Always use stratification for classification
+				\item Especially when class imbalance exists
+				\item Also consider weighted metrics
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Balanced datasets don't need stratification
+			\item \textcolor{myred}{C:} Size doesn't determine need
+			\item \textcolor{myred}{D:} Stratification is about class distribution
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stratified CV is essential for imbalanced datasets!
+	\end{frame}
+	
+	\begin{frame}{Q80: LOOCV Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Leave-One-Out Cross-Validation (LOOCV)?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - Special case of k-fold CV where k = N (one observation per fold).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Extreme case of k-fold CV
+			\begin{itemize}
+				\item $k = N$ where $N$ is number of observations
+				\item Each fold contains exactly one observation
+				\item Train on $N-1$ observations each time
+			\end{itemize}
+			\item \textbf{Algorithm:}
+			\begin{enumerate}
+				\item For $i = 1$ to $N$:
+				\begin{itemize}
+					\item Hold out observation $i$ as validation
+					\item Train on remaining $N-1$ observations
+					\item Evaluate on held-out observation
+				\end{itemize}
+				\item Average over all $N$ iterations
+			\end{enumerate}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item N = 100 observations
+				\item Train 100 models, each on 99 observations
+				\item Each validation set has 1 observation
+				\item Average validation error
+			\end{itemize}
+			\item \textbf{Properties:}
+			\begin{itemize}
+				\item Uses almost all data for training
+				\item Very low bias
+				\item High variance (estimates are correlated)
+				\item Computationally expensive
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} k=2 is 2-fold CV
+			\item \textcolor{myred}{C:} k=10 is 10-fold CV
+			\item \textcolor{myred}{D:} LOOCV uses validation sets
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LOOCV = k-fold CV with k = N!
+	\end{frame}
+	
+	\begin{frame}{Q81: LOOCV Advantages - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is an advantage of Leave-One-Out Cross-Validation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Uses almost all data for training each time (N-1 observations), giving low bias.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Low bias advantage:}
+			\begin{itemize}
+				\item Training set size is $N-1$ (almost full dataset)
+				\item Model sees almost all data each time
+				\item Training set is representative
+				\item No data withheld from training
+			\end{itemize}
+			\item \textbf{Why bias is low:}
+			\begin{itemize}
+				\item Model trained on nearly full dataset
+				\item No loss from using less data
+				\item Consistent with full data model
+				\item Less training-test discrepancy
+			\end{itemize}
+			\item \textbf{Comparison to other CV:}
+			\begin{itemize}
+				\item 10-fold CV: trains on 90\% of data
+				\item 5-fold CV: trains on 80\% of data
+				\item LOOCV: trains on 99\%+ of data
+				\item LOOCV has lowest bias
+			\end{itemize}
+			\item \textbf{When this matters:}
+			\begin{itemize}
+				\item Small datasets (every observation counts)
+				\item When bias is a concern
+				\item When you want best estimate
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} LOOCV is computationally expensive
+			\item \textcolor{myred}{C:} LOOCV can have high variance
+			\item \textcolor{myred}{D:} LOOCV is not suitable for large datasets
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LOOCV has low bias but is computationally expensive!
+	\end{frame}
+	
+	\begin{frame}{Q82: LOOCV Disadvantages - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a disadvantage of Leave-One-Out Cross-Validation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - It is computationally expensive (requires N training runs).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Computational cost:}
+			\begin{itemize}
+				\item Need to train model $N$ times
+				\item Each training is on $N-1$ observations
+				\item Total operations: $N \times \text{cost\_per\_train}$
+				\item For $N = 10,000$: 10,000 training runs
+			\end{itemize}
+			\item \textbf{When it's problematic:}
+			\begin{itemize}
+				\item Large datasets ($N > 1000$)
+				\item Complex models (slow to train)
+				\item Limited computational resources
+			\end{itemize}
+			\item \textbf{Alternative solutions:}
+			\begin{itemize}
+				\item Use k-fold with smaller $k$ (e.g., 5 or 10)
+				\item Use approximate LOOCV formulas (for some models)
+				\item Use efficient implementations when available
+			\end{itemize}
+			\item \textbf{Other disadvantages:}
+			\begin{itemize}
+				\item High variance (estimates are correlated)
+				\item Can be unstable
+				\item Not suitable for large datasets
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} LOOCV has low bias, not high bias
+			\item \textcolor{myred}{C:} LOOCV doesn't necessarily overfit
+			\item \textcolor{myred}{D:} LOOCV can be used for classification
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LOOCV is computationally expensive for large N!
+	\end{frame}
+	
+	\begin{frame}{Q83: CV Bias-Variance Tradeoff - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{How does choice of k in k-fold CV affect bias-variance tradeoff?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Larger k decreases bias and increases variance.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Effect of larger k:}
+			\begin{itemize}
+				\item More data used for training ($\frac{k-1}{k}$ fraction)
+				\item Training sets more similar to full dataset
+				\item Lower bias (models are better)
+				\item Higher variance (estimates are more correlated)
+			\end{itemize}
+			\item \textbf{Effect of smaller k:}
+			\begin{itemize}
+				\item Less data used for training
+				\item Training sets less representative
+				\item Higher bias (models are worse)
+				\item Lower variance (estimates are less correlated)
+			\end{itemize}
+			\item \textbf{The tradeoff:}
+			\begin{itemize}
+				\item LOOCV (k=N): Lowest bias, highest variance
+				\item k=2: Highest bias, lowest variance
+				\item k=10: Good balance (most common)
+			\end{itemize}
+			\item \textbf{Choosing k:}
+			\begin{itemize}
+				\item k=10 is standard
+				\item k=5 for larger datasets
+				\item k=N (LOOCV) for small datasets
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is the opposite direction
+			\item \textcolor{myred}{C:} k definitely affects bias-variance
+			\item \textcolor{myred}{D:} Smaller k increases bias, decreases variance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Larger k $\to$ lower bias, higher variance!
+	\end{frame}
+	
+	\begin{frame}{Q84: Common k Value - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the most common value of k in k-fold cross-validation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - k = 10
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why k=10 is common:}
+			\begin{itemize}
+				\item Good balance between bias and variance
+				\item Computationally feasible
+				\item Widely studied and recommended
+				\item Standard in practice
+			\end{itemize}
+			\item \textbf{Other common values:}
+			\begin{itemize}
+				\item \textbf{k=5:} For larger datasets
+				\item \textbf{k=10:} Standard default
+				\item \textbf{k=LOOCV:} For small datasets
+			\end{itemize}
+			\item \textbf{Rules of thumb:}
+			\begin{itemize}
+				\item Use k=10 for most problems
+				\item Use k=5 for $N > 10,000$
+				\item Use LOOCV for $N < 100$
+				\item Increase k for smaller datasets
+			\end{itemize}
+			\item \textbf{Tradeoffs for different k:}
+			\begin{itemize}
+				\item k=10: $90\%$ training, $10\%$ validation
+				\item k=5: $80\%$ training, $20\%$ validation
+				\item k=2: $50\%$ training, $50\%$ validation (too little training)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} k=2 is sometimes used but not most common
+			\item \textcolor{myred}{B:} k=5 is also common but k=10 is most common
+			\item \textcolor{myred}{D:} LOOCV is used for small datasets
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} k = 10 is the most common value!
+	\end{frame}
+	
+	\begin{frame}{Q85: CV Purpose - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the primary purpose of cross-validation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - To evaluate how well a model will generalize to new, unseen data.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Primary goal:} Estimate generalization performance
+			\begin{itemize}
+				\item How well does model perform on new data?
+				\item What is expected test error?
+				\item Can the model be trusted?
+			\end{itemize}
+			\item \textbf{Why we need it:}
+			\begin{itemize}
+				\item Training performance is optimistic
+				\item Test data is not available during development
+				\item Need reliable estimate without overfitting
+			\end{itemize}
+			\item \textbf{Secondary purposes:}
+			\begin{itemize}
+				\item Hyperparameter selection
+				\item Model comparison
+				\item Feature selection
+				\item Ensemble creation
+			\end{itemize}
+			\item \textbf{What it doesn't do:}
+			\begin{itemize}
+				\item Increase training data (that's data augmentation)
+				\item Reduce overfitting (that's regularization)
+				\item Select features (though it helps)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is data augmentation
+			\item \textcolor{myred}{C:} This is feature selection
+			\item \textcolor{myred}{D:} This is a training parameter
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Cross-validation estimates generalization performance!
+	\end{frame}
+	
+	\begin{frame}{Q86: Bootstrapping Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is bootstrapping in model evaluation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - Resampling technique that samples with replacement from the dataset.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Sampling with replacement
+			\begin{itemize}
+				\item Create $B$ bootstrap samples
+				\item Each sample size = $N$ (same as original)
+				\item Sampling with replacement
+				\item Some observations appear multiple times
+				\item Some observations don't appear
+			\end{itemize}
+			\item \textbf{Expected composition:}
+			\begin{itemize}
+				\item Each bootstrap sample has $N$ observations
+				\item Approximately $63.2\%$ of original data appears
+				\item Remaining $36.8\%$ are out-of-bag (OOB)
+			\end{itemize}
+			\item \textbf{Usage:}
+			\begin{itemize}
+				\item Estimate variability of model performance
+				\item Construct confidence intervals
+				\item Evaluate stability
+				\item Used in bagging (Bootstrap Aggregating)
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Original: [1, 2, 3, 4, 5]
+				\item Bootstrap: [1, 3, 3, 4, 5] (3 appears twice)
+				\item Another: [1, 2, 2, 4, 4] (2 and 4 appear twice)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Sampling without replacement is subsampling
+			\item \textcolor{myred}{C:} Bootstrapping is not regularization
+			\item \textcolor{myred}{D:} Bootstrapping is not feature selection
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Bootstrapping = sampling with replacement!
+	\end{frame}
+	
+	\begin{frame}{Q87: Bootstrapping Purpose - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the primary purpose of bootstrapping in model evaluation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - To estimate the variability of model performance (e.g., confidence intervals).
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Primary goal:} Quantify uncertainty
+			\begin{itemize}
+				\item Model performance varies across samples
+				\item Need to know how much it varies
+				\item Construct confidence intervals
+				\item Assess model stability
+			\end{itemize}
+			\item \textbf{How it works:}
+			\begin{itemize}
+				\item Create $B$ bootstrap samples
+				\item Train model on each sample
+				\item Evaluate performance on each sample (or OOB)
+				\item Get distribution of performance metrics
+			\end{itemize}
+			\item \textbf{Applications:}
+			\begin{itemize}
+				\item Confidence intervals for accuracy
+				\item Confidence intervals for coefficients
+				\item Model stability assessment
+				\item Parameter uncertainty quantification
+			\end{itemize}
+			\item \textbf{Comparison to CV:}
+			\begin{itemize}
+				\item CV: estimates average performance
+				\item Bootstrap: estimates performance distribution
+				\item Both useful for different purposes
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is regularization
+			\item \textcolor{myred}{C:} Learning rate is a training parameter
+			\item \textcolor{myred}{D:} This is feature selection
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Bootstrapping estimates performance variability!
+	\end{frame}
+	
+	\begin{frame}{Q88: CV vs Bootstrapping - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the key difference between cross-validation and bootstrapping?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - Cross-validation samples without replacement; bootstrapping samples with replacement.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Cross-validation:}
+			\begin{itemize}
+				\item Samples without replacement
+				\item Each observation appears exactly once in validation
+				\item Partitions are disjoint
+				\item Training sets are subsets of data
+				\item No overlap between folds
+			\end{itemize}
+			\item \textbf{Bootstrapping:}
+			\begin{itemize}
+				\item Samples with replacement
+				\item Observations can appear multiple times
+				\item Each sample is same size as original
+				\item Some observations omitted (OOB)
+				\item Overlap between samples
+			\end{itemize}
+			\item \textbf{Other differences:}
+			\begin{itemize}
+				\item CV: deterministic (for given random seed)
+				\item Bootstrap: random resampling
+				\item CV: evaluates on held-out data
+				\item Bootstrap: evaluates on sample or OOB
+			\end{itemize}
+			\item \textbf{When to use each:}
+			\begin{itemize}
+				\item CV: model selection, hyperparameter tuning
+				\item Bootstrap: uncertainty quantification, ensemble methods
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Both use parts of data
+			\item \textcolor{myred}{C:} Both can be used for either task
+			\item \textcolor{myred}{D:} They are different techniques
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} CV = without replacement; Bootstrapping = with replacement!
+	\end{frame}
+	
+	\begin{frame}{Q89: Grid Search Definition - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is grid search in hyperparameter tuning?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Method that exhaustively searches over a predefined grid of hyperparameter values.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Exhaustive parameter search
+			\begin{itemize}
+				\item Define grid of values for each hyperparameter
+				\item Evaluate all combinations
+				\item Select best combination
+				\item Often combined with cross-validation
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item $\lambda$: [0.001, 0.01, 0.1, 1]
+				\item Learning rate: [0.001, 0.01, 0.1]
+				\item Total combinations: $4 \times 3 = 12$
+				\item Each combination trained and evaluated
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item Guarantees finding best in grid
+				\item Simple and easy to implement
+				\item Reproducible results
+				\item Parallelizable
+			\end{itemize}
+			\item \textbf{Disadvantages:}
+			\begin{itemize}
+				\item Computationally expensive
+				\item Curse of dimensionality
+				\item Continuous parameters difficult
+				\item May miss good values
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is random search
+			\item \textcolor{myred}{C:} This is gradient-based optimization
+			\item \textcolor{myred}{D:} Cross-validation is used WITH grid search
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Grid search = exhaustive search over parameter grid!
+	\end{frame}
+	
+	\begin{frame}{Q90: Grid Search Cost - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is a major disadvantage of grid search?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - It is computationally expensive for large grids.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Computational complexity:}
+			\begin{itemize}
+				\item $M$ hyperparameters, each with $N_i$ values
+				\item Total combinations: $\prod_{i=1}^M N_i$
+				\item Grows exponentially with number of hyperparameters
+				\item $M=5$, $N=10$ each $\Rightarrow$ 100,000 combinations
+			\end{itemize}
+			\item \textbf{When it's problematic:}
+			\begin{itemize}
+				\item Many hyperparameters
+				\item Large grids for each parameter
+				\item Expensive models to train
+				\item Combined with cross-validation (multiplies cost)
+			\end{itemize}
+			\item \textbf{Alternatives:}
+			\begin{itemize}
+				\item Random search: sample random combinations
+				\item Bayesian optimization: informed search
+				\item Automated hyperparameter tuning
+				\item Smaller grids with coarse-to-fine search
+			\end{itemize}
+			\item \textbf{Practical tips:}
+			\begin{itemize}
+				\item Start with coarse grid
+				\item Use random search for many parameters
+				\item Use Bayesian optimization for expensive models
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} Finds best within grid (not suboptimal)
+			\item \textcolor{myred}{C:} Can be used with CV
+			\item \textcolor{myred}{D:} Doesn't require gradients
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Grid search is computationally expensive for large grids!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 7: ACCURACY-INTERPRETABILITY - QUESTIONS 91-100
+	% ============================================================
+	
+	\begin{frame}{Q91: Accuracy-Interpretability Tradeoff - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is the accuracy-interpretability tradeoff?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Tradeoff between predictive performance and how easily decisions can be understood.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Tension between two competing goals
+			\begin{itemize}
+				\item \textbf{Accuracy:} How well the model predicts
+				\item \textbf{Interpretability:} How well humans understand the model
+				\item Often in conflict
+			\end{itemize}
+			\item \textbf{Why they conflict:}
+			\begin{itemize}
+				\item Simpler models are more interpretable
+				\item Complex models are more accurate
+				\item Tradeoff is fundamental
+				\item Cannot maximize both
+			\end{itemize}
+			\item \textbf{Examples:}
+			\begin{itemize}
+				\item Linear regression: Very interpretable, limited accuracy
+				\item Random forest: Moderate interpretability, high accuracy
+				\item Deep neural network: Low interpretability, very high accuracy
+			\end{itemize}
+			\item \textbf{Choosing the tradeoff:}
+			\begin{itemize}
+				\item Depends on application
+				\item Regulated industries: prefer interpretability
+				\item Performance-critical: prefer accuracy
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} This is speed-complexity tradeoff
+			\item \textcolor{myred}{C:} This is bias-variance tradeoff
+			\item \textcolor{myred}{D:} This is curse of dimensionality
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Accuracy vs Interpretability = performance vs understandability!
+	\end{frame}
+	
+	\begin{frame}{Q92: High Interpretability Models - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which model typically has high interpretability?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Decision trees (shallow)
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why decision trees are interpretable:}
+			\begin{itemize}
+				\item Decision rules are easy to follow
+				\item Can be visualized
+				\item Each split corresponds to a rule
+				\item Path from root to leaf explains prediction
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item If age > 30: predict high risk
+				\item If age $\leq$ 30 and income > 50k: predict low risk
+				\item Each prediction can be explained
+			\end{itemize}
+			\item \textbf{Other interpretable models:}
+			\begin{itemize}
+				\item Linear regression (coefficients explain)
+				\item Logistic regression (odds ratios)
+				\item Decision rules
+				\item Naive Bayes
+			\end{itemize}
+			\item \textbf{Why others are less interpretable:}
+			\begin{itemize}
+				\item DNNs: black-box, millions of parameters
+				\item Random forests: ensemble of many trees
+				\item GBM: many trees, complex interactions
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} DNNs are black-box models
+			\item \textcolor{myred}{B:} Random forests are less interpretable
+			\item \textcolor{myred}{D:} GBM is complex ensemble
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Decision trees are highly interpretable "white-box" models!
+	\end{frame}
+	
+	\begin{frame}{Q93: High Accuracy Models - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which model typically has high accuracy but low interpretability?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Deep neural networks
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why DNNs are accurate:}
+			\begin{itemize}
+				\item Can approximate any function
+				\item Learn hierarchical features
+				\item Massive parameter count
+				\item State-of-the-art on many tasks
+			\end{itemize}
+			\item \textbf{Why DNNs are not interpretable:}
+			\begin{itemize}
+				\item Millions of weights
+				\item No simple decision rules
+				\item Features are abstract
+				\item "Black-box" nature
+				\item Hard to explain individual predictions
+			\end{itemize}
+			\item \textbf{Examples of high accuracy tasks:}
+			\begin{itemize}
+				\item Image recognition (95\%+ accuracy)
+				\item Speech recognition
+				\item Natural language processing
+				\item Game playing (AlphaGo)
+			\end{itemize}
+			\item \textbf{Efforts to interpret DNNs:}
+			\begin{itemize}
+				\item SHAP values
+				\item LIME
+				\item Saliency maps
+				\item Feature visualization
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Linear regression is highly interpretable
+			\item \textcolor{myred}{B:} Decision trees are highly interpretable
+			\item \textcolor{myred}{D:} Logistic regression is highly interpretable
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Deep neural networks = high accuracy, low interpretability!
+	\end{frame}
+	
+	\begin{frame}{Q94: Interpretability Importance - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In which domain is interpretability particularly important?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - Risk management and regulated industries (e.g., credit scoring)
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why regulated industries need interpretability:}
+			\begin{itemize}
+				\item Legal requirements: must explain decisions
+				\item Regulatory compliance (GDPR, etc.)
+				\item Right to explanation for consumers
+				\item Avoiding discrimination
+				\item Auditing and accountability
+			\end{itemize}
+			\item \textbf{Specific examples:}
+			\begin{itemize}
+				\item \textbf{Credit scoring:} Must explain why loan denied
+				\item \textbf{Healthcare:} Must justify treatment decisions
+				\item \textbf{Insurance:} Must explain premium calculations
+				\item \textbf{Fraud detection:} Must justify alerts
+			\end{itemize}
+			\item \textbf{Why other domains differ:}
+			\begin{itemize}
+				\item Image recognition: interpretability less critical
+				\item NLP: accuracy often prioritized
+				\item Recommendations: personalization prioritized
+			\end{itemize}
+			\item \textbf{Balance in risk management:}
+			\begin{itemize}
+				\item White-box models preferred
+				\item Even if accuracy is lower
+				\item Explainability is legally required
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Image recognition prioritizes accuracy
+			\item \textcolor{myred}{B:} NLP often prioritizes accuracy
+			\item \textcolor{myred}{D:} Recommendations prioritize personalization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Interpretability is critical in risk management and regulated industries!
+	\end{frame}
+	
+	\begin{frame}{Q95: Risk Management Model Choice - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{In risk management, which type of model is often preferred?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - White-box models (e.g., decision trees, logistic regression)
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why white-box models are preferred:}
+			\begin{itemize}
+				\item Regulatory requirements demand transparency
+				\item Must explain decisions to customers
+				\item Auditing is easier
+				\item Legal defensibility
+				\item Fairness can be verified
+			\end{itemize}
+			\item \textbf{White-box examples in risk management:}
+			\begin{itemize}
+				\item Logistic regression for credit scoring
+				\item Decision trees for fraud detection
+				\item Linear models for risk assessment
+				\item Scorecards in banking
+			\end{itemize}
+			\item \textbf{Tradeoff accepted:}
+			\begin{itemize}
+				\item May sacrifice some accuracy
+				\item Interpretability is worth the cost
+				\item Regulatory compliance is non-negotiable
+			\end{itemize}
+			\item \textbf{When black-box models are acceptable:}
+			\begin{itemize}
+				\item Internal research
+				\item Non-regulated applications
+				\item When explainability is not required
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Black-box models are avoided in risk management
+			\item \textcolor{myred}{C:} Ensembles are less interpretable
+			\item \textcolor{myred}{D:} Highest accuracy ignores interpretability requirements
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Risk management prefers interpretable (white-box) models!
+	\end{frame}
+	
+	\begin{frame}{Q96: Tradeoff Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which statement about the accuracy-interpretability tradeoff is TRUE?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: C}} - There is often a tradeoff between accuracy and interpretability.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Why there is a tradeoff:}
+			\begin{itemize}
+				\item Interpretability requires simplicity
+				\item Accuracy often requires complexity
+				\item These goals are in tension
+				\item Cannot maximize both simultaneously
+			\end{itemize}
+			\item \textbf{Examples of the tradeoff:}
+			\begin{itemize}
+				\item Linear regression: Interpretable but limited
+				\item Random forest: Less interpretable but more accurate
+				\item DNN: Hard to interpret but highly accurate
+			\end{itemize}
+			\item \textbf{When the tradeoff is less severe:}
+			\begin{itemize}
+				\item Simple problems: both can be achieved
+				\item Domain knowledge helps interpretability
+				\item Some techniques improve both
+			\end{itemize}
+			\item \textbf{Managing the tradeoff:}
+			\begin{itemize}
+				\item Choose based on application
+				\item Use interpretability tools (SHAP, LIME)
+				\item Consider hybrid approaches
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} False - simpler models often have lower accuracy
+			\item \textcolor{myred}{B:} False - complex models often have higher accuracy
+			\item \textcolor{myred}{D:} False - they are related through complexity
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Accuracy and interpretability are often in tension (tradeoff)!
+	\end{frame}
+	
+	\begin{frame}{Q97: Feature Importance - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is feature importance in model interpretability?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - Measure of how important each feature is in making predictions.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Quantifies feature contribution
+			\begin{itemize}
+				\item Which features drive predictions?
+				\item How much does each feature contribute?
+				\item Helps understand model behavior
+				\item Identifies most important predictors
+			\end{itemize}
+			\item \textbf{Common methods:}
+			\begin{itemize}
+				\item Coefficient magnitude (linear models)
+				\item Feature importance (tree-based models)
+				\item Permutation importance
+				\item SHAP values
+				\item LIME weights
+			\end{itemize}
+			\item \textbf{Interpreting feature importance:}
+			\begin{itemize}
+				\item Higher value = more important
+				\item Zero = no importance
+				\item Positive vs negative direction matters
+				\item Context-dependent
+			\end{itemize}
+			\item \textbf{Applications:}
+			\begin{itemize}
+				\item Feature selection
+				\item Model explanation
+				\item Domain insight
+				\item Debugging models
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} This is data availability
+			\item \textcolor{myred}{C:} This is feature variance
+			\item \textcolor{myred}{D:} This is correlation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Feature importance helps interpret model predictions!
+	\end{frame}
+	
+	\begin{frame}{Q98: SHAP Values - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What are SHAP (SHapley Additive exPlanations) values?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - Method to compute feature importance using game theory.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} SHapley Additive exPlanations
+			\begin{itemize}
+				\item Based on Shapley values from game theory
+				\item Distributes prediction among features
+				\item Each feature gets a contribution
+				\item Unifies other explanation methods
+			\end{itemize}
+			\item \textbf{Key properties:}
+			\begin{itemize}
+				\item \textbf{Additivity:} Sum of SHAP values = prediction
+				\item \textbf{Consistency:} If model changes, values change accordingly
+				\item \textbf{Local accuracy:} Explains individual predictions
+				\item \textbf{Missingness:} Missing features get SHAP=0
+			\end{itemize}
+			\item \textbf{Advantages:}
+			\begin{itemize}
+				\item Globally and locally consistent
+				\item Works for any model
+				\item Provides both direction and magnitude
+				\item Interpretable and reliable
+			\end{itemize}
+			\item \textbf{Example interpretation:}
+			\begin{itemize}
+				\item Base prediction: 0.5
+				\item Feature A contribution: +0.3
+				\item Feature B contribution: -0.1
+				\item Final prediction: 0.7
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} SHAP is for explanation, not accuracy
+			\item \textcolor{myred}{C:} SHAP is not regularization
+			\item \textcolor{myred}{D:} SHAP is not hyperparameter tuning
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} SHAP uses game theory to explain predictions!
+	\end{frame}
+	
+	\begin{frame}{Q99: LIME - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is LIME (Local Interpretable Model-agnostic Explanations)?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: A}} - Method to explain individual predictions by approximating model locally with interpretable model.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Definition:} Local Interpretable Model-agnostic Explanations
+			\begin{itemize}
+				\item Explains individual predictions
+				\item Approximates complex model locally
+				\item Uses interpretable model (linear, decision tree)
+				\item Model-agnostic (works for any model)
+			\end{itemize}
+			\item \textbf{How it works:}
+			\begin{enumerate}
+				\item Select instance to explain
+				\item Generate perturbed samples around it
+				\item Get predictions from complex model
+				\item Fit interpretable model on perturbed data
+				\item Use interpretable model to explain prediction
+			\end{enumerate}
+			\item \textbf{Key features:}
+			\begin{itemize}
+				\item \textbf{Local:} Only accurate near the instance
+				\item \textbf{Model-agnostic:} Works with any model
+				\item \textbf{Interpretable:} Uses simple model
+				\item \textbf{Sparse:} Uses few features
+			\end{itemize}
+			\item \textbf{Example:}
+			\begin{itemize}
+				\item Complex DNN predicted loan denial
+				\item LIME says: low income and high debt caused denial
+				\item Explanation is local to that case
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{B:} LIME is for explanation, not accuracy
+			\item \textcolor{myred}{C:} LIME is not regularization
+			\item \textcolor{myred}{D:} LIME is not feature selection (though it identifies important features locally)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LIME provides local explanations for individual predictions!
+	\end{frame}
+	
+	\begin{frame}{Q100: Model Estimation Summary - Tutorial}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Which provides the most comprehensive summary of model estimation?}
+		
+		\vspace{0.05cm}
+		\textcolor{myblue}{\textbf{ANSWER: B}} - Model estimation involves choosing between OLS, NLS, and MLE, optimizing using gradient descent, and evaluating with cross-validation.
+		
+		\vspace{0.05cm}
+		\textbf{DETAILED EXPLANATION:}
+		\begin{itemize}
+			\item \textbf{Complete picture of model estimation:}
+			\begin{enumerate}
+				\item \textbf{Estimation method selection:}
+				\begin{itemize}
+					\item OLS: linear in parameters
+					\item NLS: nonlinear in parameters
+					\item MLE: maximum likelihood
+				\end{itemize}
+				\item \textbf{Optimization:}
+				\begin{itemize}
+					\item Gradient descent (and variants)
+					\item Backpropagation (neural networks)
+					\item Numerical methods for NLS
+				\end{itemize}
+				\item \textbf{Evaluation:}
+				\begin{itemize}
+					\item Cross-validation
+					\item Bootstrap
+					\item Performance metrics
+				\end{itemize}
+				\item \textbf{Regularization:}
+				\begin{itemize}
+					\item L1/L2 regularization
+					\item Dropout
+					\item Early stopping
+				\end{itemize}
+			\end{enumerate}
+			\item \textbf{Key insight:} All components work together
+			\begin{itemize}
+				\item Each step is important
+				\item Choices affect final model
+				\item Tradeoffs at every step
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.05cm}
+		\textcolor{myred}{\textbf{WHY OTHER OPTIONS ARE WRONG:}}
+		\begin{itemize}
+			\item \textcolor{myred}{A:} Only OLS is incomplete
+			\item \textcolor{myred}{C:} Only MLE is incomplete
+			\item \textcolor{myred}{D:} Only regularization is incomplete
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Model estimation is comprehensive - includes method choice, optimization, and evaluation!
+	\end{frame}
+	
+	% ============================================================
+	% SUMMARY SLIDE
+	% ============================================================
+	
+	\begin{frame}{Summary: Complete Review}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{\textcolor{myblue}{Core Estimation Methods:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{OLS:} Minimizes SSE; closed-form for linear regression; BLUE under Gauss-Markov
+			\item \textcolor{myblue}{MLE:} Maximizes likelihood; equivalent to OLS under normal errors
+			\item \textcolor{myblue}{NLS:} For nonlinear-in-parameters models; requires numerical optimization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{\textcolor{myblue}{Optimization:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{Gradient Descent:} Iterative; uses negative gradient; learning rate controls step size
+			\item \textcolor{myblue}{Backpropagation:} Chain rule for neural networks; requires storing activations
+			\item \textcolor{myblue}{Adam/Momentum:} Adaptive methods for faster convergence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{\textcolor{myblue}{Model Selection:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{Bias-Variance Tradeoff:} Simplicity vs complexity; optimal at minimum total error
+			\item \textcolor{myblue}{Regularization:} L1 (Lasso - feature selection), L2 (Ridge - shrinkage)
+			\item \textcolor{myblue}{Cross-Validation:} k-fold (k=10 common); evaluates generalization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{\textcolor{myblue}{Interpretability:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{White-box models:} Decision trees, linear regression (interpretable)
+			\item \textcolor{myblue}{Black-box models:} Deep neural networks (accurate but not interpretable)
+			\item \textcolor{myblue}{Explainability:} SHAP values, LIME for understanding predictions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{Exam Success:}} Understand the tradeoffs and know the definitions!
+	\end{frame}
+	
+\end{document}

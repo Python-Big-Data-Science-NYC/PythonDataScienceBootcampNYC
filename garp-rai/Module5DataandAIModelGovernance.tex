@@ -1,0 +1,3951 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Data and AI Model Governance}
+\subtitle{Complete Tutorial: Data Governance, Model Risk Management, Validation, GenAI Governance}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 1: INTRODUCTION TO DATA AND MODEL GOVERNANCE - SLIDES 1-5
+	% ============================================================
+	
+	\begin{frame}{Slide 1: Introduction to Model Governance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Model Governance?}
+		
+		\begin{itemize}
+			\item Sound governance of models is essential for effective and prudent risk management
+			\item Without it, a range of outcomes and decisions may occur that can prove detrimental
+			\item Model governance should exist across the entire model lifecycle
+			\item From model development through performance monitoring and ultimately decommissioning
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why Governance Matters for AI/ML:}
+		\begin{itemize}
+			\item Ensures technological advances don't overshadow need for fundamental challenges
+			\item Addresses opacity of AI/ML models
+			\item Proper governance of data used to train these models is particularly relevant
+			\item Generative AI poses additional governance challenges
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Insight:} Governance must span \textcolor{myblue}{the entire model lifecycle} from development to decommissioning!
+		
+		\textcolor{myblue}{\textbf{Focus:}} Financial sector and quantitative risk models (QRMs) due to established regulatory framework.
+	\end{frame}
+	
+	\begin{frame}{Slide 2: Data Governance Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Data Governance?}
+		
+		\vspace{0.1cm}
+		\textbf{Data Governance Institute Definition:}
+		\begin{itemize}
+			\item "A system of decision rights and accountabilities for information-related processes"
+			\item "Executed according to agreed-upon models which describe who can take what actions"
+			\item "With what information, and when, under what circumstances, using what methods"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Broad Scope:}
+		\begin{itemize}
+			\item Encompasses the people, processes, and technologies required to manage and protect data assets
+			\item Covers entire data lifecycle from collection to deletion
+			\item Balances data accessibility with data protection
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Components:}
+		\begin{itemize}
+			\item Data strategy and vision
+			\item Data quality management
+			\item Data provenance and legal compliance
+			\item Data classification and security
+			\item Metadata management
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data governance is about \textcolor{myblue}{decision rights and accountabilities} for data!
+	\end{frame}
+	
+	\begin{frame}{Slide 3: Data Strategy - Vision and Goals}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Developing a Data Strategy:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Requirements:}
+		\begin{itemize}
+			\item Clear and approved data-governance policy
+			\item Strategic vision and operational practices
+			\item Level of authorization for non-publicly available personal information
+			\item Specification of data usage (single or recurring use)
+			\item Documentation of data sources
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Alternative Data Considerations:}
+		\begin{itemize}
+			\item Additional controls and testing required
+			\item Privacy concerns
+			\item Data quality and accuracy risks
+			\item Unbounded data streams
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Data Governance Committee Responsibilities:}
+		\begin{itemize}
+			\item Data collection, reconciliations, treatment, access, monitoring
+			\item Management of data stewards
+			\item Overall oversight on all aspects of data governance
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data strategy requires \textcolor{myblue}{clear policies and authorization} for data use!
+	\end{frame}
+	
+	\begin{frame}{4: Data Quality - Accuracy, Consistency, Integrity}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Ensuring Data Quality:}
+		
+		\vspace{0.1cm}
+		\textbf{Core Requirements:}
+		\begin{itemize}
+			\item Complete, relevant, transparent, and accurate data should be the primary objective
+			\item Model risk management requirements around data quality do not change with AI/ML algorithms
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Alternative Data Sources - Additional Scrutiny:}
+		\begin{itemize}
+			\item Verifying accuracy of alternative data sources may be difficult
+			\item Data providers may change field definitions after deployment
+			\item Even well-established data sources are subject to this risk
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Example - COVID-19 Pandemic:}
+		\begin{itemize}
+			\item U.S. Bureau of Labor Statistics unemployment data was biased
+			\item Inability to conduct proper surveys
+			\item Anomalies may occur with any data stream
+			\item New data sources introduce additional risks
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Data Monitoring:}
+		\begin{itemize}
+			\item Input data monitoring to alert model owners of flawed inputs
+			\item Outlier detection may be insufficient to spot anomalies
+			\item Definitional changes may only be disclosed in footnotes
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data quality is \textcolor{myblue}{critical and requires continuous monitoring}!
+	\end{frame}
+	
+	\begin{frame}{Slide 5: Data Provenance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data Provenance - Verifying Legal Right to Use Data:}
+		
+		\vspace{0.1cm}
+		\textbf{Definition:}
+		\begin{itemize}
+			\item Provenance refers to the sequence of ownership and handling of items of value
+			\item Now applies to data used to create models
+			\item Proving legal right to use data is essential
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why It Matters:}
+		\begin{itemize}
+			\item Scrutiny of whether vendors have legal right to use data
+			\item Copyright and intellectual property lawsuits against GenAI vendors
+			\item Example: Data scraped from websites without permission
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Regulatory Consequences:}
+		\begin{itemize}
+			\item FTC: Any model built on improperly obtained data must be destroyed
+			\item First such legal action has already been settled with model destruction
+			\item No model can be approved without proving ownership of input data
+			\item Vendor models need to provide proof and indemnify licensees
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Challenge:}
+		\begin{itemize}
+			\item Established data (e.g., FICO) is generally safe
+			\item Alternative data requires scrutiny
+			\item Risk must be considered for GenAI models where model risk management applies
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data provenance is \textcolor{myblue}{essential for legal compliance and model approval}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 2: DATA GOVERNANCE DETAILS - SLIDES 6-15
+	% ============================================================
+	
+	\begin{frame}{Slide 6: Data Classification}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data Classification - Structure and Confidentiality:}
+		
+		\vspace{0.1cm}
+		\textbf{Data Types:}
+		\begin{enumerate}
+			\item \textbf{Quantitative Data:}
+			\begin{itemize}
+				\item Measured or determined numerically
+				\item Examples: income, age, temperature
+			\end{itemize}
+			\item \textbf{Qualitative Data:}
+			\begin{itemize}
+				\item Determined non-numerically
+				\item Examples: gender, ethnicity, job title
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Data Sources:}
+		\begin{itemize}
+			\item Observed data
+			\item Projected data
+			\item Judgment-based data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Critical Governance Requirement:}
+		\begin{itemize}
+			\item Distinguish the classification of data being used
+			\item Ensure access and use is permissible
+			\item When data is confidential or personally identifiable, controls must be:
+			\begin{itemize}
+				\item Present
+				\item Operational
+				\item Effective
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data classification determines \textcolor{myblue}{access controls and usage permissions}!
+	\end{frame}
+	
+	\begin{frame}{Slide 7: Metadata Management}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Metadata Management:}
+		
+		\vspace{0.1cm}
+		\textbf{What is Metadata?}
+		\begin{itemize}
+			\item Basic information about data
+			\item Includes: file type, time of creation, data author
+			\item Data source, file size, and other relevant information
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Types of Metadata:}
+		\begin{enumerate}
+			\item \textbf{Descriptive:} Identifies and describes data
+			\item \textbf{Structural:} How data is organized
+			\item \textbf{Administrative:} Technical and rights information
+			\item \textbf{Reference:} Standards and definitions
+			\item \textbf{Statistical:} Data quality and methodology
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Robust Metadata Management Strategy:}
+		\begin{itemize}
+			\item Data documentation
+			\item Data mapping
+			\item Data dictionary
+			\item Data definitions
+			\item Data process flows
+			\item Data relationships to other data
+			\item Data structures
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Metadata management enables \textcolor{myblue}{better-informed business decisions}!
+	\end{frame}
+	
+	\begin{frame}{Slide 8: Data Security and Protection}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data Security and Protection:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Concepts:}
+		\begin{itemize}
+			\item Data security often used interchangeably with data protection and data integrity
+			\item Strategic security process and data protection plan are essential
+			\item Procedural steps identified to safeguard:
+			\begin{itemize}
+				\item Availability of data
+				\item Access to data
+				\item Data privacy
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Data Protection Strategy:}
+		\begin{itemize}
+			\item Safeguarding important information from:
+			\begin{itemize}
+				\item Corruption
+				\item Malicious or accidental damage
+				\item Compromise or loss
+			\end{itemize}
+			\item Importance increases with amount of data created and stored
+			\item Data retention policy should be in place and adhered to
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{US Regulatory Examples:}
+		\begin{itemize}
+			\item Safeguards Rule (FTC): Financial institutions must keep customer information secure
+			\item Gramm-Leach-Bliley Act (GLBA): Privacy practices and opt-out rights
+			\item Privacy Act of 1974: Federal agency data collection and use
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data security requires \textcolor{myblue}{comprehensive protection strategies and regulatory compliance}!
+	\end{frame}
+	
+	\begin{frame}{Slide 9: Data Access and Sharing}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data Access: Permissions and Secure Sharing:}
+		
+		\vspace{0.1cm}
+		\textbf{Most Important Aspect:}
+		\begin{itemize}
+			\item Ensuring data is readily accessible and shareable
+			\item To those who have requisite permission and need to access it
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Components of Data Access:}
+		\begin{itemize}
+			\item Data security
+			\item Data protection
+			\item Data permissions
+			\item Data access controls
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Regulatory Requirements:}
+		\begin{itemize}
+			\item Organizations must implement appropriate security measures
+			\item Encryption to safeguard data
+			\item Ensure confidentiality and integrity
+			\item Maintain compliance
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data access balances \textcolor{myblue}{availability with security and permissions}!
+	\end{frame}
+	
+	\begin{frame}{Slide 10: Data Compliance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Compliance: Legal and Regulatory Requirements:}
+		
+		\vspace{0.1cm}
+		\textbf{Three Basic Principles:}
+		\begin{enumerate}
+			\item \textbf{Obtaining Consent:}
+			\begin{itemize}
+				\item Data subjects must consent to data collection
+				\item Informed consent is essential
+				\item Consent can be withdrawn
+			\end{itemize}
+			\item \textbf{Data Minimization:}
+			\begin{itemize}
+				\item Collect only necessary data
+				\item Most effective privacy protection
+				\item Reduce risk and exposure
+			\end{itemize}
+			\item \textbf{Ensuring Rights of Data Subjects:}
+			\begin{itemize}
+				\item Right to access data
+				\item Right to correct data
+				\item Right to delete data
+				\item Right to be forgotten
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Key Regulatory Frameworks:}
+		\begin{itemize}
+			\item GDPR (Europe)
+			\item CCPA (California)
+			\item PIPL (China)
+			\item GLBA (US Financial)
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data compliance centers on \textcolor{myblue}{consent, minimization, and data subject rights}!
+	\end{frame}
+	
+	\begin{frame}{Slide 11: Board Responsibilities in Data Governance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Board of Directors' Role in Data Governance:}
+		
+		\vspace{0.1cm}
+		\textbf{Crucial Responsibilities:}
+		\begin{enumerate}
+			\item \textbf{Approval of Framework:}
+			\begin{itemize}
+				\item Overall data governance framework and policies
+				\item Clear guidelines on data quality, privacy, security
+				\item Compliance with relevant regulations
+			\end{itemize}
+			\item \textbf{Oversight of Compliance and Risk Management:}
+			\begin{itemize}
+				\item Compliance with legal, regulatory, and ethical standards
+				\item Data protection laws (GDPR), industry standards, internal policies
+			\end{itemize}
+			\item \textbf{Risk Assessment and Management:}
+			\begin{itemize}
+				\item Data breaches
+				\item Data quality issues
+				\item Misuse of data
+			\end{itemize}
+			\item \textbf{Regular Review:}
+			\begin{itemize}
+				\item Adapt to changing business needs
+				\item New technologies
+				\item Regulatory requirements
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Board sets the \textcolor{myblue}{"tone at the top"} for data governance culture!
+	\end{frame}
+	
+	\begin{frame}{Slide 12: Synthetic Data and AI Readiness}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Synthetic Data and AI Readiness:}
+		
+		\vspace{0.1cm}
+		\textbf{Synthetic Data Usage:}
+		\begin{itemize}
+			\item Increasing use to augment available data
+			\item Mitigates data risks (client or personally identifiable data)
+			\item Can be designed to avoid biases
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Advantages of Synthetic Data:}
+		\begin{itemize}
+			\item No privacy risks (doesn't come from real data subjects)
+			\item Can be more easily rid of problematic biases by design
+			\item Scalable and customizable
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Disadvantages:}
+		\begin{itemize}
+			\item May not be as precise as real data (especially visual data)
+			\item May differ from real data in ways not obvious
+			\item Requires careful validation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{AI-Ready Data:}
+		\begin{itemize}
+			\item Accurate, unbiased, well-structured
+			\item Cleaned and suitable for training
+			\item Improves accuracy and efficiency of AI models
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Synthetic data and AI readiness \textcolor{myblue}{require consideration in data strategy}!
+	\end{frame}
+	
+	\begin{frame}{Slide 13: Data Governance Process}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{The Data Governance Process:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Steps:}
+		\begin{enumerate}
+			\item \textbf{Data Strategy Development:}
+			\begin{itemize}
+				\item Vision and goals
+				\item Policies and procedures
+				\item Authorization levels
+			\end{itemize}
+			\item \textbf{Data Collection:}
+			\begin{itemize}
+				\item Identify sources
+				\item Verify provenance
+				\item Ensure legal compliance
+			\end{itemize}
+			\item \textbf{Data Quality Management:}
+			\begin{itemize}
+				\item Accuracy checks
+				\item Consistency validation
+				\item Integrity verification
+			\end{itemize}
+			\item \textbf{Data Classification:}
+			\begin{itemize}
+				\item Structure and confidentiality
+				\item Access controls
+			\end{itemize}
+			\item \textbf{Metadata Management:}
+			\begin{itemize}
+				\item Documentation
+				\item Data dictionary
+				\item Data mapping
+			\end{itemize}
+			\item \textbf{Data Security and Compliance:}
+			\begin{itemize}
+				\item Protection measures
+				\item Regulatory compliance
+				\item Monitoring and auditing
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data governance is a \textcolor{myblue}{continuous process across the data lifecycle}!
+	\end{frame}
+	
+	\begin{frame}{Slide 14: Roles and Responsibilities in Data Governance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Roles in Data Governance:}
+		
+		\vspace{0.1cm}
+		\textbf{Board of Directors:}
+		\begin{itemize}
+			\item Approve framework and policies
+			\item Oversee compliance and risk management
+			\item Ensure regular review and updates
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Data Governance Committee:}
+		\begin{itemize}
+			\item Overall oversight on all aspects
+			\item Approve data practices and policies
+			\item Not responsible for operational aspects
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Data Stewards:}
+		\begin{itemize}
+			\item Day-to-day data management
+			\item Ensure data quality and consistency
+			\item Implement policies
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Data Owners:}
+		\begin{itemize}
+			\item Accountability for specific data assets
+			\item Define access permissions
+			\item Ensure proper use
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Clear roles and responsibilities are \textcolor{myblue}{essential for effective data governance}!
+	\end{frame}
+	
+	\begin{frame}{Slide 15: Data Governance Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data Governance: Key Takeaways}
+		
+		\vspace{0.1cm}
+		\textbf{Core Components:}
+		\begin{enumerate}
+			\item \textbf{Strategy:}
+			\begin{itemize}
+				\item Vision and goals
+				\item Policies and authorization
+				\item Alternative data controls
+			\end{itemize}
+			\item \textbf{Quality:}
+			\begin{itemize}
+				\item Accuracy, consistency, integrity
+				\item Continuous monitoring
+				\item Alternative data scrutiny
+			\end{itemize}
+			\item \textbf{Provenance:}
+			\begin{itemize}
+				\item Legal right to use data
+				\item Copyright compliance
+				\item Vendor verification
+			\end{itemize}
+			\item \textbf{Classification:}
+			\begin{itemize}
+				\item Structure and confidentiality
+				\item Access controls
+			\end{itemize}
+			\item \textbf{Security:}
+			\begin{itemize}
+				\item Protection measures
+				\item Regulatory compliance
+				\item Data retention
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data governance is the \textcolor{myblue}{foundation for responsible AI}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 3: MODEL GOVERNANCE - SLIDES 16-30
+	% ============================================================
+	
+	\begin{frame}{Slide 16: What is a Model?}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Defining a Model (SR 11-7):}
+		
+		\vspace{0.1cm}
+		\textbf{SR 11-7 Definition:}
+		\begin{itemize}
+			\item "The term 'model' refers to a quantitative method, system, or approach"
+			\item "That applies statistical, economic, financial, or mathematical theories"
+			\item "Techniques, and assumptions to process input data into quantitative estimates"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Elements:}
+		\begin{enumerate}
+			\item \textbf{Quantity of Interest:}
+			\begin{itemize}
+				\item Numerical object whose future value is uncertain
+				\item Examples: portfolio value, revenue projection, client count
+			\end{itemize}
+			\item \textbf{Potential Future Scenarios:}
+			\begin{itemize}
+				\item Possible values of the quantity of interest
+				\item Each scenario assigned a weight (probability)
+			\end{itemize}
+			\item \textbf{Risk Measure:}
+			\begin{itemize}
+				\item Summarizes essential information
+				\item Examples: VaR, expected shortfall, average outcome
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} A model is a \textcolor{myblue}{quantitative method for processing data into estimates}!
+	\end{frame}
+	
+	\begin{frame}{Slide 17: Risk Modeling Elements}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Three Main Elements of Quantitative Risk Modeling:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Quantity of Interest:}
+		\begin{itemize}
+			\item Numerical object whose future value is uncertain
+			\item Examples:
+			\begin{itemize}
+				\item Portfolio value in ten business days
+				\item Revenue projection over next five years
+				\item Expected number of new clients by year-end
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Potential Future Scenarios:}
+		\begin{itemize}
+			\item Possible values of the quantity of interest
+			\item Each scenario assigned a weight (probability)
+			\item Examples:
+			\begin{itemize}
+				\item Portfolio value conditioned on investment decisions
+				\item Revenue after business model changes
+				\item New clients after advertising campaign
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. Risk Measure:}
+		\begin{itemize}
+			\item Summarizes essential information from scenarios
+			\item Examples:
+			\begin{itemize}
+				\item Value at Risk (VaR)
+				\item Expected Shortfall (ES)
+				\item Average outcome across all scenarios
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Risk models provide \textcolor{myblue}{structured approach to envision the future}!
+	\end{frame}
+	
+	\begin{frame}{Slide 18: Important Model Considerations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Considerations in Risk Modeling:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Completeness of Scenario Sets:}
+		\begin{itemize}
+			\item Challenging to anticipate every potential future scenario
+			\item Historical data may not reflect rare events
+			\item Expert judgment can be difficult
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Feedback Effects:}
+		\begin{itemize}
+			\item Scenarios and decisions may influence other market participants
+			\item Scenario sets and weights may need ongoing updates
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. Communication of Results:}
+		\begin{itemize}
+			\item Reports should provide summary of main assumptions
+			\item Ensure transparency and avoid complacency
+			\item Reflect perceived risk based on uncertainty and exposure
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{4. Regulatory Context:}
+		\begin{itemize}
+			\item SR 11-7 (2011) established regulatory standards
+			\item OCC Handbook (2021) includes AI/ML perspectives
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Effective risk modeling requires \textcolor{myblue}{completeness, awareness of feedback, and clear communication}!
+	\end{frame}
+	
+	\begin{frame}{Slide 19: Model Governance Policies}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Governance Policies - Key Elements:}
+		
+		\vspace{0.1cm}
+		\textbf{Core Policy Areas:}
+		\begin{enumerate}
+			\item \textbf{Defining What Constitutes a Model:}
+			\begin{itemize}
+				\item Distinction between model and end-user tool
+				\item Gray areas need consistent adherence
+				\item Presence of uncertainty may indicate a model
+			\end{itemize}
+			\item \textbf{Model Risk Definition:}
+			\begin{itemize}
+				\item Agree on internal definition
+				\item Align with regulatory requirements
+			\end{itemize}
+			\item \textbf{Risk Tier Identification:}
+			\begin{itemize}
+				\item Drives depth and frequency of validation
+				\item Materiality, complexity, exposure
+			\end{itemize}
+			\item \textbf{Model Validation Definition:}
+			\begin{itemize}
+				\item Establish expectations for validation process
+				\item Documentation standards
+			\end{itemize}
+			\item \textbf{Model Risk Appetite:}
+			\begin{itemize}
+				\item Document institution's risk appetite
+				\item Outline procedures for unacceptable risks
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Written policies are the \textcolor{myblue}{foundation of model governance frameworks}!
+	\end{frame}
+	
+	\begin{frame}{Slide 20: Model Documentation Standards}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Documentation - SR 11-7 Guidance:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Requirements:}
+		\begin{itemize}
+			\item Strong governance includes documentation of model development and validation
+			\item Sufficiently detailed to allow parties unfamiliar with a model to understand:
+			\begin{itemize}
+				\item How the model operates
+				\item Limitations of the model
+				\item Key assumptions of the model
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Documentation Best Practices:}
+		\begin{enumerate}
+			\item \textbf{Comprehensive:}
+			\begin{itemize}
+				\item Cover all aspects of model lifecycle
+				\item Include development and validation
+				\item Document all key decisions
+			\end{itemize}
+			\item \textbf{Accessible:}
+			\begin{itemize}
+				\item Clear language
+				\item Well-organized
+				\item Executive summaries
+			\end{itemize}
+			\item \textbf{Maintained:}
+			\begin{itemize}
+				\item Updated with changes
+				\item Version control
+				\item Historical records
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Documentation must be \textcolor{myblue}{sufficiently detailed for others to understand the model}!
+	\end{frame}
+	
+	\begin{frame}{Slide 21: Model Inventory}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Inventory - Comprehensive Tracking:}
+		
+		\vspace{0.1cm}
+		\textbf{What to Include:}
+		\begin{enumerate}
+			\item \textbf{Model Identification:}
+			\begin{itemize}
+				\item Model owner, user, and developer information
+				\item Purpose and brief description
+				\item Applicable products
+			\end{itemize}
+			\item \textbf{Methodology:}
+			\begin{itemize}
+				\item Description of model methodology
+				\item Model classification (e.g., Monte Carlo, logistic regression)
+				\item Whether it's an AI/ML model
+			\end{itemize}
+			\item \textbf{Development:}
+			\begin{itemize}
+				\item In-house or vendor developed
+				\item Use and frequency
+				\item Restrictions and limitations
+			\end{itemize}
+			\item \textbf{Assumptions and Limitations:}
+			\begin{itemize}
+				\item Key assumptions
+				\item Known weaknesses
+				\item Management overlays
+			\end{itemize}
+			\item \textbf{Documentation and History:}
+			\begin{itemize}
+				\item Locations of documentation and validation reports
+				\item Access to model code and databases
+				\item History of updates, approvals, validations
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model inventory enhances \textcolor{myblue}{transparency and tracking} of all models!
+	\end{frame}
+	
+	\begin{frame}{Slide 22: Model Landscape and Interdependencies}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Landscape - Understanding Interdependencies:}
+		
+		\vspace{0.1cm}
+		\textbf{Why Model Landscape Matters:}
+		\begin{itemize}
+			\item Models should not be viewed in isolation
+			\item Outputs from one model often serve as inputs for others
+			\item Transparency regarding interdependencies is vital
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Considerations:}
+		\begin{enumerate}
+			\item \textbf{Interdependencies:}
+			\begin{itemize}
+				\item Upstream and downstream dependencies
+				\item Impact on key business decisions
+				\item Critical models identification
+			\end{itemize}
+			\item \textbf{Aggregate Risk:}
+			\begin{itemize}
+				\item Influenced by interdependencies
+				\item Shared assumptions and methodologies
+				\item Models that can affect multiple outcomes
+			\end{itemize}
+			\item \textbf{Duplication:}
+			\begin{itemize}
+				\item Similar models used in different parts
+				\item Different assumptions
+				\item Inefficiency and risk
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model landscape shows \textcolor{myblue}{how models interact and affect each other}!
+	\end{frame}
+	
+	\begin{frame}{Slide 23: AI/ML Model Registration Considerations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Registering AI/ML Models - New Aspects:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Complexity of Methodology and Design:}
+		\begin{itemize}
+			\item AI/ML models learn autonomously in developer-defined range
+			\item Consider: chosen methodologies (neural networks vs. linear regression)
+			\item Interpretability indicators (number of hidden layers, parameters)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Data Usage:}
+		\begin{itemize}
+			\item Volume of required data or number of features
+			\item Complexity of data structures (unlabeled, metadata)
+			\item Data quality (poorly labeled, low quality, unstructured)
+			\item Variable interactions and transformations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. Output Parameters:}
+		\begin{itemize}
+			\item Supervised vs. unsupervised learning
+			\item Prediction vs. sentiment analysis vs. recommendations
+			\item No direct way to evaluate output accuracy for unsupervised
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} AI/ML registration requires \textcolor{myblue}{additional considerations beyond traditional models}!
+	\end{frame}
+	
+	\begin{frame}{Slide 24: Model Risk Ranking}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Risk Ranking Factors:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Factors:}
+		\begin{enumerate}
+			\item \textbf{Materiality:}
+			\begin{itemize}
+				\item Economic consequences of misuse
+				\item Operational impact
+				\item Reputational consequences
+				\item Usage by different parties
+				\item Impact on decisions, financial statements, or regulatory reporting
+			\end{itemize}
+			\item \textbf{Complexity:}
+			\begin{itemize}
+				\item May elevate risk ranking
+				\item Even if materiality is low
+				\item AI/ML models often have high complexity
+			\end{itemize}
+			\item \textbf{Exposure:}
+			\begin{itemize}
+				\item If model affects published financial reports
+				\item Risk ranking may be elevated
+				\item Even simple models can have high exposure
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Important Note:}
+		\begin{itemize}
+			\item Minimum standards of model risk assessment should apply to all models
+			\item Regardless of materiality
+			\item Absence of assessment introduces its own model risk
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Risk ranking considers \textcolor{myblue}{materiality, complexity, and exposure}!
+	\end{frame}
+	
+	\begin{frame}{Slide 25: Model Performance Monitoring Metrics}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Performance Monitoring Metrics:}
+		
+		\vspace{0.1cm}
+		\textbf{Classification Models:}
+		\begin{itemize}
+			\item Accuracy
+			\item Precision
+			\item Recall
+			\item F1 Score
+			\item Area Under the ROC Curve (AUC)
+			\item Confusion Matrices
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Regression Models:}
+		\begin{itemize}
+			\item Mean Absolute Error (MAE)
+			\item Mean Squared Error (MSE)
+			\item Coefficient of Determination (R-squared)
+			\item Root Mean Square Error (RMSE)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Additional Metrics:}
+		\begin{itemize}
+			\item Clustering metrics
+			\item Deep learning metrics
+			\item GenAI performance metrics (see Chapter 10, Module 2)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Performance monitoring must be tailored to model type
+			\item Metric must be appropriate for the model
+			\item Model validation should assess this
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Performance metrics must be \textcolor{myblue}{appropriate for the specific model type}!
+	\end{frame}
+	
+	\begin{frame}{Slide 26: Three Lines of Defense - Overview}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Three Lines of Defense in Model Risk Management:}
+		
+		\vspace{0.1cm}
+		\textbf{First Line (Business and Model Owners/Developers):}
+		\begin{itemize}
+			\item Owns the model and its performance
+			\item Responsible for designing and implementing models
+			\item Operates daily/weekly performance dashboards
+			\item Owns data quality for model inputs
+			\item First to react to threshold breaches
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Second Line (Independent Risk Management/Model Validation):}
+		\begin{itemize}
+			\item Sets model risk management policy
+			\item Conducts independent model validations
+			\item Challenges First Line's performance assessments
+			\item Maintains enterprise-wide model inventory
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Third Line (Internal Audit):}
+		\begin{itemize}
+			\item Provides independent assurance to the board
+			\item Reviews whether monitoring is appropriately archived
+			\item Ensures policies are consistently followed
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Three lines provide \textcolor{myblue}{checks and balances in model risk management}!
+	\end{frame}
+	
+	\begin{frame}{Slide 27: First Line - Model Owners and Developers}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{First Line of Defense - Detailed Responsibilities:}
+		
+		\vspace{0.1cm}
+		\textbf{Model Owners:}
+		\begin{itemize}
+			\item Accountable for proper development, validation, approval
+			\item Findings remediation, implementation, use
+			\item Ongoing performance monitoring and reporting
+			\item Change management
+			\item Capture model characterization in inventory
+			\item Assess model materiality
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Model Developers:}
+		\begin{itemize}
+			\item Central to creation of models
+			\item Decisions throughout modeling cycle affect risk
+			\item Proper documentation saves time
+			\item Act as both producers and recipients of validation feedback
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{AI/ML Considerations:}
+		\begin{itemize}
+			\item Ensure continuous learning models don't drift into unvalidated states
+			\item Work closely with MLOps teams
+			\item Data scientists must interpret metrics in business context
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model owners and developers are \textcolor{myblue}{responsible for model performance and accountability}!
+	\end{frame}
+	
+	\begin{frame}{Slide 28: Second Line - Model Risk Management}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Second Line of Defense - Model Risk Function:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Responsibilities:}
+		\begin{enumerate}
+			\item \textbf{Framework Development:}
+			\begin{itemize}
+				\item Develop and maintain model risk management framework
+				\item Establish general validation standards
+			\end{itemize}
+			\item \textbf{Model Inventory:}
+			\begin{itemize}
+				\item Maintain model inventory
+				\item Combined with material aspects of model landscape
+			\end{itemize}
+			\item \textbf{Materiality Thresholds:}
+			\begin{itemize}
+				\item Set and maintain thresholds for model materiality
+				\item Related to business decisions
+			\end{itemize}
+			\item \textbf{Validation Activities:}
+			\begin{itemize}
+				\item Ensure risk model validation activities occur
+				\item Report validation results to board
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{AI/ML Considerations:}
+		\begin{itemize}
+			\item Deep expertise in validating complex ML models
+			\item Assessing novel performance metrics
+			\item Data drift detection for high-dimensional data
+			\item Fairness/bias assessments
+			\item Tools to "look inside the black box"
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Second Line provides \textcolor{myblue}{independent challenge and oversight} of models!
+	\end{frame}
+	
+	\begin{frame}{Slide 29: Third Line - Internal Audit}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Third Line of Defense - Internal Audit:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Responsibilities:}
+		\begin{enumerate}
+			\item \textbf{Independent Assurance:}
+			\begin{itemize}
+				\item Provide assurance to the board
+				\item Model risk management framework is well-designed
+				\item Operating effectively
+			\end{itemize}
+			\item \textbf{Annual Reviews:}
+			\begin{itemize}
+				\item Monitoring evidence appropriately archived
+				\item Performance exceptions escalated according to policy
+				\item Policies consistently followed and up-to-date
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{AI/ML Considerations:}
+		\begin{itemize}
+			\item Audit teams need sufficient understanding of ML concepts
+			\item Focus on robustness of controls over automated ML pipelines
+			\item Data governance for ML training data
+			\item Adequacy of Second Line challenge for novel ML approaches
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Audit is "meta-validation" or "validation of validation"
+			\item Not the primary model risk management function
+			\item Vital and necessary independent check
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Internal Audit provides \textcolor{myblue}{independent verification} of the entire MRM framework!
+	\end{frame}
+	
+	\begin{frame}{Slide 30: Communication and Interaction}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Communication and Interaction in Model Governance:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Areas:}
+		\begin{enumerate}
+			\item \textbf{Breach Notification:}
+			\begin{itemize}
+				\item How does First Line formally communicate performance breaches?
+				\item What information must be provided?
+			\end{itemize}
+			\item \textbf{Independent Review:}
+			\begin{itemize}
+				\item Second Line's responsibilities and timelines
+				\item Verifying issues and assessing materiality
+				\item Challenging root cause analysis and remediation plans
+			\end{itemize}
+			\item \textbf{Dispute Resolution:}
+			\begin{itemize}
+				\item If First and Second Lines disagree
+				\item Documented escalation path
+				\item Model Risk Committee or Chief Risk Officer
+			\end{itemize}
+			\item \textbf{Reporting:}
+			\begin{itemize}
+				\item How findings flow to senior management and board?
+				\item Consolidated and understandable manner
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Common Failure Points:}
+		\begin{itemize}
+			\item First Line incentivized to downplay poor performance
+			\item Second Line lacking business context or technical depth
+			\item Third Line focusing on process rather than substance
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Effective communication is \textcolor{myblue}{vital for successful model governance}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 4: MODEL DEVELOPMENT AND TESTING - SLIDES 31-45
+	% ============================================================
+	
+	\begin{frame}{Slide 31: Model Development Overview}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Development Process - Overview:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Steps:}
+		\begin{enumerate}
+			\item \textbf{Define Objectives and Scope:}
+			\begin{itemize}
+				\item Clear problem or risk being addressed
+				\item Applicable products
+				\item Required data and desired outcomes
+			\end{itemize}
+			\item \textbf{Data Collection and Preprocessing:}
+			\begin{itemize}
+				\item Gather relevant data
+				\item Clean and transform data
+				\item Handle missing values or outliers
+			\end{itemize}
+			\item \textbf{Data Analysis and Visualization:}
+			\begin{itemize}
+				\item Gain insights into data
+				\item Identify patterns or relationships
+				\item Understand limitations or biases
+			\end{itemize}
+			\item \textbf{Feature Engineering:}
+			\begin{itemize}
+				\item Select and engineer appropriate features
+				\item Transform or combine variables
+				\item Dimensionality reduction
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model development is a \textcolor{myblue}{systematic process from objectives to implementation}!
+	\end{frame}
+	
+	\begin{frame}{Slide 32: Model Development Steps (Continued)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Development Process (Continued):}
+		
+		\vspace{0.1cm}
+		\textbf{5. Model Selection:}
+		\begin{itemize}
+			\item Choose modeling approach
+			\item Comprehensive evaluation of alternatives
+			\item Document rationale
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{6. Model Training/Calibration:}
+		\begin{itemize}
+			\item Optimize parameters and hyperparameters
+			\item Best fit data and minimize errors
+			\item Avoid data leakage (using future or concurrent data)
+			\item Use cross-validation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{7. Developer Testing:}
+		\begin{itemize}
+			\item Thorough testing before deployment
+			\item Evaluate performance
+			\item Identify issues early
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{8. Documentation:}
+		\begin{itemize}
+			\item Clear statement of purpose
+			\item Sound design, theory, and logic
+			\item Robust methodologies
+			\item Rigorous data quality assessment
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} SR 11-7 requires \textcolor{myblue}{sound development process and thorough testing}!
+	\end{frame}
+	
+	\begin{frame}{Slide 33: SR 11-7 Guidance on Model Development}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{SR 11-7 Guidance on Model Development:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Requirements:}
+		\begin{itemize}
+			\item Clear statement of purpose to ensure model is developed in line with its intended use
+			\item Sound design, theory, and logic underlying the model
+			\item Robust model methodologies and processing components
+			\item Rigorous assessment of data quality and relevance
+			\item Appropriate documentation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Testing Requirements:}
+		\begin{itemize}
+			\item Integral part of model development
+			\item Various components and overall functioning evaluated
+			\item Show model is performing as intended
+			\item Demonstrate accuracy, robustness, and stability
+			\item Evaluate limitations and assumptions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Important Note:}
+		\begin{itemize}
+			\item Organizations should ensure development of judgmental and qualitative aspects is also sound
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} SR 11-7 requires \textcolor{myblue}{comprehensive development and testing of all model aspects}!
+	\end{frame}
+	
+	\begin{frame}{Slide 34: Software Testing Types}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Types of Software Testing:}
+		
+		\vspace{0.1cm}
+		\textbf{Testing Chronological Order:}
+		\begin{enumerate}
+			\item \textbf{Unit Tests:}
+			\begin{itemize}
+				\item Validate each piece of code performs as designed
+			\end{itemize}
+			\item \textbf{Component Tests:}
+			\begin{itemize}
+				\item Verify functionality of individual code sections
+			\end{itemize}
+			\item \textbf{Integration Tests:}
+			\begin{itemize}
+				\item Verify interfaces between components
+			\end{itemize}
+			\item \textbf{System Tests:}
+			\begin{itemize}
+				\item Ensure completely integrated system meets requirements
+			\end{itemize}
+			\item \textbf{Performance Tests:}
+			\begin{itemize}
+				\item Assess speed, responsiveness, and stability
+			\end{itemize}
+			\item \textbf{Regression Tests:}
+			\begin{itemize}
+				\item Verify system continues to function after modifications
+			\end{itemize}
+			\item \textbf{Acceptance Tests:}
+			\begin{itemize}
+				\item Determine if model is ready for deployment
+			\end{itemize}
+			\item \textbf{Adversarial Testing:}
+			\begin{itemize}
+				\item "Red team" evaluation of AI models
+				\item Extreme scenarios and edge cases
+				\item Prompt injection and unexpected queries
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Testing should be \textcolor{myblue}{comprehensive and start as early as possible}!
+	\end{frame}
+	
+	\begin{frame}{Slide 35: White-Box vs Black-Box Testing}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Testing Approaches:}
+		
+		\vspace{0.1cm}
+		\textbf{White-Box Testing:}
+		\begin{itemize}
+			\item Testers have access to internal data structures, algorithms, and code
+			\item Testing at unit level from developer's perspective
+			\item Line-by-line proofreading of code
+			\item More effective for finding specific issues
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Black-Box Testing:}
+		\begin{itemize}
+			\item Treats software as a closed box
+			\item From user's perspective
+			\item No knowledge of internal implementation
+			\item Reduces likelihood of bias
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Gray-Box Testing:}
+		\begin{itemize}
+			\item Between white-box and black-box
+			\item Informed by knowledge about functional specifications
+			\item Knowledge of architecture of underlying code
+			\item Does not access the code itself
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{When to Use:}
+		\begin{itemize}
+			\item White-box: internally developed models, early development
+			\item Black-box: proprietary vendor models, functional testing
+			\item Gray-box: distributed applications, testing component integration
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Testing approach depends on \textcolor{myblue}{model type, development stage, and accessibility}!
+	\end{frame}
+	
+	\begin{frame}{Slide 36: Test Configurations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Effective Test Configurations:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Principles:}
+		\begin{itemize}
+			\item Tests need to be appropriately configured
+			\item Usefulness hinges on adequacy and sufficiency of configurations
+			\item Testers should not limit configurations solely to artificial cases
+			\item Most valuable test configurations emerge from real-world situations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Less Realistic Parameters (Better Testing):}
+		\begin{itemize}
+			\item Missing trades
+			\item Excessive trades
+			\item Incorrect scales or mappings
+			\item Extreme parameter values
+			\item Parameters estimated from insufficient data
+			\item Data provided by inexperienced users
+			\item Variations in compilers or hardware
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Recommendation:}
+		\begin{itemize}
+			\item Establish preliminary process that automatically generates test results from available data
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} The less realistic the test parameters, \textcolor{myblue}{the better the testing}!
+	\end{frame}
+	
+	\begin{frame}{Slide 37: The Use Test}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{The Use Test - Qualitative Assessment:}
+		
+		\vspace{0.1cm}
+		\textbf{What is the Use Test?}
+		\begin{itemize}
+			\item Examines model within its context
+			\item Considers human interaction and actual usage
+			\item Assesses acceptance of the model
+			\item Evaluates interpretation and application of results
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Focus Areas:}
+		\begin{enumerate}
+			\item \textbf{People, Not Numbers:}
+			\begin{itemize}
+				\item Focuses on credible stories of acceptance
+				\item Success and failure stories
+				\item Technical challenges take a back seat
+			\end{itemize}
+			\item \textbf{Crucial Questions:}
+			\begin{itemize}
+				\item Are results utilized appropriately?
+				\item Do they prove useful?
+				\item If not, why?
+			\end{itemize}
+			\item \textbf{Exploration Areas:}
+			\begin{itemize}
+				\item Acceptance and trust
+				\item Comprehensibility of results
+				\item Communication of feedback to modelers
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Use test focuses on \textcolor{myblue}{how people interact with and use the model}!
+	\end{frame}
+	
+	\begin{frame}{Slide 38: Use Test Reporting}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Use Test - Reporting and Impact:}
+		
+		\vspace{0.1cm}
+		\textbf{Reporting:}
+		\begin{itemize}
+			\item Results typically presented to senior management
+			\item Not documented as technical reports or spreadsheets
+			\item Easier to communicate results
+			\item Minimizes risk of being seen as arduous requirement
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Organizational Impact:}
+		\begin{itemize}
+			\item Contributes to improving culture of risk modeling
+			\item Enhances risk management culture
+			\item Bridges gap between technical and business perspectives
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Benefits:}
+		\begin{itemize}
+			\item Promotes acceptance and trust
+			\item Identifies usability issues
+			\item Improves model communication
+			\item Drives continuous improvement
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Use test is qualitative in nature
+			\item Difficult to follow a standard procedure
+			\item Requires ongoing commitment
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Use test reporting focuses on \textcolor{myblue}{senior management communication and culture improvement}!
+	\end{frame}
+	
+	\begin{frame}{Slide 39: Limits on Model Use}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Should There Be Limits on Model Use?}
+		
+		\vspace{0.1cm}
+		\textbf{Why Limits Are Needed:}
+		\begin{itemize}
+			\item Every QRM is based on underlying assumptions
+			\item Assumptions should be clearly stated
+			\item Identify model limitations and weaknesses
+			\item Prevent misuse
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Types of Limits:}
+		\begin{enumerate}
+			\item \textbf{Product Applicability:}
+			\begin{itemize}
+				\item Model approved for specific products only
+				\item Example: Standard interest rate swaptions only
+				\item Not for Bermudan swaption without additional validation
+			\end{itemize}
+			\item \textbf{Access Restrictions:}
+			\begin{itemize}
+				\item Who can use the model
+				\item Training requirements
+				\item Authorization levels
+			\end{itemize}
+			\item \textbf{Portfolio Size Limits:}
+			\begin{itemize}
+				\item Particularly for new markets or instruments
+				\item Limited data or experience
+				\item Risk ranking can change as portfolio grows
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model limits prevent \textcolor{myblue}{misuse and ensure risk ranking stays appropriate}!
+	\end{frame}
+	
+	\begin{frame}{Slide 40: Model Use Guidelines}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Three General Guidelines for Risk Modeling Culture:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Awareness:}
+		\begin{itemize}
+			\item Be aware of limitations and assumptions of risk modeling
+			\item Understand your company's history with QRMs
+			\item Know risks entailed and validation processes in place
+			\item Stay informed about market practices
+			\item Recognize that the world is constantly changing
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Transparency:}
+		\begin{itemize}
+			\item Transparently communicate assumptions, limitations, and documentation
+			\item Provide detailed documentation with executive summaries
+			\item Document decision-making process
+			\item Document all validation activities, including unsuccessful attempts
+			\item Engage in open communication with end users
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. Experience:}
+		\begin{itemize}
+			\item Learn from past modeling endeavors
+			\item Apply relevant lessons
+			\item Emphasize proper project management
+			\item Develop prototypes early
+			\item Establish and maintain libraries of reusable code
+			\item Seek input from other modelers and external experts
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Guidelines foster \textcolor{myblue}{culture that views validation as opportunity for insight}!
+	\end{frame}
+	
+	\begin{frame}{Slide 41: SR 11-7 Adaptation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Adapting SR 11-7 Guidelines:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Principle:}
+		\begin{itemize}
+			\item SR 11-7 established regulatory guidance
+			\item Each institution needs to adapt to specific situation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Factors to Consider:}
+		\begin{enumerate}
+			\item \textbf{Specific Models:}
+			\begin{itemize}
+				\item Type of models used
+				\item Complexity and risk profile
+			\end{itemize}
+			\item \textbf{Institution Size and Structure:}
+			\begin{itemize}
+				\item Large vs. small institution
+				\item Organizational structure
+				\item Resources available
+			\end{itemize}
+			\item \textbf{Governance Framework:}
+			\begin{itemize}
+				\item Existing governance structures
+				\item Board and committee oversight
+			\end{itemize}
+			\item \textbf{Regulatory Requirements:}
+			\begin{itemize}
+				\item Specific regulatory expectations
+				\item Jurisdictional requirements
+			\end{itemize}
+			\item \textbf{Budget Constraints:}
+			\begin{itemize}
+				\item Resources allocated to model risk
+				\item Cost-benefit considerations
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} SR 11-7 is general guidance that \textcolor{myblue}{must be adapted to each institution's situation}!
+	\end{frame}
+	
+	\begin{frame}{Slide 42: Model Changes Process}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Changes - Governance Process:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Change Management Process:}
+		\begin{itemize}
+			\item Structured process for making changes
+			\item Steps: change requests, impact assessment, documentation, validation, approval
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Documentation:}
+		\begin{itemize}
+			\item Comprehensive documentation required
+			\item Reason for change, modifications, validation results, approvals
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. Independent Review:}
+		\begin{itemize}
+			\item Ongoing validation of changes
+			\item Performed by individuals not involved in modification
+			\item Assess accuracy, reliability, compliance, and risks
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{4. Approval:}
+		\begin{itemize}
+			\item Final approval through defined governance process
+			\item Detailed documentation in model inventory
+			\item Rationale, decision, conditions, or limitations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{5. Review of Proposed Changes:}
+		\begin{itemize}
+			\item Model owner communicates change to MRM team
+			\item Assessment for materiality
+			\item Change-based validation if material
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model changes require \textcolor{myblue}{structured governance and independent review}!
+	\end{frame}
+	
+	\begin{frame}{Slide 43: AI/ML Model Review Differences}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{AI/ML Review Framework Differences:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Frequency:}
+		\begin{itemize}
+			\item More frequent monitoring for AI/ML models
+			\item Higher complexity with more parameters
+			\item Undesirable outcomes under certain conditions
+			\item Greater susceptibility to data drift
+			\item Monitoring dashboards may be useful
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Validation Stakeholders:}
+		\begin{itemize}
+			\item Wider range of stakeholders affected
+			\item Data protection regulation and ethical policies
+			\item Include HR, compliance, operational risk
+			\item Approval structure modifications needed
+			\item Higher familiarity with AI/ML necessary
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. Validation Content:}
+		\begin{itemize}
+			\item Focus on explainability
+			\item Benchmarking against traditional models
+			\item Assessment based on different data sets
+			\item Assessment of specific cases (edge cases)
+			\item Back testing and cross-validation
+			\item Reporting component for bias detection
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} AI/ML models require \textcolor{myblue}{more frequent review and broader stakeholder involvement}!
+	\end{frame}
+	
+	\begin{frame}{Slide 44: Implementation and Monitoring}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Implementation and Monitoring of Model Changes:}
+		
+		\vspace{0.1cm}
+		\textbf{Implementation:}
+		\begin{itemize}
+			\item Approved changes implemented in controlled manner
+			\item Proper documentation
+			\item Include changes to performance monitoring
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Monitoring:}
+		\begin{itemize}
+			\item Ongoing monitoring continues after implementation
+			\item Ensure changes achieve intended objectives
+			\item Remain compliant with regulatory requirements
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{AI/ML Automation:}
+		\begin{itemize}
+			\item Growing volume of AI/ML models
+			\item Potential need for more frequent retraining
+			\item Greater impact of model errors
+			\item Automated ongoing controls become more relevant
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Automated controls where practical and responsible
+			\item Balance automation with oversight
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model changes must be \textcolor{myblue}{implemented with controls and continuously monitored}!
+	\end{frame}
+	
+	\begin{frame}{Slide 45: Model Changes Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Changes - Key Takeaways:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Principles:}
+		\begin{enumerate}
+			\item \textbf{Structured Process:}
+			\begin{itemize}
+				\item Change requests, assessment, validation, approval
+			\end{itemize}
+			\item \textbf{Documentation:}
+			\begin{itemize}
+				\item Comprehensive record of all changes
+				\item Rationale and approvals
+			\end{itemize}
+			\item \textbf{Independent Review:}
+			\begin{itemize}
+				\item Ongoing validation
+				\item Objective assessment
+			\end{itemize}
+			\item \textbf{Frequency:}
+			\begin{itemize}
+				\item AI/ML models need more frequent review
+				\item Address data drift and complexity
+			\end{itemize}
+			\item \textbf{Stakeholders:}
+			\begin{itemize}
+				\item Broader range of stakeholders
+				\item Include compliance, HR, operational risk
+			\end{itemize}
+			\item \textbf{Monitoring:}
+			\begin{itemize}
+				\item Continuous monitoring after changes
+				\item Automated controls where practical
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model changes require \textcolor{myblue}{comprehensive governance throughout the lifecycle}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 5: MODEL VALIDATION - SLIDES 46-65
+	% ============================================================
+	
+	\begin{frame}{Slide 46: Model Validation Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{What is Model Validation?}
+		
+		\vspace{0.1cm}
+		\textbf{Definition:}
+		\begin{itemize}
+			\item Process of rigorously testing the model, inputs, outputs, governance, etc.
+			\item To try to identify the extent of residual model risk
+			\item Assess mitigating controls
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Aspects:}
+		\begin{itemize}
+			\item Critical component in identifying model risk
+			\item Involves qualitative and quantitative aspects
+			\item Follows model lifecycle
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{When Validation Occurs:}
+		\begin{enumerate}
+			\item \textbf{Initial Validation:}
+			\begin{itemize}
+				\item Prior to implementation and usage
+				\item Baseline assessment
+			\end{itemize}
+			\item \textbf{Routine Periodic Validation:}
+			\begin{itemize}
+				\item Annual reviews
+				\item In-depth periodic baseline revalidations
+			\end{itemize}
+			\item \textbf{Change-Based Validation:}
+			\begin{itemize}
+				\item Triggered by material changes
+				\item When model owner makes modifications
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model validation is the \textcolor{myblue}{rigorous testing to identify residual risk}!
+	\end{frame}
+	
+	\begin{frame}{Slide 47: Validation Lifecycle}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Validation Lifecycle:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Stages:}
+		\begin{enumerate}
+			\item \textbf{Model Identification:}
+			\begin{itemize}
+				\item Recognize and classify the model
+			\end{itemize}
+			\item \textbf{Inventory:}
+			\begin{itemize}
+				\item Record in model inventory
+				\item Schedule for validation
+			\end{itemize}
+			\item \textbf{Initial Validation:}
+			\begin{itemize}
+				\item Baseline validation prior to implementation
+			\end{itemize}
+			\item \textbf{Production and Monitoring:}
+			\begin{itemize}
+				\item Back testing and performance monitoring
+				\item Ongoing throughout production usage
+			\end{itemize}
+			\item \textbf{Periodic Validation:}
+			\begin{itemize}
+				\item Routine validations
+				\item Annual or more frequent
+			\end{itemize}
+			\item \textbf{Change-Based Validation:}
+			\begin{itemize}
+				\item Triggered by material changes
+			\end{itemize}
+			\item \textbf{Retirement:}
+			\begin{itemize}
+				\item Store in retired model inventory
+				\item Decommission
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Validation follows the \textcolor{myblue}{entire model lifecycle from identification to retirement}!
+	\end{frame}
+	
+	\begin{frame}{Slide 48: Validation Activities}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Validation Activities Include:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Review Areas:}
+		\begin{enumerate}
+			\item \textbf{Data Assessment:}
+			\begin{itemize}
+				\item Appropriateness of data sources
+				\item Data analysis (proxies, time series lengths)
+			\end{itemize}
+			\item \textbf{Assumptions and Parameters:}
+			\begin{itemize}
+				\item Assessment of any model assumptions
+				\item Parameter evaluation
+			\end{itemize}
+			\item \textbf{Limitations:}
+			\begin{itemize}
+				\item Identification of limitations, strengths, weaknesses
+				\item Approved use cases and users
+			\end{itemize}
+			\item \textbf{Implementation:}
+			\begin{itemize}
+				\item Appropriateness of implementation platform
+				\item Usage of expert judgment and overlays
+			\end{itemize}
+			\item \textbf{Conceptual Soundness:}
+			\begin{itemize}
+				\item Review of conceptual soundness
+				\item Assessment of benchmarks and best practices
+			\end{itemize}
+			\item \textbf{Performance Monitoring:}
+			\begin{itemize}
+				\item Analysis of ongoing monitoring plans
+				\item Frequency, key risk indicators, escalation plans
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Validation covers \textcolor{myblue}{all aspects of the model and its use}!
+	\end{frame}
+	
+	\begin{frame}{Slide 49: Validation Activities (Continued)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Validation Activities (Continued):}
+		
+		\vspace{0.1cm}
+		\textbf{Additional Review Areas:}
+		\begin{enumerate}
+			\item \textbf{Documentation:}
+			\begin{itemize}
+				\item Review quality of documentation
+				\item Ensure backup plans exist (internal and external)
+			\end{itemize}
+			\item \textbf{Controls:}
+			\begin{itemize}
+				\item Review controls around implementation and usage
+				\item Access controls
+			\end{itemize}
+			\item \textbf{Outcomes Analysis:}
+			\begin{itemize}
+				\item Appropriateness of dependent variable
+				\item Support for business objectives
+			\end{itemize}
+			\item \textbf{Testing:}
+			\begin{itemize}
+				\item Stress and scenario tests
+				\item Model boundary testing
+				\item Parameter stability
+			\end{itemize}
+			\item \textbf{Backtesting:}
+			\begin{itemize}
+				\item Appropriate cadence with model usage
+				\item VaR models: daily monitoring
+				\item Credit risk models: monthly
+				\item Asset-liability models: quarterly
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Validation includes \textcolor{myblue}{ongoing testing and monitoring appropriate to model type}!
+	\end{frame}
+	
+	\begin{frame}{Slide 50: Initial Validation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Initial Validation - Three Key Goals:}
+		
+		\vspace{0.1cm}
+		\textbf{Goal 1: Operational Feasibility:}
+		\begin{itemize}
+			\item Checked and confirmed
+			\item Model can run as intended without technical malfunctions
+			\item Preproduction phase to run on intended schedule
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Goal 2: Proper Documentation:}
+		\begin{itemize}
+			\item Adheres to firm-wide standards
+			\item Model development standards
+			\item Documentation standards
+			\item Implementation standards
+			\item Model monitoring standards
+			\item Third-party governance standards
+			\item Includes executive summaries
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Goal 3: User Training:}
+		\begin{itemize}
+			\item Model users receive sufficient training
+			\item Interpret and utilize results effectively
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Results form basis for official approval (sign-off)
+			\item Assumptions must be justified
+			\item Limitations and weaknesses documented
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Initial validation ensures \textcolor{myblue}{operational feasibility, documentation, and user training}!
+	\end{frame}
+	
+	\begin{frame}{Slide 51: Ongoing Validation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Ongoing (Periodic) Validation:}
+		
+		\vspace{0.1cm}
+		\textbf{Primary Objective:}
+		\begin{itemize}
+			\item Observe whether model remains aligned with intended purpose
+			\item Assumptions remain valid
+			\item Data still appropriate
+			\item Performance monitoring indicates expected performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Activities:}
+		\begin{enumerate}
+			\item \textbf{Methodology Reassessment:}
+			\begin{itemize}
+				\item Still in line with best practices
+				\item Reflects real world
+			\end{itemize}
+			\item \textbf{Assumption Validation:}
+			\begin{itemize}
+				\item Original assumptions remain valid
+				\item Real world consistently challenges assumptions
+			\end{itemize}
+			\item \textbf{Benchmark/Challenger Models:}
+			\begin{itemize}
+				\item Support validation
+				\item Compare results
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Important Considerations:}
+		\begin{itemize}
+			\item Well documented
+			\item Consolidated within single document
+			\item Regular validation with fixed agenda
+			\item Depth and frequency commensurate with risk tier
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Ongoing validation ensures \textcolor{myblue}{models remain fit for purpose over time}!
+	\end{frame}
+	
+	\begin{frame}{Slide 52: General Validation Considerations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{General Issues in Model Validation:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Terminology:}
+		\begin{itemize}
+			\item Alternative terms: model review, model QA, model evaluation, model vetting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Focus on Suitability:}
+		\begin{itemize}
+			\item Ultimate goal: assess if model is appropriate and effectively used
+			\item Initial validation critical for credibility
+			\item Ongoing performance monitoring as proposed and approved
+			\item Validation must remain within intended application domain
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. Recursive Validation:}
+		\begin{itemize}
+			\item Validation activities should be subject to critical examination
+			\item Ensure validation doesn't rely on defective data
+			\item Must remain within intended application domain
+			\item Need for challenge of validation activities
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{4. No "Valid" Model:}
+		\begin{itemize}
+			\item Models are simplified representations under assumed conditions
+			\item Goal is not to test for a "valid" model
+			\item Subject model to attempts to invalidate it
+			\item Successful validation = withstood rigorous testing
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Validation is about \textcolor{myblue}{testing, not proving validity}!
+	\end{frame}
+	
+	\begin{frame}{Slide 53: Usefulness vs Validity}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Usefulness vs. Validity:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Principle:}
+		\begin{itemize}
+			\item Models do not have to be perfect to be useful
+			\item If weaknesses and limitations are identified:
+			\begin{itemize}
+				\item Insights can improve the model
+				\item Restrict application
+				\item Enhance understanding of capabilities and limitations
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Important Considerations:}
+		\begin{itemize}
+			\item Model weaknesses can arise from regime shifts
+			\item Need for ongoing monitoring and validation over time
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Effective Challenge (SR 11-7):}
+		\begin{itemize}
+			\item Critical analysis by objective and informed parties
+			\item Identify crucial model assumptions and limitations
+			\item Spot and communicate relevant model weaknesses
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Requirements for Effective Challenge:}
+		\begin{itemize}
+			\item Independence from model development
+			\item High level of competence
+			\item Sufficient degree of influence
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Models don't need to be perfect to be \textcolor{myblue}{useful, but limitations must be understood}!
+	\end{frame}
+	
+	\begin{frame}{Slide 54: GenAI Validation Considerations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Validation of GenAI Models - Special Considerations:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Challenges:}
+		\begin{enumerate}
+			\item \textbf{Open-Ended Output:}
+			\begin{itemize}
+				\item Unstructured input and output
+				\item Makes validation challenging
+			\end{itemize}
+			\item \textbf{Performance Metrics:}
+			\begin{itemize}
+				\item Different and more complex than traditional AI/ML
+				\item New metrics needed
+			\end{itemize}
+			\item \textbf{Data Drift and Coverage:}
+			\begin{itemize}
+				\item Responses may become obsolete
+				\item Changing environment
+				\item Model obsolescence
+			\end{itemize}
+			\item \textbf{Hallucination:}
+			\begin{itemize}
+				\item Tendency to generate factually incorrect responses
+				\item Appear very convincing
+			\end{itemize}
+			\item \textbf{Discrimination and Bias:}
+			\begin{itemize}
+				\item Ensure responses are not discriminatory or biased
+				\item AI can amplify bias in data
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI validation requires \textcolor{myblue}{addressing unique challenges of generative models}!
+	\end{frame}
+	
+	\begin{frame}{Slide 55: GenAI Validation Challenges (Continued)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{GenAI Validation Challenges (Continued):}
+		
+		\vspace{0.1cm}
+		\textbf{6. Multi-Modal Issues:}
+		\begin{itemize}
+			\item Processing images, video, and audio data
+			\item In addition to text
+			\item More challenging to validate
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{7. Interpretability and Explainability:}
+		\begin{itemize}
+			\item Results difficult to explain or interpret
+			\item Black-box nature
+			\item Regulatory compliance challenges
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{8. Rapid Technological Change:}
+		\begin{itemize}
+			\item More frequent review required
+			\item Regular recalibration needed
+			\item Keeping pace with developments
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{9. Third-Party and Open-Source Models:}
+		\begin{itemize}
+			\item Increasingly offered as models as a service
+			\item Particular attention needed
+			\item Limited transparency
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{10. Computational Resources:}
+		\begin{itemize}
+			\item Significant resources required
+			\item Training, validation, recalibration
+			\item Infrastructure challenges
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Human review is \textcolor{myblue}{essential in GenAI validation}!
+	\end{frame}
+	
+	\begin{frame}{Slide 56: Model Design Motivation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Design - Motivation for Development:}
+		
+		\vspace{0.1cm}
+		\textbf{Changing Conditions:}
+		\begin{itemize}
+			\item New markets
+			\item New products
+			\item Customer requests
+			\item Models must be validated
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Regulatory Pressure:}
+		\begin{itemize}
+			\item Regulatory findings
+			\item Model not performing as intended
+			\item Redevelopment or replacement needed
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Recent Crisis:}
+		\begin{itemize}
+			\item Losses highlight urgency
+			\item Enhanced or more sensitive modeling needed
+			\item Lessons from crisis
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Internal Concerns:}
+		\begin{itemize}
+			\item Senior management discomfort
+			\item Changes in business model
+			\item Increased exposure to innovative products
+			\item Changing market conditions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Innovation and Growth:}
+		\begin{itemize}
+			\item New or evolving customer demands
+			\item New products or model extensions
+			\item Business acquisitions
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model development is driven by \textcolor{myblue}{business needs, regulation, and changing conditions}!
+	\end{frame}
+	
+	\begin{frame}{Slide 57: Model Developers}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Developers - The "Quants":}
+		
+		\vspace{0.1cm}
+		\textbf{Required Expertise:}
+		\begin{itemize}
+			\item Mathematics
+			\item Econometrics
+			\item Statistics
+			\item Strong product knowledge
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Background:}
+		\begin{itemize}
+			\item Advanced academic degrees
+			\item Mathematics, physics, engineering, computer science
+			\item Scientific background
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Qualities:}
+		\begin{itemize}
+			\item Creative problem-solving
+			\item Skepticism
+			\item Out-of-the-box thinking
+			\item Experience including past crises
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Important Balance:}
+		\begin{itemize}
+			\item Most challenging aspect: designing and constructing potential future scenarios
+			\item Assigning weights to scenarios
+			\item Must be mindful of difficulties in risk definition
+			\item Avoid uncritical use of distributions
+			\item Critical reflection on assumptions
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model developers need \textcolor{myblue}{quantitative expertise and practical experience}!
+	\end{frame}
+	
+	\begin{frame}{Slide 58: Modeling Issues - Discretization}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Modeling Issues - Discretization:}
+		
+		\vspace{0.1cm}
+		\textbf{What is Discretization?}
+		\begin{itemize}
+			\item Describing the world using continuous variables
+			\item Cases where variables are discretized to finite values
+			\item Reducing complexity in modeling path-dependent events
+			\item Events occurring at discrete time intervals
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Why Discretize?}
+		\begin{itemize}
+			\item Complex equations without closed-form solutions
+			\item Numerical approximation via discretization
+			\item Should yield very close results when properly implemented
+			\item Time intervals divided into days, months, years
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Challenges:}
+		\begin{itemize}
+			\item Discretization error
+			\item Stability
+			\item Convergence
+			\item Computational complexity
+			\item Boundary conditions
+			\item Numerical precision
+			\item Choice of time step is crucial
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Discretization enables implementation but \textcolor{myblue}{requires careful parameter selection}!
+	\end{frame}
+	
+	\begin{frame}{Slide 59: Modeling Issues - Approximations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Modeling Issues - Approximations:}
+		
+		\vspace{0.1cm}
+		\textbf{What are Approximations?}
+		\begin{itemize}
+			\item Replacing complex or hard-to-evaluate components
+			\item Alternative methods that produce similar results
+			\item More conveniently implemented
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Considerations:}
+		\begin{itemize}
+			\item Choosing an approximation fixes the precision
+			\item No room for improvement except by selecting different approximation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Examples:}
+		\begin{itemize}
+			\item Price sensitivities
+			\item Taylor series approximation in market risk
+			\item Valid for simple instruments and small changes
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Time Horizon Scaling:}
+		\begin{itemize}
+			\item Scaling VaR by square root of time
+			\item Assumes normal distribution and temporal independence
+			\item Often convenient but rarely empirically justified
+			\item Validity must be examined via statistical tests
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Approximations simplify but \textcolor{myblue}{fix precision and require careful validation}!
+	\end{frame}
+	
+	\begin{frame}{Slide 60: Modeling Issues - Numerical Evaluation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Modeling Issues - Numerical Evaluation:}
+		
+		\vspace{0.1cm}
+		\textbf{What is Numerical Evaluation?}
+		\begin{itemize}
+			\item Evaluation of model component with potential for arbitrary precision
+			\item Equipped with parameters controlling precision
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Methods:}
+		\begin{itemize}
+			\item Computation of integrals
+			\item Evaluating non-elementary functions
+			\item Solving systems of equations
+			\item Linear algebra problems
+			\item Interpolation
+			\item Numerical differential equation solutions
+			\item Optimization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Factors:}
+		\begin{itemize}
+			\item \textbf{Stability:} Small errors should not lead to unbounded imprecision
+			\item \textbf{Convergence:} Results approach true value as precision increases
+			\item \textbf{Floating-Point Arithmetic:} Rounding errors may affect stability
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Trade-off:}
+		\begin{itemize}
+			\item Running time vs. precision
+			\item Theoretical confirmation rarely sufficient
+			\item Extensive testing necessary
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Numerical evaluation requires \textcolor{myblue}{balancing precision with computational cost}!
+	\end{frame}
+	
+	\begin{frame}{Slide 61: Modeling Issues - Random Numbers}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Modeling Issues - Random Numbers:}
+		
+		\vspace{0.1cm}
+		\textbf{Why Random Numbers Needed:}
+		\begin{itemize}
+			\item Models rely heavily on probability theory
+			\item Assigning values to random variables
+			\item Samples drawn from distributions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Challenges:}
+		\begin{itemize}
+			\item Generating random numbers is difficult for both humans and computers
+			\item Computers use pseudo-random number generators (RNGs)
+			\item Depend on initial seed
+			\item Cannot produce actual random numbers
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Best Practice:}
+		\begin{itemize}
+			\item Rely on well-designed deterministic pseudo-RNGs
+			\item Rather than introducing randomness in choice of RNG
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{RNG Quality Assessment:}
+		\begin{itemize}
+			\item Specialized test suites
+			\item Criteria: speed and reproducibility
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Random number generation requires \textcolor{myblue}{high-quality deterministic pseudo-RNGs}!
+	\end{frame}
+	
+	\begin{frame}{Slide 62: Model Implementation Tasks}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Implementation Tasks:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Model Design:}
+		\begin{itemize}
+			\item Designed and documented by model designers
+			\item Facilitate translation into computer code
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Core Implementation:}
+		\begin{itemize}
+			\item Inner workings implemented as black box
+			\item With specified interfaces
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. System Implementation:}
+		\begin{itemize}
+			\item Model core integrated into system
+			\item Provides user interfaces
+			\item Collects input data and parameters
+			\item Schedules computations
+			\item Feeds the core
+			\item Processes output data
+			\item Keeps history of computations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Considerations:}
+		\begin{itemize}
+			\item Different skills for core vs system implementation
+			\item Different programming languages
+			\item Specialized skills needed for system implementation
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Implementation involves \textcolor{myblue}{model design, core development, and system integration}!
+	\end{frame}
+	
+	\begin{frame}{Slide 63: Model Adaptation Tasks}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Adaptation Tasks:}
+		
+		\vspace{0.1cm}
+		\textbf{Why Adaptation Needed:}
+		\begin{itemize}
+			\item No model lasts forever
+			\item Periodic reviews detect weaknesses
+			\item Demand adaptation or revision
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Adaptation Types:}
+		\begin{enumerate}
+			\item \textbf{Model Adaptation:}
+			\begin{itemize}
+				\item Model and documentation adapted (or replaced)
+				\item Existing computer code adapted
+			\end{itemize}
+			\item \textbf{Core Adaptation:}
+			\begin{itemize}
+				\item Model core adapted (or replaced)
+				\item Interfaces may be adapted
+			\end{itemize}
+			\item \textbf{System Adaptation:}
+			\begin{itemize}
+				\item System around model core adapted (or replaced)
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Challenges:}
+		\begin{itemize}
+			\item Initial implementation team may have left
+			\item External consultants may have done some tasks
+			\item If model no longer understood, adaptation is challenging
+			\item If same people, risk of ignorance or entrenched poor practices
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Adaptation requires \textcolor{myblue}{understanding the model and careful change management}!
+	\end{frame}
+	
+	\begin{frame}{Slide 64: Running a Model}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Running a Model - Key Considerations:}
+		
+		\vspace{0.1cm}
+		\textbf{Robustness:}
+		\begin{itemize}
+			\item Models can become complex
+			\item Intertwining with multiple systems
+			\item Increased risk of failure
+			\item Minimize complexity
+			\item Eliminate exotic systems
+			\item Standardize interfaces
+			\item Avoid "reinventing the wheel"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Computational Considerations:}
+		\begin{itemize}
+			\item Total response time varies greatly
+			\item Credit risk models: may take weeks
+			\item Market risk models: daily reporting
+			\item Pre-deal checking: faster processing
+			\item Overall running time determined by slowest task
+			\item Over-optimization for specific hardware can be risky
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Flexibility:}
+		\begin{itemize}
+			\item Scheduled runs: regular numbers with minimal manual intervention
+			\item Ad hoc runs: additional information on short notice
+			\item Staff knowledgeable about model interfaces
+			\item Prevent gradual shift from scheduled to ad hoc mode
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Running models requires \textcolor{myblue}{robustness, appropriate computing, and flexibility}!
+	\end{frame}
+	
+	\begin{frame}{Slide 65: Model Adaptation and Running Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Implementation, Adaptation, and Running - Key Takeaways:}
+		
+		\vspace{0.1cm}
+		\textbf{Implementation:}
+		\begin{itemize}
+			\item Model design, core implementation, system integration
+			\item Different skills for different tasks
+			\item Documentation is essential
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Adaptation:}
+		\begin{itemize}
+			\item Periodic reviews detect weaknesses
+			\item Model, core, or system adaptation
+			\item Challenges with changing teams
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Running:}
+		\begin{itemize}
+			\item Robustness and standardization
+			\item Computational considerations
+			\item Scheduled vs. ad hoc runs
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Common Issues:}
+		\begin{itemize}
+			\item Over-optimism
+			\item Inadequate budgeting
+			\item Midstream redefinition of goals
+			\item Misunderstandings and miscommunication
+			\item Programming errors
+			\item Lack of software quality assurance
+			\item Inappropriate design architecture
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model operations require \textcolor{myblue}{careful management of implementation, adaptation, and running}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 6: MISINTERPRETATION OF RESULTS - SLIDES 66-75
+	% ============================================================
+	
+	\begin{frame}{Slide 66: Misinterpretation of Model Results}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Potential Sources of Misinterpretation:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Lack of Comprehension:}
+		\begin{itemize}
+			\item Users lack comprehensive understanding of model
+			\item Underlying assumptions unknown
+			\item Limitations of outputs unclear
+			\item Necessary knowledge and expertise missing
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Neglecting Model Limitations:}
+		\begin{itemize}
+			\item Models have inherent limitations
+			\item May assume certain conditions
+			\item May not fully capture all relevant risks
+			\item Failing to acknowledge limitations leads to flawed understanding
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. Overemphasis on Point Estimates:}
+		\begin{itemize}
+			\item Models provide estimates with uncertainty
+			\item Focusing solely on point estimates
+			\item Ignoring range of potential outcomes
+			\item Understanding probability distributions is crucial
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Misinterpretation can have \textcolor{myblue}{significant implications for decision-making}!
+	\end{frame}
+	
+	\begin{frame}{Slide 67: Misinterpretation (Continued)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Potential Sources of Misinterpretation (Continued):}
+		
+		\vspace{0.1cm}
+		\textbf{4. Failure to Consider Qualitative Factors:}
+		\begin{itemize}
+			\item Models focus on quantitative measures
+			\item Qualitative factors should not be overlooked
+			\item Market conditions, regulatory changes, external influences
+			\item Exclusion can lead to distorted understanding
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{5. Ignoring Decision Context:}
+		\begin{itemize}
+			\item Model results considered independently
+			\item Without specific context of decision
+			\item Models should inform decision making within context
+			\item Incorporate broader business strategies, risk appetite
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{6. Confirmation Bias:}
+		\begin{itemize}
+			\item Users interpret results to align with preconceived beliefs
+			\item Cloud judgment
+			\item Compromise objective interpretation
+			\item Approach results with open mind and commitment to unbiased analysis
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Misinterpretation arises from \textcolor{myblue}{cognitive biases and lack of context}!
+	\end{frame}
+	
+	\begin{frame}{Slide 68: Fostering Proper Interpretation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Fostering Proper Interpretation of Model Results:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Practices:}
+		\begin{enumerate}
+			\item \textbf{Training and Education:}
+			\begin{itemize}
+				\item Ensure users understand model
+				\item Explain assumptions and limitations
+				\item Provide context for results
+			\end{itemize}
+			\item \textbf{Clear Communication:}
+			\begin{itemize}
+				\item Present results with uncertainty ranges
+				\item Include confidence intervals
+				\item Explain probabilistic interpretations
+			\end{itemize}
+			\item \textbf{Open Dialogue:}
+			\begin{itemize}
+				\item Encourage questioning of results
+				\item Discuss alternative interpretations
+				\item Foster critical thinking
+			\end{itemize}
+			\item \textbf{Culture:}
+			\begin{itemize}
+				\item Foster culture of open dialogue
+				\item Encourage critical thinking
+				\item Cross-functional collaboration
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Guard against misinterpretation biases
+			\item Approach results with open mind
+			\item Commit to unbiased analysis
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Proper interpretation requires \textcolor{myblue}{training, clear communication, and supportive culture}!
+	\end{frame}
+	
+
+
+
+
+
+
+
+\begin{frame}{Slide 69: Model Governance for AI/ML - Recommendations}
+	\fontsize{6.5}{7.5}\selectfont
+	
+	\textbf{Recommendations for AI/ML Model Governance:}
+	
+	\vspace{0.1cm}
+	\textbf{1. Begin with Existing Frameworks:}
+	\begin{itemize}
+		\item Don't start from scratch
+		\item Use experience from traditional model validation
+		\item Build on a strong foundation
+	\end{itemize}
+	
+	\vspace{0.1cm}
+	\textbf{2. Consider the New Role of Data:}
+	\begin{itemize}
+		\item AI/ML is ``model-free'' -- everything depends on data
+		\item Address issues such as:
+		\begin{itemize}
+			\item Various forms of bias
+			\item Overfitting
+			\item Population drift
+			\item Model drift and regime changes
+			\item Risk of harmful output
+		\end{itemize}
+		
+		\item New uses will reveal further challenges:
+		\begin{itemize}
+			\item Data limitations
+			\item Biases
+			\item Privacy and right to use
+			\item Legality
+		\end{itemize}
+	\end{itemize}
+	
+	\textcolor{myblue}{\textbf{Key Insight:}}
+	AI/ML governance must
+	\textcolor{myblue}{address the central role of data}!
+\end{frame}
+
+
+
+
+
+
+
+
+	
+	\begin{frame}{Slide 70: AI/ML Governance Recommendations (Continued)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Recommendations for AI/ML Model Governance (Continued):}
+		
+		\vspace{0.1cm}
+		\textbf{3. Add New Perspectives:}
+		\begin{itemize}
+			\item AI/ML increases relevance of ethical aspects
+			\item Data bias
+			\item Explainability of model results
+			\item Recalibration process
+			\item These attributes need to be considered in model inventory
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{4. BIS Survey Findings - Data Governance:}
+		\begin{itemize}
+			\item Adequate documentation
+			\item Policies, standards, procedures
+			\item Data quality - accuracy, transparency, provenance
+			\item Security and responsible use
+			\item Comprehensive data management systems
+			\item Metadata on sources, version, curation
+			\item Asset inventories and metadata registries
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} AI/ML governance must \textcolor{myblue}{incorporate ethical considerations and robust data governance}!
+	\end{frame}
+	
+	\begin{frame}{Slide 71: BIS Survey - Organizational Structures}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{BIS Survey - Organizational Structures for AI Governance:}
+		
+		\vspace{0.1cm}
+		\textbf{Common Approaches:}
+		\begin{enumerate}
+			\item \textbf{Centralized Solutions:}
+			\begin{itemize}
+				\item Steering committees/commissions
+				\item Program management offices
+				\item Multi-modal structures
+			\end{itemize}
+			\item \textbf{Hub-and-Spoke Systems:}
+			\begin{itemize}
+				\item Overall network with multiple functional hubs
+				\item Connected to various departments
+			\end{itemize}
+			\item \textbf{Fully Decentralized:}
+			\begin{itemize}
+				\item Governance at business line level
+				\item Local control
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Accountability Assignments:}
+		\begin{itemize}
+			\item Existing roles: Chief Data/Information/Technology Officer
+			\item Existing units: IT department
+			\item Newly created functions
+			\item Informal setups: communities of practice, cross-functional networks
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} AI governance structures range from \textcolor{myblue}{centralized to decentralized with various accountability models}!
+	\end{frame}
+	
+	\begin{frame}{Slide 72: BIS Survey - Guidelines and Risk Management}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{BIS Survey - Guidelines and Risk Management:}
+		
+		\vspace{0.1cm}
+		\textbf{Guidelines and Policies:}
+		\begin{itemize}
+			\item Terms of use for AI systems
+			\item Modalities, interfaces, and data
+			\item Models, third-party dependencies
+			\item Upstream/downstream data
+			\item Guidelines for responsible AI use
+			\item Privacy standards
+			\item Explainability requirements
+			\item International principles (e.g., Fundamental Principles of Official Statistics)
+			\item Documentation of methods for regular assessment
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Risk Management Frameworks:}
+		\begin{itemize}
+			\item Regular audit of AI systems for vulnerabilities
+			\item Evaluation of robustness of safety measures
+			\item Incident response procedures
+			\item Business continuity plans
+			\item Processes to promote and maintain skills
+			\item Prevent erosion of knowledge due to overreliance
+			\item Leverage existing frameworks (three lines of defense)
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Comprehensive guidelines and risk management are \textcolor{myblue}{essential for AI governance}!
+	\end{frame}
+	
+	\begin{frame}{Slide 73: Governance Challenges of GenAI}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Why GenAI Governance Is Harder:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Opacity and Unpredictability:}
+		\begin{itemize}
+			\item Functioning almost always opaque
+			\item Output unpredictable
+			\item Difficult to interpret or audit
+			\item Probabilistic nature: same prompt may lead to different outputs
+			\item Reproducibility challenges
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Emergent Capabilities:}
+		\begin{itemize}
+			\item Behaviors not anticipated by developers
+			\item As models become larger and more sophisticated
+			\item Skills not observed in smaller models
+			\item Changing capabilities hard to assess
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. Post-Deployment Shifts:}
+		\begin{itemize}
+			\item Model behavior can shift after deployment
+			\item External providers may update or fine-tune models
+			\item Changes in prompts or connected data alter performance
+			\item One-off validation is inadequate
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI governance must address \textcolor{myblue}{opacity, unpredictability, and evolving capabilities}!
+	\end{frame}
+	
+	\begin{frame}{Slide 74: GenAI Governance Approaches}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Internal Governance Levers for GenAI:}
+		
+		\vspace{0.1cm}
+		\textbf{1. Assign Ownership and Accountability:}
+		\begin{itemize}
+			\item Clarify responsibility at each stage
+			\item Tool selection, testing, deployment, monitoring
+			\item Ensure responsibility doesn't fall between teams
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{2. Risk-Based Review and Deployment:}
+		\begin{itemize}
+			\item Tiered review gates
+			\item Full risk reviews for high-impact systems
+			\item Light checks for low-stakes internal tools
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{3. Incentivize Responsible Behavior:}
+		\begin{itemize}
+			\item Risk-tied performance metrics
+			\item Reward flagging risks, documenting limitations
+			\item Align team incentives with responsible use
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{4. Staff Training:}
+		\begin{itemize}
+			\item Equip staff with knowledge of GenAI risks
+			\item Data protection, hallucinations, complaints
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Internal governance requires \textcolor{myblue}{clear ownership, risk-based reviews, and proper incentives}!
+	\end{frame}
+	
+	\begin{frame}{Slide 75: External Governance and Adaptive Tools}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{External Governance and Adaptive Tools:}
+		
+		\vspace{0.1cm}
+		\textbf{External Governance Constraints:}
+		\begin{itemize}
+			\item Track evolving legal and regulatory requirements
+			\item EU AI Act, Digital Services Act, US state laws
+			\item Evaluate responsibilities with model providers
+			\item Understand incident policies and update schedules
+			\item Align with emerging standards (NIST AI RMF, ISO/IEC 42001)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Adaptive Tools and Practices:}
+		\begin{itemize}
+			\item Continuously monitor post-deployment usage
+			\item Use red-teaming and adversarial testing
+			\item Develop scenario plans for unpredictability
+			\item Deploy technical safeguards (watermarking, usage logging)
+			\item Enable feedback loops and update mechanisms
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI governance requires \textcolor{myblue}{external awareness and adaptive practices}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 7: QUESTIONS FOR RISK PROFESSIONALS - SLIDES 76-85
+	% ============================================================
+	
+	\begin{frame}{Slide 76: Strategic Risk Assessment Questions}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Strategic Risk Assessment Questions:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Questions:}
+		\begin{enumerate}
+			\item \textbf{Is GenAI the right tool for this application?}
+			\begin{itemize}
+				\item Ensure reasons for deploying are good reasons
+				\item Know what trade-offs are to be expected
+			\end{itemize}
+			\item \textbf{What are the risks to:}
+			\begin{itemize}
+				\item Safety
+				\item Legality
+				\item Reputation
+				\item User trust
+				\item Transparency
+			\end{itemize}
+			\item \textbf{Risk Identification:}
+			\begin{itemize}
+				\item Identify relevant risks before deployment
+				\item Map potential unpredictable behaviors
+				\item Assess possible impacts
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Strategic assessment should occur before deployment
+			\item Consider both intended and unintended consequences
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Strategic assessment ensures \textcolor{myblue}{GenAI is the right tool for the right application}!
+	\end{frame}
+	
+	\begin{frame}{Slide 77: Model Selection Questions}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Selection and Deployment Questions:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Questions:}
+		\begin{enumerate}
+			\item \textbf{What model is being used?}
+			\begin{itemize}
+				\item What do we know about its training data?
+				\item What do we know about its alignment?
+			\end{itemize}
+			\item \textbf{Do we control the model?}
+			\begin{itemize}
+				\item API vs open source
+				\item Control over updates
+				\item Transparency varies
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Why These Questions Matter:}
+		\begin{itemize}
+			\item Understanding training data reveals potential biases
+			\item Control determines ability to audit and modify
+			\item Transparency affects governance capabilities
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Model selection affects all subsequent governance
+			\item Choose models that align with governance capabilities
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model selection determines \textcolor{myblue}{governance options and risk exposure}!
+	\end{frame}
+	
+	\begin{frame}{Slide 78: Data Governance Questions}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data Governance Questions:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Questions:}
+		\begin{enumerate}
+			\item \textbf{What data is being used?}
+			\begin{itemize}
+				\item Is any of it proprietary or sensitive?
+				\item Legal restrictions (GDPR, etc.)
+				\item Client confidentiality
+				\item Intellectual property
+			\end{itemize}
+			\item \textbf{Are data protection and retention policies in place?}
+			\begin{itemize}
+				\item Trace how inputs are used by providers
+				\item Understand data flow
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Why These Questions Matter:}
+		\begin{itemize}
+			\item Data provenance affects legal compliance
+			\item Data protection policies prevent breaches
+			\item Understanding data flow enables governance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Data governance is foundational for GenAI
+			\item Know what data is used and how it's protected
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data governance questions are \textcolor{myblue}{essential for responsible GenAI use}!
+	\end{frame}
+	
+	\begin{frame}{Slide 79: Technical Risk Control Questions}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Technical Risk Control Questions:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Questions:}
+		\begin{enumerate}
+			\item \textbf{Have we tested for unpredictability?}
+			\begin{itemize}
+				\item Hallucinations
+				\item Model drift
+				\item Unexpected behaviors
+			\end{itemize}
+			\item \textbf{What safeguards are in place against misuse?}
+			\begin{itemize}
+				\item Guardrails
+				\item Human review triggers
+				\item Usage limits
+				\item Logs and monitoring
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Why These Questions Matter:}
+		\begin{itemize}
+			\item Unpredictability can lead to harmful outcomes
+			\item Safeguards prevent misuse and limit damage
+			\item Monitoring enables detection and response
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Technical controls are essential for safe deployment
+			\item Test for edge cases and unexpected behaviors
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Technical risk controls are \textcolor{myblue}{essential for safe GenAI deployment}!
+	\end{frame}
+	
+	\begin{frame}{Slide 80: Organizational Questions}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Organizational Structure and Incentive Questions:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Questions:}
+		\begin{enumerate}
+			\item \textbf{Who owns risk for GenAI?}
+			\begin{itemize}
+				\item Is that person/team empowered?
+				\item Clear accountability
+			\end{itemize}
+			\item \textbf{Are staff appropriately trained?}
+			\begin{itemize}
+				\item Know of unpredictable behavior
+				\item Understand risks and limitations
+				\item Prevent unintended consequences
+			\end{itemize}
+			\item \textbf{Are incentives aligned with responsible AI use?}
+			\begin{itemize}
+				\item Not just speed to deploy
+				\item Risk-aware behaviors rewarded
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Why These Questions Matter:}
+		\begin{itemize}
+			\item Ownership ensures accountability
+			\item Training prevents misuse
+			\item Incentives drive behavior
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Organizational structure must \textcolor{myblue}{support responsible GenAI use}!
+	\end{frame}
+	
+	\begin{frame}{Slide 81: External Environment Questions}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{External Environment Questions:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Questions:}
+		\begin{enumerate}
+			\item \textbf{Are we prepared for changing laws and regulation?}
+			\begin{itemize}
+				\item EU AI Act
+				\item US state legislation
+				\item Compliance frameworks
+			\end{itemize}
+			\item \textbf{Are we aligned with best practices?}
+			\begin{itemize}
+				\item NIST AI RMF
+				\item ISO/IEC 42001
+				\item Industry standards
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Why These Questions Matter:}
+		\begin{itemize}
+			\item Regulatory landscape is evolving
+			\item Compliance is mandatory
+			\item Best practices build trust
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Following recognized frameworks strengthens compliance
+			\item Builds trust with external stakeholders
+			\item Demonstrates commitment to responsible AI
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} External alignment is \textcolor{myblue}{essential for regulatory compliance and stakeholder trust}!
+	\end{frame}
+	
+	\begin{frame}{Slide 82: Questions for Risk Professionals Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Questions for Risk Professionals - Summary:}
+		
+		\vspace{0.1cm}
+		\textbf{Strategic Risk:}
+		\begin{itemize}
+			\item Is GenAI the right tool?
+			\item What are the risks?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Model Selection:}
+		\begin{itemize}
+			\item What model is being used?
+			\item Do we control it?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Data Governance:}
+		\begin{itemize}
+			\item What data is being used?
+			\item Are protection policies in place?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Technical Controls:}
+		\begin{itemize}
+			\item Have we tested for unpredictability?
+			\item What safeguards are in place?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Organizational:}
+		\begin{itemize}
+			\item Who owns risk?
+			\item Are staff trained?
+			\item Are incentives aligned?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{External:}
+		\begin{itemize}
+			\item Are we prepared for regulation?
+			\item Are we aligned with best practices?
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} A structured questioning approach \textcolor{myblue}{supports comprehensive GenAI governance}!
+	\end{frame}
+	
+	\begin{frame}{Slide 83: Final Thoughts - Team Qualification}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Final Thoughts - Team Qualification:}
+		
+		\vspace{0.1cm}
+		\textbf{Validation Team Requirements:}
+		\begin{itemize}
+			\item Knowledge of AI/ML techniques
+			\item Hands-on expertise
+			\item Strong foundations in:
+			\begin{itemize}
+				\item Product knowledge
+				\item Econometrics
+				\item Statistics
+				\item Computer science
+			\end{itemize}
+			\item Proactive approach to staying abreast of latest advancements
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Additional Considerations:}
+		\begin{itemize}
+			\item Augment validation staff
+			\item Add AI/ML validation team
+			\item Hands-on knowledge of:
+			\begin{itemize}
+				\item AI/ML development platforms
+				\item Cloud-based environments
+				\item Low-code and no-code environments
+				\item CI/CD and MLOps platforms
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Familiarity with AI/ML technologies beyond traditional knowledge
+			\item Specific training may be necessary
+			\item Incorporate specialists
+			\item Use external experts if needed
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Validation teams need \textcolor{myblue}{updated skills and expertise for AI/ML models}!
+	\end{frame}
+	
+	\begin{frame}{Slide 84: Final Thoughts - End-to-End Review}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Final Thoughts - End-to-End Review:}
+		
+		\vspace{0.1cm}
+		\textbf{Review Framework:}
+		\begin{itemize}
+			\item Entire model validation framework needs review
+			\item Regulators consider AI/ML models within scope of model risk management
+			\item SR 11-7, being principle-based, applies to AI/ML models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Implications:}
+		\begin{itemize}
+			\item Challenges in model design
+			\item Implications related to:
+			\begin{itemize}
+				\item Data
+				\item Implementation
+				\item Monitoring
+				\item Documentation
+				\item Use
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item AI/ML models fall within existing regulatory frameworks
+			\item Comprehensive review is necessary
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} End-to-end review is \textcolor{myblue}{essential for AI/ML model validation}!
+	\end{frame}
+	
+	\begin{frame}{Slide 85: Final Thoughts - Balance and GenAI}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Final Thoughts - Balance and GenAI:}
+		
+		\vspace{0.1cm}
+		\textbf{Model Complexity Balance:}
+		\begin{itemize}
+			\item More complex is not always better
+			\item Balance model performance with:
+			\begin{itemize}
+				\item Interpretability
+				\item Feedback from supervisors
+				\item Cost and effort of implementation
+				\item Maintenance and monitoring
+				\item In-house expertise
+				\item Availability of reputable code libraries
+				\item Academic underpinning
+			\end{itemize}
+			\item Validation teams need balanced approach:
+			\begin{itemize}
+				\item Not just regulatory-driven
+				\item Not just performance-oriented
+				\item Nuanced cost-benefit analysis
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{GenAI Governance:}
+		\begin{itemize}
+			\item Requires particular focus
+			\item Support development of shared standards
+			\item Transparency around GenAI
+			\item Longer-term credibility depends on:
+			\begin{itemize}
+				\item Internal compliance
+				\item Broader governance ecosystem
+			\end{itemize}
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Balance and GenAI governance are \textcolor{myblue}{essential for sustainable model risk management}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 8: CHAPTER QUESTIONS - SLIDES 86-100
+	% ============================================================
+	
+	\begin{frame}{Slide 86: Model Development and Testing - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Points on Model Development and Testing:}
+		
+		\vspace{0.1cm}
+		\textbf{Development Steps:}
+		\begin{enumerate}
+			\item Define objectives and scope
+			\item Data collection and preprocessing
+			\item Data analysis and visualization
+			\item Feature engineering
+			\item Model selection
+			\item Model training/calibration
+			\item Developer testing
+			\item Documentation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Testing Types:}
+		\begin{itemize}
+			\item Unit tests
+			\item Component tests
+			\item Integration tests
+			\item System tests
+			\item Performance tests
+			\item Regression tests
+			\item Acceptance tests
+			\item Adversarial testing
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model development and testing are \textcolor{myblue}{systematic processes requiring comprehensive approaches}!
+	\end{frame}
+	
+	\begin{frame}{Slide 87: Model Validation - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Points on Model Validation:}
+		
+		\vspace{0.1cm}
+		\textbf{Validation Lifecycle:}
+		\begin{enumerate}
+			\item Model identification
+			\item Inventory
+			\item Initial validation
+			\item Production and monitoring
+			\item Periodic validation
+			\item Change-based validation
+			\item Retirement
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Validation Activities:}
+		\begin{itemize}
+			\item Data assessment
+			\item Assumptions and parameters
+			\item Limitations identification
+			\item Implementation review
+			\item Conceptual soundness
+			\item Performance monitoring
+			\item Documentation review
+			\item Controls review
+			\item Outcomes analysis
+			\item Testing and backtesting
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Validation is a \textcolor{myblue}{comprehensive, ongoing process throughout the model lifecycle}!
+	\end{frame}
+	
+	\begin{frame}{Slide 88: Model Misinterpretation - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Key Points on Misinterpretation:}
+		
+		\vspace{0.1cm}
+		\textbf{Common Sources:}
+		\begin{enumerate}
+			\item Lack of comprehension
+			\item Neglecting model limitations
+			\item Overemphasis on point estimates
+			\item Failure to consider qualitative factors
+			\item Ignoring decision context
+			\item Confirmation bias
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Prevention Strategies:}
+		\begin{itemize}
+			\item Training and education
+			\item Clear communication
+			\item Open dialogue
+			\item Supportive culture
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Misinterpretation can have significant implications
+			\item Requires active management
+			\item Culture of critical thinking is essential
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Misinterpretation can be prevented through \textcolor{myblue}{education, communication, and culture}!
+	\end{frame}
+	
+	\begin{frame}{Slide 89: Three Lines of Defense - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Three Lines of Defense - Key Points:}
+		
+		\vspace{0.1cm}
+		\textbf{First Line (Model Owners/Developers):}
+		\begin{itemize}
+			\item Own the model and its performance
+			\item Design and implement models
+			\item Operate performance dashboards
+			\item First to react to breaches
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Second Line (Risk Management/Validation):}
+		\begin{itemize}
+			\item Set model risk management policy
+			\item Conduct independent validations
+			\item Challenge First Line assessments
+			\item Maintain model inventory
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Third Line (Internal Audit):}
+		\begin{itemize}
+			\item Provide independent assurance
+			\item Review framework effectiveness
+			\item Ensure policy compliance
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Three lines provide \textcolor{myblue}{checks and balances in model risk management}!
+	\end{frame}
+	
+	\begin{frame}{Slide 90: Model Changes - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Changes - Key Points:}
+		
+		\vspace{0.1cm}
+		\textbf{Change Management Process:}
+		\begin{enumerate}
+			\item Change requests
+			\item Impact assessment
+			\item Documentation
+			\item Validation
+			\item Approval
+			\item Implementation
+			\item Monitoring
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{AI/ML Considerations:}
+		\begin{itemize}
+			\item More frequent monitoring needed
+			\item Broader stakeholder involvement
+			\item Focus on explainability
+			\item Benchmarking against traditional models
+			\item Assessment on different data sets
+			\item Assessment of specific cases
+			\item Back testing and cross-validation
+			\item Reporting for bias detection
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} AI/ML model changes require \textcolor{myblue}{more frequent review and broader stakeholder involvement}!
+	\end{frame}
+	
+	\begin{frame}{Slide 91: Data Governance - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data Governance - Key Points:}
+		
+		\vspace{0.1cm}
+		\textbf{Core Components:}
+		\begin{enumerate}
+			\item \textbf{Strategy:}
+			\begin{itemize}
+				\item Vision and goals
+				\item Policies and authorization
+			\end{itemize}
+			\item \textbf{Quality:}
+			\begin{itemize}
+				\item Accuracy, consistency, integrity
+				\item Continuous monitoring
+			\end{itemize}
+			\item \textbf{Provenance:}
+			\begin{itemize}
+				\item Legal right to use data
+				\item Copyright compliance
+			\end{itemize}
+			\item \textbf{Classification:}
+			\begin{itemize}
+				\item Structure and confidentiality
+				\item Access controls
+			\end{itemize}
+			\item \textbf{Security:}
+			\begin{itemize}
+				\item Protection measures
+				\item Regulatory compliance
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Data governance is the \textcolor{myblue}{foundation for responsible AI and model management}!
+	\end{frame}
+	
+	\begin{frame}{Slide 92: Model Inventory - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Inventory - Key Points:}
+		
+		\vspace{0.1cm}
+		\textbf{What to Include:}
+		\begin{enumerate}
+			\item Model identification (owner, user, developer)
+			\item Purpose and description
+			\item Methodology and classification
+			\item Development source (in-house/vendor)
+			\item Assumptions and limitations
+			\item Documentation locations
+			\item History of updates and validations
+			\item Performance monitoring frequency
+			\item Regulatory use indication
+			\item Risk tier
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{AI/ML Additional Considerations:}
+		\begin{itemize}
+			\item Complexity of methodology
+			\item Data usage and quality
+			\item Output parameters
+			\item Model recalibration needs
+			\item Risk ranking factors
+			\item Performance monitoring metrics
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Model inventory provides \textcolor{myblue}{comprehensive tracking and transparency} for all models!
+	\end{frame}
+	
+	\begin{frame}{Slide 93: Model Risk Ranking - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Model Risk Ranking - Key Points:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Factors:}
+		\begin{enumerate}
+			\item \textbf{Materiality:}
+			\begin{itemize}
+				\item Economic consequences
+				\item Operational impact
+				\item Reputational consequences
+				\item Usage by different parties
+				\item Impact on decisions, financial statements, regulatory reporting
+			\end{itemize}
+			\item \textbf{Complexity:}
+			\begin{itemize}
+				\item May elevate risk ranking
+				\item Even if materiality is low
+			\end{itemize}
+			\item \textbf{Exposure:}
+			\begin{itemize}
+				\item Published financial reports
+				\item Wide impact
+				\item Regulatory significance
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Important Note:}
+		\begin{itemize}
+			\item Minimum standards for all models regardless of materiality
+			\item Absence of assessment introduces its own risk
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Risk ranking determines \textcolor{myblue}{validation frequency and intensity}!
+	\end{frame}
+	
+	\begin{frame}{Slide 94: Performance Monitoring - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Performance Monitoring - Key Points:}
+		
+		\vspace{0.1cm}
+		\textbf{Classification Models:}
+		\begin{itemize}
+			\item Accuracy, Precision, Recall, F1, AUC
+			\item Confusion Matrices
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Regression Models:}
+		\begin{itemize}
+			\item MAE, MSE, R-squared, RMSE
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Additional Metrics:}
+		\begin{itemize}
+			\item Clustering metrics
+			\item Deep learning metrics
+			\item GenAI performance metrics
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Key Point:}
+		\begin{itemize}
+			\item Performance monitoring must be tailored to model type
+			\item Metrics must be appropriate for the model
+			\item Model validation should assess metric appropriateness
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Performance metrics must be \textcolor{myblue}{appropriate for the specific model type}!
+	\end{frame}
+	
+	\begin{frame}{Slide 95: GenAI Validation - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{GenAI Validation - Key Points:}
+		
+		\vspace{0.1cm}
+		\textbf{Special Considerations:}
+		\begin{enumerate}
+			\item Open-ended output
+			\item Different performance metrics
+			\item Data drift and coverage
+			\item Hallucination
+			\item Discrimination and bias
+			\item Multi-modal issues
+			\item Interpretability and explainability
+			\item Rapid technological change
+			\item Third-party and open-source models
+			\item Computational resources
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Essential:}
+		\begin{itemize}
+			\item Human review is essential
+			\item Regular validation and recalibration
+			\item Particular attention to third-party models
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI validation requires \textcolor{myblue}{addressing unique challenges and human review}!
+	\end{frame}
+	
+	\begin{frame}{Slide 96: GenAI Governance - Key Points}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{GenAI Governance - Key Points:}
+		
+		\vspace{0.1cm}
+		\textbf{Internal Levers:}
+		\begin{enumerate}
+			\item Clear ownership and accountability
+			\item Risk-based review and deployment
+			\item Incentivize responsible behavior
+			\item Staff training
+			\item Validation and monitoring
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{External Constraints:}
+		\begin{enumerate}
+			\item Track legal and regulatory requirements
+			\item Evaluate responsibilities with providers
+			\item Align with emerging standards
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{Adaptive Tools:}
+		\begin{enumerate}
+			\item Continuous monitoring
+			\item Red-teaming and adversarial testing
+			\item Scenario planning
+			\item Technical safeguards
+			\item Feedback loops
+		\end{enumerate}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} GenAI governance requires \textcolor{myblue}{internal, external, and adaptive approaches}!
+	\end{frame}
+	
+	\begin{frame}{Slide 97: Questions for Risk Professionals - Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Questions for Risk Professionals - Summary:}
+		
+		\vspace{0.1cm}
+		\textbf{Strategic Risk:}
+		\begin{itemize}
+			\item Is GenAI the right tool?
+			\item What are the risks?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Model Selection:}
+		\begin{itemize}
+			\item What model is being used?
+			\item Do we control it?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Data Governance:}
+		\begin{itemize}
+			\item What data is being used?
+			\item Are protection policies in place?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Technical Controls:}
+		\begin{itemize}
+			\item Have we tested for unpredictability?
+			\item What safeguards are in place?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Organizational:}
+		\begin{itemize}
+			\item Who owns risk?
+			\item Are staff trained?
+			\item Are incentives aligned?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{External:}
+		\begin{itemize}
+			\item Are we prepared for regulation?
+			\item Are we aligned with best practices?
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Structured questioning \textcolor{myblue}{supports comprehensive GenAI governance}!
+	\end{frame}
+	
+	\begin{frame}{Slide 98: Implementing AI Governance - BIS Survey}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Implementing AI Governance - BIS Survey Findings:}
+		
+		\vspace{0.1cm}
+		\textbf{Data Governance:}
+		\begin{itemize}
+			\item Adequate documentation
+			\item Data quality (accuracy, transparency, provenance)
+			\item Security and responsible use
+			\item Comprehensive data management systems
+			\item Metadata on sources, version, curation
+			\item Asset inventories and metadata registries
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Organizational Structures:}
+		\begin{itemize}
+			\item Centralized solutions (steering committees, PMOs)
+			\item Hub-and-spoke systems
+			\item Decentralized approaches
+			\item Accountability assignments
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} BIS survey shows \textcolor{myblue}{diverse approaches to AI governance implementation}!
+	\end{frame}
+	
+	\begin{frame}{Slide 99: Implementing AI Governance (Continued)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Implementing AI Governance - BIS Survey (Continued):}
+		
+		\vspace{0.1cm}
+		\textbf{Guidelines and Policies:}
+		\begin{itemize}
+			\item Terms of use for AI systems
+			\item Guidelines for responsible AI use
+			\item Privacy standards
+			\item Explainability requirements
+			\item International principles
+			\item Documentation of assessment methods
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{Risk Management Frameworks:}
+		\begin{itemize}
+			\item Regular audit of AI systems
+			\item Evaluation of safety measures
+			\item Incident response procedures
+			\item Business continuity plans
+			\item Skills maintenance processes
+			\item Leverage existing frameworks (3LoD)
+		\end{itemize}
+		
+		\textcolor{myblue}{\textbf{Key Insight:}} Comprehensive guidelines and risk management are \textcolor{myblue}{essential for AI governance}!
+	\end{frame}
+	
+	\begin{frame}{Slide 100: Data and AI Model Governance - Final Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{Data and AI Model Governance - Comprehensive Summary:}
+		
+		\vspace{0.1cm}
+		\textbf{Key Pillars:}
+		\begin{enumerate}
+			\item \textbf{Data Governance:}
+			\begin{itemize}
+				\item Strategy, quality, provenance, classification, security
+			\end{itemize}
+			\item \textbf{Model Governance:}
+			\begin{itemize}
+				\item Policies, documentation, inventory, risk ranking
+			\end{itemize}
+			\item \textbf{Model Development:}
+			\begin{itemize}
+				\item Objectives, data, features, training, testing
+			\end{itemize}
+			\item \textbf{Model Validation:}
+			\begin{itemize}
+				\item Initial, ongoing, change-based
+				\item Comprehensive review activities
+			\end{itemize}
+			\item \textbf{Three Lines of Defense:}
+			\begin{itemize}
+				\item Owners/developers, risk management, internal audit
+			\end{itemize}
+			\item \textbf{GenAI Governance:}
+			\begin{itemize}
+				\item Internal levers, external constraints, adaptive tools
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myred}{\textbf{Exam Success:}} Understand \textcolor{myblue}{data governance, model risk management, validation, and GenAI governance}!
+	\end{frame}
+	
+\end{document}
