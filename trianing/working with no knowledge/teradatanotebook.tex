@@ -1,0 +1,478 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ---------- Theme and appearance ----------
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{enumerate items}[default]
+\setbeamercolor{title}{fg=white,bg=blue!70!black}
+\setbeamercolor{frametitle}{fg=white,bg=blue!70!black}
+\setbeamercolor{structure}{fg=blue!60!black}
+\setbeamercolor{block title}{fg=white,bg=blue!70!black}
+\setbeamercolor{block body}{bg=blue!5}
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+% ---------- Packages ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amsmath,amssymb}
+
+\lstset{
+	language=Python,
+	basicstyle=\ttfamily\scriptsize,
+	breaklines=true,
+	columns=fullflexible
+}
+% ---------- Code listing style ----------
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{codecomment}{RGB}{0,128,0}
+\definecolor{codekeyword}{RGB}{0,0,255}
+\definecolor{codestring}{RGB}{163,21,21}
+\lstdefinestyle{pythonstyle}{
+	language=Python,
+	backgroundcolor=\color{codebg},
+	basicstyle=\ttfamily\footnotesize,
+	keywordstyle=\color{codekeyword}\bfseries,
+	commentstyle=\color{codecomment}\itshape,
+	stringstyle=\color{codestring},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	numbersep=6pt,
+	frame=single,
+	rulecolor=\color{gray!40},
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=4,
+	captionpos=b
+}
+\lstset{style=pythonstyle}
+
+% ---------- Title metadata ----------
+\title[Notebook Cleanup \& Teradata Analysis]{Demystifying a Legacy Teradata Notebook}
+\subtitle{Breaking a Monolithic Jupyter Notebook into Clean, Readable Cells}
+\author{Your Name}
+\institute{Your Department / Course}
+\date{\today}
+
+% ---------- Document ----------
+\begin{document}
+	
+	% ---------- Title frame ----------
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ---------- Outline ----------
+	\begin{frame}{Outline}
+		\tableofcontents
+	\end{frame}
+	
+	% ============================================================
+	\section{Introduction and Context}
+	% ============================================================
+	
+	\begin{frame}{What This Project Is About}
+		\begin{itemize}
+			\item We are given a \textbf{Jupyter Notebook} that begins with a \textbf{Teradata connection}.
+			\item The notebook lives on a \textbf{Jupyter server}.
+			\item The notebook is \textbf{not} a clean, modular notebook.
+			\item It contains \textbf{one very large cell} with:
+			\begin{itemize}
+				\item A large SQL query,
+				\item Python \texttt{for} loops that inject strings into the SQL,
+				\item Multiple smaller \texttt{pandas} DataFrames,
+				\item Business logic mixed with data access.
+			\end{itemize}
+			\item Goal: \textbf{demystify}, \textbf{break down}, and \textbf{clean up} the notebook.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Why This Matters}
+		\begin{block}{The Problem}
+			A single monolithic cell is hard to:
+			\begin{itemize}
+				\item Read,
+				\item Debug,
+				\item Explain,
+				\item Reuse,
+				\item Hand over to others (or to Copilot).
+			\end{itemize}
+		\end{block}
+		
+		\begin{block}{The Solution}
+			Split the code into smaller, logical cells and save intermediate outputs (e.g., DataFrame headers) so the workflow becomes transparent.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{What We Are \emph{Not} Doing}
+		\begin{itemize}
+			\item We are \textbf{not} rewriting the business logic.
+			\item We are \textbf{not} changing the SQL semantics.
+			\item We are \textbf{not} using Copilot for this phase.
+		\end{itemize}
+		
+		\begin{alertblock}{Why avoid Copilot for now?}
+			We are preparing clean, structured input \emph{for} Copilot.\\
+			Using Copilot too early adds noise and confusion.
+		\end{alertblock}
+	\end{frame}
+	
+	% ============================================================
+	\section{Environment and Access}
+	% ============================================================
+	
+	\begin{frame}{Standard Procedure to Run the Notebook}
+		\begin{enumerate}
+			\item Log in to the server using \textbf{PuTTY}.
+			\item Switch to the \textbf{Power Broker} account.
+			\item Navigate to our project folder.
+			\item Run the notebook command.
+			\item The notebook fetches the password via \texttt{config.py}.
+			\item Connect to \textbf{Teradata}.
+		\end{enumerate}
+		
+		\begin{block}{Note}
+			Teradata is a legacy, classical data warehouse with its own computational framework.\\
+			For this course, it is important to understand how it differs from \textbf{Hive}.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Typical Access Flow}
+		\begin{lstlisting}[language=bash,caption={Shell commands (illustrative)}]
+			# Log in via PuTTY (outside the notebook)
+			# Then on the server:
+			sudo su - powerbroker
+			cd /path/to/our/folder
+			jupyter nbconvert --to notebook --execute our_notebook.ipynb
+		\end{lstlisting}
+	\end{frame}
+	
+	% ============================================================
+	\section{The Monolithic Notebook}
+	% ============================================================
+	
+	\begin{frame}[fragile]{What the Big Cell Looks Like}
+		\begin{lstlisting}[caption={Conceptual structure of the monolithic cell}]
+			# config.py provides the password
+			from config import get_password
+			
+			password = get_password()
+			conn = teradata.connect(..., password=password)
+			
+			# One huge query with Python string injection
+			base_query = """
+			SELECT ...
+			FROM ...
+			WHERE month = '{month}'
+			"""
+			
+			for month in months:
+			query = base_query.format(month=month)
+			df = pd.read_sql(query, conn)
+			# ... lots of pandas logic ...
+			# ... more smaller DataFrames ...
+			# ... final output ...
+		\end{lstlisting}
+	\end{frame}
+	
+	\begin{frame}{Why the Query Is So Big}
+		\begin{itemize}
+			\item To \textbf{iteratively inject strings} into SQL, we need Python.
+			\item A \texttt{for} loop (e.g., over months) injects a value into the query.
+			\item Each iteration produces a separate query result.
+			\item The original author wrote the loop and the query together.
+			\item Over time, more and more logic was added into the same cell.
+		\end{itemize}
+		
+		\begin{block}{Key Insight}
+			The big query is not big because the SQL is complex.\\
+			It is big because \textbf{Python and SQL are entangled}.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{What Else Is Inside the Big Cell?}
+		\begin{itemize}
+			\item Multiple \texttt{pandas} DataFrames are created.
+			\item Each DataFrame is separated into its own logic.
+			\item Intermediate results are used to build the next step.
+			\item The final output is saved or returned.
+		\end{itemize}
+		
+		\begin{alertblock}{Our Job}
+			Separate the logic into different blocks and find out what is happening at each step.
+		\end{alertblock}
+	\end{frame}
+	
+	% ============================================================
+	\section{Cleanup Strategy}
+	% ============================================================
+	
+	\begin{frame}{Step-by-Step Cleanup Plan}
+		\begin{enumerate}
+			\item \textbf{Identify} the major logical sections in the big cell.
+			\item \textbf{Split} them into smaller Jupyter cells.
+			\item \textbf{Preserve} the original code (do not change logic).
+			\item \textbf{Save} intermediate outputs:
+			\begin{itemize}
+				\item DataFrame headers,
+				\item Shapes,
+				\item Sample rows,
+				\item Column definitions.
+			\end{itemize}
+			\item \textbf{Document} what each cell does.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Example: Splitting the Big Cell}
+		\begin{columns}[T]
+			\begin{column}{0.48\textwidth}
+				\textbf{Before}
+				\begin{itemize}
+					\item One cell
+					\item 500+ lines
+					\item SQL + Python + pandas
+					\item Hard to debug
+				\end{itemize}
+			\end{column}
+			\begin{column}{0.48\textwidth}
+				\textbf{After}
+				\begin{itemize}
+					\item Cell 1: Imports and config
+					\item Cell 2: Connection
+					\item Cell 3: Query template
+					\item Cell 4: Loop over months
+					\item Cell 5: DataFrame 1
+					\item Cell 6: DataFrame 2
+					\item Cell 7: Final output
+				\end{itemize}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Example: Cleaned Cell Structure}
+		\begin{lstlisting}[caption={Split cells (conceptual)}]
+			# Cell 1: Imports
+			import pandas as pd
+			from config import get_password
+			
+			# Cell 2: Connection
+			password = get_password()
+			conn = teradata.connect(..., password=password)
+			
+			# Cell 3: Query template
+			base_query = """
+			SELECT ...
+			FROM ...
+			WHERE month = '{month}'
+			"""
+			
+			# Cell 4: Loop over months
+			monthly_dfs = {}
+			for month in months:
+			query = base_query.format(month=month)
+			monthly_dfs[month] = pd.read_sql(query, conn)
+			
+			# Cell 5: Inspect one DataFrame
+			df = monthly_dfs[months[0]]
+			print(df.head())
+			print(df.columns.tolist())
+		\end{lstlisting}
+	\end{frame}
+	
+	\begin{frame}{Saving Intermediate Outputs}
+		\begin{itemize}
+			\item For each DataFrame, save:
+			\begin{itemize}
+				\item \texttt{df.head()},
+				\item \texttt{df.shape},
+				\item \texttt{df.columns.tolist()},
+				\item \texttt{df.dtypes}.
+			\end{itemize}
+			\item This makes it easy to:
+			\begin{itemize}
+				\item Verify data,
+				\item Compare months,
+				\item Explain to others,
+				\item Prepare input for Copilot.
+			\end{itemize}
+		\end{itemize}
+		
+		\begin{block}{Remember}
+			We are \textbf{not} touching the code. We are only \textbf{reorganizing} it.
+		\end{block}
+	\end{frame}
+	
+\begin{frame}{Defining Columns at the Start}
+	
+	\begin{itemize}
+		\item At the top of the notebook, define the columns we care about.
+		\item Example:
+	\end{itemize}
+	
+	\begin{block}{Column definitions}
+		\small
+		\texttt{\detokenize{KEY_COLUMNS = [}}
+		\par
+		\texttt{\detokenize{    "customer_id",}}
+		\par
+		\texttt{\detokenize{    "month",}}
+		\par
+		\texttt{\detokenize{    "revenue",}}
+		\par
+		\texttt{\detokenize{    "product_category",}}
+		\par
+		\texttt{\detokenize{]}}
+		\par
+		\vspace{0.1cm}
+		\texttt{\detokenize{DATE_COLUMNS = ["month", "transaction_date"]}}
+	\end{block}
+	
+	\begin{itemize}
+		\item This makes the notebook self-documenting.
+		\item It also helps when splitting the big cell.
+	\end{itemize}
+	
+\end{frame}
+	
+	% ============================================================
+	\section{Teradata vs. Hive}
+	% ============================================================
+	
+	\begin{frame}{Teradata vs. Hive: Why It Matters}
+		\begin{table}
+			\centering
+			\begin{tabular}{p{0.28\textwidth} p{0.28\textwidth} p{0.28\textwidth}}
+				\toprule
+				\textbf{Aspect} & \textbf{Teradata} & \textbf{Hive} \\
+				\midrule
+				Type & Classical RDBMS / MPP & Hadoop-based data warehouse \\
+				Language & SQL (Teradata dialect) & HiveQL (SQL-like) \\
+				Compute & Proprietary engine & MapReduce / Tez / Spark \\
+				Storage & Proprietary & HDFS / cloud storage \\
+				Use case & Legacy enterprise DW & Big data analytics \\
+				\bottomrule
+			\end{tabular}
+		\end{table}
+		
+		\begin{block}{Takeaway}
+			Understanding both helps you know \emph{why} the code is written the way it is.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Why We Still Use Teradata}
+		\begin{itemize}
+			\item It is a \textbf{very old, classical, legacy} place to keep data.
+			\item It has its own \textbf{computational framework}.
+			\item Many enterprises still rely on it for critical reporting.
+			\item The notebook we are cleaning is part of that legacy pipeline.
+		\end{itemize}
+		
+		\begin{alertblock}{Be Careful}
+			Teradata SQL dialect may differ from Hive SQL.\\
+			Do not assume a query will run the same way on both.
+		\end{alertblock}
+	\end{frame}
+	
+	% ============================================================
+	\section{Practical Workflow}
+	% ============================================================
+	
+	\begin{frame}{Recommended Workflow}
+		\begin{enumerate}
+			\item Log in via PuTTY.
+			\item Switch to Power Broker account.
+			\item Navigate to the project folder.
+			\item Open the notebook.
+			\item Create a \textbf{copy} of the original notebook.
+			\item In the copy, split the big cell into smaller cells.
+			\item Run each cell and save intermediate outputs.
+			\item Add markdown explanations for each section.
+			\item Compare the final output with the original.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Example: Saving Outputs to Disk}
+		\begin{lstlisting}[caption={Save DataFrame headers and samples}]
+			# After splitting, for each important DataFrame:
+			df.head(20).to_csv("output/df_head.csv", index=False)
+			with open("output/df_columns.txt", "w") as f:
+			f.write("\n".join(df.columns.tolist()))
+			
+			# Also save a small summary
+			with open("output/df_summary.txt", "w") as f:
+			f.write(f"Shape: {df.shape}\n")
+			f.write(f"Columns: {df.columns.tolist()}\n")
+			f.write(f"Dtypes:\n{df.dtypes}\n")
+		\end{lstlisting}
+	\end{frame}
+	
+	\begin{frame}{What Good Looks Like}
+		\begin{itemize}
+			\item A notebook with \textbf{clear sections}:
+			\begin{itemize}
+				\item Imports,
+				\item Configuration,
+				\item Connection,
+				\item Query templates,
+				\item Loops,
+				\item DataFrame processing,
+				\item Final output.
+			\end{itemize}
+			\item Each cell does \textbf{one thing}.
+			\item Intermediate outputs are \textbf{saved and visible}.
+			\item The original logic is \textbf{unchanged}.
+		\end{itemize}
+	\end{frame}
+	
+	% ============================================================
+	\section{Summary and Next Steps}
+	% ============================================================
+	
+	\begin{frame}{Summary}
+		\begin{itemize}
+			\item We start with a monolithic Jupyter notebook connected to Teradata.
+			\item The big cell mixes SQL, Python loops, and pandas logic.
+			\item Our job is to \textbf{demystify} and \textbf{clean up} the notebook.
+			\item We split the big cell into smaller, logical cells.
+			\item We save intermediate outputs (headers, shapes, samples).
+			\item We avoid Copilot for now to keep the analysis clean.
+			\item We understand Teradata vs. Hive to better interpret the code.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Next Steps}
+		\begin{enumerate}
+			\item Get access to the actual notebook.
+			\item Identify the major logical blocks.
+			\item Create a cleaned copy.
+			\item Split the big cell step by step.
+			\item Save outputs for each DataFrame.
+			\item Document everything in markdown.
+			\item Only then consider using Copilot for further analysis.
+		\end{enumerate}
+		
+		\begin{block}{Remember}
+			Clean code is not about rewriting.\\
+			It is about making the existing code \textbf{understandable}.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Questions?}
+		\begin{center}
+			\Large
+			Thank you!\\[1em]
+			\normalsize
+			Feel free to ask questions or share your notebook for a live walkthrough.
+		\end{center}
+	\end{frame}
+	
+\end{document}

@@ -1,0 +1,25 @@
+\frametitle{Manual Configuration: What to Change}
+
+	\begin{lstlisting}[style=sparkstyle, caption={Manually tuning Spark for a large job}]
+		spark = (SparkSession.builder
+		.appName("FixedLargeNotebook")
+		# Increase executor memory (e.g., 16g -> 32g)
+		.config("spark.executor.memory", "32g")
+		# Increase number of executors
+		.config("spark.executor.instances", "20")
+		# Increase cores per executor
+		.config("spark.executor.cores", "8")
+		# Increase driver memory if driver is collecting data
+		.config("spark.driver.memory", "16g")
+		# Tune shuffle partitions for large data
+		.config("spark.sql.shuffle.partitions", "400")
+		# Enable adaptive query execution (Spark 3+)
+		.config("spark.sql.adaptive.enabled", "true")
+		.getOrCreate())
+	\end{lstlisting}
+	
+	\begin{itemize}
+		\item Start with values from old notebooks that worked.
+		\item Adjust based on cluster capacity and job behavior.
+	\end{itemize}
+	

@@ -1,0 +1,324 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+
+%\lstdefinestyle{sparkstyle}{
+%	language=Python,
+%	basicstyle=\ttfamily\scriptsize,
+%	keywordstyle=\bfseries,
+%	commentstyle=\itshape,
+%	stringstyle=\ttfamily,
+%	showstringspaces=false,
+%	breaklines=true,
+%	breakatwhitespace=true,
+%	frame=single,
+%	numbers=left,
+%	numberstyle=\tiny,
+%	tabsize=4
+%}
+
+
+% Code listing style for Python/Spark
+\lstdefinestyle{sparkstyle}{
+	language=Python,
+	basicstyle=\ttfamily\scriptsize,
+	keywordstyle=\color{blue!80!black},
+	stringstyle=\color{red!70!black},
+	commentstyle=\color{green!50!black},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=8pt,
+	backgroundcolor=\color{gray!5},
+	frame=single,
+	rulecolor=\color{gray!40},
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=2,
+	captionpos=b
+}
+
+\lstdefinestyle{shellstyle}{
+	language=bash,
+	basicstyle=\ttfamily\scriptsize,
+	keywordstyle=\color{blue!80!black},
+	stringstyle=\color{red!70!black},
+	commentstyle=\color{green!50!black},
+	backgroundcolor=\color{gray!5},
+	frame=single,
+	rulecolor=\color{gray!40},
+	breaklines=true,
+	showstringspaces=false
+}
+
+\title{Fixing the Spark Notebook}
+\subtitle{From Timeouts to Tuned Configurations}
+\author{Data Engineering Course}
+\date{\today}
+
+\begin{document}
+	
+	% ---------------------------------------------------------------
+	% Title Slide
+	% ---------------------------------------------------------------
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Outline}
+		\tableofcontents
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\section{The Problem: Notebook Timeouts}
+	% ---------------------------------------------------------------
+	
+	\begin{frame}{The Problem: Notebook Timeouts}
+		\begin{block}{Symptoms}
+			\begin{itemize}
+				\item Running the Spark notebook \textbf{as-is} takes \textbf{4--6 hours}.
+				\item Eventually it \textbf{times out} or loses track.
+				\item Not exactly a crash --- it silently hangs after several hours.
+				\item Hard to see what is happening at that point.
+			\end{itemize}
+		\end{block}
+		
+		\begin{alertblock}{Impact}
+			\begin{itemize}
+				\item No useful output after a full working day.
+				\item Iteration is painfully slow.
+				\item We need a more reliable and faster execution.
+			\end{itemize}
+		\end{alertblock}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Why Does It Time Out?}
+		\begin{itemize}
+			\item The notebook processes a \textbf{large amount of data}.
+			\item Default Spark configuration may not provide enough:
+			\begin{itemize}
+				\item Executor memory
+				\item Number of executors
+				\item Driver memory
+				\item CPU cores
+			\end{itemize}
+			\item When resources are insufficient, Spark spills to disk, retries, and slows down dramatically.
+			\item After 5--6 hours, the session may be killed by the cluster manager or simply become unresponsive.
+		\end{itemize}
+		
+		\begin{exampleblock}{Key Insight}
+			We need to \textbf{change the configuration} --- executor memory, number of executors, and possibly driver memory --- to match the workload.
+		\end{exampleblock}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\section{How We Got the Idea: Old Notebooks}
+	% ---------------------------------------------------------------
+	
+	\begin{frame}{Learning from Old Notebooks}
+		\begin{itemize}
+			\item We examined \textbf{3--5 year old notebooks} in the repository.
+			\item Those notebooks were \textbf{manually configuring} Spark:
+			\begin{itemize}
+				\item \texttt{spark.executor.memory}
+				\item \texttt{spark.executor.cores}
+				\item \texttt{spark.executor.instances}
+				\item \texttt{spark.driver.memory}
+			\end{itemize}
+			\item They were designed to run \textbf{large workloads} and completed successfully.
+			\item This gave us the idea: \textbf{replicate their configuration approach}.
+		\end{itemize}
+		
+		\begin{block}{Observation}
+			Older code did not have the luxury of pre-configured ``large'' notebooks.\\
+			Engineers explicitly tuned Spark for each job.
+		\end{block}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}[fragile]{Example: Old-Style Manual Configuration}
+		\begin{lstlisting}[style=sparkstyle, caption={Manual Spark configuration in an old notebook}]
+			from pyspark.sql import SparkSession
+			
+			spark = (SparkSession.builder
+			.appName("LargeNotebookJob")
+			.config("spark.executor.memory", "16g")
+			.config("spark.executor.cores", "4")
+			.config("spark.executor.instances", "10")
+			.config("spark.driver.memory", "8g")
+			.config("spark.sql.shuffle.partitions", "200")
+			.getOrCreate())
+		\end{lstlisting}
+		
+		\begin{itemize}
+			\item Explicit values for memory, cores, and instances.
+			\item Tuned for a specific large workload.
+			\item This is what we might need to do --- or use a pre-configured notebook.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\section{Self-Configured ``Large'' Notebooks}
+	% ---------------------------------------------------------------
+	
+	\begin{frame}{Self-Configured Large Notebooks}
+		\begin{block}{What are they?}
+			Notebooks that come with \textbf{pre-set Spark configurations} optimized for large workloads.
+		\end{block}
+		
+		\begin{itemize}
+			\item The \textbf{tech team} creates different kinds of notebooks:
+			\begin{itemize}
+				\item Small / default notebooks for quick exploration.
+				\item Medium notebooks for standard jobs.
+				\item \textbf{Large notebooks} for heavy processing.
+			\end{itemize}
+			\item These notebooks are \textbf{self-configured} --- you do not need to manually set memory or executors.
+			\item They are ready to use when you know your job is resource-intensive.
+		\end{itemize}
+		
+		\begin{exampleblock}{Recommendation}
+			Use a \textbf{large self-configured notebook} when your workload is known to be heavy.\\
+			Fall back to manual configuration only if needed.
+		\end{exampleblock}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+\begin{frame}[fragile]{How to Identify a Large Notebook}
+	\begin{itemize}
+		\item Check the notebook metadata or header comments.
+		\item Look for pre-set Spark configuration cells:
+	\end{itemize}
+	
+	\begin{lstlisting}[style=sparkstyle, caption={Self-configured large notebook (example)}]
+		# This notebook is pre-configured for LARGE workloads.
+		# Executor memory: 32g, Executors: 20, Cores: 8
+		spark = SparkSession.builder.getOrCreate()
+		# Configuration is applied automatically by the environment.
+	\end{lstlisting}
+	
+	\begin{itemize}
+		\item Ask the tech team which notebook profile to use.
+		\item In many clusters, you can select the notebook type from a dropdown.
+	\end{itemize}
+\end{frame} 
+
+
+	\section{Approach: Fix the Notebook}
+	% ---------------------------------------------------------------
+	
+	\begin{frame}{Step-by-Step Plan}
+		\begin{enumerate}
+			\item \textbf{Reproduce the problem} --- run as-is and confirm the timeout.
+			\item \textbf{Inspect old notebooks} --- find manual configs that worked.
+			\item \textbf{Check available notebook profiles} --- ask tech team or look for large notebooks.
+			\item \textbf{Switch to a large self-configured notebook} if available.
+			\item \textbf{If not, manually set} executor memory, instances, cores, and driver memory.
+			\item \textbf{Test with a smaller subset} first to validate the configuration.
+			\item \textbf{Run the full workload} and monitor performance.
+			\item \textbf{Iterate} --- hit and trial until stable and fast enough.
+		\end{enumerate}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+\begin{frame}[fragile]{Manual Configuration: What to Change}
+	
+	\begin{lstlisting}[style=sparkstyle, caption={Manually tuning Spark for a large job}]
+		spark = (SparkSession.builder
+		.appName("FixedLargeNotebook")
+		# Increase executor memory (e.g., 16g -> 32g)
+		.config("spark.executor.memory", "32g")
+		# Increase number of executors
+		.config("spark.executor.instances", "20")
+		# Increase cores per executor
+		.config("spark.executor.cores", "8")
+		# Increase driver memory if driver is collecting data
+		.config("spark.driver.memory", "16g")
+		# Tune shuffle partitions for large data
+		.config("spark.sql.shuffle.partitions", "400")
+		# Enable adaptive query execution (Spark 3+)
+		.config("spark.sql.adaptive.enabled", "true")
+		.getOrCreate())
+	\end{lstlisting}
+	
+	\begin{itemize}
+		\item Start with values from old notebooks that worked.
+		\item Adjust based on cluster capacity and job behavior.
+	\end{itemize}
+	
+\end{frame}
+	% ---------------------------------------------------------------
+	\begin{frame}{Hit and Trial: What to Monitor}
+		\begin{itemize}
+			\item \textbf{Spark UI} --- check stages, tasks, and spills.
+			\item \textbf{Executor memory usage} --- are executors running out of memory?
+			\item \textbf{Task duration} --- which stages are slow?
+			\item \textbf{Shuffle read/write} --- excessive shuffle indicates partitioning issues.
+			\item \textbf{GC time} --- high garbage collection means memory pressure.
+		\end{itemize}
+		
+		\begin{block}{Iterative Tuning}
+			\begin{itemize}
+				\item Change one parameter at a time.
+				\item Document what you changed and the result.
+				\item Repeat until the job completes in acceptable time.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\section{Summary and Best Practices}
+	% ---------------------------------------------------------------
+	
+	\begin{frame}{Summary}
+		\begin{itemize}
+			\item The notebook \textbf{times out} because default Spark resources are insufficient.
+			\item Old notebooks solved this by \textbf{manually configuring} Spark.
+			\item The tech team now provides \textbf{self-configured large notebooks}.
+			\item \textbf{Preferred approach:} use a large notebook profile.
+			\item \textbf{Fallback:} manually set executor memory, instances, cores, and driver memory.
+			\item Expect \textbf{hit and trial} --- tuning is iterative.
+		\end{itemize}
+		
+		\begin{exampleblock}{Key Takeaway}
+			Match the Spark configuration to the workload.\\
+			Use large self-configured notebooks when available; otherwise, tune manually.
+		\end{exampleblock}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Best Practices}
+		\begin{enumerate}
+			\item \textbf{Know your workload} --- small, medium, or large.
+			\item \textbf{Prefer self-configured notebooks} provided by the tech team.
+			\item \textbf{Document} any manual configuration you apply.
+			\item \textbf{Test with a subset} before running the full job.
+			\item \textbf{Monitor Spark UI} during execution.
+			\item \textbf{Iterate} --- do not expect perfect settings on the first try.
+			\item \textbf{Communicate} with the tech team about cluster limits.
+		\end{enumerate}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{References and Further Reading}
+		\begin{itemize}
+			\item Apache Spark Documentation: \url{https://spark.apache.org/docs/latest/configuration.html}
+			\item Spark Tuning Guide: \url{https://spark.apache.org/docs/latest/tuning.html}
+			\item Internal tech team documentation on notebook profiles.
+			\item Old notebooks in the repository (3--5 years old) --- examples of manual tuning.
+		\end{itemize}
+		
+		\vspace{1em}
+		\begin{center}
+			\Large Questions?
+		\end{center}
+	\end{frame}
+	
+\end{document}
