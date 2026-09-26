@@ -15,3 +15,11 @@ GenAI Performance Metrics
 
 7
 Maximum Likelihood Estimation 
+
+
+3
+Linear Discriminant Analysis
+AIC
+
+2
+Silhouette Scores to find clusters
