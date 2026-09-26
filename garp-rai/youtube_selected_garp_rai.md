@@ -11,7 +11,9 @@ rag
 Attention Mechanism in Transformers
 GenAI Performance Metrics
 
-
+4
+cnn rnn dofference 
+Autoencoders are a class of artificial neural network models (ANNs) 
 
 7
 Maximum Likelihood Estimation 
