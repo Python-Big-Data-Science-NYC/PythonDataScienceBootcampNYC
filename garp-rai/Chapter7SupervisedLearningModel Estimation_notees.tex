@@ -1,0 +1,3700 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Chapter 7: Supervised Learning - Model Estimation}
+\subtitle{100 Tutorial Topics: OLS, NLS, MLE, Gradient Descent, Backpropagation, Regularization, Cross-Validation}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 1: INTRODUCTION TO MODEL ESTIMATION
+	% ============================================================
+	
+	\begin{frame}{T1: Model Estimation Purpose}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Primary Purpose of Model Estimation in Supervised Learning}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Model estimation is the essential step where a model learns from data
+			\item It involves finding the specific parameter values that cause the model to best fit the training data
+			\item Parameters are often called "weights" in machine learning
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{TWO MAIN ESTIMATION FAMILIES:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Least Squares:} Minimize sum of squared differences between predictions and actual values
+			\begin{itemize}
+				\item Objective: Make prediction errors (residuals) as small as possible
+			\end{itemize}
+			\item \textcolor{myblue}{Maximum Likelihood:} Probabilistic approach
+			\begin{itemize}
+				\item Assume data comes from specific distribution
+				\item Find parameters that make observing data most likely
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Fundamental to all supervised learning
+			\item Determines model performance
+			\item Foundation for prediction and classification
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Model estimation is about finding \textcolor{myblue}{optimal parameter values}, not increasing complexity!
+	\end{frame}
+	
+	\begin{frame}{T2: Analytical vs Numerical Methods}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Distinguishing Between Analytical and Numerical Estimation Methods}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Estimation methods can be broadly classified into analytical and numerical approaches
+			\item The choice depends on the complexity of the objective function and model
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ANALYTICAL METHODS:}
+		\begin{itemize}
+			\item \textbf{Closed-form solution:} Exact mathematical equations
+			\item \textbf{Unique solution:} Parameter values are unique
+			\item \textbf{Example:} OLS for linear regression: $\hat{\beta} = (X^TX)^{-1}X^Ty$
+			\item \textbf{When available:} When objective function can be differentiated
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{NUMERICAL METHODS:}
+		\begin{itemize}
+			\item \textbf{No closed-form solution:} Iterative procedures
+			\item \textbf{Start with initial guess:} Gradually move toward optimal
+			\item \textbf{Example:} Gradient descent, NLS
+			\item \textbf{When needed:} When differentiation is too complex or impossible
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:} Analytical = exact formula; Numerical = iterative approximation
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Analytical methods have \textcolor{myblue}{closed-form solutions}; numerical methods require \textcolor{myblue}{iterative procedures}!
+	\end{frame}
+	
+	\begin{frame}{T3: Hyperparameters vs Parameters}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Distinguishing Between Hyperparameters and Parameters}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Parameters are learned from data during training
+			\item Hyperparameters are configuration settings chosen before training begins
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PARAMETERS (WEIGHTS):}
+		\begin{itemize}
+			\item \textbf{Learned from data:} Estimated by optimization algorithm
+			\item \textbf{Examples:}
+			\begin{itemize}
+				\item Regression coefficients ($\beta_0, \beta_1, ...$)
+				\item Neural network weights
+				\item Bias terms
+			\end{itemize}
+			\item \textbf{Updated during training:} Changed with each iteration
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{HYPERPARAMETERS:}
+		\begin{itemize}
+			\item \textbf{Set before training:} Configuration settings
+			\item \textbf{Examples:}
+			\begin{itemize}
+				\item Learning rate ($\eta$)
+				\item Number of hidden layers
+				\item Regularization parameter ($\lambda$)
+				\item Number of epochs
+			\end{itemize}
+			\item \textbf{Require tuning:} Grid search, cross-validation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Parameters = \textcolor{myblue}{learned from data}; Hyperparameters = \textcolor{myblue}{set before training}!
+	\end{frame}
+	
+	\begin{frame}{T4: Least Squares Overview}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Overview of the Least Squares Method}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Technique to estimate parameters by minimizing sum of squared differences between observed values and model predictions
+			\item Two variants: Ordinary Least Squares (OLS) and Nonlinear Least Squares (NLS)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{OBJECTIVE FUNCTION:}
+		\begin{itemize}
+			\item Residual Sum of Squares (RSS): $\sum_{i=1}^N (y_i - \hat{y}_i)^2$
+			\item Mean Squared Error (MSE): $\frac{1}{N}\sum_{i=1}^N (y_i - \hat{y}_i)^2$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY SQUARE RESIDUALS?}
+		\begin{itemize}
+			\item Positive and negative residuals would cancel if simply summed
+			\item Sum of residuals is always zero at optimal solution
+			\item Squaring ensures all residuals contribute positively
+			\item Penalizes large errors more heavily
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY CHARACTERISTICS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{OLS:} Linear in parameters; closed-form solution
+			\item \textcolor{myblue}{NLS:} Nonlinear in parameters; iterative solution
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Least Squares minimizes \textcolor{myblue}{squared} differences, not absolute differences!
+	\end{frame}
+	
+	\begin{frame}{T5: Maximum Likelihood Overview}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Overview of Maximum Likelihood Estimation}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Probabilistic approach to parameter estimation
+			\item Finds parameter values that maximize probability of observing the given data
+			\item More flexible framework than Least Squares
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CORE QUESTION:}
+		\begin{itemize}
+			\item "Given observed data, what parameter values make this data most probable?"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{enumerate}
+			\item Assume data comes from specific distribution
+			\item Construct likelihood function: $L(\theta) = P(X|\theta)$
+			\item Find $\theta$ that maximizes $L(\theta)$
+			\item Use log-likelihood for easier computation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{APPLICATIONS:}
+		\begin{itemize}
+			\item Logistic regression (Bernoulli distribution)
+			\item Linear regression (Normal distribution)
+			\item Probit models
+			\item GARCH models for volatility
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE maximizes \textcolor{myblue}{likelihood} = $P(\text{data}|\theta)$, NOT $P(\theta|\text{data})$!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 2: ORDINARY LEAST SQUARES
+	% ============================================================
+	
+	\begin{frame}{T6: OLS Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Ordinary Least Squares - Definition and Overview}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Most straightforward estimation method
+			\item Analytical approach with closed-form solution
+			\item Used to estimate parameters in linear regression models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{OBJECTIVE:}
+		\begin{itemize}
+			\item Minimize Residual Sum of Squares (RSS)
+			\item $RSS = \sum_{i=1}^N (y_i - \hat{y}_i)^2 = \sum_{i=1}^N (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)^2$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY CHARACTERISTICS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Analytical method:} Closed-form solution
+			\item \textcolor{myblue}{Linear in parameters:} $y = \beta_0 + \beta_1 x + \varepsilon$
+			\item \textcolor{myblue}{Unique solution:} One optimal set of parameters
+			\item \textcolor{myblue}{Computationally efficient:} Direct calculation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Salary = 16.88 + 1.06 × Experience
+			\item Intercept = 16.88, Slope = 1.06
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS is an \textcolor{myblue}{analytical} method with \textcolor{myblue}{closed-form solution}!
+	\end{frame}
+	
+	\begin{frame}{T7: OLS - Residual Sum of Squares}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Residual Sum of Squares (RSS) in OLS}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item RSS is the sum of squared differences between actual and predicted values
+			\item It is the objective function that OLS minimizes
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		RSS = \sum_{i=1}^N \hat{u}_i^2 = \sum_{i=1}^N (y_i - \hat{y}_i)^2
+		\]
+		where:
+		\begin{itemize}
+			\item $y_i$ = actual observed value
+			\item $\hat{y}_i$ = predicted value
+			\item $\hat{u}_i = y_i - \hat{y}_i$ = residual
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{RELATED METRICS:}
+		\begin{itemize}
+			\item MSE = RSS/N (Mean Squared Error)
+			\item RMSE = $\sqrt{MSE}$ (Root Mean Squared Error)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY SQUARE?}
+		\begin{itemize}
+			\item Prevents positive and negative residuals from canceling
+			\item Sum of residuals is always zero at OLS solution
+			\item Penalizes large errors more heavily
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} RSS = \textcolor{myblue}{sum of squared residuals}, NOT sum of absolute residuals!
+	\end{frame}
+	
+	\begin{frame}{T8: OLS - MSE Formula}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Mean Squared Error (MSE) in OLS}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item MSE is the average of squared residuals
+			\item Commonly used metric for model performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		MSE = \frac{1}{N}\sum_{i=1}^N \hat{u}_i^2 = \frac{1}{N}\sum_{i=1}^N (y_i - \hat{y}_i)^2 = \frac{RSS}{N}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{RELATIONSHIP TO RSS:}
+		\begin{itemize}
+			\item MSE = RSS / N
+			\item Both minimized at same parameter values
+			\item MSE is scale-independent of sample size
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY MSE IS USEFUL:}
+		\begin{itemize}
+			\item Easier to compare across datasets
+			\item Commonly used as loss function in machine learning
+			\item Basis for RMSE calculation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MSE = \textcolor{myblue}{RSS/N} = average squared error!
+	\end{frame}
+	
+	\begin{frame}{T9: OLS - Fitted Line Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Fitted Regression Line in Salary Example}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE DATA:}
+		\begin{itemize}
+			\item 14 observations of bank employee experience and salary
+			\item Simple linear regression: one feature (experience), one target (salary)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FITTED EQUATION:}
+		\[
+		\hat{y} = 16.88 + 1.06x
+		\]
+		where:
+		\begin{itemize}
+			\item $\hat{y}$ = predicted salary (USD/hour)
+			\item $x$ = years of experience
+			\item Intercept $\hat{\beta}_0 = 16.88$
+			\item Slope $\hat{\beta}_1 = 1.06$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item Base salary (0 experience): \$16.88/hour
+			\item Each additional year: +\$1.06/hour
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE PREDICTION:}
+		\begin{itemize}
+			\item Experience = 9 years
+			\item Predicted salary = 16.88 + 9(1.06) = 26.42
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Know the \textcolor{myblue}{intercept and slope} from the example!
+	\end{frame}
+	
+	\begin{frame}{T10: OLS - Residual Calculation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Calculating Residuals in OLS}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Residual = Actual value - Predicted value
+			\item $\hat{u}_i = y_i - \hat{y}_i$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Data point: Experience = 9 years, Salary = \$33.08/hour
+			\item Predicted: $\hat{y} = 16.88 + 9(1.06) = 26.42$
+			\item Residual: $33.08 - 26.42 = 6.66$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item Positive residual: actual > predicted
+			\item Model under-predicted for this point
+			\item Negative residual: actual < predicted
+			\item Model over-predicted for this point
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROPERTY:}
+		\begin{itemize}
+			\item Sum of residuals = 0 at OLS solution
+			\item $\sum \hat{u}_i = 0$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Residual = \textcolor{myblue}{actual - predicted}, NOT predicted - actual!
+	\end{frame}
+	
+	\begin{frame}{T11: OLS - Normal Equations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Deriving OLS Estimates Using Normal Equations}
+		
+		\vspace{0.1cm}
+		\textbf{DERIVATION PROCESS:}
+		\begin{enumerate}
+			\item Write RSS as function of parameters
+			\item Partially differentiate with respect to each parameter
+			\item Set derivatives to zero (first-order conditions)
+			\item Solve system of equations (normal equations)
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{RESULTING FORMULAS:}
+		\begin{itemize}
+			\item Intercept: $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$
+			\item Slope: $\hat{\beta}_1 = \frac{\sum_{i=1}^N y_i x_i - N\bar{y}\bar{x}}{\sum_{i=1}^N x_i^2 - N\bar{x}^2}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THIS WORKS:}
+		\begin{itemize}
+			\item RSS is convex function of parameters
+			\item Unique minimum exists
+			\item First-order conditions characterize minimum
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item OLS has closed-form solution
+			\item No iterative optimization needed
+			\item Direct calculation from data
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS uses \textcolor{myblue}{calculus} (derivatives) to find closed-form solution!
+	\end{frame}
+	
+	\begin{frame}{T12: OLS - Multiple Regression}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Extending OLS to Multiple Regression}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Multiple regression has more than one explanatory variable
+			\item Model: $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_m x_m + \varepsilon$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MATRIX FORMULATION:}
+		\begin{itemize}
+			\item Model: $y = X\beta + \varepsilon$
+			\item Normal equations: $X^TX\hat{\beta} = X^Ty$
+			\item Solution: $\hat{\beta} = (X^TX)^{-1}X^Ty$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY MATRIX ALGEBRA:}
+		\begin{itemize}
+			\item Formulas become complex with many variables
+			\item Matrix notation is compact
+			\item Computationally efficient
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{REQUIREMENTS:}
+		\begin{itemize}
+			\item $X^TX$ must be invertible
+			\item No perfect multicollinearity
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Multiple regression uses \textcolor{myblue}{matrix algebra}, not separate regressions!
+	\end{frame}
+	
+	\begin{frame}{T13: OLS - Goodness of Fit}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Interpreting OLS Goodness of Fit}
+		
+		\vspace{0.1cm}
+		\textbf{RSS INTERPRETATION:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Low RSS:} Small residuals, good fit
+			\item \textcolor{myblue}{High RSS:} Large residuals, poor fit
+			\item \textcolor{myblue}{RSS = 0:} Perfect fit (rare)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CAVEATS:}
+		\begin{itemize}
+			\item Low training RSS could indicate overfitting
+			\item Need to check test/validation performance
+			\item Compare to baseline models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SALARY EXAMPLE:}
+		\begin{itemize}
+			\item Large residuals observed
+			\item Suggested OLS not ideal fit
+			\item Motivated considering alternative models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{RELATED METRICS:}
+		\begin{itemize}
+			\item R-squared: Proportion of variance explained
+			\item Adjusted R-squared: Penalizes additional parameters
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Low RSS = \textcolor{myblue}{good fit}, but check for overfitting!
+	\end{frame}
+	
+	\begin{frame}{T14: OLS - Limitations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Key Limitations of OLS}
+		
+		\vspace{0.1cm}
+		\textbf{LINEARITY REQUIREMENT:}
+		\begin{itemize}
+			\item OLS requires model linear in parameters
+			\item $y = \beta_0 + \beta_1 x + \beta_2 x^2$ is OK (linear in $\beta$s)
+			\item $y = \beta_0 + \beta_1 e^{\beta_2 x}$ is NOT OK (nonlinear in $\beta_2$)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{OTHER LIMITATIONS:}
+		\begin{itemize}
+			\item Sensitive to outliers
+			\item Assumes homoscedasticity (constant error variance)
+			\item Assumes no autocorrelation
+			\item No closed-form for nonlinear models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTION FOR NONLINEAR:}
+		\begin{itemize}
+			\item Use Nonlinear Least Squares (NLS)
+			\item Use numerical optimization
+			\item Use Maximum Likelihood Estimation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BINARY OUTCOMES:}
+		\begin{itemize}
+			\item OLS cannot handle binary targets
+			\item Use logistic regression (MLE)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS requires \textcolor{myblue}{linearity in parameters}, not variables!
+	\end{frame}
+	
+	\begin{frame}{T15: OLS vs NLS}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Comparing OLS and NLS}
+		
+		\vspace{0.1cm}
+		\textbf{KEY DIFFERENCES:}
+		\begin{tabular}{|p{2.5cm}|p{3cm}|p{3cm}|}
+			\hline
+			\textbf{Aspect} & \textbf{OLS} & \textbf{NLS} \\
+			\hline
+			Linearity & Linear in parameters & Nonlinear in parameters \\
+			\hline
+			Solution & Closed-form & Iterative \\
+			\hline
+			Method & Analytical & Numerical \\
+			\hline
+			Speed & Fast & Slower \\
+			\hline
+			Example & $y = \beta_0 + \beta_1 x$ & $y = \beta_0 + \beta_1 e^{\beta_2 x}$ \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{COMMON GROUND:}
+		\begin{itemize}
+			\item Both minimize sum of squared errors
+			\item Both are least squares methods
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN TO USE EACH:}
+		\begin{itemize}
+			\item \textcolor{myblue}{OLS:} Simple linear regression, polynomial regression
+			\item \textcolor{myblue}{NLS:} Neural networks, exponential models
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS = \textcolor{myblue}{closed-form}; NLS = \textcolor{myblue}{iterative}!
+	\end{frame}
+	
+	\begin{frame}{T16: NLS Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Nonlinear Least Squares - Definition and Process}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Iterative numerical approach to estimate parameters in nonlinear models
+			\item Minimizes objective function (RSS or MSE)
+			\item No closed-form solution exists
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{NLS PROCESS:}
+		\begin{enumerate}
+			\item Start with initial "guesses" for parameters (small random numbers)
+			\item Make predictions and evaluate objective function
+			\item Adjust parameters to improve objective
+			\item Check convergence; repeat if needed
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{WHY ITERATIVE:}
+		\begin{itemize}
+			\item No closed-form solution
+			\item Normal equations are nonlinear
+			\item Requires numerical optimization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{APPLICATIONS:}
+		\begin{itemize}
+			\item Neural networks
+			\item Complex curve fitting
+			\item Models with exponential terms
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLS is \textcolor{myblue}{iterative} because no closed-form solution exists!
+	\end{frame}
+	
+	\begin{frame}{T17: NLS - Hill Climbing}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Hill Climbing in NLS Optimization}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Simple method for estimating parameters
+			\item Tests small changes to each parameter one at a time
+			\item No derivatives required
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{APPROACH:}
+		\begin{enumerate}
+			\item Start with initial guesses
+			\item Test small changes to each parameter
+			\item Keep changes that improve objective
+			\item Repeat until no improvement
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{ADVANTAGES:}
+		\begin{itemize}
+			\item Simple to implement
+			\item No derivatives needed
+			\item Works for non-differentiable functions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DISADVANTAGES:}
+		\begin{itemize}
+			\item Gets stuck in local optima
+			\item Slow convergence
+			\item Only one parameter at a time
+			\item Misses optimal combinations
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Hill climbing is \textcolor{myblue}{simple but prone to local optima}!
+	\end{frame}
+	
+	\begin{frame}{T18: NLS - Gradient Descent Advantage}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Gradient Descent is Preferred Over Hill Climbing}
+		
+		\vspace{0.1cm}
+		\textbf{GRADIENT DESCENT ADVANTAGES:}
+		\begin{itemize}
+			\item Updates all parameters simultaneously
+			\item Uses gradient information (steepest descent)
+			\item Faster convergence than hill climbing
+			\item More efficient for complex models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{HILL CLIMBING LIMITATIONS:}
+		\begin{itemize}
+			\item Only one parameter at a time
+			\item Misses optimal parameter combinations
+			\item Slower convergence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMMON GROUND:}
+		\begin{itemize}
+			\item Both can get stuck in local minima
+			\item Neither guarantees global minimum
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY GRADIENT DESCENT WINS:}
+		\begin{itemize}
+			\item Workhorse of modern machine learning
+			\item Scales to high dimensions
+			\item Foundation of neural network training
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Gradient descent updates \textcolor{myblue}{all parameters simultaneously}!
+	\end{frame}
+	
+	\begin{frame}{T19: NLS - Initial Guesses}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Importance of Initial Guesses in NLS}
+		
+		\vspace{0.1cm}
+		\textbf{INITIAL GUESSES:}
+		\begin{itemize}
+			\item Starting values for parameters
+			\item Often small random numbers
+			\item Critical for convergence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THEY MATTER:}
+		\begin{itemize}
+			\item No closed-form solution
+			\item Iterative process needs starting point
+			\item Different starts may give different results
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{POTENTIAL ISSUES:}
+		\begin{itemize}
+			\item Bad starting values → slow convergence
+			\item May converge to local minimum
+			\item May not converge at all
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BEST PRACTICES:}
+		\begin{itemize}
+			\item Try multiple random starts
+			\item Use domain knowledge
+			\item Normalize data first
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} NLS starts with \textcolor{myblue}{initial guesses}, not exact values!
+	\end{frame}
+	
+	\begin{frame}{T20: NLS - Convergence Criteria}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Convergence Criteria in NLS}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Conditions for stopping the iterative process
+			\item Determines when solution is "good enough"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMMON CRITERIA:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Objective improvement:} Change in loss below threshold
+			\item \textcolor{myblue}{Gradient magnitude:} Gradient near zero
+			\item \textcolor{myblue}{Parameter change:} Parameters stop changing
+			\item \textcolor{myblue}{Maximum iterations:} Prevents infinite loops
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{TRADE-OFFS:}
+		\begin{itemize}
+			\item Tight threshold: More iterations, better precision
+			\item Loose threshold: Fewer iterations, less precision
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Stop when gradient < 0.001
+			\item Stop after 1000 iterations			\item Stop when loss improves < 0.0001
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Multiple stopping criteria exist, not just one!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 3: MAXIMUM LIKELIHOOD ESTIMATION
+	% ============================================================
+	
+	\begin{frame}{T21: MLE Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Maximum Likelihood Estimation - Definition and Overview}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Probabilistic approach to parameter estimation
+			\item Finds parameter values that maximize probability of observing data
+			\item More flexible than Least Squares
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CORE QUESTION:}
+		\begin{itemize}
+			\item "Given observed data, what parameter values make this data most probable?"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{enumerate}
+			\item Assume data from specific distribution
+			\item Construct likelihood function: $L(\theta) = P(X|\theta)$
+			\item Find $\theta$ that maximizes $L(\theta)$
+			\item Use log-likelihood for easier computation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{KEY PROPERTIES:}
+		\begin{itemize}
+			\item Consistent
+			\item Asymptotically efficient
+			\item Asymptotically normal
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE maximizes \textcolor{myblue}{likelihood} = $P(\text{data}|\theta)$!
+	\end{frame}
+	
+	\begin{frame}{T22: MLE vs OLS - Equivalence}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: When OLS and MLE Give Identical Estimates}
+		
+		\vspace{0.1cm}
+		\textbf{EQUIVALENCE CONDITION:}
+		\begin{itemize}
+			\item Errors are independently normally distributed
+			\item Zero mean
+			\item Constant variance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY EQUIVALENCE:}
+		\begin{itemize}
+			\item Log-likelihood: $\ell(\beta) = -\frac{N}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum(y_i - X_i\beta)^2$
+			\item Maximizing $\ell(\beta)$ $\equiv$ minimizing $\sum(y_i - X_i\beta)^2$
+			\item Same objective function
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN THEY DIFFER:}
+		\begin{itemize}
+			\item Non-normal errors
+			\item Heteroscedasticity
+			\item Different distributions (Bernoulli, Poisson, etc.)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PRACTICAL IMPLICATION:}
+		\begin{itemize}
+			\item Can use either method for linear regression
+			\item MLE more flexible for other models
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS = MLE under \textcolor{myblue}{normal errors}!
+	\end{frame}
+	
+	\begin{frame}{T23: MLE - Likelihood Function}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Understanding the Likelihood Function}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item $L(\theta | X) = P(X | \theta)$
+			\item Probability of observing data given parameters
+			\item Product of individual probabilities (if independent)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		L(\theta) = \prod_{i=1}^N f(x_i | \theta)
+		\]
+		where $f(x_i|\theta)$ is the probability density/mass function
+		
+		\vspace{0.1cm}
+		\textbf{KEY DISTINCTION:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Likelihood:} $P(\text{data} | \theta)$
+			\item \textcolor{myblue}{Posterior:} $P(\theta | \text{data})$ (Bayesian)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INDEPENDENCE ASSUMPTION:}
+		\begin{itemize}
+			\item Joint probability = product of individual probabilities
+			\item $\prod$ notation for multiplication
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Likelihood = \textcolor{myblue}{$P(\text{data}|\theta)$}, NOT $P(\theta|\text{data})$!
+	\end{frame}
+	
+	\begin{frame}{T24: MLE - Log-Likelihood}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Use Log-Likelihood Instead of Likelihood}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Natural logarithm of the likelihood function
+			\item $\ell(\theta) = \log L(\theta) = \sum_{i=1}^N \log f(x_i|\theta)$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MATHEMATICAL CONVENIENCE:}
+		\begin{itemize}
+			\item Likelihood: $L(\theta) = \prod f(x_i|\theta)$
+			\item Log-likelihood: $\ell(\theta) = \sum \log f(x_i|\theta)$
+			\item Products become sums
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MONOTONICITY:}
+		\begin{itemize}
+			\item $\log$ is strictly increasing
+			\item Maximizing $\ell(\theta)$ $\equiv$ maximizing $L(\theta)$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{NUMERICAL STABILITY:}
+		\begin{itemize}
+			\item Products of small probabilities underflow
+			\item Sums of logs are stable
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Log transforms \textcolor{myblue}{products to sums}!
+	\end{frame}
+	
+	\begin{frame}{T25: MLE - Logistic Regression}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: MLE for Logistic Regression}
+		
+		\vspace{0.1cm}
+		\textbf{BINARY OUTCOME:}
+		\begin{itemize}
+			\item $y_i \in \{0, 1\}$
+			\item Bernoulli distribution
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BERNOULLI LIKELIHOOD:}
+		\[
+		L(\beta) = \prod_{i=1}^N p_i^{y_i}(1-p_i)^{1-y_i}
+		\]
+		where $p_i = \frac{1}{1 + e^{-X_i\beta}}$
+		
+		\vspace{0.1cm}
+		\textbf{LOG-LIKELIHOOD:}
+		\[
+		\ell(\beta) = \sum_{i=1}^N [y_i \log(p_i) + (1-y_i)\log(1-p_i)]
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{MAXIMIZATION:}
+		\begin{itemize}
+			\item No closed-form solution
+			\item Numerical optimization (Newton-Raphson, IRLS)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logistic regression uses \textcolor{myblue}{Bernoulli} distribution!
+	\end{frame}
+	
+	\begin{frame}{T26: MLE - Linear Regression}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: MLE for Linear Regression}
+		
+		\vspace{0.1cm}
+		\textbf{CONTINUOUS OUTCOME:}
+		\begin{itemize}
+			\item $y_i \in \mathbb{R}$ (real numbers)
+			\item Normal distribution for errors
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{NORMAL LIKELIHOOD:}
+		\[
+		L(\beta, \sigma^2) = \prod_{i=1}^N \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(y_i - X_i\beta)^2}{2\sigma^2}\right)
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{LOG-LIKELIHOOD:}
+		\[
+		\ell(\beta) = -\frac{N}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum(y_i - X_i\beta)^2
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{EQUIVALENCE TO OLS:}
+		\begin{itemize}
+			\item Maximizing $\ell$ = minimizing RSS
+			\item Same parameter estimates
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Linear regression uses \textcolor{myblue}{Normal} distribution!
+	\end{frame}
+	
+	\begin{frame}{T27: MLE - Logit Model}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Log-Likelihood Function for Logit Model}
+		
+		\vspace{0.1cm}
+		\textbf{LOGIT MODEL:}
+		\begin{itemize}
+			\item $P_i = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_{1i} + ... + \beta_m x_{mi})}}$
+			\item $y_i = 1$ with probability $P_i$
+			\item $y_i = 0$ with probability $1-P_i$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LIKELIHOOD FOR ONE OBSERVATION:}
+		\[
+		L(y_i) = F(y_i)^{y_i}(1-F(y_i))^{1-y_i}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{JOINT LIKELIHOOD:}
+		\[
+		L = \prod_{i=1}^N F(y_i)^{y_i}(1-F(y_i))^{1-y_i}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{LOG-LIKELIHOOD:}
+		\[
+		\log L = \sum_{i=1}^N [y_i \log(F(y_i)) + (1-y_i)\log(1-F(y_i))]
+		\]
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logit log-likelihood uses \textcolor{myblue}{log of F and 1-F}!
+	\end{frame}
+	
+	\begin{frame}{T28: MLE - Threshold for Classification}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Threshold Z in Classification}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Threshold Z converts predicted probabilities into class predictions
+			\item Classification rule: $\hat{y}_i = 1$ if $P_i \geq Z$, else $\hat{y}_i = 0$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMMON THRESHOLDS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Z = 0.5:} Balanced costs
+			\item \textcolor{myblue}{Lower Z:} More conservative (predict more positives)
+			\item \textcolor{myblue}{Higher Z:} More liberal (predict fewer positives)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (LOAN DEFAULT):}
+		\begin{itemize}
+			\item Z = 0.05 (5\%)
+			\item Because cost of bad loan > profit foregone
+			\item More conservative lending decisions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item Threshold depends on relative costs
+			\item Lower threshold when false negatives more costly
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Threshold converts \textcolor{myblue}{probabilities to class labels}!
+	\end{frame}
+	
+	\begin{frame}{T29: MLE - Cost Asymmetry}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Cost Asymmetry and Threshold Selection}
+		
+		\vspace{0.1cm}
+		\textbf{TYPE I ERROR (FALSE POSITIVE):}
+		\begin{itemize}
+			\item Predict default, actually no default
+			\item Cost = Lost profit from not making loan
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{TYPE II ERROR (FALSE NEGATIVE):}
+		\begin{itemize}
+			\item Predict no default, actually defaults
+			\item Cost = Actual loan loss (much larger)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{RATIONALE FOR LOW THRESHOLD:}
+		\begin{itemize}
+			\item More conservative (predict more defaults)
+			\item Catches more actual defaults
+			\item Accepts more false positives
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{GENERAL PRINCIPLE:}
+		\begin{itemize}
+			\item Threshold depends on relative costs
+			\item Lower threshold when FN more costly
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Lower threshold when \textcolor{myblue}{missing positive is costly}!
+	\end{frame}
+	
+	\begin{frame}{T30: MLE vs OLS - Comparison}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Key Advantages of MLE Over OLS}
+		
+		\vspace{0.1cm}
+		\textbf{MLE FLEXIBILITY:}
+		\begin{itemize}
+			\item Works with any distribution
+			\item Bernoulli (logistic regression)
+			\item Normal (linear regression)
+			\item Poisson (count data)
+			\item GARCH (volatility)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{OLS LIMITATIONS:}
+		\begin{itemize}
+			\item Only for continuous outcomes
+			\item Assumes normal errors
+			\item Cannot handle binary outcomes
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN TO USE EACH:}
+		\begin{itemize}
+			\item \textcolor{myblue}{OLS:} Simple linear regression
+			\item \textcolor{myblue}{MLE:} Complex probabilistic models
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE is \textcolor{myblue}{more flexible} than OLS!
+	\end{frame}
+	
+	\begin{frame}{T31: MLE - Binary Outcomes}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why OLS Cannot Handle Binary Outcomes}
+		
+		\vspace{0.1cm}
+		\textbf{BINARY OUTCOME ISSUES:}
+		\begin{itemize}
+			\item $y_i \in \{0, 1\}$ (not continuous)
+			\item Errors not normally distributed
+			\item Predictions can be outside [0, 1]
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROBLEMS WITH OLS:}
+		\begin{itemize}
+			\item Heteroscedastic errors
+			\item Inefficient estimates
+			\item Invalid predictions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTION:}
+		\begin{itemize}
+			\item Use logistic regression (MLE)
+			\item Predict probabilities bounded [0, 1]
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Loan default: 0 = no default, 1 = default
+			\item OLS would predict values like -0.3 or 1.5
+			\item Logistic regression predicts probabilities
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS inappropriate for \textcolor{myblue}{binary outcomes}!
+	\end{frame}
+	
+	\begin{frame}{T32: MLE - Log-Likelihood Formula}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Log-Likelihood Formula for Logistic Regression}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		\ell = \sum_{i=1}^N [y_i \log(p_i) + (1-y_i)\log(1-p_i)]
+		\]
+		where $p_i = \frac{1}{1 + e^{-X_i\beta}}$
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item For $y_i = 1$: $\log(p_i)$
+			\item For $y_i = 0$: $\log(1-p_i)$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MAXIMIZATION:}
+		\begin{itemize}
+			\item Numerical optimization needed
+			\item No closed-form solution
+			\item Newton-Raphson or IRLS
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROPERTIES:}
+		\begin{itemize}
+			\item Concave function
+			\item Unique maximum
+			\item Fast convergence
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Know the \textcolor{myblue}{log-likelihood formula} for logistic regression!
+	\end{frame}
+	
+	\begin{frame}{T33: MLE - Optimization}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Optimization Methods for MLE in Logistic Regression}
+		
+		\vspace{0.1cm}
+		\textbf{NO CLOSED-FORM:}
+		\begin{itemize}
+			\item Log-likelihood is nonlinear in parameters
+			\item Cannot solve analytically
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{NUMERICAL METHODS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Newton-Raphson:} Uses second derivatives (Hessian)
+			\item \textcolor{myblue}{IRLS:} Iteratively Reweighted Least Squares
+			\item \textcolor{myblue}{Gradient Descent:} First-order method
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CONVERGENCE:}
+		\begin{itemize}
+			\item Usually converges quickly
+			\item May fail with perfect separation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PERFECT SEPARATION:}
+		\begin{itemize}
+			\item When classes perfectly separated
+			\item Coefficients diverge to infinity
+			\item Need regularization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logistic regression requires \textcolor{myblue}{numerical optimization}!
+	\end{frame}
+	
+	\begin{frame}{T34: MLE - Consistency}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Consistency Property of MLE}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Estimator converges to true parameter as sample size increases
+			\item $\hat{\theta}_{MLE} \xrightarrow{p} \theta_0$ as $n \to \infty$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MLE PROPERTIES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Consistent:} Converges to true value
+			\item \textcolor{myblue}{Asymptotically efficient:} Minimum variance
+			\item \textcolor{myblue}{Asymptotically normal:} Normal distribution
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CAVEAT:}
+		\begin{itemize}
+			\item MLE can be biased in finite samples
+			\item Example: $\hat{\sigma}^2_{MLE}$ is biased for $\sigma^2$
+			\item Consistency is asymptotic property
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Reliable estimates with large samples
+			\item Foundation for inference
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE is \textcolor{myblue}{consistent} but NOT necessarily unbiased!
+	\end{frame}
+	
+	\begin{frame}{T35: MLE - Asymptotic Normality}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Asymptotic Distribution of MLE}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		\sqrt{n}(\hat{\theta}_{MLE} - \theta_0) \xrightarrow{d} N(0, I^{-1}(\theta_0))
+		\]
+		where $I(\theta)$ = Fisher Information matrix
+		
+		\vspace{0.1cm}
+		\textbf{IMPLICATIONS:}
+		\begin{itemize}
+			\item Confidence intervals can be constructed
+			\item Hypothesis tests can be performed
+			\item MLE achieves efficiency bound
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FISHER INFORMATION:}
+		\[
+		I(\theta) = -E\left[\frac{\partial^2 \ell(\theta)}{\partial \theta^2}\right]
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{PRACTICAL USE:}
+		\begin{itemize}
+			\item Standard errors from inverse Hessian
+			\item Wald tests, likelihood ratio tests
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE is \textcolor{myblue}{asymptotically normal}!
+	\end{frame}
+	
+	\begin{frame}{T36: MLE - Efficiency}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Asymptotic Efficiency of MLE}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item MLE achieves lowest possible variance among consistent estimators asymptotically
+			\item No consistent estimator has lower variance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CRAMÉR-RAO LOWER BOUND:}
+		\begin{itemize}
+			\item Minimum variance for unbiased estimators
+			\item MLE achieves this asymptotically
+			\item $Var(\hat{\theta}) \geq \frac{1}{I(\theta)}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CAVEATS:}
+		\begin{itemize}
+			\item Finite sample properties may differ
+			\item Regularity conditions must hold
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Most precise estimates possible
+			\item Efficient use of data
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE is \textcolor{myblue}{asymptotically efficient}!
+	\end{frame}
+	
+	\begin{frame}{T37: MLE - Invariance Property}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Invariance Property of MLE}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item If $\hat{\theta}_{MLE}$ is MLE of $\theta$
+			\item Then $g(\hat{\theta}_{MLE})$ is MLE of $g(\theta)$
+			\item For any continuous function $g$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item If $\hat{\sigma}^2$ is MLE of $\sigma^2$
+			\item Then $\sqrt{\hat{\sigma}^2}$ is MLE of $\sigma$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY USEFUL:}
+		\begin{itemize}
+			\item Easy transformation of estimates
+			\item No need to re-estimate for transformed parameters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{IMPORTANT:}
+		\begin{itemize}
+			\item Invariance does NOT hold for expected values
+			\item $E[g(\hat{\theta})] \neq g(E[\hat{\theta}])$ generally
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE is \textcolor{myblue}{invariant} to parameter transformations!
+	\end{frame}
+	
+	\begin{frame}{T38: MLE - Fisher Information}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Fisher Information in MLE}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Measure of amount of information data carries about unknown parameter
+			\item Higher information = more precise estimates
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		I(\theta) = -E\left[\frac{\partial^2 \ell(\theta)}{\partial \theta^2}\right]
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{CONNECTION TO VARIANCE:}
+		\begin{itemize}
+			\item $Var(\hat{\theta}) \geq \frac{1}{I(\theta)}$
+			\item Cramér-Rao lower bound
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item More data = more information
+			\item Sharper likelihood peak = more information
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Fisher Information measures \textcolor{myblue}{information about parameters}!
+	\end{frame}
+	
+	\begin{frame}{T39: MLE - Applications}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Applications of MLE}
+		
+		\vspace{0.1cm}
+		\textbf{LINEAR REGRESSION:}
+		\begin{itemize}
+			\item Can use OLS or MLE
+			\item Equivalent under normal errors
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LOGISTIC REGRESSION:}
+		\begin{itemize}
+			\item Uses MLE (Bernoulli likelihood)
+			\item No OLS equivalent
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{OTHER MLE APPLICATIONS:}
+		\begin{itemize}
+			\item Probit models
+			\item GARCH models
+			\item Count data models
+			\item Survival analysis
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item MLE is flexible framework
+			\item Works with any distribution
+			\item Foundation for many models
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Both linear and logistic regression can use \textcolor{myblue}{MLE}!
+	\end{frame}
+	
+	\begin{frame}{T40: MLE - Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Key Advantages of MLE Over OLS}
+		
+		\vspace{0.1cm}
+		\textbf{FLEXIBILITY OF MLE:}
+		\begin{itemize}
+			\item Works with any distribution
+			\item Handles binary, count, continuous outcomes
+			\item Used in complex models (GARCH, neural networks)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LIMITATIONS OF OLS:}
+		\begin{itemize}
+			\item Only for continuous outcomes
+			\item Assumes normal errors
+			\item Cannot handle binary outcomes
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PRACTICAL GUIDANCE:}
+		\begin{itemize}
+			\item \textcolor{myblue}{OLS:} Simple linear regression
+			\item \textcolor{myblue}{MLE:} Complex probabilistic models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{REMEMBER:}
+		\begin{itemize}
+			\item MLE more flexible but more complex
+			\item OLS simpler for basic regression
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MLE is \textcolor{myblue}{more flexible} than OLS!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 4: GRADIENT DESCENT
+	% ============================================================
+	
+	\begin{frame}{T41: Gradient Descent Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Gradient Descent - Definition and Overview}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Iterative optimization algorithm
+			\item Updates parameters in direction of negative gradient
+			\item Workhorse of modern machine learning
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CORE CONCEPT:}
+		\begin{itemize}
+			\item Move in direction of steepest descent
+			\item Update rule: $w^{new} = w^{old} - \eta \frac{\partial L}{\partial w}$
+			\item $\eta$ = learning rate
+			\item $\frac{\partial L}{\partial w}$ = gradient
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{enumerate}
+			\item Start with initial guesses
+			\item Calculate gradient
+			\item Update parameters in opposite direction
+			\item Repeat until convergence
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{CONVERGENCE:}
+		\begin{itemize}
+			\item Gradient near zero
+			\item Loss no longer decreasing
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Gradient descent uses \textcolor{myblue}{negative gradient} direction!
+	\end{frame}
+	
+	\begin{frame}{T42: Gradient Descent - Update Rule}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Gradient Descent Update Rule}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		w_i^{new} = w_i^{old} - \eta \frac{\partial \mathcal{L}(w_i)}{\partial w_i}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{COMPONENTS:}
+		\begin{itemize}
+			\item $w_i$: Parameter to update
+			\item $\eta$: Learning rate (0, 1)
+			\item $\frac{\partial \mathcal{L}}{\partial w_i}$: Partial derivative (gradient)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY SUBTRACT:}
+		\begin{itemize}
+			\item Gradient points uphill
+			\item Negative gradient points downhill
+			\item Subtracting moves toward minimum
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Current $w = 0.8$, gradient = -48.66, $\eta = 0.005$
+			\item Update: $0.8 - 0.005(-48.66) = 1.043$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Gradient descent \textcolor{myblue}{subtracts} gradient!
+	\end{frame}
+	
+	\begin{frame}{T43: Gradient Descent - Learning Rate}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Learning Rate - Too Small}
+		
+		\vspace{0.1cm}
+		\textbf{SMALL LEARNING RATE:}
+		\begin{itemize}
+			\item Small steps
+			\item Slow convergence
+			\item Many iterations needed
+			\item May get stuck in local minima
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{VISUAL:}
+		\begin{itemize}
+			\item Tiny steps down the valley
+			\item Takes forever to reach bottom
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTION:}
+		\begin{itemize}
+			\item Increase learning rate
+			\item Use dynamic learning rate
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $\eta = 0.0001$: Very slow
+			\item $\eta = 0.001$: Still slow
+			\item $\eta = 0.01$: Reasonable
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Too small $\eta$ = \textcolor{myblue}{slow convergence}!
+	\end{frame}
+	
+	\begin{frame}{T44: Gradient Descent - Too Large Learning Rate}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Learning Rate - Too Large}
+		
+		\vspace{0.1cm}
+		\textbf{LARGE LEARNING RATE:}
+		\begin{itemize}
+			\item Large steps
+			\item Overshooting minimum
+			\item Oscillation around minimum
+			\item Divergence (loss increases)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{VISUAL:}
+		\begin{itemize}
+			\item Jumping over the valley
+			\item Bouncing back and forth
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTION:}
+		\begin{itemize}
+			\item Decrease learning rate
+			\item Use dynamic learning rate
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $\eta = 10$: Diverges
+			\item $\eta = 1$: Oscillates
+			\item $\eta = 0.1$: Maybe OK
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Too large $\eta$ = \textcolor{myblue}{overshooting/divergence}!
+	\end{frame}
+	
+	\begin{frame}{T45: Gradient Descent - Epoch}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Epoch in Gradient Descent}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item One complete pass through the entire training dataset
+			\item Includes calculating loss and adjusting weights
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BATCH GRADIENT DESCENT:}
+		\begin{itemize}
+			\item One epoch = one weight update
+			\item Uses all data for each update
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{STOCHASTIC GRADIENT DESCENT:}
+		\begin{itemize}
+			\item One epoch = N weight updates
+			\item Uses one data point per update
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Training data: 1000 observations
+			\item Batch GD: 1 update per epoch
+			\item SGD: 1000 updates per epoch
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Epoch = \textcolor{myblue}{one complete pass} through data!
+	\end{frame}
+	
+	\begin{frame}{T46: Gradient Descent - Batch}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Batch Gradient Descent}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Uses entire training dataset for each update
+			\item Computes gradient over all N samples
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CHARACTERISTICS:}
+		\begin{itemize}
+			\item One update per epoch
+			\item Stable convergence
+			\item Deterministic
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ADVANTAGES:}
+		\begin{itemize}
+			\item Stable convergence
+			\item Deterministic
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DISADVANTAGES:}
+		\begin{itemize}
+			\item Computationally expensive
+			\item Requires all data in memory
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Batch GD uses \textcolor{myblue}{entire dataset} per update!
+	\end{frame}
+	
+	\begin{frame}{T47: Gradient Descent - Stochastic}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Stochastic Gradient Descent (SGD)}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Uses one randomly selected data point per update
+			\item Updates weights after each observation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CHARACTERISTICS:}
+		\begin{itemize}
+			\item N updates per epoch
+			\item Noisy convergence
+			\item Random selection
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ADVANTAGES:}
+		\begin{itemize}
+			\item Lower memory requirements
+			\item Faster per iteration
+			\item Can escape local minima (noise)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DISADVANTAGES:}
+		\begin{itemize}
+			\item Noisy convergence
+			\item More iterations needed
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} SGD uses \textcolor{myblue}{one data point} per update!
+	\end{frame}
+	
+	\begin{frame}{T48: Gradient Descent - Mini-Batch}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Mini-Batch Gradient Descent}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Uses small subset (batch) of data for each update
+			\item Balances batch and stochastic methods
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CHARACTERISTICS:}
+		\begin{itemize}
+			\item Batch size: 32, 64, 128
+			\item Multiple updates per epoch
+			\item Most common in practice
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ADVANTAGES:}
+		\begin{itemize}
+			\item More stable than SGD
+			\item Faster than batch
+			\item Efficient memory usage
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMMON IN PRACTICE:}
+		\begin{itemize}
+			\item Standard for deep learning
+			\item Used in most frameworks
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Mini-batch uses \textcolor{myblue}{small subset} of data!
+	\end{frame}
+	
+	\begin{frame}{T49: Gradient Descent - Convergence}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Convergence in Gradient Descent}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Algorithm has reached a point where further updates don't improve loss significantly
+			\item Gradient is near zero
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CONVERGENCE CRITERIA:}
+		\begin{enumerate}
+			\item Gradient magnitude below threshold
+			\item Loss improvement below threshold
+			\item Maximum iterations reached
+			\item Validation error starts increasing
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{PRACTICAL CONSIDERATIONS:}
+		\begin{itemize}
+			\item Exact zero gradient rare
+			\item Tradeoff: precision vs computation
+			\item Early stopping prevents overfitting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Stop when gradient < 0.001
+			\item Stop after 1000 iterations
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Convergence = \textcolor{myblue}{improvement below threshold}, not exactly zero gradient!
+	\end{frame}
+	
+	\begin{frame}{T50: Gradient Descent - Local Minima}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Local Minima in Gradient Descent}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Point where loss is lower than neighbors but not lowest possible
+			\item Gradient = 0
+			\item Not global minimum
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROBLEM:}
+		\begin{itemize}
+			\item Gradient descent can get stuck
+			\item May not find global minimum
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTIONS:}
+		\begin{itemize}
+			\item Momentum
+			\item Multiple restarts
+			\item Stochastic gradient descent
+			\item Adaptive learning rates
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{IN HIGH DIMENSIONS:}
+		\begin{itemize}
+			\item Saddle points more common than local minima
+			\item Neural networks: local minima rare
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Local minima are \textcolor{myblue}{traps} for gradient descent!
+	\end{frame}
+	
+	\begin{frame}{T51: Gradient Descent - Momentum}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Momentum in Gradient Descent}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Accelerates convergence by accumulating past gradients
+			\item Reduces oscillations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{UPDATE RULE:}
+		\[
+		w^{new} = w^{old} - \eta \frac{\partial \mathcal{L}}{\partial w^{old}} + \mu(w^{old} - w^{older})
+		\]
+		where $\mu$ = momentum rate (0, 1)
+		
+		\vspace{0.1cm}
+		\textbf{BENEFITS:}
+		\begin{itemize}
+			\item Speeds up convergence
+			\item Reduces oscillation
+			\item Helps escape local minima
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTUITION:}
+		\begin{itemize}
+			\item Like a ball rolling down hill
+			\item Builds up speed in consistent directions
+			\item Dampens oscillations
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Momentum uses \textcolor{myblue}{past gradients} to smooth updates!
+	\end{frame}
+	
+	\begin{frame}{T52: Gradient Descent - Dynamic Learning Rate}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Dynamic Learning Rate}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Learning rate changes during training
+			\item Start with larger $\eta$, reduce over time
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DECAY FUNCTIONS:}
+		\begin{itemize}
+			\item Exponential: $\eta_t = \eta_0 e^{-kt}$
+			\item Inverse: $\eta_t = \frac{\eta_0}{1 + kt}$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BENEFITS:}
+		\begin{itemize}
+			\item Fast initial progress
+			\item Fine-tuning near optimum
+			\item Better convergence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Start: $\eta_0 = 0.1$
+			\item After 100 epochs: $\eta = 0.01$
+			\item After 1000 epochs: $\eta = 0.001$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Dynamic learning rate \textcolor{myblue}{decays} over time!
+	\end{frame}
+	
+	\begin{frame}{T53: Gradient Descent - Exponential Decay}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Exponential Decay for Learning Rate}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		\eta_t = \eta_0 e^{-kt}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{COMPONENTS:}
+		\begin{itemize}
+			\item $\eta_0$: Initial learning rate
+			\item $k$: Decay rate
+			\item $t$: Epoch number
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROPERTIES:}
+		\begin{itemize}
+			\item Smooth continuous decay
+			\item Never reaches exactly zero
+			\item Common in practice
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $\eta_0 = 0.1$, $k = 0.01$
+			\item $t = 0$: $\eta = 0.1$
+			\item $t = 100$: $\eta = 0.1 e^{-1} = 0.037$
+			\item $t = 200$: $\eta = 0.1 e^{-2} = 0.014$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Know the \textcolor{myblue}{exponential decay formula}!
+	\end{frame}
+	
+	\begin{frame}{T54: Gradient Descent - Inverse Decay}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Inverse Decay for Learning Rate}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		\eta_t = \frac{\eta_0}{1 + kt}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{COMPONENTS:}
+		\begin{itemize}
+			\item $\eta_0$: Initial learning rate
+			\item $k$: Decay rate
+			\item $t$: Epoch number
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROPERTIES:}
+		\begin{itemize}
+			\item Slower decay than exponential
+			\item Approaches zero asymptotically
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $\eta_0 = 0.1$, $k = 0.01$
+			\item $t = 0$: $\eta = 0.1$
+			\item $t = 100$: $\eta = 0.1/2 = 0.05$
+			\item $t = 200$: $\eta = 0.1/3 = 0.033$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Inverse decay: $\eta_t = \frac{\eta_0}{1 + kt}$!
+	\end{frame}
+	
+	\begin{frame}{T55: Gradient Descent - Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Gradient Descent Example - Salary Data}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE SETUP:}
+		\begin{itemize}
+			\item Known: $b_0 = 16.88$
+			\item Optimize: $b_1$
+			\item Initial: $b_1 = 0.8$
+			\item Learning rate: $\eta = 0.005$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{OBJECTIVE FUNCTION:}
+		\[
+		MSE(b_1) = \frac{1}{N}\sum_{i=1}^N (y_i - 16.88 - b_1 x_i)^2
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{GRADIENT:}
+		\[
+		\frac{\partial MSE}{\partial b_1} = -\frac{2}{N}\sum_{i=1}^N (y_i - \hat{y}_i) x_i
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{ITERATION 0:}
+		\begin{itemize}
+			\item $b_1 = 0.8$
+			\item Gradient = -48.664
+			\item Update: $0.8 - 0.005(-48.664) = 1.043$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Initial $b_1 = 0.8$, final $b_1 = 1.059$!
+	\end{frame}
+	
+	\begin{frame}{T56: Gradient Descent - Convergence Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Convergence in Salary Example}
+		
+		\vspace{0.1cm}
+		\textbf{CONVERGENCE TABLE:}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Iteration & $b_1$ & Gradient \\
+			\hline
+			0 & 0.800 & -48.664 \\
+			1 & 1.043 & -3.024 \\
+			2 & 1.058 & -0.188 \\
+			3 & 1.059 & -0.012 \\
+			4 & 1.059 & -0.001 \\
+			5 & 1.059 & 0.000 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{CONVERGENCE:}
+		\begin{itemize}
+			\item Gradient approaches zero
+			\item $b_1$ stabilizes at 1.059
+			\item Only 5 iterations needed
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMPARISON:}
+		\begin{itemize}
+			\item OLS solution: $\hat{b}_1 = 1.06$
+			\item Gradient descent: 1.059 (approximation)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Converged in \textcolor{myblue}{5 iterations} in the example!
+	\end{frame}
+	
+	\begin{frame}{T57: Gradient Descent - Epoch Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Epoch in Machine Learning}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item One iteration including calculating loss and adjusting weights using whole training sample
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FOR BATCH GRADIENT DESCENT:}
+		\begin{itemize}
+			\item 1 epoch = 1 weight update
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FOR STOCHASTIC GRADIENT DESCENT:}
+		\begin{itemize}
+			\item 1 epoch = N weight updates
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Training data: 1000 observations
+			\item Batch GD: 1 update per epoch
+			\item SGD: 1000 updates per epoch
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Epoch = \textcolor{myblue}{one full pass} through training data!
+	\end{frame}
+	
+	\begin{frame}{T58: Gradient Descent - Local Minima vs Global}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Local vs Global Minimum}
+		
+		\vspace{0.1cm}
+		\textbf{LOCAL MINIMUM:}
+		\begin{itemize}
+			\item Gradient = 0
+			\item Lower than immediate neighbors
+			\item May not be lowest overall
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{GLOBAL MINIMUM:}
+		\begin{itemize}
+			\item Lowest point of entire function
+			\item What we ideally want
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CHALLENGE:}
+		\begin{itemize}
+			\item Gradient descent can get stuck in local minima
+			\item No guarantee of finding global minimum
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTIONS:}
+		\begin{itemize}
+			\item Momentum
+			\item Multiple random starts
+			\item Stochastic gradient descent
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Gradient descent may find \textcolor{myblue}{local, not global}, minimum!
+	\end{frame}
+	
+	\begin{frame}{T59: Gradient Descent - Plateau}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Plateaus in Gradient Descent}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Flat region where gradient is near zero
+			\item Not a minimum
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROBLEM:}
+		\begin{itemize}
+			\item Gradient descent slows down
+			\item May appear converged but isn't
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTION:}
+		\begin{itemize}
+			\item Momentum helps
+			\item Adaptive learning rates
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Flat region in loss landscape
+			\item Gradient small but not zero
+			\item Updates tiny
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Plateaus \textcolor{myblue}{slow down} gradient descent!
+	\end{frame}
+	
+	\begin{frame}{T60: Gradient Descent - Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Key Advantages of Gradient Descent}
+		
+		\vspace{0.1cm}
+		\textbf{KEY ADVANTAGE:}
+		\begin{itemize}
+			\item Can optimize complex, high-dimensional, nonlinear models
+			\item Handles complex models
+			\item Works with high dimensions
+			\item No closed-form needed
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{APPLICATIONS:}
+		\begin{itemize}
+			\item Neural networks
+			\item Logistic regression
+			\item Any differentiable model
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LIMITATIONS:}
+		\begin{itemize}
+			\item Can get stuck in local minima
+			\item Sensitive to learning rate
+			\item May converge slowly
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Gradient descent = \textcolor{myblue}{workhorse of modern ML}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 5: BACKPROPAGATION
+	% ============================================================
+	
+	\begin{frame}{T61: Backpropagation Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Backpropagation - Definition and Overview}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Algorithm that computes gradients of loss function with respect to all weights
+			\item Uses chain rule of differentiation
+			\item Foundation of neural network training
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{enumerate}
+			\item Forward pass: compute output and loss
+			\item Backward pass: compute gradients
+			\item Update weights using gradient descent
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item Consider each layer separately
+			\item Apply chain rule at each step
+			\item Propagate errors backward
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY "BACK":}
+		\begin{itemize}
+			\item Start at output layer
+			\item Work backward through layers
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Backpropagation uses the \textcolor{myblue}{chain rule}!
+	\end{frame}
+	
+	\begin{frame}{T62: Backpropagation - Chain Rule}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Chain Rule Foundation of Backpropagation}
+		
+		\vspace{0.1cm}
+		\textbf{CHAIN RULE:}
+		\[
+		\frac{dy}{dx} = \frac{dy}{du} \cdot \frac{du}{dx}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{NEURAL NETWORK APPLICATION:}
+		\begin{itemize}
+			\item Output is function of function
+			\item Multiple layers compose functions
+			\item Chain rule computes gradients through composition
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $L = f(g(h(x)))$
+			\item $\frac{\partial L}{\partial x} = f'(g) \cdot g'(h) \cdot h'(x)$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Enables gradient computation for deep networks
+			\item Breaks complex problem into simpler steps
+			\item Foundation of automatic differentiation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Chain rule is the \textcolor{myblue}{foundation} of backpropagation!
+	\end{frame}
+	
+	\begin{frame}{T63: Backpropagation - Forward Pass}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Forward Pass in Backpropagation}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Input data passed through network to compute output and loss
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{enumerate}
+			\item Input features fed to network
+			\item Hidden layer activations computed
+			\item Output computed
+			\item Loss calculated
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (HIDDEN LAYER):}
+		\[
+		H_j = f\left(\sum_i w_{i,j} x_i\right)
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (OUTPUT LAYER):}
+		\[
+		H_k = f\left(\sum_j w_{j,k} H_j\right)
+		\]
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Forward pass computes \textcolor{myblue}{output and loss}!
+	\end{frame}
+	
+	\begin{frame}{T64: Backpropagation - Backward Pass}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Backward Pass in Backpropagation}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Gradients of loss with respect to weights computed using chain rule
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{enumerate}
+			\item Start at output layer
+			\item Compute error at output
+			\item Propagate error backward
+			\item Compute gradients for each weight
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (OUTPUT LAYER):}
+		\[
+		e_k = -(y - H_k) \cdot f'(z_k)
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (HIDDEN LAYER):}
+		\[
+		e_j = e_k \cdot w_{j,k} \cdot f'(z_j)
+		\]
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Backward pass computes \textcolor{myblue}{gradients}!
+	\end{frame}
+	
+	\begin{frame}{T65: Backpropagation - Weight Update}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Weight Update in Backpropagation}
+		
+		\vspace{0.1cm}
+		\textbf{UPDATE RULE:}
+		\[
+		w_{j,k}^{new} = w_{j,k}^{old} - \eta \frac{\partial \mathcal{L}}{\partial w_{j,k}}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{USING ERRORS:}
+		\[
+		w_{j,k}^{new} = w_{j,k}^{old} - \eta \cdot e_k \cdot H_j
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{enumerate}
+			\item Compute gradient
+			\item Multiply by learning rate
+			\item Subtract from current weight
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $w = 0.01$, $\eta = 0.1$, $e_k = -15.44$, $H_j = 0.5$
+			\item $w^{new} = 0.01 - 0.1(-15.44)(0.5) = 0.782$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Weights updated by \textcolor{myblue}{subtracting} gradient $\times$ learning rate!
+	\end{frame}
+	
+	\begin{frame}{T66: Backpropagation - Activation Function Derivative}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Sigmoid Activation Function Derivative}
+		
+		\vspace{0.1cm}
+		\textbf{SIGMOID FUNCTION:}
+		\[
+		f(z) = \frac{1}{1 + e^{-z}}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{DERIVATIVE:}
+		\[
+		f'(z) = f(z)(1 - f(z))
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{DERIVATION:}
+		\begin{itemize}
+			\item $f(z) = (1 + e^{-z})^{-1}$
+			\item $f'(z) = -1(1 + e^{-z})^{-2} \cdot (-e^{-z})$
+			\item $= \frac{e^{-z}}{(1 + e^{-z})^2}$
+			\item $= f(z)(1 - f(z))$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{IMPORTANCE:}
+		\begin{itemize}
+			\item Used in backpropagation
+			\item Easy to compute from $f(z)$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Sigmoid derivative = \textcolor{myblue}{$f(z)(1-f(z))$}!
+	\end{frame}
+	
+	\begin{frame}{T67: Backpropagation - Output Layer Error}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Output Layer Error Calculation}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		e_k = -(y - H_k) \cdot f'(z_k)
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{COMPONENTS:}
+		\begin{itemize}
+			\item $y$: Actual target
+			\item $H_k$: Predicted output
+			\item $f'(z_k)$: Activation derivative
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FOR LINEAR ACTIVATION:}
+		\begin{itemize}
+			\item $f'(z_k) = 1$
+			\item $e_k = -(y - H_k) = H_k - y$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $y = 15.46$, $H_k = 0.02$
+			\item $e_k = -(15.46 - 0.02) = -15.44$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Output error includes \textcolor{myblue}{activation derivative}!
+	\end{frame}
+	
+	\begin{frame}{T68: Backpropagation - Hidden Layer Error}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Hidden Layer Error Calculation}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		e_j = e_k \cdot w_{j,k} \cdot f'(z_j)
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{COMPONENTS:}
+		\begin{itemize}
+			\item $e_k$: Error from next layer
+			\item $w_{j,k}$: Weight connecting to next layer
+			\item $f'(z_j)$: Activation derivative
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $e_k = -15.44$, $w = 0.01$
+			\item $f'(z_j) = 0.5 \times 0.5 = 0.25$
+			\item $e_j = -15.44 \times 0.01 \times 0.25 = -0.0386$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{itemize}
+			\item Start with output error
+			\item Work backward through layers
+			\item Multiply by weights and derivatives
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Hidden error uses \textcolor{myblue}{weights and activation derivative}!
+	\end{frame}
+	
+	\begin{frame}{T69: Backpropagation - Summary of Steps}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Summary of Backpropagation Steps}
+		
+		\vspace{0.1cm}
+		\textbf{CORRECT ORDER:}
+		\begin{enumerate}
+			\item Forward pass: compute output
+			\item Error calculation: compare to actual
+			\item Backward pass: compute gradients
+			\item Update weights using gradient descent
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{REPEAT:}
+		\begin{itemize}
+			\item For each data point
+			\item Until convergence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CONVERGENCE CRITERIA:}
+		\begin{itemize}
+			\item Loss below threshold
+			\item Improvement below threshold
+			\item Maximum iterations reached
+			\item Validation error increases
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Forward $\to$ Error $\to$ Backward $\to$ Update!
+	\end{frame}
+	
+	\begin{frame}{T70: Backpropagation - Convergence Check}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: When Does Backpropagation Stop?}
+		
+		\vspace{0.1cm}
+		\textbf{CONVERGENCE CRITERIA:}
+		\begin{enumerate}
+			\item Loss below threshold
+			\item Improvement below threshold
+			\item Maximum iterations reached
+			\item Validation error increases
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{EPOCHS:}
+		\begin{itemize}
+			\item Multiple passes through data
+			\item Number depends on problem
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Stop when loss < 0.001
+			\item Stop after 100 epochs
+			\item Stop when validation error increases
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Multiple stopping criteria, not just one!
+	\end{frame}
+	
+	\begin{frame}{T71: Backpropagation - Vanishing Gradient}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Vanishing Gradient Problem}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Gradients become very small during backpropagation
+			\item Especially in early layers
+			\item Product of many small derivatives
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CAUSE:}
+		\begin{itemize}
+			\item Chain rule multiplies derivatives
+			\item Sigmoid derivatives are $<1$
+			\item Product quickly approaches zero
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTION:}
+		\begin{itemize}
+			\item Use ReLU activation
+			\item Batch normalization
+			\item LSTM architectures
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CONSEQUENCE:}
+		\begin{itemize}
+			\item Early layers don't learn
+			\item Training very slow
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Vanishing gradient = \textcolor{myblue}{very small gradients} in early layers!
+	\end{frame}
+	
+	\begin{frame}{T72: Backpropagation - Exploding Gradient}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Exploding Gradient Problem}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Gradients become very large during backpropagation
+			\item Product of many large derivatives
+			\item Unstable parameter updates
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CONSEQUENCES:}
+		\begin{itemize}
+			\item Loss diverges
+			\item Training fails
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTION:}
+		\begin{itemize}
+			\item Gradient clipping
+			\item Lower learning rate
+			\item Batch normalization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{OPPOSITE PROBLEM:}
+		\begin{itemize}
+			\item Vanishing gradient (very small)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Exploding gradient = \textcolor{myblue}{very large gradients}!
+	\end{frame}
+	
+	\begin{frame}{T73: Backpropagation - ReLU Activation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: ReLU Activation Function}
+		
+		\vspace{0.1cm}
+		\textbf{RELU FUNCTION:}
+		\[
+		f(z) = \max(0, z)
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{DERIVATIVE:}
+		\[
+		f'(z) = \begin{cases} 1 & \text{if } z > 0 \\ 0 & \text{if } z \leq 0 \end{cases}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{ADVANTAGES:}
+		\begin{itemize}
+			\item Derivative is 1 for positive values
+			\item No vanishing gradient for positive values
+			\item Computationally efficient
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT HELPS:}
+		\begin{itemize}
+			\item Avoids vanishing gradient problem
+			\item Faster training
+			\item Standard in modern networks
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} ReLU \textcolor{myblue}{avoids vanishing gradient}!
+	\end{frame}
+	
+	\begin{frame}{T74: Backpropagation - Batch Normalization}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Batch Normalization}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Adds normalization layers between hidden layers
+			\item Normalizes layer inputs
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{itemize}
+			\item Subtract mean
+			\item Divide by standard deviation
+			\item Apply between hidden layers
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BENEFITS:}
+		\begin{itemize}
+			\item Reduces internal covariate shift
+			\item Helps with vanishing/exploding gradients
+			\item Allows higher learning rates
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ANALOGY:}
+		\begin{itemize}
+			\item Like normalizing input data
+			\item But applied to hidden layers
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Batch normalization helps with \textcolor{myblue}{gradient problems}!
+	\end{frame}
+	
+	\begin{frame}{T75: Backpropagation - Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Summary of Backpropagation}
+		
+		\vspace{0.1cm}
+		\textbf{TRUE STATEMENTS:}
+		\begin{itemize}
+			\item Computes gradients for all weights
+			\item Uses chain rule
+			\item Requires storing activations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FALSE STATEMENT:}
+		\begin{itemize}
+			\item Backpropagation does NOT guarantee global minimum
+			\item Can get stuck in local minima
+			\item Can suffer from vanishing/exploding gradients
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY POINTS:}
+		\begin{itemize}
+			\item Foundation of neural network training
+			\item Chain rule is essential
+			\item Multiple computational challenges exist
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Backpropagation does \textcolor{myred}{NOT} guarantee global minimum!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 6: BIAS-VARIANCE TRADEOFF
+	% ============================================================
+	
+	\begin{frame}{T76: Bias-Variance Tradeoff Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Bias-Variance Tradeoff - Definition}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Tradeoff between choosing a model that is not complex enough (underfitting) and one that is too complex (overfitting)
+			\item Balances bias and variance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{TOTAL ERROR:}
+		\[
+		\text{Total Error} = \text{Bias}^2 + \text{Variance} + \text{Irreducible Error}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{GOAL:}
+		\begin{itemize}
+			\item Find optimal complexity
+			\item Balance bias and variance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{VISUAL:}
+		\begin{itemize}
+			\item Simple model: high bias, low variance
+			\item Complex model: low bias, high variance
+			\item Optimal: balance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Bias = \textcolor{myblue}{underfitting}; Variance = \textcolor{myblue}{overfitting}!
+	\end{frame}
+	
+	\begin{frame}{T77: Bias Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Bias in the Bias-Variance Tradeoff}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Error from model's assumptions and limitations
+			\item High bias = underfitting
+			\item Model too simple
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Linear model for nonlinear data
+			\item Cannot capture true relationship
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CHARACTERISTICS:}
+		\begin{itemize}
+			\item Poor training performance
+			\item Poor test performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Model systematically wrong
+			\item Predictions biased
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Bias = \textcolor{myblue}{error from assumptions} (underfitting)!
+	\end{frame}
+	
+	\begin{frame}{T78: Variance Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Variance in the Bias-Variance Tradeoff}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Error from sensitivity to fluctuations in training data
+			\item High variance = overfitting
+			\item Model too complex
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item High-degree polynomial
+			\item Fits noise in training data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CHARACTERISTICS:}
+		\begin{itemize}
+			\item Good training performance
+			\item Poor test performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Model unstable
+			\item Small data changes → big prediction changes
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Variance = \textcolor{myblue}{error from sensitivity} (overfitting)!
+	\end{frame}
+	
+	\begin{frame}{T79: Underfitting Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Underfitting - Definition and Causes}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Model too simple to capture underlying patterns
+			\item High bias
+			\item Fails to capture relevant patterns
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Linear model for quadratic relationship
+			\item Missing interaction terms
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SYMPTOMS:}
+		\begin{itemize}
+			\item Poor training performance
+			\item Poor test performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CAUSES:}
+		\begin{itemize}
+			\item Too few features
+			\item Model too simple
+			\item Excessive regularization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Underfitting = \textcolor{myblue}{model too simple}!
+	\end{frame}
+	
+	\begin{frame}{T80: Overfitting Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Overfitting - Definition and Causes}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Model too complex, fits noise in training data
+			\item High variance
+			\item Learns random noise
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item High-degree polynomial
+			\item Neural network with too many parameters
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SYMPTOMS:}
+		\begin{itemize}
+			\item Good training performance
+			\item Poor test performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CAUSES:}
+		\begin{itemize}
+			\item Too many parameters
+			\item Too little data
+			\item No regularization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Overfitting = \textcolor{myblue}{model too complex}!
+	\end{frame}
+	
+	\begin{frame}{T81: Bias-Variance - Model Complexity}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Effect of Model Complexity on Bias and Variance}
+		
+		\vspace{0.1cm}
+		\textbf{AS COMPLEXITY INCREASES:}
+		\begin{itemize}
+			\item Bias decreases (fits training data better)
+			\item Variance increases (more sensitive to training data)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{VISUAL:}
+		\begin{itemize}
+			\item Simple model: high bias, low variance
+			\item Complex model: low bias, high variance
+			\item Optimal: balance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Linear regression: high bias, low variance
+			\item 20th degree polynomial: low bias, high variance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item Tradeoff is fundamental
+			\item Cannot minimize both simultaneously
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} More complexity = \textcolor{myblue}{lower bias, higher variance}!
+	\end{frame}
+	
+	\begin{frame}{T82: Optimal Model Complexity}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Finding Optimal Model Complexity}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Complexity that minimizes total error
+			\item Total error = Bias² + Variance + Irreducible Error
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{TRADEOFF:}
+		\begin{itemize}
+			\item Too simple: high bias
+			\item Too complex: high variance
+			\item Optimal: balance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{HOW TO FIND:}
+		\begin{itemize}
+			\item Cross-validation
+			\item Validation set performance
+			\item Regularization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Quadratic model often optimal
+			\item Balances underfitting and overfitting
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Optimal = \textcolor{myblue}{minimum total error}!
+	\end{frame}
+	
+	\begin{frame}{T83: House Price Example - Underfitting}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Underfitting in House Price Example}
+		
+		\vspace{0.1cm}
+		\textbf{LINEAR REGRESSION:}
+		\begin{itemize}
+			\item Forces strictly decreasing relationship
+			\item Cannot capture non-monotonic pattern
+			\item Underfits the data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EVIDENCE:}
+		\begin{itemize}
+			\item Training MSE: 166.67
+			\item Test MSE: 161.12
+			\item Both high
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY:}
+		\begin{itemize}
+			\item House prices non-monotonic in age
+			\item Both very new and very old houses expensive
+			\item Linear model can't capture U-shape
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Linear regression \textcolor{myblue}{underfits} house price data!
+	\end{frame}
+	
+	\begin{frame}{T84: House Price Example - Overfitting}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Overfitting in House Price Example}
+		
+		\vspace{0.1cm}
+		\textbf{NINTH-DEGREE POLYNOMIAL:}
+		\begin{itemize}
+			\item Captures data-specific noise
+			\item Curved shape between 20-30 years
+			\item Poor generalization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EVIDENCE:}
+		\begin{itemize}
+			\item Training MSE: 122.40 (lowest)
+			\item Test MSE: 139.39 (higher than quadratic)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LESSON:}
+		\begin{itemize}
+			\item Complex models can overfit
+			\item Test performance reveals overfitting
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Ninth-degree polynomial \textcolor{myblue}{overfits}!
+	\end{frame}
+	
+	\begin{frame}{T85: House Price Example - Optimal}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Optimal Model in House Price Example}
+		
+		\vspace{0.1cm}
+		\textbf{QUADRATIC REGRESSION:}
+		\begin{itemize}
+			\item Captures U-shape pattern
+			\item Training MSE: 131.81
+			\item Test MSE: 136.57 (lowest)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY BEST:}
+		\begin{itemize}
+			\item Balanced complexity
+			\item Generalizes well
+			\item Captures true relationship
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMPARISON:}
+		\begin{itemize}
+			\item Linear: underfits (high bias)
+			\item Quadratic: optimal balance
+			\item Ninth-degree: overfits (high variance)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Quadratic strikes \textcolor{myblue}{best balance}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 7: REGULARIZATION
+	% ============================================================
+	
+	\begin{frame}{T86: Regularization Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Regularization - Definition and Purpose}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Technique to reduce overfitting by adding penalty term to loss function
+			\item Shrinks coefficients toward zero
+			\item Prevents overfitting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LOSS FUNCTION:}
+		\[
+		L = \text{RSS} + \lambda \cdot \text{Penalty}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{TYPES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Ridge (L2):} $\lambda \sum \beta_j^2$
+			\item \textcolor{myblue}{LASSO (L1):} $\lambda \sum |\beta_j|$
+			\item \textcolor{myblue}{Elastic Net:} both
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BENEFITS:}
+		\begin{itemize}
+			\item Simplifies models
+			\item Reduces overfitting
+			\item Improves generalization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Regularization adds a \textcolor{myblue}{penalty term}!
+	\end{frame}
+	
+	\begin{frame}{T87: Ridge Regression}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Ridge Regression (L2 Regularization)}
+		
+		\vspace{0.1cm}
+		\textbf{LOSS FUNCTION:}
+		\[
+		L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^m \hat{\beta}_j^2
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{CHARACTERISTICS:}
+		\begin{itemize}
+			\item Shrinks coefficients
+			\item Does NOT set to zero
+			\item Handles multicollinearity
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY L2:}
+		\begin{itemize}
+			\item Squared penalty term
+			\item Differentiable everywhere
+			\item Analytic solution exists
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item OLS coefficient: -23.22
+			\item Ridge ($\lambda=0.1$): -6.55
+			\item Ridge ($\lambda=0.5$): -2.00
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Ridge \textcolor{myblue}{shrinks but doesn't zero} coefficients!
+	\end{frame}
+	
+	\begin{frame}{T88: LASSO Regression}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: LASSO Regression (L1 Regularization)}
+		
+		\vspace{0.1cm}
+		\textbf{LOSS FUNCTION:}
+		\[
+		L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^m |\hat{\beta}_j|
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{CHARACTERISTICS:}
+		\begin{itemize}
+			\item Sets some coefficients to zero
+			\item Performs feature selection
+			\item Numerical optimization needed
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY L1:}
+		\begin{itemize}
+			\item Absolute value penalty
+			\item Creates sparsity
+			\item Not differentiable at zero
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $\lambda = 0.01$: Some coefficients zero
+			\item $\lambda = 0.1$: Only 1 non-zero
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LASSO \textcolor{myblue}{sets coefficients to zero}!
+	\end{frame}
+	
+	\begin{frame}{T89: Elastic Net}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Elastic Net Regularization}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Combination of L1 and L2
+			\item $\lambda_1 \sum \beta_j^2 + \lambda_2 \sum |\beta_j|$
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LOSS FUNCTION:}
+		\[
+		L = \text{RSS} + \lambda_1 \sum \beta_j^2 + \lambda_2 \sum |\beta_j|
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{BENEFITS:}
+		\begin{itemize}
+			\item Combines both penalties
+			\item Shrinks and selects
+			\item More flexible
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MODERN PREFERENCE:}
+		\begin{itemize}
+			\item Shift toward Elastic Net
+			\item Away from pure LASSO/Ridge
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Elastic Net = \textcolor{myblue}{L1 + L2}!
+	\end{frame}
+	
+	\begin{frame}{T90: Regularization Parameter}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Effect of Regularization Parameter $\lambda$}
+		
+		\vspace{0.1cm}
+		\textbf{AS $\lambda$ INCREASES:}
+		\begin{itemize}
+			\item Penalty becomes stronger
+			\item Coefficients shrink more
+			\item Model becomes simpler
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{TRADEOFF:}
+		\begin{itemize}
+			\item Small $\lambda$: little regularization
+			\item Large $\lambda$: heavy regularization
+			\item Optimal $\lambda$: balance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $\lambda = 0$: OLS
+			\item $\lambda = 0.1$: Moderate shrinkage
+			\item $\lambda = 10$: Heavy shrinkage
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Larger $\lambda$ = \textcolor{myblue}{simpler model}!
+	\end{frame}
+	
+	\begin{frame}{T91: LASSO - Feature Selection}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: LASSO as Feature Selection}
+		
+		\vspace{0.1cm}
+		\textbf{LASSO PROPERTY:}
+		\begin{itemize}
+			\item L1 penalty creates sparsity
+			\item Some $\beta_j = 0$ exactly
+			\item Those features removed
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{AS $\lambda$ INCREASES:}
+		\begin{itemize}
+			\item More coefficients become zero
+			\item More features removed
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE FROM TEXT:}
+		\begin{itemize}
+			\item $\lambda = 0.1$: Only 1 non-zero coefficient
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY USEFUL:}
+		\begin{itemize}
+			\item Automatic feature selection
+			\item Simpler models
+			\item Easier interpretation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LASSO \textcolor{myblue}{removes features} by zeroing coefficients!
+	\end{frame}
+	
+	\begin{frame}{T92: Ridge vs LASSO}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Key Differences Between Ridge and LASSO}
+		
+		\vspace{0.1cm}
+		\textbf{RIDGE (L2):}
+		\begin{itemize}
+			\item Shrinks coefficients
+			\item Does NOT set to zero
+			\item Handles multicollinearity
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LASSO (L1):}
+		\begin{itemize}
+			\item Can set coefficients to zero
+			\item Feature selection
+			\item Numerical optimization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CHOICE:}
+		\begin{itemize}
+			\item Ridge: reduce extreme estimates
+			\item LASSO: remove unimportant features
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMPARISON TABLE:}
+		\begin{tabular}{|p{2cm}|p{2cm}|p{2cm}|}
+			\hline
+			& Ridge & LASSO \\
+			\hline
+			Penalty & L2 & L1 \\
+			\hline
+			Zeros & No & Yes \\
+			\hline
+			Feature & No & Yes \\
+			\hline
+		\end{tabular}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Ridge = \textcolor{myblue}{shrink}; LASSO = \textcolor{myblue}{select}!
+	\end{frame}
+	
+	\begin{frame}{T93: Regularization Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Regularization Example - Stock Returns}
+		
+		\vspace{0.1cm}
+		\textbf{OLS RESULTS:}
+		\begin{itemize}
+			\item Large coefficients
+			\item Some opposite signs
+			\item Indicates multicollinearity
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item USTB1M: -23.22
+			\item USTB3M: +50.64
+			\item Opposite signs for correlated features
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTION:}
+		\begin{itemize}
+			\item Ridge regression
+			\item LASSO
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} OLS gave \textcolor{myblue}{large coefficients} due to multicollinearity!
+	\end{frame}
+	
+	\begin{frame}{T94: Ridge Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Ridge Regression Example}
+		
+		\vspace{0.1cm}
+		\textbf{RIDGE RESULTS:}
+		\begin{itemize}
+			\item Reduced coefficient magnitudes
+			\item Higher $\lambda$ = more shrinkage
+			\item Some signs changed
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item OLS USTB1M: -23.22
+			\item Ridge $\lambda=0.1$: -6.55
+			\item Ridge $\lambda=0.5$: -2.00
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THIS HELPS:}
+		\begin{itemize}
+			\item Reduces instability from multicollinearity
+			\item More stable predictions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Ridge \textcolor{myblue}{reduces coefficient magnitude}!
+	\end{frame}
+	
+	\begin{frame}{T95: LASSO Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: LASSO Regression Example}
+		
+		\vspace{0.1cm}
+		\textbf{LASSO RESULTS:}
+		\begin{itemize}
+			\item Set some coefficients to zero
+			\item $\lambda = 0.1$: Only 1 non-zero
+			\item Feature selection
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item USTB1M: 0
+			\item USTB3M: 0
+			\item USTB5Y: -0.71 (only non-zero)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BENEFIT:}
+		\begin{itemize}
+			\item Simpler model
+			\item Easier interpretation
+			\item Automatic feature selection
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LASSO \textcolor{myblue}{sets coefficients to zero}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 8: CROSS-VALIDATION AND BOOTSTRAPPING
+	% ============================================================
+	
+	\begin{frame}{T96: Cross-Validation Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: K-Fold Cross-Validation}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Splitting data into k folds
+			\item Training on k-1 folds, validating on 1 fold
+			\item Repeating k times
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{K-FOLD CV:}
+		\begin{enumerate}
+			\item Split data into k folds
+			\item For each fold:
+			\begin{itemize}
+				\item Train on k-1 folds
+				\item Validate on 1 fold
+			\end{itemize}
+			\item Average results
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{COMMON VALUES:}
+		\begin{itemize}
+			\item k = 5 or 10
+			\item k = N (LOOCV)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BENEFITS:}
+		\begin{itemize}
+			\item Efficient use of data
+			\item Reliable performance estimate
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} K-fold = train on \textcolor{myblue}{k-1}, validate on \textcolor{myblue}{1}!
+	\end{frame}
+	
+	\begin{frame}{T97: Stratified Cross-Validation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Stratified Cross-Validation}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Preserves class distribution in each fold
+			\item Important for imbalanced data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY NEEDED:}
+		\begin{itemize}
+			\item Random folds may miss rare class
+			\item Distorted evaluation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item 100 observations, 10 defaults
+			\item 10-fold CV: 9 non-defaults, 1 default per fold
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{itemize}
+			\item Sample positive and negative separately
+			\item Preserve class ratio
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Stratified CV preserves \textcolor{myblue}{class distribution}!
+	\end{frame}
+	
+	\begin{frame}{T98: Bootstrapping Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Bootstrapping}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Sampling with replacement from original data
+			\item Creates multiple bootstrap samples
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{enumerate}
+			\item Create bootstrap sample
+			\item Train model
+			\item Validate on out-of-bag data
+			\item Repeat many times
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{KEY FACTS:}
+		\begin{itemize}
+			\item Some observations repeated
+			\item ~37% not sampled (out-of-bag)
+			\item Large number of iterations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BENEFITS:}
+		\begin{itemize}
+			\item Estimates variability
+			\item Confidence intervals
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Bootstrapping samples \textcolor{myblue}{with replacement}!
+	\end{frame}
+	
+	\begin{frame}{T99: Grid Search}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Grid Search for Hyperparameter Tuning}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Exhaustive search over predefined hyperparameter grid
+			\item Used with cross-validation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{enumerate}
+			\item Define grid of hyperparameter values
+			\item Evaluate all combinations
+			\item Use cross-validation
+			\item Select best
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item $\lambda$ from 0 to 100, step 1
+			\item 5-fold CV
+			\item 101 × 5 = 505 model fits
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DRAWBACK:}
+		\begin{itemize}
+			\item Computationally expensive
+			\item May overfit the grid
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Grid search is \textcolor{myblue}{exhaustive}!
+	\end{frame}
+	
+	\begin{frame}{T100: Chapter Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Key Takeaways from Model Estimation}
+		
+		\vspace{0.1cm}
+		\textbf{ESTIMATION METHODS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{OLS:} Linear models, closed-form
+			\item \textcolor{myblue}{NLS:} Nonlinear models, iterative
+			\item \textcolor{myblue}{MLE:} Probabilistic, flexible
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIMIZATION:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Gradient Descent:} Negative gradient, learning rate
+			\item \textcolor{myblue}{Backpropagation:} Chain rule, neural networks
+			\item \textcolor{myblue}{Momentum:} Accelerates convergence
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MODEL SELECTION:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Bias-Variance:} Underfitting vs overfitting
+			\item \textcolor{myblue}{Regularization:} Ridge (L2), LASSO (L1), Elastic Net
+			\item \textcolor{myblue}{Cross-Validation:} K-fold, stratified, bootstrapping
+			\item \textcolor{myblue}{Grid Search:} Hyperparameter tuning
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textcolor{myred}{\textbf{Exam Success:}} Understand methods, tradeoffs, and when to use each!
+	\end{frame}
+	
+\end{document}
