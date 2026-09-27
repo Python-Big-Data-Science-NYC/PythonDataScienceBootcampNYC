@@ -1,0 +1,3791 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Chapter 8: Supervised Learning - Model Performance Evaluation}
+\subtitle{Comprehensive Tutorial Notes: Continuous Metrics, Classification Metrics, ROC/AUC, Threshold Selection}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 1: INTRODUCTION TO MODEL EVALUATION
+	% ============================================================
+	
+	\begin{frame}{T1: Model Evaluation Purpose}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Primary Purpose of Model Performance Evaluation}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Model performance evaluation is the systematic process of assessing how well a supervised learning model generalizes to new, unseen data
+			\item It provides the technical basis to understand model accuracy and the right questions to ask when choosing appropriate performance metrics
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY CONCEPTS:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Generalization Assessment:} How well does the model perform on data it has not seen during training?
+			\item \textcolor{myblue}{Model Comparison:} Which model is best for the specific problem at hand?
+			\item \textcolor{myblue}{Error Quantification:} How wrong can we afford to be, and what are the consequences when models are wrong?
+			\item \textcolor{myblue}{Risk Management:} What are the financial and reputational implications of model errors?
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Models drive critical decisions in credit risk, fraud detection, AML compliance
+			\item Poor models have significant financial and reputational consequences
+			\item Regulatory requirements demand rigorous model validation
+			\item Stakeholder confidence depends on reliable model performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PRACTICAL EXAMPLE:}
+		\begin{itemize}
+			\item Greek bank estimated recovery rate at 65\%
+			\item Actual recovery was 40\%
+			\item Result: €120 million capital add-on, stock price slide, regulatory scrutiny
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Model evaluation is about \textcolor{myblue}{generalization performance}, not training performance!
+	\end{frame}
+	
+	\begin{frame}{T2: Continuous vs Classification Outputs}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Distinguishing Between Continuous and Discrete Output Metrics}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Supervised learning models produce either continuous numerical outputs (regression) or discrete categorical outputs (classification)
+			\item Each type requires fundamentally different evaluation approaches and metrics
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CONTINUOUS OUTPUTS (REGRESSION):}
+		\begin{itemize}
+			\item \textbf{Predict:} Numbers such as VaR, market prices, net revenue, expected credit losses
+			\item \textbf{Metrics:} MSE, RMSE, MAE, MAPE
+			\item \textbf{Key Question:} How numerically close are predictions to actual values?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DISCRETE OUTPUTS (CLASSIFICATION):}
+		\begin{itemize}
+			\item \textbf{Predict:} Categories such as fraud vs legitimate, default vs paid off, approve vs decline
+			\item \textbf{Metrics:} Accuracy, Precision, Recall, F1 Score, AUC
+			\item \textbf{Key Question:} How well does the model distinguish between classes?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THE DISTINCTION MATTERS:}
+		\begin{itemize}
+			\item Continuous metrics measure numerical accuracy (how far off is the prediction?)
+			\item Classification metrics measure classification accuracy (how many correct classifications?)
+			\item Different types of errors have different costs in each context
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} \textcolor{myblue}{Continuous vs discrete} outputs require fundamentally different evaluation approaches!
+	\end{frame}
+	
+	\begin{frame}{T3: Consequences of Poor Modeling}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Real-World Consequences of Poor Model Performance}
+		
+		\vspace{0.1cm}
+		\textbf{THE CHAIN OF CONSEQUENCES:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Financial Impact:}
+			\begin{itemize}
+				\item Capital add-ons (e.g., €120 million for Greek bank)
+				\item Shareholder dilution
+				\item Underpricing of risk in new loan originations
+				\item Future losses in portfolio
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Operational Impact:}
+			\begin{itemize}
+				\item Deep-dive reviews of entire credit risk modeling suite
+				\item Significant internal resource consumption
+				\item Potential systemic weaknesses requiring costly overhauls
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Reputational Impact:}
+			\begin{itemize}
+				\item Lingering drag on investor confidence
+				\item Damaged relationships with regulators
+				\item Market confidence erosion
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Regulatory Impact:}
+			\begin{itemize}
+				\item ECB supervisory review actions
+				\item Increased scrutiny of all models
+				\item Potential fines and sanctions
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Poor modeling has \textcolor{myblue}{real financial, operational, and reputational consequences}!
+	\end{frame}
+	
+	\begin{frame}{T4: Test Sample Importance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Compute Metrics on Test Sample}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item The test sample comprises observations not used in determining parameter estimates or tuning hyperparameters
+			\item It provides an unbiased estimate of how the model will perform on new, unseen data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{THE OVERFITTING PROBLEM:}
+		\begin{itemize}
+			\item Models learn training data patterns, including noise and random fluctuations
+			\item Performance on training data is optimistically biased
+			\item Training performance is not a true test of generalization
+			\item A model that memorizes training data may fail completely on new data
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DATA SPLIT PURPOSES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Training Sample:} Estimate model parameters
+			\item \textcolor{myblue}{Validation Sample:} Tune hyperparameters and select model architecture
+			\item \textcolor{myblue}{Test Sample:} Evaluate final model performance (unseen data)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item We are generally more interested in validation and test performance
+			\item Examining accuracy on training data is not a true test of performance
+			\item Test sample performance is what matters in practice
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Always evaluate on \textcolor{myblue}{test sample} for true generalization performance!
+	\end{frame}
+	
+	\begin{frame}{T5: Training vs Test Gap}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Interpreting Training-Test Performance Gap}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item The difference between model performance on training data versus test data
+			\item A key diagnostic for detecting overfitting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PERFORMANCE PATTERNS:}
+		\begin{itemize}
+			\item \textcolor{mygreen}{No Gap:} Training performance $\approx$ Test performance (good generalization)
+			\item \textcolor{myorange}{Small Gap:} Slight overfitting (acceptable in practice)
+			\item \textcolor{myred}{Large Gap:} Significant overfitting (problematic, needs remediation)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THE GAP OCCURS:}
+		\begin{itemize}
+			\item Model memorizes training patterns rather than learning generalizable relationships
+			\item Learns noise instead of signal
+			\item Too complex for the amount of training data available
+			\item Insufficient regularization
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (LendingClub):}
+		\begin{itemize}
+			\item Logistic Regression: Training accuracy = 84.2\%, Test accuracy = 71.3\%
+			\item Neural Network: Training accuracy = 84.2\%, Test accuracy = 70.1\%
+			\item Both show significant gap indicating overfitting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{REMEDIATION:}
+		\begin{itemize}
+			\item Remove irrelevant features
+			\item Apply regularization (L1, L2, dropout)
+			\item Get more training data
+			\item Use cross-validation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Large train-test gap = \textcolor{myblue}{overfitting}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 2: CONTINUOUS OUTPUT METRICS
+	% ============================================================
+	
+	\begin{frame}{T6: Mean Squared Error (MSE)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Mean Squared Error - Definition and Calculation}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		MSE = \frac{1}{N}\sum_{i=1}^N (y_i - \hat{y}_i)^2
+		\]
+		where:
+		\begin{itemize}
+			\item $y_i$ = true value of outcome for observation $i$
+			\item $\hat{y}_i$ = model prediction for observation $i$
+			\item $N$ = number of observations in test sample
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHAT IT MEASURES:}
+		\begin{itemize}
+			\item Average of all squared forecast errors
+			\item Squaring removes sign (under- and over-estimation penalized symmetrically)
+			\item \textcolor{myblue}{Heavily penalizes large errors} (tail risk focus)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY CHARACTERISTICS:}
+		\begin{itemize}
+			\item Always non-negative
+			\item Lower is better (most accurate model has lowest MSE)
+			\item Units are squared (e.g., dollars²) - difficult to interpret intuitively
+			\item Sensitive to outliers
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Salary Prediction):}
+		\begin{itemize}
+			\item Model: $\hat{y} = 16.88 + 1.06 \times \text{experience}$
+			\item Sum of squared errors = 431.02
+			\item N = 10
+			\item MSE = 431.02 / 10 = 43.1
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MSE uses \textcolor{myblue}{squared errors} - heavily penalizes large deviations!
+	\end{frame}
+	
+	\begin{frame}{T7: MSE Managerial Question}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What Managerial Question Does MSE Answer?}
+		
+		\vspace{0.1cm}
+		\textbf{MANAGERIAL QUESTION:}
+		\begin{itemize}
+			\item "How do we penalize big errors in our model?"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MANAGERIAL FOCUS:}
+		\begin{itemize}
+			\item Highlights tail risk
+			\item Emphasis on squared errors heavily penalizes large deviations
+			\item Sensitive to costly outliers
+			\item Important for risk management
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THIS MATTERS:}
+		\begin{itemize}
+			\item Large errors have significant consequences in risk management
+			\item Risk managers care about tail events (extreme losses)
+			\item Regulatory focus on extreme outcomes and capital adequacy
+			\item MSE aligns with regulatory capital frameworks
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{REGULATORY PERSPECTIVE:}
+		\begin{itemize}
+			\item ECB's Guide to Internal Models recommends metrics capturing tail risk
+			\item Ensures large, infrequent losses are not overlooked
+			\item RMSE reported alongside MAE for complete picture
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MSE is for \textcolor{myblue}{penalizing big errors} - risk managers love it!
+	\end{frame}
+	
+	\begin{frame}{T8: Root Mean Square Error (RMSE)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Root Mean Square Error - Definition and Interpretation}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		RMSE = \sqrt{MSE} = \sqrt{\frac{1}{N}\sum_{i=1}^N (y_i - \hat{y}_i)^2}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{KEY CHARACTERISTICS:}
+		\begin{itemize}
+			\item Same units as target variable (e.g., dollars)
+			\item More interpretable than MSE
+			\item Gives sense of average error magnitude
+			\item Still sensitive to outliers due to squaring before square root
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMPARISON TO MSE:}
+		\begin{itemize}
+			\item MSE: Units are squared (e.g., dollars²) - hard to interpret
+			\item RMSE: Units are original (e.g., dollars) - easy to interpret
+			\item Both penalize large errors disproportionately
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Salary Prediction):}
+		\begin{itemize}
+			\item MSE = 43.1
+			\item RMSE = $\sqrt{43.1} = 6.57$
+			\item Interpretation: "On average, predictions are off by about 6.57 thousand dollars"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CAVEAT FOR MANAGERS:}
+		\begin{itemize}
+			\item Unusually large loss on single facility could disproportionately inflate RMSE
+			\item Need to ask: "Is high RMSE driven by systemic issue or one or two extreme events?"
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} RMSE is \textcolor{myblue}{easier to interpret} than MSE because it's in same units!
+	\end{frame}
+	
+	\begin{frame}{T9: RMSE Managerial Question}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What Managerial Question Does RMSE Answer?}
+		
+		\vspace{0.1cm}
+		\textbf{MANAGERIAL QUESTION:}
+		\begin{itemize}
+			\item "What does the typical error feel like in our primary unit of currency (e.g., dollars)?"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MANAGERIAL FOCUS:}
+		\begin{itemize}
+			\item Same units as target variable (e.g., dollars)
+			\item Directly interpretable for non-technical stakeholders
+			\item "On average, our predictions are off by RMSE dollars"
+			\item Helps CEOs and board members understand model performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THIS MATTERS:}
+		\begin{itemize}
+			\item Connects statistical measure to business impact
+			\item Board members can relate to dollar figures
+			\item Enables comparison across different models
+			\item Facilitates communication with non-technical audiences
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CAVEAT:}
+		\begin{itemize}
+			\item Still sensitive to outliers (squaring before square root)
+			\item An unusually large loss on single facility could disproportionately inflate RMSE
+			\item May mask generally good performance across rest of portfolio
+			\item Need to investigate if high RMSE is systemic or from extreme, explainable events
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} RMSE answers \textcolor{myblue}{"what does typical error feel like?"}
+	\end{frame}
+	
+	\begin{frame}{T10: Mean Absolute Error (MAE)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Mean Absolute Error - Definition and Advantages}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		MAE = \frac{1}{N}\sum_{i=1}^N |y_i - \hat{y}_i|
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{KEY CHARACTERISTICS:}
+		\begin{itemize}
+			\item Uses absolute differences (not squared)
+			\item \textcolor{myblue}{Robust to outliers}
+			\item Easy to communicate
+			\item Straightforward average error magnitude
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LIMITATIONS:}
+		\begin{itemize}
+			\item Can mask direction of bias (over vs under prediction)
+			\item Doesn't heavily penalize occasional large misses
+			\item May underestimate critical risk events from risk capital perspective
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Salary Prediction):}
+		\begin{itemize}
+			\item Sum of absolute errors = 50.11
+			\item N = 10
+			\item MAE = 50.11 / 10 = 5.01
+			\item Interpretation: "On average, predictions are off by about 5.01 thousand dollars"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN TO USE:}
+		\begin{itemize}
+			\item When outliers are not critical
+			\item When you want stable, interpretable measure
+			\item When equal treatment of all errors is desired
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MAE is \textcolor{myblue}{robust to outliers} - unlike MSE and RMSE!
+	\end{frame}
+	
+	\begin{frame}{T11: MAE Managerial Question}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What Managerial Question Does MAE Answer?}
+		
+		\vspace{0.1cm}
+		\textbf{MANAGERIAL QUESTION:}
+		\begin{itemize}
+			\item "On average, by how much are our predictions off, regardless of direction?"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MANAGERIAL FOCUS:}
+		\begin{itemize}
+			\item "On average, our predictions are off by MAE dollars"
+			\item Ignores direction (over vs under prediction)
+			\item Easy to communicate to non-technical audiences
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN TO USE:}
+		\begin{itemize}
+			\item When outliers are not critical
+			\item When you want stable, interpretable measure
+			\item When equal treatment of all errors is desired
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMPARISON WITH RMSE:}
+		\begin{itemize}
+			\item MAE = 5.01 vs RMSE = 6.57 in salary example
+			\item RMSE > MAE because squaring penalizes larger errors more
+			\item The gap between RMSE and MAE indicates presence of large errors
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{REGULATORY PERSPECTIVE:}
+		\begin{itemize}
+			\item ECB recommends reporting RMSE alongside MAE
+			\item MAE alone might mask critical risks
+			\item Both together provide complete picture
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MAE answers \textcolor{myblue}{"by how much are we off, regardless of direction?"}
+	\end{frame}
+	
+	\begin{frame}{T12: Mean Absolute Percentage Error (MAPE)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Mean Absolute Percentage Error - Definition and Advantages}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		MAPE = \frac{100}{N}\sum_{i=1}^N \left|\frac{y_i - \hat{y}_i}{y_i}\right|
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{KEY CHARACTERISTICS:}
+		\begin{itemize}
+			\item Expressed as percentage
+			\item Normalized - allows comparison across different scales
+			\item Board-friendly due to percentage nature
+			\item Consistent across portfolios
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LIMITATIONS:}
+		\begin{itemize}
+			\item Explodes or becomes undefined when actual values are zero or near zero
+			\item Can be misleading if few small-value items have very high percentage errors
+			\item May understate errors on large absolute value items
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Salary Prediction):}
+		\begin{itemize}
+			\item Sum of $|(y_i - \hat{y}_i)/y_i|$ = 1.62
+			\item N = 10
+			\item MAPE = 1.62 / 10 × 100 = 16.2\%
+			\item Interpretation: "On average, forecast error is 16\% of actual salary"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MOST INTUITIVE:}
+		\begin{itemize}
+			\item Of all forecast accuracy measures, MAPE is most intuitive
+			\item 16\% can be interpreted as average forecast error is 16\% of actual salary
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MAPE is \textcolor{myblue}{percentage-based} - great for communication but has limitations!
+	\end{frame}
+	
+	\begin{frame}{T13: MAPE Managerial Question}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What Managerial Question Does MAPE Answer?}
+		
+		\vspace{0.1cm}
+		\textbf{MANAGERIAL QUESTION:}
+		\begin{itemize}
+			\item "In percentage terms, what is the typical error relative to the actual value?"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{MANAGERIAL FOCUS:}
+		\begin{itemize}
+			\item "On average, our predictions are off by MAPE\%"
+			\item Normalized - allows comparison across models/portfolios
+			\item Perfect for audit committees and board presentations
+			\item Common choice for auditors
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN TO USE:}
+		\begin{itemize}
+			\item Comparing models with different scales
+			\item Communicating to non-technical stakeholders
+			\item When percentage errors are more meaningful than absolute
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{AUDITOR PREFERENCES:}
+		\begin{itemize}
+			\item Auditors often gravitate to MAPE for pure percentage narrative
+			\item Standardized measure for discussing model accuracy with audit committees
+			\item Allows comparison across different models and portfolios
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MAPE answers \textcolor{myblue}{"what's the error as a percentage?"}
+	\end{frame}
+	
+	\begin{frame}{T14: MSE Calculation Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Step-by-Step MSE Calculation}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE DATA (Test Sample of 10 Observations):}
+		
+		\begin{tabular}{|c|c|c|c|c|c|}
+			\hline
+			$i$ & $x_i$ & $y_i$ & $\hat{y}_i$ & $y_i - \hat{y}_i$ & $(y_i - \hat{y}_i)^2$ \\
+			\hline
+			1 & 4 & 20.15 & 21.12 & -0.97 & 0.94 \\
+			2 & 6 & 21.48 & 23.24 & -1.76 & 3.10 \\
+			3 & 9 & 31.88 & 26.42 & 5.46 & 29.81 \\
+			4 & 10 & 32.88 & 27.48 & 5.40 & 29.16 \\
+			5 & 21 & 49.92 & 39.14 & 10.78 & 116.21 \\
+			6 & 25 & 57.46 & 43.38 & 14.08 & 198.25 \\
+			7 & 3 & 21.13 & 20.06 & 1.07 & 1.14 \\
+			8 & 1 & 12.18 & 17.94 & -5.76 & 33.18 \\
+			9 & 2 & 19.47 & 19.00 & 0.47 & 0.22 \\
+			10 & 7 & 28.66 & 24.30 & 4.36 & 19.01 \\
+			\hline
+			Total & & & & & 431.02 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{CALCULATION:}
+		\begin{itemize}
+			\item Sum of squared errors = 431.02
+			\item N = 10
+			\item MSE = 431.02 / 10 = 43.1
+			\item RMSE = $\sqrt{43.1} = 6.57$
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MSE = \textcolor{myblue}{sum of squared errors divided by N}!
+	\end{frame}
+	
+	\begin{frame}{T15: RMSE Interpretation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Interpreting RMSE in Context}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Salary prediction model
+			\item RMSE = 6.57
+			\item Target variable measured in thousands of dollars
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item "On average, predictions are off by about 6.57 thousand dollars"
+			\item RMSE is in same units as target (salary in \$000s)
+			\item Gives sense of typical error magnitude
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{IMPORTANT NUANCES:}
+		\begin{itemize}
+			\item This is an average - some errors are larger, some smaller
+			\item Squaring means larger errors contribute more to the average
+			\item RMSE = 6.57 means typical error is around 6.57 units
+			\item Not every prediction is off by exactly 6.57
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMPARISON WITH MAE:}
+		\begin{itemize}
+			\item MAE = 5.01
+			\item RMSE = 6.57
+			\item Gap between RMSE and MAE indicates presence of larger errors
+			\item If RMSE $\approx$ MAE, errors are relatively uniform
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} RMSE is in \textcolor{myblue}{same units as target} - easier to understand!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 3: METRIC COMPARISON AND SELECTION
+	% ============================================================
+	
+	\begin{frame}{T16: MAE Calculation Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Step-by-Step MAE Calculation}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE DATA (Test Sample of 10 Observations):}
+		
+		\begin{tabular}{|c|c|c|c|c|c|}
+			\hline
+			$i$ & $x_i$ & $y_i$ & $\hat{y}_i$ & $y_i - \hat{y}_i$ & $|y_i - \hat{y}_i|$ \\
+			\hline
+			1 & 4 & 20.15 & 21.12 & -0.97 & 0.97 \\
+			2 & 6 & 21.48 & 23.24 & -1.76 & 1.76 \\
+			3 & 9 & 31.88 & 26.42 & 5.46 & 5.46 \\
+			4 & 10 & 32.88 & 27.48 & 5.40 & 5.40 \\
+			5 & 21 & 49.92 & 39.14 & 10.78 & 10.78 \\
+			6 & 25 & 57.46 & 43.38 & 14.08 & 14.08 \\
+			7 & 3 & 21.13 & 20.06 & 1.07 & 1.07 \\
+			8 & 1 & 12.18 & 17.94 & -5.76 & 5.76 \\
+			9 & 2 & 19.47 & 19.00 & 0.47 & 0.47 \\
+			10 & 7 & 28.66 & 24.30 & 4.36 & 4.36 \\
+			\hline
+			Total & & & & & 50.11 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{CALCULATION:}
+		\begin{itemize}
+			\item Sum of absolute errors = 50.11
+			\item N = 10
+			\item MAE = 50.11 / 10 = 5.01
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item "On average, predictions are off by about 5.01 thousand dollars"
+			\item Similar to RMSE but less influenced by large errors
+			\item More stable measure of typical error
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MAE = \textcolor{myblue}{average of absolute errors} - sum divided by N!
+	\end{frame}
+	
+	\begin{frame}{T17: MAPE Calculation Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Step-by-Step MAPE Calculation}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE DATA (Test Sample of 10 Observations):}
+		
+		\begin{tabular}{|c|c|c|c|c|c|}
+			\hline
+			$i$ & $y_i$ & $\hat{y}_i$ & $y_i - \hat{y}_i$ & $\frac{y_i - \hat{y}_i}{y_i}$ & $\left|\frac{y_i - \hat{y}_i}{y_i}\right|$ \\
+			\hline
+			1 & 20.15 & 21.12 & -0.97 & -0.05 & 0.05 \\
+			2 & 21.48 & 23.24 & -1.76 & -0.08 & 0.08 \\
+			3 & 31.88 & 26.42 & 5.46 & 0.17 & 0.17 \\
+			4 & 32.88 & 27.48 & 5.40 & 0.16 & 0.16 \\
+			5 & 49.92 & 39.14 & 10.78 & 0.22 & 0.22 \\
+			6 & 57.46 & 43.38 & 14.08 & 0.25 & 0.25 \\
+			7 & 21.13 & 20.06 & 1.07 & 0.05 & 0.05 \\
+			8 & 12.18 & 17.94 & -5.76 & -0.47 & 0.47 \\
+			9 & 19.47 & 19.00 & 0.47 & 0.02 & 0.02 \\
+			10 & 28.66 & 24.30 & 4.36 & 0.15 & 0.15 \\
+			\hline
+			Total & & & & & 1.62 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{CALCULATION:}
+		\begin{itemize}
+			\item Sum of $|(y_i - \hat{y}_i)/y_i|$ = 1.62
+			\item N = 10
+			\item MAPE = 1.62 / 10 × 100 = 16.2\%
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item "On average, forecast error is 16\% of actual salary"
+			\item Most intuitive of all measures
+			\item Easy to communicate to non-technical stakeholders
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MAPE = \textcolor{myblue}{percentage of actual values} - most intuitive!
+	\end{frame}
+	
+	\begin{frame}{T18: Metric Selection for Tail Risk}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Choosing Metrics to Capture Tail Risk}
+		
+		\vspace{0.1cm}
+		\textbf{WHICH METRIC CAPTURES TAIL RISK?}
+		\begin{itemize}
+			\item \textcolor{myblue}{MSE or RMSE} - because they square errors, heavily penalizing large deviations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY MSE/RMSE CAPTURE TAIL RISK:}
+		\begin{itemize}
+			\item Squaring errors heavily penalizes large deviations
+			\item Large errors contribute disproportionately to the metric
+			\item Sensitive to outliers (tail events)
+			\item Regulatory preference (ECB recommends)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMPARISON:}
+		\begin{itemize}
+			\item \textcolor{myblue}{MAE:} Robust, but ignores tail risk
+			\item \textcolor{myblue}{MAPE:} Good for communication, but has limitations
+			\item \textcolor{myblue}{MSE/RMSE:} Best for capturing extreme errors
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{REGULATORY PERSPECTIVE:}
+		\begin{itemize}
+			\item ECB's Guide to Internal Models recommends metrics capturing tail risk
+			\item Nudges firms to report RMSE alongside MAE
+			\item Ensures large, infrequent losses are not overlooked
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} ECB recommends metrics that \textcolor{myblue}{capture tail risk} - MSE and RMSE!
+	\end{frame}
+	
+	\begin{frame}{T19: When to Use MAPE}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Appropriate Use Cases for MAPE}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN MAPE IS APPROPRIATE:}
+		\begin{itemize}
+			\item Comparing models across different portfolios
+			\item Comparing error on €100k loan vs €10m loan
+			\item Communicating to audit committees
+			\item When percentage errors are more meaningful than absolute
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN MAPE IS NOT APPROPRIATE:}
+		\begin{itemize}
+			\item When actual values are near zero (MAPE explodes)
+			\item When tail risk is the primary concern
+			\item When absolute errors matter more than percentage
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY ADVANTAGE:}
+		\begin{itemize}
+			\item Normalized measure allows comparison across scales
+			\item A €2,000 error on €10,000 loan (20\%) vs €2,000 error on €1,000,000 loan (0.2\%)
+			\item MAPE treats these appropriately based on relative size
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} MAPE is best for \textcolor{myblue}{comparing across different scales}!
+	\end{frame}
+	
+	\begin{frame}{T20: Error Distribution Visualization}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Beyond Averages - The Story in Error Distributions}
+		
+		\vspace{0.1cm}
+		\textbf{WHY LOOK BEYOND AVERAGES?}
+		\begin{itemize}
+			\item Distribution of errors reveals patterns averages hide
+			\item Senior leaders should encourage visualizations (histograms, box plots)
+			\item Provides richer context for interpreting average performance metrics
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY QUESTIONS TO ASK:}
+		\begin{enumerate}
+			\item "Are our model errors generally small with a few large ones, or consistently off by moderate amount?"
+			\item "Are errors randomly distributed or is model systematically over-predicting (more negative errors) or under-predicting (more positive errors)?"
+			\item "Are there particular segments or conditions where errors are consistently larger or more biased?"
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THIS MATTERS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Consistent bias} > random errors (more problematic even if average small)
+			\item Segment analysis reveals model weaknesses
+			\item Richer context for interpreting average metrics
+			\item Diagnoses underlying model problems
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Error distributions reveal \textcolor{myblue}{patterns and biases} that averages hide!
+	\end{frame}
+	
+	\begin{frame}{T21: Model Comparison Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Comparing Alternative Models}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE: House Price Prediction}
+		
+		\begin{tabular}{|p{3.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+			\hline
+			\textbf{Model} & \textbf{MSE} & \textbf{MAE} & \textbf{MAPE} \\
+			\hline
+			Model A (Linear Regression) & 94.85 & 6.56 & 18.25 \\
+			\hline
+			Model B (Decision Tree) & 77.35* & 5.41* & 14.45* \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{CONCLUSION:}
+		\begin{itemize}
+			\item Model B has all lower values
+			\item Decision tree is more accurate according to all metrics
+			\item Asterisk denotes best performer
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item Different metrics can yield different model rankings
+			\item Choice depends on problem, regulatory situation, and historical precedent
+			\item Lower values = better performance for all these metrics
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Lower values = \textcolor{myblue}{better performance} for all these metrics!
+	\end{frame}
+	
+	\begin{frame}{T22: Different Metrics Different Rankings}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Different Metrics Can Yield Different Rankings}
+		
+		\vspace{0.1cm}
+		\textbf{WHY RANKINGS CAN DIFFER:}
+		\begin{itemize}
+			\item \textcolor{myblue}{MSE/RMSE:} Penalize large errors heavily
+			\item \textcolor{myblue}{MAE:} Treats all errors equally
+			\item \textcolor{myblue}{MAPE:} Emphasizes relative errors
+			\item Different metrics = different priorities
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{IMPLICATION:}
+		\begin{itemize}
+			\item Choose metric based on business needs
+			\item Regulatory requirements may dictate choice
+			\item Historical organizational choices matter
+			\item No single "best" metric for all situations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE SCENARIO:}
+		\begin{itemize}
+			\item Model A: Lower MAE but higher RMSE
+			\item Model B: Lower RMSE but higher MAE
+			\item Choice depends on whether tail risk or average error matters more
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Different metrics = \textcolor{myblue}{different rankings} - choose based on problem!
+	\end{frame}
+	
+	\begin{frame}{T23: Unnormalized Metrics Limitation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Limitations of Unnormalized Metrics}
+		
+		\vspace{0.1cm}
+		\textbf{THE PROBLEM:}
+		\begin{itemize}
+			\item RMSE and MAE are both unnormalized measures
+			\item They treat errors symmetrically regardless of scale
+			\item Example: \$2,000 error on \$150,000 salary (1.3\%) vs \$2,000 error on \$12,000 salary (16.7\%)
+			\item Both contribute same to RMSE/MAE
+			\item But the second error is much more significant proportionally
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THIS MATTERS:}
+		\begin{itemize}
+			\item In some situations, a \$2,000 error on \$150,000 might be considered much less important
+			\item Represents about 1\% of total salary
+			\item The other situation represents more than 10\% of salary
+			\item Unnormalized metrics don't capture this distinction
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SOLUTION:}
+		\begin{itemize}
+			\item Use MAPE for relative comparison
+			\item Understand the context of errors
+			\item Consider business impact, not just statistical measures
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Unnormalized metrics treat \textcolor{myblue}{all errors equally} - MAPE handles this issue!
+	\end{frame}
+	
+	\begin{frame}{T24: Regulatory Metric Preferences}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: ECB Recommendations on Performance Metrics}
+		
+		\vspace{0.1cm}
+		\textbf{ECB GUIDE TO INTERNAL MODELS:}
+		\begin{itemize}
+			\item Recommends use of metrics that capture tail risk
+			\item Nudges firms to report RMSE alongside MAE
+			\item Ensures that impact of large, infrequent losses is not overlooked
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THIS MATTERS:}
+		\begin{itemize}
+			\item MAE alone might mask critical risks
+			\item RMSE captures the impact of extreme events
+			\item Both together provide complete picture
+			\item Aligns with regulatory capital frameworks
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{REGULATORY CONTEXT:}
+		\begin{itemize}
+			\item ECB's Guide to Internal Models
+			\item Focus on tail risk and extreme events
+			\item Capital adequacy requirements
+			\item Systemic risk concerns
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} ECB recommends \textcolor{myblue}{RMSE alongside MAE} for complete risk picture!
+	\end{frame}
+	
+	\begin{frame}{T25: Auditor Preferences}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Auditors Prefer MAPE}
+		
+		\vspace{0.1cm}
+		\textbf{AUDITOR PERSPECTIVE:}
+		\begin{itemize}
+			\item Auditors often gravitate to MAPE
+			\item Pure percentage narrative when discussing model accuracy with audit committees
+			\item Provides standardized measure
+			\item Allows comparison across different models/portfolios
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY PERCENTAGE NARRATIVE MATTERS:}
+		\begin{itemize}
+			\item Easy to understand for non-technical stakeholders
+			\item Standardized across different scales
+			\item Facilitates comparison
+			\item Communicates effectively with audit committees
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DIFFERENT STAKEHOLDER PREFERENCES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Regulators:} RMSE alongside MAE (tail risk)
+			\item \textcolor{myblue}{Auditors:} MAPE (percentage narrative)
+			\item \textcolor{myblue}{Risk Managers:} All metrics for complete picture
+			\item \textcolor{myblue}{Board:} MAPE and accuracy (intuitive)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Auditors prefer MAPE for its \textcolor{myblue}{percentage narrative}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 4: CONFUSION MATRIX AND CLASSIFICATION METRICS
+	% ============================================================
+	
+	\begin{frame}{T26: Confusion Matrix Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: The Confusion Matrix - Foundation of Classification Metrics}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Cross-tabulation of predicted classifications against actual outcomes
+			\item Simple yet powerful tool providing clear breakdown of model performance
+			\item Cornerstone for evaluating classification models
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{STRUCTURE:}
+		
+		\begin{tabular}{|c|c|c|}
+			\hline
+			& \textbf{Predicted Negative} & \textbf{Predicted Positive} \\
+			\hline
+			\textbf{Actual Negative} & True Negative (TN) & False Positive (FP) \\
+			\hline
+			\textbf{Actual Positive} & False Negative (FN) & True Positive (TP) \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITIONS FROM RISK MANAGER'S PERSPECTIVE:}
+		\begin{itemize}
+			\item \textcolor{myblue}{True Negative (TN):} Model correctly identified negative case
+			\item \textcolor{myblue}{False Positive (FP):} Model incorrectly classified negative as positive (Type I Error)
+			\item \textcolor{myblue}{False Negative (FN):} Model incorrectly classified positive as negative (Type II Error)
+			\item \textcolor{myblue}{True Positive (TP):} Model correctly identified positive case
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Confusion matrix = \textcolor{myblue}{predicted vs actual} cross-tabulation!
+	\end{frame}
+	
+	\begin{frame}{T27: True Positive (TP)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: True Positive - Correctly Identified Positive Case}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item The model correctly identified a positive case
+			\item Desired outcome - what we want the model to do
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLES:}
+		\begin{itemize}
+			\item Correctly flagged a fraudulent transaction
+			\item Correctly predicted that a loan would default
+			\item Correctly identified a dividend-paying firm
+			\item Correctly detected a critical compliance breach
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item More TP = better model performance
+			\item True positives represent value creation
+			\item Catching fraud, defaults, or breaches avoids losses
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Dividend Prediction):}
+		\begin{itemize}
+			\item TP = 432
+			\item 432 firms correctly predicted to pay dividends
+			\item These are the successful predictions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} True Positive = \textcolor{myblue}{correctly identified positive}!
+	\end{frame}
+	
+	\begin{frame}{T28: True Negative (TN)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: True Negative - Correctly Identified Negative Case}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item The model correctly identified a negative case
+			\item Desired outcome - what we want the model to do
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLES:}
+		\begin{itemize}
+			\item Correctly identified a legitimate transaction
+			\item Correctly predicted that a loan would not default
+			\item Correctly identified a non-dividend paying firm
+			\item Correctly cleared a compliant process
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item More TN = better model performance
+			\item True negatives represent efficiency
+			\item Avoiding unnecessary interventions or investigations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Dividend Prediction):}
+		\begin{itemize}
+			\item TN = 279
+			\item 279 firms correctly predicted to not pay dividends
+			\item These are the successful negative predictions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} True Negative = \textcolor{myblue}{correctly identified negative}!
+	\end{frame}
+	
+	\begin{frame}{T29: False Positive (FP)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: False Positive - Type I Error}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item The model incorrectly classified a negative case as positive
+			\item Also known as Type I Error
+			\item "False alarm"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLES:}
+		\begin{itemize}
+			\item Flagged a legitimate transaction as fraudulent
+			\item Predicted that a good loan would default
+			\item Incorrectly identified a firm as paying dividends
+			\item Wrongly flagged a compliant process as breach
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COST PERSPECTIVE:}
+		\begin{itemize}
+			\item Operational cost to investigate false alert
+			\item Customer friction from declined transactions
+			\item Lost revenue from declining good customers
+			\item Resource waste from chasing red herrings
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Dividend Prediction):}
+		\begin{itemize}
+			\item FP = 121
+			\item 121 firms incorrectly predicted to pay dividends
+			\item False alarms in prediction
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} False Positive = \textcolor{myblue}{Type I Error} - incorrectly saying "yes"!
+	\end{frame}
+	
+	\begin{frame}{T30: False Negative (FN)}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: False Negative - Type II Error}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item The model incorrectly classified a positive case as negative
+			\item Also known as Type II Error
+			\item "Missed detection"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLES:}
+		\begin{itemize}
+			\item Missed a fraudulent transaction (labeled it legitimate)
+			\item Failed to predict that a loan would default
+			\item Incorrectly identified a firm as not paying dividends
+			\item Missed a critical compliance breach
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COST PERSPECTIVE:}
+		\begin{itemize}
+			\item Often the most costly type of error
+			\item Financial losses from undetected fraud
+			\item Capital impact of missed defaults
+			\item Regulatory sanctions for missed breaches
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Dividend Prediction):}
+		\begin{itemize}
+			\item FN = 168
+			\item 168 firms incorrectly predicted to not pay dividends
+			\item Missed dividend payers
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} False Negative = \textcolor{myblue}{Type II Error} - incorrectly saying "no"!
+	\end{frame}
+	
+	\begin{frame}{T31: Type I vs Type II Errors}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Comparing Type I and Type II Errors in Credit Risk}
+		
+		\vspace{0.1cm}
+		\textbf{WHY TYPE II ERRORS ARE MORE COSTLY IN CREDIT RISK:}
+		\begin{itemize}
+			\item Misclassifying a borrower as solvent who then defaults
+			\item Results in actual loan losses for the bank
+			\item Regulatory capital implications
+			\item Direct financial impact
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{TYPE I ERROR COST:}
+		\begin{itemize}
+			\item Lost profit from not making a loan
+			\item Operational cost of investigation
+			\item Customer friction
+			\item Usually less severe than Type II
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{GENERAL PRINCIPLE:}
+		\begin{itemize}
+			\item The cost of errors is typically not symmetric
+			\item Choose threshold based on relative costs
+			\item In credit risk, Type II errors usually more costly
+			\item In AML, both types have significant costs
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Credit Risk:} Type II more costly (missed default)
+			\item \textcolor{myblue}{Fraud Detection:} Type II more costly (missed fraud)
+			\item \textcolor{myblue}{AML:} Both costly (missed suspicious activity vs customer friction)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Type II Errors (False Negatives) are \textcolor{myblue}{usually more costly} in credit risk!
+	\end{frame}
+	
+	\begin{frame}{T32: Accuracy Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Accuracy - Basic Classification Performance Measure}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		Accuracy = \frac{TP + TN}{TP + TN + FP + FN}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item "Percentage of all predictions that were correct"
+			\item Sum of diagonal elements of confusion matrix divided by total
+			\item Straightforward to interpret - simple agreement between predicted and observed
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Dividend Prediction):}
+		\begin{itemize}
+			\item Accuracy = (432 + 279) / 1000 = 71.1\%
+			\item "71.1\% of dividend predictions were correct"
+			\item Error rate = 100\% - 71.1\% = 28.9\%
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LIMITATIONS:}
+		\begin{itemize}
+			\item Doesn't distinguish between error types (FP and FN treated equally)
+			\item Costs of errors are typically not symmetric
+			\item Misleading for imbalanced datasets
+			\item 98\% positive, classify all as positive → 98\% accuracy but useless model
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Accuracy = \textcolor{myblue}{percentage of all correct predictions}!
+	\end{frame}
+	
+	\begin{frame}{T33: Accuracy Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Calculating Accuracy from Confusion Matrix}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE DATA:}
+		\begin{itemize}
+			\item True Positive (TP) = 432
+			\item True Negative (TN) = 279
+			\item False Positive (FP) = 121
+			\item False Negative (FN) = 168
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CALCULATION:}
+		\begin{itemize}
+			\item Accuracy = (TP + TN) / (TP + TN + FP + FN)
+			\item Accuracy = (432 + 279) / (432 + 279 + 121 + 168)
+			\item Accuracy = 711 / 1000
+			\item Accuracy = 71.1\%
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item "71.1\% of all predictions were correct"
+			\item Error rate = 28.9\% (percentage of incorrect predictions)
+			\item 711 out of 1000 predictions were correct
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CONTEXT:}
+		\begin{itemize}
+			\item 600 firms actually paid dividends
+			\item 400 firms actually did not
+			\item Model correctly classified 71.1\% of all firms
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Accuracy = \textcolor{myblue}{(TP + TN) / Total}!
+	\end{frame}
+	
+	\begin{frame}{T34: Error Rate Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Error Rate and Its Relationship to Accuracy}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		Error Rate = 1 - Accuracy = \frac{FP + FN}{TP + TN + FP + FN}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item "Percentage of predictions that were incorrect"
+			\item Complementary to accuracy
+			\item Simple and intuitive
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Accuracy = 71.1\%
+			\item Error Rate = 100\% - 71.1\% = 28.9\%
+			\item "28.9\% of predictions were wrong"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{RELATIONSHIP:}
+		\begin{itemize}
+			\item Error Rate = 1 - Accuracy
+			\item They are complementary measures
+			\item Both ignore the type of error made
+			\item Both problematic for imbalanced datasets
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Error rate = \textcolor{myblue}{1 - Accuracy}!
+	\end{frame}
+	
+	\begin{frame}{T35: Accuracy Limitations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Major Limitations of Accuracy}
+		
+		\vspace{0.1cm}
+		\textbf{LIMITATION 1: DOESN'T DISTINGUISH ERROR TYPES}
+		\begin{itemize}
+			\item FP and FN treated equally
+			\item But costs are usually different
+			\item Type II errors often more costly in credit risk
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LIMITATION 2: MISLEADING FOR IMBALANCED DATA}
+		\begin{itemize}
+			\item 98\% positive, classify all as positive → 98\% accuracy
+			\item But model is practically useless
+			\item Example: Fraud detection - 99\% legitimate
+			\item Model predicting "legitimate" always has 99\% accuracy
+			\item But catches zero fraud (Recall = 0)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LIMITATION 3: IGNORES COSTS}
+		\begin{itemize}
+			\item Doesn't account for different costs of FP vs FN
+			\item In credit risk, FN (missed default) much more costly
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHAT TO USE INSTEAD:}
+		\begin{itemize}
+			\item Precision, Recall, F1 Score
+			\item AUC (Area Under ROC Curve)
+			\item Cost-sensitive metrics
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Accuracy is \textcolor{myblue}{misleading for imbalanced datasets}!
+	\end{frame}
+	
+	\begin{frame}{T36: Precision Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Precision - Of Predicted Positives, How Many Were Correct?}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		Precision = \frac{TP}{TP + FP}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{MANAGERIAL QUESTION:}
+		\begin{itemize}
+			\item "Of all the alerts our model generated, how many were actually real issues?"
+			\item "If we act on this prediction, how often will we be right?"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item Estimate of probability that model is right when labelling an outcome as true
+			\item Of all instances classified as positive, what fraction were actually positive?
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN PRECISION MATTERS:}
+		\begin{itemize}
+			\item High cost of investigation (AML alerts)
+			\item Customer friction concerns
+			\item Operational resource constraints
+			\item When false alarms are expensive
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Dividend Prediction):}
+		\begin{itemize}
+			\item Precision = 432 / (432 + 121) = 432/553 = 78.1\%
+			\item "When model predicts dividend, it's right 78.1\% of the time"
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Precision = \textcolor{myblue}{TP / (TP + FP)} - "of predicted positives, how many were right?"
+	\end{frame}
+	
+	\begin{frame}{T37: Precision Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Calculating Precision from Confusion Matrix}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE DATA:}
+		\begin{itemize}
+			\item True Positive (TP) = 432
+			\item False Positive (FP) = 121
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CALCULATION:}
+		\begin{itemize}
+			\item Precision = TP / (TP + FP)
+			\item Precision = 432 / (432 + 121)
+			\item Precision = 432 / 553
+			\item Precision = 78.1\%
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item "When the model predicts a firm will pay a dividend, it's right 78.1\% of the time"
+			\item "Of all dividend predictions, 78.1\% were correct"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CONTEXT:}
+		\begin{itemize}
+			\item 432 firms correctly predicted to pay dividends
+			\item 121 firms incorrectly predicted to pay dividends
+			\item Total predicted positive = 553
+			\item Precision = 78.1\%
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Precision = \textcolor{myblue}{TP / (TP + FP)}!
+	\end{frame}
+	
+	\begin{frame}{T38: Recall Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Recall (Sensitivity) - Of Actual Positives, How Many Did We Catch?}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		Recall = \frac{TP}{TP + FN}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{ALSO KNOWN AS:} Sensitivity, True Positive Rate
+		
+		\vspace{0.1cm}
+		\textbf{MANAGERIAL QUESTION:}
+		\begin{itemize}
+			\item "Of all real fraud events that occurred, how many did we catch?"
+			\item "What percentage of actual positives did we identify?"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item Proportion of correctly classified positives among all positive instances
+			\item True positive rate
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN RECALL MATTERS:}
+		\begin{itemize}
+			\item Missing a positive has severe consequences
+			\item Fraud detection, default prediction
+			\item Compliance monitoring
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SPECIFICITY (TRUE NEGATIVE RATE):}
+		\[
+		Specificity = \frac{TN}{TN + FP}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Dividend Prediction):}
+		\begin{itemize}
+			\item Recall = 432 / (432 + 168) = 432/600 = 72.0\%
+			\item "Of all firms that paid dividends, model caught 72\%"
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Recall = \textcolor{myblue}{TP / (TP + FN)} - "of actual positives, how many did we catch?"
+	\end{frame}
+	
+	\begin{frame}{T39: Recall Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Calculating Recall from Confusion Matrix}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE DATA:}
+		\begin{itemize}
+			\item True Positive (TP) = 432
+			\item False Negative (FN) = 168
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CALCULATION:}
+		\begin{itemize}
+			\item Recall = TP / (TP + FN)
+			\item Recall = 432 / (432 + 168)
+			\item Recall = 432 / 600
+			\item Recall = 72.0\%
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item "Of all firms that actually paid dividends, the model caught 72\%"
+			\item "The model missed 28\% of dividend payers"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CONTEXT:}
+		\begin{itemize}
+			\item 600 firms actually paid dividends
+			\item 432 were correctly predicted
+			\item 168 were missed (False Negatives)
+			\item Recall = 72.0\%
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Recall = \textcolor{myblue}{TP / (TP + FN)}!
+	\end{frame}
+	
+	\begin{frame}{T40: Precision vs Recall Tradeoff}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: The Tradeoff Between Precision and Recall}
+		
+		\vspace{0.1cm}
+		\textbf{THE TRADEOFF:}
+		\begin{itemize}
+			\item \textcolor{myblue}{High threshold:} Higher precision, lower recall
+			\item \textcolor{myblue}{Low threshold:} Lower precision, higher recall
+			\item Cannot maximize both simultaneously
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Threshold = 0.9: Only very confident predictions
+			\item Precision: High (few false positives)
+			\item Recall: Low (miss many actual positives)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BUSINESS CONTEXT DETERMINES BALANCE:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Fraud detection:} Prioritize recall (catch all fraud)
+			\item \textcolor{myblue}{AML monitoring:} High recall critical
+			\item \textcolor{myblue}{Credit approval:} Balance needed
+			\item \textcolor{myblue}{Marketing:} Precision more important
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{F1 SCORE:} Captures both in a single metric
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Precision and Recall have \textcolor{myblue}{tradeoff} - cannot maximize both simultaneously!
+	\end{frame}
+	
+	\begin{frame}{T41: F1 Score Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: F1 Score - Balancing Precision and Recall}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{WHY HARMONIC MEAN:}
+		\begin{itemize}
+			\item Harmonic mean penalizes imbalance
+			\item Low precision OR low recall → Low F1
+			\item Better than arithmetic mean for this purpose
+			\item If either precision or recall is low, F1 is low
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item Bounded between 0 and 1
+			\item Close to 1 = high precision and high recall
+			\item Low score = poor precision, poor recall, or both
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE (Dividend Prediction):}
+		\begin{itemize}
+			\item Precision = 78.1\%
+			\item Recall = 72.0\%
+			\item F1 = 2 × (0.781 × 0.720) / (0.781 + 0.720)
+			\item F1 = 2 × 0.5623 / 1.501 = 1.1246 / 1.501 = 74.9\%
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} F1 = \textcolor{myblue}{harmonic mean of precision and recall}!
+	\end{frame}
+	
+	\begin{frame}{T42: F1 Score Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Calculating F1 Score from Precision and Recall}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE DATA:}
+		\begin{itemize}
+			\item Precision = 78.1\% = 0.781
+			\item Recall = 72.0\% = 0.720
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CALCULATION:}
+		\begin{itemize}
+			\item F1 = 2 × (Precision × Recall) / (Precision + Recall)
+			\item F1 = 2 × (0.781 × 0.720) / (0.781 + 0.720)
+			\item F1 = 2 × 0.5623 / 1.501
+			\item F1 = 1.1246 / 1.501
+			\item F1 = 0.7494 = 74.9\%
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item F1 = 74.9\%
+			\item Balances precision and recall
+			\item Good overall performance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} F1 = \textcolor{myblue}{2 × (P × R) / (P + R)}!
+	\end{frame}
+	
+	\begin{frame}{T43: Specificity Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Specificity - True Negative Rate}
+		
+		\vspace{0.1cm}
+		\textbf{FORMULA:}
+		\[
+		Specificity = \frac{TN}{TN + FP}
+		\]
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item "Of all actual negatives, what percentage did we correctly identify?"
+			\item True Negative Rate
+			\item Proportion of all negative outcomes correctly predicted as negative
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{RELATION TO RECALL:}
+		\begin{itemize}
+			\item Recall = TPR (True Positive Rate)
+			\item Specificity = TNR (True Negative Rate)
+			\item Both are important for ROC curve
+			\item FPR = 1 - Specificity
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN SPECIFICITY MATTERS:}
+		\begin{itemize}
+			\item When false positives are costly
+			\item Customer friction concerns
+			\item Resource constraints for investigation
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Specificity = \textcolor{myblue}{TN / (TN + FP)} - True Negative Rate!
+	\end{frame}
+	
+	\begin{frame}{T44: Imbalanced Data Problem}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Accuracy is Misleading for Imbalanced Datasets}
+		
+		\vspace{0.1cm}
+		\textbf{THE PROBLEM:}
+		\begin{itemize}
+			\item Dataset: 98\% solvent, 2\% default
+			\item Model predicts "solvent" for everyone
+			\item Accuracy = 98\% (seems great!)
+			\item But model catches zero defaults
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHAT METRICS TO USE INSTEAD:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Precision:} 0\% (no defaults predicted)
+			\item \textcolor{myblue}{Recall:} 0\% (caught zero actual defaults)
+			\item \textcolor{myblue}{F1:} 0\% (poor precision and recall)
+			\item \textcolor{myblue}{AUC:} 0.5 (no discriminatory ability)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Fraud detection: 99\% legitimate
+			\item Model predicting "legitimate" always has 99\% accuracy
+			\item But catches zero fraud (Recall = 0)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{LESSON:}
+		\begin{itemize}
+			\item Accuracy is insufficient for imbalanced data
+			\item Use Precision, Recall, F1, AUC
+			\item Consider cost-sensitive metrics
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Accuracy is \textcolor{myblue}{misleading for imbalanced data}!
+	\end{frame}
+	
+	\begin{frame}{T45: Confusion Matrix Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Complete Confusion Matrix Analysis}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE DATA:}
+		\begin{itemize}
+			\item True Positive (TP) = 60
+			\item True Negative (TN) = 498
+			\item False Positive (FP) = 98
+			\item False Negative (FN) = 5
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CALCULATIONS:}
+		\begin{itemize}
+			\item Total = 60 + 498 + 98 + 5 = 661
+			\item Accuracy = (60 + 498) / 661 = 558/661 = 84.4\%
+			\item Precision = 60 / (60 + 98) = 60/158 = 38.0\%
+			\item Recall = 60 / (60 + 5) = 60/65 = 92.3\%
+			\item Error Rate = 1 - 0.844 = 15.6\%
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item Model catches 92.3\% of defaults (great!)
+			\item But only 38\% of default predictions are correct
+			\item Many false alarms (98 false positives)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Work through each formula carefully - don't mix up denominators!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 5: ROC AND AUC
+	% ============================================================
+	
+	\begin{frame}{T46: ROC Curve Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Receiver Operating Characteristic (ROC) Curve}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Graphical illustration of tradeoff between true and false positive rates against different choices of threshold Z
+			\item Popular way to visualize classification model performance across all thresholds
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ROC CURVE COMPONENTS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Y-axis:} True Positive Rate (Recall)
+			\item \textcolor{myblue}{X-axis:} False Positive Rate (1 - Specificity)
+			\item \textcolor{myblue}{Points:} From varying decision threshold
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{THRESHOLD EXTREMES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Threshold = 0:} All predicted positive
+			\begin{itemize}
+				\item TPR = 1 (all positives caught)
+				\item FPR = 1 (all negatives misclassified)
+				\item Point: (1, 1)
+			\end{itemize}
+			\item \textcolor{myblue}{Threshold = 1:} All predicted negative
+			\begin{itemize}
+				\item TPR = 0 (no positives caught)
+				\item FPR = 0 (all negatives correct)
+				\item Point: (0, 0)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item For values between 0 and 1, TPR increases when FPR increases
+			\item Shows tradeoff between catching positives and avoiding false alarms
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} ROC shows \textcolor{myblue}{TPR vs FPR} tradeoff across thresholds!
+	\end{frame}
+	
+	\begin{frame}{T47: AUC Interpretation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Area Under ROC Curve (AUC) - Interpretation}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Area under the ROC curve
+			\item Measures overall ability of model to distinguish between positive and negative classes
+			\item Threshold-independent measure
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{AUC VALUES AND INTERPRETATION:}
+		\begin{itemize}
+			\item \textcolor{mygreen}{AUC = 1.0:} Perfect discrimination
+			\item \textcolor{myblue}{AUC = 0.5:} No discrimination (random guessing)
+			\item \textcolor{myred}{AUC < 0.5:} Worse than random (should invert predictions)
+			\item \textcolor{mygreen}{Higher AUC = better model}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROBABILISTIC INTERPRETATION:}
+		\begin{itemize}
+			\item Probability that a random positive ranks higher than a random negative
+			\item Measures ranking ability of model
+			\item Threshold-independent
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item AUC = 0.8 means 80\% chance that a randomly chosen positive is ranked higher than a randomly chosen negative
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} AUC = \textcolor{myblue}{probability that positive ranks higher than negative}!
+	\end{frame}
+	
+	\begin{frame}{T48: AUC = 0.5 Meaning}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What AUC = 0.5 Indicates}
+		
+		\vspace{0.1cm}
+		\textbf{AUC = 0.5:}
+		\begin{itemize}
+			\item No predictive ability
+			\item Model cannot distinguish between classes
+			\item Equivalent to random guessing
+			\item Dashed diagonal line on ROC plot
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHAT IT MEANS:}
+		\begin{itemize}
+			\item Model has no useful predictive information
+			\item Positive and negative cases are equally likely to be ranked higher
+			\item No better than flipping a coin
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{AUC < 0.5:}
+		\begin{itemize}
+			\item Worse than random predictions
+			\item Model performs worse than random draws
+			\item Should invert predictions (swap positive/negative)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{TYPICAL GOOD MODELS:}
+		\begin{itemize}
+			\item AUC between 0.7 and 0.9
+			\item AUC > 0.9: Excellent discrimination
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} AUC = 0.5 = \textcolor{myblue}{no predictive ability} - random guessing!
+	\end{frame}
+	
+	\begin{frame}{T49: AUC = 1.0 Meaning}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What AUC = 1.0 Indicates}
+		
+		\vspace{0.1cm}
+		\textbf{AUC = 1.0:}
+		\begin{itemize}
+			\item Perfect predictive ability
+			\item Perfect separation between classes
+			\item Every positive has higher score than every negative
+			\item There exists a threshold with perfect classification
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CAUTION:}
+		\begin{itemize}
+			\item AUC = 1.0 on test data is suspicious
+			\item Likely indicates overfitting or data leakage
+			\item Real-world data rarely has AUC = 1.0
+			\item Should investigate immediately
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHAT TO CHECK:}
+		\begin{itemize}
+			\item Is there data leakage from test to training?
+			\item Is the model too complex?
+			\item Are there duplicate records?
+			\item Is there temporal leakage?
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} AUC = 1.0 = \textcolor{myblue}{perfect separation} - be suspicious!
+	\end{frame}
+	
+	\begin{frame}{T50: ROC Curve Shape}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Interpreting ROC Curve Shape}
+		
+		\vspace{0.1cm}
+		\textbf{BETTER ROC CURVE:}
+		\begin{itemize}
+			\item Curve closer to upper-left corner
+			\item Higher TPR, lower FPR
+			\item More area under curve (higher AUC)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ROC CURVE INTERPRETATION:}
+		\begin{itemize}
+			\item \textcolor{mygreen}{Upper-left corner:} TPR=1, FPR=0 (perfect)
+			\item \textcolor{myblue}{Diagonal line:} TPR=FPR (random)
+			\item \textcolor{myred}{Lower-right corner:} TPR=0, FPR=1 (worst)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMPARISON:}
+		\begin{itemize}
+			\item Curve A with more area = better
+			\item Curve that stays above and left = better
+			\item AUC captures this visually
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{SAMPLE ROC CURVE:}
+		\begin{itemize}
+			\item Model A: Curve closer to upper-left (better)
+			\item Model B: Curve closer to diagonal (worse)
+			\item Model A has higher AUC
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Better ROC curve = \textcolor{myblue}{closer to upper-left corner}!
+	\end{frame}
+	
+	\begin{frame}{T51: Threshold Effect on ROC}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How Threshold Changes Affect ROC Points}
+		
+		\vspace{0.1cm}
+		\textbf{THRESHOLD EXTREMES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Threshold = 0:} All predicted positive
+			\begin{itemize}
+				\item TPR = 1 (all positives caught)
+				\item FPR = 1 (all negatives misclassified)
+				\item Point: (1, 1)
+			\end{itemize}
+			\item \textcolor{myblue}{Threshold = 1:} All predicted negative
+			\begin{itemize}
+				\item TPR = 0 (no positives caught)
+				\item FPR = 0 (all negatives correct)
+				\item Point: (0, 0)
+			\end{itemize}
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{AS THRESHOLD INCREASES:}
+		\begin{itemize}
+			\item Points move from (1,1) toward (0,0)
+			\item TPR decreases (catch fewer positives)
+			\item FPR decreases (fewer false alarms)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{AS THRESHOLD DECREASES:}
+		\begin{itemize}
+			\item Points move from (0,0) toward (1,1)
+			\item TPR increases (catch more positives)
+			\item FPR increases (more false alarms)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} ROC goes from \textcolor{myblue}{(0,0) to (1,1)} as threshold decreases!
+	\end{frame}
+	
+	\begin{frame}{T52: AUC for Model Comparison}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Using AUC to Compare Models in Lending Decisions}
+		
+		\vspace{0.1cm}
+		\textbf{AUC IN LENDING:}
+		\begin{itemize}
+			\item Measures ability to rank borrowers by risk
+			\item Higher AUC = better separation of good from bad loans
+			\item Better model = more accurate risk ranking
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DECISION CONTEXT:}
+		\begin{itemize}
+			\item Choose model with higher AUC on test set
+			\item AUC = 0.8 vs 0.7: First has better ranking
+			\item Better AUC = more confidence in decisions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{HOW IT WORKS:}
+		\begin{itemize}
+			\item Model ranks all loan applicants by default probability
+			\item Higher AUC means better able to separate good from bad
+			\item Can set threshold based on risk appetite
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Model A: AUC = 0.85
+			\item Model B: AUC = 0.72
+			\item Model A better at ranking borrowers by risk
+			\item Choose Model A for lending decisions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Higher AUC = \textcolor{myblue}{better model} for lending decisions!
+	\end{frame}
+	
+	\begin{frame}{T53: Precision-Recall vs ROC}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: When to Use Precision-Recall Curve Instead of ROC}
+		
+		\vspace{0.1cm}
+		\textbf{PRECISION-RECALL CURVES:}
+		\begin{itemize}
+			\item Better for imbalanced datasets
+			\item Focus on positive class performance
+			\item More sensitive to rare events
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY NOT ROC:}
+		\begin{itemize}
+			\item ROC can be optimistic with imbalance
+			\item Large number of negatives makes FPR low
+			\item AUC can be high even with poor positive performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHEN TO USE EACH:}
+		\begin{itemize}
+			\item \textcolor{myblue}{ROC:} Balanced datasets or when both classes equally important
+			\item \textcolor{myblue}{Precision-Recall:} Imbalanced datasets, focus on positive class
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Fraud detection (1\% fraud): Use Precision-Recall
+			\item Credit approval (50/50): Use ROC
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Precision-Recall for \textcolor{myblue}{imbalanced data}!
+	\end{frame}
+	
+	\begin{frame}{T54: Multi-class ROC}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Extending Classification Metrics to Multi-class Problems}
+		
+		\vspace{0.1cm}
+		\textbf{ONE-VS-REST APPROACH:}
+		\begin{itemize}
+			\item For each class, treat as "positive"
+			\item All other classes as "negative"
+			\item Compute TP, FP, FN, TN for each class
+			\item Average or aggregate metrics
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE - CREDIT RATINGS:}
+		\begin{itemize}
+			\item Classes: AAA, AA, A, BBB, BB, B, CCC
+			\item For AAA: positive = AAA, negative = all others
+			\item Compute precision/recall for AAA
+			\item Repeat for each rating
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{GENERALIZATION:}
+		\begin{itemize}
+			\item Precision: Sum all TP / Sum all TP + Sum all FP
+			\item Recall: Sum all TP / Sum all TP + Sum all FN
+			\item Other metrics generalized similarly
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{APPLICATION:}
+		\begin{itemize}
+			\item Multi-class credit rating prediction
+			\item Risk categorization (high/medium/low)
+			\item Severity classification
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Multi-class uses \textcolor{myblue}{one-vs-rest} approach!
+	\end{frame}
+	
+	\begin{frame}{T55: AUC vs Accuracy}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Advantages of AUC Over Accuracy}
+		
+		\vspace{0.1cm}
+		\textbf{AUC ADVANTAGES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Threshold-independent:} Evaluates all thresholds
+			\item \textcolor{myblue}{Works with imbalance:} Not skewed by majority class
+			\item \textcolor{myblue}{Ranking ability:} Measures how well model orders cases
+			\item \textcolor{myblue}{Comprehensive:} Single number captures overall performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ACCURACY LIMITATIONS:}
+		\begin{itemize}
+			\item Threshold-dependent (uses one threshold)
+			\item Misleading for imbalanced data
+			\item Doesn't capture ranking ability
+			\item Treats all errors equally
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Dataset: 98\% solvent, 2\% default
+			\item Model predicting all solvent: 98\% accuracy
+			\item But AUC = 0.5 (no discrimination)
+			\item Accuracy misleading, AUC reveals truth
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} AUC is \textcolor{myblue}{threshold-independent} - a key advantage!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 6: THRESHOLD SELECTION
+	% ============================================================
+	
+	\begin{frame}{T56: Threshold Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Decision Threshold in Classification}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Most classification models output a probability or score
+			\item A decision threshold is applied to convert this score into a binary classification
+			\item Example: If PD > 5\%, classify as "high risk"; if fraud score > 0.7, block transaction
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMMON THRESHOLDS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Default:} 0.5 (balanced)
+			\item \textcolor{myblue}{Can be adjusted:} Based on business needs
+			\item \textcolor{myblue}{Different thresholds:} Different tradeoffs
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THRESHOLD CHOICE MATTERS:}
+		\begin{itemize}
+			\item Directly determines balance of False Positives and False Negatives
+			\item For every threshold, different Confusion Matrix
+			\item Different Precision and Recall values
+			\item Critical business decision, not just technical
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Model outputs probability of default
+			\item Threshold = 0.5: Predict default if PD > 0.5
+			\item Threshold = 0.3: More conservative, predict more defaults
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Threshold converts \textcolor{myblue}{probability to class label}!
+	\end{frame}
+	
+	\begin{frame}{T57: Cost Matrix Definition}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Cost Matrix for Threshold Selection}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Explicitly defining economic consequences associated with each quadrant of Confusion Matrix
+			\item Most effective way to guide threshold selection
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COST MATRIX COMPONENTS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Cost of False Negative:} Average loss from undetected fraud; capital impact of missed default (often largest cost)
+			\item \textcolor{myblue}{Cost of False Positive:} Operational cost to investigate false alert; potential lost revenue from declining good customer
+			\item \textcolor{myblue}{Benefit of True Positive:} Loss avoided by catching fraud; benefit of early intervention
+			\item \textcolor{myblue}{Benefit of True Negative:} Smooth processing; benefit of correctly underwriting good loan
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{OPTIMAL THRESHOLD:}
+		\begin{itemize}
+			\item Threshold that minimizes total expected cost
+			\item OR maximizes total expected benefit
+			\item Once costs/benefits estimated (even roughly)
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Cost matrix = \textcolor{myblue}{economic consequences} of each decision!
+	\end{frame}
+	
+	\begin{frame}{T58: Stakeholder Input}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Cross-Functional Input for Cost Matrix}
+		
+		\vspace{0.1cm}
+		\textbf{KEY STAKEHOLDERS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Business Lines:} Understand cost of missed opportunities, customer attrition
+			\item \textcolor{myblue}{Operations:} Know tangible costs of manual reviews (investigator time, call center)
+			\item \textcolor{myblue}{Finance/Risk:} Can quantify financial impact of missed risks
+			\item \textcolor{myblue}{Compliance/Legal:} Advise on potential costs of regulatory breaches
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY MULTIPLE PERSPECTIVES:}
+		\begin{itemize}
+			\item Different stakeholders understand different costs
+			\item Complete picture of all consequences
+			\item Collaborative decisions are more defensible
+			\item Developing cost matrix is not purely quantitative exercise
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLES:}
+		\begin{itemize}
+			\item Business: Cost of declining good loan
+			\item Operations: Cost of AML alert investigation
+			\item Finance: Capital impact of missed default
+			\item Legal: Cost of regulatory breach
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Cost matrix needs \textcolor{myblue}{cross-functional input}!
+	\end{frame}
+	
+	\begin{frame}{T59: Dynamic Threshold Adjustment}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Thresholds Should Be Dynamic, Not Static}
+		
+		\vspace{0.1cm}
+		\textbf{DYNAMIC ADJUSTMENT EXAMPLES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Holiday Fraud Spike:} Lower threshold (higher recall, catch more fraud)
+			\item \textcolor{myblue}{Economic Downturn:} Adjust default thresholds
+			\item \textcolor{myblue}{Benign Periods:} Higher threshold (fewer false positives)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PREREQUISITES:}
+		\begin{itemize}
+			\item Clear risk appetite statement
+			\item Documented review process
+			\item Transparent justification
+			\item Regulatory awareness
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DOCUMENTATION EXAMPLE:}
+		\begin{itemize}
+			\item "Threshold set for AML monitoring to achieve 80\% recall"
+			\item "Acceptable false positive rate of X\%"
+			\item "Deemed acceptable given consequences of missing AML events"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CAUTION:}
+		\begin{itemize}
+			\item Ensure threshold adjusted for right reasons
+			\item Not "set and forget"
+			\item Actively managed
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Thresholds should be \textcolor{myblue}{dynamic} - not "set and forget"!
+	\end{frame}
+	
+	\begin{frame}{T60: Threshold Documentation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Documentation and Defensibility of Threshold Choices}
+		
+		\vspace{0.1cm}
+		\textbf{DOCUMENTATION SHOULD SHOW:}
+		\begin{itemize}
+			\item How threshold aligns with risk appetite
+			\item Tradeoff between recall and false positives
+			\item Costs and benefits considered
+			\item Periodic review process
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Regulatory requirement
+			\item Audit trail
+			\item Knowledge transfer
+			\item Defensible decisions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE STATEMENT:}
+		\begin{itemize}
+			\item "We are currently setting threshold for transaction monitoring system to achieve 80\% recall for high-risk AML typologies"
+			\item "This means we accept a False Positive Rate of X\%, costing Y in operational overhead"
+			\item "Deemed acceptable given severe consequences of missing AML events"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PERIODIC REVIEW:}
+		\begin{itemize}
+			\item Demonstrates not "set and forget"
+			\item Actively managed in response to changing conditions
+			\item Documented review process
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Thresholds must be \textcolor{myblue}{transparent and defensible}!
+	\end{frame}
+	
+	\begin{frame}{T61: False Positive Cost}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Costs Associated with False Positives in AML Monitoring}
+		
+		\vspace{0.1cm}
+		\textbf{FALSE POSITIVE COSTS:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Operational Cost:}
+			\begin{itemize}
+				\item Investigator time wasted
+				\item Compliance teams chasing red herrings
+				\item Resource consumption
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Customer Friction:}
+			\begin{itemize}
+				\item Declined legitimate transactions
+				\item Customer inconvenience
+				\item Potential customer attrition
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Reputational Cost:}
+			\begin{itemize}
+				\item Customer dissatisfaction
+				\item Negative word-of-mouth
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Alert Fatigue:}
+			\begin{itemize}
+				\item Teams desensitized to alerts
+				\item May miss real issues
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THIS MATTERS:}
+		\begin{itemize}
+			\item High FP rate = inefficient operations
+			\item Can outweigh benefits of catching fraud
+			\item Affects customer experience
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} False Positives = \textcolor{myblue}{operational and customer costs}!
+	\end{frame}
+	
+	\begin{frame}{T62: False Negative Cost}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Costs Associated with False Negatives in Default Prediction}
+		
+		\vspace{0.1cm}
+		\textbf{FALSE NEGATIVE COSTS:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Financial Losses:}
+			\begin{itemize}
+				\item Actual loan losses
+				\item Direct financial impact
+				\item Hard to recover
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Regulatory Capital Implications:}
+			\begin{itemize}
+				\item Capital add-ons
+				\item Increased capital requirements
+				\item Regulatory scrutiny
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Risk Management:}
+			\begin{itemize}
+				\item Misclassification of risk
+				\item Underpricing of risk
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Reputational Impact:}
+			\begin{itemize}
+				\item Regulatory sanctions
+				\item Market confidence erosion
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{WHY OFTEN LARGEST COST:}
+		\begin{itemize}
+			\item Direct financial impact
+			\item Hard to recover from
+			\item Regulatory consequences
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} False Negatives = \textcolor{myblue}{financial and regulatory costs} - usually largest!
+	\end{frame}
+	
+	\begin{frame}{T63: Optimal Threshold Selection}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Determining the Optimal Threshold Using Cost Matrix}
+		
+		\vspace{0.1cm}
+		\textbf{EXPECTED COST CALCULATION:}
+		\begin{itemize}
+			\item For each threshold, compute expected cost
+			\item Cost = C(TP)×P(TP) + C(FP)×P(FP) + C(FN)×P(FN) + C(TN)×P(TN)
+			\item Choose threshold with minimum cost
+			\item Or maximum expected benefit
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COST-BASED THRESHOLD:}
+		\begin{itemize}
+			\item Different from accuracy-based threshold
+			\item Reflects business reality
+			\item More defensible
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PROCESS:}
+		\begin{enumerate}
+			\item Define costs/benefits for each quadrant
+			\item For each possible threshold, compute expected cost
+			\item Select threshold minimizing cost
+			\item Document decision
+		\end{enumerate}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Optimal threshold = \textcolor{myblue}{minimum expected cost}!
+	\end{frame}
+	
+	\begin{frame}{T64: Threshold and Business Needs}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Which Model for Fraud Detection?}
+		
+		\vspace{0.1cm}
+		\textbf{FRAUD DETECTION PRIORITIES:}
+		\begin{itemize}
+			\item Missing fraud (False Negative) is very costly
+			\item Better to catch more fraud (high recall)
+			\item Accept some false alarms (lower precision)
+			\item Business needs drive the tradeoff
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{OTHER CONTEXTS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{AML Monitoring:} High recall critical
+			\item \textcolor{myblue}{Credit Approval:} Balance needed
+			\item \textcolor{myblue}{Marketing:} Precision more important
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Model A: High precision (90\%), low recall (50\%)
+			\item Model B: Lower precision (60\%), high recall (90\%)
+			\item For fraud detection, Model B preferred
+			\item Catches more fraud despite more false alarms
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Fraud detection prioritizes \textcolor{myblue}{recall over precision}!
+	\end{frame}
+	
+	\begin{frame}{T65: Threshold Review Process}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How Often Should Thresholds Be Reviewed?}
+		
+		\vspace{0.1cm}
+		\textbf{REVIEW TRIGGERS:}
+		\begin{itemize}
+			\item Significant environmental changes
+			\item Shifts in risk appetite
+			\item New regulatory requirements
+			\item Changes in fraud patterns
+			\item Economic downturns
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{BEST PRACTICE:}
+		\begin{itemize}
+			\item Documented review schedule
+			\item Clear triggers for review
+			\item Stakeholder involvement
+			\item Regulatory notification when appropriate
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FREQUENCY:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Regular:} Quarterly, semi-annually, annually
+			\item \textcolor{myblue}{Event-driven:} As needed based on triggers
+			\item \textcolor{myblue}{Not:} Never or "set and forget"
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Thresholds should be \textcolor{myblue}{periodically reviewed} - not static!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 7: MODEL COMPARISON
+	% ============================================================
+	
+	\begin{frame}{T66: Model Comparison Example}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Comparing Logistic Regression and Neural Network}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE: LendingClub Default Prediction}
+		
+		\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+			\hline
+			\textbf{Measure} & \textbf{LR Train} & \textbf{NN Train} & \textbf{LR Test} & \textbf{NN Test} \\
+			\hline
+			Accuracy & 0.842 & 0.842 & 0.713 & 0.701 \\
+			\hline
+			Precision & 0.656 & 0.750 & 0.600 & 0.541 \\
+			\hline
+			Recall & 0.236 & 0.169 & 0.283 & 0.377 \\
+			\hline
+		\end{tabular}
+		
+		\vspace{0.1cm}
+		\textbf{KEY OBSERVATIONS:}
+		\begin{itemize}
+			\item Performance drops from training to test (some overfitting)
+			\item Different metrics give different rankings
+			\item \textcolor{myblue}{Logistic Regression:} Better accuracy and precision on test
+			\item \textcolor{myblue}{Neural Network:} Better recall on test
+			\item No clear winner; choice depends on priorities
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Different metrics = \textcolor{myblue}{different model rankings}!
+	\end{frame}
+	
+	\begin{frame}{T67: Training vs Test Comparison}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What Does Drop from Training to Test Indicate?}
+		
+		\vspace{0.1cm}
+		\textbf{PERFORMANCE DROPS:}
+		\begin{itemize}
+			\item Training accuracy: 84.2\% → Test: 71.3\% (LR)
+			\item Training accuracy: 84.2\% → Test: 70.1\% (NN)
+			\item Both show significant decrease
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{INTERPRETATION:}
+		\begin{itemize}
+			\item Models overfit to training data
+			\item Reasonable amount of overfitting
+			\item Could improve with regularization
+			\item Remove irrelevant features
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{REMEDIATION:}
+		\begin{itemize}
+			\item "Remove some of the least empirically relevant features"
+			\item "Apply regularization to the fitted models"
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Performance drop = \textcolor{myblue}{overfitting} - expected but should be managed!
+	\end{frame}
+	
+	\begin{frame}{T68: Neural Network Overfitting}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Checking for Overfitting in Neural Networks}
+		
+		\vspace{0.1cm}
+		\textbf{OVERFITTING CHECKS:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Performance:} Training >> Test
+			\item \textcolor{myblue}{Weights:} Very large or offsetting values
+			\item \textcolor{myblue}{Loss:} Training loss flat, validation increasing
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{WHAT TO LOOK FOR:}
+		\begin{itemize}
+			\item Large positive and negative weights
+			\item Model memorizing training data
+			\item Poor generalization
+			\item Strong or weak connections
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Neural network contains ten units in hidden layer
+			\item Uses logistic activation function
+			\item Examine fitted weights for offsetting connections
+			\item Indicative of overfitting
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Check \textcolor{myblue}{both performance gap and weight patterns} for overfitting!
+	\end{frame}
+	
+	\begin{frame}{T69: Logistic Regression Advantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Advantages of Logistic Regression Over Neural Networks}
+		
+		\vspace{0.1cm}
+		\textbf{LOGISTIC REGRESSION ADVANTAGES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Interpretability:} Coefficients explain feature impact
+			\item \textcolor{myblue}{Explainability:} Easy to communicate to stakeholders
+			\item \textcolor{myblue}{Speed:} Faster to train and deploy
+			\item \textcolor{myblue}{Transparency:} Regulatory acceptance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{NEURAL NETWORK ADVANTAGES:}
+		\begin{itemize}
+			\item Can capture complex patterns
+			\item Higher potential accuracy
+			\item Better for large datasets
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PRACTICAL CONSIDERATIONS:}
+		\begin{itemize}
+			\item In LendingClub example, LR better on test accuracy and precision
+			\item Simpler model may be preferred
+			\item Regulatory requirements may favor LR
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Logistic regression = \textcolor{myblue}{more interpretable} than neural networks!
+	\end{frame}
+	
+	\begin{frame}{T70: Neural Network Advantages}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Advantages of Neural Networks Over Logistic Regression}
+		
+		\vspace{0.1cm}
+		\textbf{NEURAL NETWORK ADVANTAGES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Complex Patterns:} Can model nonlinear relationships
+			\item \textcolor{myblue}{Flexibility:} Universal approximator
+			\item \textcolor{myblue}{Performance:} Often better for complex tasks
+			\item \textcolor{myblue}{Feature Learning:} Learns representations automatically
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DISADVANTAGES:}
+		\begin{itemize}
+			\item Less interpretable
+			\item More data needed
+			\item More computationally expensive
+			\item Risk of overfitting
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{IN LENDINGCLUB EXAMPLE:}
+		\begin{itemize}
+			\item Neural network had better recall (37.7\% vs 28.3\%)
+			\item Caught more defaults
+			\item But lower accuracy and precision
+			\item Tradeoff between metrics
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Neural networks = \textcolor{myblue}{better for complex patterns} but less interpretable!
+	\end{frame}
+	
+	\begin{frame}{T71: Model Selection Criteria}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: In LendingClub, Which Model Would a Risk Manager Choose?}
+		
+		\vspace{0.1cm}
+		\textbf{TRADEOFFS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{If catching defaults is critical:} Neural network (higher recall)
+			\item \textcolor{myblue}{If interpretability is required:} Logistic regression
+			\item \textcolor{myblue}{If accuracy is priority:} Logistic regression (slightly higher)
+			\item \textcolor{myblue}{If regulatory compliance:} Logistic regression
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item No single "best" model
+			\item Choice depends on business needs
+			\item Must align with risk appetite
+			\item Contradictory indicators illustrate importance of choosing appropriate metric
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DECISION FRAMEWORK:}
+		\begin{itemize}
+			\item What is the cost of missing a default?
+			\item What is the cost of false alarm?
+			\item What are regulatory requirements?
+			\item What is stakeholder preference?
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Model choice = \textcolor{myblue}{depends on priorities and constraints}!
+	\end{frame}
+	
+	\begin{frame}{T72: Overfitting Remediation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How to Address Overfitting in LendingClub Example}
+		
+		\vspace{0.1cm}
+		\textbf{REMEDIATION STRATEGIES:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Simplify Model:} Remove irrelevant features
+			\item \textcolor{myblue}{Add Regularization:} L1, L2, dropout
+			\item \textcolor{myblue}{Get More Data:} More training samples
+			\item \textcolor{myblue}{Cross-Validation:} Better model selection
+			\item \textcolor{myblue}{Early Stopping:} Stop before overfitting
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{CHAPTER RECOMMENDATION:}
+		\begin{itemize}
+			\item "Remove some of the least empirically relevant features"
+			\item "Apply regularization to the fitted models"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY THIS WORKS:}
+		\begin{itemize}
+			\item Reduces model complexity
+			\item Prevents memorization
+			\item Improves generalization
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Fix overfitting with \textcolor{myblue}{simplification or regularization}!
+	\end{frame}
+	
+	\begin{frame}{T73: Model Comparison Metrics}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Which Metrics Should Be Used to Compare Models for Default Prediction?}
+		
+		\vspace{0.1cm}
+		\textbf{RECOMMENDED APPROACH:}
+		\begin{enumerate}
+			\item Start with confusion matrix
+			\item Compute Accuracy, Precision, Recall, F1
+			\item Consider business costs
+			\item Choose metric that aligns with priorities
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{WHY MULTIPLE METRICS:}
+		\begin{itemize}
+			\item Single metric masks important differences
+			\item Different stakeholders need different views
+			\item Regulatory requirements may specify
+			\item No single metric tells whole story
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item LR: Better accuracy and precision
+			\item NN: Better recall
+			\item Both have merits
+			\item Choice depends on what matters most
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Use \textcolor{myblue}{multiple metrics} - don't rely on just one!
+	\end{frame}
+	
+	\begin{frame}{T74: Test Sample Importance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Test Sample Comparison is More Important Than Training}
+		
+		\vspace{0.1cm}
+		\textbf{TRAINING SAMPLE:}
+		\begin{itemize}
+			\item Shows how well model memorizes
+			\item Optimistically biased
+			\item Not representative of new data
+			\item Not a true test of performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{TEST SAMPLE:}
+		\begin{itemize}
+			\item Shows how well model generalizes
+			\item Unbiased performance estimate
+			\item What matters in practice
+			\item True test of performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item We are generally more interested in validation or test sample
+			\item Models overfit to training sample
+			\item Examining accuracy on seen data is not true test
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Test sample = \textcolor{myblue}{true generalization} - always prioritize!
+	\end{frame}
+	
+	\begin{frame}{T75: Model Interpretation Tradeoff}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Tradeoff Between Logistic Regression and Neural Networks}
+		
+		\vspace{0.1cm}
+		\textbf{LOGISTIC REGRESSION:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Pros:} Interpretable, transparent, regulatory friendly
+			\item \textcolor{myblue}{Cons:} Limited to linear relationships
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{NEURAL NETWORKS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Pros:} Can capture complex patterns
+			\item \textcolor{myblue}{Cons:} Black box, hard to explain
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{CHOICE DEPENDS ON:}
+		\begin{itemize}
+			\item Regulatory requirements
+			\item Business needs
+			\item Stakeholder expectations
+			\item Interpretability vs performance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{S\&P GLOBAL STUDY:}
+		\begin{itemize}
+			\item Identified tradeoffs between interpretability and performance
+			\item Emphasized choosing models aligned with business objectives
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Tradeoff = \textcolor{myblue}{interpretability vs performance}!
+	\end{frame}
+	
+	\begin{frame}{T76: LendingClub Key Takeaway}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Key Takeaway from LendingClub Model Comparison}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHTS:}
+		\begin{itemize}
+			\item Different metrics gave different rankings
+			\item Logistic regression: Better accuracy and precision
+			\item Neural network: Better recall
+			\item No clear winner
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{IMPLICATION:}
+		\begin{itemize}
+			\item Model choice must align with business objectives
+			\item "Contradictory indicators illustrate importance of choosing appropriate evaluation metric"
+			\item Regulatory context matters
+			\item No universal best model
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PRACTICAL ADVICE:}
+		\begin{itemize}
+			\item Understand what matters most
+			\item Choose metrics accordingly
+			\item Document rationale
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} No universal best model - \textcolor{myblue}{choice depends on criteria}!
+	\end{frame}
+	
+	\begin{frame}{T77: Business Metric Alignment}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Evaluation Metrics Should Align with Business Objectives}
+		
+		\vspace{0.1cm}
+		\textbf{WHY ALIGNMENT MATTERS:}
+		\begin{itemize}
+			\item Metrics drive model selection
+			\item Model selection drives decisions
+			\item Decisions have real-world consequences
+			\item Wrong metric = wrong decisions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLES:}
+		\begin{itemize}
+			\item If catching fraud is priority → optimize recall
+			\item If minimizing investigations → optimize precision
+			\item Must match business needs
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ALIGNMENT PROCESS:}
+		\begin{enumerate}
+			\item Identify business objectives
+			\item Determine cost of errors
+			\item Choose appropriate metrics
+			\item Align threshold with risk appetite
+		\end{enumerate}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Metrics must \textcolor{myblue}{align with business objectives}!
+	\end{frame}
+	
+	\begin{frame}{T78: Regulatory Considerations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How Regulatory Requirements Affect Model Evaluation}
+		
+		\vspace{0.1cm}
+		\textbf{REGULATORY EXPECTATIONS:}
+		\begin{itemize}
+			\item ECB recommends tail-risk metrics
+			\item RMSE alongside MAE
+			\item Documentation of metric choice
+			\item Justification for model selection
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Compliance is mandatory
+			\item Penalties for non-compliance
+			\item Reputational impact
+			\item Regulatory scrutiny
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY REGULATORY REQUIREMENTS:}
+		\begin{itemize}
+			\item Metrics capturing tail risk
+			\item RMSE alongside MAE
+			\item Documentation and transparency
+			\item Periodic review
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Regulators \textcolor{myblue}{specify metric requirements}!
+	\end{frame}
+	
+	\begin{frame}{T79: Multiple Model Comparison}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Framework for Comparing Multiple Models}
+		
+		\vspace{0.1cm}
+		\textbf{COMPARISON FRAMEWORK:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Multiple Metrics:}
+			\begin{itemize}
+				\item Accuracy, Precision, Recall, F1, AUC
+				\item Continuous: MSE, RMSE, MAE, MAPE
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Business Context:}
+			\begin{itemize}
+				\item Costs, priorities, risk appetite
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Regulatory Requirements:}
+			\begin{itemize}
+				\item Required metrics, documentation
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Interpretability:}
+			\begin{itemize}
+				\item Stakeholder needs
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Performance:}
+			\begin{itemize}
+				\item Training vs test gap
+			\end{itemize}
+		\end{enumerate}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Comprehensive comparison needs multiple perspectives!
+	\end{frame}
+	
+	\begin{frame}{T80: Evaluation Framework Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Recommended Framework for Model Performance Evaluation}
+		
+		\vspace{0.1cm}
+		\textbf{RECOMMENDED FRAMEWORK:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Continuous Metrics:}
+			\begin{itemize}
+				\item MSE, RMSE, MAE, MAPE
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Classification Metrics:}
+			\begin{itemize}
+				\item Confusion Matrix, Accuracy, Precision, Recall, F1, AUC
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Business Context:}
+			\begin{itemize}
+				\item Cost matrix, risk appetite
+			\end{itemize}
+			
+			\item \textcolor{myblue}{Documentation:}
+			\begin{itemize}
+				\item Transparent and defensible
+			\end{itemize}
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{KEY PRINCIPLE:}
+		\begin{itemize}
+			\item No single metric tells the whole story
+			\item Choose based on problem and stakeholders
+			\item Document and justify choices
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Comprehensive evaluation = \textcolor{myblue}{multiple metrics + business context + documentation}!
+	\end{frame}
+	
+	% ============================================================
+	% SECTION 8: ADVANCED TOPICS
+	% ============================================================
+	
+	\begin{frame}{T81: Error Distribution Analysis}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What Error Distributions Reveal About Model Performance}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHTS FROM DISTRIBUTIONS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Bias:} Systematic over/under prediction
+			\item \textcolor{myblue}{Segments:} Areas where model performs poorly
+			\item \textcolor{myblue}{Shape:} Many small vs few large errors
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{VISUALIZATIONS TO USE:}
+		\begin{itemize}
+			\item Histograms of residuals
+			\item Box plots by segment
+			\item Q-Q plots for normality
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY QUESTIONS:}
+		\begin{itemize}
+			\item "Are errors generally small with a few large ones or consistently moderate?"
+			\item "Are errors randomly distributed or systematically biased?"
+			\item "Are there segments where errors are consistently larger?"
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Error distributions reveal \textcolor{myblue}{patterns and biases} that averages hide!
+	\end{frame}
+	
+	\begin{frame}{T82: Systematic Bias Detection}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What Systematic Bias in Model Errors Indicates}
+		
+		\vspace{0.1cm}
+		\textbf{SYSTEMATIC BIAS EXAMPLES:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Over-prediction:} Consistently predicting higher values
+			\item \textcolor{myblue}{Under-prediction:} Consistently predicting lower values
+			\item \textcolor{myblue}{Segment Bias:} Errors in specific subgroups
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Can lead to systematic business impact
+			\item Harder to correct than random errors
+			\item May indicate model misspecification
+			\item More problematic than random errors even if average is small
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE:}
+		\begin{itemize}
+			\item Model consistently over-predicts recovery rates
+			\item Leads to underestimation of losses
+			\item Capital shortfall
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Systematic bias = \textcolor{myblue}{consistent error pattern}!
+	\end{frame}
+	
+	\begin{frame}{T83: Segment Analysis}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Analyze Performance Across Different Segments}
+		
+		\vspace{0.1cm}
+		\textbf{BENEFITS OF SEGMENT ANALYSIS:}
+		\begin{itemize}
+			\item Identifies model weaknesses
+			\item Reveals fairness issues
+			\item Highlights data quality problems
+			\item Guides model improvements
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE SEGMENTS:}
+		\begin{itemize}
+			\item Geographic regions
+			\item Product types
+			\item Customer segments
+			\item Economic conditions
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHAT TO LOOK FOR:}
+		\begin{itemize}
+			\item Segments with consistently larger errors
+			\item Segments with systematic bias
+			\item Segments with different performance patterns
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Segment analysis reveals \textcolor{myblue}{where models fail}!
+	\end{frame}
+	
+	\begin{frame}{T84: Risk Metrics Regulatory Preference}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Regulators Prefer Metrics Capturing Tail Risk}
+		
+		\vspace{0.1cm}
+		\textbf{TAIL RISK IMPORTANCE:}
+		\begin{itemize}
+			\item Extreme events cause largest losses
+			\item Capital requirements driven by tail risk
+			\item Regulatory focus on solvency
+			\item Systemic risk concerns
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY MSE/RMSE:}
+		\begin{itemize}
+			\item Heavily penalize large errors
+			\item Capture tail events better than MAE
+			\item Align with regulatory capital frameworks
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{ECB RECOMMENDATIONS:}
+		\begin{itemize}
+			\item Metrics capturing tail risk
+			\item RMSE alongside MAE
+			\item Ensures large, infrequent losses not overlooked
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Regulators want \textcolor{myblue}{tail-risk metrics} for capital adequacy!
+	\end{frame}
+	
+	\begin{frame}{T85: Cost Matrix Components}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What Should Be Included in a Cost Matrix}
+		
+		\vspace{0.1cm}
+		\textbf{COST COMPONENTS:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Financial:} Losses from missed risks, capital impact
+			\item \textcolor{myblue}{Operational:} Investigation costs, resource waste
+			\item \textcolor{myblue}{Reputational:} Customer trust, market confidence
+			\item \textcolor{myblue}{Regulatory:} Fines, sanctions, scrutiny
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{BENEFIT COMPONENTS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{True Positive:} Losses avoided, risks managed
+			\item \textcolor{myblue}{True Negative:} Efficient processing, satisfied customers
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item Cost matrix should capture all consequences
+			\item Financial and non-financial
+			\item Tangible and intangible
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Cost matrix should capture \textcolor{myblue}{all consequences} - financial and non-financial!
+	\end{frame}
+	
+	\begin{frame}{T86: Threshold Justification}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How to Justify Threshold Choices to Regulators}
+		
+		\vspace{0.1cm}
+		\textbf{JUSTIFICATION SHOULD INCLUDE:}
+		\begin{enumerate}
+			\item Analysis of tradeoffs
+			\item Cost-benefit calculations
+			\item Alignment with risk appetite
+			\item Stakeholder consultation
+			\item Periodic review process
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLE STATEMENT:}
+		\begin{itemize}
+			\item "Threshold chosen to achieve 80\% recall given severe consequences of missing fraud events"
+			\item "Accepts X\% false positives costing Y in operational overhead"
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Regulatory compliance
+			\item Audit trail
+			\item Defensible decisions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Thresholds must be \textcolor{myblue}{justified with documented analysis}!
+	\end{frame}
+	
+	\begin{frame}{T87: Stakeholder Communication}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How to Communicate Model Performance to Different Stakeholders}
+		
+		\vspace{0.1cm}
+		\textbf{AUDIENCE CONSIDERATIONS:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Board/Management:} MAPE, Accuracy (percentage-based)
+			\item \textcolor{myblue}{Regulators:} RMSE with MAE, tail-risk metrics
+			\item \textcolor{myblue}{Model Developers:} All metrics, error distributions
+			\item \textcolor{myblue}{Audit Committee:} MAPE for standardized comparison
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMMUNICATION BEST PRACTICES:}
+		\begin{itemize}
+			\item Use visualizations (ROC curves, error distributions)
+			\item Explain what metrics mean in business terms
+			\item Highlight tradeoffs and limitations
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Different stakeholders need \textcolor{myblue}{different metrics and explanations}!
+	\end{frame}
+	
+	\begin{frame}{T88: Performance Monitoring Frequency}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How Often Should Model Performance Be Monitored?}
+		
+		\vspace{0.1cm}
+		\textbf{MONITORING FREQUENCY:}
+		\begin{itemize}
+			\item \textcolor{myblue}{Regular Intervals:} Quarterly, semi-annually, annually
+			\item \textcolor{myblue}{Event-Driven:} Significant environmental changes
+			\item \textcolor{myblue}{Trigger-Based:} Performance threshold breaches
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHAT TO MONITOR:}
+		\begin{itemize}
+			\item Performance metrics over time
+			\item Error distributions
+			\item Segment performance
+			\item Threshold appropriateness
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY CONTINUOUS MONITORING:}
+		\begin{itemize}
+			\item Detect performance decay
+			\item Identify concept drift
+			\item Ensure ongoing compliance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Model performance must be \textcolor{myblue}{monitored continuously} - not just during development!
+	\end{frame}
+	
+	\begin{frame}{T89: Model Validation Process}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Role of Validation in Model Performance Evaluation}
+		
+		\vspace{0.1cm}
+		\textbf{VALIDATION PURPOSES:}
+		\begin{enumerate}
+			\item Independent performance assessment
+			\item Hyperparameter tuning
+			\item Overfitting detection
+			\item Model comparison
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{VALIDATION BEST PRACTICES:}
+		\begin{itemize}
+			\item Use separate validation data
+			\item Use cross-validation
+			\item Document validation process
+			\item Regulatory compliance
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item Validation provides independent assessment
+			\item Different from training
+			\item Essential for model governance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Validation provides \textcolor{myblue}{independent assessment} of model performance!
+	\end{frame}
+	
+	\begin{frame}{T90: Performance Metrics Documentation}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Why Performance Metric Choices Should Be Documented}
+		
+		\vspace{0.1cm}
+		\textbf{DOCUMENTATION SHOULD INCLUDE:}
+		\begin{enumerate}
+			\item Choice of metrics
+			\item Justification for choices
+			\item Business context
+			\item Regulatory requirements
+			\item Performance results
+			\item Model selection rationales
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Regulatory compliance
+			\item Audit trail
+			\item Knowledge transfer
+			\item Defensible decisions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Metric choices must be \textcolor{myblue}{documented and justified}!
+	\end{frame}
+	
+	\begin{frame}{T91: Performance Decay Detection}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How to Detect Model Performance Decay}
+		
+		\vspace{0.1cm}
+		\textbf{DETECTION METHODS:}
+		\begin{itemize}
+			\item Track metrics over time
+			\item Compare to baseline performance
+			\item Monitor error distributions
+			\item Segment performance tracking
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{COMMON CAUSES:}
+		\begin{itemize}
+			\item Data drift (concept drift)
+			\item Economic changes
+			\item Regulatory changes
+			\item Model degradation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Early detection allows remediation
+			\item Prevents silent model failure
+			\item Maintains performance standards
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Monitor metrics over time to detect \textcolor{myblue}{performance decay}!
+	\end{frame}
+	
+	\begin{frame}{T92: Concept Drift}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What is Concept Drift and How Does It Affect Performance?}
+		
+		\vspace{0.1cm}
+		\textbf{DEFINITION:}
+		\begin{itemize}
+			\item Changes in underlying relationship between inputs and outputs over time
+			\item Model trained on historical data may become less accurate
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EXAMPLES:}
+		\begin{itemize}
+			\item Changing fraud patterns
+			\item Economic cycles affecting default relationships
+			\item Customer behavior changes
+			\item Regulatory changes
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{DETECTION AND RESPONSE:}
+		\begin{itemize}
+			\item Monitor performance metrics
+			\item Regularly retrain models
+			\item Update model parameters
+			\item Review thresholds
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Concept drift = \textcolor{myblue}{changing relationships} over time - requires monitoring!
+	\end{frame}
+	
+	\begin{frame}{T93: Model Retraining Triggers}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What Should Trigger Model Retraining?}
+		
+		\vspace{0.1cm}
+		\textbf{RETRAINING TRIGGERS:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Performance:} Metrics below acceptable levels
+			\item \textcolor{myblue}{Data:} Significant changes in data distribution
+			\item \textcolor{myblue}{Schedule:} Regular intervals (monthly, quarterly)
+			\item \textcolor{myblue}{Events:} Major economic or regulatory changes
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{BEST PRACTICE:}
+		\begin{itemize}
+			\item Document retraining triggers
+			\item Regular performance review
+			\item Proactive monitoring
+			\item Automated alerts
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item Models are not permanent
+			\item Need periodic refresh
+			\item Align with business changes
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Retrain when \textcolor{myblue}{performance decays, data changes, or on schedule}!
+	\end{frame}
+	
+	\begin{frame}{T94: Performance Reporting}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: What Should Be Included in Model Performance Reports}
+		
+		\vspace{0.1cm}
+		\textbf{REPORT COMPONENTS:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Current:} Latest performance metrics
+			\item \textcolor{myblue}{Trends:} Performance over time
+			\item \textcolor{myblue}{Baseline:} Comparison to initial/expected performance
+			\item \textcolor{myblue}{Issues:} Any identified problems or concerns
+			\item \textcolor{myblue}{Actions:} Planned or taken remediation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{AUDIENCE:}
+		\begin{itemize}
+			\item Model owners
+			\item Management
+			\item Regulators
+			\item Audit committees
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item Reports should include current metrics, trends, and issues
+			\item Regular and transparent
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Reports should include \textcolor{myblue}{current metrics, trends, and issues}!
+	\end{frame}
+	
+	\begin{frame}{T95: Fairness and Bias}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How Model Performance Evaluation Helps Identify Fairness Issues}
+		
+		\vspace{0.1cm}
+		\textbf{FAIRNESS EVALUATION:}
+		\begin{itemize}
+			\item Compare performance across segments
+			\item Check for systematic bias
+			\item Ensure equal treatment
+			\item Regulatory compliance (fair lending)
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHAT TO EXAMINE:}
+		\begin{itemize}
+			\item Accuracy differences
+			\item False positive/negative rates
+			\item Disparate impact
+			\item Equal opportunity
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Legal and regulatory requirements
+			\item Ethical considerations
+			\item Reputational risk
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Segment analysis reveals \textcolor{myblue}{fairness issues}!
+	\end{frame}
+	
+	\begin{frame}{T96: Explainable AI}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How Model Performance Evaluation Relates to Explainable AI}
+		
+		\vspace{0.1cm}
+		\textbf{CONNECTION TO XAI:}
+		\begin{itemize}
+			\item Poor performance in segments → need explanations
+			\item Complex models (DNNs) → need XAI techniques
+			\item Regulatory requirements for explanation
+			\item Tools: SHAP, LIME for interpretation
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{PRACTICAL APPLICATION:}
+		\begin{itemize}
+			\item Use explanations to understand poor performance
+			\item Identify feature importance
+			\item Debug model issues
+			\item Build trust in predictions
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Performance evaluation guides \textcolor{myblue}{where explanations are needed}!
+	\end{frame}
+	
+	\begin{frame}{T97: SHAP Values}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: How SHAP Values Help with Model Performance Evaluation}
+		
+		\vspace{0.1cm}
+		\textbf{SHAP IN EVALUATION:}
+		\begin{itemize}
+			\item Identify important features
+			\item Understand model behavior
+			\item Debug performance issues
+			\item Explain to stakeholders
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{APPLICATION:}
+		\begin{itemize}
+			\item Feature importance analysis
+			\item Understanding model decisions
+			\item Regulatory explanations
+			\item Model improvement insights
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item SHAP helps understand what drives model performance
+			\item Identifies which features are driving good and bad performance
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} SHAP helps \textcolor{myblue}{understand what drives model performance}!
+	\end{frame}
+	
+	\begin{frame}{T98: LIME for Local Explanations}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: When LIME is Useful for Model Evaluation}
+		
+		\vspace{0.1cm}
+		\textbf{LIME APPLICATIONS:}
+		\begin{itemize}
+			\item Explain specific predictions
+			\item Understand why model made certain decisions
+			\item Identify problematic cases
+			\item Build trust with stakeholders
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{EVALUATION INSIGHTS:}
+		\begin{itemize}
+			\item Why certain cases were misclassified
+			\item What features drove errors
+			\item Edge case behavior
+			\item Model limitations
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item LIME explains individual predictions
+			\item Useful for error analysis
+			\item Complements global metrics
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} LIME explains \textcolor{myblue}{individual predictions} - useful for error analysis!
+	\end{frame}
+	
+	\begin{frame}{T99: Model Governance}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Role of Model Governance in Performance Evaluation}
+		
+		\vspace{0.1cm}
+		\textbf{GOVERNANCE COMPONENTS:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Standardization:} Consistent metrics across models
+			\item \textcolor{myblue}{Documentation:} Clear records of evaluation
+			\item \textcolor{myblue}{Monitoring:} Regular performance review
+			\item \textcolor{myblue}{Oversight:} Independent validation
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{WHY IT MATTERS:}
+		\begin{itemize}
+			\item Regulatory compliance
+			\item Risk management
+			\item Consistent decision-making
+			\item Auditability
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{KEY INSIGHT:}
+		\begin{itemize}
+			\item Governance ensures consistent evaluation and monitoring
+			\item Essential for model risk management
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Governance ensures \textcolor{myblue}{consistent evaluation and monitoring}!
+	\end{frame}
+	
+	\begin{frame}{T100: Chapter Summary}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{TOPIC: Key Takeaways from Model Performance Evaluation}
+		
+		\vspace{0.1cm}
+		\textbf{KEY TAKEAWAYS:}
+		\begin{enumerate}
+			\item \textcolor{myblue}{Multiple Metrics:} Use continuous (MSE, RMSE, MAE, MAPE) and classification (Confusion Matrix, Accuracy, Precision, Recall, F1, AUC)
+			\item \textcolor{myblue}{Business Context:} Align with business objectives and risk appetite
+			\item \textcolor{myblue}{Continuous Monitoring:} Track performance over time
+			\item \textcolor{myblue}{Documentation:} Record and justify all choices
+		\end{enumerate}
+		
+		\vspace{0.1cm}
+		\textbf{CRITICAL INSIGHTS:}
+		\begin{itemize}
+			\item No single metric tells the whole story
+			\item Different metrics serve different purposes
+			\item Performance evaluation is a continuous process
+			\item Regulatory requirements must be met
+		\end{itemize}
+		
+		\vspace{0.1cm}
+		\textbf{FINAL ADVICE:}
+		\begin{itemize}
+			\item Understand metrics, tradeoffs, and when to use each
+			\item Choose based on problem and stakeholders
+			\item Document and justify choices
+		\end{itemize}
+		
+		\textcolor{myred}{\textbf{EXAM TRAP:}} Comprehensive evaluation = \textcolor{myblue}{multiple metrics + business context + monitoring + documentation}!
+	\end{frame}
+	
+	% ============================================================
+	% SUMMARY SLIDE
+	% ============================================================
+	
+	\begin{frame}{Summary: Complete Review}
+		\fontsize{6.5}{7.5}\selectfont
+		\textbf{\textcolor{myblue}{Continuous Output Metrics:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{MSE:} Average squared error; penalizes large errors; captures tail risk
+			\item \textcolor{myblue}{RMSE:} Square root of MSE; same units as target; easier to interpret
+			\item \textcolor{myblue}{MAE:} Average absolute error; robust to outliers
+			\item \textcolor{myblue}{MAPE:} Percentage error; board-friendly; compares across scales
+		\end{itemize}
+		
+		\vspace{0.2cm}
+		\textbf{\textcolor{myblue}{Classification Metrics:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{Confusion Matrix:} TP, TN, FP, FN - foundation of all metrics
+			\item \textcolor{myblue}{Accuracy:} Total correct / total - misleading for imbalanced data
+			\item \textcolor{myblue}{Precision:} TP / (TP + FP) - "of predicted positives, how many were right?"
+			\item \textcolor{myblue}{Recall:} TP / (TP + FN) - "of actual positives, how many did we catch?"
+			\item \textcolor{myblue}{F1:} Harmonic mean of precision and recall
+			\item \textcolor{myblue}{AUC:} Area under ROC curve - threshold-independent ranking ability
+		\end{itemize}
+		
+		\vspace{0.2cm}
+		\textbf{\textcolor{myblue}{Threshold Selection:}}
+		\begin{itemize}
+			\item \textcolor{myblue}{Cost Matrix:} Economic consequences of each decision
+			\item \textcolor{myblue}{Tradeoff:} Balance false positives vs false negatives
+			\item \textcolor{myblue}{Dynamic:} Adjust based on changing conditions
+			\item \textcolor{myblue}{Documentation:} Transparent and defensible
+		\end{itemize}
+		
+		\vspace{0.2cm}
+		\textcolor{myred}{\textbf{Exam Success:}} Understand the metrics, their tradeoffs, and when to use each!
+	\end{frame}
+	
+\end{document}
