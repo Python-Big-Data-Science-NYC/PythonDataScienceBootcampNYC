@@ -2,7 +2,7 @@ Reinforcement learning https://www.youtube.com/watch?v=3vFISl7qMFI
 
 
 9
-naïve Bayes classifier
+naïve Bayes classifier Naı̈ve Bayes for NLP
 
 10
 conventional BoW vs Word2Vec vs skip-gram
