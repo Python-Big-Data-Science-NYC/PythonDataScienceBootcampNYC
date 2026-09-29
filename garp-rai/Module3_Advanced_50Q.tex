@@ -1,0 +1,1459 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+\title{Risk and Risk Factors: 50 Advanced Questions}
+\subtitle{Deep-dive questions: fairness metrics, bias mechanics, XAI, GenAI risk}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+% ===== FAIRNESS METRICS =====
+
+\begin{frame}[shrink=6]{Q1: Confusion Matrix Arithmetic - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: A fraud model screens 1,000 transactions, of which 10 are fraudulent. It flags 20 transactions, 8 of which are truly fraudulent. Which statement is correct?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Precision is 80\% and sensitivity is 40\%; accuracy of 98.6\% confirms the model is excellent
+\item Precision is 40\% and specificity is 80\%; accuracy is 80\%
+\item Precision is 40\% and sensitivity is 80\%; accuracy (98.6\%) looks excellent only because the data are highly imbalanced
+\item Precision and sensitivity are both 80\%, since 8 of 10 frauds were caught
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} TP = 8, FP = 12, FN = 2, TN = 978. Precision = TP/(TP+FP) = 8/20 = 40\%. Sensitivity = TP/(TP+FN) = 8/10 = 80\%. Accuracy = (8+978)/1000 = 98.6\%, dominated by the large true-negative count.
+\item \textbf{Why A is wrong:} This swaps precision and sensitivity, and accuracy is misleading on unbalanced data
+\item \textbf{Why B is wrong:} Specificity is TN/(TN+FP) = 978/990, about 98.8\%, and accuracy is 98.6\%
+\item \textbf{Why D is wrong:} Precision divides by all positive predictions (20), not by all actual positives (10)
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Precision = TP/(TP+FP) (of flagged, how many real); Sensitivity = TP/(TP+FN) (of real, how many caught). Accuracy misleads on imbalance!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q2: Demographic Parity Can Hide Failure - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Groups A and B each have 100 applicants, 30 of whom are truly qualified. The algorithm admits 30 applicants from each group. In A, 27 admitted are qualified; in B, only 3 are. Which conclusion is correct?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Demographic parity holds, but predictive rate parity and equal opportunity are both violated (precision and sensitivity are 90\% for A versus 10\% for B)
+\item All three measures hold because the admission counts are equal
+\item Demographic parity is violated because B has fewer qualified admits
+\item Predictive rate parity holds but equal opportunity is violated
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} Demographic parity compares only P(prediction = 1) across groups (30\% versus 30\%) and ignores correctness. Precision is 27/30 versus 3/30, and sensitivity is 27/30 versus 3/30.
+\item \textbf{Why B is wrong:} Equal counts satisfy only demographic parity
+\item \textbf{Why C is wrong:} Demographic parity is blind to correctness, so B's errors do not violate it
+\item \textbf{Why D is wrong:} Precision differs (90\% versus 10\%), so predictive rate parity fails too
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Demographic parity is INDEPENDENT of the true value: it can be satisfied even when every prediction for a subgroup is wrong!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q3: What Each Measure Conditions On - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which pairing correctly states what predictive rate parity and equal opportunity each condition on and equalize across groups?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Predictive rate parity: among those truly positive, the share predicted positive. Equal opportunity: among those predicted positive, the share truly positive
+\item Predictive rate parity: among those predicted positive, the share truly positive (precision). Equal opportunity: among those truly positive, the share predicted positive (sensitivity)
+\item Both condition on predicted positives but differ in the group variable used
+\item Predictive rate parity equalizes the overall rate of positive predictions; equal opportunity equalizes accuracy
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Predictive rate parity is P(Y=1 given Y-hat=1, A); equal opportunity is P(Y-hat=1 given Y=1, A). The direction of conditioning is what separates them.
+\item \textbf{Why A is wrong:} This reverses the two conditionings
+\item \textbf{Why C is wrong:} Equal opportunity conditions on the true value, not the prediction
+\item \textbf{Why D is wrong:} Equalizing overall positive rates is demographic parity, and equal opportunity equalizes sensitivity
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} PRP: condition on PREDICTION (precision). EO: condition on TRUTH (sensitivity)!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q4: Equalized Odds - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: How does equalized odds differ from equal opportunity?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item It is less restrictive: it requires only equal accuracy across groups
+\item It requires equal precision in addition to equal sensitivity
+\item It requires demographic parity in addition to equal sensitivity
+\item It is more restrictive: it requires equal sensitivity (true positive rate) and also equal specificity across groups
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} Equal opportunity constrains only the true positive rate. Equalized odds adds equality of specificity (equivalently, equal false-positive rates).
+\item \textbf{Why A is wrong:} Accuracy equality is a different criterion, and equalized odds is stricter, not looser
+\item \textbf{Why B is wrong:} Precision equality is predictive rate parity
+\item \textbf{Why C is wrong:} Equal positive-prediction rates are demographic parity
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Equalized odds = equal sensitivity AND equal specificity!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q5: Impossibility Result in Numbers - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Base rates are 20\% in Group 1 and 40\% in Group 2. Suppose a model achieves equal sensitivity (80\%) and equal precision (50\%) in both groups. What are the positive-prediction rates, and what follows?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Both about 40\%; all three criteria hold simultaneously
+\item About 16\% and 32\%; demographic parity holds because both are below 50\%
+\item About 32\% and 64\%; demographic parity fails, illustrating that all three criteria cannot hold when base rates differ
+\item About 20\% and 40\%; the impossibility theorem does not apply when precision is equal
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} Positive rate = sensitivity times base rate divided by precision: 0.8 x 0.2 / 0.5 = 32\% and 0.8 x 0.4 / 0.5 = 64\%. Equal sensitivity and precision force positive rates to track the base rates.
+\item \textbf{Why A is wrong:} Positive rates cannot be equal when base rates differ and the other two criteria hold
+\item \textbf{Why B is wrong:} Those are the true-positive shares (0.8 x base rate), not positive-prediction rates
+\item \textbf{Why D is wrong:} The theorem is exactly about equal precision and sensitivity clashing with parity
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Unequal base rates: demographic parity, predictive rate parity, and equal opportunity CANNOT all hold!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q6: Why Demographic Parity Persists in Practice - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Despite its weaknesses, demographic parity is often used in practice. What is the module's best explanation?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item It guarantees equal prediction quality across groups
+\item It is appropriate whenever base rates differ, since it ignores them
+\item The impossibility theorem exempts it
+\item It needs no access to the true target, which is often unavailable when decisions are made (loan defaults are observed much later; fraud patterns evolve and true fraud is rare)
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} Predictive rate parity and equal opportunity require ground-truth labels. Demographic parity does not. It is inappropriate when base rate differences are relevant to the task (for example in medical prediction).
+\item \textbf{Why A is wrong:} It says nothing about correctness
+\item \textbf{Why B is wrong:} Relevant base rate differences make it inappropriate
+\item \textbf{Why C is wrong:} The theorem covers demographic parity as one of the three incompatible criteria
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Demographic parity: no ground truth needed, but blind to prediction quality!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q7: Limits of Individual Fairness - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: A college ranks applicants strictly by grades ('treating like cases alike'). Which is the module's central criticism of this approach?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item It first requires agreement on what counts as 'alike'; applicants who overcame hurdles may deserve different weighing, and translating hurdles into numbers is contentious and must be made explicit in an algorithm
+\item It ignores merit entirely
+\item It equalizes admission rates across demographic groups by construction
+\item It requires access to protected characteristics to work
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} Individual fairness relies on Aristotle's doctrine of treating like cases alike, but similarity depends on contested judgments that vary with context.
+\item \textbf{Why B is wrong:} It is merit-based by design
+\item \textbf{Why C is wrong:} Group admission-rate equality is demographic parity, which grades-only ranking need not deliver
+\item \textbf{Why D is wrong:} Ranking by grades explicitly avoids using protected characteristics
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Individual fairness hinges on defining 'ALIKE', which is contentious!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q8: Sensitivity versus False-Positive Rate - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: A fraud system blocks every transaction. Later, another blocks none. What do these extremes show?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Blocking all gives high precision and low sensitivity; blocking none gives the reverse
+\item Both extremes are optimal because they eliminate one error type completely
+\item Blocking all gives sensitivity of 1 but a false-positive rate of 1; blocking none gives a false-positive rate of 0 but sensitivity of 0. Performance measures trade off, so the balance must fit the task
+\item Sensitivity and false-positive rate are independent, so no trade-off exists
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} With no negative predictions there are no false negatives (sensitivity = 1), but every legitimate transaction becomes a false positive. The reverse holds for predicting all negative.
+\item \textbf{Why A is wrong:} Precision would be low for block-all (many false alarms), and sensitivity is 1, not low
+\item \textbf{Why B is wrong:} Each extreme sacrifices the other measure badly
+\item \textbf{Why D is wrong:} The module uses this example to show the trade-off
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Maximizing one metric can wreck another: choose the balance for the TASK!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q9: Choosing the Error to Minimize - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Algorithm A classifies moles as cancerous or not. Algorithm B diagnoses brain cancer from scans, where treatment may be major surgery. What does the module suggest about their objective functions?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item For A, err on the side of caution and minimize missed cancers (false negatives); for B, consider also the harms of invasive treatment after a wrong positive, so the error tradeoff differs by context
+\item Both should maximize accuracy, since context does not matter
+\item Both should minimize false positives to avoid unnecessary worry
+\item For A, minimize false positives; for B, minimize false negatives
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} The choice of objective function embeds value judgments: minimizing total errors versus shaping how errors are distributed depends on the harms involved.
+\item \textbf{Why B is wrong:} Accuracy hides the asymmetry in harms
+\item \textbf{Why C is wrong:} For a mole check, missing cancer is the costlier error
+\item \textbf{Why D is wrong:} This reverses the module's reasoning for the two cases
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Objective functions carry VALUE JUDGMENTS: which error is costlier depends on context!
+\end{frame}
+
+% ===== SOURCES OF UNFAIRNESS =====
+
+\begin{frame}[shrink=6]{Q10: Endogeneity in Hiring - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: In the HireMe example, the job specification changes who applies. Which econometric concept does the module link to this?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Measurement bias: inconsistent measurement across the sample
+\item Representation bias: a sample dominated by one demographic
+\item Overfitting: memorization of training noise
+\item Endogeneity: hidden or overlooked correlations, formally the error term being correlated with a predictor, creating selection effects in the applicant pool
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} The criteria chosen influence who applies and who is hired, so the data are shaped by the specification itself.
+\item \textbf{Why A is wrong:} Measurement bias concerns inconsistent methods, not applicant self-selection
+\item \textbf{Why B is wrong:} Representation bias concerns sample composition versus the target population
+\item \textbf{Why C is wrong:} Overfitting is a modeling issue unrelated to the applicant-pool effect
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Endogeneity: the specification itself changes who shows up in the data!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q11: Proxies and Hard-to-Measure Traits - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: HireMe uses total annual sales as a proxy for productivity and drops 'team player' because it is hard to quantify. Which assessment is correct?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Proxies are safe when strongly correlated, and omitting hard-to-measure features is neutral
+\item Only the proxy is problematic; dropping a feature cannot harm anyone
+\item Both choices risk bias: total sales can undercount part-time workers (women more often), and omitting teamwork can hurt groups that outperform on it
+\item Both are fine provided gender is removed from the inputs
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} Proxies reduce complex constructs to simpler measurable ones, introducing bias. Skipping a feature can also systematically disadvantage those who would have scored well on it.
+\item \textbf{Why A is wrong:} Strong correlation on average does not prevent group-specific distortion
+\item \textbf{Why B is wrong:} Omission can disadvantage groups that generally outperform on the omitted trait
+\item \textbf{Why D is wrong:} Removing gender does not fix proxy distortions
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Proxies simplify, and omitted features can hurt too!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q12: Resemblance to Past Hires - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: A team trains a supervised model on past CVs with a single binary label: hired or not. What problem arises, and what real case illustrates it?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item The model needs no criteria, which makes it neutral; Amazon's tool succeeded
+\item A 'good' candidate becomes one who resembles previous hires, so past bias is reproduced; Amazon abandoned a recruiting tool that kept downgrading women's CVs even when otherwise identical
+\item The label is too detailed and causes underfitting; Amazon's tool was fair but slow
+\item The model will over-select women; Amazon paused it for that reason
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} The label bakes past hiring decisions into the target. Amazon could not prevent systematic downgrading of women's CVs.
+\item \textbf{Why A is wrong:} Implicit criteria are inherited from history, not neutral
+\item \textbf{Why C is wrong:} The issue is bias in the label, not underfitting
+\item \textbf{Why D is wrong:} The bias disfavored women, not men
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} 'Hired' as target = 'resembles past hires' (Amazon)!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q13: Fewer Features - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: A criminal risk tool uses 137 features, yet researchers matched its predictions with just two. What point does the module make?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item More features do not automatically improve prediction; sometimes less is more when choosing features
+\item Recidivism cannot be predicted at all
+\item All 137 features are required for fairness
+\item Two features prove the tool is unbiased
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} Nearly equivalent predictions with two inputs suggest many features add complexity without value.
+\item \textbf{Why B is wrong:} The point concerns feature parsimony, not predictability in principle
+\item \textbf{Why C is wrong:} The finding shows they were not all required
+\item \textbf{Why D is wrong:} Equivalent accuracy says nothing about bias
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Feature selection: sometimes LESS IS MORE!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q14: Why Unawareness Fails - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: In the JusticeGuard example, removing the protected variable raised the weight on 'prior conviction' from 54\% to 72\% predicted FTA risk. What is the correct explanation?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item The model became more accurate, so it weighed priors more fairly
+\item The prior-conviction variable is correlated with group membership, so its coefficient absorbs (is contaminated by) part of the removed variable's effect
+\item Removing a variable always leaves other coefficients unchanged
+\item The protected variable was uncorrelated with priors, so nothing else changed
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Expressing the protected variable through the prior variable shifts the coefficient to beta1 plus beta2 times alpha\_corr.
+\item \textbf{Why A is wrong:} Contamination is a distortion, not a fairness improvement
+\item \textbf{Why C is wrong:} With correlated regressors, coefficients change
+\item \textbf{Why D is wrong:} The example assumes a correlation between the protected group and priors
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Fairness through unawareness: correlated variables carry the protected signal!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q15: Recovering the Correlation Coefficient - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Full model: Y-hat = 0.034 + 0.543 (prior) + 0.332 (protected). After removing the protected variable: Y-hat = 0.10 + 0.72 (prior). Using gamma1 = beta1 + beta2 x alpha\_corr, what is alpha\_corr (approximately)?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item About 0.53
+\item About 0.18
+\item About 0.72
+\item About 0.33
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} alpha\_corr = (0.72 - 0.543) / 0.332 = 0.177 / 0.332, approximately 0.53.
+\item \textbf{Why B is wrong:} 0.18 is roughly the change in the coefficient (0.177), which still must be divided by beta2
+\item \textbf{Why C is wrong:} 0.72 is gamma1 itself, not the correlation
+\item \textbf{Why D is wrong:} 0.33 is beta2, not alpha\_corr
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} gamma1 = beta1 + beta2 x alpha\_corr, so alpha\_corr = (0.72 - 0.543)/0.332 = about 0.53!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q16: Substituting the Average at Prediction Time - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: The module proposes including the protected variable when estimating the model but substituting its average when predicting. Which statement is correct?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item It eliminates any accuracy loss and needs no legal review
+\item It requires removing every variable correlated with the protected trait
+\item It keeps correlated variables uncontaminated and treats people alike in all relevant respects despite different protected traits, with only a slight accuracy decrease, though legality must be checked
+\item It uses the protected variable directly in each individual prediction
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} Estimation with the protected variable avoids contamination, and using an average at prediction avoids direct use of the trait.
+\item \textbf{Why A is wrong:} The module says accuracy decreases slightly and care is needed for legality
+\item \textbf{Why B is wrong:} Removing all correlated variables is the costly alternative it wants to avoid
+\item \textbf{Why D is wrong:} The point is not to use the actual trait in the prediction step
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Estimate WITH the protected variable, predict with its AVERAGE: mind the legal side!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q17: Feedback Loops - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: A hiring model is trained on data where women were historically less often selected, even though the data are representative. What does the module predict?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item It will correct the pattern because representative data are unbiased
+\item It will reproduce the pattern but never amplify it
+\item It will be unaffected because historical bias is only a deployment issue
+\item It will reproduce and can exacerbate the pattern, forming a feedback loop
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} Representativeness does not remove historical bias: data can accurately represent a biased past.
+\item \textbf{Why A is wrong:} Representative data can still encode past bias
+\item \textbf{Why B is wrong:} The module says it can exacerbate the pattern
+\item \textbf{Why C is wrong:} Historical bias arises in the data, not only at deployment
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Representative is not the same as fair: historical bias -> FEEDBACK LOOP!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q18: Representation vs Measurement Bias - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: (i) A facial-recognition training set is dominated by one ethnic group. (ii) A doctor spends more time evaluating wealthy patients, so early-disease detection data favor them. Which classification is correct?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item (i) measurement bias; (ii) representation bias
+\item (i) representation bias; (ii) measurement bias
+\item Both are representation bias
+\item (i) historical bias; (ii) deployment bias
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Representation bias: the sample is unrepresentative of the target population. Measurement bias: methods are inconsistent across the sample. Intersectional groups can suffer the lowest performance.
+\item \textbf{Why A is wrong:} This swaps the definitions
+\item \textbf{Why C is wrong:} (ii) concerns inconsistent measurement effort, not sample composition
+\item \textbf{Why D is wrong:} Both arise during data collection, not deployment
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Representation = WHO is in the sample; Measurement = HOW consistently they are measured!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q19: Balanced vs Proportional Data - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Only 20\% of historical applicants are female. From 1,000 CVs, a team wants a balanced training set rather than a proportional one. What results?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item About 200 female CVs, identical to proportional representation
+\item About 800 female CVs, matching the applicant mix
+\item Balancing increases representativeness of the population
+\item About 500 female CVs (50\%) instead of 200, which helps the model treat women as statistically relevant but makes the set less representative of the applicant population
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} Balanced means minority subgroups occupy a similar proportion to majority groups, unlike proportional representation, which mirrors the population.
+\item \textbf{Why A is wrong:} That is proportional representation
+\item \textbf{Why B is wrong:} The mix would be 50/50, not 80/20 female
+\item \textbf{Why C is wrong:} Balancing typically reduces representativeness
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} BALANCED is not PROPORTIONAL: balancing can reduce representativeness!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q20: Resampling Trade-offs - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which pairing of technique and limitation is correct?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Oversampling removes majority data; under-sampling creates synthetic minority data
+\item Removing data points works only if datasets are large enough; creating synthetic points can compromise the model's ability to generalize
+\item Bootstrapping resamples only from external datasets
+\item Removing points is best for rare-event data such as fraud
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Bootstrapping can oversample the minority, under-sample the majority, or combine both. Each method has limits.
+\item \textbf{Why A is wrong:} Oversampling adds minority points; under-sampling removes majority points
+\item \textbf{Why C is wrong:} Bootstrapping resamples points from the existing dataset
+\item \textbf{Why D is wrong:} With fraud under 1\%, removal is hard since data are scarce
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Bootstrap = resample from existing data; removal needs BIG data; synthetic risks generalization!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q21: Rare-Event Imbalance - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Fraud makes up under 1\% of transactions. Which model-design remedy does the module describe?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Evaluate only by accuracy and discard the minority class
+\item Train on majority data alone
+\item Ensembles where each model sees all minority-class data plus a random sample of the majority, or a cost function penalizing minority misclassification more heavily
+\item Use an equal penalty for all misclassifications
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} Beyond resampling, imbalance can be handled by model design.
+\item \textbf{Why A is wrong:} Accuracy favors the majority class in imbalanced data
+\item \textbf{Why B is wrong:} Ignoring the minority class defeats detection
+\item \textbf{Why D is wrong:} Equal penalties do not address minority underperformance
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Imbalance: ensembles OR asymmetric cost functions!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q22: Word Embeddings - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Why can word embeddings create fairness risk in NLP systems?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Vectors trained on human text can encode stereotypes (for example, mapping 'man is to programmer' to 'woman is to homemaker'), which downstream models may inherit
+\item Embeddings discard meaning, so bias comes only from labels
+\item Embeddings are unaffected by the training text
+\item Embeddings remove all protected-attribute information
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} Embeddings capture relationships between words, including stereotyped ones.
+\item \textbf{Why B is wrong:} They capture meaning through relationships to other words
+\item \textbf{Why C is wrong:} They reflect the text they were trained on
+\item \textbf{Why D is wrong:} They can retain and reproduce such information
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Preprocessing can introduce bias: STEREOTYPES in embeddings!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q23: Deployment Mismatch - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which is an example of deployment-stage bias per the module?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Using a recidivism-risk algorithm to decide sentence length, or deploying a third-party 'good employee' model whose built-in values differ from the firm's
+\item Collecting a non-random sample
+\item Choosing a biased proxy for the target during problem specification
+\item Using stereotyped word embeddings
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} Algorithms used in contexts they were not designed for, with outdated data, or with misaligned values can cause harm. Regular auditing and human oversight are recommended.
+\item \textbf{Why B is wrong:} That is a data-collection issue
+\item \textbf{Why C is wrong:} That is a problem-specification issue
+\item \textbf{Why D is wrong:} That is a model-development issue
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Deployment bias: WRONG CONTEXT, outdated data, misaligned values!
+\end{frame}
+
+% ===== EXPLAINABILITY =====
+
+\begin{frame}[shrink=6]{Q24: Three Related Concepts - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which classification is correct? (a) SHAP-style attributions computed after training a complex model; (b) a small decision tree whose logic is readable; (c) publishing a system's design, data, and decision processes.}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item (a) interpretability; (b) transparency; (c) explainability
+\item (a) transparency; (b) explainability; (c) interpretability
+\item (a) explainability (ex post); (b) interpretability (inherent); (c) transparency
+\item All three are transparency
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} Explainability is often after the fact; interpretability is comprehension via built-in mechanisms; transparency is openness of design, data, and processes.
+\item \textbf{Why A is wrong:} This scrambles the terms
+\item \textbf{Why B is wrong:} Post hoc attribution is explainability, not transparency
+\item \textbf{Why D is wrong:} The module defines three distinct concepts
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} EXPLAIN = ex post; INTERPRET = inherent; TRANSPARENCY = openness!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q25: XAI Techniques Matched - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which matching of technique and description is correct?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Shapley values: local surrogate. LUCID: marginal contributions. LIME: backward design from outputs
+\item Shapley values: marginal contribution of each feature across all feature combinations. LUCID: works backward from an output to a distribution over inputs. LIME: a local interpretable surrogate around one prediction
+\item LIME: global linear model of the whole network. Shapley: backpropagation. LUCID: feature ranking
+\item All three simply rank features globally
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Feature importance ranks inputs; Shapley averages marginal effects; LUCID inverts the model from output; LIME fits a simple local model.
+\item \textbf{Why A is wrong:} This scrambles the three descriptions
+\item \textbf{Why C is wrong:} LIME is local and model-agnostic, not a global network model
+\item \textbf{Why D is wrong:} They are distinct techniques
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Shapley = marginal effects; LUCID = backward from output; LIME = local surrogate!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q26: Limits of XAI - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Why not always use inherently interpretable models instead of ex-post XAI?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Complex models often (not always) achieve higher accuracy, so there is a trade-off to weigh in context; ex-post methods can oversimplify and be computationally costly
+\item Interpretable models are always more accurate
+\item XAI methods are computationally free
+\item Ex-post methods explain models before training
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} The answer is 'yes and no': interpretable models avoid the problem but may cost performance.
+\item \textbf{Why B is wrong:} The module says complex models often reach higher accuracy
+\item \textbf{Why C is wrong:} Several XAI techniques are computationally intensive
+\item \textbf{Why D is wrong:} Ex-post techniques are applied after training
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Interpretable vs accurate: a CONTEXT-dependent trade-off!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q27: Forms of Opaqueness - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Match: (i) ad profiling built from browsing data without the person knowing; (ii) a loan applicant knows an algorithm decided but not why; (iii) source code and data are public, yet only trained specialists can read them.}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item (i) confidentiality; (ii) secrecy; (iii) transparency
+\item (i) specialized knowledge; (ii) secrecy; (iii) confidentiality
+\item (i) secrecy; (ii) confidentiality; (iii) lack of specialized knowledge
+\item All three are confidentiality
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} Secrecy: unaware of being profiled. Confidentiality: reasons hidden. Specialized knowledge: available but not comprehensible.
+\item \textbf{Why A is wrong:} Secrecy and confidentiality are swapped
+\item \textbf{Why B is wrong:} This scrambles the mapping
+\item \textbf{Why D is wrong:} The module distinguishes three forms
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} SECRECY = unaware; CONFIDENTIALITY = hidden reasons; SPECIALIZED KNOWLEDGE = can't decode!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q28: Legitimate Non-Disclosure - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which conclusion best fits the module's discussion of opacity?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Algorithms must always be fully public
+\item Firms need no access to third-party algorithms
+\item Opacity of decisions is unique to algorithms
+\item Full public disclosure is not always desirable (security, trade secrets), but a firm using a third-party algorithm should seek enough access to assess impacts on its own customers
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} Publishing a spam filter's code would ease circumvention, and secrecy can protect competitive advantage, yet accountability needs access for risk assessment.
+\item \textbf{Why A is wrong:} The module gives legitimate reasons for non-disclosure
+\item \textbf{Why B is wrong:} It recommends obtaining some access for own risk assessment
+\item \textbf{Why C is wrong:} Selbst and Barocas note opacity can occur without algorithms
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Legit reasons for secrecy exist, but deployers need ACCESS to assess risk!
+\end{frame}
+
+% ===== AUTONOMY AND SAFETY =====
+
+\begin{frame}[shrink=6]{Q29: Delegation and Autonomy - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Does delegating decisions to AI automatically reduce autonomy?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item No: as long as users have adequate control over the delegation and meaningful human oversight, they remain autonomous; autonomy has an authenticity dimension and an ability-to-execute dimension
+\item Yes, any delegation eliminates autonomy
+\item No, because autonomy concerns only executing decisions
+\item Yes, but only for non-experts
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} We routinely delegate to people and entities without losing autonomy.
+\item \textbf{Why B is wrong:} The module rejects this misconception
+\item \textbf{Why C is wrong:} The first dimension concerns holding values and beliefs that are one's own
+\item \textbf{Why D is wrong:} Expertise is not the criterion
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Delegation is not the same as losing autonomy: keep CONTROL and OVERSIGHT!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q30: Manipulation Cases - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which statement about Cambridge Analytica and the Facebook emotional contagion experiment is accurate?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Cambridge Analytica proved large voting effects; the contagion experiment had consent
+\item Both show manipulation is easily quantified, so regulation is straightforward
+\item The contagion experiment is the clearer manipulation example (feeds altered without consent, and users' posts shifted), while Cambridge Analytica's actual effect is questionable; the EU AI Act addresses manipulation partly via transparency duties and a ban on subliminal techniques
+\item Neither involved user data
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} Manipulation is ambiguous and hard to operationalize, hampering progress.
+\item \textbf{Why A is wrong:} The module says the effect is questionable, and users did not consent in the experiment
+\item \textbf{Why B is wrong:} The module says manipulation is hard to quantify
+\item \textbf{Why D is wrong:} Both relied on user data
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Contagion = clear-cut manipulation; CA's effect questionable; manipulation is hard to MEASURE!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q31: Uber Tempe Crash - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: The Tempe crash involved a system that failed to recognize the pedestrian, deactivated safety mechanisms, and a distracted safety driver. Which mitigation does the module tie to the driver problem?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Remove the human entirely
+\item Inform operators of automation-bias risks and design mechanisms requiring periodic human input, such as eye tracking with alerts
+\item Encourage passive monitoring to reduce fatigue
+\item Rely on the driver's judgment without design changes
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Automation bias causes complacency and reduced vigilance and can cause skill atrophy. Design should keep humans engaged.
+\item \textbf{Why A is wrong:} The module stresses meaningful human control
+\item \textbf{Why C is wrong:} Passive observation is the problem
+\item \textbf{Why D is wrong:} Awareness plus design mechanisms are recommended
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Automation bias: inform users AND design for periodic human input!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q32: AI Mental Health Support - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Studies show AI replies can be judged more empathetic than average human ones, yet benefits dwindle when people learn the reply was AI-generated. What is the module's lesson?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Disclosure is unnecessary because effects are unchanged
+\item Empathy is a crucial part of support that AI lacks, so we should reflect on which issues stay in human hands ('just because we can does not mean we should') and involve diverse stakeholders
+\item AI empathy is identical to human empathy
+\item Only technical accuracy matters in mental health support
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} The module points to the golden rule of AI development and to stakeholder involvement.
+\item \textbf{Why A is wrong:} Effects dwindle upon disclosure
+\item \textbf{Why C is wrong:} The module says AI systems have no empathy
+\item \textbf{Why D is wrong:} Emotional adequacy is central
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} 'Just because we can does not mean we should'!
+\end{frame}
+
+% ===== REPUTATIONAL RISK =====
+
+\begin{frame}[shrink=6]{Q33: Causes of Reputational Damage - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Match: Cambridge Analytica; the Dutch child-benefit fraud algorithm; a customer auto-denied a loan with no reasons.}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Lack of explainability; privacy breach; algorithmic bias
+\item Algorithmic bias; lack of explainability; privacy breach
+\item Privacy breach; algorithmic bias/unfairness; lack of explainability
+\item All three are privacy breaches
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} The three main causes are privacy breaches, algorithmic bias, and lack of explainability. In the Dutch case, thousands were falsely denied or made to repay benefits and the prime minister resigned.
+\item \textbf{Why A is wrong:} This scrambles the causes
+\item \textbf{Why B is wrong:} Cambridge Analytica was about data handling, not bias
+\item \textbf{Why D is wrong:} They correspond to three distinct causes
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Three causes: PRIVACY, BIAS, EXPLAINABILITY!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q34: Competence vs Value Alignment - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which classification is correct?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Emotional contagion: competence; breaches: only value alignment
+\item Emotional contagion experiment: value alignment (the firm knew and proceeded without consent). Technical failures or unfairness: often competence. A breach from under-investment: possibly both
+\item All AI incidents are competence failures
+\item Value alignment is questioned only when the company was unaware of risks
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Value alignment is questioned when a firm is aware of risks and proceeds or lacks due diligence.
+\item \textbf{Why A is wrong:} The company knew, so value alignment is at issue
+\item \textbf{Why C is wrong:} The distinction can be blurred
+\item \textbf{Why D is wrong:} It arises when the company was aware
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} COMPETENCE = can't; VALUE ALIGNMENT = knew and did anyway!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q35: Response Strategy - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: After an incident, which response fits the module for incompetence versus misaligned values?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Deny publicly until investigations end
+\item For incompetence, show the issue is being fixed; for value misalignment, reassure stakeholders that deeper governance or cultural problems will be fixed organizationally; transparency is key in both
+\item Use vague ethical frameworks
+\item Show a technical fix even for value misalignment
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Ethical frameworks can be too vague, so developing them with experts helps. A crisis-management plan can be prepared in advance.
+\item \textbf{Why A is wrong:} The module advises transparency
+\item \textbf{Why C is wrong:} It warns that many frameworks are too vague
+\item \textbf{Why D is wrong:} Value problems may be rooted in structure or culture
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Show the WILL TO CHANGE: technical fix vs organizational fix!
+\end{frame}
+
+% ===== EXISTENTIAL AND GLOBAL RISK =====
+
+\begin{frame}[shrink=6]{Q36: Alignment vs Malevolence - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: What does the paperclip example illustrate in the existential-risk debate?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Only malicious AI is dangerous
+\item Current narrow AI already exceeds human general intelligence
+\item Regulation has already solved alignment
+\item A superintelligent system with a misaligned objective could harm humanity without being malevolent, which is the alignment problem
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} Skeptics counter that AI is still narrow, governance will adapt, and early fears of new technologies were often overblown (for example, melting at 50 mph on trains).
+\item \textbf{Why A is wrong:} The concern includes well-intentioned but misaligned AI
+\item \textbf{Why B is wrong:} Skeptics say current AI is narrow
+\item \textbf{Why C is wrong:} Skeptics trust governance to develop, not that it is finished
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Alignment: misaligned goals, not evil intent!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q37: Job Displacement Figures - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: The WEF (2023) predicted 83 million jobs destroyed and 69 million created. What is the net effect, and what caution does the module give about such forecasts?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item A net gain of 14 million jobs
+\item A net loss of 152 million jobs
+\item A net loss of 14 million jobs, and the forecast is fully reliable
+\item A net loss of 14 million jobs (about 2\% of employment), with caution that pace of AI progress, required human supervision, and new job creation are hard to forecast
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} 83 minus 69 equals 14. High-skill jobs such as accounting also seem exposed, unlike earlier automation waves.
+\item \textbf{Why A is wrong:} Destroyed exceeds created
+\item \textbf{Why B is wrong:} That adds instead of subtracting
+\item \textbf{Why C is wrong:} The module says predictions should be taken with care
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} 83M destroyed - 69M created = 14M net loss (2\%); forecasts uncertain!
+\end{frame}
+
+% ===== GENAI RISKS =====
+
+\begin{frame}[shrink=6]{Q38: Hallucinations and Liability - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Air Canada argued its chatbot was a 'separate legal entity responsible for its own actions.' What happened?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item The tribunal accepted it; the chatbot bore liability
+\item The tribunal held the passenger responsible
+\item The tribunal rejected the argument and held the company responsible for its chatbot's outputs, awarding damages
+\item The case was dismissed because chatbots are unregulated
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} Hallucinations look credible and can create legal liability, not only reputational harm.
+\item \textbf{Why A is wrong:} The argument was rejected
+\item \textbf{Why B is wrong:} Liability fell on the airline
+\item \textbf{Why D is wrong:} Damages were awarded to the passenger
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} You are RESPONSIBLE for your chatbot's outputs!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q39: Unpredictability - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Why does GenAI unpredictability matter for regulated tasks?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item It only affects creative writing
+\item It guarantees identical answers to identical prompts
+\item It affects only cost, not compliance
+\item It undermines standardizing outputs across users and time, harming consistent treatment and auditability (financial advice, claims, legal work), creating compliance and reputational risk
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} Behavior can also change through updates, fine-tuning, or deployment modes.
+\item \textbf{Why A is wrong:} It affects high-stakes domains
+\item \textbf{Why B is wrong:} Outputs are probabilistic
+\item \textbf{Why C is wrong:} It creates compliance risk
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Unpredictable outputs = compliance AND reputational risk!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q40: Adversarial Inputs - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which definition pair is correct?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Prompt injection: bypassing safeguards. Jailbreak: hidden instructions in inputs
+\item Both mean retraining the model on new data
+\item Both refer to hallucination
+\item Prompt injection: hidden instructions in inputs cause unintended behavior. Jailbreak: crafted prompts bypass a model's safety mechanisms
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} Both are adversarial techniques under functional risks.
+\item \textbf{Why A is wrong:} This swaps them
+\item \textbf{Why B is wrong:} They are input-based attacks
+\item \textbf{Why C is wrong:} Hallucination is a separate risk
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} INJECTION = hidden instructions; JAILBREAK = bypass safeguards!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q41: Data Privacy in GenAI - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which is a data and information risk described in the module?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Personal or confidential prompt data being stored, shared, or used for training without the user's knowledge, especially with third-party providers (researchers extracted emails, phone numbers, and card numbers from an LLM in 2021)
+\item Models never retain any training data
+\item Privacy risk exists only for on-premise models
+\item Extraction is impossible
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} The FTC opened a 2023 investigation into OpenAI over data privacy and consumer protection.
+\item \textbf{Why B is wrong:} Extraction attacks have been demonstrated
+\item \textbf{Why C is wrong:} Risk is higher with external providers
+\item \textbf{Why D is wrong:} Researchers demonstrated it
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Prompts and connected databases can leak PII!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q42: Copyright Litigation - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: In Getty Images v. Stability AI, what does the module say happened?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Getty won on all claims
+\item Getty dropped every claim
+\item Getty dropped its main copyright infringement claim (apparently because of difficulty showing infringement in the UK), while other claims such as secondary infringement and trade mark infringement continue
+\item The suit concerned privacy only
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} Organizations should consider copyright risk when using GenAI to create public-facing content.
+\item \textbf{Why A is wrong:} Proceedings continued on other claims
+\item \textbf{Why B is wrong:} Only the main claim was dropped
+\item \textbf{Why D is wrong:} The claims were IP-related
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Getty dropped the MAIN claim; other IP claims continue!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q43: Responsibility Gaps - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: An HR team uses an LLM to summarize employee complaints and produces biased results. Which risk domain and remedy?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Societal risk; ban all GenAI
+\item Strategic risk; switch vendors
+\item Organizational risk (responsibility gap): establish clear lines of responsibility for quality assurance, oversight, and mitigation
+\item Functional risk only; retrain the model
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: C}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why C is correct:} GenAI tools can fall between existing accountability lines, especially with non-technical teams.
+\item \textbf{Why A is wrong:} This is not a societal-scale issue
+\item \textbf{Why B is wrong:} Vendor choice does not close the internal accountability gap
+\item \textbf{Why D is wrong:} The core issue is accountability structure
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Responsibility gaps = who owns GenAI outputs?
+\end{frame}
+
+\begin{frame}[shrink=6]{Q44: Five Risk Domains - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which mapping is correct? (1) fabricated legal citations; (2) vendor changes pricing or model with little warning; (3) synthetic content erodes trust in legitimate sources.}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item (1) societal; (2) functional; (3) strategic
+\item (1) strategic; (2) organizational; (3) data
+\item (1) organizational; (2) data; (3) functional
+\item (1) functional; (2) strategic; (3) societal
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} The five domains are functional, data-related, organizational, strategic/systemic, and societal.
+\item \textbf{Why A is wrong:} This scrambles the domains
+\item \textbf{Why B is wrong:} Fabricated citations are a performance risk, not strategic
+\item \textbf{Why C is wrong:} Fabricated citations are functional
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Five domains: FUNCTIONAL, DATA, ORGANIZATIONAL, STRATEGIC, SOCIETAL!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q45: Untrained Employees - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Cyberhaven reported 4.2\% of 1.6 million workers pasted sensitive data into ChatGPT. About how many workers is that, and what does it show?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item About 67,200; lack of formal guidance and training creates data-protection and accountability risk (several large firms banned the tool)
+\item About 6,720; the risk is negligible
+\item About 672,000; the tool was banned by regulators
+\item About 67,200; the risk is only technical
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} 0.042 x 1,600,000 = 67,200.
+\item \textbf{Why B is wrong:} This is off by a factor of 10 and understates the exposure
+\item \textbf{Why C is wrong:} This is off by a factor of 10 the other way, and firms imposed the bans
+\item \textbf{Why D is wrong:} It is an organizational and behavioral risk
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} 4.2\% x 1.6M = 67,200 workers!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q46: Vendor Lock-in - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: What is the core strategic risk of depending on a few dominant GenAI vendors?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Vendors always provide full audit access
+\item The organization stays accountable for use but has little leverage or control over pricing, model updates, and access, and short-term adoption can become long-term lock-in
+\item Accountability transfers to the vendor
+\item Lock-in is only a cost issue
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Reliance can limit auditability, transparency, and leverage.
+\item \textbf{Why A is wrong:} Auditability is limited
+\item \textbf{Why C is wrong:} The deployer remains accountable
+\item \textbf{Why D is wrong:} It also affects control and transparency
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Accountable, but LITTLE CONTROL!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q47: Regulatory Unpredictability - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which statement fits the module?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Regulation is evolving unevenly (the EU AI Act has ex ante duties like transparency and post-market monitoring, while the US has a state patchwork), so even low-risk uses may face future requirements; Apple delayed EU AI features in 2024
+\item Regulation is uniform globally
+\item Only high-risk uses face future requirements
+\item Compliance uncertainty never affects strategy
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: A}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why A is correct:} This creates challenges for organizations operating across jurisdictions.
+\item \textbf{Why B is wrong:} It is uneven
+\item \textbf{Why C is wrong:} Even low-risk cases may face complex requirements
+\item \textbf{Why D is wrong:} Apple's delay shows it can
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Uneven regulation: EU ex ante versus US patchwork!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q48: Reputation Without Regulation - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Can GenAI use damage reputation even if the company complies with the law?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item No, compliance protects reputation
+\item Only if the model is open source
+\item Only in the EU
+\item Yes: biased content, hallucinations, or undisclosed AI use can trigger backlash even when compliant (for example, Grok's antisemitic outputs in 2025)
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: D}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why D is correct:} Poor governance can damage reputation and invite regulatory scrutiny.
+\item \textbf{Why A is wrong:} Compliance is not sufficient
+\item \textbf{Why B is wrong:} Open-sourcing is not the criterion
+\item \textbf{Why C is wrong:} Turkey's ban shows global reach
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Compliance is not the same as public trust!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q49: Societal-Scale GenAI Risks - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which is a societal GenAI risk with its illustrating case?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Vendor lock-in with a 2019 case
+\item Impersonation via deepfakes, such as a 2019 voice deepfake that persuaded a UK energy CEO to transfer EUR 220,000; also lack of provenance without watermarking
+\item Data privacy violations with the FTC case
+\item Responsibility gaps with the HR case
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Other societal risks: disinformation at scale, manipulative targeting, and provenance gaps.
+\item \textbf{Why A is wrong:} That is strategic
+\item \textbf{Why C is wrong:} That is a data risk
+\item \textbf{Why D is wrong:} That is organizational
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Deepfakes: fraud, defamation, manipulation!
+\end{frame}
+
+\begin{frame}[shrink=6]{Q50: Incentives and Conclusions - Advanced}
+\fontsize{6.5}{7.5}\selectfont
+\textbf{QUESTION: Which medium-term measures does the module recommend for GenAI risk?}
+
+\vspace{0.1cm}
+\textbf{OPTIONS:}
+\begin{enumerate}[A.]
+\item Reward cost savings only
+\item Align incentives and reviews with responsible deployment (supplement speed and cost metrics with risk and reliability metrics), use review boards or responsible-AI champions, and encourage IT-legal-product collaboration
+\item Avoid cross-team coordination
+\item Ban all GenAI use
+\end{enumerate}
+
+\vspace{0.1cm}
+\textcolor{myblue}{\textbf{ANSWER: B}}
+
+\vspace{0.1cm}
+\textbf{DETAILED EXPLANATION:}
+\begin{itemize}
+\item \textbf{Why B is correct:} Misaligned incentives can favor rapid, risky deployment.
+\item \textbf{Why A is wrong:} That worsens misaligned incentives
+\item \textbf{Why C is wrong:} The module recommends coordination
+\item \textbf{Why D is wrong:} It recommends managing, not banning
+\end{itemize}
+
+\textcolor{myred}{\textbf{EXAM TRAP:}} Align INCENTIVES with responsible deployment!
+\end{frame}
+
+\end{document}

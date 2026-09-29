@@ -1,0 +1,1076 @@
+\documentclass[8pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath, amssymb, graphicx, array, multirow, booktabs, xcolor, tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Compact font settings
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{enumerate item}{size=\footnotesize}
+\setbeamerfont{itemize item}{size=\footnotesize}
+\setbeamerfont{block title}{size=\footnotesize}
+\setbeamertemplate{navigation symbols}{}
+
+% Compact spacing
+\setlength{\itemsep}{0.08ex}
+\setlength{\parskip}{0.08ex}
+\setlength{\leftmargini}{0.3cm}
+\setbeamersize{text margin left=3mm, text margin right=3mm}
+\addtobeamertemplate{frame begin}{\vspace{-0.4cm}}{}
+
+% Colors
+\definecolor{myblue}{RGB}{0,0,255}
+\definecolor{myred}{RGB}{255,0,0}
+\definecolor{mygreen}{RGB}{0,128,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{mypurple}{RGB}{128,0,128}
+\definecolor{mygray}{RGB}{128,128,128}
+\definecolor{mygold}{RGB}{255,215,0}
+
+% Helper macros
+\newcommand{\fs}{\fontsize{10}{12}\selectfont}
+\newcommand{\opts}[4]{\par\vspace{0.12cm}\noindent\textbf{A.}~#1\par\vspace{0.08cm}\noindent\textbf{B.}~#2\par\vspace{0.08cm}\noindent\textbf{C.}~#3\par\vspace{0.08cm}\noindent\textbf{D.}~#4\par}
+\newcommand{\ans}[1]{\textcolor{myblue}{\textbf{ANSWER: #1}}}
+\newcommand{\trap}[1]{\textcolor{myred}{\textbf{EXAM TRAP:}} #1}
+\newcommand{\numtag}{\textcolor{mypurple}{\textbf{[NUMERICAL]}}}
+\newcommand{\hard}{\textcolor{myorange}{\textbf{[HARD]}}}
+
+\title{Data and AI Model Governance}
+\subtitle{50 Hard Questions: Numerical, Multi-Step and Theory-Heavy}
+\author{GARP RAI Exam Preparation}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{How to Use This Deck}
+\fs
+\begin{itemize}
+\item 50 questions, each with a \textbf{Question slide} followed by an \textbf{Answer \& Worked Solution slide}.
+\item \numtag\ = calculation required (21 questions). \hard\ = multi-step scenario / theory-heavy.
+\item Sections: A Data Governance (Q1--7) $\cdot$ B Model Governance \& Inventory (Q8--18) $\cdot$ C Development \& Testing (Q19--26) $\cdot$ D Change, Validation \& Backtesting (Q27--36) $\cdot$ E Numerical Issues \& Implementation (Q37--44) $\cdot$ F GenAI \& Frameworks (Q45--50).
+\item Numbers are illustrative. Where a threshold (e.g., PSI bands, Basel traffic light, four-fifths rule, AUC yellow/red) is a common industry convention rather than something stated in the module, the slide says so.
+\end{itemize}
+\end{frame}
+
+% ============================================================
+% SECTION A: DATA GOVERNANCE  Q1-Q7
+% ============================================================
+
+\begin{frame}[t]{Q1: Provenance and a Vendor Model}
+\fs
+\hard\ \textbf{QUESTION:} A bank licenses a vendor credit-scoring model. Due diligence reveals the vendor's training set includes records scraped from websites without permission. The model's out-of-sample Gini is excellent. The FTC has stated that models proven to be built on improperly obtained data must be destroyed, and the first such action has settled. What is the most defensible model risk management (MRM) stance?
+\opts{Approve it, since predictive power is independent of where the data came from, and rely on strong back-testing.}
+{Withhold approval until the vendor proves ownership of / right to use the input data and the contract is revised to indemnify the licensee; treat the issue as unresolved model risk in the meantime.}
+{Approve it in the lowest risk tier with light monitoring, because the legal risk sits with the vendor.}
+{Accept the vendor's verbal assurance, since credit bureau data (e.g., FICO) is also accepted without scrutiny.}
+\end{frame}
+
+\begin{frame}[t]{A1: Provenance and a Vendor Model}
+\fs
+\ans{B}
+\begin{itemize}
+\item \textbf{Why B:} No model can be approved under MRM guidelines without proving ownership of the input data. For vendor models, the vendor must provide the proof, and contracts must be revised to indemnify licensees. Model destruction would remove the model (and its business use) regardless of its accuracy.
+\item \textbf{Why A is wrong:} Accuracy is irrelevant to the legal right to use the data; a destroyed model has zero value.
+\item \textbf{Why C is wrong:} Tiering is driven by materiality, complexity and exposure; legal exposure is not transferred just because the vendor built the model.
+\item \textbf{Why D is wrong:} Established sources such as credit bureaus are low-risk because provenance is clear; alternative data requires \emph{proof}, not assurances.
+\end{itemize}
+\trap{Provenance is a \textcolor{myblue}{legal right-to-use} test, independent of predictive performance.}
+\end{frame}
+
+\begin{frame}[t]{Q2: Silent Redefinition of an Alternative-Data Field}
+\fs
+\hard\ \textbf{QUESTION:} An alternative-data vendor quietly changes the definition of a field (``active accounts'' now excludes dormant accounts). The change is disclosed only in a footnote. Univariate outlier detection on the model's input dashboard shows nothing unusual, and the model has been live for 14 months. Which control set is best aligned with the module?
+\opts{Tighten outlier thresholds on all inputs and re-run monthly.}
+{Input-data monitoring that includes definition/metadata checks (data dictionary version control, contractual change notification, periodic review of provider documentation), with alerts to model owners.}
+{Retrain the model quarterly so it adapts automatically to any data change.}
+{Rely on P\&L back-testing alone, because bad inputs will eventually show up as bad outputs.}
+\end{frame}
+
+\begin{frame}[t]{A2: Silent Redefinition of an Alternative-Data Field}
+\fs
+\ans{B}
+\begin{itemize}
+\item \textbf{Why B:} Providers may change field definitions after deployment. Data flaws may not be visible in the series alone, and outlier detection may be insufficient, particularly when definitional changes appear only in footnotes (cf.\ the 2020 BLS unemployment footnote). Metadata management (data dictionary, definitions, mappings) plus input monitoring is the appropriate control.
+\item \textbf{Why A is wrong:} A definitional shift can be a level shift inside the normal range; tighter thresholds produce false alarms without detecting it.
+\item \textbf{Why C is wrong:} Retraining on redefined data silently bakes the changed meaning into the model.
+\item \textbf{Why D is wrong:} Output back-testing is lagging and cannot attribute cause.
+\end{itemize}
+\trap{Input monitoring $\neq$ outlier detection. Also monitor \textcolor{myblue}{definitions and metadata}.}
+\end{frame}
+
+\begin{frame}[t]{Q3: What Does the Data Governance Committee Do?}
+\fs
+\hard\ \textbf{QUESTION:} A firm's data governance committee has approved a documented treatment for missing data and the use of proxies for a new credit model. Which of the following is \emph{outside} the committee's intended responsibility?
+\opts{Approving policies for data collection, reconciliation and treatment.}
+{Overseeing the management of data stewards and access policies.}
+{Performing the daily reconciliation of the model's input feed and correcting individual field errors.}
+{Providing oversight across all aspects of data governance and approving data-applicability decisions for alternative data.}
+\end{frame}
+
+\begin{frame}[t]{A3: What Does the Data Governance Committee Do?}
+\fs
+\ans{C}
+\begin{itemize}
+\item \textbf{Why C:} The committee provides overall oversight of approved data practices and policies (collection, reconciliations, treatment, access, monitoring, management of data stewards) but is \emph{not} responsible for the operational aspects. Day-to-day reconciliation and error correction belong to data stewards / operational teams.
+\item \textbf{Why A, B, D are wrong:} Each describes policy, oversight or approval activity that the committee owns. Alternative-data applicability warrants an evaluation and approval process, and treatments such as missing-data handling and proxies should be approved by the data governance authority.
+\end{itemize}
+\trap{Committee = \textcolor{myblue}{oversight and approval}, not operations. Stewards execute.}
+\end{frame}
+
+\begin{frame}[t]{Q4: Synthetic Data and ``AI-Ready'' Data}
+\fs
+\hard\ \textbf{QUESTION:} To avoid exposing client PII, a bank augments scarce default records with synthetic records generated from the real portfolio. Which statement best reflects sound data strategy?
+\opts{Synthetic data removes privacy and bias concerns, so the data governance review can be skipped for it.}
+{Synthetic data can augment scarce data and mitigate PII exposure, but it must still meet AI-readiness (accurate, unbiased, well structured, cleaned, suitable) and be governed and validated; it can inherit and reproduce biases of its source.}
+{Synthetic data is always superior to real data because it can be generated in unlimited quantity.}
+{Synthetic data is exempt from provenance requirements because no real person is involved.}
+\end{frame}
+
+\begin{frame}[t]{A4: Synthetic Data and ``AI-Ready'' Data}
+\fs
+\ans{B}
+\begin{itemize}
+\item \textbf{Why B:} The module identifies synthetic data as a tool to augment data and mitigate risks such as PII in training data, and states that data strategy must consider both synthetic data and AI readiness. AI-ready data is accurate, unbiased, structured, cleaned and suitable for training. Generated data is a function of the source data (and generator), so bias, gaps and provenance issues carry over.
+\item \textbf{Why A, C, D are wrong:} Governance, quality and provenance still apply; quantity does not equal quality; the generator's source data still needs a legal right to use.
+\end{itemize}
+\trap{Synthetic $\neq$ risk-free. It shifts risk from \textcolor{myblue}{privacy exposure} to \textcolor{myblue}{fidelity and bias}.}
+\end{frame}
+
+\begin{frame}[t]{Q5: Retain Everything Indefinitely}
+\fs
+\hard\ \textbf{QUESTION:} Most data regulation can be reduced to three principles: obtaining consent, minimizing the amount of data held, and ensuring rights of data subjects. A data science team proposes keeping all raw customer chat logs indefinitely ``in case future models need them.'' Which principle is \emph{most directly} challenged, and what governance element should address it?
+\opts{Consent only; addressed by the metadata dictionary.}
+{Data minimization; addressed by a data retention policy that is documented and adhered to.}
+{Rights of data subjects only; addressed by encryption.}
+{None; larger training sets always improve AI/ML model accuracy, so retention is a business decision.}
+\end{frame}
+
+\begin{frame}[t]{A5: Retain Everything Indefinitely}
+\fs
+\ans{B}
+\begin{itemize}
+\item \textbf{Why B:} ``Keep everything, just in case'' is the opposite of minimizing the data held. A data retention policy should be in place and adhered to as part of data protection. (Consent for a new, unspecified purpose and data-subject rights may also be implicated, but minimization is the most direct conflict.)
+\item \textbf{Why A is wrong:} Metadata documents data; it does not limit holding it.
+\item \textbf{Why C is wrong:} Encryption protects confidentiality/integrity; it does not reduce what is held.
+\item \textbf{Why D is wrong:} AI/ML models need large data, but the principle of minimization and legal requirements still bind.
+\end{itemize}
+\trap{AI's appetite for data does not suspend \textcolor{myblue}{consent, minimization and data-subject rights}.}
+\end{frame}
+
+\begin{frame}[t]{Q6: Population Stability Index on a Score Distribution}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A model's development-sample score distribution over four equal-frequency bins is 25\% / 25\% / 25\% / 25\%. In production the shares are 10\% / 20\% / 30\% / 40\%. Using $PSI=\sum_i (a_i-e_i)\ln(a_i/e_i)$ and the common rule of thumb ($<0.10$ stable, $0.10$--$0.25$ moderate shift, $>0.25$ significant shift), what is the PSI and the appropriate reaction?
+\opts{$\approx 0.05$; stable, no action.}
+{$\approx 0.11$; borderline, note in the next annual review only.}
+{$\approx 0.23$; moderate population shift: investigate drivers and assess performance impact via input-data monitoring.}
+{$\approx 0.46$; significant shift: decommission the model.}
+\end{frame}
+
+\begin{frame}[t]{A6: Population Stability Index}
+\fs
+\ans{C}
+\begin{itemize}
+\item Bin terms: $(0.10-0.25)\ln 0.4=+0.1374$; $(0.20-0.25)\ln 0.8=+0.0112$; $(0.30-0.25)\ln 1.2=+0.0091$; $(0.40-0.25)\ln 1.6=+0.0705$.
+\item $PSI = 0.1374+0.0112+0.0091+0.0705 \approx \mathbf{0.228}$, in the 0.10--0.25 band.
+\item \textbf{Reaction:} moderate shift $\Rightarrow$ investigate cause (population drift, definitional change), check performance on recent data, escalate per monitoring plan. It is not automatic decommissioning.
+\item \textbf{Why others are wrong:} A/B miscalculate; D doubles the answer and over-reacts.
+\end{itemize}
+\textcolor{mygray}{Note: PSI bands are an industry rule of thumb, not a module requirement. The module's point is that input-data monitoring and drift detection are needed, and AI/ML models are more exposed to data drift.}
+\end{frame}
+
+\begin{frame}[t]{Q7: Approval Rates and Bias Screening}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A lending model approves 300 of 500 applicants in Group A and 168 of 400 applicants in Group B. The validator computes the ratio of approval rates (B/A) and compares it with the ``four-fifths'' (0.80) screening convention. Which conclusion is best?
+\opts{Ratio $=1.43$; passes, no concern.}
+{Ratio $=0.70$; below 0.80, so flag for bias review (proxy variables, legitimate factors, alternative models); the ratio alone does not prove discrimination.}
+{Ratio $=0.18$; difference in approval rates is small, no action.}
+{Ratio $=0.42$; fails, so the model must be decommissioned immediately.}
+\end{frame}
+
+\begin{frame}[t]{A7: Approval Rates and Bias Screening}
+\fs
+\ans{B}
+\begin{itemize}
+\item Approval rates: A $=300/500=60\%$; B $=168/400=42\%$. Ratio $=0.42/0.60=\mathbf{0.70}<0.80$.
+\item The screen signals potential adverse impact $\Rightarrow$ investigate: are proxies for protected characteristics present, is the outcome explained by legitimate factors, do alternative specifications reduce the gap? The module stresses assessing bias, noting that AI models can amplify bias inherent in the data.
+\item \textbf{Why others are wrong:} A inverts the ratio; C misreads a 18-point gap as small; D treats a screen as a verdict.
+\end{itemize}
+\textcolor{mygray}{Note: the four-fifths rule comes from US employment-selection practice and is used as a fairness screen; it is not stated in the module.}
+\end{frame}
+
+% ============================================================
+% SECTION B: MODEL GOVERNANCE, INVENTORY, 3 LINES  Q8-Q18
+% ============================================================
+
+\begin{frame}[t]{Q8: Is It a Model?}
+\fs
+\hard\ \textbf{QUESTION:} Under the SR 11-7 definition (a quantitative method applying statistical, economic, financial or mathematical theories, techniques and assumptions to process input data into quantitative estimates), which item most clearly belongs in the model inventory?
+\opts{A spreadsheet that totals invoice amounts by customer.}
+{A spreadsheet that applies an assumed prepayment curve and weighted scenarios to project loan cash flows.}
+{A static lookup table of ISO country codes used by the reporting system.}
+{A macro that reformats the layout of a monthly report.}
+\end{frame}
+
+\begin{frame}[t]{A8: Is It a Model?}
+\fs
+\ans{B}
+\begin{itemize}
+\item \textbf{Why B:} It applies assumptions and scenario weights to inputs to produce quantitative estimates under uncertainty. The presence of uncertainty and assumptions indicates a calculation rises to the level of a model, even if it sits in a ``simple spreadsheet.''
+\item \textbf{Why A, C, D are wrong:} These are arithmetic, reference or formatting tools (end-user tools/non-models). Important non-models may still be recorded separately in the inventory as qualified analytical or end-user tools.
+\end{itemize}
+\textcolor{myblue}{Extension:} an AI chatbot giving tailored financial advice has an underlying model even without traditional numeric output; that is why AI/ML registration criteria are needed.
+
+\trap{The test is \textcolor{myblue}{assumptions + uncertainty + quantitative estimates}, not the software used.}
+\end{frame}
+
+\begin{frame}[t]{Q9: Risk Tiering with an Exposure Override}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A firm scores models 1--5 on materiality (weight 0.5), complexity (0.3) and exposure (0.2). Tier 1: score $\ge 4.0$; Tier 2: $3.0$--$3.99$; Tier 3: $<3.0$. Policy: if the model feeds published financial reports or regulatory reporting (exposure score $\ge 4$), the tier is raised by one level. Model X scores materiality 2, complexity 5, exposure 4, and feeds published financial statements. What is its final tier and validation implication?
+\opts{Tier 3; low materiality means light validation every three years.}
+{Tier 2; weighted score of 3.3 with no override.}
+{Tier 1; weighted score 3.3 gives Tier 2, raised one level by the exposure override, so annual (or more frequent) validation.}
+{Unranked; simple models need no tiering.}
+\end{frame}
+
+\begin{frame}[t]{A9: Risk Tiering with an Exposure Override}
+\fs
+\ans{C}
+\begin{itemize}
+\item Score $=0.5(2)+0.3(5)+0.2(4)=1.0+1.5+0.8=\mathbf{3.3}\Rightarrow$ Tier 2 before override.
+\item Exposure $=4\ge4$ and the model feeds published financials $\Rightarrow$ raise one level $\Rightarrow$ \textbf{Tier 1}.
+\item The tier drives the depth and frequency of validation (higher-risk models are revalidated at least annually; lower-risk models on a two- or three-year cycle).
+\item \textbf{Why A is wrong:} Complexity and exposure can elevate a model that materiality alone would rank low. \textbf{Why B:} ignores the override. \textbf{Why D:} minimum standards apply to all models.
+\end{itemize}
+\trap{Materiality is only \textcolor{myblue}{one} of three drivers: \textcolor{myblue}{materiality, complexity, exposure}.}
+\end{frame}
+
+\begin{frame}[t]{Q10: Which Statements Are True?}
+\fs
+\hard\ \textbf{QUESTION:} Consider: \textbf{I.} A model with low materiality but high complexity may be ranked higher than materiality alone suggests. \textbf{II.} Minimum standards of model risk assessment should be applied to all models regardless of materiality. \textbf{III.} The risk tier drives the depth and frequency of validation. \textbf{IV.} Exposure is considered only for models used in regulatory capital calculations. Which set is correct?
+\opts{I and II only}
+{I, II and III only}
+{II, III and IV only}
+{I, II, III and IV}
+\end{frame}
+
+\begin{frame}[t]{A10: Which Statements Are True?}
+\fs
+\ans{B}
+\begin{itemize}
+\item \textbf{I true:} complexity elevates an otherwise low-ranked model. \textbf{II true:} the absence of any assessment can itself introduce model risk. \textbf{III true:} tier determines validation depth and frequency.
+\item \textbf{IV false:} exposure is broader; e.g., an otherwise simple model affecting published financial reports may have its ranking elevated. Regulatory capital is one example, not the only one.
+\end{itemize}
+\trap{Watch the word \textcolor{myred}{``only''} in IV: one example was turned into an exclusive rule.}
+\end{frame}
+
+\begin{frame}[t]{Q11: Registering AI/ML Models in the Inventory}
+\fs
+\hard\ \textbf{QUESTION:} Which statement about the AI/ML-specific inventory factors is most accurate?
+\opts{Supervised models are always harder to validate than unsupervised ones because they have target labels.}
+{Unsupervised outputs (clusters, sentiment) have no direct way to evaluate accuracy, and a model needing only retraining on recent data (structure maintained) is less complex to recalibrate than one needing redevelopment.}
+{The number of hidden layers or parameters is irrelevant to interpretability and transparency assessments.}
+{Data volume and number of features matter only during development, not for inventory complexity ratings.}
+\end{frame}
+
+\begin{frame}[t]{A11: Registering AI/ML Models in the Inventory}
+\fs
+\ans{B}
+\begin{itemize}
+\item \textbf{Why B:} The module lists complexity of methodology and design, data usage, output parameters (supervised prediction vs.\ unsupervised, where accuracy cannot be evaluated directly), and recalibration (retraining vs.\ full redevelopment) as new weightings.
+\item \textbf{Why A is wrong:} Labels make direct accuracy measurement \emph{possible}; unsupervised outputs lack that. \textbf{Why C:} hidden layers and parameter counts are cited as indicators of transparency. \textbf{Why D:} data volume, features, structure, quality and transformations drive assessment difficulty.
+\end{itemize}
+\trap{More \textcolor{myblue}{complexity + weaker output evaluation + heavier recalibration} $\Rightarrow$ more inventory weight.}
+\end{frame}
+
+\begin{frame}[t]{Q12: Validation Workload with AI/ML Uplift}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A firm has 200 models: 20 Tier 1 (validated annually), 60 Tier 2 (every 2 years), 120 Tier 3 (every 3 years). Baseline annual validation workload is therefore $20+30+40=90$. Policy is revised: the 10 AI/ML models among the Tier 1 models move to semi-annual validation, and the 15 AI/ML models among Tier 2 move to annual validation. Tier 3 is unchanged. What is the new average annual number of validations?
+\opts{97.5}{102.5}{107.5}{120}
+\end{frame}
+
+\begin{frame}[t]{A12: Validation Workload with AI/ML Uplift}
+\fs
+\ans{C}
+\begin{itemize}
+\item Tier 1 AI/ML: 10 models go from 1 to 2 validations per year: $+10$.
+\item Tier 2 AI/ML: 15 models go from 0.5 to 1 per year: $+15\times0.5=+7.5$.
+\item New workload $=90+10+7.5=\mathbf{107.5}$ per year (a 19.4\% increase).
+\item \textbf{Why others are wrong:} 97.5 counts only the Tier 2 uplift; 102.5 uses $+12.5$; 120 double counts.
+\end{itemize}
+\textcolor{myblue}{Governance link:} the module notes AI/ML models may need more frequent review (complexity, drift), so second-line capacity and technical skills must scale with the inventory.
+
+\trap{Frequency is set by \textcolor{myblue}{tier}, and AI/ML characteristics may justify a \textcolor{myblue}{shorter} cycle.}
+\end{frame}
+
+\begin{frame}[t]{Q13: Error Propagation Through Model Interdependencies}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} Model A's output feeds Model B. Model A's output has a 4\% relative error. Model B's output is 2.5 times as sensitive (elasticity 2.5) to that input in relative terms. Model B also has its own independent 6\% relative error. Treating errors as independent and combining in quadrature, what is the approximate relative error of Model B's output?
+\opts{10.0\%}{11.7\%}{16.0\%}{6.0\%}
+\end{frame}
+
+\begin{frame}[t]{A13: Error Propagation Through Model Interdependencies}
+\fs
+\ans{B}
+\begin{itemize}
+\item Inherited error $=2.5\times4\%=10\%$.
+\item Combined $=\sqrt{10^2+6^2}=\sqrt{136}\approx\mathbf{11.7\%}$.
+\item \textbf{Why others are wrong:} 10\% ignores B's own error; 16\% adds linearly (assumes perfectly correlated errors); 6\% ignores inheritance.
+\end{itemize}
+\textcolor{myblue}{Governance link:} outputs of one model often serve as inputs of others, so the model landscape (upstream/downstream links) is needed to see how errors compound and to avoid understating aggregate model risk.
+
+\trap{A downstream model \textcolor{myblue}{amplifies or damps} upstream error depending on sensitivity.}
+\end{frame}
+
+\begin{frame}[t]{Q14: Shared Data Feed and Aggregate Model Risk}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} Three models use the same data vendor. Assume: the vendor's feed is corrupted with probability 3\%, in which case all three models fail; otherwise each model fails independently with probability 2\% (from other causes). What is the probability all three fail at once, and how does it compare with a naive independence assumption ($0.02^3$)?
+\opts{$0.0008\%$; the naive figure is right.}
+{$0.06\%$; roughly 75 times the naive figure.}
+{$\approx3.00\%$; roughly 3,750 times the naive figure.}
+{$6.0\%$; roughly 7,500 times the naive figure.}
+\end{frame}
+
+\begin{frame}[t]{A14: Shared Data Feed and Aggregate Model Risk}
+\fs
+\ans{C}
+\begin{itemize}
+\item $P(\text{all fail})=0.03\cdot1+0.97\cdot0.02^3=0.03+0.97\cdot8\times10^{-6}\approx\mathbf{3.0008\%}$.
+\item Naive: $0.02^3=8\times10^{-6}=0.0008\%$. Ratio $\approx3{,}750$.
+\item Aggregate model risk is driven not only by interdependencies but also by \emph{shared assumptions, methodologies or data} that can affect many models at once. The model landscape should surface such common dependencies.
+\end{itemize}
+\trap{Independence assumptions understate tail risk when a \textcolor{myblue}{common factor} exists.}
+\end{frame}
+
+\begin{frame}[t]{Q15: Performance Threshold Breach and the Three Lines}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} An ML credit model's approved baseline AUC is 0.82. The monitoring plan sets yellow at a drop of 0.03 or more and red at a drop of 0.05 or more. This month's AUC on live data is 0.775. What is the status and most appropriate action?
+\opts{Green; the AUC is still far above 0.5.}
+{Yellow (drop $=0.045$): first line investigates root cause and proposes remediation and formally notifies second line; second line independently reviews materiality and challenges the diagnosis.}
+{Red; the model is automatically decommissioned by the first line.}
+{Yellow; the first line may resolve it quietly, because notification is required only in the red zone.}
+\end{frame}
+
+\begin{frame}[t]{A15: Performance Threshold Breach and the Three Lines}
+\fs
+\ans{B}
+\begin{itemize}
+\item Drop $=0.82-0.775=0.045$: $\ge0.03$ (yellow) but $<0.05$ (red).
+\item First line: reacts first to yellow/red breaches, investigates degradation, proposes remediation (e.g., recalibration). Protocols should define \emph{breach notification} content, second-line \emph{independent review} of materiality and root-cause, and a \emph{dispute-resolution} path.
+\item \textbf{Why D is wrong:} first-line incentives to downplay poor performance are a named failure point; formal notification protocols exist to counter this.
+\item \textbf{Why A/C are wrong:} 0.5 is not the reference; a breach zone does not trigger automatic decommissioning.
+\end{itemize}
+\textcolor{mygray}{Yellow/red bands here are illustrative policy settings.}
+\end{frame}
+
+\begin{frame}[t]{Q16: Diagnosing Three-Lines-of-Defense Failure Points}
+\fs
+\hard\ \textbf{QUESTION:} At a bank: (1) data scientists' bonuses are tied to reported AUC; (2) the two validators have no ML experience and cannot challenge a gradient-boosting model; (3) internal audit confirms that monitoring reports are archived on schedule but does not test whether thresholds are appropriate. Which analysis and remedy set is best?
+\opts{Failure points: (1) first-line incentive to downplay poor performance; (2) second line lacking technical depth/stature; (3) third line focused on process documentation. Remedies: risk-tied incentives, ML-skilled validators with stature, audit of substantive effectiveness.}
+{All three are third-line failures; remedy: more audit staff.}
+{No failure exists, because monitoring reports are archived on time.}
+{All three are second-line failures; remedy: give validators code access.}
+\end{frame}
+
+\begin{frame}[t]{A16: Diagnosing Three-Lines-of-Defense Failure Points}
+\fs
+\ans{A}
+\begin{itemize}
+\item The module names exactly these common failure points: first-line teams incentivized to downplay poor performance; second line lacking business context, technical depth or stature to challenge sophisticated models; third line focusing solely on process documentation rather than substantive effectiveness.
+\item Remedies align: incentive design rewarding flagging risks and documenting limitations; ML expertise and tools for validation (bias/fairness, drift for high-dimensional data, ``looking inside'' the black box); audit staff able to assess robustness of ML pipeline controls and adequacy of second-line challenge.
+\item \textbf{Why B, C, D are wrong:} They misattribute or deny the distributed nature of the failures.
+\end{itemize}
+\trap{Each line has its \textcolor{myblue}{own} characteristic failure mode. Match them.}
+\end{frame}
+
+\begin{frame}[t]{Q17: Best Role Allocation}
+\fs
+\hard\ \textbf{QUESTION:} Which arrangement is best aligned with model risk management roles?
+\opts{Model owner is the developers' own quant team; validators are colleagues from the same team; audit performs primary validation to save cost.}
+{Model owner is the business unit using the outputs; validators are independent of development (dedicated team or modelers not involved); audit reviews the validation process as ``meta-validation''; board sets model risk appetite.}
+{The board technically approves every model version; validators own the model; users are excluded from feedback loops.}
+{Model owner is IT; users own validation; regulators own the inventory.}
+\end{frame}
+
+\begin{frame}[t]{A17: Best Role Allocation}
+\fs
+\ans{B}
+\begin{itemize}
+\item In the ideal configuration ownership sits with parties using the outputs, which creates accountability and an incentive to understand assumptions and limitations. Validators provide independence and objectivity; they can be modelers not involved in the specific model or a dedicated team. Internal/external auditors are ``validation of validation,'' not the primary validation function. The board and senior management set risk appetite and ensure qualified resources; formal model approval falls under senior management, using validation results as basis.
+\item \textbf{A} lacks independence. \textbf{C} misassigns board, validator and user roles. \textbf{D} misassigns ownership; the model risk function (not regulators) maintains the inventory.
+\end{itemize}
+\trap{Auditors are \textcolor{myblue}{not} primary validators.}
+\end{frame}
+
+\begin{frame}[t]{Q18: Use Beyond the Approved Domain}
+\fs
+\hard\ \textbf{QUESTION:} A model approved for standard swaptions on a small pilot book (limit \$25M notional, ranked low risk) is now being used for Bermudan swaptions, and the book has grown to \$90M. What governance actions are required?
+\opts{None; it is the same model family, so the approval carries over.}
+{Treat Bermudan use as outside intended domain requiring additional validation and approval; record use limits in the inventory; re-assess the risk rank given that portfolio growth may raise a low-ranked model to high risk.}
+{Raise the notional limit to \$90M and keep the ranking.}
+{Remove the model from the inventory to avoid inconsistent records.}
+\end{frame}
+
+\begin{frame}[t]{A18: Use Beyond the Approved Domain}
+\fs
+\ans{B}
+\begin{itemize}
+\item The module's example: a model approved for standard swaptions should not be used for Bermudan swaptions without additional validation and approval.
+\item Portfolio size limits are valuable when experience is thin; limits should be recorded in the inventory so the risk ranking does not drift above the understood ranking (a low-risk model at small size can become high risk if the portfolio grows significantly). Here the book is 3.6 times the limit.
+\item \textbf{Why A, C, D are wrong:} They ignore, retroactively legitimize, or hide the breach.
+\end{itemize}
+\trap{Inventory + landscape reviews are how \textcolor{myblue}{out-of-domain use} is detected.}
+\end{frame}
+
+% ============================================================
+% SECTION C: DEVELOPMENT AND TESTING  Q19-Q26
+% ============================================================
+
+\begin{frame}[t]{Q19: Suspiciously Good Performance}
+\fs
+\hard\ \textbf{QUESTION:} A default-prediction model (predicting default within 12 months of origination) shows AUC $=0.97$ in random 5-fold cross-validation. The feature list includes ``collections status'' recorded 90 days after origination. What is the best diagnosis and fix?
+\opts{The model is excellent; approve it.}
+{Data leakage: the feature uses information not observable at the prediction date. Rebuild features with point-in-time data and use time-based splits; validators should scrutinize implausibly high performance.}
+{Ordinary overfitting; add hyperparameters to improve regularization.}
+{Heteroskedasticity; use robust standard errors.}
+\end{frame}
+
+\begin{frame}[t]{A19: Suspiciously Good Performance}
+\fs
+\ans{B}
+\begin{itemize}
+\item Training with data leakage (future or concurrent data that would not have been observable at prediction time) is singled out for special emphasis in model training. Random k-fold cross-validation does not remove leakage because the leaked feature is present in every fold.
+\item \textbf{Fix:} point-in-time feature construction; time-ordered (out-of-time) validation; document data excluded and why; validators should examine features and holdout results.
+\item \textbf{Why A, C, D are wrong:} A ignores red flags; C changes complexity and does not remove the leaked variable; D is a regression-specification issue unrelated to leakage.
+\end{itemize}
+\trap{Cross-validation is \textcolor{myblue}{not} a leakage detector.}
+\end{frame}
+
+\begin{frame}[t]{Q20: Cross-Validation vs Holdout}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} Five-fold cross-validation AUCs are 0.81, 0.79, 0.84, 0.76, 0.80. The untouched holdout AUC is 0.71. Using the sample standard deviation of the fold scores, which conclusion is best?
+\opts{Holdout is within normal fold-to-fold variation; no concern.}
+{Mean $=0.80$, SD $\approx0.029$; the holdout is about 3 SDs below the mean, so the CV estimate is probably optimistic (leakage in preprocessing, or shift between development and holdout data) and must be investigated.}
+{Standard error $\approx0.013$ means the holdout is an improvement.}
+{Holdout is always lower than CV, so subtract 0.09 from all future estimates.}
+\end{frame}
+
+\begin{frame}[t]{A20: Cross-Validation vs Holdout}
+\fs
+\ans{B}
+\begin{itemize}
+\item Mean $=(0.81+0.79+0.84+0.76+0.80)/5=0.80$. Deviations: $+0.01,-0.01,+0.04,-0.04,0$; sum of squares $=0.0034$; sample variance $=0.0034/4=0.00085$; $SD=\mathbf{0.0291}$.
+\item Gap $=0.80-0.71=0.09\approx3.1$ SDs $\Rightarrow$ not ordinary fold noise. (SE of the mean $=0.029/\sqrt5\approx0.013$; the gap is about 7 SEs.)
+\item Holdout samples (data not used to estimate the model) are a main SR 11-7 test for AI/ML. A large discrepancy suggests leakage, information reuse in tuning, or population drift.
+\item \textbf{Why others are wrong:} A misjudges the scale; C reverses the direction; D is not a valid correction.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Q21: Matching Test Types}
+\fs
+\hard\ \textbf{QUESTION:} Match: (i) verifying the interface between the QRM core and its input-processing component; (ii) re-running previously passing tests after a bug fix to check nothing else broke; (iii) a red team using prompt injection and chained prompts to trick an AI model into error.
+\opts{(i) component test; (ii) acceptance test; (iii) performance test}
+{(i) integration test; (ii) regression test; (iii) adversarial testing}
+{(i) unit test; (ii) system test; (iii) use test}
+{(i) system test; (ii) integration test; (iii) regression test}
+\end{frame}
+
+\begin{frame}[t]{A21: Matching Test Types}
+\fs
+\ans{B}
+\begin{itemize}
+\item \textbf{Integration tests} verify the interfaces between components. \textbf{Regression tests} verify the system continues to function after modification. \textbf{Adversarial testing} (red team) evaluates AI models under extreme scenarios or edge cases by trying to trick them, including prompt injection and chained prompts.
+\item \textbf{Others:} unit tests check individual code pieces; component tests check sections such as the core alone; system tests check the fully integrated system; performance tests assess speed, responsiveness, stability; acceptance tests decide readiness for deployment; the use test is qualitative and people-focused.
+\end{itemize}
+\trap{Integration = \textcolor{myblue}{interfaces}; regression = \textcolor{myblue}{after change}.}
+\end{frame}
+
+\begin{frame}[t]{Q22: White, Black and Gray Box}
+\fs
+\hard\ \textbf{QUESTION:} Match: (i) line-by-line proofreading of internally developed core code; (ii) an independent tester with no knowledge of internals, reducing bias; (iii) a tester who knows the functional specifications and architecture but does not access the code.
+\opts{(i) black; (ii) white; (iii) gray}
+{(i) white; (ii) black; (iii) gray}
+{(i) gray; (ii) white; (iii) black}
+{(i) white; (ii) gray; (iii) black}
+\end{frame}
+
+\begin{frame}[t]{A22: White, Black and Gray Box}
+\fs
+\ans{B}
+\begin{itemize}
+\item \textbf{White-box:} access to internal data structures, algorithms and code; unit-level, developer perspective; considered more effective. \textbf{Black-box:} closed-box from a user's perspective; reduces likelihood of bias. \textbf{Gray-box:} informed by functional specifications and architecture, but no access to the code itself.
+\item Which is feasible depends on whether the model is in-house or external, the development stage, and local vs.\ distributed application. ML/AI models are often more like black-box vendor models where code cannot be reviewed.
+\end{itemize}
+\trap{Gray box = \textcolor{myblue}{spec and architecture knowledge, no code}.}
+\end{frame}
+
+\begin{frame}[t]{Q23: The Use Test}
+\fs
+\hard\ \textbf{QUESTION:} A market-risk model passes all technical tests, yet traders routinely override its output and ignore the limits derived from it. Which description of the appropriate test is correct?
+\opts{A quantitative back-test whose results are compiled in a spreadsheet for regulators.}
+{The use test: a qualitative, people-focused assessment of acceptance, trust, comprehensibility, actual application and feedback to modelers, typically reported to senior management and possibly not started until the model has been in use for some time.}
+{An extended unit test executed by programmers.}
+{A one-time pre-production performance test.}
+\end{frame}
+
+\begin{frame}[t]{A23: The Use Test}
+\fs
+\ans{B}
+\begin{itemize}
+\item The use test examines the model in its context: human interaction, actual usage, acceptance, interpretation and application of results. It records credible stories of success or failure; technical and process challenges take a back seat. It is ongoing, difficult to standardize, and typically presented to senior management rather than as technical reports.
+\item It can improve the risk-modeling culture. The key questions: are results used appropriately, are they useful, and if not, why?
+\item \textbf{Why others are wrong:} A/C/D describe quantitative, developer or one-off tests.
+\end{itemize}
+\trap{The use test is about \textcolor{myblue}{people, not numbers}.}
+\end{frame}
+
+\begin{frame}[t]{Q24: Fraud Model Metrics}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A fraud classifier on 1,000 transactions yields TP $=80$, FP $=20$, FN $=40$, TN $=860$. Which statement is correct?
+\opts{Precision $=0.667$, recall $=0.800$; accuracy $=0.94$ is impressive.}
+{Precision $=0.800$, recall $=0.667$, F1 $\approx0.727$, accuracy $=0.94$, but a model flagging nothing would already score 0.88 accuracy, so accuracy overstates quality.}
+{Precision $=0.800$, recall $=0.667$, F1 $=0.800$.}
+{Precision $=0.940$, recall $=0.860$.}
+\end{frame}
+
+\begin{frame}[t]{A24: Fraud Model Metrics}
+\fs
+\ans{B}
+\begin{itemize}
+\item Precision $=TP/(TP+FP)=80/100=0.800$. Recall $=TP/(TP+FN)=80/120=0.667$.
+\item $F1=2PR/(P+R)=2(0.8)(0.667)/(1.467)=\mathbf{0.727}$. Accuracy $=(80+860)/1000=0.94$.
+\item Fraud base rate $=120/1000=12\%$, so a naive classifier flagging nothing is right on all 880 non-fraud cases: accuracy $=0.88$. The model's 0.94 is only 6 points better, while it misses one-third of fraud. The module notes the performance metric must be appropriate for the model and that validation should assess this.
+\item \textbf{Why others are wrong:} A swaps P and R; C misstates F1; D confuses accuracy and specificity.
+\end{itemize}
+\trap{Accuracy on \textcolor{myblue}{imbalanced} data hides poor recall.}
+\end{frame}
+
+\begin{frame}[t]{Q25: MSE, RMSE, MAE and Sensitivity to Large Errors}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A regression model's prediction errors on five observations are $+2,-1,+3,-2,0$. Later the $+3$ error becomes $+6$ (others unchanged). Which statement is correct?
+\opts{Initially MSE $=3.6$, RMSE $\approx1.90$, MAE $=1.60$; after the change RMSE rises about 58\% while MAE rises about 38\%, so RMSE penalizes large errors more.}
+{Initially MSE $=1.6$, RMSE $\approx1.26$, MAE $=3.6$; RMSE and MAE rise equally.}
+{Initially MSE $=3.6$, RMSE $=3.6$, MAE $=1.6$; MAE rises more than RMSE.}
+{Initially MSE $=18$, RMSE $=4.24$, MAE $=8$; neither metric changes.}
+\end{frame}
+
+\begin{frame}[t]{A25: MSE, RMSE, MAE and Sensitivity}
+\fs
+\ans{A}
+\begin{itemize}
+\item Initial: squares $4+1+9+4+0=18$; $MSE=18/5=3.6$; $RMSE=\sqrt{3.6}=1.897$; $MAE=(2+1+3+2+0)/5=1.6$.
+\item After: squares $4+1+36+4+0=45$; $MSE=9$; $RMSE=3.0$ ($+58.1\%$); $MAE=(2+1+6+2+0)/5=2.2$ ($+37.5\%$).
+\item Squaring gives outliers more weight, so RMSE/MSE are more sensitive to a few large errors. The metric must be appropriate to the model, and validation should assess this.
+\item \textbf{Why others are wrong:} B and D miscompute; C confuses MSE with RMSE.
+\end{itemize}
+\trap{$RMSE\ge MAE$ always, and the gap widens with \textcolor{myblue}{error dispersion}.}
+\end{frame}
+
+\begin{frame}[t]{Q26: R$^2$ vs Adjusted R$^2$}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A regression with $n=50$ and $k=5$ predictors has $SSE=120$, $SST=400$. Three extra predictors ($k=8$) reduce $SSE$ to 118. Using $R^2_{adj}=1-\frac{SSE/(n-k-1)}{SST/(n-1)}$, what happens?
+\opts{$R^2$ rises $0.700\to0.705$ and adjusted $R^2$ also rises.}
+{$R^2$ rises $0.700\to0.705$, but adjusted $R^2$ falls from $\approx0.666$ to $\approx0.647$: the extra variables add no genuine explanatory value.}
+{Adjusted $R^2$ rises from 0.666 to 0.681.}
+{Adjusted $R^2$ falls from 0.700 to 0.647.}
+\end{frame}
+
+\begin{frame}[t]{A26: R$^2$ vs Adjusted R$^2$}
+\fs
+\ans{B}
+\begin{itemize}
+\item First model: $R^2=1-120/400=0.70$; $R^2_{adj}=1-(120/44)/(400/49)=1-0.30\times49/44=\mathbf{0.666}$.
+\item Second: $R^2=1-118/400=0.705$; $R^2_{adj}=1-0.295\times49/41=1-0.3526=\mathbf{0.647}$.
+\item In-sample $R^2$ can never fall when variables are added; adjusting for degrees of freedom exposes overfitting. This is relevant to feature engineering and dimensionality choices, and to why holdout data matter.
+\item \textbf{Why others are wrong:} A/C ignore the penalty; D starts from the wrong base value.
+\end{itemize}
+\trap{Higher in-sample fit $\ne$ better model. Penalize \textcolor{myblue}{complexity}.}
+\end{frame}
+
+% ============================================================
+% SECTION D: CHANGE, VALIDATION AND BACKTESTING  Q27-Q36
+% ============================================================
+
+\begin{frame}[t]{Q27: Sequence of a Model Change}
+\fs
+\hard\ \textbf{QUESTION:} A model owner wants to recalibrate a model for a new product. Which sequence best follows the module's change-management process?
+\opts{Implement in production $\to$ notify model risk $\to$ validate afterward $\to$ document if time permits.}
+{Owner notifies model risk of proposed change $\to$ model risk assesses materiality $\to$ if material, schedule change-based validation by parties independent of the change $\to$ approval and documentation in the inventory $\to$ controlled implementation with updated monitoring.}
+{Developers approve their own change $\to$ update the inventory $\to$ inform users by email.}
+{Validate annually regardless of changes $\to$ approve at year-end $\to$ implement.}
+\end{frame}
+
+\begin{frame}[t]{A27: Sequence of a Model Change}
+\fs
+\ans{B}
+\begin{itemize}
+\item The module's process: change requests, impact assessment, documentation, validation, and approval; independent review by teams not involved in the change; final approval through the governance process with details (rationale, decision, conditions) stored in the inventory; controlled implementation with documented changes to performance monitoring, and ongoing monitoring afterward.
+\item A \textbf{change-based validation} is triggered when the change is material. Periodic revalidation cadence (annual, biennial) is separate from, and does not replace, change-based validation.
+\end{itemize}
+\trap{Materiality assessment comes \textcolor{myblue}{before} deciding on change-based validation.}
+\end{frame}
+
+\begin{frame}[t]{Q28: How AI/ML Review Differs: Find the False Statement}
+\fs
+\hard\ \textbf{QUESTION:} The module says the review framework for AI/ML differs in frequency, validation stakeholders and validation content. Which statement is \emph{false}?
+\opts{An annual minimum review may be insufficient for AI/ML models because of complexity, many parameters and greater susceptibility to data drift.}
+{HR, compliance and operational risk may need to be involved as controlling instances from early development.}
+{For black-box models, explainability, benchmarking against classical models, holdout assessment and edge-case analysis gain relevance.}
+{Because AI/ML models are more transparent than classical regressions, in-sample MSE back-testing is the most informative validation tool.}
+\end{frame}
+
+\begin{frame}[t]{A28: How AI/ML Review Differs}
+\fs
+\ans{D}
+\begin{itemize}
+\item \textbf{Why D is false:} Common back-testing and sensitivity methods (e.g., MSE) can become less effective because there may be no straightforward relation between inputs and outputs, unlike classical regression. K-fold cross-validation and holdout assessment become more suitable; AI/ML models are often \emph{less} transparent.
+\item \textbf{A, B, C are true} as stated in the module. Frequency may also be informed by changes in key inputs (e.g., macro indicators), KPIs for early warning (biases, unachieved targets, external events) and business volume.
+\end{itemize}
+\trap{Opacity, not transparency, is the reason AI/ML validation \textcolor{myblue}{changes}.}
+\end{frame}
+
+\begin{frame}[t]{Q29: VaR Back-Testing: Traffic Light and Kupiec}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A 99\% one-day VaR model is back-tested over 250 days with 7 exceptions (expected 2.5). Basel traffic light: green 0--4, yellow 5--9, red 10+. Kupiec proportion-of-failures statistic $LR_{POF}=-2\ln\!\left[\frac{(1-p)^{n-x}p^x}{(1-\hat p)^{n-x}\hat p^x}\right]\sim\chi^2_1$ (critical values 3.84 at 5\%, 6.63 at 1\%). Given $P(X\ge7)\approx1.4\%$ under $H_0$ and $LR_{POF}\approx5.50$, what is the best conclusion?
+\opts{Green zone; model is fine.}
+{Yellow zone; reject 99\% coverage at the 5\% level but not at 1\%; the model may underestimate risk, so investigate and escalate per monitoring plan.}
+{Red zone; reject at both 5\% and 1\%.}
+{Yellow zone; fail to reject at 5\%.}
+\end{frame}
+
+\begin{frame}[t]{A29: VaR Back-Testing}
+\fs
+\ans{B}
+\begin{itemize}
+\item 7 exceptions $\in[5,9]\Rightarrow$ yellow. $P(X\ge7)=1-\text{Binom}(6;250,0.01)\approx1.37\%$: unusual under a correct 99\% model.
+\item $LR_{POF}=5.50>3.84$ (reject at 5\%), but $<6.63$ (do not reject at 1\%). Observed rate $\hat p=7/250=2.8\%$ versus 1\% target.
+\item Action: root-cause analysis (data, horizon scaling, distributional assumptions, regime shift), escalation per plan; cadence matters (VaR needs daily monitoring and frequent back-testing; credit models monthly; ALM quarterly).
+\end{itemize}
+\textcolor{mygray}{Note: traffic-light zones and Kupiec test are standard back-testing tools; the module stresses cadence and escalation.}
+\end{frame}
+
+\begin{frame}[t]{Q30: Validating an ML Credit Model: Which Tests?}
+\fs
+\hard\ \textbf{QUESTION:} A validator proposes for a neural-network credit model: (i) classical MSE-based sensitivity back-testing of ``coefficients''; (ii) k-fold cross-validation and holdout testing; (iii) review of decisions for obligors exactly on the approval boundary; (iv) benchmarking against a logistic regression. Which set is best supported by the module?
+\opts{(ii), (iii) and (iv); (i) may be ineffective where no straightforward input-output relationship exists.}
+{All four equally; nothing differs from classical models.}
+{(i) only.}
+{None; the model owner remains responsible, so validation is unnecessary.}
+\end{frame}
+
+\begin{frame}[t]{A30: Validating an ML Credit Model}
+\fs
+\ans{A}
+\begin{itemize}
+\item Recommended for black-box-like models: explainability focus, benchmarking against classical models (understand reasons for deviations), assessment on different datasets (holdout samples), assessment of specific cases (extreme inputs and edge-of-cutoff obligors), and k-fold cross-validation where MSE-based back-testing becomes ineffective. Reporting checks (accuracy, completeness, limitations, bias detection) also apply.
+\item \textbf{Why D is wrong:} model owners remain responsible for understanding inputs, outputs, benchmarking and assumptions even when code cannot be reviewed.
+\end{itemize}
+\trap{``No coefficients'' $\Rightarrow$ shift emphasis to \textcolor{myblue}{outcomes, benchmarks, holdouts, edge cases}.}
+\end{frame}
+
+\begin{frame}[t]{Q31: Validation Philosophy}
+\fs
+\hard\ \textbf{QUESTION:} Which statement best reflects the module's view of validation?
+\opts{Validation certifies a model as ``valid''; once passed, only material changes need review.}
+{Because models are simplifications, validation subjects a model to attempts to invalidate it; passing means it withstood rigorous testing. It must be ongoing (assumptions can fail in regime shifts), recursive (validation itself can be challenged), and imperfect models can still be useful if limits are understood.}
+{Any model with identified weaknesses must be rejected.}
+{Recursive validation means validators re-run the developers' code and adopt their results.}
+\end{frame}
+
+\begin{frame}[t]{A31: Validation Philosophy}
+\fs
+\ans{B}
+\begin{itemize}
+\item There is no ``valid'' model; the aim is to try to invalidate it. Ongoing validation is needed because the real world challenges assumptions. Validation is recursive: it must not use defective data or stray outside the intended domain. Usefulness $\ne$ validity: weaknesses can be used to improve the model or restrict its application.
+\item \textbf{Why A is wrong:} certification language and change-only review contradict ongoing validation. \textbf{C:} weaknesses are documented and can lead to restricted use. \textbf{D:} recursion means validation is itself open to challenge.
+\end{itemize}
+\trap{Successful validation $=$ \textcolor{myblue}{survived attempts to invalidate}, not ``proved valid''.}
+\end{frame}
+
+\begin{frame}[t]{Q32: Effective Challenge}
+\fs
+\hard\ \textbf{QUESTION:} Effective challenge requires independence from development, a high level of competence, and sufficient influence to spark improvement. Which validation team satisfies all three?
+\opts{Reports to the developer's manager, highly skilled.}
+{Independent and skilled, but findings are advisory only with no escalation path or authority over release.}
+{Independent of development, technically competent (including ML), with stature and an escalation path to the model risk committee/board.}
+{Independent and with escalation rights, but no ML expertise and no tools for black-box models.}
+\end{frame}
+
+\begin{frame}[t]{A32: Effective Challenge}
+\fs
+\ans{C}
+\begin{itemize}
+\item SR 11-7 ``effective challenge'' is critical analysis by objective and informed parties who can identify assumptions and limitations, spot and communicate weaknesses, and drive change. A misses independence, B misses influence, D misses competence.
+\item For AI/ML this includes expertise in novel performance metrics, drift detection in high-dimensional data, fairness/bias assessment and tools to ``look inside'' the black box.
+\end{itemize}
+\trap{Effective challenge is a \textcolor{myblue}{three-part test}: independence, competence, influence.}
+\end{frame}
+
+\begin{frame}[t]{Q33: Validating a Vendor-Hosted GenAI Tool}
+\fs
+\hard\ \textbf{QUESTION:} A bank deploys a vendor-hosted LLM to summarize regulatory documents. Which validation plan is best aligned with the module?
+\opts{One pre-launch benchmark score is enough.}
+{Human review in the loop; testing for hallucination, bias and multi-modal issues; monitoring for data drift and coverage; re-validation when the provider updates the model; specific scrutiny of third-party/open-source model-as-a-service.}
+{Use MSE and R$^2$, as for any regression.}
+{Do not validate, because open-ended outputs cannot be validated.}
+\end{frame}
+
+\begin{frame}[t]{A33: Validating a Vendor-Hosted GenAI Tool}
+\fs
+\ans{B}
+\begin{itemize}
+\item GenAI validation is complicated by open-ended output, different and more complex performance metrics, drift and data coverage, hallucination, discrimination and bias, multi-modal issues, limited interpretability, rapid technology change (more frequent review/recalibration), third-party and open-source models offered as a service, and heavy compute needs. Human review must be part of the process.
+\item \textbf{Why others are wrong:} A ignores post-deployment changes; C uses wrong metrics; D abandons the obligation.
+\end{itemize}
+\trap{Difficulty of validation does not remove it; it \textcolor{myblue}{adds human review and more frequency}.}
+\end{frame}
+
+\begin{frame}[t]{Q34: VaR vs Expected Shortfall}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} From 100 simulated scenarios the five largest losses (\$M) are 4.0, 4.4, 5.0, 6.2 and 10.4. Define 95\% VaR as the fifth-largest loss and 95\% ES as the average of the five largest. The 10.4 loss is then revised to 20.4. Which is correct?
+\opts{VaR $=6.0$, ES $=4.0$.}
+{VaR $=4.0$, ES $=6.0$; after revision VaR stays 4.0 while ES becomes 8.0.}
+{VaR $=4.0$, ES $=6.0$; after revision both rise.}
+{VaR $=5.0$, ES $=5.6$; after revision ES becomes 7.0.}
+\end{frame}
+
+\begin{frame}[t]{A34: VaR vs Expected Shortfall}
+\fs
+\ans{B}
+\begin{itemize}
+\item VaR $=4.0$ (fifth-largest). $ES=(4.0+4.4+5.0+6.2+10.4)/5=30/5=\mathbf{6.0}$.
+\item After revision: the fifth-largest is still 4.0, so VaR is unchanged; $ES=(4.0+4.4+5.0+6.2+20.4)/5=40/5=\mathbf{8.0}$.
+\item VaR ignores loss magnitude beyond the quantile; ES reflects tail severity. Risk measures summarize scenarios: completeness of scenario sets and communication of underlying assumptions matter.
+\end{itemize}
+\trap{A tail loss can change ES a lot without moving \textcolor{myblue}{VaR}.}
+\end{frame}
+
+\begin{frame}[t]{Q35: Square-Root-of-Time Scaling}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A model produces a 1-day 99\% VaR of \$2.4M. Separately, a 1-year (250-day) VaR of \$60M must be converted to 1-day. Using square-root-of-time scaling, which is correct?
+\opts{10-day \$24.0M; 1-day \$0.24M.}
+{10-day $\approx$ \$7.59M; 1-day $\approx$ \$3.79M; valid under normality and temporal independence, which may not hold.}
+{10-day $\approx$ \$7.59M; 1-day $\approx$ \$3.79M; robust to autocorrelation and fat tails.}
+{10-day \$5.76M; 1-day \$6.0M.}
+\end{frame}
+
+\begin{frame}[t]{A35: Square-Root-of-Time Scaling}
+\fs
+\ans{B}
+\begin{itemize}
+\item $2.4\times\sqrt{10}=2.4\times3.162=\mathbf{7.59}$. $60/\sqrt{250}=60/15.81=\mathbf{3.79}$.
+\item The module warns the approximation assumes a normal distribution and temporal independence, which may not hold; its validity must be examined with statistical tests and impact measured.
+\item \textbf{Why others are wrong:} A scales linearly; C claims robustness that is not there; D is arithmetic nonsense.
+\end{itemize}
+\trap{Convenient does not mean \textcolor{myblue}{empirically justified}.}
+\end{frame}
+
+\begin{frame}[t]{Q36: When Daily Returns Are Autocorrelated}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} Daily returns follow a stationary AR(1)-type process with autocorrelation $\rho_k=0.3^k$ at lag $k$ and constant variance. The 1-day 99\% VaR is \$2.4M. Variance of the $n$-day sum: $\sigma^2\,[\,n+2\sum_{k=1}^{n-1}(n-k)\rho^k\,]$. For $n=10$, the bracket equals 17.35. What is the 10-day VaR, and how wrong is $\sqrt{10}$ scaling?
+\opts{\$7.59M; $\sqrt{10}$ scaling is exact.}
+{$\approx$ \$10.0M; $\sqrt{10}$ scaling understates by about 24\%.}
+{$\approx$ \$12.0M; it understates by about 37\%.}
+{$\approx$ \$5.8M; it overstates by about 24\%.}
+\end{frame}
+
+\begin{frame}[t]{A36: When Daily Returns Are Autocorrelated}
+\fs
+\ans{B}
+\begin{itemize}
+\item Scale factor $=\sqrt{17.35}=4.165$ (vs $\sqrt{10}=3.162$). 10-day VaR $=2.4\times4.165\approx\mathbf{\$10.0M}$.
+\item $\sqrt{T}$ gives \$7.59M: understated by $2.41/10.0\approx24\%$ (true value is 32\% higher than the approximation).
+\item Positive autocorrelation makes risk accumulate faster than independence implies (negative autocorrelation does the opposite). Reflects the module's warning that the scaling approximation depends on temporal independence.
+\end{itemize}
+\trap{Independence assumptions can bias in either direction depending on \textcolor{myblue}{the sign of autocorrelation}.}
+\end{frame}
+
+% ============================================================
+% SECTION E: NUMERICAL ISSUES AND IMPLEMENTATION  Q37-Q44
+% ============================================================
+
+\begin{frame}[t]{Q37: Duration--Convexity Approximation}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A plain bond priced at 100 has modified duration $D=7.0$ and convexity $C=60$. Use $\Delta P/P\approx-D\Delta y+\tfrac12C(\Delta y)^2$. For yield rises of 100 bp and 300 bp, which is correct?
+\opts{Duration+convexity: $-6.70$ and $-18.30$; the neglected convexity term is 9 times larger at 300 bp, so the approximation degrades for large moves.}
+{Duration+convexity: $-7.30$ and $-23.70$; the convexity term is negative.}
+{Duration only: $-6.70$ and $-18.30$; convexity is irrelevant.}
+{Duration+convexity: $-6.70$ and $-20.10$; the convexity term grows linearly in the shock.}
+\end{frame}
+
+\begin{frame}[t]{A37: Duration--Convexity Approximation}
+\fs
+\ans{A}
+\begin{itemize}
+\item 100 bp: duration term $-7.00$; convexity term $\tfrac12(60)(0.01)^2(100)=+0.30$; total $-6.70$.
+\item 300 bp: duration term $-21.00$; convexity $\tfrac12(60)(0.03)^2(100)=+2.70$; total $-18.30$. Convexity term scales with the \emph{square} of the shock: $9\times$.
+\item Sensitivities/Taylor approximations are valid for simple instruments like plain bonds and small changes in risk factors; approximation fixes the precision, so improvement requires a different approximation. Including instruments via sensitivities is preferable to excluding them, provided limitations are understood.
+\end{itemize}
+\trap{Approximation error does not shrink on demand. Precision is \textcolor{myblue}{fixed} by the approximation chosen.}
+\end{frame}
+
+\begin{frame}[t]{Q38: Discretization Error and Run Time}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A time-stepping scheme has error proportional to the time step $\Delta t$ (first-order). At $\Delta t=0.1$ the error is 0.06 (price units). The target error is 0.003, and run time is inversely proportional to $\Delta t$. Roughly how many times longer must the model run?
+\opts{2 times}{5 times}{20 times}{400 times}
+\end{frame}
+
+\begin{frame}[t]{A38: Discretization Error and Run Time}
+\fs
+\ans{C}
+\begin{itemize}
+\item Error $=C\Delta t$ with $C=0.06/0.1=0.6$. Target $\Delta t=0.003/0.6=0.005$, a 20-fold reduction $\Rightarrow$ 20 times as many steps $\Rightarrow$ $\sim20\times$ run time.
+\item The trade-off: too large a step risks instability and error, too small a step costs excessive computation. Time step and bucket size should be exposed as parameters so their effect can be evaluated in separate test environments without time or memory limits; adaptive discretization concentrates effort where precision matters.
+\item \textbf{Why others are wrong:} 400 would assume error $\propto\Delta t^{2}$ and squares the wrong quantity; 2 and 5 under-scale.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Q39: Monte Carlo Precision}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A Monte Carlo estimate of an expected payoff uses $N=10{,}000$ independent draws; payoff standard deviation is 12. What is the standard error, and how many draws are needed to reduce it to 0.03?
+\opts{SE $=0.12$; 40,000 draws.}
+{SE $=1.2$; 100,000 draws.}
+{SE $=0.12$; 160,000 draws.}
+{SE $=0.012$; 1,000,000 draws.}
+\end{frame}
+
+\begin{frame}[t]{A39: Monte Carlo Precision}
+\fs
+\ans{C}
+\begin{itemize}
+\item $SE=\sigma/\sqrt N=12/100=\mathbf{0.12}$ (95\% interval $\approx\pm0.235$).
+\item Target 0.03 is one quarter of 0.12 $\Rightarrow$ $N$ must rise by $4^2=16$: $N=160{,}000$ (check: $12/\sqrt{160{,}000}=12/400=0.03$).
+\item Report results with sampling error; fix and document the seed so validators can reproduce runs.
+\item \textbf{Why others are wrong:} 40,000 halves the SE only; 1.2 and 0.012 misplace decimals.
+\end{itemize}
+\trap{Halve the error $\Rightarrow$ quadruple the samples; quarter the error $\Rightarrow$ \textcolor{myblue}{16 times}.}
+\end{frame}
+
+\begin{frame}[t]{Q40: Random Number Generation}
+\fs
+\hard\ \textbf{QUESTION:} Which policy is most consistent with the module on random numbers in a risk model?
+\opts{Seed a hardware source with the clock on each run and choose a different generator at random every run to maximize randomness.}
+{Use a well-designed deterministic pseudo-random generator with a documented seed; assess generator quality with specialized test suites (speed, reproducibility); do not add randomness to the choice of generator.}
+{Any generator is acceptable if the model output looks reasonable.}
+{Seeds are unnecessary because pseudo-random numbers are truly random.}
+\end{frame}
+
+\begin{frame}[t]{A40: Random Number Generation}
+\fs
+\ans{B}
+\begin{itemize}
+\item Computers use pseudo-random number generators dependent on an initial seed; they cannot produce actual random numbers. It is typically better to rely on well-designed deterministic generators than to introduce randomness in the choice of RNG. Quality is assessed with test suites using criteria such as speed and reproducibility.
+\item Reproducibility supports validation, back-testing and audit.
+\item \textbf{Why others are wrong:} A destroys reproducibility; C skips quality testing; D is factually wrong.
+\end{itemize}
+\trap{Pseudo-random $\ne$ random. Governance needs \textcolor{myblue}{reproducibility}.}
+\end{frame}
+
+\begin{frame}[t]{Q41: Approximation vs Numerical Evaluation}
+\fs
+\hard\ \textbf{QUESTION:} Which statement about approximation versus numerical evaluation is correct?
+\opts{Approximation fixes the precision; numerical evaluation offers control parameters (order, iterations, step/grid size) that allow arbitrary precision, subject to a run-time/precision trade-off, extensive testing, and floating-point stability issues.}
+{Numerical evaluation fixes the precision; approximation offers arbitrary precision through more iterations.}
+{They are identical; both allow arbitrary precision.}
+{Once convergence is mathematically proven, no testing of a numerical method is needed.}
+\end{frame}
+
+\begin{frame}[t]{A41: Approximation vs Numerical Evaluation}
+\fs
+\ans{A}
+\begin{itemize}
+\item Approximation replaces hard-to-evaluate components with alternatives yielding similar results; choosing one fixes precision. Numerical evaluation has potential for arbitrary precision through parameters, with mathematical justification only under certain conditions that can be hard to meet in practice, so theory alone is rarely sufficient. Stability and convergence matter: small errors should not lead to unbounded imprecision, and floating-point rounding can affect stability.
+\end{itemize}
+\trap{Convergence theorems \textcolor{myblue}{do not replace} testing.}
+\end{frame}
+
+\begin{frame}[t]{Q42: Implementation and Adaptation Pitfalls}
+\fs
+\hard\ \textbf{QUESTION:} The original quant designers also coded the model core, under pressure from designers (maximum accuracy) and the systems team (minimum run time). The code is highly optimized with shortcuts and poor documentation, the core has no well-defined interfaces, and the designers have left. A consultant must now adapt it. Which assessment is best?
+\opts{Low risk: optimized code is reliable code.}
+{High adaptation risk: dual pressure produces optimized but unreadable code; a black-box core without defined interfaces means changes can break previously working code; design-and-code by the same people can yield sloppy documentation. Mitigate with documented interfaces, quality controls, and separate skill sets for core and system implementation.}
+{Risk is unchanged, because model adaptation requires no code changes.}
+{Replace the systems team with the model owner.}
+\end{frame}
+
+\begin{frame}[t]{A42: Implementation and Adaptation Pitfalls}
+\fs
+\ans{B}
+\begin{itemize}
+\item The module: core teams face pressure from designers and the system team, so code tends to be highly optimized but hard to read; core and system implementation need different skills and often different languages; a core that becomes a black box without defined interfaces risks introducing errors during adaptation; loss of the initial team makes the model hard to understand; large or highly complex systems may be replaced instead of adapted.
+\item \textbf{Why others are wrong:} A confuses speed with reliability; C ignores core adaptation; D does not address the issue.
+\end{itemize}
+\trap{\textcolor{myblue}{Documentation and interfaces} keep future adaptation safe.}
+\end{frame}
+
+\begin{frame}[t]{Q43: Pipeline Run Time and Cloud Latency}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} A model run has 20 min of sequential data gathering, then three parallel tasks of 40, 55 and 35 min, then 15 min of sequential reporting. Total run time is determined by the slowest parallel task. An API call adds 8 min to the 35-min task in one scenario and to the 55-min task in another. What are the total run times: baseline / latency on 35-min task / latency on 55-min task?
+\opts{165 / 173 / 173 min}
+{90 / 90 / 98 min}
+{90 / 98 / 98 min}
+{90 / 98 / 90 min}
+\end{frame}
+
+\begin{frame}[t]{A43: Pipeline Run Time and Cloud Latency}
+\fs
+\ans{B}
+\begin{itemize}
+\item Baseline: $20+\max(40,55,35)+15=20+55+15=\mathbf{90}$ min.
+\item Latency on the 35-min task: $35+8=43<55\Rightarrow$ total unchanged, \textbf{90}. On the 55-min task: $63\Rightarrow20+63+15=\mathbf{98}$.
+\item The overall running time is determined by the slowest task, so parallel processes must be monitored; models invoked through APIs and hosted on the cloud add latency risk.
+\item \textbf{Why A is wrong:} it sums parallel tasks (165). C and D misplace the critical path.
+\end{itemize}
+\trap{Critical path: only the \textcolor{myblue}{slowest} parallel task matters.}
+\end{frame}
+
+\begin{frame}[t]{Q44: Diagnosing Misinterpretation and Run-Mode Drift}
+\fs
+\hard\ \textbf{QUESTION:} Match: (i) a manager quotes the VaR figure as ``the most we can lose'' with no interval or assumptions; (ii) an analyst accepts model output only when it supports a desired trade; (iii) results are interpreted without considering an upcoming regulatory change. Also, ad hoc runs by manual data manipulation are becoming the normal way results are produced. Which is the correct set?
+\opts{(i) confirmation bias; (ii) point-estimate overemphasis; (iii) lack of comprehension; drift is acceptable.}
+{(i) overemphasis on point estimates and neglect of limitations; (ii) confirmation bias; (iii) failure to consider qualitative factors; shift from scheduled to ad hoc mode should be monitored and prevented.}
+{(i) ignoring decision context; (ii) neglecting limitations; (iii) point estimate; drift means better flexibility.}
+{None are misinterpretations; they are ordinary judgment.}
+\end{frame}
+
+\begin{frame}[t]{A44: Diagnosing Misinterpretation and Run-Mode Drift}
+\fs
+\ans{B}
+\begin{itemize}
+\item Sources listed in the module: lack of comprehension; neglecting limitations; overemphasis on point estimates (use confidence intervals, probabilistic interpretation); failure to consider qualitative factors (market conditions, regulation); ignoring decision context; confirmation bias.
+\item Flexibility of scheduled vs ad hoc runs is desirable, but a gradual shift from scheduled to ad hoc mode must be monitored and prevented so results are correctly interpreted and accepted.
+\end{itemize}
+\trap{Remedy $=$ culture of open dialogue, critical thinking and \textcolor{myblue}{cross-functional collaboration}.}
+\end{frame}
+
+% ============================================================
+% SECTION F: GENAI AND FRAMEWORKS  Q45-Q50
+% ============================================================
+
+\begin{frame}[t]{Q45: Reproducibility of a Probabilistic GenAI System}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} For a given prompt, an LLM returns the same modal answer with probability 0.9 on each independent run. If an auditor re-runs the prompt 20 times, what is the probability that all 20 outputs equal the modal answer, and what governance implication follows?
+\opts{$\approx90\%$; reproducibility is not a concern.}
+{$\approx12\%$ ($0.9^{20}$); exact reproduction is unlikely, so audit needs logging, versioned prompts/settings and tolerance-based evaluation; temperature/top-k lower but do not eliminate variability.}
+{$\approx2\%$; use of temperature eliminates the problem.}
+{$\approx88\%$; the model is deterministic.}
+\end{frame}
+
+\begin{frame}[t]{A45: Reproducibility of a Probabilistic GenAI System}
+\fs
+\ans{B}
+\begin{itemize}
+\item $P=0.9^{20}=\mathbf{0.1216}$; $1-0.1216=87.8\%$ chance of at least one deviation.
+\item GenAI models are probabilistic: even in fixed contexts, the same prompt can produce different outputs. Controlling hyperparameters (temperature, top-k) can make outputs more predictable, but not completely so. This complicates auditing and reproducibility in regulated settings where justification and traceability are needed.
+\item \textbf{Why others are wrong:} A ignores compounding; C overstates the effect of temperature; D confuses ``at least one deviation'' with the answer.
+\end{itemize}
+\trap{Probabilistic $\Rightarrow$ audit design must tolerate variation.}
+\end{frame}
+
+\begin{frame}[t]{Q46: Hallucination Rate vs a 5\% Policy Limit}
+\fs
+\numtag\ \hard\ \textbf{QUESTION:} Policy limits hallucinated responses to 5\%. A sample of 400 outputs finds 24 hallucinations. Using the normal approximation for a 95\% confidence interval, which conclusion is best?
+\opts{Breach proven at 95\% confidence.}
+{$\hat p=6.0\%$, $SE\approx1.19\%$, 95\% CI $\approx[3.7\%,8.3\%]$; it includes 5\%, so a breach is not statistically established, but the point estimate is above limit: enlarge the sample, add human review and escalate per risk tier.}
+{Compliant, since 6\% is within tolerance of 5\%.}
+{95\% CI is $[5.0\%,7.0\%]$; breach proven.}
+\end{frame}
+
+\begin{frame}[t]{A46: Hallucination Rate vs a 5\% Policy Limit}
+\fs
+\ans{B}
+\begin{itemize}
+\item $\hat p=24/400=0.06$; $SE=\sqrt{0.06\times0.94/400}=0.0119$; $95\%$ CI $=0.06\pm1.96(0.0119)=[3.67\%,8.33\%]$.
+\item The interval straddles 5\%; the evidence is inconclusive, yet a risk-based governance response (larger sample, human review, escalation and possibly use limits) is warranted. Communicating uncertainty rather than point estimates is a theme of the module.
+\item \textbf{Why others are wrong:} A/D misread the CI; C invents a tolerance not in policy.
+\end{itemize}
+\trap{Confidence intervals \textcolor{myblue}{inform} escalation; they do not replace judgment.}
+\end{frame}
+
+\begin{frame}[t]{Q47: Why One-Off Sign-Off Fails for GenAI}
+\fs
+\hard\ \textbf{QUESTION:} A bank signed off an LLM-based assistant eight months ago. Since then the provider has updated the model without notice, the product team has rewritten prompts, and a new document set was connected to the retrieval pipeline. Which governance change is best?
+\opts{Repeat the sign-off annually.}
+{Replace one-off approvals with checks at key points (model updates, prompt/retrieval changes), ongoing monitoring, and clear escalation, governing prompts, retrieval pipelines and human-AI interaction, not just the model.}
+{Freeze all prompts permanently.}
+{Add a disclaimer and change nothing else.}
+\end{frame}
+
+\begin{frame}[t]{A47: Why One-Off Sign-Off Fails for GenAI}
+\fs
+\ans{B}
+\begin{itemize}
+\item Model behavior shifts after deployment (providers update or fine-tune, with or without notice); prompts and connected data can change performance; outputs are shaped by user interaction and connected tools. Governance must extend beyond the model to prompts, retrieval pipelines and human-AI interactions, and must be adaptive and distributed.
+\item \textbf{Why others are wrong:} Annual repetition still leaves long unmonitored gaps; freezing removes benefits and does not control provider updates; disclaimers do not manage risk.
+\end{itemize}
+\trap{Approvals should attach to \textcolor{myblue}{change events and continuous monitoring}.}
+\end{frame}
+
+\begin{frame}[t]{Q48: Internal, External and Adaptive Levers}
+\fs
+\hard\ \textbf{QUESTION:} Classify: (1) negotiating incident policies and update schedules with a model provider; (2) tiered review gates, with full review for public-facing systems and light checks for low-stakes internal tools; (3) tabletop exercises for a scenario in which the model hallucinates legal advice.
+\opts{(1) internal; (2) external; (3) adaptive}
+{(1) external; (2) internal; (3) adaptive}
+{(1) adaptive; (2) external; (3) internal}
+{(1) external; (2) adaptive; (3) internal}
+\end{frame}
+
+\begin{frame}[t]{A48: Internal, External and Adaptive Levers}
+\fs
+\ans{B}
+\begin{itemize}
+\item \textbf{External constraints:} legal/regulatory tracking, negotiating responsibilities with providers (terms of service, incident policies, update schedules), aligning with standards (NIST AI RMF, ISO/IEC 42001).
+\item \textbf{Internal levers:} ownership/accountability, risk-based tiered review, risk-tied incentives, staff training, escalation paths, validation and monitoring.
+\item \textbf{Adaptive tools:} continuous monitoring, red-teaming, scenario plans and tabletop exercises, watermarking and usage logging, feedback loops.
+\end{itemize}
+\trap{Provider terms $\Rightarrow$ external; tiered gates $\Rightarrow$ internal; tabletop $\Rightarrow$ adaptive.}
+\end{frame}
+
+\begin{frame}[t]{Q49: Technical Safeguards for GenAI}
+\fs
+\hard\ \textbf{QUESTION:} Which statement about GenAI safeguards is correct?
+\opts{Watermarking is always feasible regardless of provider.}
+{Usage logging provides transparency and audit trails and helps detect unusual activity; watermarking supports content provenance only where the organization controls the model or the provider offers it; red-teaming uncovers edge cases.}
+{Usage logging replaces validation and monitoring.}
+{Red-teaming is relevant only to traditional statistical models.}
+\end{frame}
+
+\begin{frame}[t]{A49: Technical Safeguards for GenAI}
+\fs
+\ans{B}
+\begin{itemize}
+\item As stated: usage logging gives transparency, helps detect unusual activity, and supports audit trails; watermarking can support content provenance but is feasible only when organizations control the model or use providers offering it; red-teaming/adversarial testing (introduced in Section 4.1.1) applies to GenAI models to uncover edge cases.
+\item \textbf{Why others are wrong:} A ignores feasibility limits; C treats logging as a complete control; D contradicts the module.
+\end{itemize}
+\trap{Safeguards \textcolor{myblue}{complement}, not replace, validation and monitoring.}
+\end{frame}
+
+\begin{frame}[t]{Q50: Building an AI/ML Governance Framework}
+\fs
+\hard\ \textbf{QUESTION:} Which statement best reflects the module's recommendations and context?
+\opts{Discard SR 11-7-style frameworks and build AI governance from scratch, because AI/ML is ``model free.''}
+{Start from existing model governance; elevate the role of data (bias, overfitting, population/model drift, regime change, privacy, legality); add ethical aspects, explainability and recalibration to inventory attributes; note the fragmented regulatory landscape (e.g., EU AI Act requires ex ante risk assessment, others use voluntary or sector-specific standards).}
+{Use a single centralized structure for all institutions, as central banks do.}
+{Data governance is separate from AI governance and should not be considered in the model inventory.}
+\end{frame}
+
+\begin{frame}[t]{A50: Building an AI/ML Governance Framework}
+\fs
+\ans{B}
+\begin{itemize}
+\item Recommendations: begin with existing frameworks (experience from model validation); consider the new role of data (the paradigm that AI/ML is ``model free'' is not literally true); add new perspectives (ethics, explainability, recalibration) to model risk classification and inventory.
+\item BIS survey: four components (data governance, organization, rules, risk management); organizational structures range from centralized to hub-and-spoke to fully decentralized, often leveraging the three lines of defense.
+\item \textbf{Why others are wrong:} A restarts from zero; C ignores that structures vary; D separates what the module ties together.
+\end{itemize}
+\trap{Build on the existing framework, \textcolor{myblue}{then} add data and ethics dimensions.}
+\end{frame}
+
+\end{document}
