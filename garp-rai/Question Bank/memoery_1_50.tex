@@ -1,0 +1,780 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=0pt,topsep=1pt}
+\setlist[itemize]{leftmargin=*,itemsep=0pt,topsep=1pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI Memory]{GARP Risk \& AI --- Memory Flashcards}
+\subtitle{Names, Theories, Formulas, Acronyms --- 150 Slides}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}\titlepage\end{frame}
+	
+	% ============================================================
+	\section{Formulas --- Euclidean, Manhattan, Silhouette, WCSS}
+	% ============================================================
+	
+	\begin{frame}{1 --- Euclidean Distance}
+		\begin{block}{Formula}
+			$d_E = \sqrt{\sum_{j=1}^{m}(x_{jQ} - x_{jP})^2}$
+		\end{block}
+		\begin{block}{Definition}
+			The straight-line (``as the crow flies'') distance between two points P and Q in m-dimensional feature space. Also called the L2 norm. It is the square root of the sum of squared differences along each dimension.
+		\end{block}
+		\begin{block}{Memory Hook}
+			L2 = ``square root of sum of squares.'' Pythagoras extended to m dimensions. Contrast: Manhattan is the sum of absolute differences (no square, no root).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			K-means uses Euclidean distance by default. Because differences are squared, large deviations are penalised heavily, so Euclidean distance is sensitive to outliers. It works best when clusters are roughly spherical and features are on comparable scales. If one feature has a much larger magnitude (e.g.\ income in dollars vs age in years), it dominates the distance calculation, which is exactly why standardisation is a prerequisite for K-means. GARP frequently tests that Euclidean distance requires scaled features, and it contrasts Euclidean (spherical clusters) with Manhattan (rhombus-shaped clusters). Also used in KNN, hierarchical clustering (single/complete linkage), LDA, and SVM with RBF kernels.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{2 --- Manhattan Distance}
+		\begin{block}{Formula}
+			$d_M = \sum_{j=1}^{m}|x_{jQ} - x_{jP}|$
+		\end{block}
+		\begin{block}{Definition}
+			The sum of absolute differences along each coordinate. Also known as the L1 norm, taxicab distance, or city-block distance. It measures the distance travelled along a grid rather than diagonally.
+		\end{block}
+		\begin{block}{Memory Hook}
+			L1 = ``sum of absolutes.'' Imagine driving through Manhattan's rectangular street grid: you cannot go diagonally through buildings. The formula has no square and no square root.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			More robust to outliers than Euclidean because it does not square deviations. Preferred when features have different scales or when the data has heavy tails. In K-means, using Manhattan distance produces clusters that are approximately rhombus-shaped rather than spherical --- a key distinction GARP tests. Manhattan distance is also the basis of LASSO regularisation (L1 penalty), and it appears in the A* search heuristic discussion in Classical AI, where the textbook explicitly warns that Manhattan distance is not admissible for train-route estimation but is useful in various machine-learning algorithms. In the exam, you may be asked which distance metric is appropriate for a given dataset or which norm corresponds to a given formula.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{3 --- Silhouette Score}
+		\begin{block}{Formula}
+			$s_i = \dfrac{b_i - a_i}{\max(a_i, b_i)}$
+		\end{block}
+		\begin{block}{Definition}
+			$a_i$ = mean distance from point $i$ to all other points in its OWN cluster (cohesion). $b_i$ = mean distance from point $i$ to all points in the NEAREST OTHER cluster (separation). The overall silhouette score $s$ is the average of $s_i$ across all points.
+		\end{block}
+		\begin{block}{Memory Hook}
+			$b$ = ``best other cluster,'' $a$ = ``average own cluster.'' Numerator = separation minus cohesion. Denominator normalises to a $[-1,1]$ scale. Think: ``b beats a, but never beyond 1.''
+		\end{block}
+		\begin{block}{Exam Relevance}
+			$s \approx 1$ = well-clustered (points are tight and far from others). $s \approx 0$ = points lie on the boundary between clusters. $s < 0$ = possibly mis-clustered. Higher silhouette = better-defined clusters. Used to select optimal K in K-means and to validate hierarchical clustering. GARP prefers testing silhouette over the elbow method because it gives a quantitative answer instead of a visual judgement. In the exam, you may be asked to interpret a silhouette plot: thin silhouettes and negative values indicate small or wrongly assigned clusters, and you compare average scores across K to pick the best. Note that a limit case of $s = 1$ would mean every point sits exactly on its centroid.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{4 --- WCSS (Within-Cluster Sum of Squares)}
+		\begin{block}{Formula}
+			$WCSS_k = \sum_{j=1}^{n_k} d_j^2$
+		\end{block}
+		\begin{block}{Definition}
+			For cluster $k$ with $n_k$ points, the sum of squared distances $d_j$ from each point to its cluster centroid. The total across all K clusters is the K-means objective function. Also called inertia.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Within'' = inside one cluster. Squaring prevents positive and negative deviations from cancelling. Lower WCSS = tighter, more compact clusters.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			WCSS always decreases as K increases, and in the extreme case K = N every point is its own cluster and WCSS = 0 --- but the model is completely uninformative. This is a textbook example of overfitting. Because WCSS is a sum of squared distances, its absolute value scales with the data and the number of features, so you cannot say one WCSS value is inherently ``good'' or ``bad''; you can only compare WCSS across models for the same dataset. GARP tests the analogy with residual sum of squares in regression: adding predictors cannot make RSS worse, and adding clusters cannot make WCSS worse. In the exam, you may be asked why WCSS falls monotonically with K, or why the naive rule of thumb K $\approx \sqrt{N/2}$ is arbitrary.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{5 --- Total WCSS}
+		\begin{block}{Formula}
+			$WCSS = \sum_{k=1}^{K} WCSS_k$
+		\end{block}
+		\begin{block}{Definition}
+			The sum of the WCSS values of all K clusters. This is the quantity K-means minimises. It is plotted against K in a scree plot to find the ``elbow.''
+		\end{block}
+		\begin{block}{Memory Hook}
+			Total inertia = add up all the within-cluster inertias. The scree plot is WCSS on the y-axis, K on the x-axis; the elbow is where the curve stops falling steeply.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The scree (elbow) method: run K-means for K = 1 to 10 or 15, record total WCSS, plot, and look for the point where the marginal reduction drops sharply. Beyond the elbow, adding clusters adds complexity without proportional improvement in compactness. The textbook example: for the Treasury-yield/stock-return data (1927--2021), the rate of decrease in WCSS changes sharply at K = 2, and the scatter plot confirms two clusters. GARP notes that the elbow is not always sharp, and there may be multiple elbows; in those cases you fall back on domain knowledge and interpretability. In the exam, you may be asked to identify the elbow from a described plot or to explain why total WCSS cannot be used alone to choose K.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{6 --- BCSS (Between-Cluster Sum of Squares)}
+		\begin{block}{Formula}
+			$BCSS = \sum_{k=1}^{K} n_k \|\mu_k - \bar{\mu}\|^2$
+		\end{block}
+		\begin{block}{Definition}
+			The sum of squared distances from each cluster centroid $\mu_k$ to the overall centroid $\bar{\mu}$, weighted by cluster size $n_k$. Measures inter-cluster separation, the counterpart to WCSS's intra-cluster compactness.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Between'' = separation between clusters. Weighted by size, so big clusters count more. Higher BCSS = clusters are far apart.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Key identity: Total Variance = WCSS + BCSS. Because total variance is fixed for a given dataset, minimising WCSS is equivalent to maximising BCSS --- the two are two sides of the same coin. WCSS focuses on intra-cluster similarity, BCSS on inter-cluster dissimilarity. A good clustering solution has low WCSS AND high BCSS. GARP tests this relationship directly. In the exam, you may be asked to complete the identity, to explain why minimising WCSS implicitly maximises BCSS, or to say which measure captures compactness versus separation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{7 --- Bias-Variance Decomposition}
+		\begin{block}{Formula}
+			$Total\ Error = Bias^2 + Variance + Irreducible\ Error$
+		\end{block}
+		\begin{block}{Definition}
+			Expected prediction error decomposes into three parts: bias$^2$ (systematic error from wrong assumptions), variance (sensitivity to the particular training sample), and irreducible error (noise no model can remove).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Simple model = high bias, low variance (misses patterns). Complex model = low bias, high variance (fits noise). Irreducible error is the floor you can never beat.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			This is the central tension in machine learning and a very common GARP theme. Underfitting = high bias (model too simple to capture nonlinearity, e.g.\ fitting a straight line to a quadratic relationship). Overfitting = high variance (model memorises training noise; training error tiny, test error large). The goal is to find the complexity that minimises total error. Remedies: regularisation (ridge, LASSO, elastic net), cross-validation, ensembling, pruning, dropout, early stopping. Note the bias-variance trade-off also drives the prediction-accuracy vs interpretability trade-off: flexible models (neural nets) tend to lower bias at the cost of interpretability, while interpretable models (linear regression) may carry higher bias. In the exam, you may be asked to diagnose over/underfitting from train-vs-test error or to match remedies to symptoms.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{8 --- Ridge Regression Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda\sum_j \beta_j^2$
+		\end{block}
+		\begin{block}{Definition}
+			Ordinary least squares with an added L2 penalty equal to the sum of squared coefficients, scaled by hyperparameter $\lambda$. Also called L2 regularisation or shrinkage.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Ridge = ``squared penalty.'' It shrinks coefficients toward zero but never exactly to zero. Think of a ridge pulling the coefficients down a slope.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Preferred when many features are correlated (multicollinearity): Ridge stabilises coefficient estimates by shrinking them, trading a little bias for much lower variance. $\lambda$ controls the strength --- larger $\lambda$ = more shrinkage. Crucially, Ridge does NOT perform feature selection: coefficients get small but stay non-zero. Key differences from LASSO: Ridge reduces magnitudes, LASSO can zero them out. In practice data is normalised/standardised before regularisation. Credit bureaus use Ridge to handle multicollinearity among consumer credit variables. In the exam, you may be asked to distinguish Ridge from LASSO, to identify the penalty type, or to say why Ridge is preferred when all features are somewhat useful.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{9 --- LASSO Regression Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda\sum_j |\beta_j|$
+		\end{block}
+		\begin{block}{Definition}
+			OLS with an L1 penalty equal to the sum of absolute coefficient values. LASSO = Least Absolute Shrinkage and Selection Operator. Its geometry drives some coefficients exactly to zero.
+		\end{block}
+		\begin{block}{Memory Hook}
+			LASSO = ``absolute penalty = automatic feature selection.'' The absolute-value function is not differentiable at zero, so a numerical procedure (not a closed form) is needed. Compare: Ridge has an analytic solution, LASSO does not.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			LASSO is a feature-selection technique: as $\lambda$ increases, more coefficients are set exactly to zero, removing features from the model. Preferred when only a few features are important. The textbook example: applied to highly correlated Treasury yields, LASSO with $\lambda = 0.1$ leaves only one non-zero coefficient plus the intercept, while Ridge merely shrinks all coefficients. Limitation: with highly correlated features, LASSO may arbitrarily pick one and ignore the others (unstable). In the exam, you may be asked which method performs feature selection, what happens to coefficients as $\lambda$ rises, or to contrast the L1 and L2 penalty terms.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{10 --- Elastic Net Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda_1\sum_j \beta_j^2 + \lambda_2\sum_j |\beta_j|$
+		\end{block}
+		\begin{block}{Definition}
+			A hybrid regularisation that combines both the L2 (squared) and L1 (absolute) penalty terms, with two hyperparameters $\lambda_1$ and $\lambda_2$ controlling the mix.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Elastic Net = ``elastic'' between Ridge and LASSO. Gets sparsity (zeroing) from L1 and grouping of correlated features from L2. Two knobs, not one.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Elastic Net addresses LASSO's instability when features are correlated: it can select features while also grouping correlated ones, rather than arbitrarily dropping all but one. By choosing $\lambda_1$ and $\lambda_2$ appropriately you can obtain the benefits of both --- reducing the magnitudes of some parameters and removing unimportant ones entirely. Modern regularisation testing has shifted toward Elastic Net and away from pure LASSO and Ridge, though LASSO still has use cases. In the exam, you may be asked to identify the Elastic Net loss function, to explain what each penalty contributes, or to say when Elastic Net is preferred over either single method.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{11 --- Precision}
+		\begin{block}{Formula}
+			$Precision = \dfrac{TP}{TP + FP}$
+		\end{block}
+		\begin{block}{Definition}
+			Of all instances the model labelled POSITIVE, the fraction that are actually positive. Also called positive predictive value (PPV). Answer to: ``When the model says positive, how often is it right?''
+		\end{block}
+		\begin{block}{Memory Hook}
+			Precision = ``purity of positive predictions.'' Denominator includes everything you flagged. High precision = few false alarms. It says nothing about positives you missed.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Use precision when false positives are costly --- e.g.\ anti-money-laundering alerts, where each false alert consumes investigator time and can disrupt legitimate customers. Low precision means teams chase red herrings and become desensitised to alerts. Note: precision alone is gameable --- a model that flags only one near-certain positive can have perfect precision but terrible recall. GARP tests the precision/recall trade-off and how lowering the classification threshold raises recall but lowers precision (more false positives). In the exam, you may be asked to compute precision from a confusion matrix or to choose the metric that matters when investigation costs are high.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{12 --- Recall (Sensitivity)}
+		\begin{block}{Formula}
+			$Recall = \dfrac{TP}{TP + FN}$
+		\end{block}
+		\begin{block}{Definition}
+			Of all actually positive cases, the fraction the model correctly identified. Also called sensitivity or the true positive rate (TPR). Answer to: ``Of all real positives, how many did we catch?''
+		\end{block}
+		\begin{block}{Memory Hook}
+			Recall = ``coverage of the positives.'' Denominator is all the real positives in the data. High recall = few missed positives. It says nothing about false alarms.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Use recall when false negatives are costly --- medical diagnosis, fraud detection, critical compliance breaches. Missing a default or a fraud (low recall) can trigger large losses, regulatory sanctions, or reputational damage, far outweighing the cost of a few false alarms. GARP's worked example: four loan models are compared on accuracy, precision, recall, and F1 --- the SVM (Model C) ``correctly identifies the highest percentage of defaulted loans'' because it has the highest recall (0.51), even though its accuracy is the lowest. This teaches that accuracy can mislead and recall is the right metric when the positive class must be caught. In the exam, you may be asked which model best detects the minority class, or why the highest-accuracy model is not the answer.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{13 --- Specificity}
+		\begin{block}{Formula}
+			$Specificity = \dfrac{TN}{TN + FP}$
+		\end{block}
+		\begin{block}{Definition}
+			Of all actually negative cases, the fraction the model correctly identified as negative. Also called the true negative rate (TNR). It is the complement of the false positive rate: Specificity = 1 $-$ FPR.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Specificity = ``coverage of the negatives.'' Sensitivity covers positives; specificity covers negatives. Both are about actual classes, not predictions.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Important when false positives are costly and you need to correctly clear the many legitimate cases. In the rare-disease diagnostic question, GARP contrasts sensitivity (correctly catching the sick) with specificity (correctly identifying the healthy) and concludes that sensitivity is the right measure when failing to treat is fatal --- showing how the choice depends on which error dominates. Note: specificity is NOT the same as precision (specificity conditions on actual negatives; precision conditions on predicted positives). The ROC curve plots TPR (sensitivity) against FPR (1 $-$ specificity). In the exam, you may be asked to compute specificity or to distinguish it from precision and recall.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{14 --- F1 Score}
+		\begin{block}{Formula}
+			$F1 = \dfrac{2 \cdot Precision \cdot Recall}{Precision + Recall}$
+		\end{block}
+		\begin{block}{Definition}
+			The harmonic mean of precision and recall --- a single balanced metric. Bounded between 0 and 1, closer to 1 only when BOTH precision and recall are high.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Harmonic (not arithmetic) mean, so a weak component drags the score down hard. If precision = 1 and recall = 0.1, arithmetic mean = 0.55 but F1 = 0.18. F1 punishes imbalance between the two.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Useful when you need one combined number and neither error type dominates. But a low F1 is ambiguous: it can come from poor precision, poor recall, or both, so you should always inspect the components. GARP's loan example uses F1 alongside accuracy, precision, and recall to compare four models --- F1 (0.47) is highest for the SVM, matching its recall advantage. In imbalanced settings F1 is generally more informative than accuracy. In the exam, you may be asked to compute F1, to explain why the harmonic mean is used, or to say what a low F1 does and does not tell you.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{15 --- Accuracy}
+		\begin{block}{Formula}
+			$Accuracy = \dfrac{TP + TN}{TP + TN + FP + FN}$
+		\end{block}
+		\begin{block}{Definition}
+			The fraction of ALL predictions that are correct --- both positive and negative classes pooled together.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Accuracy = (all correct) / (everything). The most intuitive metric and the most dangerous one for imbalanced data.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The classic failure mode GARP tests: if 98\% of borrowers are solvent, a model that calls every borrower solvent has 98\% accuracy but is practically useless (it never catches a default). GARP's own guidance: ``especially in cases of unbalanced data, accuracy is not a good measure.'' The related error rate is 1 $-$ accuracy and inherits the same flaw. Accuracy also ignores the different costs of Type I (false positive) and Type II (false negative) errors. Use accuracy only when classes are roughly balanced and errors cost the same. In the exam, you may be asked why a high-accuracy model is the wrong choice, or to compute accuracy alongside precision and recall and explain the discrepancy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{16 --- Error Rate (Type I / Type II)}
+		\begin{block}{Formula}
+			$Error\ Rate = \dfrac{FP + FN}{Total} = 1 - Accuracy$
+		\end{block}
+		\begin{block}{Definition}
+			The fraction of incorrect predictions. Type I error = false positive (predicting positive when actually negative). Type II error = false negative (predicting negative when actually positive).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Type I = ``false alarm'' (FP). Type II = ``miss'' (FN). In fraud: FP = blocking a legitimate transaction; FN = letting fraud through. Which hurts more is a business question.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Accuracy and error rate ignore the TYPE of error, yet the two types usually cost different amounts. For a bank extending credit, misclassifying a borrower as solvent (who then defaults --- a false negative) is typically far more costly than declining a good customer (a false positive). The threshold you set determines the FP/FN balance, so threshold choice is a business decision, not just a technical one. GARP's cost-matrix discussion: optimal threshold minimises total expected cost or maximises expected benefit, with input from business lines, operations, finance/risk, and compliance. In the exam, you may be asked which error type dominates in a scenario, or how raising the threshold changes FP and FN.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{17 --- MSE (Mean Squared Error)}
+		\begin{block}{Formula}
+			$MSE = \frac{1}{N}\sum_{i=1}^{N}(y_i - \hat{y}_i)^2$
+		\end{block}
+		\begin{block}{Definition}
+			The average of squared prediction errors for a continuous target. The most common predictive-ability measure and a standard loss function.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Squared dollars'' --- units are the square of the target, which is why interpretation is awkward. Big errors are punished disproportionately.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Because errors are squared, MSE is sensitive to outliers: one huge miss can dominate. The square also removes the sign, so over- and under-prediction are penalised symmetrically. MSE is differentiable, making it convenient for gradient-based training (a reason neural nets use it or its variants). Among competing models on the same test set, the lowest MSE is the most accurate by that criterion. But MSE and MAE can rank models differently, so metric choice matters. The textbook example computes MSE = 43.1 (and RMSE = 6.57) for a salary-regression test sample. In the exam, you may be asked to compute MSE, to explain its unit problem, or to say when MAE is preferable.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{18 --- RMSE (Root Mean Squared Error)}
+		\begin{block}{Formula}
+			$RMSE = \sqrt{MSE} = \sqrt{\frac{1}{N}\sum(y_i - \hat{y}_i)^2}$
+		\end{block}
+		\begin{block}{Definition}
+			The square root of MSE, which brings the error metric back into the SAME units as the target variable (e.g.\ dollars, not squared dollars), making it far easier to interpret.
+		\end{block}
+		\begin{block}{Memory Hook}
+			RMSE = ``typical error in currency units.'' Because the forecast errors are squared before averaging and then square-rooted, RMSE scales with the units of the data --- the textbook states this explicitly.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			RMSE retains MSE's sensitivity to outliers (the squaring happens before the square root), so a single extreme event can inflate it --- a risk leader must ask whether a high RMSE is a systemic issue or one explainable outlier. Regulators increasingly steer metric choice: the ECB's Guide to Internal Models recommends metrics that capture tail risk, nudging firms to report RMSE ALONGSIDE MAE so large infrequent losses are not overlooked. Note RMSE $\geq$ MAE always, and the gap widens with error variance. In the exam, you may be asked to convert MSE to RMSE, or to explain why RMSE is preferred for communicating performance to management.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{19 --- MAE (Mean Absolute Error)}
+		\begin{block}{Formula}
+			$MAE = \frac{1}{N}\sum|y_i - \hat{y}_i|$
+		\end{block}
+		\begin{block}{Definition}
+			The average of the absolute prediction errors. Unlike MSE it does not square, so it is robust to outliers. Measures the raw size of errors.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Absolute'' = no squaring = outlier-resistant. Also called L1 loss. It is the direct analogue of Manhattan distance in error space.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			MAE treats all errors linearly, so a single large miss does not dominate the way it does in MSE/RMSE --- a strength when the data has extreme values, a weakness when large misses are especially costly. Two limitations GARP notes: MAE can mask the DIRECTION of bias (it cannot tell if the model consistently over- or under-predicts), and it does not heavily penalise occasional large misses, which may matter from a risk-capital perspective. Best practice is to pair MAE with RMSE and to visualise the error distribution. In the exam, you may be asked which metric is robust to outliers, or to compute MAE = 5.01 in the salary example (50.11 / 10).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{20 --- MAPE (Mean Absolute Percentage Error)}
+		\begin{block}{Formula}
+			$MAPE = 100 \times \frac{1}{N}\sum\left|\dfrac{y_i - \hat{y}_i}{y_i}\right|$
+		\end{block}
+		\begin{block}{Definition}
+			The average absolute error expressed as a PERCENTAGE of the actual value. Scale-free, so it allows comparison across models or portfolios of different sizes (a 100k loan vs a 10m loan).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Percentage error.'' The most intuitive metric for a board because it is a familiar relative number. But it explodes when the actual value is near zero.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Two well-known pitfalls: (1) MAPE is undefined or explodes when $y_i = 0$ or is very close to zero; (2) it can be misleading if a few small-value items have huge percentage errors, while large-absolute-value items with small percentage errors are understated. Auditors often favour MAPE for its pure percentage narrative to audit committees, providing a standardised measure of model accuracy. In the salary example MAPE = 16\%, read as ``the average forecast error is 16\% of the actual salary.'' In the exam, you may be asked to compute MAPE, to state its key limitation, or to say when RMSE should be preferred instead.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{21 --- Simple Linear Regression}
+		\begin{block}{Formula}
+			$y_i = \beta_0 + \beta_1 x_i + u_i$
+		\end{block}
+		\begin{block}{Definition}
+			Models a continuous target y as a linear function of one feature x. $\beta_0$ = intercept (value of y when x = 0), $\beta_1$ = slope (change in y per one-unit change in x), $u_i$ = error/disturbance term assumed zero mean, constant variance, independent.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``y = a + bx.'' Two unknowns to estimate: intercept and slope. Only two variables: one feature, one target (hence ``bivariate'' regression).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The intercept positions the line; the slope is the effect of interest. If x = 0 is outside the data range the intercept may be meaningless, but it is still needed so the line is correctly positioned. The error term captures all factors affecting y not included in the model. Estimation is usually by OLS (least squares), with maximum likelihood giving identical results when errors are i.i.d.\ normal. A risk-manager example: regressing a stock's return on a market index ETF to estimate the hedge ratio $\beta_1$. In the exam, you may be asked to interpret $\beta_0$ or $\beta_1$ from a fitted equation, or to say what the error term represents.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{22 --- Multiple Linear Regression}
+		\begin{block}{Formula}
+			$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \cdots + \beta_m x_{mi} + u_i$
+		\end{block}
+		\begin{block}{Definition}
+			Extends simple regression to m features with m + 1 parameters to estimate. Each slope is the PARTIAL effect of its feature, holding all other features constant.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Partial effect'' is the key phrase: each $\beta_j$ isolates the contribution of feature j. More features = more realistic but more pitfalls.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The model must remain LINEAR IN PARAMETERS for OLS; you may still include logs, interaction terms, and powers (all become new features), so nonlinearity in the variables is allowed. Main misspecification problems GARP tests: (1) wrong features --- omitting a relevant correlated variable biases the included coefficients; including irrelevant variables is less severe but causes inefficiency and overfitting; (2) wrong functional form --- assuming linearity when the truth is curved; (3) multicollinearity --- features highly correlated (perfect multicollinearity breaks OLS entirely; the dummy-variable trap is an example); (4) outliers; (5) heteroskedasticity --- non-constant error variance, detected by White's test and fixed with robust errors, WLS, or log transformation. In the exam, you may be asked to identify which problem a scenario describes and its remedy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{23 --- Logistic Function (Sigmoid)}
+		\begin{block}{Formula}
+			$f(z) = \dfrac{1}{1 + e^{-z}}$
+		\end{block}
+		\begin{block}{Definition}
+			Maps any real number z to the interval (0, 1), producing an S-shaped curve. Used to convert a linear combination of features into a probability for binary classification.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Squash to (0,1).'' Also called the sigmoid. Its derivative has the neat form $f(z)(1 - f(z))$, which is why it is convenient for backpropagation.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The reason we cannot use ordinary linear regression for a 0/1 target: a straight line can predict values outside [0, 1], which are nonsensical as probabilities. The logistic function guarantees valid probabilities. It is also a popular activation function in neural networks, though in hidden layers it has largely been replaced by ReLU because of the vanishing-gradient problem (the derivative is at most 0.25, so products of many derivatives vanish). The logistic is still common in output layers for binary classification. In the exam, you may be asked why linear regression fails for binary targets, what range the sigmoid outputs, or which activation to use at an output layer for classification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{24 --- Logistic Regression Probability}
+		\begin{block}{Formula}
+			$P_i = \dfrac{1}{1 + e^{-(\beta_0 + \beta_1 x_{1i} + \cdots + \beta_m x_{mi})}}$
+		\end{block}
+		\begin{block}{Definition}
+			The probability that $y_i = 1$, obtained by applying the sigmoid to a linear predictor. The probability that $y_i = 0$ is $1 - P_i$.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Linear part inside, sigmoid outside.'' Coefficients live on the log-odds scale, so their exponents are odds ratios: $\exp(\beta_j)$.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The log-odds (logit) is linear: $\ln\!\big(P/(1-P)\big) = \beta_0 + \beta_1 x_1 + \cdots$, which is why it is called a logit model. Interpretation: the sign and significance of coefficients can be read directly, but the magnitude is on the log-odds scale. A one-unit increase in $x_j$ multiplies the odds by $\exp(\beta_j)$. The textbook's LendingClub example: longer loan terms and higher interest rates significantly INCREASE default probability; having a mortgage significantly DECREASES it. Estimation is by maximum likelihood (not OLS). Extension to more than two unordered classes: multinomial logit; to ordered classes: ordered logit. In the exam, you may be asked to interpret a positive coefficient, to compute a predicted probability, or to name the estimation method.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{25 --- Log-Likelihood (Logit)}
+		\begin{block}{Formula}
+			$\log L = \sum_{i=1}^{N}\big[\,y_i \ln F(y_i) + (1 - y_i)\ln\!\big(1 - F(y_i)\big)\big]$
+		\end{block}
+		\begin{block}{Definition}
+			The natural logarithm of the likelihood function for a binary outcome, where $F(y_i)$ is the predicted probability that $y_i = 1$. Maximum likelihood estimation finds the coefficients that maximise this sum.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Product of probabilities becomes a SUM of logs.'' This avoids numerical underflow when multiplying many small probabilities. Each observation contributes only one term (the one that matches its actual label).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			For observation i: if $y_i = 1$ the term reduces to $\ln F(y_i)$; if $y_i = 0$ it reduces to $\ln(1 - F(y_i))$. Maximising the log-likelihood is equivalent to maximising the likelihood (log is monotonic). For linear regression with i.i.d.\ normal errors, MLE yields the SAME estimates as OLS --- a key result. MLE is the standard estimation paradigm for logit and probit models and is more flexible, though it requires knowing (or assuming) the data-generating distribution. In the exam, you may be asked why we take logs, why MLE equals OLS for normal-error linear regression, or to identify the log-likelihood expression.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{26 --- OLS Slope}
+		\begin{block}{Formula}
+			$\hat{\beta}_1 = \dfrac{\sum_i y_i x_i - N\bar{y}\bar{x}}{\sum_i x_i^2 - N\bar{x}^2}$
+		\end{block}
+		\begin{block}{Definition}
+			The ordinary least squares estimate of the slope in simple linear regression, equal to the covariance of x and y divided by the variance of x.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Cov(x, y) / Var(x).'' If x and y move together, slope positive; if oppositely, negative. A larger spread in x gives a more precise slope.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Derived by differentiating the RSS with respect to each parameter, setting the derivatives to zero, and solving --- the OLS ``normal equations.'' Intuition: the numerator captures joint variation, the denominator scales by how much x varies. The slope is the best linear unbiased estimator (BLUE) under the Gauss-Markov assumptions. In multivariate settings the closed-form solution becomes matrix algebra ($\hat{\beta} = (X^TX)^{-1}X^Ty$), but the intuition is the same. In the exam, you may be asked to compute the slope from summary statistics, to explain the covariance/variance interpretation, or to say what happens if x has no variance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{27 --- OLS Intercept}
+		\begin{block}{Formula}
+			$\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$
+		\end{block}
+		\begin{block}{Definition}
+			The OLS estimate of the intercept, obtained by rearranging the fact that the fitted regression line passes through the point of means $(\bar{x}, \bar{y})$.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Mean point anchor'': the line must go through $(\bar{x}, \bar{y})$, so once you know the slope, the intercept follows. No separate optimisation needed.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The intercept is the predicted value of y when x = 0. In some cases this is meaningful (temperature in Celsius, x = 0 = freezing); in others it is not (years of experience, x = 0 may lie outside the data range). It matters for correct positioning of the line even when not interpretable. In the salary example, $\hat{\beta}_0 = 16.88$ means someone with zero experience would earn about \$16.88/hour on average. Note the intercept formula is Option A in the sample question on the OLS slope, a common exam distractor. In the exam, you may be asked to compute the intercept given the slope and means, or to explain why the line passes through the means.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{28 --- RSS (Residual Sum of Squares)}
+		\begin{block}{Formula}
+			$RSS = \sum_{i=1}^{N}(y_i - \hat{y}_i)^2$
+		\end{block}
+		\begin{block}{Definition}
+			The sum of squared differences between actual and fitted values. The quantity OLS minimises. Also called Sum of Squared Residuals (SSR) or Sum of Squared Errors (SSE).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Squared vertical distances.'' Squaring prevents positive and negative residuals from cancelling --- a common exam point. For the optimal OLS fit, the sum of residuals (not squared) is exactly zero.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			OLS estimates are found by minimising RSS, which is why OLS is a ``least squares'' method. RSS is a loss function and appears in regression trees (splits chosen to minimise RSS), in ridge/LASSO (RSS + penalty), and in evaluating model fit (lower RSS = better in-sample fit, but lower RSS on training does not guarantee good generalisation). RSS is also the denominator intuition behind $R^2$. One caveat: OLS slopes are sensitive to outliers precisely because residuals are squared, so a single extreme point can pull the line. In the exam, you may be asked why we square residuals, what objective OLS minimises, or to compute RSS from a small table.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{29 --- Standardization (Z-score)}
+		\begin{block}{Formula}
+			$z = \dfrac{x - \mu}{\sigma}$
+		\end{block}
+		\begin{block}{Definition}
+			Subtract the sample mean and divide by the sample standard deviation, producing a variable with mean 0 and variance 1. Rescales features so no single one dominates distance or gradient computations.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Centre and scale.'' Preferred over min-max when the data contains outliers, because it does not squash the rest into a tiny range. Does NOT change the shape of the distribution or the correlations.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Three reasons to scale (per the textbook): (1) numerical stability of the learning algorithm (avoids overflow/underflow); (2) interpretability of parameter estimates; (3) detecting whether out-of-sample data lies beyond the training range (a normalised value outside [0,1] signals extrapolation). Prerequisite for K-means, KNN, SVM, LDA, PCA, neural networks. Does not change the shape of the distribution or correlations --- a sample question confirms standardisation preserves correlations. In the exam, you may be asked to compute standardised values (e.g.\ Option B for a salary), to distinguish standardisation from normalisation, or to say why scaling precedes distance-based clustering.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{30 --- Min-Max Normalization}
+		\begin{block}{Formula}
+			$x' = \dfrac{x - x_{min}}{x_{max} - x_{min}}$
+		\end{block}
+		\begin{block}{Definition}
+			Rescales a feature to the range [0, 1] by subtracting the minimum and dividing by the range (max $-$ min). Also called the min-max transformation.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Bound to [0,1].'' The largest value maps to 1, the smallest to 0. It does NOT force mean 0 or variance 1. Sensitive to outliers because min/max define the range.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Preserves the correlations between data points and does NOT change the shape of the distribution --- but unlike standardisation the resulting variables generally do NOT have mean 0 or unit variance. A GARP sample question tests exactly this: ``Normalization preserves the correlations between data points'' is the correct statement, while ``standardization creates a distribution bounded by 0 and 1'' is false. Because min/max are used, a single outlier can compress the rest of the data, so standardisation is often preferred when outliers exist. Both methods are applied only to numerical input features, not to the target. In the exam, you may be asked which method bounds to [0,1], which is robust to outliers, or to compute normalised values.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{31 --- PCA Component}
+		\begin{block}{Formula}
+			$PC_j = b_{1j}P_1 + b_{2j}P_2 + \cdots + b_{mj}P_m$
+		\end{block}
+		\begin{block}{Definition}
+			The j-th principal component is a linear combination of the original (standardised) predictors $P_1 \dots P_m$ with weights $b_{ij}$ (component loadings). PCs are ordered so the first captures the most variance.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Weighted blend of features.'' PC1 = direction of maximum variance; PC2 = maximum remaining variance, orthogonal (uncorrelated) to PC1. Loadings tell you which features matter for each PC.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			PCA is an unsupervised dimensionality-reduction technique --- a classical method that predates the ML revolution. It addresses multicollinearity (PCs are uncorrelated by construction) and speeds up models needing low correlation. It does NOT consider the target, so it can discard directions that matter for prediction. Data must be scaled and de-skewed first, or PCA will simply summarise the largest-magnitude features. The textbook example on Treasury yields: PC1 $\approx$ level (all loadings positive), PC2 $\approx$ slope (short vs long opposite signs), PC3 $\approx$ twist; three components explain over 98\% of variation. Use a scree plot and keep components before the elbow. In the exam, you may be asked to interpret loadings, to say how many PCs to keep, or to note PCA's limitations.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{32 --- Cosine Similarity}
+		\begin{block}{Formula}
+			$S_c(P,Q) = \dfrac{P \cdot Q}{\|P\|\,\|Q\|}$
+		\end{block}
+		\begin{block}{Definition}
+			The cosine of the angle between two vectors --- a similarity measure bounded in $[-1, 1]$. It depends only on direction, not magnitude, so it is unaffected by vector length.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Angle, not distance.'' Close to 1 = same direction (similar); close to 0 = unrelated; negative = opposite. Used to compare word embeddings in Word2Vec/GloVe.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Because it ignores magnitude, cosine similarity is preferred for text/embedding data where document length or word frequency should not dominate. The textbook gives concrete numbers: China--Japan 0.84, Gold--Silver 0.95 (similar); Australia--Tokyo 0.40, Banana--Rose 0.30 (dissimilar). It also underpins word analogies: Europe $-$ Spain + China $\approx$ Asia (cosine 0.79). Cosine similarity is also one of the alternative distance measures suggested for K-means to mitigate the curse of dimensionality (it does not always increase with the number of features). In the exam, you may be asked to compute cosine similarity, to interpret a value, or to say why it is used for word vectors.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{33 --- TF-IDF}
+		\begin{block}{Formula}
+			$TF\text{-}IDF_{ij} = TF_{ij} \times IDF_i$
+		\end{block}
+		\begin{block}{Definition}
+			The weight of term i in document j: term frequency (how often the term appears in the document) multiplied by inverse document frequency (how rare it is across the corpus). Highlights words frequent in a document but rare overall.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Frequent here, rare everywhere = informative.'' If a word appears in every document, IDF = 0 and it gets no weight. The textbook phrase: ``higher weights to words that occur frequently in a particular document but rarely in the entire corpus.''
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Common words such as ``this'' that appear in all documents have zero discriminatory power (TF-IDF = 0). Rare words appearing once in short documents get the highest TF-IDF (e.g.\ ``fed,'' ``hikes'' in the sample). The same word can have different TF-IDF across documents because TF varies with document length while IDF does not. TF-IDF is used for document classification and information retrieval, and it is a dictionary/heuristic NLP approach rather than a machine-learning one. In the exam, you may be asked to compute a TF-IDF value, to explain why a common word gets zero weight, or to say why the same word differs across documents.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{34 --- IDF (Inverse Document Frequency)}
+		\begin{block}{Formula}
+			$IDF_i = \ln\!\left(\dfrac{D}{d_i}\right)$
+		\end{block}
+		\begin{block}{Definition}
+			$D$ = total number of documents in the corpus; $d_i$ = number of documents that contain term i. The natural log of the ratio. Measures how rare a term is across the whole corpus.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Rarer term = higher IDF.'' A term in every document has $d_i = D$, so $IDF = \ln(1) = 0$. A term in one document has $d_i = 1$, so $IDF = \ln(D)$, which is large.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The log compresses the range of IDF values and prevents extreme weights. IDF does NOT vary by document --- it is a property of the term and the corpus, which is why a given word's TF-IDF difference across documents comes entirely from TF. In the textbook example, ``disappointing'' (in 2 of 4 docs) has IDF 0.69, ``down'' (in 3 of 4) has IDF 0.29, and ``fed'' (in 1 of 4) has IDF 1.39. In the exam, you may be asked to compute IDF, to explain why a term appearing in all documents has IDF = 0, or to distinguish IDF (corpus-level) from TF (document-level).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{35 --- L2 Normalization}
+		\begin{block}{Formula}
+			$v_{norm} = \dfrac{v}{\|v\|_2} = \dfrac{v}{\sqrt{\sum_i v_i^2}}$
+		\end{block}
+		\begin{block}{Definition}
+			Divides each element of a vector by the vector's L2 norm (the square root of the sum of squared elements), producing a unit-length vector. All elements are scaled to lie between 0 and 1.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Make the vector length one.'' Used to stop repeated words from skewing analysis --- e.g.\ a review that says ``bad, bad, bad, bad'' would otherwise dominate. Normalising each document separately puts them on equal footing.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The textbook's customer-feedback example: repeatedly using ``bad'' could skew the analysis, so word vectors are normalised using the L2 norm before analysis --- analogous to how outliers are handled in econometrics. In the worked example, the vector [2,0,0,0,1,0,1,0,\dots,1,1] has L2 norm 2.83 and is divided through to give normalised entries like 0.71 and 0.35. L2 normalisation is standard before computing cosine similarity, since cosine similarity is invariant to scaling. In the exam, you may be asked what L2 normalisation does, why it is used in NLP, or to identify the L2 norm expression.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{36 --- Bayes Rule}
+		\begin{block}{Formula}
+			$P(c|d) = \dfrac{P(d|c)\,P(c)}{P(d)}$
+		\end{block}
+		\begin{block}{Definition}
+			Posterior $P(c|d)$ = likelihood $P(d|c)$ $\times$ prior $P(c)$, divided by evidence $P(d)$. How to update a probability about class c after observing data d.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Posterior = likelihood $\times$ prior / evidence.'' Prior = belief before data; likelihood = how probable the data is under the class; posterior = updated belief. In classification, drop the denominator (constant across classes).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Foundation of the Naive Bayes classifier. Because $P(d)$ does not depend on the class, the classification rule simplifies to $\hat{c} = \arg\max_c P(d|c)P(c)$ --- a classic GARP point (the denominator ``effectively cancels across classes''). Bayes rule also underlies the BIC derivation. The prior is the assumed probability before new information; the posterior is the updated probability. In the exam, you may be asked to apply Bayes rule to a simple case, to name each term, or to say why $P(d)$ can be dropped in classification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{37 --- Naive Bayes Classification}
+		\begin{block}{Formula}
+			$\hat{c} = \arg\max_c\; P(w_1|c)\,P(w_2|c)\cdots P(w_N|c)\,P(c)$
+		\end{block}
+		\begin{block}{Definition}
+			Predict the class maximizing the product of the conditional word probabilities and the class prior. ``Naive'' because it ASSUMES words are conditionally independent given the class.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Multiply the word probabilities, times the prior, pick the biggest.'' Independence lets a joint probability become a simple product. Popular for its simplicity and solid accuracy.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Three issues GARP tests: (1) computational underflow --- multiply many tiny probabilities; solve by summing logs instead (ln(AB) = ln A + ln B), which does not change the argmax; (2) the zero-probability problem --- if a word never appears in a class during training, the whole product becomes zero, so Laplace smoothing adds a positive integer $\lambda$ (usually 1) to all counts; (3) unknown words in the test set are dropped because the model has no information about them. In the textbook's customer-service example, an unlabeled review was classified ``bad'' with posterior 0.67. In the exam, you may be asked to apply the rule, to explain the independence assumption, or to say why smoothing is needed.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{38 --- Scaled Dot-Product Attention}
+		\begin{block}{Formula}
+			$score(Q_i, K_j) = \dfrac{Q_i \cdot K_j}{\sqrt{d_k}}$
+		\end{block}
+		\begin{block}{Definition}
+			The compatibility score between a query vector $Q_i$ (the token being processed) and a key vector $K_j$ (another token), scaled by the square root of the key dimension $d_k$. The scores are softmaxed into weights over the value vectors.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Query asks, key answers, value delivers.'' Divide by $\sqrt{d_k}$ to stop the dot products growing so large that softmax saturates (outputs near 0 or 1, gradients vanish). Scaling keeps gradients healthy.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Core of the transformer architecture. Each token plays three roles: Query (current input), Key (other inputs being compared), Value (used to compute the context vector). Multi-head attention runs several heads in parallel, each focusing on different relationships; GPT's base version has 12 heads. Attention captures long-range dependencies (e.g.\ linking ``it'' to ``MGARCH'' seven words earlier) better than RNNs. Masked attention is used in decoders to prevent the model from seeing future tokens. In the exam, you may be asked why we scale by $\sqrt{d_k}$, to identify Q/K/V, or to explain what multi-head attention adds.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{39 --- Softmax}
+		\begin{block}{Formula}
+			$softmax(x_i) = \dfrac{e^{x_i}}{\sum_j e^{x_j}}$
+		\end{block}
+		\begin{block}{Definition}
+			Converts a vector of real-valued scores into a probability distribution: all outputs positive, and they sum to 1. Used in attention and as the output layer for multi-class classification.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Exponentiate, then normalise.'' Exponentials make everything positive and magnify the largest values. Sum-to-one makes it a valid probability distribution. Sharpens differences between scores.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Exponentially magnifies the importance of the largest input --- a large gap in scores yields an output near 1 for the top class and near 0 for the rest. This is desirable for classification but means the softmax can saturate, which is exactly why attention scores are scaled before softmax. Softmax is the multi-class generalisation of the logistic (sigmoid) function and is the standard activation for multi-class output layers. It is also used to normalise attention scores into weights. In the exam, you may be asked to state the properties of softmax, to say why exponentials are used, or to identify its role in a transformer.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{40 --- Gradient Descent Update}
+		\begin{block}{Formula}
+			$w_i^{new} = w_i^{old} - \eta\,\dfrac{\partial L}{\partial w_i}$
+		\end{block}
+		\begin{block}{Definition}
+			Iteratively move each weight in the direction OPPOSITE the gradient of the loss (down the slope), scaled by the learning rate $\eta$. Continue until the gradient is (near) zero.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Go downhill: subtract the slope.'' If the gradient is positive, reduce the weight; if negative, increase it. $\eta$ sets the step size. This is the workhorse of modern ML training.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			An epoch = one full pass over the training data. Batch GD uses the whole dataset per update (stable but slow, memory-heavy); stochastic GD (SGD) uses one random example (noisy but fast, no full-data load); mini-batch GD uses a small subset (balances both). A bad $\eta$: too small = slow convergence; too large = overshooting/oscillation or failure to converge. A positive gradient means reduce the weight; a negative gradient means increase it --- a frequently tested inversion. Momentum adds a term $\mu(w^{old} - w^{older})$ to speed consistent directions and damp oscillation, helping escape local minima. In the exam, you may be asked which direction to move, what an epoch is, or to compare GD variants.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{41 --- Exponential Learning Rate Decay}
+		\begin{block}{Formula}
+			$\eta_t = \eta_0\,e^{-kt}$
+		\end{block}
+		\begin{block}{Definition}
+			The learning rate at epoch t decays exponentially from its initial value $\eta_0$, with decay controlled by $k$. A larger $k$ makes the rate drop faster.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Start big, shrink fast.'' Begin with a large step to move quickly toward the optimum, then smaller steps to avoid overshooting near the minimum. Used in stochastic gradient descent.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			A fixed learning rate is rarely optimal: too large for fine-tuning near the optimum, too small for fast early progress. Decay schedules reconcile the two --- GARP notes that for stochastic GD a dynamic learning rate starts larger to get close to the optimal solution faster, then reduces as learning proceeds to avoid overshooting. Exponential and inverse decay are the two popular choices. In the exam, you may be asked to identify the exponential-decay formula, to explain why the rate is reduced over time, or to contrast it with inverse decay.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{42 --- Inverse Learning Rate Decay}
+		\begin{block}{Formula}
+			$\eta_t = \dfrac{\eta_0}{1 + kt}$
+		\end{block}
+		\begin{block}{Definition}
+			An alternative decay schedule where the learning rate decreases as the reciprocal of (1 + kt), with $k$ controlling the rate of decay and $t$ the epoch. Falls more slowly than exponential decay.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Divide by (1 + kt)'' instead of multiplying by an exponential. Slower taper --- keeps the learning rate higher for longer than exponential decay would.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Both exponential and inverse decay reduce the learning rate over epochs; the choice is empirical. Inverse decay can be preferable when you want to retain a meaningful step size for more epochs. These schedules matter most in stochastic and mini-batch gradient descent, where the noisy gradient benefits from gradually smaller steps. In the exam, you may be asked to identify which formula is inverse decay, to compare it with exponential decay, or to explain the role of $k$ and $t$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{43 --- Gini Coefficient}
+		\begin{block}{Formula}
+			$Gini = 1 - \sum_{j=1}^{J} p_j^2$
+		\end{block}
+		\begin{block}{Definition}
+			A measure of node impurity in a classification tree, where $p_j$ is the proportion of class j in the node and J the number of classes. A small Gini means the node is mostly one class.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``One minus the sum of squared proportions.'' Pure node (one class, $p = 1$) $\Rightarrow$ Gini = 0. A 50/50 binary split gives the maximum Gini of 0.5. Used by the CART algorithm.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Splits in a classification tree are chosen to create nodes as pure as possible --- i.e.\ to maximise the drop (information gain) in Gini. The textbook's dividend example: baseline Gini = 0.480; splitting on ``large cap'' gives a weighted Gini of 0.255 and an information gain of 0.225, so large cap becomes the root split. Gini is computationally cheaper than entropy (no logarithm) and usually yields very similar trees. In the exam, you may be asked to compute Gini, to identify which split gives the largest information gain, or to contrast Gini with entropy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{44 --- Entropy}
+		\begin{block}{Formula}
+			$Entropy = -\sum_{j=1}^{J} p_j \log_2(p_j)$
+		\end{block}
+		\begin{block}{Definition}
+			Another node-impurity measure in classification trees, quantifying the disorder or uncertainty of the class distribution. Uses base-2 logarithms, so it is measured in bits.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Sum of p times log p, negated.'' Pure node $\Rightarrow$ entropy = 0 (no uncertainty). A 50/50 binary split $\Rightarrow$ entropy = 1 (maximum uncertainty). Used by ID3 and C4.5.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Information gain = parent entropy $-$ weighted average child entropy; trees choose the split that maximises it. Changing the logarithm base only rescales all entropy values by a constant and does not change which splits are chosen --- a subtle point GARP notes. Entropy and Gini typically produce very similar trees; the choice is often a matter of implementation. In the exam, you may be asked to compute entropy, to explain information gain, or to note that Gini and entropy usually agree.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{45 --- AIC (Akaike Information Criterion)}
+		\begin{block}{Formula}
+			$AIC = 2k - 2\ln(L)$
+		\end{block}
+		\begin{block}{Definition}
+			A model-selection criterion combining goodness of fit (via the likelihood L) with a penalty for the number of parameters k. Lower AIC is preferred. Part of the wrapper-method feature-selection toolkit.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Fit minus complexity.'' $2k$ penalises extra parameters; $-2\ln(L)$ rewards better fit. Lower is better. Adding a feature can raise or lower AIC --- the balance decides.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Used in forward and backward stepwise regression: at each step, add (or remove) the feature that most reduces AIC; stop when no further improvement is possible. The textbook's forward-selection example: AIC drops from 3202.69 (no predictors) to 3193.36 (Age) to 3123.20 (Age + Age$^3$); adding a third variable increases AIC, so the model ``Age + Age$^3$'' is selected. AIC does not require nested models. BIC uses a heavier penalty ($k\ln N$) and tends to pick simpler models. In the exam, you may be asked to interpret the AIC formula, to choose the model with the lowest AIC, or to contrast AIC and BIC.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{46 --- BIC (Bayesian Information Criterion)}
+		\begin{block}{Formula}
+			$BIC = k\ln(N) - 2\ln(L)$
+		\end{block}
+		\begin{block}{Definition}
+			A model-selection criterion like AIC but with the complexity penalty multiplied by $\ln(N)$, the log of the sample size. Lower BIC is preferred. Penalises complexity more heavily than AIC.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``AIC with a bigger stick.'' Because $\ln(N) > 2$ for $N > 7$, BIC penalises extra parameters more than AIC does, so BIC tends to select simpler models.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Both AIC and BIC are used for stepwise selection and general model comparison; both prefer lower values. BIC is more conservative and is derived from a Bayesian perspective, while AIC has an information-theoretic justification. As the sample size grows, the difference between the two penalties grows, so on large datasets BIC will favour much simpler models. In the exam, you may be asked to identify the BIC formula, to say which criterion selects simpler models, or to explain the role of $\ln(N)$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{47 --- Covariance}
+		\begin{block}{Formula}
+			$Cov(x_1, x_2) = \dfrac{\sum_i (x_1 - \bar{x}_1)(x_2 - \bar{x}_2)}{N - 1}$
+		\end{block}
+		\begin{block}{Definition}
+			The average product of deviations of two variables from their means. Positive = they move together; negative = they move oppositely; zero = no LINEAR relationship. The numerator of the OLS slope, and a building block of the LDA covariance matrix.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Do they deviate together?'' Both above mean or both below mean $\Rightarrow$ positive product. One above, one below $\Rightarrow$ negative. Divide by $N - 1$ for the unbiased sample estimate.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Covariance is central to portfolio theory (covariance of asset returns), LDA (a pooled/common covariance matrix is assumed), and PCA (the covariance/correlation structure determines the components). Its magnitude is hard to interpret because it depends on the units, which is why correlation (standardised covariance) is often preferred. GARP's FTA example shows how a correlated omitted variable contaminates a coefficient: once the protected variable is removed, the coefficient on ``prior'' jumps from 0.54 to 0.72. In the exam, you may be asked to interpret the sign of covariance, to compute it from a small table, or to explain why correlation is preferred for interpretation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{48 --- 2x2 Matrix Inverse}
+		\begin{block}{Formula}
+			$\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \dfrac{1}{ad - bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$
+		\end{block}
+		\begin{block}{Definition}
+			The inverse of a 2x2 matrix: swap the diagonal entries, negate the off-diagonal entries, and divide by the determinant $ad - bc$. Exists only if the determinant is non-zero.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Swap, negate, divide by det.'' Determinant = $ad - bc$. If det = 0 the matrix is singular (no inverse) --- this happens with perfect multicollinearity or the dummy-variable trap.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The inverse of the covariance matrix appears in the LDA discriminant function: $\delta_j(x) = x^T\hat{\Sigma}^{-1}\hat{\mu}_j - \tfrac12\hat{\mu}_j^T\hat{\Sigma}^{-1}\hat{\mu}_j + \ln \hat{\pi}_j$. It also appears in the closed-form OLS solution $\hat{\beta} = (X^TX)^{-1}X^Ty$; a singular $X^TX$ signals perfect multicollinearity, which is why OLS ``breaks down'' in that case. In the textbook's LDA example, the estimated covariance matrix is $\begin{pmatrix}1 & -0.58\\ -0.58 & 1\end{pmatrix}$ with inverse $\begin{pmatrix}1.52 & 0.88\\ 0.88 & 1.52\end{pmatrix}$. In the exam, you may be asked to compute a 2x2 inverse, to state the condition for invertibility, or to link the determinant to multicollinearity.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{49 --- LDA Discriminant Function}
+		\begin{block}{Formula}
+			$\delta_j(x) = x^T\hat{\Sigma}^{-1}\hat{\mu}_j - \tfrac12\hat{\mu}_j^T\hat{\Sigma}^{-1}\hat{\mu}_j + \ln(\hat{\pi}_j)$
+		\end{block}
+		\begin{block}{Definition}
+			For each class j, compute a linear discriminant score; assign the observation to the class with the LARGEST score. $x$ = feature vector, $\hat{\mu}_j$ = class-mean vector, $\hat{\Sigma}^{-1}$ = inverse of the (pooled) covariance matrix, $\hat{\pi}_j$ = prior probability of class j.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Score each class, pick the max.'' Three parts: a term linear in x (via the mean), a constant correcting for the mean's magnitude, and the log prior. Linear in x, hence ``Linear'' Discriminant Analysis.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			LDA assumptions: features within each class are multivariate normal, all classes share a common covariance matrix, features are continuous. Even when assumptions are imperfect, LDA is often robust and works well. It handles multi-class classification directly and can also be used for dimensionality reduction. The textbook's borrower example computes $\delta_0 = 0.30$ (no default) and $\delta_1 = -3.95$ (default) for a new applicant, so the applicant is classified as ``no default.'' Priors can be equal or estimated from class frequencies. In the exam, you may be asked to state the LDA assumptions, to compute a discriminant score, or to assign an observation to a class.
+		\end{frame}
+		
+		\begin{frame}{50 --- Autoencoder Loss (Reconstruction Error)}
+			\begin{block}{Formula}
+				$L = \sum_{j=1}^{m}\sum_{i=1}^{N}(x_{ij} - \hat{x}_{ij})^2$
+			\end{block}
+			\begin{block}{Definition}
+				The squared difference between the original features and their reconstructions, summed over all features and observations. The autoencoder minimises this ``reconstruction error.''
+			\end{block}
+			\begin{block}{Memory Hook}
+				``Encode then decode; measure how much you lost.'' A bottleneck layer forces compression. With linear activations, an autoencoder with K hidden nodes reproduces the first K principal components.
+			\end{block}
+			\begin{block}{Exam Relevance}
+				Autoencoders are unsupervised feedforward networks whose outputs equal their inputs (no labels). They are used mainly for dimensionality reduction (nonlinear generalisation of PCA) and anomaly detection: trained on ``normal'' data, they reconstruct normal cases with low error but struggle with anomalies, producing HIGH reconstruction error that flags the anomaly. The loss can also be written as MSE by dividing by mN. The textbook's Treasury-yield example shows autoencoder MSE closely tracking PCA MSE at each dimensionality. In the exam, you may be asked to identify the loss function, to explain anomaly detection via reconstruction error, or to state the autoencoder-PCA relationship.
+			\end{block}
+		\end{frame}
+		
+	\end{document}

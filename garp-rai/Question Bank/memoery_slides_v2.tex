@@ -1,0 +1,877 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI Memory]{GARP Risk \& AI --- Memory Flashcards}
+\subtitle{Names, Theories, Formulas, Acronyms --- 150 Slides}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% =================================================================
+	\section{Formulas to Memorize}
+	% =================================================================
+	
+	\begin{frame}{1 --- Euclidean Distance}
+		\begin{block}{Formula}
+			$d_E = \sqrt{\sum_{j=1}^{m}(x_{jQ} - x_{jP})^2}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			L2 norm. ``As the crow flies.'' Straight-line distance between two points in m-dimensional space.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Used in K-means by default. Squares differences so large deviations are penalized heavily. Best when clusters are spherical and features are on similar scales. Sensitive to outliers because of the squaring. If features are on different scales (e.g., age vs income), the feature with larger magnitude dominates the distance calculation. This is why standardization is essential before K-means. GARP frequently tests whether you know that Euclidean distance requires scaled features. Also used in KNN, hierarchical clustering, and LDA.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{2 --- Manhattan Distance}
+		\begin{block}{Formula}
+			$d_M = \sum_{j=1}^{m}|x_{jQ} - x_{jP}|$
+		\end{block}
+		\begin{block}{Memory Hook}
+			L1 norm. ``City block driving.'' Sum of absolute differences along each dimension.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			More robust to outliers than Euclidean because it does not square differences. Used when features have different scales or when data has heavy tails. Also called taxicab distance. In K-means, using Manhattan distance produces clusters that are approximately rhombus-shaped rather than spherical. This is a key difference GARP tests. Manhattan distance is preferred when the data has many outliers or when you want to reduce the influence of extreme values. It is also used in LASSO regularization (L1 penalty).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{3 --- Silhouette Score}
+		\begin{block}{Formula}
+			$s_i = \frac{b_i - a_i}{\max(a_i, b_i)}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			$a_i$ = mean distance to own cluster (cohesion). $b_i$ = mean distance to nearest other cluster (separation). Range $[-1,1]$.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			$s \approx 1$ = well-clustered. $s \approx 0$ = boundary between clusters. $s < 0$ = possibly mis-clustered. Used to select optimal K in K-means. Higher silhouette score = better-defined clusters. GARP tests the interpretation of silhouette scores and how they compare to scree plots. The silhouette method is often preferred over the elbow method because it provides a quantitative measure rather than relying on visual interpretation. In the exam, you may be asked to identify which K value is best based on silhouette scores. The silhouette score is also used in hierarchical clustering to validate cluster quality.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{4 --- WCSS (Within-Cluster Sum of Squares)}
+		\begin{block}{Formula}
+			$WCSS_k = \sum_{j=1}^{n_k} d_j^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Also called inertia. K-means objective function. Sum of squared distances from each point to its cluster centroid.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Lower = more compact clusters. WCSS always decreases as K increases (overfitting risk). In the extreme case where K = N, each point is its own cluster, WCSS = 0, but the model is useless. This is a classic case of overfitting. GARP tests the relationship between K and WCSS. The goal is to find the ``elbow'' where adding more clusters yields diminishing returns. WCSS scales with the data and number of features, so you cannot say a particular WCSS value is inherently good or bad. You can only compare WCSS across different models for the same dataset. This is a key exam concept.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{5 --- Total WCSS}
+		\begin{block}{Formula}
+			$WCSS = \sum_{k=1}^{K} WCSS_k$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Sum of all cluster WCSS values. K-means minimizes this.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Used in scree plot: plot WCSS vs K, look for elbow. Elbow = point where adding more clusters yields diminishing returns. The scree plot is also called the elbow plot. GARP may ask you to interpret a scree plot and identify the optimal K. The elbow point represents a trade-off: beyond this point, increasing K adds complexity without proportional improvement in compactness. Sometimes the elbow is ambiguous, and you may need to use silhouette scores or domain knowledge to choose K. The scree plot is a heuristic, not a definitive answer. This is a common exam theme.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{6 --- BCSS (Between-Cluster Sum of Squares)}
+		\begin{block}{Formula}
+			$BCSS = \sum_{k=1}^{K} n_k \|\mu_k - \bar{\mu}\|^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Measures how far cluster centroids are from the overall mean, weighted by cluster size.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Higher = better separated clusters. Relationship: Total Variance = WCSS + BCSS. Minimizing WCSS implicitly helps maximize BCSS. GARP tests the relationship between WCSS and BCSS. While WCSS focuses on intra-cluster similarity (compactness), BCSS focuses on inter-cluster dissimilarity (separation). A good clustering solution has low WCSS and high BCSS. However, because Total Variance is constant for a given dataset, minimizing WCSS is equivalent to maximizing BCSS. This is a mathematical identity that GARP may test.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{7 --- Bias-Variance Decomposition}
+		\begin{block}{Formula}
+			$Total\ Error = Bias^2 + Variance + Irreducible\ Error$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Underfitting = high bias, low variance. Overfitting = low bias, high variance.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Irreducible error = noise no model can eliminate. Trade-off: increasing complexity reduces bias but increases variance. This is the central tension in machine learning. GARP tests the bias-variance trade-off frequently. A simple model (e.g., linear regression) has high bias because it cannot capture complex relationships. A complex model (e.g., deep neural network) has high variance because it fits noise in the training data. The goal is to find the sweet spot that minimizes total error. Regularization, cross-validation, and ensemble methods help achieve this balance. In the exam, you may be asked to identify whether a model is overfitting or underfitting based on training and test error.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{8 --- Ridge Regression Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda\sum\beta_j^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			L2 penalty. Shrinks coefficients toward zero but never exactly zero.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Good when many features are correlated. $\lambda$ controls strength: larger $\lambda$ = more shrinkage. Does not perform feature selection. GARP tests the difference between Ridge and LASSO. Ridge is also known as L2 regularization because the penalty is the sum of squared coefficients (L2 norm). Ridge is preferred when you have many features that are all somewhat useful. It reduces the impact of multicollinearity by shrinking coefficients. However, it does not remove features entirely. The bias introduced by Ridge is a trade-off for reduced variance. In the exam, you may be asked to compare Ridge and LASSO or to identify which is more appropriate for a given scenario.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{9 --- LASSO Regression Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda\sum|\beta_j|$
+		\end{block}
+		\begin{block}{Memory Hook}
+			L1 penalty. Can set coefficients exactly to zero = feature selection.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Good when only a few features are important. $\lambda$ controls sparsity: larger $\lambda$ = more coefficients zeroed out. LASSO = Least Absolute Shrinkage and Selection Operator. GARP tests the acronym and the feature selection property. LASSO is preferred when you suspect that many features are irrelevant. It performs automatic feature selection by setting coefficients to zero. This is why LASSO is also called a feature selection technique. However, LASSO can be unstable when features are highly correlated (it may arbitrarily select one and ignore the others). Elastic Net addresses this limitation. In the exam, you may be asked when to use LASSO vs Ridge.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{10 --- Elastic Net Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda_1\sum\beta_j^2 + \lambda_2\sum|\beta_j|$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Combines L1 and L2 penalties. Gets sparsity from LASSO and grouping from Ridge.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Good when features are correlated and you want some feature selection. Two hyperparameters to tune. GARP tests the motivation for Elastic Net. When features are highly correlated, LASSO tends to select one and ignore others, which can be problematic. Ridge shrinks all coefficients but does not select. Elastic Net combines the best of both: it can select features (like LASSO) while also grouping correlated features (like Ridge). The two hyperparameters $\lambda_1$ and $\lambda_2$ control the trade-off. Modern regularization testing has shifted toward Elastic Net and away from LASSO and Ridge. In the exam, you may be asked which regularization method is most appropriate for a given scenario.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{11 --- Precision}
+		\begin{block}{Formula}
+			$Precision = \frac{TP}{TP + FP}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Of those predicted positive, how many are actually positive? High precision = few false alarms.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Use when false positives are costly (spam filter, fraud alert). Also called positive predictive value. GARP tests precision, recall, and their trade-offs frequently. Precision focuses on the quality of positive predictions. A model with high precision makes few false positive errors. In fraud detection, high precision means that when the model flags a transaction as fraudulent, it is usually correct. This reduces the burden on investigators. However, high precision may come at the cost of lower recall (missing some fraud). The choice depends on the relative costs of false positives vs false negatives. In the exam, you may be asked which metric is most appropriate for a given business scenario.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{12 --- Recall (Sensitivity)}
+		\begin{block}{Formula}
+			$Recall = \frac{TP}{TP + FN}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Of all actual positives, how many did we catch? High recall = few missed positives.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Use when false negatives are costly (fraud detection, medical diagnosis). Also called true positive rate. GARP tests recall and its relationship to precision. Recall focuses on the coverage of actual positives. A model with high recall catches most positive cases. In medical diagnosis, high recall means that most patients with the disease are correctly identified. This is critical when missing a positive case (false negative) has severe consequences. However, high recall may come at the cost of lower precision (more false positives). The F1 score balances both. In the exam, you may be asked to calculate recall from a confusion matrix or to identify which model has the highest recall.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{13 --- Specificity}
+		\begin{block}{Formula}
+			$Specificity = \frac{TN}{TN + FP}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			True negative rate. Of all actual negatives, how many did we correctly identify?
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Important when false positives are costly. Complement of false positive rate: Specificity = 1 - FPR. GARP tests specificity and its relationship to sensitivity. Specificity is the proportion of actual negatives that are correctly identified. In fraud detection, high specificity means that most legitimate transactions are correctly classified as legitimate. This reduces customer friction (fewer legitimate transactions blocked). However, high specificity may come at the cost of lower sensitivity (missing some fraud). The ROC curve plots sensitivity vs (1 - specificity). In the exam, you may be asked to interpret a ROC curve or to calculate specificity from a confusion matrix.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{14 --- F1 Score}
+		\begin{block}{Formula}
+			$F1 = \frac{2 \cdot Precision \cdot Recall}{Precision + Recall}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Harmonic mean of precision and recall. Range [0,1]. Balances both metrics.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Low F1 can be from poor precision, poor recall, or both. Useful for imbalanced datasets. GARP tests the F1 score as a single metric that balances precision and recall. The harmonic mean is used instead of the arithmetic mean because it penalizes extreme values. For example, if precision = 1 and recall = 0.1, the arithmetic mean is 0.55, but the F1 score is 0.18. This reflects the fact that the model is not performing well overall. F1 is useful when you need a single metric to compare models. However, it may obscure whether a low F1 is due to poor precision, poor recall, or both. In the exam, you may be asked to calculate F1 or to compare models based on F1.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{15 --- Accuracy}
+		\begin{block}{Formula}
+			$Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Percentage of correct predictions. Misleading for imbalanced data.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			If 98\% of transactions are legitimate, predicting all legitimate gives 98\% accuracy but 0\% fraud detection. GARP tests this concept frequently. Accuracy is the most intuitive metric but also the most misleading for imbalanced datasets. In fraud detection, where fraud is rare (e.g., 1\% of transactions), a model that predicts ``no fraud'' for every transaction has 99\% accuracy but is useless. This is why precision, recall, and F1 are preferred for imbalanced data. Accuracy is appropriate when classes are balanced. In the exam, you may be asked to identify why accuracy is misleading or to calculate accuracy from a confusion matrix.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{16 --- Error Rate}
+		\begin{block}{Formula}
+			$Error\ Rate = \frac{FP + FN}{Total} = 1 - Accuracy$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Percentage of incorrect predictions. Type I error = false positive. Type II error = false negative.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Costs of each type differ by application. GARP tests the distinction between Type I and Type II errors. Type I error (false positive) = rejecting a true null hypothesis. Type II error (false negative) = failing to reject a false null hypothesis. In fraud detection, a false positive is flagging a legitimate transaction as fraud (customer friction). A false negative is missing a fraudulent transaction (financial loss). The relative costs determine the optimal threshold. In medical diagnosis, a false positive is diagnosing a healthy patient as sick (unnecessary treatment). A false negative is missing a sick patient (untreated disease). The exam may ask you to identify which type of error is more costly in a given scenario.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{17 --- MSE}
+		\begin{block}{Formula}
+			$MSE = \frac{1}{N}\sum(y_i - \hat{y}_i)^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Mean Squared Error. Penalizes large errors heavily because of squaring. Sensitive to outliers.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Units are squared (e.g., dollars squared), making interpretation difficult. GARP tests MSE and its relationship to RMSE and MAE. MSE is the most common loss function for regression. It is differentiable, which makes it suitable for gradient descent. However, because errors are squared, MSE is sensitive to outliers. A single large error can dominate the MSE. This is why MAE is sometimes preferred when outliers are present. In the exam, you may be asked to compare MSE, MAE, and RMSE or to identify which is most appropriate for a given scenario. MSE is also used as a loss function in neural network training.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{18 --- RMSE}
+		\begin{block}{Formula}
+			$RMSE = \sqrt{MSE}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Root Mean Squared Error. Same units as target variable, so more interpretable.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Still sensitive to outliers. ECB recommends reporting RMSE alongside MAE for tail risk. GARP tests RMSE as the square root of MSE. RMSE is easier to interpret than MSE because it is in the same units as the target variable. For example, if you are predicting house prices in dollars, RMSE is in dollars, while MSE is in dollars squared. This makes RMSE more intuitive for stakeholders. However, RMSE is still sensitive to outliers because it is derived from MSE. The ECB's Guide to Internal Models recommends using metrics that capture tail risk, such as RMSE alongside MAE. In the exam, you may be asked to interpret RMSE or to compare it to MAE.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{19 --- MAE}
+		\begin{block}{Formula}
+			$MAE = \frac{1}{N}\sum|y_i - \hat{y}_i|$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Mean Absolute Error. Robust to outliers. Straightforward interpretation: average error magnitude.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Does not penalize large errors as heavily as MSE. Can mask direction of bias. GARP tests MAE as an alternative to MSE. MAE is the average of absolute errors. Because it does not square errors, MAE is more robust to outliers. This makes it useful when the data has extreme values that could skew MSE. However, MAE does not penalize large errors as heavily as MSE, which may be a disadvantage in applications where large errors are particularly costly. MAE also does not distinguish between over-prediction and under-prediction (both are treated the same). In the exam, you may be asked to compare MAE and MSE or to identify which is more appropriate for a given dataset.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{20 --- MAPE}
+		\begin{block}{Formula}
+			$MAPE = 100 \times \frac{1}{N}\sum\left|\frac{y_i - \hat{y}_i}{y_i}\right|$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Mean Absolute Percentage Error. Scale-independent, good for comparing across different scales.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Fails when actual = 0 or near zero. Board-friendly because it is a percentage. GARP tests MAPE as a relative error metric. MAPE expresses errors as a percentage of the actual value. This makes it scale-independent, so you can compare models across different datasets or time periods. MAPE is often used in business reporting because it is easy to understand. However, MAPE has a significant limitation: it fails when the actual value is zero or near zero (division by zero). It also understates the impact of errors on large absolute value items if their percentage error is small. In the exam, you may be asked to identify the limitations of MAPE or to compare it to other metrics.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{21 --- Simple Linear Regression}
+		\begin{block}{Formula}
+			$y_i = \beta_0 + \beta_1 x_i + u_i$
+		\end{block}
+		\begin{block}{Memory Hook}
+			$\beta_0$ = intercept (value of y when x = 0). $\beta_1$ = slope (change in y for one-unit change in x).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			$u_i$ = error term. OLS minimizes sum of squared residuals. GARP tests the interpretation of regression coefficients. The intercept $\beta_0$ is the predicted value of y when x = 0. However, this may not be meaningful if x = 0 is outside the range of the data. The slope $\beta_1$ measures the change in y for a one-unit change in x. For example, if y is salary and x is years of experience, $\beta_1$ is the increase in salary for each additional year of experience. The error term $u_i$ captures all factors affecting y that are not included in the model. OLS estimates $\beta_0$ and $\beta_1$ by minimizing the sum of squared residuals. In the exam, you may be asked to interpret coefficients or to identify the limitations of linear regression.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{22 --- Multiple Linear Regression}
+		\begin{block}{Formula}
+			$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \cdots + \beta_m x_{mi} + u_i$
+		\end{block}
+		\begin{block}{Memory Hook}
+			$m$ features, $m+1$ parameters. Each coefficient measures partial effect controlling for other features.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			OLS can be used if model is linear in parameters. Watch for multicollinearity, heteroskedasticity, outliers. GARP tests the assumptions and limitations of multiple regression. The key assumption is that the model is linear in parameters. This means that the coefficients enter linearly, but the features themselves can be nonlinear (e.g., $x^2$, $\ln(x)$). Multicollinearity occurs when features are highly correlated, leading to unstable coefficient estimates. Heteroskedasticity occurs when the variance of errors is not constant, leading to inefficient estimates and invalid inference. Outliers can disproportionately influence the regression line. In the exam, you may be asked to identify these problems or to suggest remedies (e.g., regularization for multicollinearity, robust standard errors for heteroskedasticity).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{23 --- Logistic Function}
+		\begin{block}{Formula}
+			$f(z) = \frac{1}{1 + e^{-z}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Sigmoid function. Output between 0 and 1. Used in logistic regression for binary classification.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Also used as activation function in neural networks. Can suffer from vanishing gradient. GARP tests the sigmoid function and its properties. The sigmoid function maps any real number to the interval (0,1). This makes it suitable for modeling probabilities. In logistic regression, the sigmoid function is applied to a linear combination of features to produce a probability. The output can then be thresholded (e.g., at 0.5) to make a binary classification. In neural networks, the sigmoid function was historically used as an activation function, but it has largely been replaced by ReLU because of the vanishing gradient problem. In the exam, you may be asked to identify the sigmoid function or to explain its role in logistic regression.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{24 --- Logistic Regression Probability}
+		\begin{block}{Formula}
+			$P_i = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_{1i} + \cdots + \beta_m x_{mi})}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Applies sigmoid to linear combination of features. Output interpreted as probability.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Log-odds is linear: $\ln(P/(1-P)) = \beta_0 + \beta_1 x_1 + \cdots$. Coefficients interpreted as odds ratios: $\exp(\beta_j)$. GARP tests the interpretation of logistic regression coefficients. The log-odds (logit) is a linear function of the features. This is why logistic regression is also called a logit model. The coefficient $\beta_j$ represents the change in log-odds for a one-unit change in $x_j$. Exponentiating the coefficient gives the odds ratio: $\exp(\beta_j)$. For example, if $\beta_j = 0.5$, then $\exp(0.5) = 1.65$, meaning that a one-unit increase in $x_j$ multiplies the odds of the outcome by 1.65. In the exam, you may be asked to interpret coefficients as odds ratios or to calculate probabilities.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{25 --- Log-Likelihood (Logit)}
+		\begin{block}{Formula}
+			$\log L = \sum[y_i \ln F(y_i) + (1-y_i)\ln(1-F(y_i))]$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Sum of log-probabilities. MLE maximizes this.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Log transformation turns products into sums, avoiding underflow. For linear regression with normal errors, MLE = OLS. GARP tests maximum likelihood estimation and its relationship to OLS. MLE finds the parameter values that maximize the likelihood of observing the data. For logistic regression, the log-likelihood is used because it is easier to maximize than the likelihood itself. The log transformation turns the product of probabilities into a sum, which is computationally more stable (avoids underflow for small probabilities). For linear regression with normally distributed errors, MLE produces the same estimates as OLS. This is a key theoretical result. In the exam, you may be asked to compare MLE and OLS or to identify the log-likelihood function.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{26 --- OLS Slope}
+		\begin{block}{Formula}
+			$\hat{\beta}_1 = \frac{\sum y_i x_i - N\bar{y}\bar{x}}{\sum x_i^2 - N\bar{x}^2}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Covariance(x,y) / Variance(x). Measures how much y changes per unit change in x.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			OLS finds the line that minimizes sum of squared residuals. GARP tests the OLS formula and its interpretation. The slope is the ratio of the covariance between x and y to the variance of x. This makes intuitive sense: if x and y move together (positive covariance), the slope is positive. If they move oppositely (negative covariance), the slope is negative. The variance of x in the denominator scales the slope. A larger variance in x means that the slope is estimated with more precision. The OLS slope is the best linear unbiased estimator (BLUE) under the Gauss-Markov assumptions. In the exam, you may be asked to calculate the slope or to interpret its sign and magnitude.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{27 --- OLS Intercept}
+		\begin{block}{Formula}
+			$\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Regression line passes through the point of means $(\bar{x}, \bar{y})$.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Intercept = predicted y when x = 0. May not be meaningful if x = 0 is outside data range. GARP tests the interpretation of the intercept. The intercept is the value of y when x = 0. In some cases, this is meaningful (e.g., if x is temperature in Celsius, x = 0 is the freezing point). In other cases, it is not (e.g., if x is years of experience, x = 0 means no experience, which may be outside the range of the data). The intercept is necessary for the regression line to pass through the point of means. Without an intercept, the line would be forced through the origin, which could bias the slope estimate. In the exam, you may be asked to interpret the intercept or to explain why it is included in the model.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{28 --- RSS}
+		\begin{block}{Formula}
+			$RSS = \sum(y_i - \hat{y}_i)^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Residual Sum of Squares. OLS minimizes this. Also called Sum of Squared Residuals (SSR) or Sum of Squared Errors (SSE).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Squaring prevents positive and negative residuals from canceling. GARP tests RSS and its role in OLS. The residuals are the differences between actual and predicted values. If we simply summed the residuals, positive and negative values would cancel out, potentially giving a sum of zero even for a poor fit. Squaring the residuals ensures that all values are positive, so the sum reflects the total error. OLS finds the parameter values that minimize RSS. RSS is also used in other contexts, such as evaluating model fit (lower RSS = better fit). In the exam, you may be asked to calculate RSS or to explain why it is used instead of the sum of residuals.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{29 --- Standardization}
+		\begin{block}{Formula}
+			$z = \frac{x - \mu}{\sigma}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Z-score. Mean = 0, SD = 1. Preferred when data has outliers (normalization would squash them).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Applied to input features, not target. Critical for K-means, KNN, SVM, neural networks. GARP tests standardization and its importance for distance-based algorithms. Standardization transforms features to have a mean of 0 and a standard deviation of 1. This ensures that all features contribute equally to distance calculations. Without standardization, a feature with a large scale (e.g., income in dollars) would dominate a feature with a small scale (e.g., age in years). This is why standardization is a prerequisite for K-means, KNN, and SVM. Standardization is preferred over normalization when the data has outliers because normalization would squash the outliers into a tight range. In the exam, you may be asked why standardization is necessary or to calculate standardized values.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{30 --- Min-Max Normalization}
+		\begin{block}{Formula}
+			$x' = \frac{x - x_{min}}{x_{max} - x_{min}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Range [0,1]. Squashes outliers into tight range. Preserves correlations between data points.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Does not change shape of distribution. Less preferred than standardization when outliers exist. GARP tests normalization and its differences from standardization. Normalization scales features to a fixed range, typically [0,1]. This is useful when you want to ensure that all features are on the same scale. However, normalization is sensitive to outliers because the min and max are used in the formula. If there is an extreme outlier, the rest of the data will be squashed into a small range. Standardization is more robust to outliers because it uses the mean and standard deviation, which are less affected by extreme values. In the exam, you may be asked to compare normalization and standardization or to identify which is more appropriate for a given dataset.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{31 --- PCA Component}
+		\begin{block}{Formula}
+			$PC_j = b_{1j}P_1 + b_{2j}P_2 + \cdots + b_{mj}P_m$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Linear combination of original predictors. Weights = component loadings. First PC captures most variance.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Second PC orthogonal to first. Components are uncorrelated. Used for dimensionality reduction and multicollinearity. GARP tests PCA and its applications. PCA finds linear combinations of the original features that maximize variance. The first principal component (PC1) captures the most variance. The second principal component (PC2) captures the most variance that is not already explained by PC1, and it is orthogonal (uncorrelated) to PC1. This process continues until all variance is explained. PCA is used for dimensionality reduction: instead of using all m features, you can use the first few PCs that capture most of the variance. PCA also solves multicollinearity because the PCs are uncorrelated. In the exam, you may be asked to interpret PCA loadings or to explain how PCA reduces dimensionality.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{32 --- Cosine Similarity}
+		\begin{block}{Formula}
+			$S_c(P,Q) = \frac{P \cdot Q}{\|P\| \|Q\|}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Range [-1,1]. Measures angle between vectors, not magnitude. Used in Word2Vec for word similarity.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			If words are close, similarity near 1. If unrelated, similarity near 0. Example: China-Japan = 0.84. GARP tests cosine similarity and its applications in NLP. Cosine similarity measures the cosine of the angle between two vectors. It is not affected by the magnitude of the vectors, only their direction. This makes it useful for comparing documents of different lengths or word vectors of different frequencies. In Word2Vec, cosine similarity is used to find words that are semantically similar. For example, ``king'' and ``queen'' have high cosine similarity because they appear in similar contexts. In the exam, you may be asked to interpret cosine similarity values or to explain why it is preferred over Euclidean distance for text data.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{33 --- TF-IDF}
+		\begin{block}{Formula}
+			$TF\text{-}IDF_{ij} = TF_{ij} \times IDF_i$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Term frequency $\times$ inverse document frequency. Weights words that are frequent in a document but rare across corpus.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Words appearing in all documents get IDF = 0. Used for document classification and information retrieval. GARP tests TF-IDF and its components. Term frequency (TF) measures how often a word appears in a document. Inverse document frequency (IDF) measures how rare a word is across the corpus. Multiplying them gives TF-IDF, which is high for words that are frequent in a specific document but rare overall. This helps identify words that are characteristic of a document. For example, in a corpus of financial news, the word ``the'' appears in every document (IDF = 0), so it gets no weight. The word ``bankruptcy'' might appear in only a few documents (high IDF), so it gets high weight when it appears. In the exam, you may be asked to calculate TF-IDF or to explain its purpose.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{34 --- IDF}
+		\begin{block}{Formula}
+			$IDF_i = \ln\left(\frac{D}{d_i}\right)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			$D$ = total documents. $d_i$ = documents containing term $i$. Rare words get higher IDF.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Common words get lower IDF. If term appears in all documents, IDF = 0 (no discriminatory power). GARP tests IDF and its role in TF-IDF. IDF is the natural logarithm of the ratio of total documents to the number of documents containing the term. If a term appears in every document, $d_i = D$, so $IDF = \ln(1) = 0$. This means the term has no discriminatory power and gets no weight in TF-IDF. If a term appears in only one document, $d_i = 1$, so $IDF = \ln(D)$, which is high. This gives rare terms more weight. The logarithm compresses the range of IDF values, preventing extreme weights. In the exam, you may be asked to calculate IDF or to explain why it is used.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{35 --- L2 Normalization}
+		\begin{block}{Formula}
+			$v_{norm} = \frac{v}{\sqrt{\sum v_i^2}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Creates unit vector. Divides each element by L2 norm. Used in NLP to normalize word vectors.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Prevents repeated words from skewing analysis. All elements lie between 0 and 1. GARP tests L2 normalization and its applications. L2 normalization scales a vector to have a length (L2 norm) of 1. This is useful when the magnitude of the vector is not important, only its direction. For example, in document classification, a long document will have higher word counts than a short document. L2 normalization removes this length effect, making documents comparable. In Word2Vec, word embeddings are often L2-normalized before computing cosine similarity. In the exam, you may be asked to normalize a vector or to explain why normalization is important.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{36 --- Bayes Rule}
+		\begin{block}{Formula}
+			$P(c|d) = \frac{P(d|c)P(c)}{P(d)}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Posterior = Likelihood $\times$ Prior / Evidence. $P(c)$ = prior probability. $P(d|c)$ = likelihood.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			$P(c|d)$ = posterior. Used in Naive Bayes classification. GARP tests Bayes rule and its components. Bayes rule describes how to update probabilities based on new evidence. The prior $P(c)$ is the probability of class $c$ before observing the data. The likelihood $P(d|c)$ is the probability of observing data $d$ given class $c$. The evidence $P(d)$ is the total probability of observing data $d$ across all classes. The posterior $P(c|d)$ is the updated probability of class $c$ after observing data $d$. In Naive Bayes, we compute the posterior for each class and choose the class with the highest posterior. In the exam, you may be asked to apply Bayes rule or to identify its components.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{37 --- Naive Bayes Classification}
+		\begin{block}{Formula}
+			$\hat{c} = \arg\max_c P(w_1|c)P(w_2|c)\cdots P(w_N|c)P(c)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Product of conditional word probabilities times class prior. ``Naive'' because assumes word independence.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Laplace smoothing adds 1 to all counts to avoid zero probabilities. Used for spam detection, sentiment analysis. GARP tests Naive Bayes and its assumptions. The ``naive'' assumption is that words are independent of each other given the class. This is rarely true in practice (words are correlated), but Naive Bayes still performs well in many applications. The classification rule chooses the class that maximizes the product of conditional word probabilities and the class prior. Because probabilities can be very small, the log is often used to avoid underflow. Laplace smoothing adds a small positive number (usually 1) to all counts to avoid zero probabilities, which would make the entire product zero. In the exam, you may be asked to apply Naive Bayes or to explain why it works despite the naive assumption.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{38 --- Scaled Dot-Product Attention}
+		\begin{block}{Formula}
+			$score(Q_i, K_j) = \frac{Q_i \cdot K_j}{\sqrt{d_k}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Divide by $\sqrt{d_k}$ (key dimension) to prevent softmax saturation. Query = current token. Key = other tokens. Value = used to compute context.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Core of transformer architecture. GARP tests the attention mechanism and its purpose. Attention computes a weighted sum of values, where the weights are determined by the similarity between queries and keys. The scaling factor $\sqrt{d_k}$ is crucial: without it, the dot products can become very large, causing the softmax function to saturate (outputs close to 0 or 1). This leads to vanishing gradients and poor training. Scaling ensures that the dot products have a reasonable range. In the exam, you may be asked to explain why scaling is necessary or to compute attention scores.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{39 --- Softmax}
+		\begin{block}{Formula}
+			$softmax(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Normalizes exponentials into probability distribution. Sum = 1. Used in attention and multiclass outputs.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Exponentially magnifies largest values. Prevents negative probabilities. GARP tests softmax and its properties. Softmax takes a vector of real numbers and converts it into a probability distribution. The exponential function ensures that all outputs are positive. Dividing by the sum ensures that the outputs sum to 1. Softmax magnifies the largest values: if one input is much larger than the others, its output will be close to 1, and the others will be close to 0. This is useful for classification, where we want to assign high probability to the most likely class. In the exam, you may be asked to compute softmax or to explain its role in neural networks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{40 --- Gradient Descent Update}
+		\begin{block}{Formula}
+			$w_i^{new} = w_i^{old} - \eta\frac{\partial L}{\partial w_i}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Subtract learning-rate-scaled gradient. $\eta$ = learning rate. Too small = slow convergence. Too large = overshooting.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Batch GD uses full dataset. SGD uses one example. Mini-batch uses subset. GARP tests gradient descent and its variants. Gradient descent is an iterative optimization algorithm that finds the parameter values that minimize a loss function. The gradient is the direction of steepest ascent. We move in the opposite direction (subtract) to descend. The learning rate $\eta$ controls the step size. If $\eta$ is too small, convergence is slow. If $\eta$ is too large, the algorithm may overshoot the minimum and fail to converge. Batch gradient descent uses the entire dataset to compute the gradient, which is accurate but slow. Stochastic gradient descent uses one example at a time, which is fast but noisy. Mini-batch gradient descent uses a small subset, balancing both. In the exam, you may be asked to compare these variants or to explain the role of the learning rate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{41 --- Exponential Learning Rate Decay}
+		\begin{block}{Formula}
+			$\eta_t = \eta_0 e^{-kt}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Learning rate decreases exponentially over epochs. $k$ controls decay rate. $t$ = epoch.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Start with larger rate for fast initial progress, reduce for fine-tuning. Common in SGD. GARP tests learning rate schedules. A fixed learning rate may be suboptimal: too large for fine-tuning, too small for initial progress. Decay schedules address this by starting with a larger rate and gradually reducing it. Exponential decay is one of the most common schedules. The parameter $k$ controls how quickly the rate decays. A larger $k$ means faster decay. Inverse decay is another option: $\eta_t = \eta_0 / (1 + kt)$. In the exam, you may be asked to compare decay schedules or to explain why decay is used.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{42 --- Inverse Learning Rate Decay}
+		\begin{block}{Formula}
+			$\eta_t = \frac{\eta_0}{1 + kt}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Alternative decay schedule. Decreases more slowly than exponential. $k$ controls decay rate.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Used in stochastic gradient descent. Both schedules reduce learning rate over time. GARP tests the differences between decay schedules. Inverse decay reduces the learning rate more slowly than exponential decay. This may be preferable when you want to maintain a higher learning rate for longer. The choice between exponential and inverse decay depends on the problem and is often determined empirically. In the exam, you may be asked to identify the formula for inverse decay or to compare it to exponential decay.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{43 --- Gini Coefficient}
+		\begin{block}{Formula}
+			$Gini = 1 - \sum_{j=1}^{J} p_j^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Node impurity in classification trees. Lower = purer. Gini = 0 for pure node. Gini = 0.5 for binary 50/50 split.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Computationally faster than entropy (no log). Usually produces similar trees. GARP tests Gini and entropy as impurity measures. The Gini coefficient measures the probability of misclassifying a randomly chosen element if it were randomly labeled according to the distribution of labels in the node. A pure node (all elements belong to one class) has Gini = 0. A 50/50 split has Gini = 0.5. Decision trees choose splits that minimize the weighted average Gini of the child nodes. Gini is preferred over entropy in some implementations (e.g., CART) because it is faster to compute (no logarithm). In the exam, you may be asked to calculate Gini or to compare it to entropy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{44 --- Entropy}
+		\begin{block}{Formula}
+			$Entropy = -\sum_{j=1}^{J} p_j \log_2(p_j)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Measure of disorder in classification trees. Lower = purer. Entropy = 0 for pure node. Entropy = 1 for binary 50/50 split.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Base-2 log. Changing base scales all values by constant. GARP tests entropy and its relationship to information gain. Entropy measures the uncertainty or disorder in a node. A pure node has entropy = 0 (no uncertainty). A 50/50 split has entropy = 1 (maximum uncertainty for binary classification). Decision trees choose splits that maximize information gain, which is the reduction in entropy. Information gain = parent entropy - weighted average child entropy. Entropy is used in ID3 and C4.5 algorithms. Gini is used in CART. In the exam, you may be asked to calculate entropy or to explain information gain.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{45 --- AIC}
+		\begin{block}{Formula}
+			$AIC = 2k - 2\ln(L)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Akaike Information Criterion. $k$ = parameters. $L$ = likelihood. Lower = better. Penalizes complexity.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Used in stepwise regression for feature selection. Does not require nested models. GARP tests AIC and its use in model selection. AIC balances model fit (likelihood) with complexity (number of parameters). A model with more parameters will have higher likelihood (better fit) but also higher penalty. AIC helps choose the model that best balances these two objectives. Lower AIC = better model. AIC is used in stepwise regression: at each step, add or remove the feature that most reduces AIC. AIC does not require models to be nested, unlike some other tests. In the exam, you may be asked to interpret AIC or to use it for model selection.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{46 --- BIC}
+		\begin{block}{Formula}
+			$BIC = k\ln(N) - 2\ln(L)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Bayesian Information Criterion. $N$ = sample size. Penalizes complexity more than AIC for large samples. Lower = better.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			More conservative (selects simpler models). Used for model selection. GARP tests BIC and its differences from AIC. BIC penalizes complexity more heavily than AIC, especially for large samples. This is because the penalty term includes $\ln(N)$, which grows with sample size. As a result, BIC tends to select simpler models than AIC. BIC is based on Bayesian theory and approximates the Bayes factor. AIC is based on information theory. Both are used for model selection, but BIC is more conservative. In the exam, you may be asked to compare AIC and BIC or to identify which is more appropriate for a given situation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{47 --- Covariance}
+		\begin{block}{Formula}
+			$Cov(x_1, x_2) = \frac{\sum(x_1 - \bar{x}_1)(x_2 - \bar{x}_2)}{N-1}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Average product of deviations from means. Positive = variables move together. Negative = move oppositely.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Zero = no linear relationship. Used in LDA covariance matrix. GARP tests covariance and its interpretation. Covariance measures how two variables vary together. If both variables tend to be above their means at the same time, the product of deviations is positive, so covariance is positive. If one tends to be above its mean when the other is below, the product is negative, so covariance is negative. If there is no linear relationship, the products average to zero. Covariance is used in portfolio theory (covariance between asset returns), LDA (covariance matrix), and PCA. In the exam, you may be asked to interpret covariance or to calculate it from data.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{48 --- 2x2 Matrix Inverse}
+		\begin{block}{Formula}
+			$\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \frac{1}{ad-bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Swap diagonal, negate off-diagonal, divide by determinant. Determinant = $ad-bc$ must be non-zero.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			If determinant = 0, matrix is singular (no inverse). Used in LDA discriminant function. GARP tests matrix inverse as part of LDA. The inverse of a matrix is used to solve systems of linear equations and in various machine learning algorithms. For a 2x2 matrix, the inverse has a simple formula. The determinant $ad-bc$ must be non-zero for the inverse to exist. If the determinant is zero, the matrix is singular, meaning it does not have an inverse. In LDA, the inverse of the covariance matrix is used in the discriminant function. In the exam, you may be asked to compute the inverse of a 2x2 matrix or to explain the condition for invertibility.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{49 --- LDA Discriminant Function}
+		\begin{block}{Formula}
+			$\delta_j(x) = x^T\hat{\Sigma}^{-1}\hat{\mu}_j - \frac{1}{2}\hat{\mu}_j^T\hat{\Sigma}^{-1}\hat{\mu}_j + \ln(\hat{\pi}_j)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			LDA assumes multivariate normal with common covariance. Assign to class with largest $\delta_j$.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Works for multi-class classification. $\hat{\pi}_j$ = prior probability of class $j$. GARP tests LDA and its assumptions. LDA is a classification method that assumes the features are normally distributed within each class, with a common covariance matrix across classes. Under these assumptions, the discriminant function is linear in the features. For each class, we compute a discriminant score, and we assign the observation to the class with the highest score. LDA is closely related to logistic regression but differs in assumptions and estimation. LDA is more efficient when the assumptions hold, but logistic regression is more robust when they do not. In the exam, you may be asked to compare LDA and logistic regression or to interpret discriminant scores.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{50 --- Autoencoder Loss}
+		\begin{block}{Formula}
+			$L = \sum_{j=1}^{m}\sum_{i=1}^{N}(x_{ij} - \hat{x}_{ij})^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Reconstruction error. Autoencoders learn compressed representations. Used for dimensionality reduction and anomaly detection.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			High reconstruction error = anomaly. With linear activation = PCA. GARP tests autoencoders and their applications. An autoencoder is a neural network that is trained to reconstruct its input. It consists of an encoder that compresses the input into a lower-dimensional representation (the bottleneck) and a decoder that reconstructs the input from this representation. The loss function is the reconstruction error, which measures how well the output matches the input. Autoencoders are used for dimensionality reduction (similar to PCA but with nonlinear capabilities) and anomaly detection. In anomaly detection, the autoencoder is trained on normal data. When an anomalous data point is presented, the reconstruction error is high, flagging it as an anomaly. In the exam, you may be asked to explain how autoencoders work or to compare them to PCA.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Names and People}
+	% =================================================================
+	
+	\begin{frame}{51 --- John McCarthy}
+		\begin{block}{Contribution}
+			Coined ``Artificial Intelligence'' (1956). Dartmouth Conference. Developed LISP (1960).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Along with Marvin Minsky, Nathan Rochester, and Claude Shannon. Founded Stanford AI Lab (1963). Considered a founding father of AI.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the origin of the term ``Artificial Intelligence.'' McCarthy organized the Dartmouth Summer Research Project in 1956, where the term was first used. He also developed LISP, one of the earliest programming languages for AI. This is a key historical fact. In the exam, you may be asked who coined the term or when the Dartmouth Conference took place.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{52 --- Alan Turing}
+		\begin{block}{Contributions}
+			Turing Machine (1936). Turing Test (1950) = ``The Imitation Game.''
+		\end{block}
+		\begin{block}{Memory Hook}
+			``On Computable Numbers, with an Application to the Entscheidungsproblem'' (1936). ``Computing Machinery and Intelligence'' (1950).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Turing Test: computer proves intelligence if conversation indistinguishable from human. Worked at Bletchley Park during WWII. GARP tests Turing's contributions to AI. The Turing Machine is a theoretical model of computation that defines what is computable. The Turing Test is a criterion for intelligence based on conversational ability. Turing's 1950 paper introduced the ``imitation game,'' which later became known as the Turing Test. Turing also worked on breaking the Enigma code during WWII. In the exam, you may be asked about the Turing Test or the Turing Machine.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{53 --- McCulloch and Pitts}
+		\begin{block}{Contribution}
+			First neural network model (1943). ``A logical calculus of the ideas immanent in nervous activity.''
+		\end{block}
+		\begin{block}{Memory Hook}
+			Published in Bulletin of Mathematical Biology. Described neurons in terms of propositional logic.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Foundational paper for neural networks. GARP tests the origins of neural networks. McCulloch and Pitts proposed a simplified model of a neuron that could perform logical operations. They showed that networks of such neurons could compute any logical function. This paper laid the foundation for artificial neural networks. In the exam, you may be asked who developed the first neural network model or what the McCulloch-Pitts neuron does.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{54 --- Donald Hebb}
+		\begin{block}{Contribution}
+			Hebbian Learning (1949). ``The Organisation of Behaviour.''
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Neurons that fire together, wire together.'' Proposed associative learning in neural networks.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Neurophysiological postulate: connection strengthens when one neuron repeatedly fires another. GARP tests Hebbian learning and its influence. Hebb's idea that learning occurs through strengthening of connections between neurons that are active at the same time is a cornerstone of neural network theory. This principle is still used in some learning algorithms today. In the exam, you may be asked about Hebb's contribution or the phrase ``neurons that fire together, wire together.''
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{55 --- Frank Rosenblatt}
+		\begin{block}{Contribution}
+			Perceptron (1958). Formulated in terms of probability theory, not symbolic logic.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Single-layer neural network. Could not learn XOR (shown by Minsky and Papert).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Inspired widespread interest in neural networks. GARP tests the Perceptron and its limitations. The Perceptron was the first practical neural network. It could learn linear decision boundaries. However, it could not learn nonlinear functions like XOR. This limitation was highlighted by Minsky and Papert, leading to reduced interest in neural networks until the 1980s. In the exam, you may be asked about the Perceptron or its limitations.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{56 --- Minsky and Papert}
+		\begin{block}{Contribution}
+			``Perceptrons'' (1969). Showed single-layer Perceptrons cannot learn XOR.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Critique severely undermined enthusiasm for neural networks. Later shown that multi-layer networks can learn XOR. Led to AI winter.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the impact of Minsky and Papert's critique. Their book ``Perceptrons'' demonstrated that single-layer networks could not solve simple nonlinear problems like XOR. This led to a decline in neural network research funding and interest (an ``AI winter''). It was later shown that multi-layer networks with nonlinear activation functions could solve XOR, reviving interest in neural networks. In the exam, you may be asked about the XOR problem or the AI winter.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{57 --- Rumelhart, McClelland, PDP}
+		\begin{block}{Contribution}
+			``Parallel Distributed Processing'' (1986). Revived connectionism.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Demonstrated how layers of interacting neurons could learn complex functions. Displaced pessimism from Minsky and Papert. Backpropagation rose to prominence.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the revival of neural networks in the 1980s. The PDP group showed that multi-layer neural networks trained with backpropagation could learn complex nonlinear functions. This addressed the limitations identified by Minsky and Papert and led to renewed interest in neural networks. In the exam, you may be asked about the PDP book or the role of backpropagation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{58 --- Yann LeCun}
+		\begin{block}{Contribution}
+			LeNet-5 (1998). Convolutional neural network for digit recognition. 8 layers with convolutional and pooling layers.
+		\end{block}
+		\begin{block}{Memory Hook}
+			About 9,118 neurons. Foundational work for modern CNNs. Used for mail sorting, bank check processing.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the origins of convolutional neural networks. LeNet-5 was one of the first successful applications of CNNs. It was used to recognize handwritten digits on bank checks and mail. Its architecture (convolutional layers, pooling layers, fully connected layers) became the standard for image recognition. In the exam, you may be asked about LeNet-5 or the structure of CNNs.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{59 --- Krizhevsky, Sutskever, Hinton}
+		\begin{block}{Contribution}
+			AlexNet (2012). Won ImageNet Large Scale Visual Recognition Challenge with 15.3\% error rate (vs 25.8\% previous year).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Nearly 100 times bigger than LeNet-5. Almost 900,000 neurons. Demonstrated power of deep learning. Used GPUs for computation.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the impact of AlexNet on deep learning. AlexNet's victory in the 2012 ImageNet competition is considered a turning point in the history of deep learning. It showed that deep neural networks could dramatically outperform traditional methods when trained on large datasets with powerful hardware (GPUs). This led to widespread adoption of deep learning. In the exam, you may be asked about AlexNet or the ImageNet competition.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{60 --- DeepMind}
+		\begin{block}{Contributions}
+			AlphaGo (2016): defeated Lee Sedol 4-1. AlphaZero (2017): self-play.
+		\end{block}
+		\begin{block}{Memory Hook}
+			AlphaGo beat Fan Hui 5-0 (2015), Lee Sedol 4-1 (2016). AlphaZero learned by competing against itself without human game databases. Defeated Stockfish.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Acquired by Google in 2014. GARP tests the achievements of DeepMind. AlphaGo defeated the world champion in Go, a game long considered too complex for computers. AlphaZero learned by self-play, without any human knowledge, and defeated the best chess program. These achievements demonstrated the power of deep reinforcement learning. In the exam, you may be asked about AlphaGo, AlphaZero, or self-play.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{61 --- Emily M. Bender}
+		\begin{block}{Contribution}
+			``Stochastic parrot'' (2021). Describes LLMs that imitate language without understanding meaning.
+		\end{block}
+		\begin{block}{Memory Hook}
+			They generate plausible responses based on statistical patterns, not true understanding. Term widely cited in AI ethics discussions.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the concept of the stochastic parrot and its implications. LLMs like GPT are trained to predict the next word based on statistical patterns in text. They do not have an internal model of the world or true understanding. This means they can generate plausible-sounding but false or nonsensical output (hallucination). The term ``stochastic parrot'' highlights this limitation. In the exam, you may be asked about the stochastic parrot or the limitations of LLMs.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{62 --- Vaswani et al.}
+		\begin{block}{Contribution}
+			``Attention Is All You Need'' (2017). Introduced transformer architecture based on self-attention.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Eliminated need for recurrence and convolutions. Foundation for BERT, GPT, and modern LLMs. Multiple attention heads capture different relationships.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the transformer architecture and its impact. The transformer paper introduced the self-attention mechanism, which allows the model to weigh the importance of different words in a sentence when processing each word. This proved more effective than recurrent neural networks (RNNs) for many NLP tasks. Transformers are the foundation of modern LLMs like BERT and GPT. In the exam, you may be asked about the transformer, self-attention, or the paper title.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{63 --- Google (BERT)}
+		\begin{block}{Contribution}
+			BERT (2018). Bidirectional Encoder Representations from Transformers. Encoder-only model.
+		\end{block}
+		\begin{block}{Memory Hook}
+			100 million parameters. Trained on books and Wikipedia. Not generative. Excellent for classification. Variants: RoBERTa, FinBERT.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests BERT and its applications. BERT is an encoder-only transformer that reads the entire input sequence bidirectionally (left-to-right and right-to-left). It is pre-trained on a large corpus using masked language modeling (predicting masked words) and next sentence prediction. BERT is not generative (it cannot create new text) but is excellent for classification, sentiment analysis, and question answering. In the exam, you may be asked about BERT's architecture or its applications.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{64 --- OpenAI (GPT)}
+		\begin{block}{Contribution}
+			GPT series (2018-present). Generative Pre-trained Transformer. Decoder-only autoregressive model.
+		\end{block}
+		\begin{block}{Memory Hook}
+			GPT-1: 100M parameters. GPT-2: 774M. GPT-3: 175B. GPT-4: 2023. GPT-5: 2025. Uses RLHF for alignment.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests GPT and its evolution. GPT is a decoder-only transformer that generates text autoregressively (one word at a time). It is pre-trained on a large corpus to predict the next word. GPT-3 and later models are few-shot learners, meaning they can perform new tasks with only a few examples. RLHF (Reinforcement Learning from Human Feedback) is used to fine-tune GPT to follow instructions and align with human preferences. In the exam, you may be asked about GPT's architecture or training.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{65 --- Facebook (BART)}
+		\begin{block}{Contribution}
+			BART (2019). Bidirectional and Auto-Regressive Transformer. Combines encoder and decoder.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Used for summarization, translation, and generation. Trained by distorting text and learning to reconstruct. Open source.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests BART and its architecture. BART combines the bidirectional encoder of BERT with the autoregressive decoder of GPT. It is trained by corrupting text (e.g., shuffling, removing words) and learning to reconstruct the original. This makes it effective for tasks like summarization and translation. BART is open source and has been widely adopted. In the exam, you may be asked about BART's architecture or its applications.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{66 --- Kleinberg, Mullainathan, Raghavan}
+		\begin{block}{Contribution}
+			Fairness Impossibility Theorem (2016). Demographic parity, predictive rate parity, and equal opportunity cannot all hold simultaneously when base rates differ.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Mathematical result, not practical limitation. Fairness requires trade-offs and value judgments.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the fairness impossibility theorem. The theorem states that when the base rates (prevalence of the outcome) differ between groups, it is mathematically impossible to satisfy all three fairness criteria simultaneously. This means that any attempt to achieve fairness must involve trade-offs. For example, you can achieve demographic parity (equal positive prediction rates) or equal opportunity (equal true positive rates), but not both. This is a fundamental result that GARP expects candidates to understand. In the exam, you may be asked to identify the theorem or to explain its implications.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{67 --- Bentham and Mill}
+		\begin{block}{Contribution}
+			Utilitarianism. Jeremy Bentham and John Stuart Mill. Maximize overall utility/happiness.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Consequentialist framework. Judges actions by outcomes, not intentions. Can justify violating individual rights for greater good.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests utilitarianism and its application to AI ethics. Utilitarianism is a consequentialist theory that judges actions by their outcomes. The morally correct action is the one that produces the greatest net utility (happiness, welfare) for all affected. In AI ethics, utilitarianism might justify deploying a model that benefits the majority even if it harms a minority. This is a common tension in AI ethics discussions. In the exam, you may be asked about utilitarianism or its proponents.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{68 --- Immanuel Kant}
+		\begin{block}{Contribution}
+			Deontology. Categorical Imperative. Act only on maxims that could be universal laws.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Treat people as ends, not means. Judges actions by adherence to duties and rules, not consequences. Lying is always wrong regardless of consequences.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests deontology and its application to AI ethics. Deontology is a non-consequentialist theory that judges actions by their adherence to moral duties and rules. Kant's categorical imperative states that you should act only according to maxims that could be universal laws. This means treating people as ends in themselves, not merely as means to an end. In AI ethics, deontology might prohibit using personal data without consent, even if it would improve model accuracy. In the exam, you may be asked about deontology or Kant's categorical imperative.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{69 --- Aristotle}
+		\begin{block}{Contribution}
+			Virtue Ethics. Nicomachean Ethics. Emphasizes virtuous character traits (wisdom, courage, justice, temperance).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Asks ``What kind of person should I be?'' rather than ``What should I do?'' Virtues nurtured through practice and habit.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests virtue ethics and its application to AI ethics. Virtue ethics focuses on the character of the moral agent rather than on specific actions or their consequences. It asks what traits a virtuous person would exhibit (e.g., honesty, fairness, compassion). In AI ethics, virtue ethics might focus on the character of the developers and deployers of AI systems, encouraging them to cultivate virtues like responsibility and transparency. In the exam, you may be asked about virtue ethics or Aristotle's contribution.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{70 --- Stuart Lloyd}
+		\begin{block}{Contribution}
+			Lloyd's Algorithm (1957) = K-means. Bell Labs. Iterative algorithm: assign points to nearest centroid, update centroids, repeat until convergence.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Also called K-means. K-means++ improves initialization by spreading centroids apart.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the K-means algorithm and its origins. Lloyd's algorithm is the standard K-means clustering algorithm. It iteratively assigns each data point to the nearest centroid and then updates the centroids to be the mean of the assigned points. This process repeats until convergence. K-means++ is an improved initialization method that selects initial centroids far apart, reducing the risk of poor local optima. In the exam, you may be asked about Lloyd's algorithm or K-means++.
+		\end{block}
+	\end{frame}
+	
+\end{document}

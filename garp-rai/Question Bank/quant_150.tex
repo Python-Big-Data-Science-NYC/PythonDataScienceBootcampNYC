@@ -1,0 +1,2449 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI]{GARP Risk \& AI --- 150 Memory \& Theory Questions}
+\subtitle{Formulas, Names, Definitions, Theorems}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% =================================================================
+	\section{Formulas and Mathematical Definitions}
+	% =================================================================
+	
+	\begin{frame}{Q1 --- Euclidean Distance Formula}
+		\begin{block}{Question}
+			In the K-means algorithm, Euclidean distance between two points $P$ and $Q$ in $m$ dimensions is expressed as:
+			\begin{enumerate}
+				\item $\sum_{j=1}^{m} |x_{jQ} - x_{jP}|$
+				\item $\sqrt{\sum_{j=1}^{m} (x_{jQ} - x_{jP})^2}$
+				\item $\max_j |x_{jQ} - x_{jP}|$
+				\item $\sum_{j=1}^{m} (x_{jQ} - x_{jP})$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Euclidean distance is the square root of the sum of squared differences = L2-norm. Option A is Manhattan distance (L1). Option C is Chebyshev distance. Option D is signed sum (not a metric).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q2 --- Manhattan Distance Formula}
+		\begin{block}{Question}
+			The Manhattan distance between two points $P$ and $Q$ in $m$ dimensions is also known as:
+			\begin{enumerate}
+				\item The L2-norm
+				\item The L1-norm
+				\item The L$\infty$-norm
+				\item The cosine norm
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Manhattan distance = L1-norm = sum of absolute differences. L2-norm is Euclidean; L$\infty$-norm is Chebyshev; cosine norm is a similarity metric.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q3 --- Silhouette Score Formula}
+		\begin{block}{Question}
+			The silhouette score for a data point $i$ is defined as:
+			\begin{enumerate}
+				\item $s_i = a_i - b_i$
+				\item $s_i = \dfrac{b_i - a_i}{\max(a_i, b_i)}$
+				\item $s_i = \dfrac{a_i + b_i}{2}$
+				\item $s_i = \dfrac{a_i \cdot b_i}{a_i + b_i}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Silhouette score = $(b_i - a_i)/\max(a_i, b_i)$ where $a_i$ is mean intra-cluster distance and $b_i$ is mean distance to nearest other cluster. Range is $[-1, 1]$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q4 --- Silhouette Score Range}
+		\begin{block}{Question}
+			The silhouette score $s_i$ for any data point lies within which range?
+			\begin{enumerate}
+				\item $[0, 1]$
+				\item $[-1, 1]$
+				\item $[-1, 0]$
+				\item $[0, \infty)$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Silhouette scores are bounded in $[-1, 1]$. $s \approx 1$ = well-clustered; $s \approx 0$ = boundary; $s < 0$ = possibly mis-clustered.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q5 --- WCSS Definition}
+		\begin{block}{Question}
+			The Within-Cluster Sum of Squares (WCSS) for cluster $k$ is defined as:
+			\begin{enumerate}
+				\item $\sum_{j=1}^{n_k} d_j$
+				\item $\sum_{j=1}^{n_k} d_j^2$
+				\item $\sqrt{\sum_{j=1}^{n_k} d_j}$
+				\item $\max_j d_j$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			WCSS$_k = \sum_{j=1}^{n_k} d_j^2$ where $d_j$ is the distance from point $j$ to the cluster centroid. Squared distances ensure positive and negative deviations do not cancel.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q6 --- Total WCSS Formula}
+		\begin{block}{Question}
+			The total WCSS for all $K$ clusters is given by:
+			\begin{enumerate}
+				\item $\sum_{k=1}^{K} \text{WCSS}_k$
+				\item $\prod_{k=1}^{K} \text{WCSS}_k$
+				\item $\max_k \text{WCSS}_k$
+				\item $\frac{1}{K} \sum_{k=1}^{K} \text{WCSS}_k$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Total WCSS = sum of individual cluster WCSS values. This is the objective function minimised by K-means.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q7 --- Bias-Variance Decomposition}
+		\begin{block}{Question}
+			The expected total prediction error of a model can be decomposed as:
+			\begin{enumerate}
+				\item Bias + Variance
+				\item Bias$^2$ + Variance$^2$
+				\item Bias$^2$ + Variance + Irreducible Error
+				\item Bias + Variance + Irreducible Error
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Total error = Bias$^2$ + Variance + Irreducible Error. The irreducible component represents noise that no model can eliminate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q8 --- Regularization Loss (Ridge)}
+		\begin{block}{Question}
+			The Ridge regression loss function is:
+			\begin{enumerate}
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)^2 + \lambda \sum |\beta_j|$
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)^2 + \lambda \sum \beta_j^2$
+				\item $\sum (y_i - \hat{y}_i)^2$
+				\item $\lambda \sum |\beta_j|$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Ridge uses L2 penalty: $\lambda \sum \beta_j^2$. LASSO uses L1 penalty: $\lambda \sum |\beta_j|$. Options A and C are LASSO and OLS respectively.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q9 --- Regularization Loss (LASSO)}
+		\begin{block}{Question}
+			The LASSO regression loss function is:
+			\begin{enumerate}
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)^2 + \lambda \sum \beta_j^2$
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)^2 + \lambda \sum |\beta_j|$
+				\item $\sum \beta_j^2$
+				\item $\sum (y_i - \hat{y}_i)^2$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			LASSO uses L1 penalty: $\lambda \sum |\beta_j|$. It can drive coefficients to exactly zero, performing feature selection.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q10 --- Elastic Net Loss Function}
+		\begin{block}{Question}
+			The Elastic Net regression loss function combines:
+			\begin{enumerate}
+				\item L1 and L2 penalties
+				\item Only L1 penalty
+				\item Only L2 penalty
+				\item Neither penalty
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Elastic Net = L1 + L2 = $\lambda_1 \sum \beta_j^2 + \lambda_2 \sum |\beta_j|$. It inherits sparsity from L1 and grouping from L2.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q11 --- Precision Formula}
+		\begin{block}{Question}
+			Precision is defined as:
+			\begin{enumerate}
+				\item $\dfrac{TP}{TP + FN}$
+				\item $\dfrac{TP}{TP + FP}$
+				\item $\dfrac{TN}{TN + FP}$
+				\item $\dfrac{TP + TN}{TP + TN + FP + FN}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Precision = TP/(TP+FP). Option A is recall (sensitivity); Option C is specificity; Option D is accuracy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q12 --- Recall Formula}
+		\begin{block}{Question}
+			Recall (sensitivity) is defined as:
+			\begin{enumerate}
+				\item $\dfrac{TP}{TP + FP}$
+				\item $\dfrac{TP}{TP + FN}$
+				\item $\dfrac{TN}{TN + FP}$
+				\item $\dfrac{FP}{FP + TN}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Recall = TP/(TP+FN) = true positive rate. Option A = precision; Option C = specificity; Option D = false positive rate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q13 --- F1 Score Formula}
+		\begin{block}{Question}
+			The F1 score is defined as:
+			\begin{enumerate}
+				\item $\dfrac{P + R}{2}$
+				\item $\dfrac{2 \cdot P \cdot R}{P + R}$
+				\item $\sqrt{P \cdot R}$
+				\item $P \cdot R$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			F1 = harmonic mean of precision and recall = $2PR/(P+R)$. Option A is arithmetic mean; Option C is geometric mean; Option D is product.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q14 --- Specificity Formula}
+		\begin{block}{Question}
+			Specificity is defined as:
+			\begin{enumerate}
+				\item $\dfrac{TP}{TP + FN}$
+				\item $\dfrac{TN}{TN + FP}$
+				\item $\dfrac{TP}{TP + FP}$
+				\item $\dfrac{FP}{FP + TN}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Specificity = TN/(TN+FP) = true negative rate. Options A, C, D are recall, precision, and FPR respectively.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q15 --- Accuracy Formula}
+		\begin{block}{Question}
+			Accuracy is defined as:
+			\begin{enumerate}
+				\item $\dfrac{TP + TN}{TP + TN + FP + FN}$
+				\item $\dfrac{TP}{TP + FP}$
+				\item $\dfrac{TP}{TP + FN}$
+				\item $\dfrac{FP + FN}{TP + TN}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Accuracy = (TP+TN)/Total. Option D is the error rate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q16 --- Error Rate Formula}
+		\begin{block}{Question}
+			Error rate (1 - accuracy) can be expressed as:
+			\begin{enumerate}
+				\item $\dfrac{TP + TN}{Total}$
+				\item $\dfrac{FP + FN}{Total}$
+				\item $\dfrac{TP + FP}{Total}$
+				\item $\dfrac{FN + TN}{Total}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Error rate = (FP+FN)/Total = 1 $-$ accuracy. Options A, C, D are not error rates.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q17 --- MSE Formula}
+		\begin{block}{Question}
+			Mean Squared Error is:
+			\begin{enumerate}
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)$
+				\item $\frac{1}{N}\sum |y_i - \hat{y}_i|$
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)^2$
+				\item $\sqrt{\frac{1}{N}\sum (y_i - \hat{y}_i)^2}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			MSE = average squared error. Option A would sum to zero; Option B is MAE; Option D is RMSE.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q18 --- MAE Formula}
+		\begin{block}{Question}
+			Mean Absolute Error is:
+			\begin{enumerate}
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)^2$
+				\item $\frac{1}{N}\sum |y_i - \hat{y}_i|$
+				\item $\sqrt{\frac{1}{N}\sum (y_i - \hat{y}_i)^2}$
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			MAE = average absolute error. It is less sensitive to outliers than MSE.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q19 --- RMSE Formula}
+		\begin{block}{Question}
+			Root Mean Square Error is:
+			\begin{enumerate}
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)^2$
+				\item $\frac{1}{N}\sum |y_i - \hat{y}_i|$
+				\item $\sqrt{\frac{1}{N}\sum (y_i - \hat{y}_i)^2}$
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			RMSE = square root of MSE. It is expressed in the same units as the target variable.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q20 --- MAPE Formula}
+		\begin{block}{Question}
+			Mean Absolute Percentage Error is:
+			\begin{enumerate}
+				\item $\frac{1}{N}\sum |y_i - \hat{y}_i|$
+				\item $100 \cdot \frac{1}{N}\sum \left|\dfrac{y_i - \hat{y}_i}{y_i}\right|$
+				\item $\frac{1}{N}\sum (y_i - \hat{y}_i)^2$
+				\item $\sqrt{\frac{1}{N}\sum (y_i - \hat{y}_i)^2}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			MAPE = 100 $\times$ mean of $|(y_i - \hat{y}_i)/y_i|$. It is scale-independent but fails when actuals are near zero.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q21 --- Simple Linear Regression Equation}
+		\begin{block}{Question}
+			The simple linear regression model is:
+			\begin{enumerate}
+				\item $y_i = \beta_0 \cdot \beta_1 x_i + u_i$
+				\item $y_i = \beta_0 + \beta_1 x_i + u_i$
+				\item $y_i = \beta_0^{\beta_1} + u_i$
+				\item $y_i = \beta_0 / (\beta_1 x_i) + u_i$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Simple linear regression: $y_i = \beta_0 + \beta_1 x_i + u_i$. $\beta_0$ is the intercept, $\beta_1$ is the slope, $u_i$ is the error term.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q22 --- Logistic Function}
+		\begin{block}{Question}
+			The logistic (sigmoid) function is defined as:
+			\begin{enumerate}
+				\item $f(z) = z$
+				\item $f(z) = e^z$
+				\item $f(z) = \dfrac{1}{1 + e^{-z}}$
+				\item $f(z) = \ln(z)$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Sigmoid = $1/(1+e^{-z})$. Output is bounded in $(0, 1)$, making it suitable for probability estimation in logistic regression.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q23 --- Logistic Regression Probability}
+		\begin{block}{Question}
+			In a logistic regression with $m$ features, the probability that $y_i = 1$ is:
+			\begin{enumerate}
+				\item $P_i = \beta_0 + \beta_1 x_{1i} + \cdots + \beta_m x_{mi}$
+				\item $P_i = \dfrac{1}{1 + e^{-(\beta_0 + \beta_1 x_{1i} + \cdots + \beta_m x_{mi})}}$
+				\item $P_i = e^{\beta_0 + \beta_1 x_{1i} + \cdots + \beta_m x_{mi}}$
+				\item $P_i = \ln(\beta_0 + \beta_1 x_{1i} + \cdots + \beta_m x_{mi})$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Logistic regression applies the sigmoid function to the linear predictor: $P_i = 1/(1 + e^{-(\beta_0 + \beta X)})$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q24 --- Log-Likelihood for Logit}
+		\begin{block}{Question}
+			The log-likelihood function for the logit model is:
+			\begin{enumerate}
+				\item $\sum_i [y_i \ln F(y_i) + (1 - y_i) \ln(1 - F(y_i))]$
+				\item $\sum_i y_i$
+				\item $\sum_i (y_i - F(y_i))^2$
+				\item $\prod_i F(y_i)$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Log-likelihood sums log-probabilities of observed outcomes. Multiplying probabilities turns into summing logs. Option D is the likelihood (before log); Option C is a squared-error form (not likelihood).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q25 --- OLS Slope Formula}
+		\begin{block}{Question}
+			The OLS estimate of the slope in simple linear regression is:
+			\begin{enumerate}
+				\item $\hat{\beta}_1 = \bar{y} - \hat{\beta}_0 \bar{x}$
+				\item $\hat{\beta}_1 = \dfrac{\sum y_i x_i - N \bar{y} \bar{x}}{\sum x_i^2 - N \bar{x}^2}$
+				\item $\hat{\beta}_1 = \dfrac{\bar{y}}{\bar{x}}$
+				\item $\hat{\beta}_1 = \sum (y_i - \bar{y})(x_i - \bar{x})$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			OLS slope = covariance of $x$ and $y$ divided by variance of $x$. Option A is the intercept formula (rearranged). Option C is a naive ratio; Option D is missing the denominator.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q26 --- OLS Intercept Formula}
+		\begin{block}{Question}
+			Given the OLS slope estimate $\hat{\beta}_1$, the intercept is computed as:
+			\begin{enumerate}
+				\item $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$
+				\item $\hat{\beta}_0 = \bar{y} + \hat{\beta}_1 \bar{x}$
+				\item $\hat{\beta}_0 = \bar{y} / \hat{\beta}_1 \bar{x}$
+				\item $\hat{\beta}_0 = \hat{\beta}_1 \bar{x}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			The regression line passes through the point of means: $\bar{y} = \hat{\beta}_0 + \hat{\beta}_1 \bar{x}$, so $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q27 --- Residual Sum of Squares}
+		\begin{block}{Question}
+			The residual sum of squares (RSS) is:
+			\begin{enumerate}
+				\item $\sum (y_i - \hat{y}_i)$
+				\item $\sum (y_i - \hat{y}_i)^2$
+				\item $\sum |y_i - \hat{y}_i|$
+				\item $\sqrt{\sum (y_i - \hat{y}_i)^2}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			RSS = sum of squared residuals. OLS minimises RSS. Option A would be zero for OLS by construction.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q28 --- Standardization Formula}
+		\begin{block}{Question}
+			The z-score standardization formula is:
+			\begin{enumerate}
+				\item $z = \dfrac{x - \mu}{\sigma}$
+				\item $z = \dfrac{x - \min}{\max - \min}$
+				\item $z = \ln(x)$
+				\item $z = x^2$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Standardization = $(x-\mu)/\sigma$. Option B is min-max normalization.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q29 --- Min-Max Normalization Formula}
+		\begin{block}{Question}
+			The min-max normalization formula is:
+			\begin{enumerate}
+				\item $x' = \dfrac{x - \mu}{\sigma}$
+				\item $x' = \dfrac{x - x_{\min}}{x_{\max} - x_{\min}}$
+				\item $x' = \ln(x)$
+				\item $x' = \dfrac{1}{x}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Min-max scales values to $[0,1]$: $x' = (x - x_{\min})/(x_{\max} - x_{\min})$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q30 --- PCA Component Equation}
+		\begin{block}{Question}
+			The $j$-th principal component is expressed as:
+			\begin{enumerate}
+				\item $PC_j = b_{1j} P_1 + b_{2j} P_2 + \cdots + b_{mj} P_m$
+				\item $PC_j = P_1 \cdot P_2 \cdots P_m$
+				\item $PC_j = \max(P_1, P_2, \ldots, P_m)$
+				\item $PC_j = \dfrac{P_1 + P_2 + \cdots + P_m}{m}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			A principal component is a linear combination of standardised predictors weighted by component loadings $b_{ij}$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q31 --- Cosine Similarity Formula}
+		\begin{block}{Question}
+			Cosine similarity between two vectors $P$ and $Q$ is:
+			\begin{enumerate}
+				\item $\|P - Q\|$
+				\item $\dfrac{P \cdot Q}{\|P\| \|Q\|}$
+				\item $\|P\| + \|Q\|$
+				\item $\dfrac{P}{Q}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Cosine similarity = dot product divided by the product of magnitudes. Range is $[-1, 1]$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q32 --- TF-IDF Formula}
+		\begin{block}{Question}
+			The TF-IDF weight of term $i$ in document $j$ is:
+			\begin{enumerate}
+				\item $\text{TF}_{ij} + \text{IDF}_i$
+				\item $\text{TF}_{ij} \times \text{IDF}_i$
+				\item $\text{TF}_{ij} / \text{IDF}_i$
+				\item $\text{TF}_{ij} - \text{IDF}_i$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			TF-IDF = term frequency $\times$ inverse document frequency. Term frequency captures within-document frequency; IDF captures rarity across the corpus.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q33 --- IDF Definition}
+		\begin{block}{Question}
+			The inverse document frequency of term $i$ across $D$ documents is:
+			\begin{enumerate}
+				\item $\ln(D / d_i)$
+				\item $D \cdot d_i$
+				\item $D + d_i$
+				\item $D - d_i$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			IDF$_i = \ln(D/d_i)$ where $d_i$ is the number of documents containing term $i$. If term appears in all documents, IDF = 0.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q34 --- L2 Vector Normalization}
+		\begin{block}{Question}
+			L2 normalization of a vector $v$ divides each element by:
+			\begin{enumerate}
+				\item $\sum v_i$
+				\item $\sqrt{\sum v_i^2}$
+				\item $\max(v_i)$
+				\item $|v_1|$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			L2 norm = $\sqrt{\sum v_i^2}$. Dividing by it produces a unit vector.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q35 --- Bayes Rule}
+		\begin{block}{Question}
+			Bayes' rule is written as:
+			\begin{enumerate}
+				\item $P(c|d) = P(d|c) P(c) / P(d)$
+				\item $P(c|d) = P(c) + P(d)$
+				\item $P(c|d) = P(d|c) / P(c)$
+				\item $P(c|d) = P(c) \cdot P(d)$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Bayes: posterior = likelihood $\times$ prior / evidence. Used in Naive Bayes classification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q36 --- Naive Bayes Classification Rule}
+		\begin{block}{Question}
+			The Naive Bayes classification rule (argmax form) is:
+			\begin{enumerate}
+				\item $\hat{c} = \arg\max_c P(c)$
+				\item $\hat{c} = \arg\max_c P(w_1|c) P(w_2|c) \cdots P(w_N|c) P(c)$
+				\item $\hat{c} = \arg\min_c P(c)$
+				\item $\hat{c} = \sum_c P(c)$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Naive Bayes predicts the class maximising the product of conditional word probabilities and the class prior, exploiting the independence assumption.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q37 --- Attention Score Formula}
+		\begin{block}{Question}
+			The scaled dot-product attention score between query $Q_i$ and key $K_j$ is:
+			\begin{enumerate}
+				\item $Q_i \cdot K_j$
+				\item $\dfrac{Q_i \cdot K_j}{\sqrt{d_k}}$
+				\item $\dfrac{Q_i + K_j}{2}$
+				\item $|Q_i - K_j|$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Scaled dot-product attention divides the dot product by $\sqrt{d_k}$ where $d_k$ is key dimension. This prevents softmax from saturating.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q38 --- Softmax Function}
+		\begin{block}{Question}
+			The softmax function is defined as:
+			\begin{enumerate}
+				\item $\text{softmax}(x_i) = \dfrac{e^{x_i}}{\sum_j e^{x_j}}$
+				\item $\text{softmax}(x_i) = x_i / \sum_j x_j$
+				\item $\text{softmax}(x_i) = e^{x_i}$
+				\item $\text{softmax}(x_i) = \ln(x_i)$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Softmax normalises exponentials into a probability distribution. Used in attention and multiclass outputs.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q39 --- Gradient Descent Update Rule}
+		\begin{block}{Question}
+			The gradient descent weight update rule is:
+			\begin{enumerate}
+				\item $w_i^{\text{new}} = w_i^{\text{old}} + \eta \dfrac{\partial L}{\partial w_i}$
+				\item $w_i^{\text{new}} = w_i^{\text{old}} - \eta \dfrac{\partial L}{\partial w_i}$
+				\item $w_i^{\text{new}} = w_i^{\text{old}} \cdot \eta$
+				\item $w_i^{\text{new}} = \eta$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Gradient descent subtracts the learning-rate-scaled gradient. Option A would be gradient ascent.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q40 --- Dynamic Learning Rate (Exponential Decay)}
+		\begin{block}{Question}
+			Exponential decay of the learning rate is:
+			\begin{enumerate}
+				\item $\eta_t = \eta_0 + k t$
+				\item $\eta_t = \eta_0 e^{-kt}$
+				\item $\eta_t = \eta_0 \cdot k t$
+				\item $\eta_t = \eta_0 / k$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Exponential decay: $\eta_t = \eta_0 e^{-kt}$, where $k$ controls decay and $t$ is the epoch.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q41 --- Dynamic Learning Rate (Inverse Decay)}
+		\begin{block}{Question}
+			Inverse decay of the learning rate is:
+			\begin{enumerate}
+				\item $\eta_t = \eta_0 e^{-kt}$
+				\item $\eta_t = \eta_0 / (1 + kt)$
+				\item $\eta_t = \eta_0 (1 + kt)$
+				\item $\eta_t = \eta_0 \cdot k$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Inverse decay: $\eta_t = \eta_0/(1+kt)$. Alternative to exponential decay for stochastic gradient descent.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Names, Theorems, and Attribution}
+	% =================================================================
+	
+	\begin{frame}{Q42 --- K-means Algorithm Attribution}
+		\begin{block}{Question}
+			The K-means algorithm is also known as:
+			\begin{enumerate}
+				\item Lloyd's algorithm
+				\item Newton's algorithm
+				\item Bayes' algorithm
+				\item Fisher's algorithm
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			K-means is also known as Lloyd's algorithm, after Stuart Lloyd who developed it at Bell Labs in 1957.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q43 --- Impossibility Theorem Attribution}
+		\begin{block}{Question}
+			The fairness impossibility theorem showing that demographic parity, predictive rate parity, and equal opportunity cannot all hold under unequal base rates is attributed to:
+			\begin{enumerate}
+				\item Kleinberg, Mullainathan, and Raghavan
+				\item Fisher, Neyman, and Pearson
+				\item Bentham and Mill
+				\item Kant and Aristotle
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Kleinberg, Mullainathan, and Raghavan (2016) proved this impossibility result. Chouldechova independently derived a related result.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q44 --- Utilitarianism Founders}
+		\begin{block}{Question}
+			Which pair of philosophers are considered the founders of utilitarianism?
+			\begin{enumerate}
+				\item Kant and Aristotle
+				\item Bentham and Mill
+				\item Rawls and Nozick
+				\item Plato and Socrates
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Jeremy Bentham and John Stuart Mill developed classical utilitarianism in the 18th and 19th centuries.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q45 --- Categorical Imperative Attribution}
+		\begin{block}{Question}
+			The concept of the categorical imperative is attributed to:
+			\begin{enumerate}
+				\item Immanuel Kant
+				\item John Stuart Mill
+				\item Jeremy Bentham
+				\item Aristotle
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Kant's categorical imperative: act only on maxims that could be universal laws.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q46 --- Virtue Ethics Origin}
+		\begin{block}{Question}
+			Virtue ethics is most closely associated with which ancient philosopher?
+			\begin{enumerate}
+				\item Aristotle
+				\item Kant
+				\item Mill
+				\item Bentham
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Virtue ethics has roots in ancient Greek philosophy, particularly Aristotle's Nicomachean Ethics.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q47 --- Transformer Paper Title}
+		\begin{block}{Question}
+			The 2017 paper introducing the transformer architecture is titled:
+			\begin{enumerate}
+				\item ``Attention Is All You Need''
+				\item ``Deep Learning for AI''
+				\item ``Neural Networks and Learning''
+				\item ``Machine Learning Fundamentals''
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			``Attention Is All You Need'' by Vaswani et al. (2017) introduced the transformer architecture based on self-attention.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q48 --- BERT Full Name}
+		\begin{block}{Question}
+			BERT stands for:
+			\begin{enumerate}
+				\item Bidirectional Encoder Representations from Transformers
+				\item Bayesian Encoder for Recursive Tasks
+				\item Binary Encoder Representation Technique
+				\item Bidirectional Encoder for Random Text
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			BERT = Bidirectional Encoder Representations from Transformers. It is an encoder-only model released by Google in 2018.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q49 --- GPT Full Name}
+		\begin{block}{Question}
+			GPT stands for:
+			\begin{enumerate}
+				\item General Purpose Transformer
+				\item Generative Pre-trained Transformer
+				\item Gradient Pre-training Technique
+				\item Global Parameter Training
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			GPT = Generative Pre-trained Transformer. It is a decoder-only autoregressive model family from OpenAI.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q50 --- BART Full Name}
+		\begin{block}{Question}
+			BART stands for:
+			\begin{enumerate}
+				\item Bidirectional and Auto-Regressive Transformer
+				\item Bayesian Auto-Regressive Technique
+				\item Binary Auto-Regressive Transformer
+				\item Bidirectional Attention for Recognition Tasks
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			BART = Bidirectional and Auto-Regressive Transformer. It combines an encoder and decoder and is used for both understanding and generation tasks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q51 --- LSTM Full Name}
+		\begin{block}{Question}
+			LSTM stands for:
+			\begin{enumerate}
+				\item Long Short-Term Memory
+				\item Linear Sequential Time Model
+				\item Layered Stochastic Transformation Model
+				\item Low-Signal Temporal Method
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			LSTM = Long Short-Term Memory. It is a type of RNN that mitigates the vanishing gradient problem via gating mechanisms.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q52 --- DBSCAN Full Name}
+		\begin{block}{Question}
+			DBSCAN stands for:
+			\begin{enumerate}
+				\item Density-Based Spatial Clustering of Applications with Noise
+				\item Data-Based Sample Clustering Algorithm for Networks
+				\item Dynamic Bayesian Segmentation Clustering Algorithm
+				\item Distributed Batch Spectral Clustering Approach
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			DBSCAN = Density-Based Spatial Clustering of Applications with Noise. It identifies core, border, and noise points using $\varepsilon$ and minPts.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q53 --- LASSO Full Name}
+		\begin{block}{Question}
+			LASSO stands for:
+			\begin{enumerate}
+				\item Least Absolute Shrinkage and Selection Operator
+				\item Linear Analysis of Statistical Sparse Outcomes
+				\item Layered Adaptive Sparse Subset Optimization
+				\item Least Squares Solution Operator
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			LASSO = Least Absolute Shrinkage and Selection Operator. It uses an L1 penalty and can zero out coefficients.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q54 --- KNN Full Name}
+		\begin{block}{Question}
+			KNN stands for:
+			\begin{enumerate}
+				\item K-Nearest Neighbors
+				\item Kernel Neural Network
+				\item K-Normalized Nodes
+				\item Knowledge Notation Network
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			KNN = K-Nearest Neighbors. A non-parametric classifier/regressor based on nearest training examples.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q55 --- SVM Full Name}
+		\begin{block}{Question}
+			SVM stands for:
+			\begin{enumerate}
+				\item Support Vector Machine
+				\item Supervised Vector Model
+				\item Statistical Variance Method
+				\item Sparse Vector Mechanism
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			SVM = Support Vector Machine. It finds the maximum-margin hyperplane separating classes.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q56 --- CBoW Full Name}
+		\begin{block}{Question}
+			CBoW stands for:
+			\begin{enumerate}
+				\item Continuous Bag of Words
+				\item Complex Bag of Words
+				\item Categorical Bag of Words
+				\item Continuous Batch of Words
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			CBoW = Continuous Bag of Words. One of two Word2Vec architectures: many inputs, one output.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q57 --- RAG Full Name}
+		\begin{block}{Question}
+			RAG stands for:
+			\begin{enumerate}
+				\item Retrieval Augmented Generation
+				\item Random Attention Gate
+				\item Recurrent Adversarial Graph
+				\item Regularized Attention Gradient
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			RAG = Retrieval Augmented Generation. It augments LLM responses with retrieved documents for factual accuracy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q58 --- RLHF Full Name}
+		\begin{block}{Question}
+			RLHF stands for:
+			\begin{enumerate}
+				\item Reinforcement Learning from Human Feedback
+				\item Recursive Layered Hidden Features
+				\item Random Loss with High Frequency
+				\item Regularized Linear Hierarchical Framework
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			RLHF = Reinforcement Learning from Human Feedback. Used in LLM training to align outputs with human preferences.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q59 --- PCA Full Name}
+		\begin{block}{Question}
+			PCA stands for:
+			\begin{enumerate}
+				\item Principal Component Analysis
+				\item Predictive Cluster Aggregation
+				\item Pattern Classification Algorithm
+				\item Probabilistic Component Approximation
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			PCA = Principal Component Analysis. A dimensionality reduction technique using orthogonal linear combinations.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q60 --- SR 11-7 Attribution}
+		\begin{block}{Question}
+			SR 11-7, ``Guidance on Model Risk Management'', was issued by which U.S. regulator?
+			\begin{enumerate}
+				\item The Federal Reserve and the OCC
+				\item The SEC
+				\item The FDIC alone
+				\item The CFTC
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			SR 11-7 (2011) was issued jointly by the Federal Reserve and the Office of the Comptroller of the Currency (OCC) as supervisory guidance on model risk management.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q61 --- GDPR Article on Breach Notification}
+		\begin{block}{Question}
+			Which GDPR article requires notification of a personal data breach to the supervisory authority within 72 hours?
+			\begin{enumerate}
+				\item Article 17
+				\item Article 33
+				\item Article 6
+				\item Article 22
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Article 33 = breach notification. Article 17 = right to erasure; Article 6 = lawful basis; Article 22 = automated decision-making rights.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q62 --- GDPR Article on Right to Erasure}
+		\begin{block}{Question}
+			The GDPR right to erasure (right to be forgotten) is contained in:
+			\begin{enumerate}
+				\item Article 6
+				\item Article 17
+				\item Article 33
+				\item Article 5
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Article 17 = right to erasure. Article 5 = principles; Article 6 = lawful basis; Article 33 = breach notification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q63 --- NIST AI RMF Functions}
+		\begin{block}{Question}
+			The NIST AI Risk Management Framework is organised around four core functions:
+			\begin{enumerate}
+				\item Train, Test, Deploy, Monitor
+				\item Govern, Map, Measure, Manage
+				\item Design, Build, Audit, Retire
+				\item Plan, Do, Check, Act
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			NIST AI RMF = Govern (structures), Map (context), Measure (assessment), Manage (mitigation).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q64 --- Three Lines of Defence Attribution}
+		\begin{block}{Question}
+			The Three Lines of Defence model in financial risk management is best associated with:
+			\begin{enumerate}
+				\item The Institute of Internal Auditors (IIA)
+				\item The Federal Reserve alone
+				\item The Basel Committee alone
+				\item The SEC alone
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			The IIA formalised the Three Lines of Defence model, later updated to the Three Lines Model in 2020.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Definitions and Terminology}
+	% =================================================================
+	
+	\begin{frame}{Q65 --- Inscrutability Definition}
+		\begin{block}{Question}
+			Inscrutability, as used in AI risk, is best defined as:
+			\begin{enumerate}
+				\item The inability to understand the model's internal mechanisms
+				\item The inability to explain a single prediction
+				\item The inability to generalise out-of-sample
+				\item The inability to measure accuracy
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Inscrutability = opaque internal mechanisms. Explainability = specific decisions. Generalisability = out-of-sample performance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q66 --- Interpretability Definition}
+		\begin{block}{Question}
+			Interpretability refers to:
+			\begin{enumerate}
+				\item Providing reasons for a specific decision
+				\item Understanding the model's internal logic and mechanisms
+				\item Measuring accuracy
+				\item Reducing features
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Interpretability = internal understanding. Explainability = specific-decision justification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q67 --- Explainability Definition}
+		\begin{block}{Question}
+			Explainability is best defined as:
+			\begin{enumerate}
+				\item Understanding internal model logic
+				\item Providing human-understandable reasons for specific decisions
+				\item Model training efficiency
+				\item Feature reduction
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Explainability = post-hoc justification of specific decisions in human terms.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q68 --- Transparency Definition}
+		\begin{block}{Question}
+			Transparency in AI refers to:
+			\begin{enumerate}
+				\item Understanding internal model logic
+				\item Openness about the model's design, algorithms, data, and decision-making processes
+				\item Explaining specific predictions
+				\item Reducing model size
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Transparency = openness about design, algorithms, data, and processes. Distinct from interpretability (internal logic) and explainability (specific decisions).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q69 --- Opaqueness Definition}
+		\begin{block}{Question}
+			Opaqueness in AI refers to:
+			\begin{enumerate}
+				\item Lack of transparency in a model's design, data, or decision-making
+				\item Model generalisability
+				\item Model accuracy
+				\item Model speed
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Opaqueness = lack of transparency. Forms include secrecy (unaware of profiling), confidentiality (internals hidden), and specialised knowledge (requires expertise).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q70 --- Automation Bias Definition}
+		\begin{block}{Question}
+			Automation bias is best defined as:
+			\begin{enumerate}
+				\item A tendency to over-rely on automated systems, reducing vigilance
+				\item Systematic measurement error
+				\item Random sampling error
+				\item Non-linear relationship in data
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Automation bias = over-reliance on automated recommendations, reducing critical oversight and human verification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q71 --- Proxy Discrimination Definition}
+		\begin{block}{Question}
+			Proxy discrimination occurs when:
+			\begin{enumerate}
+				\item A feature correlated with a protected attribute carries discriminatory effects even after the protected attribute is removed
+				\item The model is too complex
+				\item The dataset is small
+				\item The model uses too many features
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Proxy discrimination = removing a protected attribute but retaining correlated features that perpetuate discrimination (e.g., ZIP codes as race proxies).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q72 --- Historical Bias Definition}
+		\begin{block}{Question}
+			Historical bias in AI refers to:
+			\begin{enumerate}
+				\item Random noise in the training set
+				\item Past discrimination encoded in training data, which the model then perpetuates
+				\item Measurement error
+				\item Sampling noise
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Historical bias arises when training data reflects past discriminatory patterns. Models trained on such data reinforce and amplify these patterns.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q73 --- Sampling Bias Definition}
+		\begin{block}{Question}
+			Sampling bias occurs when:
+			\begin{enumerate}
+				\item The sample is not representative of the target population
+				\item The model is too simple
+				\item The data has outliers
+				\item The model overfits
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Sampling bias = unrepresentative training sample. The model performs poorly when deployed on the actual target population.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q74 --- Data Composition Bias Definition}
+		\begin{block}{Question}
+			Data composition bias arises from:
+			\begin{enumerate}
+				\item Imbalanced class distribution in the training data
+				\item Features measured differently across groups
+				\item Outliers in the data
+				\item Model overfitting
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Data composition bias = imbalance where minority classes are underrepresented. The model underperforms on minority groups.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q75 --- Measurement Bias Definition}
+		\begin{block}{Question}
+			Measurement bias occurs when:
+			\begin{enumerate}
+				\item Features are measured differently across groups
+				\item The class distribution is imbalanced
+				\item The sample is small
+				\item The model is nonlinear
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Measurement bias = inconsistent measurement methods across groups (e.g., different diagnostic tests for different populations).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q76 --- Individual Fairness Definition}
+		\begin{block}{Question}
+			Individual fairness is best defined as:
+			\begin{enumerate}
+				\item Equal outcomes across demographic groups
+				\item Treating similar individuals similarly
+				\item Equal true positive rates
+				\item Equal precision
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Individual fairness = treat like cases alike. Rooted in Aristotle's doctrine. Contrasts with group fairness (statistical parity).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q77 --- Demographic Parity Definition}
+		\begin{block}{Question}
+			Demographic parity requires:
+			\begin{enumerate}
+				\item Equal true positive rates across groups
+				\item Equal predicted positive rates across groups
+				\item Equal precision across groups
+				\item Equal accuracy across groups
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Demographic parity: $P(\hat{Y}=1 | A=0) = P(\hat{Y}=1 | A=1)$. It does not consider whether predictions are correct.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q78 --- Equal Opportunity Definition}
+		\begin{block}{Question}
+			Equal opportunity requires:
+			\begin{enumerate}
+				\item Equal positive prediction rates
+				\item Equal true positive rates across groups
+				\item Equal precision across groups
+				\item Equal false positive rates
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Equal opportunity: $P(\hat{Y}=1 | Y=1, A=0) = P(\hat{Y}=1 | Y=1, A=1)$. Requires equal TPR across groups.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q79 --- Predictive Rate Parity Definition}
+		\begin{block}{Question}
+			Predictive rate parity requires:
+			\begin{enumerate}
+				\item Equal true positive rates across groups
+				\item Equal precision across groups
+				\item Equal positive prediction rates
+				\item Equal accuracy
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Predictive rate parity: $P(Y=1 | \hat{Y}=1, A=0) = P(Y=1 | \hat{Y}=1, A=1)$. Requires equal precision across groups.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q80 --- Fairness Impossibility Theorem}
+		\begin{block}{Question}
+			The fairness impossibility theorem states that when base rates differ:
+			\begin{enumerate}
+				\item All fairness metrics can be satisfied
+				\item Demographic parity, predictive rate parity, and equal opportunity cannot all be satisfied simultaneously
+				\item Only equal opportunity can be satisfied
+				\item Accuracy is the only relevant metric
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Kleinberg, Mullainathan, and Raghavan (2016): under unequal base rates, these three fairness criteria are mutually incompatible.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q81 --- Nonmaleficence Definition}
+		\begin{block}{Question}
+			Nonmaleficence refers to:
+			\begin{enumerate}
+				\item Actively promoting welfare
+				\item Avoiding harm and unjustified risk
+				\item Fairness
+				\item Respecting autonomy
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Nonmaleficence = do no harm. It forbids imposing unjustified risks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q82 --- Beneficence Definition}
+		\begin{block}{Question}
+			Beneficence refers to:
+			\begin{enumerate}
+				\item Avoiding harm
+				\item Actively promoting the welfare of others
+				\item Respecting autonomy
+				\item Ensuring fairness
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Beneficence = do good. It requires positive action to help others.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q83 --- Autonomy Definition}
+		\begin{block}{Question}
+			Autonomy as an AI ethics principle requires:
+			\begin{enumerate}
+				\item Respecting individual decision-making
+				\item Ensuring fairness
+				\item Avoiding harm
+				\item Benefiting others
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Autonomy = respect for individual self-determination and consent.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q84 --- Justice Definition}
+		\begin{block}{Question}
+			Justice as an AI ethics principle primarily concerns:
+			\begin{enumerate}
+				\item Fairness, equality, and impartiality
+				\item Avoiding harm
+				\item Benefiting others
+				\item Respecting autonomy
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Justice = fairness, equality, impartiality. Distributive justice concerns allocation; procedural justice concerns fair process.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q85 --- Consequentialism Definition}
+		\begin{block}{Question}
+			Consequentialism is an ethical framework that judges actions by:
+			\begin{enumerate}
+				\item Adherence to rules
+				\item Outcomes or consequences
+				\item Character traits
+				\item Legal compliance
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Consequentialism judges by outcomes. Utilitarianism is the most common form, maximising overall welfare.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q86 --- Deontology Definition}
+		\begin{block}{Question}
+			Deontology is an ethical framework that judges actions by:
+			\begin{enumerate}
+				\item Outcomes
+				\item Adherence to duties and rules
+				\item Character
+				\item Profit
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Deontology judges by duties and rules irrespective of consequences. Kant is the primary proponent.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q87 --- Virtue Ethics Definition}
+		\begin{block}{Question}
+			Virtue ethics focuses on:
+			\begin{enumerate}
+				\item Outcomes
+				\item Rules
+				\item Character traits and living a good life
+				\item Legal compliance
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Virtue ethics asks what kind of person one should be and emphasises virtues like wisdom, courage, and justice.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q88 --- Contextual Integrity Definition}
+		\begin{block}{Question}
+			Contextual integrity requires that:
+			\begin{enumerate}
+				\item Data can be freely reused
+				\item Data use must respect the norms of the context in which it was provided
+				\item Data must be encrypted
+				\item Data must be deleted
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Contextual integrity (Nissenbaum): data provided in one context should not be used in an incompatible context.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q89 --- Data Minimisation Definition}
+		\begin{block}{Question}
+			Data minimisation requires:
+			\begin{enumerate}
+				\item Collecting all available data
+				\item Collecting only data necessary for the specified purpose
+				\item Sharing data freely
+				\item Retaining data indefinitely
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Data minimisation = collect only what is necessary for the specified purpose. Core GDPR principle.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q90 --- Right to be Forgotten Definition}
+		\begin{block}{Question}
+			The right to be forgotten allows data subjects to:
+			\begin{enumerate}
+				\item Access their data
+				\item Request erasure of personal data under certain conditions
+				\item Sell their data
+				\item Share data without consent
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Right to erasure (GDPR Art. 17): allows deletion when data is no longer necessary, consent is withdrawn, etc.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q91 --- Data Provenance Definition}
+		\begin{block}{Question}
+			Data provenance refers to:
+			\begin{enumerate}
+				\item Data storage format
+				\item The origin, history, and legal right to use data
+				\item Data encryption
+				\item Data classification
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Data provenance = origin and legal rights to use data. Critical for alternative data and AI training sets.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q92 --- Data Classification Definition}
+		\begin{block}{Question}
+			Data classification is the process of:
+			\begin{enumerate}
+				\item Sorting data alphabetically
+				\item Categorising data by sensitivity and structure to determine handling and controls
+				\item Encrypting data
+				\item Compressing data
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Data classification assigns sensitivity labels (public, internal, confidential, restricted) and structure labels.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q93 --- Metadata Definition}
+		\begin{block}{Question}
+			Metadata is best defined as:
+			\begin{enumerate}
+				\item Raw data
+				\item Data about data
+				\item Encrypted data
+				\item Synthetic data
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Metadata = data about data. It documents origin, structure, definitions, and relationships.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q94 --- RBAC Definition}
+		\begin{block}{Question}
+			Role-Based Access Control (RBAC) grants access based on:
+			\begin{enumerate}
+				\item Individual discretion
+				\item User roles within the organisation
+				\item Random selection
+				\item Data size
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			RBAC = permissions based on organisational roles. ABAC = attribute-based; MAC = mandatory; DAC = discretionary.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q95 --- ABAC Definition}
+		\begin{block}{Question}
+			Attribute-Based Access Control (ABAC) grants access based on:
+			\begin{enumerate}
+				\item User roles
+				\item Attributes of user, resource, and environment
+				\item Random selection
+				\item Seniority
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			ABAC uses attributes (user, resource, environment) to make access decisions. More flexible than RBAC.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q96 --- Model Inventory Definition}
+		\begin{block}{Question}
+			A model inventory is:
+			\begin{enumerate}
+				\item A list of all models in use, with owners, risk tiers, and validation status
+				\item A list of data sources
+				\item A list of employees
+				\item A list of IT systems
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Model inventory = registry of all models. Includes owner, purpose, risk tier, validation status, and interdependencies.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q97 --- Model Landscape Definition}
+		\begin{block}{Question}
+			A model landscape is:
+			\begin{enumerate}
+				\item A list of all models
+				\item A map of interactions and interdependencies between models
+				\item A training dataset
+				\item A model architecture
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Model landscape = map of interactions and dependencies. It reveals cascade risk and critical nodes.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q98 --- Model Risk Appetite Definition}
+		\begin{block}{Question}
+			Model risk appetite is:
+			\begin{enumerate}
+				\item The set of models in production
+				\item The level of model risk the organisation is willing to accept
+				\item The cost of modelling
+				\item The number of models
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Model risk appetite = acceptable level of model risk, set by the board, guiding governance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q99 --- Use Test Definition}
+		\begin{block}{Question}
+			The use test in model validation is:
+			\begin{enumerate}
+				\item A quantitative accuracy metric
+				\item A qualitative assessment of whether the model is used appropriately for its intended purpose
+				\item A code review
+				\item A speed test
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			The use test assesses whether the model is used correctly and appropriately in practice. It is qualitative and people-focused.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q100 --- Outcomes Analysis Definition}
+		\begin{block}{Question}
+			Outcomes analysis in model validation is used to:
+			\begin{enumerate}
+				\item Speed up training
+				\item Compare model predictions against realised outcomes to detect bias, degradation, or incorrect assumptions
+				\item Reduce features
+				\item Increase accuracy
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Outcomes analysis compares model predictions against actual outcomes to validate model quality in production.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Algorithm Names and Mechanism Recall}
+	% =================================================================
+	
+	\begin{frame}{Q101 --- K-means++ Purpose}
+		\begin{block}{Question}
+			K-means++ is an improved initialisation method whose purpose is to:
+			\begin{enumerate}
+				\item Reduce K
+				\item Spread initial centroids far apart to reduce poor local optima
+				\item Increase WCSS
+				\item Eliminate outliers
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			K-means++ selects initial centroids with probability proportional to squared distance from nearest existing centroid, spreading them out and reducing poor local optima.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q102 --- Scree Plot Definition}
+		\begin{block}{Question}
+			A scree plot displays:
+			\begin{enumerate}
+				\item WCSS against number of clusters K
+				\item Data against time
+				\item Two features against each other
+				\item Model accuracy against training time
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			A scree plot charts WCSS (inertia) against K. The elbow point suggests the optimal K.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q103 --- Dendrogram Definition}
+		\begin{block}{Question}
+			A dendrogram is:
+			\begin{enumerate}
+				\item A scatter plot
+				\item A tree-like diagram showing hierarchical clustering steps
+				\item A line chart of loss
+				\item A histogram
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			A dendrogram visualises hierarchical clustering: x-axis shows data points, y-axis shows merge distance. Long vertical lines indicate significant cluster boundaries.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q104 --- Confusion Matrix Layout}
+		\begin{block}{Question}
+			A standard confusion matrix contains four cells:
+			\begin{enumerate}
+				\item TP, TN, FP, FN
+				\item A, B, C, D
+				\item Alpha, Beta, Gamma, Delta
+				\item Mean, Median, Mode, Range
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Confusion matrix cells: True Positive, True Negative, False Positive (Type I error), False Negative (Type II error).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q105 --- ROC Axes}
+		\begin{block}{Question}
+			The ROC curve plots which two quantities on its axes?
+			\begin{enumerate}
+				\item Precision vs recall
+				\item True positive rate vs false positive rate
+				\item Train error vs test error
+				\item Loss vs iteration
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			ROC: y-axis = TPR (sensitivity); x-axis = FPR (1 $-$ specificity). AUC summarises discrimination.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q106 --- AUC Range and Interpretation}
+		\begin{block}{Question}
+			The AUC ranges over which values, and what does AUC = 0.5 indicate?
+			\begin{enumerate}
+				\item $[0, 1]$; AUC = 0.5 indicates random classifier
+				\item $[-1, 1]$; AUC = 0.5 indicates perfect classifier
+				\item $[0, 100]$; AUC = 0.5 indicates perfect classifier
+				\item $[1, 10]$; AUC = 0.5 indicates random classifier
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			AUC ranges in $[0, 1]$. AUC = 0.5 = random; AUC = 1.0 = perfect; AUC $<$ 0.5 = worse than random.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q107 --- K-Fold Cross-Validation Definition}
+		\begin{block}{Question}
+			In $k$-fold cross-validation, the data is:
+			\begin{enumerate}
+				\item Split into $k$ equal folds; the model is trained $k$ times, each time holding out a different fold for validation
+				\item Split into 2 folds only
+				\item Not split at all
+				\item Split randomly without reuse
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			$k$-fold CV: partition into $k$ folds; iterate $k$ times, each time training on $k-1$ folds and validating on the held-out fold. Average the results.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q108 --- Stratified CV Purpose}
+		\begin{block}{Question}
+			Stratified cross-validation ensures that:
+			\begin{enumerate}
+				\item Each fold has the same class proportion as the whole dataset
+				\item Only the majority class is used
+				\item All folds have equal mean
+				\item Random assignment is avoided
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Stratified CV preserves class ratios in every fold, critical for imbalanced datasets.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q109 --- Bootstrap Definition}
+		\begin{block}{Question}
+			Bootstrapping in model evaluation is:
+			\begin{enumerate}
+				\item Sampling with replacement to create new datasets
+				\item Sampling without replacement
+				\item Splitting data into two halves
+				\item Training without validation
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Bootstrapping draws samples with replacement. About 63\% unique observations per sample; ~37\% out-of-bootstrap.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q110 --- Out-of-Bag Fraction}
+		\begin{block}{Question}
+			In bootstrapping, the expected fraction of observations NOT sampled in each bootstrap sample is approximately:
+			\begin{enumerate}
+				\item 10\%
+				\item 25\%
+				\item 37\%
+				\item 63\%
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			The expected out-of-bootstrap fraction is $1 - 1/e \approx 0.368$ = 37\%.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q111 --- Grid Search Definition}
+		\begin{block}{Question}
+			Grid search is a technique for:
+			\begin{enumerate}
+				\item Exhaustively searching through a predefined set of hyperparameter combinations
+				\item Removing outliers
+				\item Feature selection only
+				\item Clustering
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Grid search evaluates every combination of hyperparameters within specified ranges. Often combined with cross-validation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q112 --- Learning Rate Definition}
+		\begin{block}{Question}
+			The learning rate $\eta$ in gradient descent controls:
+			\begin{enumerate}
+				\item The number of iterations
+				\item The step size of each weight update
+				\item The number of features
+				\item The batch size
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Learning rate $\eta$ scales the gradient to determine step size. Too small = slow; too large = overshoot.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q113 --- Backpropagation Definition}
+		\begin{block}{Question}
+			Backpropagation is:
+			\begin{enumerate}
+				\item Forward-only computation
+				\item An algorithm that computes gradients layer-by-layer using the chain rule, starting from the output layer
+				\item A clustering method
+				\item A type of regularisation
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Backpropagation computes gradients efficiently by applying the chain rule from output to input layers.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q114 --- Epoch Definition}
+		\begin{block}{Question}
+			An epoch in neural network training is:
+			\begin{enumerate}
+				\item One gradient update
+				\item One full pass through the entire training dataset
+				\item One validation step
+				\item One feature selection step
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			An epoch = one full pass through the training data. Typically many epochs are required for convergence.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q115 --- Batch Gradient Descent Definition}
+		\begin{block}{Question}
+			Batch gradient descent updates weights using:
+			\begin{enumerate}
+				\item One random training example per step
+				\item A subset of training examples per step
+				\item The entire training set per step
+				\item No training examples
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Batch GD uses the full dataset per update. Stochastic uses one example; mini-batch uses a subset.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q116 --- Stochastic Gradient Descent Definition}
+		\begin{block}{Question}
+			Stochastic gradient descent (SGD) updates weights using:
+			\begin{enumerate}
+				\item The full training set
+				\item One random training example per step
+				\item A fixed subset
+				\item No examples
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			SGD uses one randomly selected example per update. It is noisier but faster per pass.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q117 --- Mini-Batch Gradient Descent Definition}
+		\begin{block}{Question}
+			Mini-batch gradient descent updates weights using:
+			\begin{enumerate}
+				\item One example
+				\item The full dataset
+				\item A small subset of the training data per step
+				\item No data
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Mini-batch GD uses a small subset (e.g., 32 or 64 examples). It balances parallelism and stochasticity.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q118 --- Momentum Purpose}
+		\begin{block}{Question}
+			Momentum in gradient descent primarily:
+			\begin{enumerate}
+				\item Reduces the learning rate
+				\item Smooths the optimisation path and accelerates in consistent gradient directions
+				\item Eliminates local minima
+				\item Converts non-convex to convex
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Momentum accumulates a velocity vector, accelerating consistent directions and dampening oscillation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q119 --- Adam Optimiser}
+		\begin{block}{Question}
+			The Adam optimiser combines which two ideas?
+			\begin{enumerate}
+				\item Momentum and adaptive learning rates
+				\item Batch and stochastic descent
+				\item Ridge and LASSO
+				\item Precision and recall
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Adam = Adaptive Moment Estimation. It combines momentum (first moment) with adaptive per-parameter learning rates (second moment).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q120 --- Dropout Purpose}
+		\begin{block}{Question}
+			Dropout regularisation works by:
+			\begin{enumerate}
+				\item Removing whole layers
+				\item Randomly deactivating a fraction of neurons during training to prevent co-adaptation
+				\item Reducing the learning rate
+				\item Removing features
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Dropout randomly drops units during training. At inference, all units are used with scaled weights.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q121 --- Batch Normalization Purpose}
+		\begin{block}{Question}
+			Batch normalisation normalises:
+			\begin{enumerate}
+				\item Weights
+				\item Intermediate layer inputs, stabilising training and mitigating internal covariate shift
+				\item Features
+				\item Outputs
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Batch norm normalises the activations of a layer across the batch, improving stability and speed of training.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q122 --- Early Stopping Purpose}
+		\begin{block}{Question}
+			Early stopping is a regularisation technique that:
+			\begin{enumerate}
+				\item Stops training when validation performance starts to deteriorate
+				\item Stops training after a fixed number of epochs
+				\item Stops training immediately
+				\item Never stops training
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Early stopping monitors validation loss and halts training when it stops improving, preventing overfitting.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q123 --- Vanishing Gradient Definition}
+		\begin{block}{Question}
+			The vanishing gradient problem occurs when:
+			\begin{enumerate}
+				\item Gradients grow unboundedly
+				\item Gradients become extremely small as they propagate through many layers
+				\item Weights are initialised poorly
+				\item The learning rate is too high
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Vanishing gradient: gradients shrink exponentially through deep networks with saturating activations (e.g., sigmoid).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q124 --- Exploding Gradient Definition}
+		\begin{block}{Question}
+			The exploding gradient problem occurs when:
+			\begin{enumerate}
+				\item Gradients shrink to near zero
+				\item Gradients grow extremely large across layers, destabilising training
+				\item Weights are zero
+				\item Learning rate is zero
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Exploding gradient: gradients grow exponentially. Remedies include gradient clipping and careful initialisation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q125 --- ReLU Activation}
+		\begin{block}{Question}
+			The ReLU (Rectified Linear Unit) activation function is:
+			\begin{enumerate}
+				\item $f(x) = \max(0, x)$
+				\item $f(x) = 1/(1+e^{-x})$
+				\item $f(x) = \tanh(x)$
+				\item $f(x) = x^2$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			ReLU = $\max(0, x)$. It is computationally efficient and reduces vanishing gradient for positive values.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q126 --- Sigmoid Activation}
+		\begin{block}{Question}
+			The sigmoid activation function is:
+			\begin{enumerate}
+				\item $f(x) = \max(0, x)$
+				\item $f(x) = 1/(1+e^{-x})$
+				\item $f(x) = \tanh(x)$
+				\item $f(x) = x$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Sigmoid = $1/(1+e^{-x})$, bounded in $(0, 1)$. Used in binary outputs but can suffer from vanishing gradients.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q127 --- Tanh Activation}
+		\begin{block}{Question}
+			The tanh (hyperbolic tangent) activation function is:
+			\begin{enumerate}
+				\item $f(x) = \max(0, x)$
+				\item $f(x) = 1/(1+e^{-x})$
+				\item $f(x) = (e^x - e^{-x})/(e^x + e^{-x})$
+				\item $f(x) = x^2$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			tanh = $(e^x - e^{-x})/(e^x + e^{-x})$. Output is bounded in $[-1, 1]$ and centred at zero.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q128 --- Softmax Purpose}
+		\begin{block}{Question}
+			Softmax is used at the output layer primarily for:
+			\begin{enumerate}
+				\item Binary classification
+				\item Multi-class classification, converting logits into a probability distribution
+				\item Regression
+				\item Clustering
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Softmax outputs sum to one, making it appropriate for multi-class probability outputs.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q129 --- Confusion Matrix Type I Error}
+		\begin{block}{Question}
+			A Type I error in a classification context corresponds to:
+			\begin{enumerate}
+				\item False positive
+				\item False negative
+				\item True positive
+				\item True negative
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Type I error = false positive (rejecting a true null hypothesis). Type II error = false negative.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q130 --- Confusion Matrix Type II Error}
+		\begin{block}{Question}
+			A Type II error in a classification context corresponds to:
+			\begin{enumerate}
+				\item False positive
+				\item False negative
+				\item True positive
+				\item True negative
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Type II error = false negative (failing to reject a false null hypothesis).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q131 --- Class Imbalance Handling Techniques}
+		\begin{block}{Question}
+			Which of the following is NOT a standard technique for handling class imbalance?
+			\begin{enumerate}
+				\item Oversampling the minority class
+				\item Undersampling the majority class
+				\item Using a weighted loss function
+				\item Removing the minority class entirely
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			Removing the minority class destroys the signal and defeats the purpose. Options A, B, C are standard approaches.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q132 --- SMOTE Definition}
+		\begin{block}{Question}
+			SMOTE stands for:
+			\begin{enumerate}
+				\item Synthetic Minority Over-sampling Technique
+				\item Statistical Missing Value Estimation
+				\item Sparse Matrix Optimisation Technique
+				\item Sequential Model Ensemble
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			SMOTE = Synthetic Minority Over-sampling Technique. It generates synthetic minority samples via interpolation between existing minority points.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q133 --- Bagging Definition}
+		\begin{block}{Question}
+			Bagging (Bootstrap Aggregation) is:
+			\begin{enumerate}
+				\item Training models sequentially
+				\item Training multiple models on bootstrap samples and averaging predictions
+				\item Training a single model on all data
+				\item Removing features
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Bagging trains models in parallel on bootstrap samples and averages outputs. Reduces variance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q134 --- Random Forest Definition}
+		\begin{block}{Question}
+			Random forest differs from bagging by:
+			\begin{enumerate}
+				\item Using sequential training
+				\item Adding random feature subsetting at each split
+				\item Using only one tree
+				\item Removing randomness
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Random forest = bagging + random feature subsampling at each split. Reduces correlation across trees.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q135 --- Boosting Definition}
+		\begin{block}{Question}
+			Boosting trains models:
+			\begin{enumerate}
+				\item In parallel on bootstrap samples
+				\item Sequentially, each correcting the errors of the previous model
+				\item Randomly
+				\item Without any error correction
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Boosting fits models sequentially, each new model focused on prior residuals or misclassified points. Reduces bias.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q136 --- AdaBoost Definition}
+		\begin{block}{Question}
+			AdaBoost is a boosting method that:
+			\begin{enumerate}
+				\item Fits residuals
+				\item Reweights misclassified training examples and combines weak learners
+				\item Uses random features
+				\item Removes features
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			AdaBoost reweights training examples after each iteration, focusing subsequent weak learners on previously misclassified points.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q137 --- Gradient Boosting Definition}
+		\begin{block}{Question}
+			Gradient boosting fits new trees to:
+			\begin{enumerate}
+				\item The original labels
+				\item The residuals of previous trees
+				\item Random labels
+				\item Boostrap samples only
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Gradient boosting fits each new tree to the negative gradient (residuals) of the loss function from prior trees.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q138 --- XGBoost Definition}
+		\begin{block}{Question}
+			XGBoost stands for:
+			\begin{enumerate}
+				\item Extreme Gradient Boosting
+				\item Extended Gradient Boost
+				\item Extra Gradient Boost
+				\item Exponential Gradient Boost
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			XGBoost = Extreme Gradient Boosting. An efficient implementation of gradient boosting with regularisation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q139 --- Bagging vs Boosting Variance Bias}
+		\begin{block}{Question}
+			Which statement correctly distinguishes bagging and boosting in terms of bias and variance?
+			\begin{enumerate}
+				\item Bagging mainly reduces variance; boosting mainly reduces bias
+				\item Bagging mainly reduces bias; boosting mainly reduces variance
+				\item Both reduce bias only
+				\item Both reduce variance only
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Bagging averages decorrelated models, reducing variance. Boosting sequentially corrects errors, reducing bias.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q140 --- Precision-Recall Trade-off}
+		\begin{block}{Question}
+			Lowering the classification threshold generally:
+			\begin{enumerate}
+				\item Increases recall and decreases precision
+				\item Increases precision and decreases recall
+				\item Increases both
+				\item Decreases both
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Lower threshold = more positives predicted = higher recall but lower precision (more false positives).
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Hard Theory and Formula Questions (continued)}
+	% =================================================================
+	
+	\begin{frame}{Q141 --- Log-Odds in Logistic Regression}
+		\begin{block}{Question}
+			In logistic regression, the log-odds (logit) of the outcome is:
+			\begin{enumerate}
+				\item $\ln(P/(1-P)) = \beta_0 + \beta_1 x_1 + \cdots$
+				\item $P/(1-P)$
+				\item $P \cdot (1-P)$
+				\item $\ln(P)$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Logit = $\ln(P/(1-P))$, linear in the coefficients. Logistic regression models the log-odds as a linear function of features.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q142 --- Odds Ratio Interpretation}
+		\begin{block}{Question}
+			In logistic regression, the exponential of a coefficient $\exp(\beta_j)$ represents:
+			\begin{enumerate}
+				\item The probability
+				\item The odds ratio for a one-unit increase in $x_j$
+				\item The variance
+				\item The residual
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			$\exp(\beta_j)$ = odds ratio. A one-unit increase in $x_j$ multiplies the odds by $\exp(\beta_j)$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q143 --- Linear Discriminant Analysis Formula}
+		\begin{block}{Question}
+			In LDA, the discriminant function for class $j$ is:
+			\begin{enumerate}
+				\item $\delta_j(x) = x^T \hat{\Sigma}^{-1} \hat{\mu}_j - \frac{1}{2}\hat{\mu}_j^T \hat{\Sigma}^{-1} \hat{\mu}_j + \ln(\hat{\pi}_j)$
+				\item $\delta_j(x) = x$
+				\item $\delta_j(x) = x^2$
+				\item $\delta_j(x) = 1/(1+e^{-x})$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			LDA discriminant: $\delta_j(x) = x^T \hat{\Sigma}^{-1}\hat{\mu}_j - \frac{1}{2}\hat{\mu}_j^T \hat{\Sigma}^{-1}\hat{\mu}_j + \ln(\hat{\pi}_j)$. Classification chooses the largest $\delta_j$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q144 --- Covariance Matrix Inverse (2x2)}
+		\begin{block}{Question}
+			For a 2x2 matrix $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$, the inverse is:
+			\begin{enumerate}
+				\item $\dfrac{1}{ad - bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$
+				\item $\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$
+				\item $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$
+				\item $\dfrac{1}{2} \begin{pmatrix} a & b \\ c & d \end{pmatrix}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Inverse of 2x2 = 1/determinant $\times$ adjugate. Determinant = $ad - bc$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q145 --- Covariance Formula}
+		\begin{block}{Question}
+			The covariance between two features $x_1$ and $x_2$ is:
+			\begin{enumerate}
+				\item $\dfrac{\sum (x_1 - \bar{x}_1)(x_2 - \bar{x}_2)}{N - 1}$
+				\item $\sum x_1 x_2$
+				\item $\bar{x}_1 \cdot \bar{x}_2$
+				\item $\dfrac{\sum x_1}{N} \cdot \dfrac{\sum x_2}{N}$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Covariance = average product of deviations from means, using $N-1$ for sample covariance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q146 --- AIC Formula}
+		\begin{block}{Question}
+			The Akaike Information Criterion is defined as:
+			\begin{enumerate}
+				\item $AIC = 2k - 2\ln(L)$
+				\item $AIC = k + L$
+				\item $AIC = 2k + 2\ln(L)$
+				\item $AIC = L/k$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			AIC = $2k - 2\ln(L)$ where $k$ = number of parameters and $L$ = likelihood. Lower AIC = better model.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q147 --- BIC Formula}
+		\begin{block}{Question}
+			The Bayesian Information Criterion is defined as:
+			\begin{enumerate}
+				\item $BIC = k\ln(N) - 2\ln(L)$
+				\item $BIC = 2k - 2\ln(L)$
+				\item $BIC = k + L$
+				\item $BIC = L^2$
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			BIC = $k\ln(N) - 2\ln(L)$. It penalises complexity more heavily than AIC for large samples.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q148 --- Heteroskedasticity Definition}
+		\begin{block}{Question}
+			Heteroskedasticity in regression refers to:
+			\begin{enumerate}
+				\item Non-constant variance of residuals across observations
+				\item Non-normal residuals
+				\item Nonlinearity in relationships
+				\item Multicollinearity
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Heteroskedasticity = variance of errors is not constant. It inflates standard errors and invalidates inference.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q149 --- Cook's Distance Purpose}
+		\begin{block}{Question}
+			Cook's distance is used to:
+			\begin{enumerate}
+				\item Measure the influence of each observation on fitted regression coefficients
+				\item Measure model accuracy
+				\item Detect multicollinearity
+				\item Estimate variance
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Cook's distance measures how much coefficients change if an observation is removed. High values identify influential points.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q150 --- White's Test Purpose}
+		\begin{block}{Question}
+			White's Test in regression is used to:
+			\begin{enumerate}
+				\item Test for heteroskedasticity
+				\item Test for normality
+				\item Test for autocorrelation
+				\item Test for linearity
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			White's Test detects heteroskedasticity (non-constant error variance). A significant result indicates heteroskedasticity.
+		\end{block}
+	\end{frame}
+	
+\end{document}

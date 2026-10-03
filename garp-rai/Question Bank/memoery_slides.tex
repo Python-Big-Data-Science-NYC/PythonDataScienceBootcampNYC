@@ -1,0 +1,1391 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI Memory]{GARP Risk \& AI --- Memory Flashcards}
+\subtitle{Names, Theories, Formulas, Acronyms --- 150 Slides}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% =================================================================
+	\section{Formulas to Memorize}
+	% =================================================================
+	
+	\begin{frame}{1 --- Euclidean Distance}
+		\begin{block}{Formula}
+			$d_E = \sqrt{\sum_{j=1}^{m}(x_{jQ} - x_{jP})^2}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			L2 norm. ``As the crow flies.'' Used in K-means by default. Squares differences so large deviations are penalized heavily. Best when clusters are spherical and features are on similar scales. Sensitive to outliers because of the squaring.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{2 --- Manhattan Distance}
+		\begin{block}{Formula}
+			$d_M = \sum_{j=1}^{m}|x_{jQ} - x_{jP}|$
+		\end{block}
+		\begin{block}{Memory Hook}
+			L1 norm. ``City block driving.'' More robust to outliers than Euclidean because it does not square differences. Used when features have different scales or when the data has heavy tails. Also called taxicab distance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{3 --- Silhouette Score}
+		\begin{block}{Formula}
+			$s_i = \frac{b_i - a_i}{\max(a_i, b_i)}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			$a_i$ = mean distance to own cluster (cohesion). $b_i$ = mean distance to nearest other cluster (separation). Range $[-1,1]$. $s \approx 1$ = well-clustered. $s \approx 0$ = boundary. $s < 0$ = mis-clustered. Used to select optimal K in K-means.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{4 --- WCSS (Within-Cluster Sum of Squares)}
+		\begin{block}{Formula}
+			$WCSS_k = \sum_{j=1}^{n_k} d_j^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Also called inertia. K-means objective function. Sum of squared distances from each point to its cluster centroid. Lower = more compact clusters. WCSS always decreases as K increases (overfitting risk).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{5 --- Total WCSS}
+		\begin{block}{Formula}
+			$WCSS = \sum_{k=1}^{K} WCSS_k$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Sum of all cluster WCSS values. K-means minimizes this. Used in scree plot: plot WCSS vs K, look for elbow. Elbow = point where adding more clusters yields diminishing returns.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{6 --- BCSS (Between-Cluster Sum of Squares)}
+		\begin{block}{Formula}
+			$BCSS = \sum_{k=1}^{K} n_k \|\mu_k - \bar{\mu}\|^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Measures how far cluster centroids are from the overall mean, weighted by cluster size. Higher = better separated clusters. Relationship: Total Variance = WCSS + BCSS.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{7 --- Bias-Variance Decomposition}
+		\begin{block}{Formula}
+			$Total\ Error = Bias^2 + Variance + Irreducible\ Error$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Underfitting = high bias, low variance. Overfitting = low bias, high variance. Irreducible error = noise no model can eliminate. Trade-off: increasing complexity reduces bias but increases variance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{8 --- Ridge Regression Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda\sum\beta_j^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			L2 penalty. Shrinks coefficients toward zero but never exactly zero. Good when many features are correlated. $\lambda$ controls strength: larger $\lambda$ = more shrinkage. Does not perform feature selection.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{9 --- LASSO Regression Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda\sum|\beta_j|$
+		\end{block}
+		\begin{block}{Memory Hook}
+			L1 penalty. Can set coefficients exactly to zero = feature selection. Good when only a few features are important. $\lambda$ controls sparsity: larger $\lambda$ = more coefficients zeroed out.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{10 --- Elastic Net Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda_1\sum\beta_j^2 + \lambda_2\sum|\beta_j|$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Combines L1 and L2 penalties. Gets sparsity from LASSO and grouping from Ridge. Good when features are correlated and you want some feature selection. Two hyperparameters to tune.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{11 --- Precision}
+		\begin{block}{Formula}
+			$Precision = \frac{TP}{TP + FP}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Of those predicted positive, how many are actually positive? High precision = few false alarms. Use when false positives are costly (spam filter, fraud alert). Also called positive predictive value.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{12 --- Recall (Sensitivity)}
+		\begin{block}{Formula}
+			$Recall = \frac{TP}{TP + FN}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Of all actual positives, how many did we catch? High recall = few missed positives. Use when false negatives are costly (fraud detection, medical diagnosis). Also called true positive rate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{13 --- Specificity}
+		\begin{block}{Formula}
+			$Specificity = \frac{TN}{TN + FP}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			True negative rate. Of all actual negatives, how many did we correctly identify? Important when false positives are costly. Complement of false positive rate: Specificity = 1 - FPR.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{14 --- F1 Score}
+		\begin{block}{Formula}
+			$F1 = \frac{2 \cdot Precision \cdot Recall}{Precision + Recall}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Harmonic mean of precision and recall. Range [0,1]. Balances both metrics. Low F1 can be from poor precision, poor recall, or both. Useful for imbalanced datasets.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{15 --- Accuracy}
+		\begin{block}{Formula}
+			$Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Percentage of correct predictions. Misleading for imbalanced data. If 98\% of transactions are legitimate, predicting all legitimate gives 98\% accuracy but 0\% fraud detection. GARP tests this concept frequently.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{16 --- Error Rate}
+		\begin{block}{Formula}
+			$Error\ Rate = \frac{FP + FN}{Total} = 1 - Accuracy$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Percentage of incorrect predictions. Same limitations as accuracy for imbalanced data. Type I error = false positive. Type II error = false negative. Costs of each type differ by application.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{17 --- MSE}
+		\begin{block}{Formula}
+			$MSE = \frac{1}{N}\sum(y_i - \hat{y}_i)^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Mean Squared Error. Penalizes large errors heavily because of squaring. Sensitive to outliers. Units are squared (e.g., dollars squared), making interpretation difficult.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{18 --- RMSE}
+		\begin{block}{Formula}
+			$RMSE = \sqrt{MSE}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Root Mean Squared Error. Same units as target variable, so more interpretable. Still sensitive to outliers. ECB recommends reporting RMSE alongside MAE for tail risk.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{19 --- MAE}
+		\begin{block}{Formula}
+			$MAE = \frac{1}{N}\sum|y_i - \hat{y}_i|$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Mean Absolute Error. Robust to outliers. Straightforward interpretation: average error magnitude. Does not penalize large errors as heavily as MSE. Can mask direction of bias.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{20 --- MAPE}
+		\begin{block}{Formula}
+			$MAPE = 100 \times \frac{1}{N}\sum\left|\frac{y_i - \hat{y}_i}{y_i}\right|$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Mean Absolute Percentage Error. Scale-independent, good for comparing across different scales. Fails when actual = 0 or near zero. Board-friendly because it is a percentage.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{21 --- Simple Linear Regression}
+		\begin{block}{Formula}
+			$y_i = \beta_0 + \beta_1 x_i + u_i$
+		\end{block}
+		\begin{block}{Memory Hook}
+			$\beta_0$ = intercept (value of y when x = 0). $\beta_1$ = slope (change in y for one-unit change in x). $u_i$ = error term. OLS minimizes sum of squared residuals.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{22 --- Multiple Linear Regression}
+		\begin{block}{Formula}
+			$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \cdots + \beta_m x_{mi} + u_i$
+		\end{block}
+		\begin{block}{Memory Hook}
+			$m$ features, $m+1$ parameters. Each coefficient measures partial effect controlling for other features. OLS can be used if model is linear in parameters. Watch for multicollinearity, heteroskedasticity, outliers.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{23 --- Logistic Function}
+		\begin{block}{Formula}
+			$f(z) = \frac{1}{1 + e^{-z}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Sigmoid function. Output between 0 and 1. Used in logistic regression for binary classification. Also used as activation function in neural networks. Can suffer from vanishing gradient.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{24 --- Logistic Regression Probability}
+		\begin{block}{Formula}
+			$P_i = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_{1i} + \cdots + \beta_m x_{mi})}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Applies sigmoid to linear combination of features. Output interpreted as probability. Log-odds is linear: $\ln(P/(1-P)) = \beta_0 + \beta_1 x_1 + \cdots$. Coefficients interpreted as odds ratios: $\exp(\beta_j)$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{25 --- Log-Likelihood (Logit)}
+		\begin{block}{Formula}
+			$\log L = \sum[y_i \ln F(y_i) + (1-y_i)\ln(1-F(y_i))]$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Sum of log-probabilities. MLE maximizes this. Log transformation turns products into sums, avoiding underflow. For linear regression with normal errors, MLE = OLS.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{26 --- OLS Slope}
+		\begin{block}{Formula}
+			$\hat{\beta}_1 = \frac{\sum y_i x_i - N\bar{y}\bar{x}}{\sum x_i^2 - N\bar{x}^2}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Covariance(x,y) / Variance(x). Measures how much y changes per unit change in x. OLS finds the line that minimizes sum of squared residuals.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{27 --- OLS Intercept}
+		\begin{block}{Formula}
+			$\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Regression line passes through the point of means $(\bar{x}, \bar{y})$. Intercept = predicted y when x = 0. May not be meaningful if x = 0 is outside data range.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{28 --- RSS}
+		\begin{block}{Formula}
+			$RSS = \sum(y_i - \hat{y}_i)^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Residual Sum of Squares. OLS minimizes this. Also called Sum of Squared Residuals (SSR) or Sum of Squared Errors (SSE). Squaring prevents positive and negative residuals from canceling.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{29 --- Standardization}
+		\begin{block}{Formula}
+			$z = \frac{x - \mu}{\sigma}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Z-score. Mean = 0, SD = 1. Preferred when data has outliers (normalization would squash them). Applied to input features, not target. Critical for K-means, KNN, SVM, neural networks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{30 --- Min-Max Normalization}
+		\begin{block}{Formula}
+			$x' = \frac{x - x_{min}}{x_{max} - x_{min}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Range [0,1]. Squashes outliers into tight range. Preserves correlations between data points. Does not change shape of distribution. Less preferred than standardization when outliers exist.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{31 --- PCA Component}
+		\begin{block}{Formula}
+			$PC_j = b_{1j}P_1 + b_{2j}P_2 + \cdots + b_{mj}P_m$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Linear combination of original predictors. Weights = component loadings. First PC captures most variance. Second PC orthogonal to first. Components are uncorrelated. Used for dimensionality reduction and multicollinearity.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{32 --- Cosine Similarity}
+		\begin{block}{Formula}
+			$S_c(P,Q) = \frac{P \cdot Q}{\|P\| \|Q\|}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Range [-1,1]. Measures angle between vectors, not magnitude. Used in Word2Vec for word similarity. If words are close, similarity near 1. If unrelated, similarity near 0. Example: China-Japan = 0.84.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{33 --- TF-IDF}
+		\begin{block}{Formula}
+			$TF\text{-}IDF_{ij} = TF_{ij} \times IDF_i$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Term frequency $\times$ inverse document frequency. Weights words that are frequent in a document but rare across corpus. Words appearing in all documents get IDF = 0. Used for document classification and information retrieval.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{34 --- IDF}
+		\begin{block}{Formula}
+			$IDF_i = \ln\left(\frac{D}{d_i}\right)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			$D$ = total documents. $d_i$ = documents containing term $i$. Rare words get higher IDF. Common words get lower IDF. If term appears in all documents, IDF = 0 (no discriminatory power).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{35 --- L2 Normalization}
+		\begin{block}{Formula}
+			$v_{norm} = \frac{v}{\sqrt{\sum v_i^2}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Creates unit vector. Divides each element by L2 norm. Used in NLP to normalize word vectors. Prevents repeated words from skewing analysis. All elements lie between 0 and 1.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{36 --- Bayes Rule}
+		\begin{block}{Formula}
+			$P(c|d) = \frac{P(d|c)P(c)}{P(d)}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Posterior = Likelihood $\times$ Prior / Evidence. $P(c)$ = prior probability. $P(d|c)$ = likelihood. $P(c|d)$ = posterior. Used in Naive Bayes classification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{37 --- Naive Bayes Classification}
+		\begin{block}{Formula}
+			$\hat{c} = \arg\max_c P(w_1|c)P(w_2|c)\cdots P(w_N|c)P(c)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Product of conditional word probabilities times class prior. ``Naive'' because assumes word independence. Laplace smoothing adds 1 to all counts to avoid zero probabilities. Used for spam detection, sentiment analysis.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{38 --- Scaled Dot-Product Attention}
+		\begin{block}{Formula}
+			$score(Q_i, K_j) = \frac{Q_i \cdot K_j}{\sqrt{d_k}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Divide by $\sqrt{d_k}$ (key dimension) to prevent softmax saturation. Query = current token. Key = other tokens. Value = used to compute context. Core of transformer architecture.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{39 --- Softmax}
+		\begin{block}{Formula}
+			$softmax(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Normalizes exponentials into probability distribution. Sum = 1. Used in attention and multiclass outputs. Exponentially magnifies largest values. Prevents negative probabilities.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{40 --- Gradient Descent Update}
+		\begin{block}{Formula}
+			$w_i^{new} = w_i^{old} - \eta\frac{\partial L}{\partial w_i}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Subtract learning-rate-scaled gradient. $\eta$ = learning rate. Too small = slow convergence. Too large = overshooting. Batch GD uses full dataset. SGD uses one example. Mini-batch uses subset.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{41 --- Exponential Learning Rate Decay}
+		\begin{block}{Formula}
+			$\eta_t = \eta_0 e^{-kt}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Learning rate decreases exponentially over epochs. $k$ controls decay rate. $t$ = epoch. Start with larger rate for fast initial progress, reduce for fine-tuning. Common in SGD.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{42 --- Inverse Learning Rate Decay}
+		\begin{block}{Formula}
+			$\eta_t = \frac{\eta_0}{1 + kt}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Alternative decay schedule. Decreases more slowly than exponential. $k$ controls decay rate. Used in stochastic gradient descent. Both schedules reduce learning rate over time.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{43 --- Gini Coefficient}
+		\begin{block}{Formula}
+			$Gini = 1 - \sum_{j=1}^{J} p_j^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Node impurity in classification trees. Lower = purer. Gini = 0 for pure node. Gini = 0.5 for binary 50/50 split. Computationally faster than entropy (no log). Usually produces similar trees.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{44 --- Entropy}
+		\begin{block}{Formula}
+			$Entropy = -\sum_{j=1}^{J} p_j \log_2(p_j)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Measure of disorder in classification trees. Lower = purer. Entropy = 0 for pure node. Entropy = 1 for binary 50/50 split. Base-2 log. Changing base scales all values by constant.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{45 --- AIC}
+		\begin{block}{Formula}
+			$AIC = 2k - 2\ln(L)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Akaike Information Criterion. $k$ = parameters. $L$ = likelihood. Lower = better. Penalizes complexity. Used in stepwise regression for feature selection. Does not require nested models.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{46 --- BIC}
+		\begin{block}{Formula}
+			$BIC = k\ln(N) - 2\ln(L)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Bayesian Information Criterion. $N$ = sample size. Penalizes complexity more than AIC for large samples. Lower = better. More conservative (selects simpler models). Used for model selection.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{47 --- Covariance}
+		\begin{block}{Formula}
+			$Cov(x_1, x_2) = \frac{\sum(x_1 - \bar{x}_1)(x_2 - \bar{x}_2)}{N-1}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Average product of deviations from means. Positive = variables move together. Negative = move oppositely. Zero = no linear relationship. Used in LDA covariance matrix.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{48 --- 2x2 Matrix Inverse}
+		\begin{block}{Formula}
+			$\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \frac{1}{ad-bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Swap diagonal, negate off-diagonal, divide by determinant. Determinant = $ad-bc$ must be non-zero. Used in LDA discriminant function. If determinant = 0, matrix is singular (no inverse).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{49 --- LDA Discriminant Function}
+		\begin{block}{Formula}
+			$\delta_j(x) = x^T\hat{\Sigma}^{-1}\hat{\mu}_j - \frac{1}{2}\hat{\mu}_j^T\hat{\Sigma}^{-1}\hat{\mu}_j + \ln(\hat{\pi}_j)$
+		\end{block}
+		\begin{block}{Memory Hook}
+			LDA assumes multivariate normal with common covariance. Assign to class with largest $\delta_j$. Works for multi-class classification. $\hat{\pi}_j$ = prior probability of class $j$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{50 --- Autoencoder Loss}
+		\begin{block}{Formula}
+			$L = \sum_{j=1}^{m}\sum_{i=1}^{N}(x_{ij} - \hat{x}_{ij})^2$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Reconstruction error. Autoencoders learn compressed representations. Used for dimensionality reduction and anomaly detection. High reconstruction error = anomaly. With linear activation = PCA.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Names and People}
+	% =================================================================
+	
+	\begin{frame}{51 --- John McCarthy}
+		\begin{block}{Contribution}
+			Coined ``Artificial Intelligence'' (1956)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Dartmouth Conference. Along with Marvin Minsky, Nathan Rochester, and Claude Shannon. Also developed LISP programming language (1960). Founded Stanford AI Lab (1963). Considered a founding father of AI.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{52 --- Alan Turing}
+		\begin{block}{Contributions}
+			Turing Machine (1936). Turing Test (1950) = ``The Imitation Game.''
+		\end{block}
+		\begin{block}{Memory Hook}
+			``On Computable Numbers, with an Application to the Entscheidungsproblem'' (1936). ``Computing Machinery and Intelligence'' (1950). Turing Test: computer proves intelligence if conversation indistinguishable from human. Worked at Bletchley Park during WWII.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{53 --- McCulloch and Pitts}
+		\begin{block}{Contribution}
+			First neural network model (1943)
+		\end{block}
+		\begin{block}{Memory Hook}
+			``A logical calculus of the ideas immanent in nervous activity.'' Published in Bulletin of Mathematical Biology. Described neurons in terms of propositional logic. Foundational paper for neural networks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{54 --- Donald Hebb}
+		\begin{block}{Contribution}
+			Hebbian Learning (1949)
+		\end{block}
+		\begin{block}{Memory Hook}
+			``The Organisation of Behaviour.'' ``Neurons that fire together, wire together.'' Proposed associative learning in neural networks. Neurophysiological postulate: connection strengthens when one neuron repeatedly fires another.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{55 --- Frank Rosenblatt}
+		\begin{block}{Contribution}
+			Perceptron (1958)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Formulated Perceptron in terms of probability theory, not symbolic logic. Single-layer neural network. Could not learn XOR (shown by Minsky and Papert). Inspired widespread interest in neural networks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{56 --- Minsky and Papert}
+		\begin{block}{Contribution}
+			``Perceptrons'' (1969)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Showed single-layer Perceptrons cannot learn simple logical functions like XOR. Critique severely undermined enthusiasm for neural networks. Later shown that multi-layer networks can learn XOR. Led to AI winter.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{57 --- Rumelhart, McClelland, PDP}
+		\begin{block}{Contribution}
+			``Parallel Distributed Processing'' (1986)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Revived connectionism. Demonstrated how layers of interacting neurons could learn complex functions. Displaced pessimism from Minsky and Papert. Backpropagation rose to prominence.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{58 --- Yann LeCun}
+		\begin{block}{Contribution}
+			LeNet-5 (1998)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Convolutional neural network for digit recognition. 8 layers with convolutional and pooling layers. About 9,118 neurons. Foundational work for modern CNNs. Used for mail sorting, bank check processing.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{59 --- Krizhevsky, Sutskever, Hinton}
+		\begin{block}{Contribution}
+			AlexNet (2012)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Won ImageNet Large Scale Visual Recognition Challenge with 15.3\% error rate (vs 25.8\% previous year). Nearly 100 times bigger than LeNet-5. Almost 900,000 neurons. Demonstrated power of deep learning. Used GPUs for computation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{60 --- DeepMind}
+		\begin{block}{Contributions}
+			AlphaGo (2016): defeated Lee Sedol 4-1. AlphaZero (2017): self-play.
+		\end{block}
+		\begin{block}{Memory Hook}
+			AlphaGo beat Fan Hui 5-0 (2015), Lee Sedol 4-1 (2016). AlphaZero learned by competing against itself without human game databases. Defeated Stockfish. Acquired by Google in 2014.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{61 --- Emily M. Bender}
+		\begin{block}{Contribution}
+			``Stochastic parrot'' (2021)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Describes LLMs that imitate language without understanding meaning. They generate plausible responses based on statistical patterns, not true understanding. Term widely cited in AI ethics discussions.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{62 --- Vaswani et al.}
+		\begin{block}{Contribution}
+			``Attention Is All You Need'' (2017)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Introduced transformer architecture based on self-attention. Eliminated need for recurrence and convolutions. Foundation for BERT, GPT, and modern LLMs. Multiple attention heads capture different relationships.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{63 --- Google (BERT)}
+		\begin{block}{Contribution}
+			BERT (2018)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Bidirectional Encoder Representations from Transformers. Encoder-only model. 100 million parameters. Trained on books and Wikipedia. Not generative. Excellent for classification. Variants: RoBERTa, FinBERT.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{64 --- OpenAI (GPT)}
+		\begin{block}{Contribution}
+			GPT series (2018-present)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Generative Pre-trained Transformer. Decoder-only autoregressive model. GPT-1: 100M parameters. GPT-2: 774M. GPT-3: 175B. GPT-4: 2023. GPT-5: 2025. Uses RLHF for alignment.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{65 --- Facebook (BART)}
+		\begin{block}{Contribution}
+			BART (2019)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Bidirectional and Auto-Regressive Transformer. Combines encoder and decoder. Used for summarization, translation, and generation. Trained by distorting text and learning to reconstruct. Open source.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{66 --- Kleinberg, Mullainathan, Raghavan}
+		\begin{block}{Contribution}
+			Fairness Impossibility Theorem (2016)
+		\end{block}
+		\begin{block}{Memory Hook}
+			Demographic parity, predictive rate parity, and equal opportunity cannot all hold simultaneously when base rates differ. Mathematical result, not practical limitation. Fairness requires trade-offs and value judgments.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{67 --- Bentham and Mill}
+		\begin{block}{Contribution}
+			Utilitarianism
+		\end{block}
+		\begin{block}{Memory Hook}
+			Jeremy Bentham and John Stuart Mill. Maximize overall utility/happiness. Consequentialist framework. Judges actions by outcomes, not intentions. Can justify violating individual rights for greater good.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{68 --- Immanuel Kant}
+		\begin{block}{Contribution}
+			Deontology. Categorical Imperative.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Act only on maxims that could be universal laws. Treat people as ends, not means. Judges actions by adherence to duties and rules, not consequences. Lying is always wrong regardless of consequences.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{69 --- Aristotle}
+		\begin{block}{Contribution}
+			Virtue Ethics
+		\end{block}
+		\begin{block}{Memory Hook}
+			Nicomachean Ethics. Emphasizes virtuous character traits (wisdom, courage, justice, temperance). Asks ``What kind of person should I be?'' rather than ``What should I do?'' Virtues nurtured through practice and habit.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{70 --- Stuart Lloyd}
+		\begin{block}{Contribution}
+			Lloyd's Algorithm (1957) = K-means
+		\end{block}
+		\begin{block}{Memory Hook}
+			Bell Labs. Iterative algorithm: assign points to nearest centroid, update centroids, repeat until convergence. Also called K-means. K-means++ improves initialization by spreading centroids apart.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Theorems and Key Concepts}
+	% =================================================================
+	
+	\begin{frame}{71 --- Universal Approximation Theorem}
+		\begin{block}{Statement}
+			Neural network with enough hidden neurons can approximate any continuous function.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Power of neural networks. Does not guarantee learning or generalization. Need enough data and proper training. Underlies why neural networks are so flexible. Requires non-linear activation functions.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{72 --- Fairness Impossibility Theorem}
+		\begin{block}{Statement}
+			When base rates differ, demographic parity, predictive rate parity, and equal opportunity cannot all hold.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Base rate = prevalence of outcome in group. Fairness requires trade-offs. Must choose which metric matters most. Kleinberg, Mullainathan, Raghavan (2016). Chouldechova independently derived related result.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{73 --- No Free Lunch Theorem}
+		\begin{block}{Statement}
+			No single algorithm is best for all problems.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Match algorithm to data characteristics. K-means for spherical clusters. DBSCAN for arbitrary shapes. Neural networks for complex patterns. This is why GARP covers so many algorithms.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{74 --- Bias-Variance Trade-off}
+		\begin{block}{Statement}
+			Total error = Bias$^2$ + Variance + Irreducible Error.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Simple = high bias (underfitting). Complex = high variance (overfitting). Irreducible error = noise. Regularization, cross-validation, ensembles help find balance. Central tension in machine learning.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{75 --- Curse of Dimensionality}
+		\begin{block}{Statement}
+			As features increase, data becomes sparse. Distances become similar.
+		\end{block}
+		\begin{block}{Memory Hook}
+			K-means struggles with many features. KNN also affected. Solutions: feature selection, PCA, cosine distance. Distances between points become less meaningful. Need exponentially more data as dimensions increase.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{76 --- Vanishing Gradient Problem}
+		\begin{block}{Statement}
+			Gradients become very small in deep networks. Learning slow or impossible.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Caused by sigmoid/tanh activation. Chain rule multiplies many small derivatives. Solutions: ReLU activation, batch normalization, LSTM for RNNs, residual connections. More critical for deep networks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{77 --- Exploding Gradient Problem}
+		\begin{block}{Statement}
+			Gradients grow extremely large. Unstable training.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Opposite of vanishing gradient. Chain rule multiplies many large derivatives. Solutions: gradient clipping, careful weight initialization, batch normalization. Less common than vanishing gradient.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{78 --- Overfitting}
+		\begin{block}{Definition}
+			Model captures noise. Good on training, poor on test.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Large gap between training and test error. Signs: very low training error, high test error. Solutions: regularization (L1, L2), dropout, early stopping, more data, simpler model. More severe with many parameters.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{79 --- Underfitting}
+		\begin{block}{Definition}
+			Model too simple. Poor on both training and test.
+		\end{block}
+		\begin{block}{Memory Hook}
+			High bias. More complex model needed. Signs: high training error, high test error. Solutions: add features, use more complex model, reduce regularization. Less common than overfitting.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{80 --- Markov Decision Process}
+		\begin{block}{Definition}
+			States, actions, rewards, transition probabilities. Markov property: no memory.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Bellman equations define optimal value functions. Dynamic programming solves MDPs when probabilities known. Foundation of reinforcement learning. Future depends only on current state.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{81 --- Bellman Equations}
+		\begin{block}{Formula}
+			$V^*(s) = \max_a E[R_{t+1} + \gamma V^*(s')]$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Optimal value = max expected reward + discounted next value. $\gamma$ = discount factor (0 to 1). Higher $\gamma$ = more weight on future rewards. Used in Q-learning and dynamic programming.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{82 --- Exploration vs Exploitation}
+		\begin{block}{Definition}
+			Explore: try new actions. Exploit: use known best.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Epsilon-greedy balances both. With probability $\epsilon$, explore randomly. With probability $1-\epsilon$, exploit best-known action. $\epsilon$ typically decays over time. Pure greedy may miss better options.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{83 --- Monte Carlo vs Temporal Difference}
+		\begin{block}{Comparison}
+			MC: updates at episode end. TD: updates each step.
+		\end{block}
+		\begin{block}{Memory Hook}
+			MC high variance, unbiased. TD lower variance, biased. MC requires complete episodes. TD works for continuous tasks. Q-learning is TD method. TD more commonly used in practice.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{84 --- Q-Learning}
+		\begin{block}{Formula}
+			$Q(s,a) \leftarrow Q(s,a) + \alpha[R + \gamma \max_{a'} Q(s',a') - Q(s,a)]$
+		\end{block}
+		\begin{block}{Memory Hook}
+			Off-policy TD. $\alpha$ = learning rate. $\gamma$ = discount factor. Learns optimal action-value function. DQN combines with neural networks. Uses experience replay and target network.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{85 --- Principal Component Analysis}
+		\begin{block}{Definition}
+			Finds linear combinations maximizing variance.
+		\end{block}
+		\begin{block}{Memory Hook}
+			First PC most variance. Second PC orthogonal to first. Components uncorrelated. Used for dimensionality reduction and multicollinearity. Not a learning method (no training). Sensitive to scaling.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{86 --- Autoencoders vs PCA}
+		\begin{block}{Comparison}
+			PCA: linear. Autoencoder: nonlinear with activation functions.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Autoencoder with linear activation = PCA. Nonlinear captures more complex patterns. Used for anomaly detection. High reconstruction error = anomaly. Bottleneck layer = compressed representation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{87 --- Random Forest vs Bagging}
+		\begin{block}{Comparison}
+			Bagging: bootstrap samples. Random Forest: bagging + random feature subsetting.
+		\end{block}
+		\begin{block}{Memory Hook}
+			RF reduces correlation between trees. Key hyperparameter: number of features at each split (typically $\sqrt{m}$). More diverse trees = better ensemble. Reduces variance. Less interpretable than single tree.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{88 --- Boosting vs Bagging}
+		\begin{block}{Comparison}
+			Bagging: parallel. Boosting: sequential, corrects errors.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Bagging reduces variance. Boosting reduces bias. AdaBoost reweights misclassified examples. Gradient Boosting fits residuals. Boosting can overfit if not tuned carefully. XGBoost is popular implementation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{89 --- Support Vector Machines}
+		\begin{block}{Definition}
+			Maximum margin hyperplane. Support vectors = closest points.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Kernel trick for nonlinear. Soft margin allows misclassification. $\lambda$ controls trade-off: large $\lambda$ = wider margin, more misclassifications. Works well with high dimensions. Binary classification primarily.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{90 --- K-Nearest Neighbors}
+		\begin{block}{Definition}
+			Classifies based on majority vote of K nearest neighbors.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Lazy learner (no training). K = $\sqrt{N}$ common heuristic. Small K = overfitting. Large K = underfitting. Requires feature scaling. Computationally intensive at prediction time.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{91 --- Decision Trees}
+		\begin{block}{Definition}
+			Recursive binary splitting. Interpretable (``white box'').
+		\end{block}
+		\begin{block}{Memory Hook}
+			Regression: minimize RSS. Classification: minimize Gini/entropy. Pruning prevents overfitting. Pre-pruning stops growth early. Post-pruning grows fully then removes weak branches. Ensemble methods improve accuracy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{92 --- Inscrutability}
+		\begin{block}{Definition}
+			Inability to understand internal mechanisms.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Distinct from explainability (specific decisions) and interpretability (internal logic). Deep networks are inscrutable. Leads to hidden bias, privacy risks, over-reliance. Source of reputational risk.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{93 --- Explainability}
+		\begin{block}{Definition}
+			Ability to explain specific decisions in human terms.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Post-hoc (after the fact). Counterfactual explanations: ``If you had X, you would have been approved.'' Techniques: SHAP, LIME, feature importance. Builds trust and accountability.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{94 --- Interpretability}
+		\begin{block}{Definition}
+			Degree to which human can comprehend internal logic.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Inherent (built-in). Decision trees = interpretable. Neural networks = not interpretable. Trade-off with accuracy. Less flexible models more interpretable.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{95 --- Transparency}
+		\begin{block}{Definition}
+			Openness about design, algorithms, data, processes.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Distinct from explainability and interpretability. Transparency = knowing what the model is. Interpretability = understanding how it works. Explainability = explaining specific decisions.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{96 --- Sources of Algorithmic Bias}
+		\begin{block}{Four Sources}
+			Problem specification, data, modeling, deployment.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Proxy discrimination: protected attribute removed but correlated features remain. Historical bias: training data reflects past discrimination. Sampling bias: sample not representative. Measurement bias: inconsistent measurement across groups.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{97 --- Fairness Metrics}
+		\begin{block}{Definitions}
+			Demographic parity: equal positive prediction rates. Predictive rate parity: equal precision. Equal opportunity: equal TPR.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Impossibility theorem: cannot satisfy all three. Individual fairness: treat similar individuals similarly. Group fairness: statistical parity across groups. Trade-offs required.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{98 --- Ethical Frameworks}
+		\begin{block}{Three Frameworks}
+			Consequentialism (outcomes). Deontology (duties). Virtue ethics (character).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Complementary, not mutually exclusive. Practical ethics blends all three. Best decision accords with all three. Medical ethics provides model for AI ethics.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{99 --- AI Ethics Principles}
+		\begin{block}{Five Principles}
+			Nonmaleficence, beneficence, justice, autonomy, explainability.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Nonmaleficence = do no harm. Beneficence = do good. Justice = fairness. Autonomy = respect decisions. Explainability = understandable reasons. From medical ethics (Hippocratic Oath, Belmont Report).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{100 --- Privacy Principles}
+		\begin{block}{Key Principles}
+			Data minimization, right to be forgotten, contextual integrity, control over data, data security.
+		\end{block}
+		\begin{block}{Memory Hook}
+			GDPR Article 17 = right to erasure. Article 33 = breach notification within 72 hours. Privacy is both moral and legal right. Data minimization = collect only what is necessary. Contextual integrity = respect context norms.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{101 --- Model Risk Management}
+		\begin{block}{Key Concepts}
+			Model inventory, model landscape, model risk appetite, effective challenge.
+		\end{block}
+		\begin{block}{Memory Hook}
+			SR 11-7 requires annual validation at minimum. AI/ML models require more frequent monitoring. Three lines of defense: business, risk management, internal audit. Model inventory = registry. Model landscape = dependency map.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{102 --- AI/ML Validation Differences}
+		\begin{block}{Compared to Traditional Models}
+			More frequent monitoring. Broader stakeholder involvement. Focus on explainability and benchmarking.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Black-box models require different validation. K-fold cross-validation more suitable than MSE. Explainability, benchmarking, assessment on different datasets, back testing. HR, compliance, operational risk involved.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{103 --- GenAI Risks}
+		\begin{block}{Key Risks}
+			Hallucination, unpredictability, data privacy, IP issues, bias amplification.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Hallucination = factually incorrect but convincing. Unpredictability = same prompt, different outputs. Data privacy = prompts may contain sensitive data. IP = training on copyrighted content. Bias = amplifies training data biases.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{104 --- Regulatory Landscape}
+		\begin{block}{Key Regulations}
+			EU AI Act, GDPR, NIST AI RMF, SR 11-7.
+		\end{block}
+		\begin{block}{Memory Hook}
+			EU AI Act fines up to 35M euros or 7\% of global turnover. Prohibited: social scoring, biometric categorization, emotion recognition in workplace. High-risk: impact assessment required. NIST AI RMF: Govern, Map, Measure, Manage.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{105 --- EU AI Act Prohibited Systems}
+		\begin{block}{Prohibited}
+			Social scoring, biometric categorization, emotion recognition in workplace, untargeted facial scraping, manipulation of free will.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Effective August 1, 2024. Ban on unacceptable risk from February 2, 2025. Most provisions from August 2, 2026. European AI Office enforces.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{106 --- EU AI Act High-Risk Requirements}
+		\begin{block}{Requirements}
+			Impact assessment, record keeping, transparency, human oversight.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Banks, insurance, essential services. Must keep records of datasets, methodologies, oversight measures. Impact assessment on fundamental rights. Notify when interacting with chatbots/biometric/emotion recognition.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{107 --- GDPR Key Articles}
+		\begin{block}{Articles}
+			Article 17 = right to erasure. Article 33 = breach notification (72 hours). Article 6 = lawful basis. Article 22 = automated decision-making.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Extraterritorial scope: applies to organizations outside EEA offering services to EEA data subjects. Data subject rights: access, rectification, erasure, restriction, portability, objection.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{108 --- NIST AI RMF}
+		\begin{block}{Four Functions}
+			Govern, Map, Measure, Manage.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Voluntary, non-prescriptive, flexible. Govern = structures. Map = context. Measure = assessment. Manage = mitigation. Customizable based on use cases and risk profiles.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{109 --- SR 11-7}
+		\begin{block}{Key Points}
+			Federal Reserve and OCC. Model risk management guidance. Annual validation minimum.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Defines model as quantitative method/system/approach. Effective challenge = critical analysis by independent parties. Three lines of defense. Model inventory and landscape required.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{110 --- Three Lines of Defense}
+		\begin{block}{Lines}
+			First: business/model owners. Second: independent risk management. Third: internal audit.
+		\end{block}
+		\begin{block}{Memory Hook}
+			First line owns model and performance. Second line sets policy, conducts validations. Third line provides independent assurance to board. IIA formalized model.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{111 --- Model Inventory Contents}
+		\begin{block}{Contents}
+			Owner, purpose, methodology, risk tier, validation status, interdependencies.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Registry of all models. Includes AI/ML models. Tracks usage, changes, approvals. Model landscape = map of interactions. Identifies cascade risk and critical nodes.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{112 --- Model Risk Appetite}
+		\begin{block}{Definition}
+			Acceptable level of model risk. Set by board.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Guides governance. Model risk function sets thresholds for materiality. Board sets overall appetite. Model risk ranking: materiality, complexity, exposure.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{113 --- Use Test}
+		\begin{block}{Definition}
+			Qualitative assessment of whether model is used appropriately.
+		\end{block}
+		\begin{block}{Memory Hook}
+			People-focused, not numbers-focused. Assesses acceptance, trust, comprehensibility. Results presented to senior management. Contributes to risk modeling culture.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{114 --- Outcomes Analysis}
+		\begin{block}{Definition}
+			Compare model predictions against realized outcomes.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Detects bias, degradation, incorrect assumptions. Part of ongoing validation. Compares predicted vs actual. Backtesting at appropriate cadence.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{115 --- Initial Validation Goals}
+		\begin{block}{Three Goals}
+			Operational feasibility, proper documentation, user training.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Ensures model can run as intended. Adheres to firm-wide standards. Users trained to interpret results. Preproduction phase required. Results form basis for approval.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{116 --- Effective Challenge}
+		\begin{block}{Definition}
+			Critical analysis by objective and informed parties.
+		\end{block}
+		\begin{block}{Memory Hook}
+			SR 11-7 concept. Identifies assumptions, limitations, weaknesses. Requires independence, competence, influence. Core of model validation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{117 --- Model Validation Frequency}
+		\begin{block}{Frequency}
+			At least annually, or more frequently if warranted.
+		\end{block}
+		\begin{block}{Memory Hook}
+			SR 11-7 recommendation. AI/ML models need more frequent review. Higher-risk models validated more often. Periodic baseline revalidation. Change-based validation for material changes.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{118 --- Model Risk Tier}
+		\begin{block}{Definition}
+			Determines depth and frequency of validation.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Higher tier = more frequent validation. Based on materiality, complexity, exposure. Drives resource allocation. Minimum standards apply to all models.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{119 --- Model Risk Ranking Factors}
+		\begin{block}{Factors}
+			Materiality, complexity, exposure.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Materiality = impact on decisions. Complexity = methodology sophistication. Exposure = usage breadth. Used to prioritize validation resources.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{120 --- Data Provenance}
+		\begin{block}{Definition}
+			Origin, history, and legal right to use data.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Critical for alternative data. FTC requires destruction of models built on improperly obtained data. Copyright lawsuits against GenAI vendors. Vendor models need proof of ownership.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{121 --- Data Classification}
+		\begin{block}{Definition}
+			Categorizing data by sensitivity and structure.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Sensitivity labels: public, internal, confidential, restricted. Structure labels: structured, semi-structured, unstructured. Determines handling and controls.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{122 --- Metadata}
+		\begin{block}{Definition}
+			Data about data.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Documents origin, structure, definitions, relationships. Types: descriptive, structural, administrative, reference, statistical. Essential for robust data governance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{123 --- RBAC}
+		\begin{block}{Definition}
+			Role-Based Access Control.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Permissions based on organizational roles. ABAC = attribute-based. MAC = mandatory. DAC = discretionary. RBAC simpler; ABAC more flexible.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{124 --- ABAC}
+		\begin{block}{Definition}
+			Attribute-Based Access Control.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Uses attributes of user, resource, environment. More flexible than RBAC. Can implement complex policies. More complex to manage.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{125 --- Data Strategy}
+		\begin{block}{Elements}
+			Vision, goals, priorities, data governance policy.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Includes authorization for non-public data. Single or recurring use. Source of information. Alternative data requires additional controls.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{126 --- Data Governance Committee}
+		\begin{block}{Responsibilities}
+			Approved data practices and policies.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Collection, reconciliations, treatment, access, monitoring. Management of data stewards. Overall oversight, not operational. Data strategy approval.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{127 --- Synthetic Data}
+		\begin{block}{Purpose}
+			Augment available data and mitigate privacy risks.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Used when personally identifiable data present. Can be more easily rid of biases by design. Disadvantage: sometimes less precise than real data. May differ from real data in non-obvious ways.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{128 --- AI-Ready Data}
+		\begin{block}{Definition}
+			Accurate, unbiased, well-structured, cleaned, suitable for training.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Improves accuracy and efficiency of AI models. Requires consideration in data strategy. Synthetic data and AI readiness linked. Data quality is foundational.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{129 --- Data Retention Policy}
+		\begin{block}{Definition}
+			How long data is kept and when deleted.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Complies with regulations. Routine deletion protects individuals. Keeps data accurate. Expiry date is good security practice. Personal data should not be kept forever.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{130 --- GDPR Data Subject Rights}
+		\begin{block}{Rights}
+			Access, rectification, erasure, restriction, portability, objection.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Article 17 = erasure. Article 33 = breach notification. Article 6 = lawful basis. Article 22 = automated decision-making. Extraterritorial scope.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{131 --- GDPR Extraterritorial Scope}
+		\begin{block}{Scope}
+			Applies to organizations outside EEA offering services to EEA data subjects.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Made GDPR hugely effective globally. Inspired other countries' privacy legislation. Organizations improved standards everywhere. Better standards for all users.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{132 --- CCPA}
+		\begin{block}{Definition}
+			California Consumer Privacy Act (2018).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Most comprehensive US state privacy law. Rights: know, access, delete, opt out of sale, non-discrimination. Applies to businesses doing business in California. Inspired other state laws.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{133 --- BIPA}
+		\begin{block}{Definition}
+			Biometric Information Privacy Act (Illinois, 2008).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Regulates collection of biometric identifiers. Statutory damages: \$1,000 per violation, \$5,000 if intentional. Notification, access, deletion, breach notice. Civil remedies available.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{134 --- HIPAA}
+		\begin{block}{Definition}
+			Health Insurance Portability and Accountability Act (1996).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Protects privacy and security of health information. Applies to health care providers, plans. Requires safeguards for electronic health information. Breach notification required.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{135 --- GLBA}
+		\begin{block}{Definition}
+			Gramm-Leach-Bliley Act.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Requires financial institutions to explain privacy practices. Implement security safeguards for customer information. Provide opt-out rights. FTC enforces.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{136 --- FTC Safeguards Rule}
+		\begin{block}{Definition}
+			Financial institutions under FTC jurisdiction must keep customer information secure.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Requires measures to keep customer information secure. Part of GLBA implementation. Applies to non-bank financial institutions.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{137 --- Privacy Act of 1974}
+		\begin{block}{Definition}
+			Governs federal agencies' collection and use of personal data.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Prohibits disclosure without written consent. Limited exceptions (Census Bureau). System of records requirements. Applies only to federal agencies.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{138 --- EU Digital Markets Act}
+		\begin{block}{Definition}
+			Targets large online platforms with gatekeeper status.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Bans self-preferencing. Requires interoperability. Transparency obligations. No tying and bundling. Open access to data.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{139 --- EU Digital Services Act}
+		\begin{block}{Definition}
+			Requires platforms to prevent illegal content, be transparent, address disinformation.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Protect against algorithmic bias. Allow opt-out of personalized content. Applies to online intermediaries and platforms. 19 companies currently beholden.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{140 --- China Generative AI Measures}
+		\begin{block}{Definition}
+			Prohibit illegal content, prevent discriminatory content, protect privacy.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Published by Cyberspace Administration of China. Effective August 15, 2023. Applies to text, pictures, sounds, videos. Not infringe on others' rights.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{141 --- PIPL}
+		\begin{block}{Definition}
+			Personal Information Protection Law (China).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Mandates data minimization, user consent, algorithmic transparency. Comprehensive personal information law. Similar to GDPR in scope.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{142 --- Colorado Privacy Act}
+		\begin{block}{Definition}
+			CPA (2021).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Rights: know, access, delete, opt out of sale, opt out of targeted advertising. Data minimization, security, transparency. Applies to businesses in Colorado.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{143 --- Virginia CDPA}
+		\begin{block}{Definition}
+			Consumer Data Protection Act (2021).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Applies to businesses controlling/processing data of 100,000+ Virginia consumers. Or 25,000+ with >50\% revenue from data sales. Rights similar to CCPA.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{144 --- Illinois PIPA}
+		\begin{block}{Definition}
+			Personal Information Protection Act (2005).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Reasonable security, breach notification within 24 hours. Privacy notice, access, correction, opt-out. Applies to businesses with Illinois resident data.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{145 --- EU AI Act Effective Date}
+		\begin{block}{Date}
+			August 1, 2024.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Ban on unacceptable risk from February 2, 2025. Most provisions from August 2, 2026. European AI Office enforces. First body to enforce binding AI rules.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{146 --- European AI Office}
+		\begin{block}{Definition}
+			Responsible for compliance, implementation, enforcement of EU AI Act.
+		\end{block}
+		\begin{block}{Memory Hook}
+			First body in world to enforce binding AI rules. Established by EU AI Act. Sets global standards.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{147 --- AI Act High-Risk Requirements}
+		\begin{block}{Requirements}
+			Record keeping, impact assessment, transparency, human oversight.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Providers must keep records of datasets, methodologies, oversight. Impact assessment on fundamental rights. Notify when interacting with AI. Label deepfakes.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{148 --- AI Act Prohibited Systems}
+		\begin{block}{Prohibited}
+			Social scoring, biometric categorization, emotion recognition in workplace/education, untargeted facial scraping, manipulation.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Six months for companies to comply. Fines up to 35M euros or 7\% of global turnover. Based on offense and company size.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{149 --- AI Act Fines}
+		\begin{block}{Range}
+			7.5M euros (1.5\%) to 35M euros (7\%) of global turnover.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Depends on offense and company size. Proportional to severity. First body to enforce binding AI rules. Sets global precedent.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{150 --- Executive Order on AI}
+		\begin{block}{Date}
+			October 30, 2023.
+		\end{block}
+		\begin{block}{Memory Hook}
+			President Biden. Safe, Secure, and Trustworthy Development and Use of AI. Requires safety test results sharing with government. Addresses biases, algorithmic decision-making, cybersecurity threats. AI Safety and Security Board established by DHS (April 26, 2024).
+		\end{block}
+	\end{frame}
+	
+\end{document}
