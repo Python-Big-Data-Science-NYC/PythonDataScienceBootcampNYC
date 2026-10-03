@@ -1,0 +1,999 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI]{GARP Risk \& AI --- 100 Simple Numerical Problems}
+\subtitle{Unofficial Exam Prep --- With Detailed Definitions}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% =================================================================
+	\section{Confusion Matrix Metrics}
+	% =================================================================
+	
+	\begin{frame}{N001 --- Accuracy}
+		\begin{block}{Question}
+			A model has TP = 40, TN = 50, FP = 10, FN = 20. What is the accuracy?
+			\begin{enumerate}
+				\item 0.50
+				\item 0.75
+				\item 0.80
+				\item 0.90
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Accuracy is the proportion of all predictions (both positive and negative) that the model classified correctly. It is the most intuitive performance measure but can be misleading when classes are imbalanced.\\
+			\textbf{Formula:} Accuracy = (TP + TN) / (TP + TN + FP + FN)\\
+			\textbf{Calculation:} (40 + 50) / (40 + 50 + 10 + 20) = 90 / 120 = 0.75\\
+			\textbf{Interpretation:} The model correctly classified 75 percent of all instances.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N002 --- Precision}
+		\begin{block}{Question}
+			A model has TP = 30, FP = 20. What is the precision?
+			\begin{enumerate}
+				\item 0.40
+				\item 0.50
+				\item 0.60
+				\item 0.75
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Precision (also called Positive Predictive Value) is the proportion of positive predictions that are actually correct. It answers the question: ``Of all the cases the model flagged as positive, how many were truly positive?'' High precision means few false alarms.\\
+			\textbf{Formula:} Precision = TP / (TP + FP)\\
+			\textbf{Calculation:} 30 / (30 + 20) = 30 / 50 = 0.60\\
+			\textbf{Interpretation:} When the model predicts positive, it is correct 60 percent of the time.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N003 --- Recall}
+		\begin{block}{Question}
+			A model has TP = 25, FN = 75. What is the recall?
+			\begin{enumerate}
+				\item 0.25
+				\item 0.33
+				\item 0.50
+				\item 0.75
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Recall (also called Sensitivity or True Positive Rate) is the proportion of actual positive cases that the model correctly identified. It answers: ``Of all the truly positive cases, how many did the model catch?'' High recall means few missed positives.\\
+			\textbf{Formula:} Recall = TP / (TP + FN)\\
+			\textbf{Calculation:} 25 / (25 + 75) = 25 / 100 = 0.25\\
+			\textbf{Interpretation:} The model only caught 25 percent of all actual positive cases; it missed 75 percent.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N004 --- F1 Score}
+		\begin{block}{Question}
+			A model has precision = 0.60 and recall = 0.40. What is the F1 score?
+			\begin{enumerate}
+				\item 0.24
+				\item 0.48
+				\item 0.50
+				\item 0.60
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The F1 score is the harmonic mean of precision and recall. It combines both metrics into a single value, rewarding models that balance precision and recall. It is especially useful when classes are imbalanced. The harmonic mean penalizes extreme values (e.g., very high precision but very low recall).\\
+			\textbf{Formula:} F1 = 2 $\times$ (Precision $\times$ Recall) / (Precision + Recall)\\
+			\textbf{Calculation:} 2 $\times$ (0.60 $\times$ 0.40) / (0.60 + 0.40) = 2 $\times$ 0.24 / 1.00 = 0.48\\
+			\textbf{Interpretation:} The F1 score of 0.48 reflects a moderate balance between precision and recall.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N005 --- Error Rate}
+		\begin{block}{Question}
+			A model has accuracy = 0.82. What is the error rate?
+			\begin{enumerate}
+				\item 0.08
+				\item 0.18
+				\item 0.22
+				\item 0.28
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The error rate (also called misclassification rate) is the proportion of all predictions that the model got wrong. It is the complement of accuracy.\\
+			\textbf{Formula:} Error Rate = 1 $-$ Accuracy = (FP + FN) / (TP + TN + FP + FN)\\
+			\textbf{Calculation:} 1 $-$ 0.82 = 0.18\\
+			\textbf{Interpretation:} 18 percent of all predictions were incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N006 --- Specificity}
+		\begin{block}{Question}
+			A model has TN = 80, FP = 20. What is the specificity?
+			\begin{enumerate}
+				\item 0.20
+				\item 0.50
+				\item 0.80
+				\item 0.90
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Specificity (also called True Negative Rate) is the proportion of actual negative cases that the model correctly identified as negative. It answers: ``Of all the truly negative cases, how many did the model correctly leave alone?'' High specificity means few false alarms on the negative class.\\
+			\textbf{Formula:} Specificity = TN / (TN + FP)\\
+			\textbf{Calculation:} 80 / (80 + 20) = 80 / 100 = 0.80\\
+			\textbf{Interpretation:} The model correctly identified 80 percent of all actual negative cases.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N007 --- Accuracy from Confusion Matrix}
+		\begin{block}{Question}
+			A model has TP = 15, TN = 70, FP = 5, FN = 10. What is the accuracy?
+			\begin{enumerate}
+				\item 0.75
+				\item 0.80
+				\item 0.85
+				\item 0.90
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Accuracy measures the overall proportion of correct predictions (both positive and negative).\\
+			\textbf{Formula:} Accuracy = (TP + TN) / (TP + TN + FP + FN)\\
+			\textbf{Calculation:} (15 + 70) / (15 + 70 + 5 + 10) = 85 / 100 = 0.85\\
+			\textbf{Interpretation:} 85 percent of all predictions were correct.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N008 --- Precision}
+		\begin{block}{Question}
+			A model has TP = 45, FP = 15. What is the precision?
+			\begin{enumerate}
+				\item 0.60
+				\item 0.70
+				\item 0.75
+				\item 0.80
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Precision is the proportion of positive predictions that are correct.\\
+			\textbf{Formula:} Precision = TP / (TP + FP)\\
+			\textbf{Calculation:} 45 / (45 + 15) = 45 / 60 = 0.75\\
+			\textbf{Interpretation:} When the model predicts positive, it is correct 75 percent of the time.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N009 --- Recall}
+		\begin{block}{Question}
+			A model has TP = 60, FN = 40. What is the recall?
+			\begin{enumerate}
+				\item 0.40
+				\item 0.50
+				\item 0.60
+				\item 0.75
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Recall is the proportion of actual positive cases that the model correctly identified.\\
+			\textbf{Formula:} Recall = TP / (TP + FN)\\
+			\textbf{Calculation:} 60 / (60 + 40) = 60 / 100 = 0.60\\
+			\textbf{Interpretation:} The model caught 60 percent of all actual positive cases.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N010 --- F1 Score}
+		\begin{block}{Question}
+			A model has precision = 0.80 and recall = 0.50. What is the F1 score?
+			\begin{enumerate}
+				\item 0.40
+				\item 0.50
+				\item 0.62
+				\item 0.80
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The F1 score is the harmonic mean of precision and recall, providing a single balanced metric.\\
+			\textbf{Formula:} F1 = 2 $\times$ (Precision $\times$ Recall) / (Precision + Recall)\\
+			\textbf{Calculation:} 2 $\times$ (0.80 $\times$ 0.50) / (0.80 + 0.50) = 2 $\times$ 0.40 / 1.30 = 0.80 / 1.30 = 0.615 $\approx$ 0.62\\
+			\textbf{Interpretation:} The F1 score of 0.62 reflects a moderate balance, penalized by the lower recall.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Regression Metrics}
+	% =================================================================
+	
+	\begin{frame}{N011 --- Mean Squared Error}
+		\begin{block}{Question}
+			Actual values: [10, 20, 30]. Predicted values: [12, 18, 33]. What is the MSE?
+			\begin{enumerate}
+				\item 4.33
+				\item 5.67
+				\item 7.33
+				\item 8.67
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Mean Squared Error (MSE) is the average of the squared differences between actual and predicted values. Squaring ensures positive and negative errors do not cancel out and heavily penalizes large errors.\\
+			\textbf{Formula:} MSE = (1/N) $\times$ $\sum$ (y$_{i}$ $-$ $\hat{y}$$_{i}$)$^{2}$\\
+			\textbf{Calculation:} Errors: (10$-$12)=$-$2, (20$-$18)=2, (30$-$33)=$-$3. Squared: 4, 4, 9. Sum = 17. MSE = 17/3 = 5.67\\
+			\textbf{Interpretation:} On average, the squared prediction error is 5.67.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N012 --- Root Mean Squared Error}
+		\begin{block}{Question}
+			MSE = 25. What is the RMSE?
+			\begin{enumerate}
+				\item 3
+				\item 4
+				\item 5
+				\item 6
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Root Mean Squared Error (RMSE) is the square root of MSE. It is expressed in the same units as the target variable, making it more interpretable than MSE.\\
+			\textbf{Formula:} RMSE = $\sqrt{\text{MSE}}$\\
+			\textbf{Calculation:} $\sqrt{25}$ = 5\\
+			\textbf{Interpretation:} The typical prediction error is about 5 units (in the same units as the target).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N013 --- Mean Absolute Error}
+		\begin{block}{Question}
+			Actual values: [5, 10, 15]. Predicted values: [7, 8, 18]. What is the MAE?
+			\begin{enumerate}
+				\item 2.00
+				\item 2.33
+				\item 2.67
+				\item 3.00
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Mean Absolute Error (MAE) is the average of the absolute differences between actual and predicted values. Unlike MSE, it does not square errors, so it is more robust to outliers.\\
+			\textbf{Formula:} MAE = (1/N) $\times$ $\sum$ $|$y$_{i}$ $-$ $\hat{y}$$_{i}$$|$\\
+			\textbf{Calculation:} $|$5$-$7$|$=2, $|$10$-$8$|$=2, $|$15$-$18$|$=3. Sum = 7. MAE = 7/3 = 2.33\\
+			\textbf{Interpretation:} On average, predictions are off by 2.33 units.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N014 --- Mean Absolute Percentage Error}
+		\begin{block}{Question}
+			Actual = 100, Predicted = 110. What is the absolute percentage error for this observation?
+			\begin{enumerate}
+				\item 5 percent
+				\item 10 percent
+				\item 11 percent
+				\item 20 percent
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Absolute Percentage Error (APE) measures the error as a percentage of the actual value. It is scale-independent, allowing comparison across different magnitudes. MAPE is the average of APE across all observations.\\
+			\textbf{Formula:} APE = $|$y $-$ $\hat{y}$$|$ / y $\times$ 100 percent\\
+			\textbf{Calculation:} $|$100$-$110$|$ / 100 = 10/100 = 0.10 = 10 percent\\
+			\textbf{Interpretation:} The prediction is 10 percent higher than the actual value.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N015 --- MSE from Errors}
+		\begin{block}{Question}
+			Errors are: 2, $-$4, 6. What is the MSE?
+			\begin{enumerate}
+				\item 4.67
+				\item 6.67
+				\item 8.67
+				\item 18.67
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} MSE is the average of squared errors. Given errors directly, we square each and average.\\
+			\textbf{Formula:} MSE = (1/N) $\times$ $\sum$ (error$_{i}$)$^{2}$\\
+			\textbf{Calculation:} Squared errors: 4, 16, 36. Sum = 56. MSE = 56/3 = 18.67\\
+			\textbf{Interpretation:} The average squared error is 18.67.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N016 --- RMSE from Errors}
+		\begin{block}{Question}
+			Errors are: 1, 3, 2. What is the RMSE?
+			\begin{enumerate}
+				\item 1.67
+				\item 2.16
+				\item 3.00
+				\item 4.67
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} RMSE is the square root of MSE, expressed in original units.\\
+			\textbf{Formula:} RMSE = $\sqrt{(1/N) \times \sum (\text{error}_{i})^{2}}$\\
+			\textbf{Calculation:} Squared errors: 1, 9, 4. Sum = 14. MSE = 14/3 = 4.67. RMSE = $\sqrt{4.67}$ = 2.16\\
+			\textbf{Interpretation:} The typical error magnitude is 2.16 units.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N017 --- MAE}
+		\begin{block}{Question}
+			Errors are: $-$3, 5, $-$2, 4. What is the MAE?
+			\begin{enumerate}
+				\item 2.50
+				\item 3.00
+				\item 3.50
+				\item 4.00
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} MAE is the average of absolute errors, treating positive and negative errors equally.\\
+			\textbf{Formula:} MAE = (1/N) $\times$ $\sum$ $|$error$_{i}$$|$\\
+			\textbf{Calculation:} Absolute errors: 3, 5, 2, 4. Sum = 14. MAE = 14/4 = 3.50\\
+			\textbf{Interpretation:} On average, predictions are off by 3.50 units.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N018 --- MAPE}
+		\begin{block}{Question}
+			Actual values: [50, 100]. Predicted values: [55, 90]. What is the MAPE?
+			\begin{enumerate}
+				\item 10 percent
+				\item 12 percent
+				\item 15 percent
+				\item 20 percent
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Mean Absolute Percentage Error (MAPE) is the average of absolute percentage errors. It expresses forecast error as a percentage of actual values.\\
+			\textbf{Formula:} MAPE = (1/N) $\times$ $\sum$ $|$(y$_{i}$ $-$ $\hat{y}$$_{i}$)/y$_{i}$$|$ $\times$ 100 percent\\
+			\textbf{Calculation:} APE1 = $|$50$-$55$|$/50 = 5/50 = 10 percent. APE2 = $|$100$-$90$|$/100 = 10/100 = 10 percent. MAPE = (10+10)/2 = 10 percent\\
+			\textbf{Interpretation:} On average, predictions deviate from actuals by 10 percent.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N019 --- MSE}
+		\begin{block}{Question}
+			Actual values: [8, 12]. Predicted values: [10, 10]. What is the MSE?
+			\begin{enumerate}
+				\item 2
+				\item 4
+				\item 8
+				\item 16
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} MSE is the average of squared errors.\\
+			\textbf{Formula:} MSE = (1/N) $\times$ $\sum$ (y$_{i}$ $-$ $\hat{y}$$_{i}$)$^{2}$\\
+			\textbf{Calculation:} Errors: 8$-$10=$-$2, 12$-$10=2. Squared: 4, 4. Sum = 8. MSE = 8/2 = 4\\
+			\textbf{Interpretation:} The average squared prediction error is 4.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N020 --- RMSE}
+		\begin{block}{Question}
+			MSE = 16. What is the RMSE?
+			\begin{enumerate}
+				\item 2
+				\item 4
+				\item 8
+				\item 16
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} RMSE is the square root of MSE, expressed in original units.\\
+			\textbf{Formula:} RMSE = $\sqrt{\text{MSE}}$\\
+			\textbf{Calculation:} $\sqrt{16}$ = 4\\
+			\textbf{Interpretation:} The typical prediction error is 4 units.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Probability and Statistics}
+	% =================================================================
+	
+	\begin{frame}{N021 --- Bayes Rule}
+		\begin{block}{Question}
+			P(A) = 0.3, P(B$|$A) = 0.8, P(B) = 0.4. What is P(A$|$B)?
+			\begin{enumerate}
+				\item 0.24
+				\item 0.40
+				\item 0.60
+				\item 0.80
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Bayes' theorem updates the probability of an event A given new evidence B. It combines the prior probability P(A), the likelihood P(B$|$A), and the evidence P(B).\\
+			\textbf{Formula:} P(A$|$B) = P(B$|$A) $\times$ P(A) / P(B)\\
+			\textbf{Calculation:} 0.8 $\times$ 0.3 / 0.4 = 0.24 / 0.4 = 0.60\\
+			\textbf{Interpretation:} Given that B occurred, there is a 60 percent probability that A also occurred.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N022 --- Bayes Rule}
+		\begin{block}{Question}
+			P(A) = 0.5, P(B$|$A) = 0.6, P(B) = 0.3. What is P(A$|$B)?
+			\begin{enumerate}
+				\item 0.50
+				\item 0.60
+				\item 0.80
+				\item 1.00
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Bayes' theorem updates prior beliefs with new evidence.\\
+			\textbf{Formula:} P(A$|$B) = P(B$|$A) $\times$ P(A) / P(B)\\
+			\textbf{Calculation:} 0.6 $\times$ 0.5 / 0.3 = 0.30 / 0.3 = 1.00\\
+			\textbf{Interpretation:} Given B, A is certain to occur (in this simplified example).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N023 --- Naive Bayes}
+		\begin{block}{Question}
+			Prior P(Good) = 0.6. Likelihoods: P(w1$|$Good) = 0.5, P(w2$|$Good) = 0.4. What is the unnormalized posterior?
+			\begin{enumerate}
+				\item 0.06
+				\item 0.12
+				\item 0.24
+				\item 0.40
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Naive Bayes calculates the probability of a class given observed features, assuming features are conditionally independent. The unnormalized posterior is the product of the prior and all likelihoods.\\
+			\textbf{Formula:} Unnormalized Posterior = P(Class) $\times$ $\prod$ P(word$_{i}$$|$Class)\\
+			\textbf{Calculation:} 0.5 $\times$ 0.4 $\times$ 0.6 = 0.12\\
+			\textbf{Interpretation:} The unnormalized score for ``Good'' is 0.12 (to be normalized against other classes).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N024 --- Naive Bayes}
+		\begin{block}{Question}
+			Prior P(Bad) = 0.4. Likelihoods: P(w1$|$Bad) = 0.7, P(w2$|$Bad) = 0.3. What is the unnormalized posterior?
+			\begin{enumerate}
+				\item 0.084
+				\item 0.120
+				\item 0.210
+				\item 0.280
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The unnormalized posterior for a class is the product of its prior and the likelihoods of observed features.\\
+			\textbf{Formula:} Unnormalized Posterior = P(Class) $\times$ $\prod$ P(word$_{i}$$|$Class)\\
+			\textbf{Calculation:} 0.7 $\times$ 0.3 $\times$ 0.4 = 0.084\\
+			\textbf{Interpretation:} The unnormalized score for ``Bad'' is 0.084.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N025 --- Normalized Posterior}
+		\begin{block}{Question}
+			Unnormalized posteriors: Good = 0.12, Bad = 0.08. What is the normalized P(Good)?
+			\begin{enumerate}
+				\item 0.40
+				\item 0.50
+				\item 0.60
+				\item 0.67
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Normalization converts unnormalized posterior scores into proper probabilities that sum to 1.\\
+			\textbf{Formula:} P(Good) = Unnorm(Good) / (Unnorm(Good) + Unnorm(Bad))\\
+			\textbf{Calculation:} 0.12 / (0.12 + 0.08) = 0.12 / 0.20 = 0.60\\
+			\textbf{Interpretation:} Given the observed words, there is a 60 percent probability the document belongs to the ``Good'' class.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N026 --- Mean}
+		\begin{block}{Question}
+			Data: [4, 8, 12, 16]. What is the mean?
+			\begin{enumerate}
+				\item 8
+				\item 10
+				\item 12
+				\item 14
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The mean (average) is the sum of all values divided by the number of values. It measures the central tendency of the data.\\
+			\textbf{Formula:} Mean = ($\sum$x$_{i}$) / N\\
+			\textbf{Calculation:} (4+8+12+16) / 4 = 40 / 4 = 10\\
+			\textbf{Interpretation:} The average value in the dataset is 10.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N027 --- Variance}
+		\begin{block}{Question}
+			Data: [2, 4, 6]. What is the population variance?
+			\begin{enumerate}
+				\item 1.33
+				\item 2.67
+				\item 4.00
+				\item 8.00
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Variance measures the average squared deviation from the mean. It quantifies how spread out the data is.\\
+			\textbf{Formula:} Variance = (1/N) $\times$ $\sum$ (x$_{i}$ $-$ $\mu$)$^{2}$\\
+			\textbf{Calculation:} Mean = 4. Squared deviations: (2$-$4)$^{2}$=4, (4$-$4)$^{2}$=0, (6$-$4)$^{2}$=4. Sum = 8. Variance = 8/3 = 2.67\\
+			\textbf{Interpretation:} The data points deviate from the mean by an average squared amount of 2.67.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N028 --- Standard Deviation}
+		\begin{block}{Question}
+			Variance = 9. What is the standard deviation?
+			\begin{enumerate}
+				\item 2
+				\item 3
+				\item 4
+				\item 9
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Standard deviation is the square root of variance. It is expressed in the same units as the data, making it easier to interpret.\\
+			\textbf{Formula:} SD = $\sqrt{\text{Variance}}$\\
+			\textbf{Calculation:} $\sqrt{9}$ = 3\\
+			\textbf{Interpretation:} On average, data points deviate from the mean by 3 units.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N029 --- Z-Score}
+		\begin{block}{Question}
+			Value = 85, Mean = 70, SD = 10. What is the z-score?
+			\begin{enumerate}
+				\item 0.5
+				\item 1.0
+				\item 1.5
+				\item 2.0
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The z-score (standard score) measures how many standard deviations a value is from the mean. It standardizes values for comparison across different distributions.\\
+			\textbf{Formula:} z = (x $-$ $\mu$) / $\sigma$\\
+			\textbf{Calculation:} (85 $-$ 70) / 10 = 15 / 10 = 1.5\\
+			\textbf{Interpretation:} The value 85 is 1.5 standard deviations above the mean.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N030 --- Normalization}
+		\begin{block}{Question}
+			Value = 30, Min = 10, Max = 50. What is the min-max normalized value?
+			\begin{enumerate}
+				\item 0.25
+				\item 0.50
+				\item 0.75
+				\item 1.00
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Min-max normalization rescales values to a fixed range, typically [0, 1]. It preserves the relative relationships between data points.\\
+			\textbf{Formula:} Normalized = (x $-$ min) / (max $-$ min)\\
+			\textbf{Calculation:} (30 $-$ 10) / (50 $-$ 10) = 20 / 40 = 0.50\\
+			\textbf{Interpretation:} The value 30 is exactly halfway between the minimum and maximum.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Clustering}
+	% =================================================================
+	
+	\begin{frame}{N031 --- Euclidean Distance}
+		\begin{block}{Question}
+			Point A = (1, 2), Point B = (4, 6). What is the Euclidean distance?
+			\begin{enumerate}
+				\item 3
+				\item 4
+				\item 5
+				\item 7
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Euclidean distance is the straight-line distance between two points in Euclidean space. It is the most common distance metric in clustering algorithms like K-means.\\
+			\textbf{Formula:} d = $\sqrt{(x_{2}-x_{1})^{2} + (y_{2}-y_{1})^{2}}$\\
+			\textbf{Calculation:} $\sqrt{(4-1)^{2} + (6-2)^{2}}$ = $\sqrt{9+16}$ = $\sqrt{25}$ = 5\\
+			\textbf{Interpretation:} The two points are 5 units apart in Euclidean space.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N032 --- Manhattan Distance}
+		\begin{block}{Question}
+			Point A = (1, 2), Point B = (4, 6). What is the Manhattan distance?
+			\begin{enumerate}
+				\item 3
+				\item 5
+				\item 7
+				\item 9
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Manhattan distance (also called city-block or L1 distance) is the sum of the absolute differences between coordinates. It measures distance along grid lines, like walking in a city.\\
+			\textbf{Formula:} d = $|$x$_{2}$ $-$ x$_{1}$$|$ + $|$y$_{2}$ $-$ y$_{1}$$|$\\
+			\textbf{Calculation:} $|$4 $-$ 1$|$ + $|$6 $-$ 2$|$ = 3 + 4 = 7\\
+			\textbf{Interpretation:} The Manhattan distance between the two points is 7 units.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N033 --- Centroid}
+		\begin{block}{Question}
+			Points: (2, 4), (6, 8), (10, 12). What is the centroid?
+			\begin{enumerate}
+				\item (4, 6)
+				\item (6, 8)
+				\item (8, 10)
+				\item (9, 12)
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The centroid is the arithmetic mean of all points in a cluster. In K-means, the centroid represents the center of a cluster and is recalculated iteratively.\\
+			\textbf{Formula:} Centroid = (mean of x-coordinates, mean of y-coordinates)\\
+			\textbf{Calculation:} ((2+6+10)/3, (4+8+12)/3) = (18/3, 24/3) = (6, 8)\\
+			\textbf{Interpretation:} The center of the cluster is at (6, 8).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N034 --- WCSS}
+		\begin{block}{Question}
+			Points in cluster: (1, 1), (2, 2). Centroid = (1.5, 1.5). What is the WCSS?
+			\begin{enumerate}
+				\item 0.5
+				\item 1.0
+				\item 2.0
+				\item 4.0
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Within-Cluster Sum of Squares (WCSS) measures the compactness of a cluster. It is the sum of squared distances from each point to its cluster centroid. Lower WCSS indicates tighter, more compact clusters.\\
+			\textbf{Formula:} WCSS = $\sum$ d(point, centroid)$^{2}$\\
+			\textbf{Calculation:} d1$^{2}$ = (1$-$1.5)$^{2}$ + (1$-$1.5)$^{2}$ = 0.25+0.25 = 0.5. d2$^{2}$ = (2$-$1.5)$^{2}$ + (2$-$1.5)$^{2}$ = 0.25+0.25 = 0.5. WCSS = 0.5+0.5 = 1.0\\
+			\textbf{Interpretation:} The total squared deviation within the cluster is 1.0.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N035 --- Silhouette Score}
+		\begin{block}{Question}
+			a = 2, b = 6. What is the silhouette score?
+			\begin{enumerate}
+				\item 0.33
+				\item 0.50
+				\item 0.67
+				\item 0.75
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The silhouette score measures how similar a point is to its own cluster (cohesion, a) compared to the nearest other cluster (separation, b). It ranges from $-$1 to 1. Higher values indicate better-defined clusters.\\
+			\textbf{Formula:} s = (b $-$ a) / max(a, b)\\
+			\textbf{Calculation:} (6 $-$ 2) / 6 = 4 / 6 = 0.67\\
+			\textbf{Interpretation:} A score of 0.67 indicates reasonably good cluster separation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N036 --- Euclidean Distance}
+		\begin{block}{Question}
+			Point A = (0, 0), Point B = (3, 4). What is the Euclidean distance?
+			\begin{enumerate}
+				\item 3
+				\item 4
+				\item 5
+				\item 7
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Euclidean distance is the straight-line distance between two points.\\
+			\textbf{Formula:} d = $\sqrt{(x_{2}-x_{1})^{2} + (y_{2}-y_{1})^{2}}$\\
+			\textbf{Calculation:} $\sqrt{(3-0)^{2} + (4-0)^{2}}$ = $\sqrt{9+16}$ = $\sqrt{25}$ = 5\\
+			\textbf{Interpretation:} The distance between the origin and (3, 4) is 5 units.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N037 --- Centroid}
+		\begin{block}{Question}
+			Points: (0, 0), (4, 0), (2, 6). What is the centroid?
+			\begin{enumerate}
+				\item (2, 2)
+				\item (2, 3)
+				\item (3, 2)
+				\item (3, 3)
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The centroid is the arithmetic mean of all points in a cluster.\\
+			\textbf{Formula:} Centroid = (mean of x-coordinates, mean of y-coordinates)\\
+			\textbf{Calculation:} ((0+4+2)/3, (0+0+6)/3) = (6/3, 6/3) = (2, 2)\\
+			\textbf{Interpretation:} The center of the cluster is at (2, 2).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N038 --- Manhattan Distance}
+		\begin{block}{Question}
+			Point A = (2, 3), Point B = (5, 7). What is the Manhattan distance?
+			\begin{enumerate}
+				\item 5
+				\item 6
+				\item 7
+				\item 8
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Manhattan distance is the sum of absolute coordinate differences.\\
+			\textbf{Formula:} d = $|$x$_{2}$ $-$ x$_{1}$$|$ + $|$y$_{2}$ $-$ y$_{1}$$|$\\
+			\textbf{Calculation:} $|$5 $-$ 2$|$ + $|$7 $-$ 3$|$ = 3 + 4 = 7\\
+			\textbf{Interpretation:} The Manhattan distance is 7 units.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N039 --- WCSS}
+		\begin{block}{Question}
+			Points in cluster: (0, 0), (2, 0). Centroid = (1, 0). What is the WCSS?
+			\begin{enumerate}
+				\item 1
+				\item 2
+				\item 4
+				\item 8
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} WCSS is the sum of squared distances from points to their centroid.\\
+			\textbf{Formula:} WCSS = $\sum$ d(point, centroid)$^{2}$\\
+			\textbf{Calculation:} d1$^{2}$ = (0$-$1)$^{2}$ + (0$-$0)$^{2}$ = 1. d2$^{2}$ = (2$-$1)$^{2}$ + (0$-$0)$^{2}$ = 1. WCSS = 1+1 = 2\\
+			\textbf{Interpretation:} The total squared deviation is 2.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N040 --- Silhouette Score}
+		\begin{block}{Question}
+			a = 1, b = 5. What is the silhouette score?
+			\begin{enumerate}
+				\item 0.20
+				\item 0.40
+				\item 0.60
+				\item 0.80
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The silhouette score measures cluster cohesion versus separation.\\
+			\textbf{Formula:} s = (b $-$ a) / max(a, b)\\
+			\textbf{Calculation:} (5 $-$ 1) / 5 = 4 / 5 = 0.80\\
+			\textbf{Interpretation:} A score of 0.80 indicates strong cluster separation.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Regression}
+	% =================================================================
+	
+	\begin{frame}{N041 --- Simple Linear Regression Prediction}
+		\begin{block}{Question}
+			Model: y = 3 + 2x. What is y when x = 5?
+			\begin{enumerate}
+				\item 10
+				\item 13
+				\item 15
+				\item 20
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} In simple linear regression, the predicted value is the intercept plus the slope multiplied by the feature value.\\
+			\textbf{Formula:} $\hat{y}$ = $\beta$$_{0}$ + $\beta$$_{1}$x\\
+			\textbf{Calculation:} y = 3 + 2(5) = 3 + 10 = 13\\
+			\textbf{Interpretation:} When x = 5, the predicted y is 13.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N042 --- Simple Linear Regression Prediction}
+		\begin{block}{Question}
+			Model: y = 10 $-$ 1.5x. What is y when x = 4?
+			\begin{enumerate}
+				\item 2
+				\item 4
+				\item 6
+				\item 8
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} In simple linear regression, the predicted value is the intercept plus the slope multiplied by the feature value.\\
+			\textbf{Formula:} $\hat{y}$ = $\beta$$_{0}$ + $\beta$$_{1}$x\\
+			\textbf{Calculation:} y = 10 $-$ 1.5(4) = 10 $-$ 6 = 4\\
+			\textbf{Interpretation:} When x = 4, the predicted y is 4.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N043 --- Multiple Linear Regression Prediction}
+		\begin{block}{Question}
+			Model: y = 2 + 3x1 $-$ 1x2. What is y when x1 = 4 and x2 = 5?
+			\begin{enumerate}
+				\item 7
+				\item 9
+				\item 11
+				\item 13
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} In multiple linear regression, the predicted value is the intercept plus the sum of each slope multiplied by its feature.\\
+			\textbf{Formula:} $\hat{y}$ = $\beta$$_{0}$ + $\beta$$_{1}$x$_{1}$ + $\beta$$_{2}$x$_{2}$\\
+			\textbf{Calculation:} y = 2 + 3(4) $-$ 1(5) = 2 + 12 $-$ 5 = 9\\
+			\textbf{Interpretation:} When x1 = 4 and x2 = 5, the predicted y is 9.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N044 --- Logistic Regression Probability}
+		\begin{block}{Question}
+			Model: z = $-$2 + 1x. What is P(y=1) when x = 3? (Use logistic function; e $\approx$ 2.718)
+			\begin{enumerate}
+				\item 0.27
+				\item 0.50
+				\item 0.73
+				\item 0.88
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Logistic regression models the probability of a binary outcome using the logistic (sigmoid) function, which maps any real number to a value between 0 and 1.\\
+			\textbf{Formula:} P(y=1) = 1 / (1 + e$^{-z}$), where z = $\beta$$_{0}$ + $\beta$$_{1}$x\\
+			\textbf{Calculation:} z = $-$2 + 1(3) = 1. P = 1/(1+e$^{-1}$) = 1/(1+0.368) = 1/1.368 = 0.73\\
+			\textbf{Interpretation:} When x = 3, the probability of y=1 is 73 percent.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N045 --- Logistic Regression Probability}
+		\begin{block}{Question}
+			Model: z = 1 $-$ 2x. What is P(y=1) when x = 2? (Use logistic function; e $\approx$ 2.718)
+			\begin{enumerate}
+				\item 0.05
+				\item 0.12
+				\item 0.27
+				\item 0.50
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Logistic regression models the probability of a binary outcome using the logistic function.\\
+			\textbf{Formula:} P(y=1) = 1 / (1 + e$^{-z}$), where z = $\beta$$_{0}$ + $\beta$$_{1}$x\\
+			\textbf{Calculation:} z = 1 $-$ 2(2) = $-$3. P = 1/(1+e$^{3}$) = 1/(1+20.09) = 1/21.09 = 0.047 $\approx$ 0.05\\
+			\textbf{Interpretation:} When x = 2, the probability of y=1 is about 5 percent.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N046 --- R-Squared}
+		\begin{block}{Question}
+			TSS = 100, RSS = 20. What is R$^{2}$?
+			\begin{enumerate}
+				\item 0.20
+				\item 0.50
+				\item 0.80
+				\item 1.00
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} R-squared (coefficient of determination) measures the proportion of variance in the dependent variable explained by the model. It ranges from 0 to 1, with higher values indicating better fit.\\
+			\textbf{Formula:} R$^{2}$ = 1 $-$ (RSS / TSS)\\
+			\textbf{Calculation:} 1 $-$ (20 / 100) = 1 $-$ 0.20 = 0.80\\
+			\textbf{Interpretation:} The model explains 80 percent of the variance in the target variable.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N047 --- R-Squared}
+		\begin{block}{Question}
+			TSS = 200, RSS = 50. What is R$^{2}$?
+			\begin{enumerate}
+				\item 0.25
+				\item 0.50
+				\item 0.75
+				\item 0.85
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} R-squared measures the proportion of variance explained by the model.\\
+			\textbf{Formula:} R$^{2}$ = 1 $-$ (RSS / TSS)\\
+			\textbf{Calculation:} 1 $-$ (50 / 200) = 1 $-$ 0.25 = 0.75\\
+			\textbf{Interpretation:} The model explains 75 percent of the variance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N048 --- Adjusted R-Squared}
+		\begin{block}{Question}
+			R$^{2}$ = 0.80, n = 50, k = 5. What is adjusted R$^{2}$?
+			\begin{enumerate}
+				\item 0.75
+				\item 0.78
+				\item 0.80
+				\item 0.82
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Adjusted R-squared penalizes the addition of unnecessary predictors. It is always less than or equal to R-squared.\\
+			\textbf{Formula:} Adjusted R$^{2}$ = 1 $-$ [(1 $-$ R$^{2}$)(n $-$ 1) / (n $-$ k $-$ 1)]\\
+			\textbf{Calculation:} 1 $-$ [(1 $-$ 0.80)(50 $-$ 1) / (50 $-$ 5 $-$ 1)] = 1 $-$ [0.20 $\times$ 49 / 44] = 1 $-$ 0.2227 = 0.7773 $\approx$ 0.78\\
+			\textbf{Interpretation:} After adjusting for the number of predictors, the model explains 78 percent of the variance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N049 --- Residual}
+		\begin{block}{Question}
+			Actual = 25, Predicted = 22. What is the residual?
+			\begin{enumerate}
+				\item $-$3
+				\item 3
+				\item 47
+				\item 0.12
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} A residual is the difference between the actual value and the predicted value. It represents the error of the model for a single observation.\\
+			\textbf{Formula:} Residual = y $-$ $\hat{y}$\\
+			\textbf{Calculation:} 25 $-$ 22 = 3\\
+			\textbf{Interpretation:} The model under-predicted by 3 units.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{N050 --- Residual}
+		\begin{block}{Question}
+			Actual = 18, Predicted = 20. What is the residual?
+			\begin{enumerate}
+				\item $-$2
+				\item 2
+				\item 38
+				\item 0.10
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} A residual is the difference between actual and predicted values.\\
+			\textbf{Formula:} Residual = y $-$ $\hat{y}$\\
+			\textbf{Calculation:} 18 $-$ 20 = $-$2\\
+			\textbf{Interpretation:} The model over-predicted by 2 units.
+		\end{block}
+	\end{frame}
+	
+\end{document}

@@ -1,0 +1,1991 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=0pt,topsep=1pt}
+\setlist[itemize]{leftmargin=*,itemsep=0pt,topsep=1pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI Memory]{GARP Risk \& AI --- Memory Flashcards}
+\subtitle{Names, Theories, Formulas, Acronyms --- 150 Slides}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}\titlepage\end{frame}
+	
+	% ============================================================
+	\section{Formulas --- Distance, Clustering, Metrics}
+	% ============================================================
+	
+	\begin{frame}{1 --- Euclidean Distance}
+		\begin{block}{Formula}
+			$d_E = \sqrt{\sum_{j=1}^{m}(x_{jQ} - x_{jP})^2}$
+		\end{block}
+		\begin{block}{Definition}
+			The straight-line (``as the crow flies'') distance between two points P and Q in m-dimensional feature space. Also called the L2 norm. It is the square root of the sum of squared differences along each dimension.
+		\end{block}
+		\begin{block}{Memory Hook}
+			L2 = ``square root of sum of squares.'' Pythagoras extended to m dimensions. Contrast: Manhattan is the sum of absolute differences (no square, no root).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			K-means uses Euclidean distance by default. Because differences are squared, large deviations are penalised heavily, so Euclidean distance is sensitive to outliers. It works best when clusters are roughly spherical and features are on comparable scales. If one feature has a much larger magnitude (e.g.\ income in dollars vs age in years), it dominates the distance calculation, which is exactly why standardisation is a prerequisite for K-means. GARP frequently tests that Euclidean distance requires scaled features, and it contrasts Euclidean (spherical clusters) with Manhattan (rhombus-shaped clusters). Also used in KNN, hierarchical clustering (single/complete linkage), LDA, and SVM with RBF kernels.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{2 --- Manhattan Distance}
+		\begin{block}{Formula}
+			$d_M = \sum_{j=1}^{m}|x_{jQ} - x_{jP}|$
+		\end{block}
+		\begin{block}{Definition}
+			The sum of absolute differences along each coordinate. Also known as the L1 norm, taxicab distance, or city-block distance. It measures the distance travelled along a grid rather than diagonally.
+		\end{block}
+		\begin{block}{Memory Hook}
+			L1 = ``sum of absolutes.'' Imagine driving through Manhattan's rectangular street grid: you cannot go diagonally through buildings. The formula has no square and no square root.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			More robust to outliers than Euclidean because it does not square deviations. Preferred when features have different scales or when the data has heavy tails. In K-means, using Manhattan distance produces clusters that are approximately rhombus-shaped rather than spherical --- a key distinction GARP tests. Manhattan distance is also the basis of LASSO regularisation (L1 penalty), and it appears in the A* search heuristic discussion in Classical AI. In the exam, you may be asked which distance metric is appropriate for a given dataset or which norm corresponds to a given formula.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{3 --- Silhouette Score}
+		\begin{block}{Formula}
+			$s_i = \dfrac{b_i - a_i}{\max(a_i, b_i)}$
+		\end{block}
+		\begin{block}{Definition}
+			$a_i$ = mean distance from point $i$ to all other points in its OWN cluster (cohesion). $b_i$ = mean distance from point $i$ to all points in the NEAREST OTHER cluster (separation). The overall silhouette score $s$ is the average of $s_i$ across all points.
+		\end{block}
+		\begin{block}{Memory Hook}
+			$b$ = ``best other cluster,'' $a$ = ``average own cluster.'' Numerator = separation minus cohesion. Denominator normalises to a $[-1,1]$ scale. Think: ``b beats a, but never beyond 1.''
+		\end{block}
+		\begin{block}{Exam Relevance}
+			$s \approx 1$ = well-clustered (points are tight and far from others). $s \approx 0$ = points lie on the boundary between clusters. $s < 0$ = possibly mis-clustered. Higher silhouette = better-defined clusters. Used to select optimal K in K-means and to validate hierarchical clustering. GARP prefers testing silhouette over the elbow method because it gives a quantitative answer. In the exam, you may be asked to interpret a silhouette plot: thin silhouettes and negative values indicate small or wrongly assigned clusters, and you compare average scores across K to pick the best. A limit case of $s = 1$ would mean every point sits exactly on its centroid.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{4 --- WCSS (Within-Cluster Sum of Squares)}
+		\begin{block}{Formula}
+			$WCSS_k = \sum_{j=1}^{n_k} d_j^2$
+		\end{block}
+		\begin{block}{Definition}
+			For cluster $k$ with $n_k$ points, the sum of squared distances $d_j$ from each point to its cluster centroid. The total across all K clusters is the K-means objective function. Also called inertia.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Within'' = inside one cluster. Squaring prevents positive and negative deviations from cancelling. Lower WCSS = tighter, more compact clusters.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			WCSS always decreases as K increases, and in the extreme case K = N every point is its own cluster and WCSS = 0 --- but the model is completely uninformative. This is a textbook example of overfitting. Because WCSS is a sum of squared distances, its absolute value scales with the data and the number of features, so you cannot say one WCSS value is inherently ``good'' or ``bad''; you can only compare WCSS across models for the same dataset. GARP tests the analogy with residual sum of squares in regression: adding predictors cannot make RSS worse, and adding clusters cannot make WCSS worse. In the exam, you may be asked why WCSS falls monotonically with K, or why the naive rule of thumb K $\approx \sqrt{N/2}$ is arbitrary.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{5 --- Total WCSS}
+		\begin{block}{Formula}
+			$WCSS = \sum_{k=1}^{K} WCSS_k$
+		\end{block}
+		\begin{block}{Definition}
+			The sum of the WCSS values of all K clusters. This is the quantity K-means minimises. It is plotted against K in a scree plot to find the ``elbow.''
+		\end{block}
+		\begin{block}{Memory Hook}
+			Total inertia = add up all the within-cluster inertias. The scree plot is WCSS on the y-axis, K on the x-axis; the elbow is where the curve stops falling steeply.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The scree (elbow) method: run K-means for K = 1 to 10 or 15, record total WCSS, plot, and look for the point where the marginal reduction drops sharply. Beyond the elbow, adding clusters adds complexity without proportional improvement in compactness. The textbook example: for the Treasury-yield/stock-return data (1927--2021), the rate of decrease in WCSS changes sharply at K = 2, and the scatter plot confirms two clusters. GARP notes that the elbow is not always sharp, and there may be multiple elbows; in those cases you fall back on domain knowledge and interpretability. In the exam, you may be asked to identify the elbow from a described plot or to explain why total WCSS cannot be used alone to choose K.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{6 --- BCSS (Between-Cluster Sum of Squares)}
+		\begin{block}{Formula}
+			$BCSS = \sum_{k=1}^{K} n_k \|\mu_k - \bar{\mu}\|^2$
+		\end{block}
+		\begin{block}{Definition}
+			The sum of squared distances from each cluster centroid $\mu_k$ to the overall centroid $\bar{\mu}$, weighted by cluster size $n_k$. Measures inter-cluster separation, the counterpart to WCSS's intra-cluster compactness.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Between'' = separation between clusters. Weighted by size, so big clusters count more. Higher BCSS = clusters are far apart.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Key identity: Total Variance = WCSS + BCSS. Because total variance is fixed for a given dataset, minimising WCSS is equivalent to maximising BCSS --- the two are two sides of the same coin. WCSS focuses on intra-cluster similarity, BCSS on inter-cluster dissimilarity. A good clustering solution has low WCSS AND high BCSS. GARP tests this relationship directly. In the exam, you may be asked to complete the identity, to explain why minimising WCSS implicitly maximises BCSS, or to say which measure captures compactness versus separation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{7 --- Bias-Variance Decomposition}
+		\begin{block}{Formula}
+			$Total\ Error = Bias^2 + Variance + Irreducible\ Error$
+		\end{block}
+		\begin{block}{Definition}
+			Expected prediction error decomposes into three parts: bias$^2$ (systematic error from wrong assumptions), variance (sensitivity to the particular training sample), and irreducible error (noise no model can remove).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Simple model = high bias, low variance (misses patterns). Complex model = low bias, high variance (fits noise). Irreducible error is the floor you can never beat.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			This is the central tension in machine learning and a very common GARP theme. Underfitting = high bias (model too simple to capture nonlinearity, e.g.\ fitting a straight line to a quadratic relationship). Overfitting = high variance (model memorises training noise; training error tiny, test error large). The goal is to find the complexity that minimises total error. Remedies: regularisation (ridge, LASSO, elastic net), cross-validation, ensembling, pruning, dropout, early stopping. Note the bias-variance trade-off also drives the prediction-accuracy vs interpretability trade-off: flexible models (neural nets) tend to lower bias at the cost of interpretability, while interpretable models (linear regression) may carry higher bias. In the exam, you may be asked to diagnose over/underfitting from train-vs-test error or to match remedies to symptoms.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{8 --- Ridge Regression Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda\sum_j \beta_j^2$
+		\end{block}
+		\begin{block}{Definition}
+			Ordinary least squares with an added L2 penalty equal to the sum of squared coefficients, scaled by hyperparameter $\lambda$. Also called L2 regularisation or shrinkage.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Ridge = ``squared penalty.'' It shrinks coefficients toward zero but never exactly to zero. Think of a ridge pulling the coefficients down a slope.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Preferred when many features are correlated (multicollinearity): Ridge stabilises coefficient estimates by shrinking them, trading a little bias for much lower variance. $\lambda$ controls the strength --- larger $\lambda$ = more shrinkage. Crucially, Ridge does NOT perform feature selection: coefficients get small but stay non-zero. Key differences from LASSO: Ridge reduces magnitudes, LASSO can zero them out. In practice data is normalised/standardised before regularisation. Credit bureaus use Ridge to handle multicollinearity among consumer credit variables. In the exam, you may be asked to distinguish Ridge from LASSO, to identify the penalty type, or to say why Ridge is preferred when all features are somewhat useful.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{9 --- LASSO Regression Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda\sum_j |\beta_j|$
+		\end{block}
+		\begin{block}{Definition}
+			OLS with an L1 penalty equal to the sum of absolute coefficient values. LASSO = Least Absolute Shrinkage and Selection Operator. Its geometry drives some coefficients exactly to zero.
+		\end{block}
+		\begin{block}{Memory Hook}
+			LASSO = ``absolute penalty = automatic feature selection.'' The absolute-value function is not differentiable at zero, so a numerical procedure (not a closed form) is needed. Compare: Ridge has an analytic solution, LASSO does not.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			LASSO is a feature-selection technique: as $\lambda$ increases, more coefficients are set exactly to zero, removing features from the model. Preferred when only a few features are important. The textbook example: applied to highly correlated Treasury yields, LASSO with $\lambda = 0.1$ leaves only one non-zero coefficient plus the intercept, while Ridge merely shrinks all coefficients. Limitation: with highly correlated features, LASSO may arbitrarily pick one and ignore the others (unstable). In the exam, you may be asked which method performs feature selection, what happens to coefficients as $\lambda$ rises, or to contrast the L1 and L2 penalty terms.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{10 --- Elastic Net Loss}
+		\begin{block}{Formula}
+			$L = \frac{1}{N}\sum(y_i - \hat{y}_i)^2 + \lambda_1\sum_j \beta_j^2 + \lambda_2\sum_j |\beta_j|$
+		\end{block}
+		\begin{block}{Definition}
+			A hybrid regularisation that combines both the L2 (squared) and L1 (absolute) penalty terms, with two hyperparameters $\lambda_1$ and $\lambda_2$ controlling the mix.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Elastic Net = ``elastic'' between Ridge and LASSO. Gets sparsity (zeroing) from L1 and grouping of correlated features from L2. Two knobs, not one.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Elastic Net addresses LASSO's instability when features are correlated: it can select features while also grouping correlated ones, rather than arbitrarily dropping all but one. By choosing $\lambda_1$ and $\lambda_2$ appropriately you can obtain the benefits of both --- reducing the magnitudes of some parameters and removing unimportant ones entirely. Modern regularisation testing has shifted toward Elastic Net and away from pure LASSO and Ridge, though LASSO still has use cases. In the exam, you may be asked to identify the Elastic Net loss function, to explain what each penalty contributes, or to say when Elastic Net is preferred over either single method.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{11 --- Precision}
+		\begin{block}{Formula}
+			$Precision = \dfrac{TP}{TP + FP}$
+		\end{block}
+		\begin{block}{Definition}
+			Of all instances the model labelled POSITIVE, the fraction that are actually positive. Also called positive predictive value (PPV). Answer to: ``When the model says positive, how often is it right?''
+		\end{block}
+		\begin{block}{Memory Hook}
+			Precision = ``purity of positive predictions.'' Denominator includes everything you flagged. High precision = few false alarms. It says nothing about positives you missed.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Use precision when false positives are costly --- e.g.\ anti-money-laundering alerts, where each false alert consumes investigator time and can disrupt legitimate customers. Low precision means teams chase red herrings and become desensitised to alerts. Note: precision alone is gameable --- a model that flags only one near-certain positive can have perfect precision but terrible recall. GARP tests the precision/recall trade-off and how lowering the classification threshold raises recall but lowers precision (more false positives). In the exam, you may be asked to compute precision from a confusion matrix or to choose the metric that matters when investigation costs are high.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{12 --- Recall (Sensitivity)}
+		\begin{block}{Formula}
+			$Recall = \dfrac{TP}{TP + FN}$
+		\end{block}
+		\begin{block}{Definition}
+			Of all actually positive cases, the fraction the model correctly identified. Also called sensitivity or the true positive rate (TPR). Answer to: ``Of all real positives, how many did we catch?''
+		\end{block}
+		\begin{block}{Memory Hook}
+			Recall = ``coverage of the positives.'' Denominator is all the real positives in the data. High recall = few missed positives. It says nothing about false alarms.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Use recall when false negatives are costly --- medical diagnosis, fraud detection, critical compliance breaches. Missing a default or a fraud (low recall) can trigger large losses, regulatory sanctions, or reputational damage, far outweighing the cost of a few false alarms. GARP's worked example: four loan models are compared on accuracy, precision, recall, and F1 --- the SVM (Model C) ``correctly identifies the highest percentage of defaulted loans'' because it has the highest recall (0.51), even though its accuracy is the lowest. This teaches that accuracy can mislead and recall is the right metric when the positive class must be caught. In the exam, you may be asked which model best detects the minority class, or why the highest-accuracy model is not the answer.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{13 --- Specificity}
+		\begin{block}{Formula}
+			$Specificity = \dfrac{TN}{TN + FP}$
+		\end{block}
+		\begin{block}{Definition}
+			Of all actually negative cases, the fraction the model correctly identified as negative. Also called the true negative rate (TNR). It is the complement of the false positive rate: Specificity = 1 $-$ FPR.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Specificity = ``coverage of the negatives.'' Sensitivity covers positives; specificity covers negatives. Both are about actual classes, not predictions.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Important when false positives are costly and you need to correctly clear the many legitimate cases. In the rare-disease diagnostic question, GARP contrasts sensitivity (correctly catching the sick) with specificity (correctly identifying the healthy) and concludes that sensitivity is the right measure when failing to treat is fatal --- showing how the choice depends on which error dominates. Note: specificity is NOT the same as precision (specificity conditions on actual negatives; precision conditions on predicted positives). The ROC curve plots TPR (sensitivity) against FPR (1 $-$ specificity). In the exam, you may be asked to compute specificity or to distinguish it from precision and recall.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{14 --- F1 Score}
+		\begin{block}{Formula}
+			$F1 = \dfrac{2 \cdot Precision \cdot Recall}{Precision + Recall}$
+		\end{block}
+		\begin{block}{Definition}
+			The harmonic mean of precision and recall --- a single balanced metric. Bounded between 0 and 1, closer to 1 only when BOTH precision and recall are high.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Harmonic (not arithmetic) mean, so a weak component drags the score down hard. If precision = 1 and recall = 0.1, arithmetic mean = 0.55 but F1 = 0.18. F1 punishes imbalance between the two.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Useful when you need one combined number and neither error type dominates. But a low F1 is ambiguous: it can come from poor precision, poor recall, or both, so you should always inspect the components. GARP's loan example uses F1 alongside accuracy, precision, and recall to compare four models --- F1 (0.47) is highest for the SVM, matching its recall advantage. In imbalanced settings F1 is generally more informative than accuracy. In the exam, you may be asked to compute F1, to explain why the harmonic mean is used, or to say what a low F1 does and does not tell you.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{15 --- Accuracy}
+		\begin{block}{Formula}
+			$Accuracy = \dfrac{TP + TN}{TP + TN + FP + FN}$
+		\end{block}
+		\begin{block}{Definition}
+			The fraction of ALL predictions that are correct --- both positive and negative classes pooled together.
+		\end{block}
+		\begin{block}{Memory Hook}
+			Accuracy = (all correct) / (everything). The most intuitive metric and the most dangerous one for imbalanced data.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The classic failure mode GARP tests: if 98\% of borrowers are solvent, a model that calls every borrower solvent has 98\% accuracy but is practically useless (it never catches a default). GARP's own guidance: ``especially in cases of unbalanced data, accuracy is not a good measure.'' The related error rate is 1 $-$ accuracy and inherits the same flaw. Accuracy also ignores the different costs of Type I (false positive) and Type II (false negative) errors. Use accuracy only when classes are roughly balanced and errors cost the same. In the exam, you may be asked why a high-accuracy model is the wrong choice, or to compute accuracy alongside precision and recall and explain the discrepancy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{16 --- Error Rate (Type I / Type II)}
+		\begin{block}{Formula}
+			$Error\ Rate = \dfrac{FP + FN}{Total} = 1 - Accuracy$
+		\end{block}
+		\begin{block}{Definition}
+			The fraction of incorrect predictions. Type I error = false positive (predicting positive when actually negative). Type II error = false negative (predicting negative when actually positive).
+		\end{block}
+		\begin{block}{Memory Hook}
+			Type I = ``false alarm'' (FP). Type II = ``miss'' (FN). In fraud: FP = blocking a legitimate transaction; FN = letting fraud through. Which hurts more is a business question.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Accuracy and error rate ignore the TYPE of error, yet the two types usually cost different amounts. For a bank extending credit, misclassifying a borrower as solvent (who then defaults --- a false negative) is typically far more costly than declining a good customer (a false positive). The threshold you set determines the FP/FN balance, so threshold choice is a business decision, not just a technical one. GARP's cost-matrix discussion: optimal threshold minimises total expected cost or maximises expected benefit, with input from business lines, operations, finance/risk, and compliance. In the exam, you may be asked which error type dominates in a scenario, or how raising the threshold changes FP and FN.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{17 --- MSE (Mean Squared Error)}
+		\begin{block}{Formula}
+			$MSE = \frac{1}{N}\sum_{i=1}^{N}(y_i - \hat{y}_i)^2$
+		\end{block}
+		\begin{block}{Definition}
+			The average of squared prediction errors for a continuous target. The most common predictive-ability measure and a standard loss function.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Squared dollars'' --- units are the square of the target, which is why interpretation is awkward. Big errors are punished disproportionately.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Because errors are squared, MSE is sensitive to outliers: one huge miss can dominate. The square also removes the sign, so over- and under-prediction are penalised symmetrically. MSE is differentiable, making it convenient for gradient-based training (a reason neural nets use it or its variants). Among competing models on the same test set, the lowest MSE is the most accurate by that criterion. But MSE and MAE can rank models differently, so metric choice matters. The textbook example computes MSE = 43.1 (and RMSE = 6.57) for a salary-regression test sample. In the exam, you may be asked to compute MSE, to explain its unit problem, or to say when MAE is preferable.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{18 --- RMSE (Root Mean Squared Error)}
+		\begin{block}{Formula}
+			$RMSE = \sqrt{MSE} = \sqrt{\frac{1}{N}\sum(y_i - \hat{y}_i)^2}$
+		\end{block}
+		\begin{block}{Definition}
+			The square root of MSE, which brings the error metric back into the SAME units as the target variable (e.g.\ dollars, not squared dollars), making it far easier to interpret.
+		\end{block}
+		\begin{block}{Memory Hook}
+			RMSE = ``typical error in currency units.'' Because the forecast errors are squared before averaging and then square-rooted, RMSE scales with the units of the data --- the textbook states this explicitly.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			RMSE retains MSE's sensitivity to outliers (the squaring happens before the square root), so a single extreme event can inflate it --- a risk leader must ask whether a high RMSE is a systemic issue or one explainable outlier. Regulators increasingly steer metric choice: the ECB's Guide to Internal Models recommends metrics that capture tail risk, nudging firms to report RMSE ALONGSIDE MAE so large infrequent losses are not overlooked. Note RMSE $\geq$ MAE always, and the gap widens with error variance. In the exam, you may be asked to convert MSE to RMSE, or to explain why RMSE is preferred for communicating performance to management.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{19 --- MAE (Mean Absolute Error)}
+		\begin{block}{Formula}
+			$MAE = \frac{1}{N}\sum|y_i - \hat{y}_i|$
+		\end{block}
+		\begin{block}{Definition}
+			The average of the absolute prediction errors. Unlike MSE it does not square, so it is robust to outliers. Measures the raw size of errors.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Absolute'' = no squaring = outlier-resistant. Also called L1 loss. It is the direct analogue of Manhattan distance in error space.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			MAE treats all errors linearly, so a single large miss does not dominate the way it does in MSE/RMSE --- a strength when the data has extreme values, a weakness when large misses are especially costly. Two limitations GARP notes: MAE can mask the DIRECTION of bias (it cannot tell if the model consistently over- or under-predicts), and it does not heavily penalise occasional large misses, which may matter from a risk-capital perspective. Best practice is to pair MAE with RMSE and to visualise the error distribution. In the exam, you may be asked which metric is robust to outliers, or to compute MAE = 5.01 in the salary example (50.11 / 10).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{20 --- MAPE (Mean Absolute Percentage Error)}
+		\begin{block}{Formula}
+			$MAPE = 100 \times \frac{1}{N}\sum\left|\dfrac{y_i - \hat{y}_i}{y_i}\right|$
+		\end{block}
+		\begin{block}{Definition}
+			The average absolute error expressed as a PERCENTAGE of the actual value. Scale-free, so it allows comparison across models or portfolios of different sizes (a 100k loan vs a 10m loan).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Percentage error.'' The most intuitive metric for a board because it is a familiar relative number. But it explodes when the actual value is near zero.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Two well-known pitfalls: (1) MAPE is undefined or explodes when $y_i = 0$ or is very close to zero; (2) it can be misleading if a few small-value items have huge percentage errors, while large-absolute-value items with small percentage errors are understated. Auditors often favour MAPE for its pure percentage narrative to audit committees, providing a standardised measure of model accuracy. In the salary example MAPE = 16\%, read as ``the average forecast error is 16\% of the actual salary.'' In the exam, you may be asked to compute MAPE, to state its key limitation, or to say when RMSE should be preferred instead.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{21 --- Simple Linear Regression}
+		\begin{block}{Formula}
+			$y_i = \beta_0 + \beta_1 x_i + u_i$
+		\end{block}
+		\begin{block}{Definition}
+			Models a continuous target y as a linear function of one feature x. $\beta_0$ = intercept (value of y when x = 0), $\beta_1$ = slope (change in y per one-unit change in x), $u_i$ = error/disturbance term assumed zero mean, constant variance, independent.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``y = a + bx.'' Two unknowns to estimate: intercept and slope. Only two variables: one feature, one target (hence ``bivariate'' regression).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The intercept positions the line; the slope is the effect of interest. If x = 0 is outside the data range the intercept may be meaningless, but it is still needed so the line is correctly positioned. The error term captures all factors affecting y not included in the model. Estimation is usually by OLS (least squares), with maximum likelihood giving identical results when errors are i.i.d.\ normal. A risk-manager example: regressing a stock's return on a market index ETF to estimate the hedge ratio $\beta_1$. In the exam, you may be asked to interpret $\beta_0$ or $\beta_1$ from a fitted equation, or to say what the error term represents.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{22 --- Multiple Linear Regression}
+		\begin{block}{Formula}
+			$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \cdots + \beta_m x_{mi} + u_i$
+		\end{block}
+		\begin{block}{Definition}
+			Extends simple regression to m features with m + 1 parameters to estimate. Each slope is the PARTIAL effect of its feature, holding all other features constant.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Partial effect'' is the key phrase: each $\beta_j$ isolates the contribution of feature j. More features = more realistic but more pitfalls.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The model must remain LINEAR IN PARAMETERS for OLS; you may still include logs, interaction terms, and powers (all become new features), so nonlinearity in the variables is allowed. Main misspecification problems GARP tests: (1) wrong features --- omitting a relevant correlated variable biases the included coefficients; including irrelevant variables is less severe but causes inefficiency and overfitting; (2) wrong functional form --- assuming linearity when the truth is curved; (3) multicollinearity --- features highly correlated (perfect multicollinearity breaks OLS entirely; the dummy-variable trap is an example); (4) outliers; (5) heteroskedasticity --- non-constant error variance, detected by White's test and fixed with robust errors, WLS, or log transformation. In the exam, you may be asked to identify which problem a scenario describes and its remedy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{23 --- Logistic Function (Sigmoid)}
+		\begin{block}{Formula}
+			$f(z) = \dfrac{1}{1 + e^{-z}}$
+		\end{block}
+		\begin{block}{Definition}
+			Maps any real number z to the interval (0, 1), producing an S-shaped curve. Used to convert a linear combination of features into a probability for binary classification.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Squash to (0,1).'' Also called the sigmoid. Its derivative has the neat form $f(z)(1 - f(z))$, which is why it is convenient for backpropagation.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The reason we cannot use ordinary linear regression for a 0/1 target: a straight line can predict values outside [0, 1], which are nonsensical as probabilities. The logistic function guarantees valid probabilities. It is also a popular activation function in neural networks, though in hidden layers it has largely been replaced by ReLU because of the vanishing-gradient problem (the derivative is at most 0.25, so products of many derivatives vanish). The logistic is still common in output layers for binary classification. In the exam, you may be asked why linear regression fails for binary targets, what range the sigmoid outputs, or which activation to use at an output layer for classification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{24 --- Logistic Regression Probability}
+		\begin{block}{Formula}
+			$P_i = \dfrac{1}{1 + e^{-(\beta_0 + \beta_1 x_{1i} + \cdots + \beta_m x_{mi})}}$
+		\end{block}
+		\begin{block}{Definition}
+			The probability that $y_i = 1$, obtained by applying the sigmoid to a linear predictor. The probability that $y_i = 0$ is $1 - P_i$.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Linear part inside, sigmoid outside.'' Coefficients live on the log-odds scale, so their exponents are odds ratios: $\exp(\beta_j)$.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The log-odds (logit) is linear: $\ln\!\big(P/(1-P)\big) = \beta_0 + \beta_1 x_1 + \cdots$, which is why it is called a logit model. Interpretation: the sign and significance of coefficients can be read directly, but the magnitude is on the log-odds scale. A one-unit increase in $x_j$ multiplies the odds by $\exp(\beta_j)$. The textbook's LendingClub example: longer loan terms and higher interest rates significantly INCREASE default probability; having a mortgage significantly DECREASES it. Estimation is by maximum likelihood (not OLS). Extension to more than two unordered classes: multinomial logit; to ordered classes: ordered logit. In the exam, you may be asked to interpret a positive coefficient, to compute a predicted probability, or to name the estimation method.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{25 --- Log-Likelihood (Logit)}
+		\begin{block}{Formula}
+			$\log L = \sum_{i=1}^{N}\big[\,y_i \ln F(y_i) + (1 - y_i)\ln\!\big(1 - F(y_i)\big)\big]$
+		\end{block}
+		\begin{block}{Definition}
+			The natural logarithm of the likelihood function for a binary outcome, where $F(y_i)$ is the predicted probability that $y_i = 1$. Maximum likelihood estimation finds the coefficients that maximise this sum.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Product of probabilities becomes a SUM of logs.'' This avoids numerical underflow when multiplying many small probabilities. Each observation contributes only one term (the one that matches its actual label).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			For observation i: if $y_i = 1$ the term reduces to $\ln F(y_i)$; if $y_i = 0$ it reduces to $\ln(1 - F(y_i))$. Maximising the log-likelihood is equivalent to maximising the likelihood (log is monotonic). For linear regression with i.i.d.\ normal errors, MLE yields the SAME estimates as OLS --- a key result. MLE is the standard estimation paradigm for logit and probit models and is more flexible, though it requires knowing (or assuming) the data-generating distribution. In the exam, you may be asked why we take logs, why MLE equals OLS for normal-error linear regression, or to identify the log-likelihood expression.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{26 --- OLS Slope}
+		\begin{block}{Formula}
+			$\hat{\beta}_1 = \dfrac{\sum_i y_i x_i - N\bar{y}\bar{x}}{\sum_i x_i^2 - N\bar{x}^2}$
+		\end{block}
+		\begin{block}{Definition}
+			The ordinary least squares estimate of the slope in simple linear regression, equal to the covariance of x and y divided by the variance of x.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Cov(x, y) / Var(x).'' If x and y move together, slope positive; if oppositely, negative. A larger spread in x gives a more precise slope.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Derived by differentiating the RSS with respect to each parameter, setting the derivatives to zero, and solving --- the OLS ``normal equations.'' Intuition: the numerator captures joint variation, the denominator scales by how much x varies. The slope is the best linear unbiased estimator (BLUE) under the Gauss-Markov assumptions. In multivariate settings the closed-form solution becomes matrix algebra ($\hat{\beta} = (X^TX)^{-1}X^Ty$), but the intuition is the same. In the exam, you may be asked to compute the slope from summary statistics, to explain the covariance/variance interpretation, or to say what happens if x has no variance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{27 --- OLS Intercept}
+		\begin{block}{Formula}
+			$\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$
+		\end{block}
+		\begin{block}{Definition}
+			The OLS estimate of the intercept, obtained by rearranging the fact that the fitted regression line passes through the point of means $(\bar{x}, \bar{y})$.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Mean point anchor'': the line must go through $(\bar{x}, \bar{y})$, so once you know the slope, the intercept follows. No separate optimisation needed.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The intercept is the predicted value of y when x = 0. In some cases this is meaningful (temperature in Celsius, x = 0 = freezing); in others it is not (years of experience, x = 0 may lie outside the data range). It matters for correct positioning of the line even when not interpretable. In the salary example, $\hat{\beta}_0 = 16.88$ means someone with zero experience would earn about \$16.88/hour on average. Note the intercept formula is Option A in the sample question on the OLS slope, a common exam distractor. In the exam, you may be asked to compute the intercept given the slope and means, or to explain why the line passes through the means.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{28 --- RSS (Residual Sum of Squares)}
+		\begin{block}{Formula}
+			$RSS = \sum_{i=1}^{N}(y_i - \hat{y}_i)^2$
+		\end{block}
+		\begin{block}{Definition}
+			The sum of squared differences between actual and fitted values. The quantity OLS minimises. Also called Sum of Squared Residuals (SSR) or Sum of Squared Errors (SSE).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Squared vertical distances.'' Squaring prevents positive and negative residuals from cancelling --- a common exam point. For the optimal OLS fit, the sum of residuals (not squared) is exactly zero.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			OLS estimates are found by minimising RSS, which is why OLS is a ``least squares'' method. RSS is a loss function and appears in regression trees (splits chosen to minimise RSS), in ridge/LASSO (RSS + penalty), and in evaluating model fit (lower RSS = better in-sample fit, but lower RSS on training does not guarantee good generalisation). RSS is also the denominator intuition behind $R^2$. One caveat: OLS slopes are sensitive to outliers precisely because residuals are squared, so a single extreme point can pull the line. In the exam, you may be asked why we square residuals, what objective OLS minimises, or to compute RSS from a small table.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{29 --- Standardization (Z-score)}
+		\begin{block}{Formula}
+			$z = \dfrac{x - \mu}{\sigma}$
+		\end{block}
+		\begin{block}{Definition}
+			Subtract the sample mean and divide by the sample standard deviation, producing a variable with mean 0 and variance 1. Rescales features so no single one dominates distance or gradient computations.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Centre and scale.'' Preferred over min-max when the data contains outliers, because it does not squash the rest into a tiny range. Does NOT change the shape of the distribution or the correlations.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Three reasons to scale (per the textbook): (1) numerical stability of the learning algorithm (avoids overflow/underflow); (2) interpretability of parameter estimates; (3) detecting whether out-of-sample data lies beyond the training range (a normalised value outside [0,1] signals extrapolation). Prerequisite for K-means, KNN, SVM, LDA, PCA, neural networks. A sample question confirms standardisation preserves correlations. In the exam, you may be asked to compute standardised values, to distinguish standardisation from normalisation, or to say why scaling precedes distance-based clustering.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{30 --- Min-Max Normalization}
+		\begin{block}{Formula}
+			$x' = \dfrac{x - x_{min}}{x_{max} - x_{min}}$
+		\end{block}
+		\begin{block}{Definition}
+			Rescales a feature to the range [0, 1] by subtracting the minimum and dividing by the range (max $-$ min). Also called the min-max transformation.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Bound to [0,1].'' The largest value maps to 1, the smallest to 0. It does NOT force mean 0 or variance 1. Sensitive to outliers because min/max define the range.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Preserves the correlations between data points and does NOT change the shape of the distribution --- but unlike standardisation the resulting variables generally do NOT have mean 0 or unit variance. A GARP sample question tests exactly this: ``Normalization preserves the correlations between data points'' is the correct statement, while ``standardization creates a distribution bounded by 0 and 1'' is false. Because min/max are used, a single outlier can compress the rest of the data, so standardisation is often preferred when outliers exist. Both methods are applied only to numerical input features, not to the target. In the exam, you may be asked which method bounds to [0,1], which is robust to outliers, or to compute normalised values.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{31 --- PCA Component}
+		\begin{block}{Formula}
+			$PC_j = b_{1j}P_1 + b_{2j}P_2 + \cdots + b_{mj}P_m$
+		\end{block}
+		\begin{block}{Definition}
+			The j-th principal component is a linear combination of the original (standardised) predictors $P_1 \dots P_m$ with weights $b_{ij}$ (component loadings). PCs are ordered so the first captures the most variance.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Weighted blend of features.'' PC1 = direction of maximum variance; PC2 = maximum remaining variance, orthogonal (uncorrelated) to PC1. Loadings tell you which features matter for each PC.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			PCA is an unsupervised dimensionality-reduction technique --- a classical method that predates the ML revolution. It addresses multicollinearity (PCs are uncorrelated by construction) and speeds up models needing low correlation. It does NOT consider the target, so it can discard directions that matter for prediction. Data must be scaled and de-skewed first. The textbook example on Treasury yields: PC1 $\approx$ level, PC2 $\approx$ slope, PC3 $\approx$ twist; three components explain over 98\% of variation. Use a scree plot and keep components before the elbow. In the exam, you may be asked to interpret loadings, to say how many PCs to keep, or to note PCA's limitations.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{32 --- Cosine Similarity}
+		\begin{block}{Formula}
+			$S_c(P,Q) = \dfrac{P \cdot Q}{\|P\|\,\|Q\|}$
+		\end{block}
+		\begin{block}{Definition}
+			The cosine of the angle between two vectors --- a similarity measure bounded in $[-1, 1]$. It depends only on direction, not magnitude, so it is unaffected by vector length.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Angle, not distance.'' Close to 1 = same direction (similar); close to 0 = unrelated; negative = opposite. Used to compare word embeddings in Word2Vec/GloVe.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Because it ignores magnitude, cosine similarity is preferred for text/embedding data where document length or word frequency should not dominate. The textbook gives concrete numbers: China--Japan 0.84, Gold--Silver 0.95 (similar); Australia--Tokyo 0.40, Banana--Rose 0.30 (dissimilar). It also underpins word analogies: Europe $-$ Spain + China $\approx$ Asia (cosine 0.79). Cosine similarity is also one of the alternative distance measures suggested for K-means to mitigate the curse of dimensionality. In the exam, you may be asked to compute cosine similarity, to interpret a value, or to say why it is used for word vectors.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{33 --- TF-IDF}
+		\begin{block}{Formula}
+			$TF\text{-}IDF_{ij} = TF_{ij} \times IDF_i$
+		\end{block}
+		\begin{block}{Definition}
+			The weight of term i in document j: term frequency (how often the term appears in the document) multiplied by inverse document frequency (how rare it is across the corpus). Highlights words frequent in a document but rare overall.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Frequent here, rare everywhere = informative.'' If a word appears in every document, IDF = 0 and it gets no weight. Higher weights to words that occur frequently in a particular document but rarely in the corpus.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Common words such as ``this'' that appear in all documents have zero discriminatory power (TF-IDF = 0). Rare words appearing once in short documents get the highest TF-IDF (e.g.\ ``fed,'' ``hikes'' in the sample). The same word can have different TF-IDF across documents because TF varies with document length while IDF does not. TF-IDF is used for document classification and information retrieval, and it is a dictionary/heuristic NLP approach rather than a machine-learning one. In the exam, you may be asked to compute a TF-IDF value, to explain why a common word gets zero weight, or to say why the same word differs across documents.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{34 --- IDF (Inverse Document Frequency)}
+		\begin{block}{Formula}
+			$IDF_i = \ln\!\left(\dfrac{D}{d_i}\right)$
+		\end{block}
+		\begin{block}{Definition}
+			$D$ = total number of documents in the corpus; $d_i$ = number of documents that contain term i. The natural log of the ratio. Measures how rare a term is across the whole corpus.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Rarer term = higher IDF.'' A term in every document has $d_i = D$, so $IDF = \ln(1) = 0$. A term in one document has $d_i = 1$, so $IDF = \ln(D)$, which is large.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The log compresses the range of IDF values and prevents extreme weights. IDF does NOT vary by document --- it is a property of the term and the corpus, which is why a given word's TF-IDF difference across documents comes entirely from TF. In the textbook example, ``disappointing'' (in 2 of 4 docs) has IDF 0.69, ``down'' (in 3 of 4) has IDF 0.29, and ``fed'' (in 1 of 4) has IDF 1.39. In the exam, you may be asked to compute IDF, to explain why a term appearing in all documents has IDF = 0, or to distinguish IDF (corpus-level) from TF (document-level).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{35 --- L2 Normalization}
+		\begin{block}{Formula}
+			$v_{norm} = \dfrac{v}{\|v\|_2} = \dfrac{v}{\sqrt{\sum_i v_i^2}}$
+		\end{block}
+		\begin{block}{Definition}
+			Divides each element of a vector by the vector's L2 norm (the square root of the sum of squared elements), producing a unit-length vector. All elements are scaled to lie between 0 and 1.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Make the vector length one.'' Used to stop repeated words from skewing analysis --- e.g.\ a review that says ``bad, bad, bad, bad'' would otherwise dominate. Normalising each document separately puts them on equal footing.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The textbook's customer-feedback example: repeatedly using ``bad'' could skew the analysis, so word vectors are normalised using the L2 norm before analysis --- analogous to how outliers are handled in econometrics. In the worked example, the vector [2,0,0,0,1,0,1,0,\dots,1,1] has L2 norm 2.83 and is divided through to give normalised entries like 0.71 and 0.35. L2 normalisation is standard before computing cosine similarity, since cosine similarity is invariant to scaling. In the exam, you may be asked what L2 normalisation does, why it is used in NLP, or to identify the L2 norm expression.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{36 --- Bayes Rule}
+		\begin{block}{Formula}
+			$P(c|d) = \dfrac{P(d|c)\,P(c)}{P(d)}$
+		\end{block}
+		\begin{block}{Definition}
+			Posterior $P(c|d)$ = likelihood $P(d|c)$ $\times$ prior $P(c)$, divided by evidence $P(d)$. How to update a probability about class c after observing data d.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Posterior = likelihood $\times$ prior / evidence.'' Prior = belief before data; likelihood = how probable the data is under the class; posterior = updated belief. In classification, drop the denominator (constant across classes).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Foundation of the Naive Bayes classifier. Because $P(d)$ does not depend on the class, the classification rule simplifies to $\hat{c} = \arg\max_c P(d|c)P(c)$ --- a classic GARP point (the denominator ``effectively cancels across classes''). Bayes rule also underlies the BIC derivation. The prior is the assumed probability before new information; the posterior is the updated probability. In the exam, you may be asked to apply Bayes rule to a simple case, to name each term, or to say why $P(d)$ can be dropped in classification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{37 --- Naive Bayes Classification}
+		\begin{block}{Formula}
+			$\hat{c} = \arg\max_c\; P(w_1|c)\,P(w_2|c)\cdots P(w_N|c)\,P(c)$
+		\end{block}
+		\begin{block}{Definition}
+			Predict the class maximizing the product of the conditional word probabilities and the class prior. ``Naive'' because it ASSUMES words are conditionally independent given the class.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Multiply the word probabilities, times the prior, pick the biggest.'' Independence lets a joint probability become a simple product. Popular for its simplicity and solid accuracy.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Three issues GARP tests: (1) computational underflow --- multiply many tiny probabilities; solve by summing logs instead (ln(AB) = ln A + ln B), which does not change the argmax; (2) the zero-probability problem --- if a word never appears in a class during training, the whole product becomes zero, so Laplace smoothing adds a positive integer $\lambda$ (usually 1) to all counts; (3) unknown words in the test set are dropped because the model has no information about them. In the textbook's customer-service example, an unlabeled review was classified ``bad'' with posterior 0.67. In the exam, you may be asked to apply the rule, to explain the independence assumption, or to say why smoothing is needed.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{38 --- Scaled Dot-Product Attention}
+		\begin{block}{Formula}
+			$score(Q_i, K_j) = \dfrac{Q_i \cdot K_j}{\sqrt{d_k}}$
+		\end{block}
+		\begin{block}{Definition}
+			The compatibility score between a query vector $Q_i$ (the token being processed) and a key vector $K_j$ (another token), scaled by the square root of the key dimension $d_k$. The scores are softmaxed into weights over the value vectors.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Query asks, key answers, value delivers.'' Divide by $\sqrt{d_k}$ to stop the dot products growing so large that softmax saturates (outputs near 0 or 1, gradients vanish). Scaling keeps gradients healthy.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Core of the transformer architecture. Each token plays three roles: Query (current input), Key (other inputs being compared), Value (used to compute the context vector). Multi-head attention runs several heads in parallel, each focusing on different relationships; GPT's base version has 12 heads. Attention captures long-range dependencies (e.g.\ linking ``it'' to ``MGARCH'' seven words earlier) better than RNNs. Masked attention is used in decoders to prevent the model from seeing future tokens. In the exam, you may be asked why we scale by $\sqrt{d_k}$, to identify Q/K/V, or to explain what multi-head attention adds.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{39 --- Softmax}
+		\begin{block}{Formula}
+			$softmax(x_i) = \dfrac{e^{x_i}}{\sum_j e^{x_j}}$
+		\end{block}
+		\begin{block}{Definition}
+			Converts a vector of real-valued scores into a probability distribution: all outputs positive, and they sum to 1. Used in attention and as the output layer for multi-class classification.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Exponentiate, then normalise.'' Exponentials make everything positive and magnify the largest values. Sum-to-one makes it a valid probability distribution. Sharpens differences between scores.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Exponentially magnifies the importance of the largest input --- a large gap in scores yields an output near 1 for the top class and near 0 for the rest. This is desirable for classification but means the softmax can saturate, which is exactly why attention scores are scaled before softmax. Softmax is the multi-class generalisation of the logistic (sigmoid) function and is the standard activation for multi-class output layers. It is also used to normalise attention scores into weights. In the exam, you may be asked to state the properties of softmax, to say why exponentials are used, or to identify its role in a transformer.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{40 --- Gradient Descent Update}
+		\begin{block}{Formula}
+			$w_i^{new} = w_i^{old} - \eta\,\dfrac{\partial L}{\partial w_i}$
+		\end{block}
+		\begin{block}{Definition}
+			Iteratively move each weight in the direction OPPOSITE the gradient of the loss (down the slope), scaled by the learning rate $\eta$. Continue until the gradient is (near) zero.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Go downhill: subtract the slope.'' If the gradient is positive, reduce the weight; if negative, increase it. $\eta$ sets the step size. This is the workhorse of modern ML training.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			An epoch = one full pass over the training data. Batch GD uses the whole dataset per update (stable but slow, memory-heavy); stochastic GD (SGD) uses one random example (noisy but fast, no full-data load); mini-batch GD uses a small subset (balances both). A bad $\eta$: too small = slow convergence; too large = overshooting/oscillation or failure to converge. A positive gradient means reduce the weight; a negative gradient means increase it --- a frequently tested inversion. Momentum adds a term $\mu(w^{old} - w^{older})$ to speed consistent directions and damp oscillation. In the exam, you may be asked which direction to move, what an epoch is, or to compare GD variants.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{41 --- Exponential Learning Rate Decay}
+		\begin{block}{Formula}
+			$\eta_t = \eta_0\,e^{-kt}$
+		\end{block}
+		\begin{block}{Definition}
+			The learning rate at epoch t decays exponentially from its initial value $\eta_0$, with decay controlled by $k$. A larger $k$ makes the rate drop faster.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Start big, shrink fast.'' Begin with a large step to move quickly toward the optimum, then smaller steps to avoid overshooting near the minimum. Used in stochastic gradient descent.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			A fixed learning rate is rarely optimal: too large for fine-tuning near the optimum, too small for fast early progress. Decay schedules reconcile the two --- GARP notes that for stochastic GD a dynamic learning rate starts larger to get close to the optimal solution faster, then reduces as learning proceeds to avoid overshooting. Exponential and inverse decay are the two popular choices. In the exam, you may be asked to identify the exponential-decay formula, to explain why the rate is reduced over time, or to contrast it with inverse decay.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{42 --- Inverse Learning Rate Decay}
+		\begin{block}{Formula}
+			$\eta_t = \dfrac{\eta_0}{1 + kt}$
+		\end{block}
+		\begin{block}{Definition}
+			An alternative decay schedule where the learning rate decreases as the reciprocal of (1 + kt), with $k$ controlling the rate of decay and $t$ the epoch. Falls more slowly than exponential decay.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Divide by (1 + kt)'' instead of multiplying by an exponential. Slower taper --- keeps the learning rate higher for longer than exponential decay would.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Both exponential and inverse decay reduce the learning rate over epochs; the choice is empirical. Inverse decay can be preferable when you want to retain a meaningful step size for more epochs. These schedules matter most in stochastic and mini-batch gradient descent, where the noisy gradient benefits from gradually smaller steps. In the exam, you may be asked to identify which formula is inverse decay, to compare it with exponential decay, or to explain the role of $k$ and $t$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{43 --- Gini Coefficient}
+		\begin{block}{Formula}
+			$Gini = 1 - \sum_{j=1}^{J} p_j^2$
+		\end{block}
+		\begin{block}{Definition}
+			A measure of node impurity in a classification tree, where $p_j$ is the proportion of class j in the node and J the number of classes. A small Gini means the node is mostly one class.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``One minus the sum of squared proportions.'' Pure node (one class, $p = 1$) $\Rightarrow$ Gini = 0. A 50/50 binary split gives the maximum Gini of 0.5. Used by the CART algorithm.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Splits in a classification tree are chosen to create nodes as pure as possible --- i.e.\ to maximise the drop (information gain) in Gini. The textbook's dividend example: baseline Gini = 0.480; splitting on ``large cap'' gives a weighted Gini of 0.255 and an information gain of 0.225, so large cap becomes the root split. Gini is computationally cheaper than entropy (no logarithm) and usually yields very similar trees. In the exam, you may be asked to compute Gini, to identify which split gives the largest information gain, or to contrast Gini with entropy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{44 --- Entropy}
+		\begin{block}{Formula}
+			$Entropy = -\sum_{j=1}^{J} p_j \log_2(p_j)$
+		\end{block}
+		\begin{block}{Definition}
+			Another node-impurity measure in classification trees, quantifying the disorder or uncertainty of the class distribution. Uses base-2 logarithms, so it is measured in bits.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Sum of p times log p, negated.'' Pure node $\Rightarrow$ entropy = 0 (no uncertainty). A 50/50 binary split $\Rightarrow$ entropy = 1 (maximum uncertainty). Used by ID3 and C4.5.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Information gain = parent entropy $-$ weighted average child entropy; trees choose the split that maximises it. Changing the logarithm base only rescales all entropy values by a constant and does not change which splits are chosen --- a subtle point GARP notes. Entropy and Gini typically produce very similar trees; the choice is often a matter of implementation. In the exam, you may be asked to compute entropy, to explain information gain, or to note that Gini and entropy usually agree.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{45 --- AIC (Akaike Information Criterion)}
+		\begin{block}{Formula}
+			$AIC = 2k - 2\ln(L)$
+		\end{block}
+		\begin{block}{Definition}
+			A model-selection criterion combining goodness of fit (via the likelihood L) with a penalty for the number of parameters k. Lower AIC is preferred. Part of the wrapper-method feature-selection toolkit.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Fit minus complexity.'' $2k$ penalises extra parameters; $-2\ln(L)$ rewards better fit. Lower is better. Adding a feature can raise or lower AIC --- the balance decides.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Used in forward and backward stepwise regression: at each step, add (or remove) the feature that most reduces AIC; stop when no further improvement is possible. The textbook's forward-selection example: AIC drops from 3202.69 (no predictors) to 3193.36 (Age) to 3123.20 (Age + Age$^3$); adding a third variable increases AIC, so the model ``Age + Age$^3$'' is selected. AIC does not require nested models. BIC uses a heavier penalty ($k\ln N$) and tends to pick simpler models. In the exam, you may be asked to interpret the AIC formula, to choose the model with the lowest AIC, or to contrast AIC and BIC.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{46 --- BIC (Bayesian Information Criterion)}
+		\begin{block}{Formula}
+			$BIC = k\ln(N) - 2\ln(L)$
+		\end{block}
+		\begin{block}{Definition}
+			A model-selection criterion like AIC but with the complexity penalty multiplied by $\ln(N)$, the log of the sample size. Lower BIC is preferred. Penalises complexity more heavily than AIC.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``AIC with a bigger stick.'' Because $\ln(N) > 2$ for $N > 7$, BIC penalises extra parameters more than AIC does, so BIC tends to select simpler models.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Both AIC and BIC are used for stepwise selection and general model comparison; both prefer lower values. BIC is more conservative and is derived from a Bayesian perspective, while AIC has an information-theoretic justification. As the sample size grows, the difference between the two penalties grows, so on large datasets BIC will favour much simpler models. In the exam, you may be asked to identify the BIC formula, to say which criterion selects simpler models, or to explain the role of $\ln(N)$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{47 --- Covariance}
+		\begin{block}{Formula}
+			$Cov(x_1, x_2) = \dfrac{\sum_i (x_1 - \bar{x}_1)(x_2 - \bar{x}_2)}{N - 1}$
+		\end{block}
+		\begin{block}{Definition}
+			The average product of deviations of two variables from their means. Positive = they move together; negative = they move oppositely; zero = no LINEAR relationship. The numerator of the OLS slope, and a building block of the LDA covariance matrix.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Do they deviate together?'' Both above mean or both below mean $\Rightarrow$ positive product. One above, one below $\Rightarrow$ negative. Divide by $N - 1$ for the unbiased sample estimate.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Covariance is central to portfolio theory, LDA (a pooled/common covariance matrix is assumed), and PCA. Its magnitude is hard to interpret because it depends on the units, which is why correlation (standardised covariance) is often preferred. GARP's FTA example shows how a correlated omitted variable contaminates a coefficient: once the protected variable is removed, the coefficient on ``prior'' jumps from 0.54 to 0.72. In the exam, you may be asked to interpret the sign of covariance, to compute it from a small table, or to explain why correlation is preferred for interpretation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{48 --- 2x2 Matrix Inverse}
+		\begin{block}{Formula}
+			$\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \dfrac{1}{ad - bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$
+		\end{block}
+		\begin{block}{Definition}
+			The inverse of a 2x2 matrix: swap the diagonal entries, negate the off-diagonal entries, and divide by the determinant $ad - bc$. Exists only if the determinant is non-zero.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Swap, negate, divide by det.'' Determinant = $ad - bc$. If det = 0 the matrix is singular (no inverse) --- this happens with perfect multicollinearity or the dummy-variable trap.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The inverse of the covariance matrix appears in the LDA discriminant function. It also appears in the closed-form OLS solution $\hat{\beta} = (X^TX)^{-1}X^Ty$; a singular $X^TX$ signals perfect multicollinearity, which is why OLS ``breaks down'' in that case. In the textbook's LDA example, the estimated covariance matrix is $\begin{pmatrix}1 & -0.58\\ -0.58 & 1\end{pmatrix}$ with inverse $\begin{pmatrix}1.52 & 0.88\\ 0.88 & 1.52\end{pmatrix}$. In the exam, you may be asked to compute a 2x2 inverse, to state the condition for invertibility, or to link the determinant to multicollinearity.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{49 --- LDA Discriminant Function}
+		\begin{block}{Formula}
+			$\delta_j(x) = x^T\hat{\Sigma}^{-1}\hat{\mu}_j - \tfrac12\hat{\mu}_j^T\hat{\Sigma}^{-1}\hat{\mu}_j + \ln(\hat{\pi}_j)$
+		\end{block}
+		\begin{block}{Definition}
+			For each class j, compute a linear discriminant score; assign the observation to the class with the LARGEST score. $x$ = feature vector, $\hat{\mu}_j$ = class-mean vector, $\hat{\Sigma}^{-1}$ = inverse of the (pooled) covariance matrix, $\hat{\pi}_j$ = prior probability of class j.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Score each class, pick the max.'' Three parts: a term linear in x (via the mean), a constant correcting for the mean's magnitude, and the log prior. Linear in x, hence ``Linear'' Discriminant Analysis.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			LDA assumptions: features within each class are multivariate normal, all classes share a common covariance matrix, features are continuous. Even when assumptions are imperfect, LDA is often robust and works well. It handles multi-class classification directly and can also be used for dimensionality reduction. The textbook's borrower example computes $\delta_0 = 0.30$ (no default) and $\delta_1 = -3.95$ (default) for a new applicant, so the applicant is classified as ``no default.'' Priors can be equal or estimated from class frequencies. In the exam, you may be asked to state the LDA assumptions, to compute a discriminant score, or to assign an observation to a class.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{50 --- Autoencoder Loss (Reconstruction Error)}
+		\begin{block}{Formula}
+			$L = \sum_{j=1}^{m}\sum_{i=1}^{N}(x_{ij} - \hat{x}_{ij})^2$
+		\end{block}
+		\begin{block}{Definition}
+			The squared difference between the original features and their reconstructions, summed over all features and observations. The autoencoder minimises this ``reconstruction error.''
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Encode then decode; measure how much you lost.'' A bottleneck layer forces compression. With linear activations, an autoencoder with K hidden nodes reproduces the first K principal components.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Autoencoders are unsupervised feedforward networks whose outputs equal their inputs (no labels). They are used mainly for dimensionality reduction (nonlinear generalisation of PCA) and anomaly detection: trained on ``normal'' data, they reconstruct normal cases with low error but struggle with anomalies, producing HIGH reconstruction error that flags the anomaly. The loss can also be written as MSE by dividing by mN. The textbook's Treasury-yield example shows autoencoder MSE closely tracking PCA MSE at each dimensionality. In the exam, you may be asked to identify the loss function, to explain anomaly detection via reconstruction error, or to state the autoencoder-PCA relationship.
+		\end{block}
+	\end{frame}
+	
+	% ============================================================
+	\section{Names and People}
+	% ============================================================
+	
+	\begin{frame}{51 --- John McCarthy}
+		\begin{block}{Contribution}
+			Coined the term ``Artificial Intelligence'' in 1956 at the Dartmouth Summer Research Project. Developed the LISP programming language (1960). Founded the Stanford AI Lab (1963).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``McCarthy = McCarthyism of AI --- he named the field.'' Co-organised Dartmouth with Minsky, Rochester, and Shannon.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the origin of the term ``Artificial Intelligence.'' The 1956 Dartmouth conference proposed that ``every aspect of learning or any other feature of intelligence can in principle be so precisely described that a machine can be made to simulate it.'' McCarthy is considered one of the founding fathers of AI alongside Minsky. In the exam, you may be asked who coined the term, when, or at which conference.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{52 --- Alan Turing}
+		\begin{block}{Contribution}
+			Turing Machine (1936). Turing Test / Imitation Game (1950). Worked at Bletchley Park on the Enigma code during WWII.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Turing = the universal machine + the imitation game.'' His 1950 paper ``Computing Machinery and Intelligence'' proposed that a machine is intelligent if its conversation is indistinguishable from a human's.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The Turing Machine (1936) was a theoretical device proving what is computable and underpins the idea of a universal programmable computer. The Turing Test remains a benchmark concept and is especially salient now that LLM-based chatbots are plausible contenders. GARP notes Turing's test focused on conversational versatility, and that modern ``stochastic parrots'' can pass surface imitation without true understanding. In the exam, you may be asked the name of Turing's test, the year, or the significance of the Turing machine.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{53 --- McCulloch and Pitts}
+		\begin{block}{Contribution}
+			The 1943 paper ``A logical calculus of the ideas immanent in nervous activity'' --- the first computational model of a neuron and neural network. Published in the Bulletin of Mathematical Biology.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``M\&P before M\&M.'' Warren McCulloch and Walter Pitts modelled neurons using propositional logic. Their paper talks of neural nets as equivalent to Turing machines.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Foundational for neural networks --- it framed neurons as logical units and networks as computable functions. Ironically it was immersed in the same logical background as Turing's work, before the later split between symbolic and connectionist approaches. In the exam, you may be asked who produced the first neural-network model or in what year.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{54 --- Donald Hebb}
+		\begin{block}{Contribution}
+			Hebbian learning (1949). Book ``The Organisation of Behaviour.'' Proposed that when one neuron repeatedly helps fire another, the connection strengthens --- the basis of associative learning.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Neurons that fire together, wire together.'' This is a famous summary of Hebb's neurophysiological postulate.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Hebb's rule underlies many learning algorithms and the idea that memories are stored in connection strengths rather than explicit symbols. This ``connectionist'' tradition later competed with the symbolic GOFAI tradition. In the exam, you may be asked to attribute ``fire together, wire together'' or to say what Hebb contributed.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{55 --- Frank Rosenblatt}
+		\begin{block}{Contribution}
+			The Perceptron (1958) --- an early artificial neuron model based on probability theory rather than symbolic logic. The first substantial trainable classifier.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Rosenblatt = Perceptron.'' Rejecting symbolic/algorithmic approaches, he modelled the brain as a probabilistic switching network.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The Perceptron is the ancestor of modern neural networks. It is a single-layer model that can only learn linearly separable patterns. This limitation --- most famously XOR --- was the target of Minsky and Papert's critique and temporarily cooled interest in neural nets. In the exam, you may be asked who invented the Perceptron or what it can and cannot learn.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{56 --- Minsky and Papert}
+		\begin{block}{Contribution}
+			The 1969 book ``Perceptrons'' --- a rigorous critique showing single-layer Perceptrons cannot learn simple functions like XOR, apparently wrecking the prospect of neural-network intelligence.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Perceptrons = the book that froze neural nets.'' The critique applied only to single-layer nets; multilayer nets can learn XOR.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			This critique drove a long decline in neural-network research until backpropagation and multilayer nets revived it in the 1980s. GARP uses this as a lesson in the historical cycle of AI optimism and disappointment. In the exam, you may be asked what Minsky and Papert proved or why neural-network research stalled in the 1970s.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{57 --- Rumelhart, McClelland, and the PDP Group}
+		\begin{block}{Contribution}
+			The 1986 two-volume ``Parallel Distributed Processing'' --- revived connectionism by showing layers of simple neurons can learn complex functions, and popularised backpropagation.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``PDP = the reboot of neural nets.'' Their work displaced the pessimism of Minsky and Papert.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			PDP emphasised biologically-inspired learning, graceful degradation, and distributed storage of knowledge in weights. It framed the modern deep-learning worldview. In the exam, you may be asked who wrote ``Parallel Distributed Processing'' or how backpropagation was popularised.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{58 --- Yann LeCun}
+		\begin{block}{Contribution}
+			LeNet-5 (1998) --- an 8-layer convolutional neural network for digit recognition, applied to mail sorting and bank-check processing.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``LeCun = LeNet = the grandfather of CNNs.'' Convolutional and pooling layers first proved their power here.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			LeNet-5 established the convolutional-pooling architecture that underlies modern image recognition. It uses filters/kernels shared across the image, reducing parameters and building translation invariance. In the exam, you may be asked who developed LeNet-5 or what a convolutional layer does.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{59 --- Krizhevsky, Sutskever, and Hinton}
+		\begin{block}{Contribution}
+			AlexNet (2012) --- crushed the ImageNet competition with a 15.3\% error rate versus 25.8\% the previous year. Nearly 100 times bigger than LeNet-5, with almost 900,000 neurons.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``AlexNet = the big bang of deep learning.'' It exploited GPUs and huge data to win decisively.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			AlexNet is a landmark showing that deep convolutional networks plus GPU compute plus ImageNet-scale data dramatically outperform prior methods. It triggered the modern deep-learning boom. In the exam, you may be asked the year, the error rate, or why GPUs mattered.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{60 --- DeepMind}
+		\begin{block}{Contribution}
+			AlphaGo (2015--2016) --- defeated Fan Hui 5-0 and Lee Sedol 4-1. AlphaZero (2017) --- taught itself chess, Go, and Shogi by self-play, defeating Stockfish.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``AlphaGo = deep RL beats the world at Go.'' ``AlphaZero = no human data, just self-play.''
+		\end{block}
+		\begin{block}{Exam Relevance}
+			AlphaGo used deep reinforcement learning with neural networks and search. AlphaZero learned from scratch by playing itself --- a key demonstration of self-training and reinforcement learning. In the exam, you may be asked the match scores, the difference between AlphaGo and AlphaZero, or the concept of self-play.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{61 --- Emily M. Bender}
+		\begin{block}{Contribution}
+			Coined ``stochastic parrot'' (2021) to describe LLMs that imitate language without understanding meaning.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Stochastic parrot = plausible mimicry, no comprehension.'' The phrase is central to LLM critiques.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The term captures a key limitation: LLMs model text patterns, not the world. They can generate fluent, even convincing, output that is false or nonsensical (hallucination). GARP expects candidates to understand this distinction. In the exam, you may be asked who coined the term or what it means.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{62 --- Vaswani et al.}
+		\begin{block}{Contribution}
+			The 2017 paper ``Attention Is All You Need'' --- introduced the transformer architecture based on self-attention, dropping recurrence and convolution.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Attention is all you need = transformers.'' Encoder/decoder + multi-head self-attention.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Transformers underlie BERT, GPT, and virtually all modern LLMs. Self-attention lets each token weigh every other token, capturing long-range dependencies and enabling parallel training. GARP tests the transformer components (queries, keys, values, multi-head attention, positional embeddings). In the exam, you may be asked the title, the year, or the key mechanism.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{63 --- Google (BERT)}
+		\begin{block}{Contribution}
+			BERT (2018) --- Bidirectional Encoder Representations from Transformers. Encoder-only, about 100 million parameters, pre-trained on books and Wikipedia.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``BERT = bidirectional encoder.'' It reads context both left and right of a word. Not generative; great for classification.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			BERT is trained with masked-language modelling (predicting randomly hidden words) and next-sentence prediction. It is an encoder-only model, so it analyses rather than generates. Variants include RoBERTa and FinBERT. In the exam, you may be asked BERT's full name, whether it is generative, or its training tasks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{64 --- OpenAI (GPT)}
+		\begin{block}{Contribution}
+			The GPT series --- Generative Pre-trained Transformers. Decoder-only autoregressive models. GPT-1 ($\sim$100M params), GPT-2 (774M), GPT-3 (175B), GPT-4 (2023), GPT-5 (2025).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``GPT = generate next token.'' Decoder-only, autoregressive, fine-tuned with RLHF.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GPT models predict the next token, enabling text generation. They are pre-trained on huge corpora, then aligned with RLHF. GPT-3 introduced strong few-shot and no-shot capabilities. In the exam, you may be asked the full name, the architecture (decoder-only vs encoder-only), or the role of RLHF.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{65 --- Facebook (BART)}
+		\begin{block}{Contribution}
+			BART (2019) --- Bidirectional and Auto-Regressive Transformer. Combines an encoder (like BERT) with an autoregressive decoder (like GPT).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``BART = BERT + GPT in one.'' Encoder + decoder enables both understanding and generation.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			BART is trained by corrupting text (shuffling, removing, replacing words) and learning to reconstruct the original. This makes it strong at summarisation, translation, and question answering. In the exam, you may be asked BART's full name, its architecture, or its training objective.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{66 --- Kleinberg, Mullainathan, and Raghavan}
+		\begin{block}{Contribution}
+			The 2016 fairness impossibility theorem --- when base rates differ, demographic parity, predictive rate parity, and equal opportunity cannot all hold simultaneously.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``You can't have all three fairness metrics at once.'' Choose your trade-off explicitly.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			This mathematical result shows fairness cannot be fully automated --- value judgments are required. Chouldechova independently derived a related result. GARP tests the theorem and its implication that fairness involves imperfect compromises. In the exam, you may be asked which three metrics cannot coexist or who proved it.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{67 --- Bentham and Mill}
+		\begin{block}{Contribution}
+			Utilitarianism --- the most common form of consequentialism. Jeremy Bentham and John Stuart Mill. Judge actions by their consequences; maximise overall utility.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Bentham \& Mill = greatest good for the greatest number.'' Forward-looking, circumstance-relative, outcome-focused.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Utilitarianism provides a single quantifiable metric but can justify violating individual rights for the greater good. In AI ethics, this could mean deploying a model that benefits many but harms a minority. GARP contrasts utilitarianism with deontology and virtue ethics. In the exam, you may be asked the founders of utilitarianism or its key critique.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{68 --- Immanuel Kant}
+		\begin{block}{Contribution}
+			Deontology. The categorical imperative: act only on maxims that could be universal laws; treat people as ends in themselves, never merely as means. Morality is grounded in reason and duty, not consequences.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Kant = duty, not outcomes.'' Lying is always wrong, regardless of consequences.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Deontology judges actions by adherence to duties and rules. In AI ethics, deontological reasoning supports rights-based constraints (e.g.\ prohibiting manipulation) even when outcomes would be better. GARP contrasts it with consequentialism (outcomes) and virtue ethics (character). In the exam, you may be asked the categorical imperative or Kant's stance on consequences.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{69 --- Aristotle}
+		\begin{block}{Contribution}
+			Virtue ethics. Nicomachean Ethics. Focuses on character traits (wisdom, courage, justice, temperance) and living a good life, rather than rules or consequences.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``What kind of person should I be?'' Virtues are cultivated through practice and habit.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Virtue ethics asks what a virtuous agent would do, and is seeing renewed interest in AI ethics. Some scholars argue ethical AI should be built the way children learn virtue --- through experience and habit --- rather than top-down rules. In the exam, you may be asked which philosopher is associated with virtue ethics or its guiding question.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{70 --- Stuart Lloyd}
+		\begin{block}{Contribution}
+			Lloyd's algorithm (1957) --- the K-means clustering algorithm. Developed at Bell Labs.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``K-means = Lloyd's algorithm.'' Iterate: assign points to nearest centroid, then update centroids.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Lloyd's algorithm is the workhorse of partitional clustering. It converges but may settle in a poor local optimum, so multiple random restarts or K-means++ initialisation are used. In the exam, you may be asked the alternate name of K-means or the algorithm's steps.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{71 --- Universal Approximation Theorem}
+		\begin{block}{Statement}
+			A feedforward neural network with enough hidden neurons (and suitable activation) can approximate any continuous function to arbitrary precision.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Enough neurons $\Rightarrow$ any function.'' It explains why neural networks are so flexible.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			This theorem justifies the use of neural networks as universal function approximators, but it does NOT guarantee that training will find the right weights, nor that the model will generalise. Overfitting and computational issues remain. GARP tests the theorem's statement and its practical limits. In the exam, you may be asked what the theorem does and does not guarantee.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{72 --- Fairness Impossibility Theorem (Detail)}
+		\begin{block}{Statement}
+			When base rates differ across groups, demographic parity, predictive rate parity, and equal opportunity cannot all be satisfied at once.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Pick your fairness metric.'' Trade-offs are unavoidable.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Kleinberg, Mullainathan, and Raghavan (2016); Chouldechova (2017) derived a related result for recidivism tools. Implication: fairness is a moral/ethical judgment, not a purely mathematical one, and requires deliberate choices that may need to change over time. GARP tests the theorem and its consequences. In the exam, you may be asked what cannot be satisfied, or why ``automating fairness'' is impossible.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{73 --- No Free Lunch Theorem}
+		\begin{block}{Statement}
+			Averaged over all possible problems, no learning algorithm is better than any other. Superiority on one class of problems implies inferiority on another.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``No universal best algorithm.'' Match the method to the data and task.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			This justifies the diversity of ML methods and the need for model selection, cross-validation, and domain knowledge. GARP implies this idea when contrasting K-means (spherical clusters) with DBSCAN (arbitrary shapes) and supervised with unsupervised methods. In the exam, you may be asked what the theorem says about algorithm choice.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{74 --- Bias-Variance Trade-off (Detail)}
+		\begin{block}{Statement}
+			Expected error = Bias$^2$ + Variance + Irreducible Error. Increasing complexity lowers bias but raises variance.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Underfit = biased; overfit = high variance.'' Find the sweet spot.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Underfitting: model too simple, high bias, misses patterns (e.g.\ linear fit to a curved relationship). Overfitting: model too complex, high variance, fits noise (e.g.\ 9th-degree polynomial), fails to generalise. The textbook's house-price example shows the quadratic beating both the linear and the 9th-degree fit on test data. In the exam, you may be asked to diagnose which regime a model is in or to match remedies (regularisation, more data, pruning) to symptoms.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{75 --- Curse of Dimensionality}
+		\begin{block}{Statement}
+			As the number of features grows, data becomes sparse, distances between points become similar, and models require exponentially more data.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``More features $\Rightarrow$ everything is far apart and equally close.'' K-means and KNN suffer most.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The textbook notes K-means ``tends to perform poorly when the number of features is large, converging very slowly.'' Remedies: remove features, use PCA, or switch to a distance measure like cosine that does not always grow with dimension. In the exam, you may be asked which algorithms suffer from high dimensionality or how to mitigate it.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{76 --- Vanishing Gradient Problem}
+		\begin{block}{Statement}
+			In deep networks, gradients can become vanishingly small as they back-propagate through many layers, making learning extremely slow.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Deep chain of small derivatives $\Rightarrow$ gradient dies.'' Caused by saturating activations like sigmoid/tanh.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The chain rule multiplies many derivatives; with sigmoid ($\leq 0.25$) the product vanishes. Mitigations: use ReLU (derivative 1 for positive inputs), batch normalization, LSTM for RNNs, or specialised architectures. GARP tests the problem and its solutions. In the exam, you may be asked which activation mitigates vanishing gradients or what causes them.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{77 --- Exploding Gradient Problem}
+		\begin{block}{Statement}
+			The opposite failure mode: gradients grow extremely large as they propagate, destabilising training (huge weight updates).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Multiplied large derivatives blow up.'' Remedies include gradient clipping and careful initialisation.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Exploding gradients often accompany recurrent networks and can cause NaN losses. The textbook lists it alongside vanishing gradients as a key computational issue. Solutions: gradient clipping, weight regularisation, better initialisation, batch normalization. In the exam, you may be asked to distinguish exploding from vanishing gradients or to name a remedy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{78 --- Overfitting}
+		\begin{block}{Statement}
+			The model learns noise rather than signal: excellent on training data, poor on unseen data.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Memorised the training set.'' Symptoms: tiny training error, large test error, unstable predictions.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			More likely with many parameters (deep nets) and small samples. Remedies: regularisation (L1/L2), dropout, early stopping, pruning, more data, cross-validation. GARP's neural-network notes list signs: predictions vary with training sample; large gap between train and test error. In the exam, you may be asked to identify overfitting from error patterns or to choose a remedy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{79 --- Underfitting}
+		\begin{block}{Statement}
+			The model is too simple to capture the underlying pattern: poor on both training and test data.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Missed the signal.'' High bias, low variance. A straight line forced onto a U-shaped relationship.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Underfitting can also result from over-aggressive regularisation or too few informative features. Remedies: increase model capacity, add features/interactions, reduce regularisation strength. In the exam, you may be asked to distinguish underfitting from overfitting or to recommend a fix.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{80 --- Markov Decision Process (MDP)}
+		\begin{block}{Statement}
+			A framework for sequential decision-making: states S, actions A, rewards R, and transition probabilities P, with the Markov property that the future depends only on the current state.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Memoryless: only now matters.'' S, A, R, P --- the four pillars of RL.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			MDPs underlie reinforcement learning. When transition probabilities and rewards are known, dynamic programming solves for the optimal policy via the Bellman equations. When unknown, model-free methods (Monte Carlo, Temporal Difference) are used. In the exam, you may be asked the components of an MDP or what the Markov property means.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{81 --- Bellman Equations}
+		\begin{block}{Formula}
+			$V^*(s) = \max_a E[R_{t+1} + \gamma V^*(s')]$
+		\end{block}
+		\begin{block}{Statement}
+			The optimal value of a state equals the best expected immediate reward plus the discounted value of the next state. They give a recursive way to compute optimal value functions.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Best now + discounted best later.'' $\gamma$ (discount) trades off immediate vs future rewards.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The Bellman optimality equations underpin dynamic programming and Q-learning. For the action-value function, $Q^*(s,a) = E[R_{t+1} + \gamma \max_{a'} Q^*(s',a')]$. In the exam, you may be asked to write the Bellman equation or interpret $\gamma$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{82 --- Exploration vs Exploitation}
+		\begin{block}{Statement}
+			The central RL dilemma: exploit the best-known action to gain reward now, or explore new actions to possibly find better rewards later.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Try new things vs stick with what works.'' Pure exploitation can be stuck; pure exploration wastes reward.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The epsilon-greedy strategy (explore randomly with probability $\epsilon$, exploit otherwise) balances the two. A common refinement is to decay $\epsilon$ over time as confidence grows. The Multi-Armed Bandit is the classic illustration. In the exam, you may be asked what epsilon-greedy does or why pure greedy is suboptimal.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{83 --- Monte Carlo vs Temporal Difference}
+		\begin{block}{Statement}
+			MC updates value estimates only at the end of a complete episode; TD updates after every step by bootstrapping from the next state's estimate.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``MC waits for the ending; TD learns as it goes.'' MC unbiased but high variance; TD biased but lower variance.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			MC cannot handle non-episodic tasks and delays learning. TD can learn online and works for continuous tasks; Q-learning is a TD method. In the exam, you may be asked to contrast MC and TD or to say which can learn before an episode ends.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{84 --- Q-Learning}
+		\begin{block}{Formula}
+			$Q(s,a) \leftarrow Q(s,a) + \alpha[R + \gamma \max_{a'} Q(s',a') - Q(s,a)]$
+		\end{block}
+		\begin{block}{Statement}
+			A model-free, off-policy TD algorithm that learns the optimal action-value function directly from experience.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Update toward reward + discounted best next Q.'' DQN = Q-learning + neural network (for big state spaces).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Off-policy means it learns the optimal policy even while following an exploratory one. Deep Q-Networks add experience replay and a target network to stabilise training. In the exam, you may be asked the update rule, the meaning of $\alpha$ and $\gamma$, or what DQN adds.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{85 --- Principal Component Analysis (Detail)}
+		\begin{block}{Statement}
+			PCA finds orthogonal linear combinations (principal components) that successively maximise explained variance. It is used for dimensionality reduction and to combat multicollinearity.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Rotate axes to align with spread.'' PC1 = most variance; PCs are uncorrelated.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Standardise/deskew the data before PCA, or scale dominates. The scree/elbow plot decides how many components to keep. PCA does not use labels (unsupervised) and can discard predictive directions. GARP's Treasury example interprets PCs as level, slope, twist. In the exam, you may be asked to interpret loadings, choose K, or explain PCA's link to multicollinearity.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{86 --- Autoencoders vs PCA}
+		\begin{block}{Statement}
+			Autoencoders are neural networks that learn a compressed representation by minimising reconstruction error. With linear activations and one hidden layer, they reproduce PCA; with nonlinear activations they generalise it.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Linear autoencoder = PCA; nonlinear = more.'' Bottleneck forces compression.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Autoencoders handle nonlinear structure and high-dimensional data; they are used for dimensionality reduction and anomaly detection (high reconstruction error). The textbook compares PCA and autoencoder MSE on Treasury yields --- near-identical. In the exam, you may be asked the equivalence to PCA or when autoencoders outperform.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{87 --- Random Forest vs Bagging}
+		\begin{block}{Statement}
+			Bagging trains many trees on bootstrap samples and averages. Random Forest adds random feature subsetting at each split to decorrelate the trees further.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Forest = bagging + random features.'' Fewer shared strong features means less correlated trees and better ensembles.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Random forest reduces variance and improves accuracy over a single tree, at the cost of interpretability. The sample question confirms: ``Random forest can improve prediction accuracy by reducing correlation across trees'' (Answer C). In the exam, you may be asked the advantage of random forest or how it differs from bagging.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{88 --- Boosting vs Bagging}
+		\begin{block}{Statement}
+			Bagging trains models in parallel on bootstrap samples to reduce variance. Boosting trains models sequentially, each correcting the previous model's errors, to reduce bias.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Bagging = parallel; Boosting = sequential error-correction.'' Gradient boosting fits residuals; AdaBoost reweights misclassified points.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Boosting often achieves state-of-the-art accuracy but can overfit if not tuned. Bagging is more robust. GARP contrasts the two and notes boosting's results are harder to explain. In the exam, you may be asked which reduces bias vs variance, or to name a boosting variant.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{89 --- Support Vector Machines}
+		\begin{block}{Statement}
+			SVMs find the maximum-margin hyperplane separating classes. Only the support vectors (closest points) determine the boundary.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Widest street between classes.'' Kernels handle nonlinearity; soft margins allow misclassification.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Kernel trick projects data to higher dimensions without explicit computation. The soft-margin parameter $\lambda$ controls the trade-off: larger $\lambda$ = wider margin, more misclassifications. GARP's car-loan example computes the decision value $-2.7$ and classifies as ``not granted.'' In the exam, you may be asked what support vectors are, the role of the kernel, or to classify a point from a boundary equation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{90 --- K-Nearest Neighbors}
+		\begin{block}{Statement}
+			KNN classifies a point by majority vote of its K nearest neighbours, or predicts the mean of their values (regression). It is a ``lazy learner'' --- no explicit training.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``You are your neighbours.'' Small K overfits; large K underfits. K $\approx \sqrt{N}$ is a common heuristic.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			KNN requires feature scaling and suffers from the curse of dimensionality. Distance computation is expensive at prediction time. In the textbook's borrower example, K = 4 nearest neighbours give a default classification. In the exam, you may be asked how KNN predicts, the effect of K, or why scaling matters.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{91 --- Decision Trees}
+		\begin{block}{Statement}
+			Trees recursively split data on feature thresholds to maximise purity (classification) or minimise RSS (regression). Highly interpretable ``white-box'' models.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Flowchart of yes/no questions.'' Classification uses Gini/entropy; regression uses RSS. Pruning avoids overfitting.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Trees are interpretable but can be less accurate than black-box ensembles (random forest, boosting). Pruning (pre or post) controls complexity. The dividend example builds a tree using Gini and information gain. In the exam, you may be asked the split criterion, the meaning of pruning, or when a tree is preferred over a neural network.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{92 --- Inscrutability}
+		\begin{block}{Definition}
+			The inability to understand the internal mechanisms of a model --- why it produces the outputs it does.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Black box.'' Deep nets are inscrutable; their knowledge is buried in millions of weights.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Inscrutability creates risks: hidden bias, privacy leakage, manipulation, and over-reliance. GARP's fraud-detection question defines inscrutability as ``the inability to understand the internal mechanisms of a model'' (Answer A). In the exam, you may be asked to distinguish inscrutability from explainability, interpretability, or transparency.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{93 --- Explainability}
+		\begin{block}{Definition}
+			The ability to explain, in understandable terms, how a model reached a particular decision or prediction --- often after the fact (ex-post).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Why THIS decision?'' Counterfactuals (``if you had \$10k more, you would be approved'') are a common form.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Explainability supports accountability and trust, and is increasingly mandated for high-risk AI. Techniques include SHAP, LIME, feature importance, and surrogate models. GARP distinguishes explainability from interpretability (built-in transparency) and transparency (openness about design/data). In the exam, you may be asked to define explainability or to choose a technique for a black-box model.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{94 --- Interpretability}
+		\begin{block}{Definition}
+			The degree to which a human can understand a model's internal logic and predict its behaviour from the model itself --- inherent, not post hoc.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Glass box vs black box.'' Decision trees and linear regression are interpretable; deep nets are not.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			More interpretable models may be less accurate, creating a trade-off. GARP notes interpretable models are preferred for causal investigation, flexible models for pure prediction. In the exam, you may be asked which model is inherently interpretable or how interpretability differs from explainability.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{95 --- Transparency}
+		\begin{block}{Definition}
+			Openness and accessibility of an AI system's design, algorithms, data, and decision-making processes. Distinct from interpretability (understanding internal logic) and explainability (justifying specific decisions).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Show your work at the system level.'' Opaqueness = lack of transparency.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Opaqueness comes in three forms: secrecy (you don't know you're being profiled), confidentiality (internals hidden), and specialised-knowledge opacity (you can't understand even with access). Transparency supports accountability and governance but may conflict with security or proprietary interests. In the exam, you may be asked which form of opacity a scenario illustrates.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{96 --- Sources of Algorithmic Bias}
+		\begin{block}{Statement}
+			Bias can enter at four stages: problem specification, data collection/composition, model development, and deployment.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Specify, Data, Model, Deploy --- SDMD.'' Each stage has characteristic failure modes.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Examples: proxy targets (healthcare cost as a proxy for illness); historical bias (past discrimination in hiring data); sampling bias (training on US/Canada travellers); representation/measurement bias; deployment bias (using a tool outside its intended context or over-relying on it). The fraud-detection question illustrates data-composition bias: 20 fraudulent transactions in 10,000 is highly imbalanced. In the exam, you may be asked to classify a scenario's bias source.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{97 --- Fairness Metrics}
+		\begin{block}{Statement}
+			Group fairness metrics: demographic parity (equal positive rates), predictive rate parity (equal precision), equal opportunity (equal true positive rates). Individual fairness: treat similar individuals similarly.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Parity of rates; parity of precision; parity of TPR.'' Plus individual fairness = consistency.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The impossibility theorem means you cannot satisfy all group metrics at once when base rates differ. The college-admission and recidivism examples show the tension. GARP tests the definitions and the trade-offs, and stresses that fairness is a moral judgment, not just a math problem. In the exam, you may be asked to match a fairness definition to a scenario or to explain why trade-offs are unavoidable.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{98 --- Ethical Frameworks}
+		\begin{block}{Statement}
+			Consequentialism (judge by outcomes), deontology (judge by duties/rules), virtue ethics (judge by character). Practical ethics blends all three.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Outcomes, Duties, Character.'' Consequentialism (Bentham/Mill), deontology (Kant), virtue ethics (Aristotle).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP asks candidates to compare and contrast the frameworks and to apply them to AI scenarios (e.g.\ manipulation, privacy, autonomy). The best decisions often satisfy all three. The medical-ethics analogy informs AI ethics. In the exam, you may be asked to identify a framework from a scenario or to compare two frameworks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{99 --- AI Ethics Principles}
+		\begin{block}{Statement}
+			Five common principles: nonmaleficence (avoid harm), beneficence (do good), justice (fairness), autonomy (respect decisions), explainability (understandable reasons).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Non-mal, Bene, Just, Auto, Explain.'' Derived from medical ethics (Hippocratic Oath, Belmont Report).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			These principles underpin most AI ethics codes and regulatory frameworks. Autonomy is violated by manipulation or overriding personal preferences; beneficence and nonmaleficence by unsafe or harmful systems; justice by discriminatory outcomes. In the exam, you may be asked which principle a scenario violates (e.g.\ an AI overriding a patient's preferences violates autonomy).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{100 --- Privacy Principles}
+		\begin{block}{Statement}
+			Data minimisation (collect only what's needed), right to be forgotten (erasure), contextual integrity (respect the context of data collection), control over data (access/transfer/delete), and data security.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Collect little, respect context, give control, keep it safe.'' Privacy is a moral AND legal right.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GDPR Article 17 = erasure; Article 33 = breach notification within 72 hours. Privacy losses harm individuals (discrimination, identity theft), institutions (fines, lawsuits), and society (national security). GARP tests privacy principles and the trade-off between data utility and risk. In the exam, you may be asked which practice best protects privacy or what a given GDPR article covers.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{101 --- Model Risk Management}
+		\begin{block}{Statement}
+			Frameworks to identify, measure, and control the risk that models are wrong or misused. Key tools: model inventory, model landscape, risk tiering, and validation.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Inventory, Landscape, Tier, Validate.'' SR 11-7 is the US supervisory anchor.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			SR 11-7 defines a model as a quantitative method/system/approach applying theories to process input data into quantitative estimates. The three lines of defence (business, risk management, audit) organise responsibilities. Model risk = adverse consequences from incorrect or misused model outputs. In the exam, you may be asked the components of a model inventory or the roles in the three lines.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{102 --- AI/ML Validation Differences}
+		\begin{block}{Statement}
+			AI/ML models need more frequent monitoring, broader stakeholder involvement, and validation that focuses on explainability and benchmarking, since they are often black boxes.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``More often, more stakeholders, more explainability.'' Data drift and complexity drive the change.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Traditional annual review may be insufficient. GARP recommends monitoring dashboards, K-fold cross-validation for back testing, benchmarking against classical models, and assessing extreme/borderline cases. Explainability is key for black-box models. In the exam, you may be asked how AI/ML validation differs from traditional model validation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{103 --- GenAI Risks}
+		\begin{block}{Statement}
+			Key GenAI risks: hallucination, unpredictability, data privacy violations, IP/copyright issues, and bias amplification. Plus vendor lock-in and regulatory uncertainty.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Hallucinate, drift, leak, infringe, bias.'' GenAI adds governance challenges beyond classical ML.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Hallucinations are credible but false outputs; Air Canada was held liable for its chatbot's bad advice. Unpredictability undermines consistency and auditability. Prompt injection and jailbreaks create security risks. GARP tests these risks and mitigations (human review, red-teaming, watermarking, logging). In the exam, you may be asked to identify a GenAI risk from a scenario or to name a mitigation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{104 --- Regulatory Landscape}
+		\begin{block}{Statement}
+			Major regimes: EU AI Act (risk-based), GDPR (privacy), NIST AI RMF (voluntary framework), SR 11-7 (model risk), plus US state laws and China's measures.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``EU = strict and risk-tiered; US = patchwork; NIST = voluntary.'' Different jurisdictions, different obligations.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The EU AI Act bans certain practices, imposes impact assessments on high-risk systems, and requires transparency. GDPR has extraterritorial reach. NIST's four functions are Govern, Map, Measure, Manage. GARP tests the major regimes and their key requirements. In the exam, you may be asked which regulation applies to a scenario or what a framework requires.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{105 --- EU AI Act Prohibited Systems}
+		\begin{block}{Statement}
+			Banned: social scoring, biometric categorization using sensitive traits, emotion recognition in workplace/education, untargeted facial scraping, and manipulation that circumvents free will.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Unacceptable risk = banned.'' Six months to comply once in force.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The Act uses a risk pyramid: unacceptable (banned), high-risk (heavily regulated), limited-risk (transparency), minimal-risk (unregulated). Fines up to 35M euros or 7\% of global turnover. GARP tests which systems are prohibited and the risk categories. In the exam, you may be asked which practice the Act bans or what tier a system falls into.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{106 --- EU AI Act High-Risk Requirements}
+		\begin{block}{Statement}
+			High-risk systems require risk assessment, record-keeping of datasets and methods, transparency, human oversight, and conformity assessment.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``High risk = paperwork plus oversight.'' Banks, insurers, and essential-service providers are in scope.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Providers of high-risk AI must keep thorough records and design systems for auditability. Deployers (e.g.\ banks) must do an impact assessment on fundamental rights. GARP tests these obligations. In the exam, you may be asked what a high-risk deployer must do or which obligations attach to high-risk systems.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{107 --- GDPR Key Articles}
+		\begin{block}{Statement}
+			Article 17 = right to erasure (``right to be forgotten''). Article 33 = breach notification to the supervisor within 72 hours. Article 6 = lawful basis. Article 22 = rights on automated decision-making.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``17 = forget me; 33 = tell within 72h; 6 = why it's lawful; 22 = no blind automation.''
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GDPR applies extraterritorially to organisations offering services to EEA data subjects. Data-subject rights include access, rectification, erasure, restriction, portability, and objection. GARP's model-governance questions reference these obligations. In the exam, you may be asked which article covers erasure or breach notification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{108 --- NIST AI RMF}
+		\begin{block}{Statement}
+			A voluntary framework organised around four functions: Govern (structures), Map (context), Measure (assessment), Manage (mitigation).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``G-M-M-M: Govern, Map, Measure, Manage.'' Voluntary and non-prescriptive.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The framework is flexible and customisable to different sectors and risk profiles. It is often cited alongside ISO/IEC 42001 and the EU AI Act as a scaffolding for governance. GARP tests the four functions. In the exam, you may be asked to name the four functions or to say whether the framework is mandatory.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{109 --- SR 11-7}
+		\begin{block}{Statement}
+			Federal Reserve/OCC guidance (2011) on model risk management. Requires model inventory, validation, effective challenge, and governance across the model lifecycle.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``SR 11-7 = the model-risk bible.'' Effective challenge and annual review are hallmarks.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			SR 11-7 defines a model broadly, requires documentation detailed enough for an unfamiliar party to understand the model, and sets expectations for validation. GARP extends it to AI/ML. In the exam, you may be asked what SR 11-7 requires, who issued it, or how it applies to AI/ML.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{110 --- Three Lines of Defence}
+		\begin{block}{Statement}
+			First line: business/model owners manage and monitor the model. Second line: independent risk management sets policy and validates. Third line: internal audit provides independent assurance to the board.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Own it, Check it, Audit it.'' Adapted from the IIA Three Lines model.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP adapts the three lines for AI/ML: the first line needs MLOps integration and continuous-learning awareness; the second line needs deep ML validation expertise and fairness/bias assessment; the third line needs sufficient ML understanding to assess governance. Clear protocols exist for breach notification, independent review, dispute resolution, and reporting. In the exam, you may be asked which line does what or to identify a governance failure.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{111 --- Model Inventory Contents}
+		\begin{block}{Statement}
+			A model inventory should include owner, purpose, methodology, classification (including whether AI/ML), in-house vs vendor, usage frequency, restrictions, materiality, assumptions/weaknesses, documentation locations, interdependencies, update/validation history, monitoring frequency, regulatory use, and risk tier.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Everything about every model in one place.'' It also lists important non-models (qualified analytical tools).
+		\end{block}
+		\begin{block}{Exam Relevance}
+			For AI/ML, extra weight goes on methodology complexity, data usage, output parameters (supervised vs unsupervised), recalibration needs, and performance-monitoring metrics (accuracy, F1, AUC for classification; MAE, MSE, $R^2$, RMSE for regression). In the exam, you may be asked what belongs in an inventory or which AI/ML-specific fields matter.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{112 --- Model Risk Appetite}
+		\begin{block}{Statement}
+			The level of model risk the firm is willing to accept. Set by the board, operationalised by the model risk function through materiality thresholds and risk tiers.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``How much model risk will we tolerate?'' Board sets it; the model risk function enforces it.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GARP tests the roles: the board (not the model risk function) sets risk appetite; the model risk function maintains the inventory and sets materiality thresholds. A common exam trap is assigning these to the wrong party. In the exam, you may be asked who sets the appetite or who maintains the inventory.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{113 --- Use Test}
+		\begin{block}{Statement}
+			A qualitative validation examining whether the model is used appropriately in context --- acceptance, interpretation, and application of results by people.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``People, not numbers.'' It collects credible stories of model success or failure in real use.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The use test is ongoing, not one-off, and is presented to senior management. It asks whether results are used correctly, trusted, understood, and whether feedback reaches modellers. GARP tests the use test's qualitative, people-focused nature. In the exam, you may be asked what the use test examines or how it differs from quantitative back testing.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{114 --- Outcomes Analysis}
+		\begin{block}{Statement}
+			Comparing model predictions against realised outcomes over time to detect bias, degradation, or incorrect assumptions.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Did the model get it right in the real world?'' Back testing is part of it.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Outcomes analysis includes reviewing the appropriateness of the dependent variable, benchmarking against classical models, stress tests at model boundaries, parameter stability checks, and back testing at a cadence matched to model use (daily for VaR, monthly for credit, quarterly for ALM). In the exam, you may be asked what outcomes analysis checks or how often to back test.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{115 --- Initial Validation Goals}
+		\begin{block}{Statement}
+			Initial (pre-deployment) validation ensures (1) operational feasibility, (2) proper documentation and adherence to firm standards, and (3) sufficient user training.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Can it run, is it documented, can users use it?'' Preproduction phase required.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Initial validation results form the basis for formal approval (sign-off). Assumptions must be justified; limitations and weaknesses documented. It also checks implementation platform appropriateness and back-up plans for internal/external models. In the exam, you may be asked the three goals of initial validation or what its output is.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{116 --- Effective Challenge}
+		\begin{block}{Statement}
+			SR 11-7's requirement for critical, objective analysis by informed parties able to identify key assumptions, limitations, and weaknesses --- requiring independence, competence, and influence.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Independent, competent, influential criticism.'' The heart of model validation.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Effective challenge is not a checkbox: it must be independent of development, technically deep, and senior enough to change outcomes. It includes challenging the first line's performance assessments and remediation plans. In the exam, you may be asked the three requirements for effective challenge or what it aims to do.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{117 --- Model Validation Frequency}
+		\begin{block}{Statement}
+			SR 11-7 recommends periodic review at least annually, more frequently if warranted. AI/ML models generally need more frequent monitoring due to complexity and data drift.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Annual minimum; more for AI/ML.'' Risk tier drives frequency.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The OCC also recommends annual (or more frequent) review. High-risk models may be revalidated yearly or more often; lower-risk models every two or three years. Change-based validation is triggered by material changes. In the exam, you may be asked the minimum frequency, what triggers extra validation, or why AI/ML needs more.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{118 --- Model Risk Tier}
+		\begin{block}{Statement}
+			A classification that determines the depth and frequency of validation. Higher-risk tiers get more frequent and deeper validation.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Tier = how much scrutiny.'' Driven by materiality, complexity, exposure.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Risk tiering ensures resources are allocated efficiently. Minimum standards of assessment apply to ALL models regardless of tier, because skipping assessment introduces its own risk. In the exam, you may be asked what determines the tier or how tier affects validation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{119 --- Model Risk Ranking Factors}
+		\begin{block}{Statement}
+			Three core factors: materiality (economic/operational/reputational impact), complexity (methodology sophistication), and exposure (usage breadth and consequence).
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Material, Complex, Exposed --- MCE.'' A simple model touching financial statements may still rank high.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Materiality drives efficient resource allocation. Complexity can elevate an otherwise low-materiality model. Exposure (e.g.\ published financial reports) can also elevate ranking. GARP tests how these factors interact. In the exam, you may be asked which factors affect ranking or to identify a scenario that elevates a model's tier.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{120 --- Data Provenance}
+		\begin{block}{Statement}
+			The documented origin, history, and legal right to use data. Critical for alternative data, which may be scraped or licensed ambiguously.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Where did the data come from, and are we allowed to use it?'' FTC has ordered destruction of models built on improperly obtained data.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Vendor models need proof of data ownership and contractual indemnities. Copyright lawsuits against GenAI vendors illustrate the risk. GARP tests data provenance as part of data governance. In the exam, you may be asked what provenance means or why it matters for AI/ML and GenAI.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{121 --- Data Classification}
+		\begin{block}{Statement}
+			Categorising data by structure (structured, semi-structured, unstructured) and confidentiality/sensitivity, to determine handling, access, and controls.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``What kind of data is it, and how sensitive?'' Classification drives controls.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Data may be quantitative or qualitative, observed or projected. Confidential or personally identifiable data must have controls that are present, operational, and effective. GARP tests classification and its governance implications. In the exam, you may be asked how data should be classified or what controls follow from a classification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{122 --- Metadata}
+		\begin{block}{Statement}
+			Data about data: file type, creation time, author, source, size, structure, definitions, and relationships to other data.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Labels for your data.'' Descriptive, structural, administrative, reference, statistical.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Robust metadata management ensures data is high-quality, consistent, and accurate across systems. It includes data dictionaries, process flows, and definitions. GARP tests metadata's role in governance. In the exam, you may be asked what metadata includes or why it matters for data governance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{123 --- RBAC (Role-Based Access Control)}
+		\begin{block}{Statement}
+			Access is granted based on a user's role in the organisation. Users with the same role have the same permissions.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Access by job title.'' Simple and scalable, but coarse-grained.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			RBAC is one of several access-control models; ABAC (attributes), MAC (mandatory), DAC (discretionary) are others. RBAC is common but may be too coarse for nuanced policies. GARP tests access control as part of data governance. In the exam, you may be asked which model grants access by role or how RBAC compares to ABAC.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{124 --- ABAC (Attribute-Based Access Control)}
+		\begin{block}{Statement}
+			Access is granted based on attributes of the user, the resource, and the environment, evaluated against policies.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Access by many attributes.'' More flexible and fine-grained than RBAC, but more complex to manage.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			ABAC can express nuanced rules (e.g.\ allow access only during business hours from a corporate device). It is part of modern data-governance toolkits. In the exam, you may be asked to distinguish ABAC from RBAC or to identify which model a scenario describes.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{125 --- Data Strategy}
+		\begin{block}{Statement}
+			A clear, approved data-governance policy covering vision, goals, priorities, authorisation for non-public personal information, single vs recurring use, and source of information.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Where are we going with data, and what are the rules?'' Alternative data needs extra controls.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The data governance committee approves data practices including collection, reconciliations, treatment, access, and monitoring. Complete, relevant, transparent, and accurate data is the primary objective. In the exam, you may be asked what a data strategy includes or who approves data practices.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{126 --- Data Governance Committee}
+		\begin{block}{Statement}
+			Provides overall oversight of data governance --- approved practices for collection, reconciliations, treatment, access, monitoring, and management of data stewards. Not responsible for operational aspects.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Policy oversight, not operations.'' Approves the data strategy and controls.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The committee sets the rules; data stewards execute them. GARP tests this division and the committee's approval role for alternative data use. In the exam, you may be asked what the committee is responsible for or who approves sending data to a vendor.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{127 --- Synthetic Data}
+		\begin{block}{Statement}
+			Artificially generated data used to augment limited data and mitigate privacy risk when real data contains personally identifiable information.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Fake but useful.'' No real data subjects, so lower privacy risk; but may be less precise than real data.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Synthetic data can be designed to be free of problematic biases, but may differ from real data in ways that are not obvious, and may not be as precise (especially for visual data). GARP tests the trade-offs. In the exam, you may be asked why synthetic data is used or what its disadvantages are.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{128 --- AI-Ready Data}
+		\begin{block}{Statement}
+			Data that is accurate, unbiased, well-structured, cleaned, and suitable for training AI models. Improves model accuracy and efficiency.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Clean, balanced, structured, trustworthy.'' Garbage in, garbage out.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			AI readiness requires consideration of synthetic data and governance. Data quality (accuracy, consistency, integrity) is a core governance objective; alternative data needs extra scrutiny because providers may change definitions after deployment. In the exam, you may be asked what AI-ready data means or why data quality matters.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{129 --- Data Retention Policy}
+		\begin{block}{Statement}
+			A policy specifying how long data is kept and when it is deleted, in line with legal and regulatory requirements.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Data has an expiry date.'' Routine deletion reduces privacy and legal risk.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Personal data should be deleted as soon as it is no longer necessary; retention also keeps data accurate (people change jobs, homes, preferences). The GDPR's data-minimisation and storage-limitation principles support this. In the exam, you may be asked why retention policies matter or what they specify.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{130 --- GDPR Data Subject Rights}
+		\begin{block}{Statement}
+			Rights of data subjects: to be informed, access, rectification, erasure, restriction of processing, data portability, and to object. Plus rights related to automated decision-making.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Know, see, fix, forget, limit, move, object.'' Seven rights plus automation protections.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GDPR applies extraterritorially to organisations offering services to EEA data subjects. Article 17 (erasure) and Article 33 (breach notification within 72 hours) are frequently tested. GARP references these in the context of LLMs and data governance. In the exam, you may be asked which right covers deletion or which article covers breach notification.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{131 --- GDPR Extraterritorial Scope}
+		\begin{block}{Statement}
+			GDPR applies to organisations outside the European Economic Area if they offer goods/services to, or monitor the behaviour of, data subjects in the EEA.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``If you serve Europeans, GDPR follows you.'' This has made GDPR a global de facto standard.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The extraterritorial reach means global firms often adopt GDPR-compliant practices everywhere, and the law has inspired similar legislation worldwide. GARP tests this scope in the context of data governance and AI. In the exam, you may be asked when GDPR applies to a non-EU firm or why it has global impact.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{132 --- CCPA (California Consumer Privacy Act)}
+		\begin{block}{Statement}
+			The most comprehensive US state privacy law (2018). Grants consumers the right to know, access, delete, opt out of the sale of personal information, and non-discrimination.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``California's GDPR-lite.'' Applies to businesses doing business in California.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			CCPA requires clear privacy notices and consent for certain data types. It has inspired other state laws (Virginia CDPA, Colorado CPA). GARP tests CCPA in the patchwork of US privacy regulation. In the exam, you may be asked which rights CCPA grants or which state's law is the most comprehensive.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{133 --- BIPA (Biometric Information Privacy Act)}
+		\begin{block}{Statement}
+			Illinois law (2008) regulating the collection, use, and storage of biometric identifiers (fingerprints, facial patterns, voiceprints) and biometric information.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Illinois, biometrics, statutory damages.'' \$1,000 per violation; \$5,000 if intentional/reckless.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			BIPA requires notice, consent, access, and deletion rights; breaches must be notified within 45 days. It has driven major litigation and influenced other laws. GARP tests BIPA in the context of privacy and AI. In the exam, you may be asked what BIPA covers or its statutory damages.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{134 --- HIPAA}
+		\begin{block}{Statement}
+			Health Insurance Portability and Accountability Act (1996) --- protects the privacy and security of protected health information (PHI) in the US.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Health data, US.'' Requires safeguards for electronic health information and breach notification.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			HIPAA applies to healthcare providers, plans, and clearinghouses. It is a sectoral law, unlike GDPR's broad scope. GARP tests HIPAA alongside other privacy regulations. In the exam, you may be asked what HIPAA protects or to which entities it applies.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{135 --- GLBA (Gramm-Leach-Bliley Act)}
+		\begin{block}{Statement}
+			US law requiring financial institutions to explain their privacy practices, provide opt-out rights, and implement security safeguards for customer information.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Banking privacy law.'' The FTC enforces it for many financial institutions.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			GLBA is part of the US regulatory patchwork for data privacy and security, alongside HIPAA and state laws. GARP tests it in data-governance contexts. In the exam, you may be asked what GLBA requires or who enforces it.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{136 --- FTC Safeguards Rule}
+		\begin{block}{Statement}
+			Requires financial institutions under FTC jurisdiction to have measures in place to keep customer information secure, including encryption and access controls.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``FTC's security rule for finance.'' Part of GLBA implementation.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The rule is one of several regulatory requirements organisations must map to their data-protection strategy. GARP tests it alongside GDPR, CCPA, and others. In the exam, you may be asked what the Safeguards Rule requires or which regulator enforces it.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{137 --- Privacy Act of 1974}
+		\begin{block}{Statement}
+			US law governing how federal agencies collect, use, and disclose personal information in systems of records. Prohibits disclosure without written consent, with limited exceptions.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Federal agencies only.'' Older, narrower than GDPR.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The Act applies to federal agencies, not private firms. It is part of the historical privacy landscape that informs modern regulation. In the exam, you may be asked who the Act applies to or what it restricts.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{138 --- EU Digital Markets Act (DMA)}
+		\begin{block}{Statement}
+			Targets large online platforms with ``gatekeeper'' status. Bans self-preferencing, requires interoperability of messaging, open access to data, and transparency about algorithms.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Gatekeeper rules.'' Aims to make digital markets fair and contestable.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The DMA addresses competition and fairness in digital markets, complementing the DSA (content) and AI Act (AI). GARP tests the EU's layered regulatory approach. In the exam, you may be asked which platforms are targeted or what practices are banned.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{139 --- EU Digital Services Act (DSA)}
+		\begin{block}{Statement}
+			Requires online platforms to prevent illegal content, be transparent about moderation, address disinformation, protect against algorithmic bias, and allow opt-out of personalised recommendations.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Content and moderation rules.'' Very large platforms face extra obligations.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The DSA applies to marketplaces, social networks, app stores, and other intermediaries. It is part of the EU's digital rulebook alongside the DMA and AI Act. In the exam, you may be asked what the DSA requires or which platforms are in scope.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{140 --- China's Generative AI Measures}
+		\begin{block}{Statement}
+			Effective August 15, 2023. Require providers of generative AI services to prohibit illegal content, prevent discriminatory content, and not infringe on privacy or personal-information rights.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``China's GenAI rules.'' Content controls plus privacy protection.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			China's measures are part of its broader AI and data regulation, alongside PIPL and algorithmic-recommendation rules. GARP tests the global regulatory landscape. In the exam, you may be asked what the measures prohibit or when they took effect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{141 --- PIPL}
+		\begin{block}{Statement}
+			China's Personal Information Protection Law --- mandates data minimisation, user consent, and transparency in algorithmic decision-making, with broad applicability.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``China's GDPR.'' Strong consent and minimisation requirements.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			PIPL is part of China's data-governance regime alongside the Generative AI Measures and the Internet Information Service Algorithmic Recommendation Management Provisions. GARP tests the global privacy landscape. In the exam, you may be asked what PIPL requires or how it compares to GDPR.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{142 --- Colorado Privacy Act (CPA)}
+		\begin{block}{Statement}
+			Colorado law (2021) granting consumers rights to know, access, delete, opt out of sale, and opt out of targeted advertising, with data-minimisation and security provisions.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Another state GDPR-style law.'' Adds targeted-advertising opt-out.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The CPA is part of the US state privacy patchwork alongside CCPA and CDPA. GARP tests the fragmented US landscape. In the exam, you may be asked which rights the CPA grants or how it compares to CCPA.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{143 --- Virginia CDPA}
+		\begin{block}{Statement}
+			Virginia Consumer Data Protection Act (2021). Applies to businesses controlling/processing data of 100,000+ Virginia consumers, or 25,000+ with more than 50\% revenue from data sales.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Virginia joins the state privacy club.'' Thresholds matter.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The CDPA grants rights similar to CCPA and adds protections for sensitive data (genetic, biometric). GARP tests the US state patchwork. In the exam, you may be asked the applicability thresholds or which rights the CDPA grants.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{144 --- Illinois PIPA}
+		\begin{block}{Statement}
+			Illinois Personal Information Protection Act (2005). Requires reasonable security, breach notification within 24 hours, privacy notice, access, correction, and opt-out of sale.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Illinois, 24 hours.'' Faster breach notification than GDPR's 72 hours.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			PIPA applies to businesses maintaining or storing personal information of Illinois residents. It complements BIPA (biometrics). GARP tests state-level obligations. In the exam, you may be asked the breach-notification window or what PIPA requires.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{145 --- EU AI Act Effective Date}
+		\begin{block}{Statement}
+			Effective August 1, 2024. Ban on unacceptable-risk systems from February 2, 2025. Most provisions from August 2, 2026.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``2024, 2025, 2026 --- three stages.'' Ban first, then broad compliance.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The Act is the world's first comprehensive AI regulation and sets global standards, much like GDPR did for privacy. GARP tests its timeline and staged implementation. In the exam, you may be asked when the Act took effect or when the ban applies.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{146 --- European AI Office}
+		\begin{block}{Statement}
+			Established by the EU AI Act to handle compliance, implementation, and enforcement. The first body in the world to enforce binding AI rules.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Europe's AI enforcer.'' A model for future national AI regulators.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The Office signals a shift from voluntary principles to binding enforcement. GARP tests this institutional development. In the exam, you may be asked what the Office does or why it matters.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{147 --- AI Act High-Risk Requirements (Detail)}
+		\begin{block}{Statement}
+			High-risk providers must maintain records of datasets, programming/training methodologies, and oversight measures; implement risk management, human oversight, and post-market monitoring; and label AI-generated media.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Records, oversight, transparency, monitoring.'' Deployers must conduct a fundamental-rights impact assessment.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			Banks and insurers offering essential services are in scope. GARP tests the specific obligations of high-risk providers and deployers. In the exam, you may be asked which records must be kept or what deployers must do.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{148 --- AI Act Prohibited Systems (Detail)}
+		\begin{block}{Statement}
+			Banned: biometric categorization using sensitive characteristics; untargeted facial scraping; emotion recognition in workplace/education; social scoring; manipulation circumventing free will; exploitation of vulnerabilities.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``Six prohibitions.'' These are the unacceptable-risk practices.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The prohibitions reflect European fundamental-rights values and set a global benchmark. GARP tests the list and its rationale. In the exam, you may be asked which practice is banned or why it falls into the unacceptable category.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{149 --- AI Act Fines}
+		\begin{block}{Statement}
+			Fines range from 7.5M euros or 1.5\% of global turnover up to 35M euros or 7\% of global turnover, depending on offense and company size.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``7.5M/1.5\% to 35M/7\%.'' Comparable to GDPR's top tier.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The fines create strong financial incentives for compliance and signal the seriousness of the regime. GARP tests the range and what drives the amount. In the exam, you may be asked the maximum fine or what factors determine the penalty.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{150 --- Executive Order on AI (US)}
+		\begin{block}{Statement}
+			President Biden's EO on Safe, Secure, and Trustworthy AI (October 30, 2023). Requires developers of powerful AI systems to share safety test results with the government; addresses bias, algorithmic decision-making, cybersecurity, and international cooperation.
+		\end{block}
+		\begin{block}{Memory Hook}
+			``US EO = safety tests + government sharing.'' Complements the NIST AI RMF and the DHS AI Safety and Security Board.
+		\end{block}
+		\begin{block}{Exam Relevance}
+			The EO is part of the evolving US approach, which otherwise relies on sectoral regulators and state laws rather than a single comprehensive act. The AI Safety and Security Board (DHS, April 2024) advises on safe AI in critical infrastructure. GARP tests these developments. In the exam, you may be asked what the EO requires or how the US approach differs from the EU's.
+		\end{block}
+	\end{frame}
+	
+\end{document}
