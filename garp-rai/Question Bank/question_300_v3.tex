@@ -1,0 +1,2046 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=0pt,topsep=1pt}
+\setlist[itemize]{leftmargin=*,itemsep=0pt,topsep=1pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI]{GARP Risk \& AI --- 300 Hard Questions}
+\subtitle{Unofficial Exam Prep}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	\begin{frame}\titlepage\end{frame}
+	
+	% =================================================================
+	\section{Module 1: AI and Risk --- Introduction \& Overview}
+	% =================================================================
+	
+	\begin{frame}{Q1 --- Inscrutability vs Explainability}
+		\begin{block}{Question}
+			A regulator demands justification for a rejected loan. The bank can produce the top-3 contributing features for the specific decision via SHAP values, but its data science team admits that no one, including them, can articulate the exact internal transformation the neural network applied from inputs to output. Which statement most accurately characterises this model?
+		\end{block}
+		\begin{enumerate}
+			\item The model is interpretable but not explainable.
+			\item The model is explainable but not interpretable.
+			\item The model is neither explainable nor interpretable.
+			\item The model is both fully interpretable and fully explainable.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Explainability = ability to explain a specific decision in human-understandable terms (post-hoc). Interpretability = ability to understand the model's internal mechanisms. Deep nets are commonly explainable via SHAP/LIME but not interpretable.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q2 --- Inscrutability Definition}
+		\begin{block}{Question}
+			Which of the following most accurately captures what practitioners mean when they describe an AI model as ``inscrutable''?
+		\end{block}
+		\begin{enumerate}
+			\item Inability to determine the accuracy of predictions.
+			\item Inability to understand the internal mechanisms that produce the output.
+			\item Inability to explain the model's specific predictions to end-users.
+			\item Inability to generalise from training data to unseen data.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Inscrutability refers specifically to opaque internal mechanisms. It is distinct from explainability (specific decisions), accuracy, and generalisability.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q3 --- Classical AI Characteristics}
+		\begin{block}{Question}
+			IBM's Deep Blue defeated Garry Kasparov in 1997 and is cited as a landmark success for classical (GOFAI) AI. Which of the following best captures the essential characteristic of classical AI that Deep Blue exemplified?
+		\end{block}
+		\begin{enumerate}
+			\item It optimises parameters through gradient descent over large datasets.
+			\item It cannot handle structured data such as time-series or tabular records.
+			\item It relies on pre-defined rules and search strategies applied within a narrow, well-defined context.
+			\item It scales effortlessly to large, complex, and unstructured problems.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Classical AI (Good Old-Fashioned AI) operates on explicit symbolic rules and search within tightly bounded domains. It does not learn from data using gradient descent and does not generalise to complex, unstructured problems.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q4 --- Deep Learning Differentiator}
+		\begin{block}{Question}
+			Which of the following most directly accounts for deep learning's dramatic outperformance of classical AI on tasks such as image recognition and natural language processing?
+		\end{block}
+		\begin{enumerate}
+			\item Use of A* search algorithms to traverse state spaces.
+			\item Recursive adversarial tree search with pruning heuristics.
+			\item Lookahead strategies combined with hand-crafted evaluation functions.
+			\item Self-training via backpropagation and gradient descent on large data.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			Deep learning's edge stems from its ability to learn hierarchical representations directly from data using backpropagation and gradient descent, in contrast with hand-crafted rules used by classical AI.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q5 --- Societal vs Other Risks}
+		\begin{block}{Question}
+			A large social media platform's recommendation algorithm is shown to systematically amplify divisive political content, contributing to eroding public trust in democratic institutions. Under the GARP AI risk taxonomy, this scenario is best classified as:
+		\end{block}
+		\begin{enumerate}
+			\item Individual risk only.
+			\item Organisational risk only.
+			\item Societal risk.
+			\item Purely operational risk with no societal dimension.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Harm to democratic processes and public trust at the societal level = societal risk. This is distinguished from harm to a specific person (individual) or to a firm (organisational).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q6 --- Risk Levels}
+		\begin{block}{Question}
+			A hospital's diagnostic AI mislabels a patient's condition, leading to harmful treatment. Separately, a bank's trading AI generates unexpected losses through mispriced hedges. Under the taxonomy of AI risks, these are best characterised respectively as:
+		\end{block}
+		\begin{enumerate}
+			\item Societal risk; individual risk.
+			\item Individual risk; organisational risk.
+			\item Organisational risk; societal risk.
+			\item Operational risk; individual risk.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Patient harm = individual risk. Firm-level trading losses = organisational risk.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q7 --- AI Breakthroughs Timeline}
+		\begin{block}{Question}
+			Which of the following pairings of AI milestone and era is accurate?
+		\end{block}
+		\begin{enumerate}
+			\item 1997 Deep Blue = the deep learning revolution.
+			\item 2010s AlexNet and AlphaGo = classical AI's golden era.
+			\item 2017 transformers paper = a foundational breakthrough underpinning modern LLMs.
+			\item 2020s Large Language Models = a return to rule-based expert systems.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			The 2017 ``Attention Is All You Need'' paper introduced transformers, which underpin modern LLMs (GPT, Claude, Gemini). Deep Blue was classical AI; the 2010s were the deep learning revolution.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q8 --- Nominal Data}
+		\begin{block}{Question}
+			A wealth advisor surveys customers, asking them to select the types of investment products they hold (stocks, bonds, mutual funds, ETFs). What is the most appropriate data classification for these responses?
+		\end{block}
+		\begin{enumerate}
+			\item Ordinal data.
+			\item Nominal data.
+			\item Interval data.
+			\item Ratio data.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			No inherent ordering between stocks, bonds, ETFs → nominal.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q9 --- Ordinal Data}
+		\begin{block}{Question}
+			Which of the following variables is best classified as ordinal?
+		\end{block}
+		\begin{enumerate}
+			\item Gender (male/female/other).
+			\item Credit rating (AAA, AA, A, BBB, ...).
+			\item Temperature in Celsius.
+			\item Portfolio value in USD.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Credit ratings are ordered but intervals between ratings are not equal → ordinal. Gender is nominal; temperature and dollar values are numeric.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q10 --- Standardization}
+		\begin{block}{Question}
+			After standardizing a feature, which statement is correct?
+		\end{block}
+		\begin{enumerate}
+			\item Values are bounded within [0, 1].
+			\item Values are bounded within [$-1$, 1].
+			\item Mean is 0, standard deviation is 1, and values are not bounded.
+			\item Correlations with other features are destroyed.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Standardization uses $z=(x-\mu)/\sigma$, giving mean 0, SD 1, with no fixed bounds. Correlations are preserved.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q11 --- Normalization}
+		\begin{block}{Question}
+			Which statement correctly describes normalization (min-max scaling)?
+		\end{block}
+		\begin{enumerate}
+			\item It produces a distribution with mean 0 and SD 1.
+			\item It maps values to [0, 1] but is sensitive to outliers.
+			\item It transforms highly skewed data into a standard normal distribution.
+			\item It is invariant to extreme outliers.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Min-max maps to [0, 1] but is sensitive to outliers, since they compress the rest of the distribution into a narrow range.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q12 --- Scaling with Outliers}
+		\begin{block}{Question}
+			When a feature contains extreme outliers, which scaling method is generally preferred, and why?
+		\end{block}
+		\begin{enumerate}
+			\item Normalization, because it preserves the full range.
+			\item Standardization, because normalization would squash the data into an uncharacteristic range.
+			\item Log transformation, because it always produces normal data.
+			\item No scaling, because outliers dominate anyway.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Standardization is preferred with outliers; normalization's min and max are distorted by them.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q13 --- Stepwise Regression}
+		\begin{block}{Question}
+			Forward stepwise regression produces these results: Step 2 gives ``Age + Age$^3$'' with AIC = 3123.20; Step 3 gives ``Age + Age$^3$ + Age$^5$'' with AIC = 3124.50. Which model should the analyst select?
+		\end{block}
+		\begin{enumerate}
+			\item Age + Age$^3$ + Age$^5$, because it has more explanatory power.
+			\item Age + Age$^3$, because it has the lower AIC.
+			\item Age$^3$ alone, because it is simplest.
+			\item Restart with backward elimination to verify.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Forward stepwise stops when adding a variable no longer reduces AIC. Lower AIC = better model.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q14 --- AIC Properties}
+		\begin{block}{Question}
+			Which statement about AIC (Akaike Information Criterion) is correct?
+		\end{block}
+		\begin{enumerate}
+			\item Higher AIC indicates a better model.
+			\item AIC penalises model complexity to prevent overfitting.
+			\item AIC ignores model fit and only considers the number of parameters.
+			\item AIC always decreases when more variables are added.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			AIC = $2k - 2\ln(L)$; it balances fit against complexity. Lower is better.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q15 --- ML vs Classical Statistics}
+		\begin{block}{Question}
+			Which statement best captures the primary difference between machine learning and classical statistics?
+		\end{block}
+		\begin{enumerate}
+			\item ML focuses on inference; classical statistics focuses on prediction.
+			\item ML prioritises out-of-sample prediction accuracy; classical statistics emphasises inference and hypothesis testing.
+			\item ML requires stronger distributional assumptions.
+			\item ML uses fewer parameters than classical statistics.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			ML optimises prediction; classical statistics focuses on inference and parameter estimation under assumptions.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q16 --- Feature Scaling}
+		\begin{block}{Question}
+			Why do distance-based algorithms such as K-means, KNN, and SVM require feature scaling?
+		\end{block}
+		\begin{enumerate}
+			\item Because they only work with categorical features.
+			\item Because features with larger magnitudes dominate distance calculations.
+			\item Because scaling improves interpretability.
+			\item Because scaling eliminates multicollinearity.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Distance-based methods use magnitude; unscaled features cause one feature to dominate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q17 --- No Scaling Needed}
+		\begin{block}{Question}
+			Which of the following model classes generally does NOT require feature scaling?
+		\end{block}
+		\begin{enumerate}
+			\item KNN.
+			\item SVM.
+			\item K-means.
+			\item Decision trees and random forests.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			Tree-based models split on thresholds, not distances, so scaling is unnecessary.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q18 --- PCA Purpose}
+		\begin{block}{Question}
+			The primary purpose of Principal Component Analysis is to:
+		\end{block}
+		\begin{enumerate}
+			\item Increase the number of features for prediction.
+			\item Reduce dimensionality while preserving as much variance as possible.
+			\item Classify observations into categories.
+			\item Cluster observations.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			PCA finds orthogonal linear combinations (components) that capture variance in descending order.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q19 --- PCA and Correlation}
+		\begin{block}{Question}
+			PCA is especially useful when:
+		\end{block}
+		\begin{enumerate}
+			\item Features are uncorrelated and independent.
+			\item Features are highly correlated (multicollinearity present).
+			\item All features are categorical.
+			\item There are no numeric features.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			PCA handles multicollinearity by producing uncorrelated components.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q20 --- PCA Disadvantage}
+		\begin{block}{Question}
+			Which of the following is a key disadvantage of PCA?
+		\end{block}
+		\begin{enumerate}
+			\item It reduces variance explained.
+			\item Components are linear combinations, obscuring interpretation of original features.
+			\item It requires labelled data.
+			\item It always increases the number of dimensions.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			PCA's components are combinations of features, making business interpretation harder.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q21 --- Data Cleaning}
+		\begin{block}{Question}
+			The most common problem encountered during data preparation is:
+		\end{block}
+		\begin{enumerate}
+			\item Duplicate observations.
+			\item Missing data.
+			\item Extreme outliers.
+			\item Inconsistent formatting.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Missing data is pervasive and can bias results if handled incorrectly.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q22 --- Informative Missingness}
+		\begin{block}{Question}
+			Missingness that correlates with the outcome variable is called informative missingness. Why does it matter?
+		\end{block}
+		\begin{enumerate}
+			\item It has no impact on model performance.
+			\item It can induce significant bias in the model.
+			\item It can always be safely ignored.
+			\item It is only a concern for categorical variables.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			If missingness conveys information, ignoring it biases parameter estimates.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q23 --- Outliers}
+		\begin{block}{Question}
+			Which of the following model types is generally robust to outliers?
+		\end{block}
+		\begin{enumerate}
+			\item Ordinary Least Squares.
+			\item Tree-based models and SVMs.
+			\item Polynomial regression.
+			\item Ridge regression.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Tree splits use thresholds; SVM uses margins. OLS and polynomial regression are sensitive to outliers.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q24 --- Q-Q Plot}
+		\begin{block}{Question}
+			On a normal Q-Q plot, a distribution shows significant tail deviations from the diagonal. This indicates:
+		\end{block}
+		\begin{enumerate}
+			\item The distribution is normal.
+			\item The distribution is fat-tailed.
+			\item The distribution is homoscedastic.
+			\item The distribution is uniform.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Tail deviations = fat tails, common in financial returns.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q25 --- Log Transform}
+		\begin{block}{Question}
+			A common rule of thumb for identifying high skew in a feature is:
+		\end{block}
+		\begin{enumerate}
+			\item Max/min ratio > 2.
+			\item Max/min ratio > 5.
+			\item Max/min ratio > 10.
+			\item Max/min ratio > 100.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Max/min > 10 → high skew; log-transform often reduces it.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q26 --- Discretization}
+		\begin{block}{Question}
+			Converting continuous market capitalisation into Small/Medium/Large categories is called:
+		\end{block}
+		\begin{enumerate}
+			\item Standardization.
+			\item Discretization (binning).
+			\item Normalization.
+			\item One-hot encoding.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Binning converts numeric to categorical.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q27 --- One-Hot Encoding}
+		\begin{block}{Question}
+			Why use one-hot encoding rather than integer codes for nominal categories?
+		\end{block}
+		\begin{enumerate}
+			\item It is faster to train.
+			\item It avoids implying a false ordering between categories.
+			\item It reduces the number of features.
+			\item It handles missing data better.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Integer codes imply ordering; one-hot avoids this.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q28 --- Dummy Trap}
+		\begin{block}{Question}
+			The ``dummy variable trap'' arises when:
+		\end{block}
+		\begin{enumerate}
+			\item All categories are represented with dummy variables alongside an intercept.
+			\item Too many variables are dropped.
+			\item Features are standardized.
+			\item Feature selection is performed.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Perfect multicollinearity results from including all dummies + intercept.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q29 --- Longitudinal Data}
+		\begin{block}{Question}
+			Time-series stock returns are an example of:
+		\end{block}
+		\begin{enumerate}
+			\item Cross-sectional data.
+			\item Longitudinal data.
+			\item Nominal data.
+			\item Categorical data.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Time-series data is ordered, temporally linked = longitudinal.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q30 --- Semi-Structured}
+		\begin{block}{Question}
+			Which of the following is an example of semi-structured data?
+		\end{block}
+		\begin{enumerate}
+			\item Census tables.
+			\item Emails and HTML files.
+			\item Free-form narrative text.
+			\item Raw sensor telemetry.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Semi-structured has partial structure (tags, headers) but not fixed tabular format.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q31 --- PCA Elbow}
+		\begin{block}{Question}
+			Why retain only components before the elbow in a PCA scree plot?
+		\end{block}
+		\begin{enumerate}
+			\item To maximise the number of components.
+			\item To capture most variance with the fewest components.
+			\item To remove outliers.
+			\item To ensure the distribution is normal.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Components after the elbow add little variance and increase complexity.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q32 --- PCA Loadings}
+		\begin{block}{Question}
+			PC1 shows near-equal positive loadings on all Treasury yields. This component most likely represents:
+		\end{block}
+		\begin{enumerate}
+			\item The slope of the yield curve.
+			\item The curvature of the yield curve.
+			\item The level of the yield curve (parallel shift).
+			\item Idiosyncratic noise.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Equal positive loadings = parallel shift = level.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q33 --- PCA Standardization}
+		\begin{block}{Question}
+			Why is standardization generally recommended before PCA?
+		\end{block}
+		\begin{enumerate}
+			\item To preserve correlations.
+			\item To prevent features with larger scales from dominating the variance.
+			\item To avoid overfitting.
+			\item To ensure normality.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			PCA summarizes variance; unscaled features with large magnitudes dominate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q34 --- GIGO}
+		\begin{block}{Question}
+			The acronym GIGO in data science stands for:
+		\end{block}
+		\begin{enumerate}
+			\item Garbage In, Garbage Out.
+			\item Generic Input, Generic Output.
+			\item Gradient In, Gradient Out.
+			\item Great Input, Great Output.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Model quality is limited by data quality.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q35 --- EDA}
+		\begin{block}{Question}
+			Which of the following is NOT part of exploratory data analysis?
+		\end{block}
+		\begin{enumerate}
+			\item Collecting data.
+			\item Cleaning data.
+			\item Visualising data.
+			\item Deploying the production model.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			Deployment happens after EDA and modelling.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q36 --- Sample Splits}
+		\begin{block}{Question}
+			The commonly cited rule of thumb for train/validation/test splits is:
+		\end{block}
+		\begin{enumerate}
+			\item 90/5/5.
+			\item 80/10/10.
+			\item About two-thirds training, with the remainder split between validation and test.
+			\item 50/25/25.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Common convention: ~2/3 training, ~1/6 validation, ~1/6 test.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q37 --- Time-Series Splits}
+		\begin{block}{Question}
+			For time-series data, how should training/validation/test splits be constructed?
+		\end{block}
+		\begin{enumerate}
+			\item Randomly.
+			\item Preserving temporal order: train on the earliest data, then validation, then test.
+			\item Reversed temporal order.
+			\item No split is needed.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Preserve chronology to avoid data leakage.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q38 --- Overfitting}
+		\begin{block}{Question}
+			Overfitting is best described as:
+		\end{block}
+		\begin{enumerate}
+			\item A model that is too simple to capture the signal.
+			\item A model that fits noise in training data and generalises poorly.
+			\item A model with too few parameters.
+			\item A model with no hyperparameters.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Overfitting = high variance, poor out-of-sample performance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q39 --- K-Fold CV}
+		\begin{block}{Question}
+			K-fold cross-validation's main benefit is:
+		\end{block}
+		\begin{enumerate}
+			\item Faster training.
+			\item Using data more efficiently to estimate model performance.
+			\item Eliminating validation.
+			\item Increasing feature count.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Every observation is used for both training and validation across folds.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q40 --- Stratified CV}
+		\begin{block}{Question}
+			Stratified cross-validation preserves:
+		\end{block}
+		\begin{enumerate}
+			\item Feature means.
+			\item Class proportions in each fold.
+			\item Randomness of splits.
+			\item Extreme outlier counts.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Ensures class ratio is maintained across folds.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q41 --- Uninformative Observations}
+		\begin{block}{Question}
+			Which type of observation should be removed during data cleaning?
+		\end{block}
+		\begin{enumerate}
+			\item Observations with extreme values on some features.
+			\item Observations not relevant to the task at hand.
+			\item Observations from the training set only.
+			\item Observations from the test set only.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Irrelevant observations should be removed; outliers should be examined, not automatically dropped.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q42 --- Structural Missingness}
+		\begin{block}{Question}
+			Structural missingness differs from other missingness because:
+		\end{block}
+		\begin{enumerate}
+			\item It is random.
+			\item It is missing by design (e.g., fund managed by a team has no single manager).
+			\item It can always be ignored.
+			\item It only affects numeric features.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Structural missingness is by-design; not informative of the outcome.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q43 --- Imputation}
+		\begin{block}{Question}
+			A common simple imputation technique for missing values is:
+		\end{block}
+		\begin{enumerate}
+			\item Replacing with zero.
+			\item Replacing with the mean or median of non-missing values.
+			\item Dropping the feature entirely.
+			\item Adding a dummy variable.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Mean/median imputation is simple and common.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q44 --- Histogram}
+		\begin{block}{Question}
+			A histogram is used to:
+		\end{block}
+		\begin{enumerate}
+			\item Visualise the shape of a distribution.
+			\item Plot residuals against fitted values.
+			\item Show relationships between two variables.
+			\item Measure model accuracy.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Histograms show the distribution of a single variable.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q45 --- Scatter Plot}
+		\begin{block}{Question}
+			A scatter plot is most useful for:
+		\end{block}
+		\begin{enumerate}
+			\item Visualising a single variable's distribution.
+			\item Investigating the relationship between two variables.
+			\item Measuring model accuracy.
+			\item Training a model.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Scatter plots reveal correlations and patterns between two features.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q46 --- Correlation Matrix}
+		\begin{block}{Question}
+			A correlation matrix helps identify:
+		\end{block}
+		\begin{enumerate}
+			\item Multicollinearity among features.
+			\item Missingness.
+			\item Outliers.
+			\item Distribution shape.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			High correlations signal potential multicollinearity.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q47 --- Box Plot}
+		\begin{block}{Question}
+			A box-and-whiskers plot is primarily used to:
+		\end{block}
+		\begin{enumerate}
+			\item Show data density.
+			\item Identify quartiles and detect outliers.
+			\item Measure correlation.
+			\item Compute mean.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Box plots visualise median, quartiles, and outliers.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q48 --- Non-Linearity}
+		\begin{block}{Question}
+			Non-linear relationships in data are best addressed by:
+		\end{block}
+		\begin{enumerate}
+			\item Linear regression.
+			\item Tree-based models, neural networks, or explicit non-linear features.
+			\item Dropping the feature.
+			\item Standardizing the data.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Non-linear models can capture non-linear patterns.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q49 --- Regularization Tie-in}
+		\begin{block}{Question}
+			Regularization techniques like LASSO and Ridge are used to:
+		\end{block}
+		\begin{enumerate}
+			\item Increase training error.
+			\item Reduce overfitting by penalising large coefficients.
+			\item Eliminate features entirely.
+			\item Speed up training.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Regularization shrinks coefficients; LASSO can zero some.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q50 --- Test Set}
+		\begin{block}{Question}
+			The test set is used to:
+		\end{block}
+		\begin{enumerate}
+			\item Estimate parameters.
+			\item Select the best model.
+			\item Provide a final unbiased estimate of model performance.
+			\item Clean the data.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Test set is untouched during training/selection and used for final evaluation.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Module 2: Tools \& Techniques}
+	% =================================================================
+	
+	\begin{frame}{Q51 --- Optimal K}
+		\begin{block}{Question}
+			WCSS values are: K=1: 1000; K=2: 400; K=3: 380; K=4: 375. What is the optimal K according to the elbow method?
+		\end{block}
+		\begin{enumerate}
+			\item 1
+			\item 2
+			\item 3
+			\item 4
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Elbow at K=2; further reductions marginal.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q52 --- Local Optima}
+		\begin{block}{Question}
+			20 K-means runs with different initialisations yield WCSS: 98, 100, 101, 102, 250. What does the 250 result most likely indicate?
+		\end{block}
+		\begin{enumerate}
+			\item A better clustering solution.
+			\item Convergence to a poor local optimum.
+			\item An error in the data.
+			\item The algorithm found a global optimum.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			High WCSS = poor local optimum. Choose lowest WCSS; K-means++ mitigates.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q53 --- WCSS vs BCSS}
+		\begin{block}{Question}
+			Which statement about WCSS and BCSS is correct?
+		\end{block}
+		\begin{enumerate}
+			\item Both should be minimized.
+			\item WCSS measures cluster separation, BCSS measures compactness.
+			\item Lower WCSS and higher BCSS both indicate better clustering.
+			\item WCSS and BCSS are always equal.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			WCSS compactness (lower better); BCSS separation (higher better).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q54 --- WCSS Monotonicity}
+		\begin{block}{Question}
+			As K increases in K-means, WCSS:
+		\end{block}
+		\begin{enumerate}
+			\item Always increases.
+			\item Stays constant.
+			\item Decreases monotonically or stays the same.
+			\item Oscillates unpredictably.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Adding clusters cannot worsen fit.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q55 --- Dendrogram}
+		\begin{block}{Question}
+			A very long vertical line near the top of a dendrogram indicates:
+		\end{block}
+		\begin{enumerate}
+			\item No cluster structure.
+			\item The merge at that height drastically worsens fit.
+			\item Clusters are spherical.
+			\item K-means would produce identical results.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Long vertical lines mark significant cluster boundaries.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q56 --- Single Linkage}
+		\begin{block}{Question}
+			Single linkage in hierarchical clustering defines cluster distance as:
+		\end{block}
+		\begin{enumerate}
+			\item The shortest distance between any two points in different clusters.
+			\item The greatest distance between any two points.
+			\item The average distance between points.
+			\item The distance between centroids.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Single = shortest; complete = farthest.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q57 --- DBSCAN Parameters}
+		\begin{block}{Question}
+			Very small $\varepsilon$ and low minPts in DBSCAN typically cause:
+		\end{block}
+		\begin{enumerate}
+			\item Too many core points.
+			\item Fragmented clusters and many noise points.
+			\item Perfectly spherical clusters.
+			\item Faster convergence.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Small radius fragments clusters, marking many points as noise.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q58 --- DBSCAN Strength}
+		\begin{block}{Question}
+			DBSCAN's main advantage over K-means is:
+		\end{block}
+		\begin{enumerate}
+			\item Faster runtime.
+			\item Handling arbitrary-shaped clusters and robust outlier detection.
+			\item Fewer parameters.
+			\item Always producing spherical clusters.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Density-based approach finds any shape and marks outliers.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q59 --- Concentric Clusters}
+		\begin{block}{Question}
+			Two concentric circles of data. Which algorithm is best suited?
+		\end{block}
+		\begin{enumerate}
+			\item K-means with Euclidean distance.
+			\item K-means with Manhattan distance.
+			\item DBSCAN.
+			\item Linear discriminant analysis.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			K-means assumes spherical clusters; DBSCAN handles rings.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q60 --- Centroid}
+		\begin{block}{Question}
+			The centroid of the points (1, 3), (2, 4), (3, 5) is:
+		\end{block}
+		\begin{enumerate}
+			\item (2, 4).
+			\item (1.5, 3.5).
+			\item (2, 5).
+			\item (3, 4).
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Mean of coordinates.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q61 --- Silhouette}
+		\begin{block}{Question}
+			For a point with $a_i = 2$ (avg. distance to own cluster) and $b_i = 8$ (avg. distance to nearest other cluster), the silhouette score is:
+		\end{block}
+		\begin{enumerate}
+			\item $-0.75$.
+			\item $0.25$.
+			\item $0.75$.
+			\item $1.00$.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			$(b-a)/\max(a,b) = (8-2)/8 = 0.75$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q62 --- Silhouette Range}
+		\begin{block}{Question}
+			The silhouette score for a data point lies within:
+		\end{block}
+		\begin{enumerate}
+			\item [0, 1].
+			\item [-1, 1].
+			\item [-$\infty$, $\infty$].
+			\item [1, 10].
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Negative values indicate possible mis-clustering.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q63 --- Convolution Output}
+		\begin{block}{Question}
+			A 5$\times$5 input is convolved with a 3$\times$3 kernel (stride 1, no padding). Output size:
+		\end{block}
+		\begin{enumerate}
+			\item 5$\times$5.
+			\item 4$\times$4.
+			\item 3$\times$3.
+			\item 2$\times$2.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			$(5-3+1) = 3$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q64 --- Bagging}
+		\begin{block}{Question}
+			100 trees trained on bootstrap samples using all features at each split = :
+		\end{block}
+		\begin{enumerate}
+			\item Random forest.
+			\item Bagging.
+			\item Gradient boosting.
+			\item AdaBoost.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			All features used = bagging. Random forest uses feature subsets.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q65 --- Random Forest Advantage}
+		\begin{block}{Question}
+			Random forest typically outperforms a single decision tree because:
+		\end{block}
+		\begin{enumerate}
+			\item It has fewer hyperparameters.
+			\item It reduces correlation across trees by sampling features at each split.
+			\item It guarantees higher training accuracy.
+			\item It eliminates overfitting.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Random feature subsets decorrelate trees, reducing variance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q66 --- Boosting}
+		\begin{block}{Question}
+			Which is a boosting technique?
+		\end{block}
+		\begin{enumerate}
+			\item Bagging.
+			\item Random forest.
+			\item AdaBoost.
+			\item Bootstrap aggregation.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Boosting trains models sequentially, each correcting previous errors.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q67 --- SVM Decision}
+		\begin{block}{Question}
+			Boundary: $0.5 x_1 - 1.2 x_2 + 0.3 = 0$. For a point $(x_1=2, x_2=1)$:
+		\end{block}
+		\begin{enumerate}
+			\item Class 1.
+			\item Class 0.
+			\item Cannot determine.
+			\item On the boundary.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			$0.5(2)-1.2(1)+0.3 = 0.1 > 0$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q68 --- Support Vectors}
+		\begin{block}{Question}
+			Support vectors are:
+		\end{block}
+		\begin{enumerate}
+			\item All training points.
+			\item Points closest to the decision boundary.
+			\item The centroids of each class.
+			\item Outliers.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Support vectors define the margin.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q69 --- Precision}
+		\begin{block}{Question}
+			Precision is defined as:
+		\end{block}
+		\begin{enumerate}
+			\item TP/(TP+FN).
+			\item TP/(TP+FP).
+			\item TN/(TN+FP).
+			\item (TP+TN)/Total.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Precision = PPV.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q70 --- Recall}
+		\begin{block}{Question}
+			Recall is defined as:
+		\end{block}
+		\begin{enumerate}
+			\item TP/(TP+FN).
+			\item TP/(TP+FP).
+			\item TN/(TN+FP).
+			\item (TP+TN)/Total.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Recall = sensitivity = TPR.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q71 --- F1}
+		\begin{block}{Question}
+			Model A: precision 0.5, recall 0.5. Model B: precision 0.9, recall 0.1. Which has higher F1?
+		\end{block}
+		\begin{enumerate}
+			\item Model A.
+			\item Model B.
+			\item Equal.
+			\item Cannot compute.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			F1: A=0.5, B=0.18. A higher.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q72 --- AUC}
+		\begin{block}{Question}
+			Model A: AUC 0.85. Model B: AUC 0.55. Which is correct?
+		\end{block}
+		\begin{enumerate}
+			\item Model B is only slightly better than random.
+			\item Model B has better discrimination.
+			\item AUC 0.55 indicates perfect classification.
+			\item AUC measures regression accuracy.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			AUC 0.5 = random. A clearly outperforms B.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q73 --- Accuracy}
+		\begin{block}{Question}
+			Confusion matrix: TP=40, FP=10, FN=20, TN=130. Accuracy = ?
+		\end{block}
+		\begin{enumerate}
+			\item 0.80.
+			\item 0.85.
+			\item 0.90.
+			\item 0.95.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			$(40+130)/200 = 0.85$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q74 --- Tokenization}
+		\begin{block}{Question}
+			Which NLP preprocessing step splits text into individual words?
+		\end{block}
+		\begin{enumerate}
+			\item Lemmatization.
+			\item Stop word removal.
+			\item Tokenization.
+			\item Feature extraction.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Tokenization splits text into words/tokens.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q75 --- Stop Words}
+		\begin{block}{Question}
+			Stop word removal:
+		\end{block}
+		\begin{enumerate}
+			\item Removes rare words.
+			\item Removes low-information words (the, a, is).
+			\item Converts words to numeric vectors.
+			\item Splits sentences.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Stop words add no informational value.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q76 --- Lemmatization vs Stemming}
+		\begin{block}{Question}
+			The difference between lemmatization and stemming is:
+		\end{block}
+		\begin{enumerate}
+			\item Lemmatization uses dictionary form; stemming trims prefixes/suffixes.
+			\item They are identical.
+			\item Stemming is slower.
+			\item Lemmatization only applies to verbs.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Running → run (lemma); stemming is cruder.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q77 --- Skip-gram}
+		\begin{block}{Question}
+			Which Word2Vec architecture has one input and many outputs?
+		\end{block}
+		\begin{enumerate}
+			\item CBoW.
+			\item Skip-gram.
+			\item Autoencoder.
+			\item RNN.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			CBoW: many in, one out. Skip-gram: one in, many out.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q78 --- Co-training}
+		\begin{block}{Question}
+			The main benefit of co-training is:
+		\end{block}
+		\begin{enumerate}
+			\item Faster parallel training.
+			\item Exploiting unlabelled data via two feature views.
+			\item Reducing feature count.
+			\item Eliminating validation.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Two models label data for each other.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q79 --- Ridge vs LASSO}
+		\begin{block}{Question}
+			100 features, 10 matter. Which regularization?
+		\end{block}
+		\begin{enumerate}
+			\item Ridge.
+			\item LASSO.
+			\item Neither.
+			\item Both identical.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			LASSO zeros irrelevant coefficients.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q80 --- Elastic Net}
+		\begin{block}{Question}
+			50 correlated + 10 important features. Best regularization:
+		\end{block}
+		\begin{enumerate}
+			\item Ridge.
+			\item LASSO.
+			\item Elastic Net.
+			\item None.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Elastic Net combines L1 and L2.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q81 --- K-Fold}
+		\begin{block}{Question}
+			100 observations, k=10. Observations per fold:
+		\end{block}
+		\begin{enumerate}
+			\item 1.
+			\item 5.
+			\item 10.
+			\item 20.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			100/10 = 10.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q82 --- Stratified CV}
+		\begin{block}{Question}
+			95% non-default, 5% default. Why stratify?
+		\end{block}
+		\begin{enumerate}
+			\item Speed.
+			\item Preserve class ratio.
+			\item Remove outliers.
+			\item Eliminate overfitting.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Prevents folds without minority examples.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q83 --- Bias-Variance}
+		\begin{block}{Question}
+			Low training error + high test error indicates:
+		\end{block}
+		\begin{enumerate}
+			\item High bias.
+			\item High variance.
+			\item Optimal fit.
+			\item Underfitting.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Overfitting.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q84 --- Underfitting}
+		\begin{block}{Question}
+			Fitting a linear model to a strong U-shaped relationship exemplifies:
+		\end{block}
+		\begin{enumerate}
+			\item Overfitting.
+			\item Underfitting.
+			\item Regularization.
+			\item Stratification.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Linear cannot capture non-linear shapes.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q85 --- Cancer Screening}
+		\begin{block}{Question}
+			Cancer screening metric priority:
+		\end{block}
+		\begin{enumerate}
+			\item Precision.
+			\item Recall / Sensitivity.
+			\item Accuracy.
+			\item Specificity.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Avoid missing true cases (false negatives).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q86 --- ROC Curve}
+		\begin{block}{Question}
+			Each point on the ROC curve corresponds to:
+		\end{block}
+		\begin{enumerate}
+			\item A different classification threshold.
+			\item A specific training/test split.
+			\item Lower AUC.
+			\item A regression model.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			ROC sweeps thresholds.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q87 --- False Positive Rate}
+		\begin{block}{Question}
+			Sensitivity = 0.8, Specificity = 0.9. FPR = ?
+		\end{block}
+		\begin{enumerate}
+			\item 0.1.
+			\item 0.2.
+			\item 0.8.
+			\item 0.9.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			FPR = 1 - Specificity.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q88 --- AUC Edge}
+		\begin{block}{Question}
+			AUC = 0.45 indicates:
+		\end{block}
+		\begin{enumerate}
+			\item Better than random.
+			\item Worse than random.
+			\item Perfect classifier.
+			\item Random classifier.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			AUC < 0.5 is worse than random.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q89 --- Threshold Choice}
+		\begin{block}{Question}
+			Lowering the fraud-score threshold:
+		\end{block}
+		\begin{enumerate}
+			\item Increases recall, typically decreases precision.
+			\item Increases precision, decreases recall.
+			\item Increases both.
+			\item Decreases both.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			More positives caught, more false alarms.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q90 --- Regularization Purpose}
+		\begin{block}{Question}
+			Primary purpose of regularization:
+		\end{block}
+		\begin{enumerate}
+			\item Increase model complexity.
+			\item Prevent overfitting by penalizing large coefficients.
+			\item Speed up training.
+			\item Increase features.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Ridge, LASSO, Elastic Net all prevent overfitting.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q91 --- L1 Penalty}
+		\begin{block}{Question}
+			Which technique uses L1 penalty?
+		\end{block}
+		\begin{enumerate}
+			\item Ridge.
+			\item LASSO.
+			\item Both.
+			\item Neither.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			LASSO = L1.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q92 --- Grid Search}
+		\begin{block}{Question}
+			Grid search is used for:
+		\end{block}
+		\begin{enumerate}
+			\item Feature selection.
+			\item Hyperparameter tuning.
+			\item Cross-validation.
+			\item Data cleaning.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Exhaustive hyperparameter search.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q93 --- Bootstrapping}
+		\begin{block}{Question}
+			Sampling with replacement to estimate model performance is called:
+		\end{block}
+		\begin{enumerate}
+			\item Cross-validation.
+			\item Bootstrapping.
+			\item Grid search.
+			\item Stratification.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Bootstrapping resamples with replacement.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q94 --- Learning Rate}
+		\begin{block}{Question}
+			Too-large learning rate in gradient descent most likely causes:
+		\end{block}
+		\begin{enumerate}
+			\item Slow convergence.
+			\item Overshooting and oscillation.
+			\item Vanishing gradient.
+			\item Perfect convergence.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Overshoots minimum.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q95 --- Vanishing Gradient}
+		\begin{block}{Question}
+			Vanishing gradient is most likely in:
+		\end{block}
+		\begin{enumerate}
+			\item Shallow networks.
+			\item Deep networks with sigmoid activations.
+			\item Linear regression.
+			\item Decision trees.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Chain rule of small derivatives.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q96 --- Backpropagation}
+		\begin{block}{Question}
+			Backpropagation uses which calculus rule?
+		\end{block}
+		\begin{enumerate}
+			\item Bayes rule.
+			\item Chain rule.
+			\item Product rule.
+			\item Power rule.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Chain rule computes gradients layer by layer.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q97 --- Momentum}
+		\begin{block}{Question}
+			Momentum helps gradient descent by:
+		\end{block}
+		\begin{enumerate}
+			\item Reducing learning rate.
+			\item Accelerating in consistent directions and reducing overshoot.
+			\item Eliminating local minima.
+			\item Reducing features.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Smooths descent path.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q98 --- ReLU}
+		\begin{block}{Question}
+			ReLU is preferred over sigmoid in hidden layers because:
+		\end{block}
+		\begin{enumerate}
+			\item It is nonlinear.
+			\item It reduces vanishing gradient.
+			\item It is bounded.
+			\item It is linear.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			No saturation for positive values.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q99 --- MSE vs MAE}
+		\begin{block}{Question}
+			Which metric is more sensitive to outliers?
+		\end{block}
+		\begin{enumerate}
+			\item MSE.
+			\item MAE.
+			\item MAPE.
+			\item Both equal.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Squared errors amplify outliers.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q100 --- MAPE}
+		\begin{block}{Question}
+			MAPE fails when:
+		\end{block}
+		\begin{enumerate}
+			\item Data is large.
+			\item Actual values are near zero.
+			\item Data is skewed.
+			\item Outliers present.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Division by near-zero.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q101 --- RMSE}
+		\begin{block}{Question}
+			RMSE is preferred over MSE because:
+		\end{block}
+		\begin{enumerate}
+			\item Lower value.
+			\item Same units as target.
+			\item Less sensitive.
+			\item Easier to compute.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Interpretability.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q102 --- False Positive}
+		\begin{block}{Question}
+			A false positive is:
+		\end{block}
+		\begin{enumerate}
+			\item Predicted positive, actually positive.
+			\item Predicted positive, actually negative.
+			\item Predicted negative, actually positive.
+			\item Predicted negative, actually negative.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Type I error.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q103 --- Specificity}
+		\begin{block}{Question}
+			TN/(TN+FP) is:
+		\end{block}
+		\begin{enumerate}
+			\item True positive rate.
+			\item True negative rate.
+			\item Precision.
+			\item Accuracy.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Specificity = TNR.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q104 --- Class Imbalance}
+		\begin{block}{Question}
+			98\% majority class. Predicting all majority yields:
+		\end{block}
+		\begin{enumerate}
+			\item Low accuracy.
+			\item 98\% accuracy but no predictive value.
+			\item Perfect recall.
+			\item Poor precision.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Accuracy paradox.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q105 --- AUC Robust}
+		\begin{block}{Question}
+			AUC's main advantage over accuracy in imbalanced data is:
+		\end{block}
+		\begin{enumerate}
+			\item Faster.
+			\item Threshold-independent and imbalance-robust.
+			\item Simpler.
+			\item Fewer features.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			AUC evaluates discrimination across thresholds.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q106 --- ROC Axes}
+		\begin{block}{Question}
+			The ROC curve plots:
+		\end{block}
+		\begin{enumerate}
+			\item TPR vs FPR.
+			\item Precision vs Recall.
+			\item Error vs Complexity.
+			\item Train vs Test error.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			TPR (y) vs FPR (x).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q107 --- Cost Matrix}
+		\begin{block}{Question}
+			The classification threshold should be set to:
+		\end{block}
+		\begin{enumerate}
+			\item Always 0.5.
+			\item Minimize expected cost using a cost matrix.
+			\item Maximize accuracy.
+			\item Minimize training error.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Reflects business costs of FP vs FN.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q108 --- Multi-Class Metrics}
+		\begin{block}{Question}
+			For 3-class classification, micro-averaged precision is computed as:
+		\end{block}
+		\begin{enumerate}
+			\item Average of binary precisions.
+			\item Sum of TPs divided by sum of (TP+FP) across classes.
+			\item Majority class only.
+			\item Ignore minority classes.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Micro-average pools across classes.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q109 --- Polynomial}
+		\begin{block}{Question}
+			Adding too many polynomial terms likely causes:
+		\end{block}
+		\begin{enumerate}
+			\item Underfitting.
+			\item Overfitting.
+			\item Regularization.
+			\item Stratification.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			High-degree polynomials fit noise.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q110 --- Precision-Recall Tradeoff}
+		\begin{block}{Question}
+			In fraud detection, if the cost of missing fraud is very high relative to false alarms, one should:
+		\end{block}
+		\begin{enumerate}
+			\item Maximize precision.
+			\item Maximize recall / sensitivity.
+			\item Maximize specificity.
+			\item Maximize MSE.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Missing fraud is costlier than a false alarm.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q111 --- Class Imbalance Handling}
+		\begin{block}{Question}
+			Which is NOT a standard way to handle class imbalance?
+		\end{block}
+		\begin{enumerate}
+			\item Oversampling the minority class.
+			\item Undersampling the majority class.
+			\item Using a weighted loss function.
+			\item Removing the minority class entirely.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			Removing minority class destroys signal.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q112 --- SMOTE}
+		\begin{block}{Question}
+			SMOTE is:
+		\end{block}
+		\begin{enumerate}
+			\item A regularization technique.
+			\item Synthetic Minority Over-sampling Technique.
+			\item A clustering algorithm.
+			\item A feature selection method.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Generates synthetic minority samples.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q113 --- Bootstrap Out-of-Bag}
+		\begin{block}{Question}
+			In bootstrapping, the proportion of original data not sampled in each iteration is approximately:
+		\end{block}
+		\begin{enumerate}
+			\item 10\%.
+			\item 25\%.
+			\item 37\%.
+			\item 50\%.
+		\end{enumerate}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			$1 - 1/e \approx 0.37$.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q114 --- Learning Rate Decay}
+		\begin{block}{Question}
+			Dynamic learning rate decay in stochastic gradient descent is used to:
+		\end{block}
+		\begin{enumerate}
+			\item Increase learning rate over time.
+			\item Start large, decrease to avoid overshooting near optimum.
+			\item Keep learning rate constant.
+			\item Increase complexity.
+		\end{enumerate}
+
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Large initially, decays to refine convergence.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q115 --- Batch vs Stochastic GD}
+	\begin{block}{Question}
+		Stochastic gradient descent differs from batch GD by:
+
+	\begin{enumerate}
+		\item Using all data per update.
+		\item Using one random data point per update.
+		\item Using a subset.
+		\item Skipping updates.
+	\end{enumerate}
+\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+	SGD updates per random sample.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q116 --- Batch Normalization}
+\begin{block}{Question}
+	Batch normalization's role is to:
+\end{block}
+\begin{enumerate}
+	\item Increase model complexity.
+	\item Normalize layer inputs to stabilize training and reduce vanishing gradients.
+	\item Reduce feature count.
+	\item Speed up backpropagation only.
+\end{enumerate}
+
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Stabilizes and accelerates training.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q117 --- Dropout}
+\begin{block}{Question}
+Dropout regularization works by:
+\end{block}
+\begin{enumerate}
+\item Removing features.
+\item Randomly dropping units during training to prevent co-adaptation.
+\item Removing whole layers.
+\item Reducing learning rate.
+\end{enumerate}
+
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Prevents overfitting by random unit deactivation.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q118 --- L1 vs L2 Geometry}
+\begin{block}{Question}
+Why does LASSO produce sparse solutions while Ridge typically does not?
+\end{block}
+\begin{enumerate}
+\item LASSO uses larger penalty.
+\item L1 penalty has sharp corners at zero; L2 is smooth and only shrinks toward zero.
+\item LASSO uses fewer iterations.
+\item Ridge uses larger learning rate.
+\end{enumerate}
+
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Geometry of L1 vs L2 penalty regions.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q119 --- Elastic Net Purpose}
+\begin{block}{Question}
+Elastic Net is useful when:
+\end{block}
+\begin{enumerate}
+\item Features are independent.
+\item Features are correlated and some are irrelevant.
+\item There are no features.
+\item Sample size is huge.
+\end{enumerate}
+
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Combines L1 sparsity with L2 handling of correlated groups.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q120 --- Overfitting Sign}
+\begin{block}{Question}
+Which pair of training and test errors most suggests overfitting?
+\end{block}
+\begin{enumerate}
+\item Low train, low test.
+\item Low train, high test.
+\item High train, high test.
+\item High train, low test.
+\end{enumerate}
+
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Fit to noise → poor test.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q121 --- Feature Selection Methods}
+\begin{block}{Question}
+Stepwise regression belongs to which class of feature selection?
+\end{block}
+\begin{enumerate}
+\item Filter methods.
+\item Wrapper methods.
+\item Embedded methods.
+\item Dimensionality reduction.
+\end{enumerate}
+
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Wrapper methods evaluate subsets with the model.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q122 --- Best Subset Selection}
+\begin{block}{Question}
+Best subset selection differs from stepwise by:
+\end{block}
+\begin{enumerate}
+\item Evaluating all possible subsets.
+\item Evaluating only forward paths.
+\item Removing all features.
+\item Using only one feature.
+\end{enumerate}
+
+\begin{exampleblock}{Answer: A}\end{exampleblock}
+\begin{block}{Explanation}
+Best subset tries all 2$^m$ subsets; stepwise is heuristic.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q123 --- Nonlinear Least Squares}
+\begin{block}{Question}
+Nonlinear least squares is used when:
+\end{block}
+\begin{enumerate}
+\item The model is linear in parameters.
+\item No closed-form solution exists and numerical iteration is needed.
+\item The model has no parameters.
+\item There is no objective function.
+\end{enumerate}
+
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+NLS iteratively minimizes RSS for non-linear models.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q124 --- MLE}
+\begin{block}{Question}
+Maximum likelihood estimation finds:
+\end{block}
+\begin{enumerate}
+\item Parameters maximizing the probability of observing the data.
+\item Parameters minimizing MSE only.
+\item Arbitrary values.
+\item Random parameters.
+\end{enumerate}
+
+\begin{exampleblock}{Answer: A}\end{exampleblock}
+\begin{block}{Explanation}
+Maximizes the likelihood of the observed data.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q125 --- Hill Climbing}
+\begin{block}{Question}
+Hill climbing is:
+\end{block}
+\begin{enumerate}
+\item A gradient-based method.
+\item A derivative-free heuristic optimizer that can get stuck in local optima.
+\item A regularizer.
+\item A metric.
+\end{enumerate}
+
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Simple heuristic; susceptible to local optima.
+
+\end{frame}
+
+\end{document}

@@ -1,0 +1,1653 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI]{GARP Risk \& AI --- Q451--Q550}
+\subtitle{Unofficial Exam Prep}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% =================================================================
+	\section{Advanced Module 1 Topics}
+	% =================================================================
+	
+	\begin{frame}{Q451 --- AI Risk Tolerance at Board Level}
+		\begin{block}{Question}
+			A board is defining its AI risk tolerance statement. Which of the following should be included as the most critical element?
+			\begin{enumerate}
+				\item A list of every AI model the firm owns.
+				\item A clear statement of the types and levels of AI risk the organisation is willing to accept, aligned with strategy and regulatory obligations.
+				\item Marketing language about the firm's AI capabilities.
+				\item Employee satisfaction metrics.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			AI risk tolerance defines acceptable risk levels and guides governance. Options A, C, and D are not the core of a risk tolerance statement.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q452 --- Model Risk Appetite vs Tolerance}
+		\begin{block}{Question}
+			Which statement best distinguishes model risk appetite from model risk tolerance?
+			\begin{enumerate}
+				\item They are identical.
+				\item Appetite defines the level of risk the organisation actively seeks or accepts to achieve objectives; tolerance defines the maximum deviation from appetite that triggers action.
+				\item Appetite is only for technology risk.
+				\item Tolerance is only for third-party risk.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Appetite = desired risk-return balance; tolerance = acceptable deviation. Options A, C, and D misstate the distinction.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q453 --- Deep Learning and Financial Time Series}
+		\begin{block}{Question}
+			A team trains an LSTM on 20 years of hourly returns to forecast next-hour volatility. The model performs poorly out-of-sample. Which is the most likely reason?
+			\begin{enumerate}
+				\item LSTMs cannot handle time-series data.
+				\item Financial returns are close to noise at hourly horizons, so complex models overfit non-repeating patterns.
+				\item The dataset is too small.
+				\item The model should be logistic regression.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Financial returns exhibit low signal-to-noise; complex models overfit. Options A, C, and D are incorrect or secondary.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q454 --- Overfitting Detection in Deep Nets}
+		\begin{block}{Question}
+			A deep network achieves 99\% training accuracy and 62\% test accuracy. What action is most appropriate?
+			\begin{enumerate}
+				\item Increase model depth.
+				\item Apply regularization (dropout, weight decay), reduce complexity, or obtain more data; use early stopping based on validation loss.
+				\item Increase learning rate.
+				\item Deploy immediately.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			The large gap signals overfitting. Options A, C, and D would worsen it or ignore the problem.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q455 --- Data Preprocessing Order}
+		\begin{block}{Question}
+			When preparing data for a distance-based model, which sequence is correct?
+			\begin{enumerate}
+				\item Scale, then split into train/test.
+				\item Split into train/test, fit scaling on train, apply to test.
+				\item Ignore scaling.
+				\item Scale only test set.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Scaling parameters must be estimated on the training set only, then applied to the test set, to avoid leakage. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q456 --- Target Leakage Detection}
+		\begin{block}{Question}
+			A model achieves suspiciously high test accuracy. Investigation reveals a feature that is computed using future information. What is the issue and remedy?
+			\begin{enumerate}
+				\item Overfitting; add regularization.
+				\item Target leakage; the feature must be removed or recomputed using only information available at prediction time.
+				\item Underfitting; add features.
+				\item Data drift; retrain the model.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Future-information features cause leakage. Options A, C, and D do not address the root cause.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q457 --- ML in Regulatory Reporting}
+		\begin{block}{Question}
+			A bank wants to use ML to compute regulatory capital. Which of the following is the most critical governance requirement?
+			\begin{enumerate}
+				\item Highest possible accuracy.
+				\item Full compliance with regulatory standards: documentation, validation, interpretability, and independent review by qualified validators.
+				\item Fastest training.
+				\item Lowest cost.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Regulatory reporting requires compliance, documentation, validation, and interpretability. Options A, C, and D are insufficient.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q458 --- Model Risk in Vendor Models}
+		\begin{block}{Question}
+			A firm uses a vendor-supplied AI model for credit scoring. Which governance gap is most likely?
+			\begin{enumerate}
+				\item The model cannot be tested.
+				\item Limited transparency into model internals, restricting full independent validation; mitigation includes black-box testing and contractual rights to documentation.
+				\item Vendor models cannot be used in regulated industries.
+				\item Vendor models have no risk.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Vendor models limit transparency; black-box validation and contract terms help. Options A, C, and D are inaccurate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q459 --- Reproducibility in ML}
+		\begin{block}{Question}
+			Which of the following is essential for reproducibility of an ML model?
+			\begin{enumerate}
+				\item Only the model architecture.
+				\item Fixed random seeds, documented data versions, environment specifications, and code versioning.
+				\item Only training data.
+				\item Only hyperparameters.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Reproducibility requires fixed seeds, data versions, environment, and code versioning. Options A, C, and D are partial.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q460 --- Data Versioning}
+		\begin{block}{Question}
+			Why is data versioning important in AI governance?
+			\begin{enumerate}
+				\item To reduce storage.
+				\item To enable reproducibility, auditability, and root-cause analysis of model behaviour over time.
+				\item To speed up training.
+				\item To reduce costs.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Data versioning supports reproducibility and audit. Options A, C, and D are secondary.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Module 2 --- Advanced ML Techniques}
+	% =================================================================
+	
+	\begin{frame}{Q461 --- K-Means Initialization}
+		\begin{block}{Question}
+			What is the purpose of the K-means++ initialization?
+			\begin{enumerate}
+				\item To randomly select centroids.
+				\item To spread initial centroids far apart, reducing the chance of poor local optima and improving convergence.
+				\item To eliminate outliers.
+				\item To reduce K.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			K-means++ chooses centroids with probability proportional to squared distance, spreading them out. Options A, C, and D misstate the purpose.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q462 --- DBSCAN and Varying Densities}
+		\begin{block}{Question}
+			A dataset has clusters with very different densities. Which algorithm is likely to struggle?
+			\begin{enumerate}
+				\item K-means.
+				\item DBSCAN, because it uses a single global density threshold.
+				\item Hierarchical clustering.
+				\item Gaussian Mixture Models.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			DBSCAN struggles with varying densities because a single $\varepsilon$ cannot fit all clusters. Options A, C, and D are less affected.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q463 --- Hierarchical Clustering Linkage Choice}
+		\begin{block}{Question}
+			Which linkage method is most sensitive to outliers?
+			\begin{enumerate}
+				\item Single linkage.
+				\item Complete linkage.
+				\item Average linkage.
+				\item Ward's method.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Single linkage uses the closest points and can chain clusters via single points, including outliers. Options B, C, and D are more robust.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q464 --- Elbow Method Limitations}
+		\begin{block}{Question}
+			What is a common limitation of the elbow method for choosing K?
+			\begin{enumerate}
+				\item It always produces a clear elbow.
+				\item The elbow may be ambiguous or absent, and its identification is subjective.
+				\item It only works for K=2.
+				\item It requires labels.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Elbow plots may not have a clear bend. Options A, C, and D are inaccurate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q465 --- Silhouette Score vs Elbow}
+		\begin{block}{Question}
+			Why is the silhouette method often used alongside the elbow method?
+			\begin{enumerate}
+				\item Because both methods always agree.
+				\item Because silhouette scores provide a quantitative criterion (higher is better) that complements the visual elbow heuristic.
+				\item Because silhouette requires labels.
+				\item Because elbow is never used.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Silhouette provides a numerical criterion to complement visual inspection. Options A, C, and D are inaccurate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q466 --- Random Forest Feature Importance}
+		\begin{block}{Question}
+			A random forest reports that a feature ``region\_id'' is highly important. Why should this be interpreted with caution?
+			\begin{enumerate}
+				\item Feature importance is always wrong.
+				\item High-cardinality features can appear artificially important due to the impurity bias; permutation importance may give a more reliable ranking.
+				\item Region has no business meaning.
+				\item Only tree depth matters.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Impurity-based importance is biased toward high-cardinality features. Options A, C, and D are less accurate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q467 --- SVM Kernel Selection}
+		\begin{block}{Question}
+			Which kernel is most appropriate when the data is not linearly separable and the analyst has no prior knowledge of the boundary shape?
+			\begin{enumerate}
+				\item Linear kernel.
+				\item RBF kernel.
+				\item Polynomial of very high degree.
+				\item No kernel.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			The RBF kernel is a common default for non-linear separation. Options A, C, and D are less suitable defaults.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q468 --- KNN Curse of Dimensionality}
+		\begin{block}{Question}
+			Which statement best describes the curse of dimensionality for KNN?
+			\begin{enumerate}
+				\item KNN gets faster as dimensionality increases.
+				\item As dimensionality increases, distances become less discriminative and all points appear equidistant, degrading KNN performance.
+				\item KNN is unaffected by dimensionality.
+				\item KNN performs best in very high dimensions.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			High dimensions cause distance concentration. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q469 --- Regularization and Bias-Variance}
+		\begin{block}{Question}
+			Increasing the regularization strength in a linear model will:
+			\begin{enumerate}
+				\item Decrease bias and increase variance.
+				\item Increase bias and decrease variance, potentially reducing overfitting.
+				\item Have no effect.
+				\item Increase both bias and variance.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Regularization trades bias for variance reduction. Options A, C, and D misstate the trade-off.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q470 --- Cross-Validation for Hyperparameter Tuning}
+		\begin{block}{Question}
+			Why is cross-validation preferable to a single validation split for hyperparameter tuning?
+			\begin{enumerate}
+				\item It is faster.
+				\item It reduces the variance of performance estimates and uses data more efficiently.
+				\item It requires more data.
+				\item It eliminates the need for a test set.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Cross-validation reduces variance of performance estimates. Options A, C, and D are incorrect or incomplete.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Module 2 --- NLP and GenAI}
+	% =================================================================
+	
+	\begin{frame}{Q471 --- Tokenization Errors}
+		\begin{block}{Question}
+			A pipeline fails to correctly identify negations. Which preprocessing step is most likely missing?
+			\begin{enumerate}
+				\item Tokenization.
+				\item N-grams or negation handling --- bi-grams and above capture ``not good'' as a unit.
+				\item Lowercasing.
+				\item Feature extraction.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			N-grams preserve local order and handle negation. Options A, C, and D do not address negation.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q472 --- TF-IDF and Stop Words}
+		\begin{block}{Question}
+			A word appears in every document of a corpus. What is its TF-IDF score?
+			\begin{enumerate}
+				\item Very high.
+				\item Zero (or near-zero), because IDF = log(N/N) = 0.
+				\item Undefined.
+				\item Equal to TF.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			IDF = log(N/n) where n = document frequency. If n=N, IDF=0. Options A, C, and D are wrong.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q473 --- Word Embeddings and Polysemy}
+		\begin{block}{Question}
+			A classic limitation of static word embeddings (Word2Vec) is:
+			\begin{enumerate}
+				\item They are too large.
+				\item They assign a single vector per word, ignoring polysemy (multiple meanings).
+				\item They cannot handle text.
+				\item They always overfit.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Static embeddings assign one vector per word, missing context-dependent meanings. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q474 --- Contextual Embeddings}
+		\begin{block}{Question}
+			Contextual embeddings from transformers differ from static embeddings by:
+			\begin{enumerate}
+				\item Having fewer dimensions.
+				\item Producing different vectors for the same word depending on the surrounding context.
+				\item Being faster.
+				\item Using no training data.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Contextual embeddings depend on surrounding tokens; static embeddings do not. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q475 --- RNN vs Transformer}
+		\begin{block}{Question}
+			Which best explains why transformers replaced RNNs in most NLP tasks?
+			\begin{enumerate}
+				\item Transformers use less memory.
+				\item Transformers parallelise over sequence positions and capture long-range dependencies through attention.
+				\item Transformers use fewer parameters.
+				\item Transformers avoid training.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Transformers' parallelism and attention capabilities are the key advantages. Options A, C, and D are incorrect or secondary.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q476 --- LLM Temperature}
+		\begin{block}{Question}
+			Setting the temperature of an LLM to a high value will:
+			\begin{enumerate}
+				\item Make outputs more deterministic.
+				\item Increase randomness and creativity, at the cost of predictability.
+				\item Decrease token count.
+				\item Have no effect.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			High temperature flattens the token distribution, increasing randomness. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q477 --- Top-P Sampling}
+		\begin{block}{Question}
+			Top-P (nucleus) sampling works by:
+			\begin{enumerate}
+				\item Selecting all tokens with probability above a fixed threshold.
+				\item Selecting the smallest set of tokens whose cumulative probability exceeds P.
+				\item Selecting the K most probable tokens.
+				\item Selecting tokens at random.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Top-P is cumulative-probability-based. Options A, C, and D describe other methods.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q478 --- Hallucination Cause}
+		\begin{block}{Question}
+			Why do LLMs hallucinate?
+			\begin{enumerate}
+				\item They are trained on too little data.
+				\item They optimise for statistical plausibility, not factual accuracy, generating fluent but incorrect outputs.
+				\item They have no memory.
+				\item They require more tokens.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Hallucinations stem from training objectives that optimise plausibility. Options A, C, and D are unrelated.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q479 --- Retrieval-Augmented Generation}
+		\begin{block}{Question}
+			RAG improves LLM factual accuracy by:
+			\begin{enumerate}
+				\item Fine-tuning the model.
+				\item Retrieving relevant documents at inference time and providing them as context.
+				\item Increasing model size.
+				\item Reducing context length.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			RAG retrieves external knowledge and provides it to the model. Options A, C, and D do not describe RAG.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q480 --- Prompt Engineering}
+		\begin{block}{Question}
+			Which is the most effective prompt engineering technique for structured output?
+			\begin{enumerate}
+				\item Short random prompts.
+				\item Specifying role, format, and providing a few-shot example.
+				\item Ignoring output format.
+				\item Reducing context.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Role specification, format guidance, and examples reduce ambiguity. Options A, C, and D are ineffective.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q481 --- Chain-of-Thought}
+		\begin{block}{Question}
+			Chain-of-thought prompting improves performance mainly because:
+			\begin{enumerate}
+				\item It changes model weights.
+				\item It allows the model to use intermediate reasoning tokens to solve multi-step problems.
+				\item It reduces computation.
+				\item It increases randomness.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Chain-of-thought provides intermediate reasoning steps. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q482 --- LLM Leaderboards}
+		\begin{block}{Question}
+			A key caveat of relying on LLM leaderboards is:
+			\begin{enumerate}
+				\item They are always definitive.
+				\item Benchmark contamination and saturation can inflate or compress scores, and leaderboards may not reflect real-world performance.
+				\item They ignore accuracy.
+				\item They cover all tasks.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Benchmark issues include contamination, saturation, and lack of real-world relevance. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q483 --- LLM Statelessness}
+		\begin{block}{Question}
+			What does ``stateless'' mean for an LLM?
+			\begin{enumerate}
+				\item It stores all previous conversations.
+				\item It does not retain information between separate prompts unless prior context is re-supplied.
+				\item It cannot process sequences.
+				\item It works only offline.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			LLMs process each prompt independently. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q484 --- Agentic AI}
+		\begin{block}{Question}
+			What distinguishes an agentic AI system from a standard LLM application?
+			\begin{enumerate}
+				\item Higher accuracy.
+				\item The ability to autonomously take actions in an environment with limited supervision.
+				\item Lower cost.
+				\item Smaller model size.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Agentic AI takes autonomous actions. Options A, C, and D are not the distinguishing feature.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q485 --- GenAI Benchmarking}
+		\begin{block}{Question}
+			Why might a GenAI model score highly on a benchmark yet perform poorly in production?
+			\begin{enumerate}
+				\item Benchmarks are always accurate.
+				\item Benchmarks may be contaminated, saturated, or unrepresentative of the real-world context in which the model is deployed.
+				\item Benchmarks require no data.
+				\item Benchmarks measure only speed.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Benchmarks have known limitations. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q486 --- Fine-Tuning vs RAG}
+		\begin{block}{Question}
+			Which scenario best favours RAG over fine-tuning?
+			\begin{enumerate}
+				\item When proprietary knowledge changes frequently and must be updated often.
+				\item When model weights must change permanently.
+				\item When data is static.
+				\item When latency is irrelevant.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			RAG is best for frequently changing knowledge. Options B, C, and D are less aligned with RAG's strengths.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q487 --- GenAI Bias Evaluation}
+		\begin{block}{Question}
+			Which is an appropriate method for evaluating bias in a GenAI system?
+			\begin{enumerate}
+				\item Ignore bias.
+				\item Use demographic-parity-like metrics, stereotype scores, and adversarial prompts across groups.
+				\item Only evaluate accuracy.
+				\item Only evaluate speed.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Bias evaluation requires fairness metrics and adversarial testing. Options A, C, and D are insufficient.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q488 --- GenAI Model Cards}
+		\begin{block}{Question}
+			A model card for a GenAI system typically includes:
+			\begin{enumerate}
+				\item Only the model's API key.
+				\item Intended use, training data, evaluation results, limitations, and ethical considerations.
+				\item Only training cost.
+				\item Only temperature settings.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Model cards document intended use, training data, evaluations, limitations, and ethics. Options A, C, and D are partial.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q489 --- GenAI Deployment Risks}
+		\begin{block}{Question}
+			Which of the following is a significant deployment risk for GenAI systems?
+			\begin{enumerate}
+				\item Uncontrolled output that could produce non-compliant or harmful content.
+				\item Faster inference.
+				\item Reduced storage.
+				\item Lower cost.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Uncontrolled output is a key deployment risk. Options B, C, and D are benefits, not risks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q490 --- GenAI Prompt Injection}
+		\begin{block}{Question}
+			Prompt injection is:
+			\begin{enumerate}
+				\item A harmless input.
+				\item A manipulation where an attacker inserts malicious instructions into prompts or data to cause unintended behaviour.
+				\item A model architecture.
+				\item A training technique.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Prompt injection attacks manipulate the model via crafted inputs. Options A, C, and D misstate.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Module 3 --- Extended Risk Topics}
+	% =================================================================
+	
+	\begin{frame}{Q491 --- Group vs Individual Fairness}
+		\begin{block}{Question}
+			Which is an example of individual fairness?
+			\begin{enumerate}
+				\item Equal approval rates across groups.
+				\item Two applicants with identical qualifications receive the same decision.
+				\item Equal TPR across groups.
+				\item Equal FPR across groups.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Individual fairness = similar individuals treated similarly. Options A, C, and D are group fairness metrics.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q492 --- Fairness Impossibility}
+		\begin{block}{Question}
+			The impossibility result for fairness holds:
+			\begin{enumerate}
+				\item Only when base rates are equal.
+				\item When base rates differ, making it impossible to satisfy demographic parity, predictive rate parity, and equal opportunity simultaneously.
+				\item Never.
+				\item Only for regression models.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			The impossibility arises under unequal base rates. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q493 --- Data Composition Bias}
+		\begin{block}{Question}
+			Which is most likely to cause data composition bias?
+			\begin{enumerate}
+				\item Balanced dataset.
+				\item Imbalanced dataset where minority class is underrepresented.
+				\item Random data.
+				\item Complete data.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Class imbalance drives composition bias. Options A, C, and D do not.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q494 --- Measurement Bias}
+		\begin{block}{Question}
+			Which is an example of measurement bias?
+			\begin{enumerate}
+				\item Inconsistent measurement methods across groups.
+				\item Random sampling.
+				\item Balanced data.
+				\item Complete data.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Measurement bias arises when features are measured differently across groups. Options B, C, and D are unrelated.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q495 --- Historical Bias}
+		\begin{block}{Question}
+			Which is an example of historical bias?
+			\begin{enumerate}
+				\item Training on past hiring decisions that reflect discrimination against women.
+				\item Random sampling.
+				\item Balanced data.
+				\item Normalized features.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Historical bias stems from past discrimination encoded in data. Options B, C, and D are unrelated.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q496 --- Proxy Discrimination}
+		\begin{block}{Question}
+			Which is an example of proxy discrimination?
+			\begin{enumerate}
+				\item Explicit use of race as a feature.
+				\item Use of a feature highly correlated with race (e.g., certain ZIP codes).
+				\item Removing race.
+				\item Balanced data.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Proxies carry discriminatory effects indirectly. Options A, C, and D are different or unrelated.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q497 --- Interpretability vs Explainability}
+		\begin{block}{Question}
+			Which is true about a logistic regression model?
+			\begin{enumerate}
+				\item It is interpretable but often not explainable for complex cases.
+				\item It is inherently interpretable and generally explainable.
+				\item Neither interpretable nor explainable.
+				\item Only explainable.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Logistic regression has interpretable coefficients and can be explained. Options A, C, and D are inaccurate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q498 --- Black-Box Models}
+		\begin{block}{Question}
+			Which technique is most commonly used to explain black-box model predictions?
+			\begin{enumerate}
+				\item Linear regression.
+				\item SHAP or LIME.
+				\item Logistic regression.
+				\item Grid search.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			SHAP and LIME are post-hoc explainability techniques. Options A, C, and D are unrelated.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q499 --- Interpretability Trade-offs}
+		\begin{block}{Question}
+			The interpretability-accuracy trade-off implies:
+			\begin{enumerate}
+				\item Interpretable models are always less accurate.
+				\item Complex models often achieve higher accuracy but lower interpretability; the trade-off should be managed based on context.
+				\item Complex models are always better.
+				\item Interpretability is irrelevant.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			The trade-off is real and should be managed contextually. Options A, C, and D are oversimplifications.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q500 --- Reputational Risk from AI}
+		\begin{block}{Question}
+			Which of the following is a direct source of AI-related reputational risk?
+			\begin{enumerate}
+				\item Increased storage.
+				\item Privacy breaches, algorithmic bias, or failure to explain decisions.
+				\item Faster training.
+				\item Higher accuracy.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Reputational risk arises from privacy, bias, and explainability failures. Options A, C, and D are not sources of reputational risk.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q501 --- Human Autonomy Violation}
+		\begin{block}{Question}
+			Which is a clear violation of human autonomy?
+			\begin{enumerate}
+				\item Explaining a decision.
+				\item Manipulating a user's choices through dark patterns or AI-driven persuasion without consent.
+				\item Providing choices.
+				\item Showing accurate information.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Manipulative design undermines autonomy. Options A, C, and D respect autonomy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q502 --- Societal Risk Scenarios}
+		\begin{block}{Question}
+			Which of the following is a societal risk?
+			\begin{enumerate}
+				\item A bank loses money.
+				\item An AI system amplifies political misinformation at scale.
+				\item A chatbot mislabels a customer.
+				\item A model underperforms.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Societal risk affects society at large. Options A, C, and D are individual or organisational risks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q503 --- Existential Risk}
+		\begin{block}{Question}
+			Which is a key concern in AI existential risk discussions?
+			\begin{enumerate}
+				\item Model speed.
+				\item Superintelligent AI misaligned with human values.
+				\item Storage costs.
+				\item IT complexity.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Existential risk focuses on superintelligence and value alignment. Options A, C, and D are operational.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q504 --- Global Inequality}
+		\begin{block}{Question}
+			AI may worsen global inequality because:
+			\begin{enumerate}
+				\item AI is universally accessible.
+				\item Advanced AI capability concentrated in a few nations may widen economic and political gaps.
+				\item AI reduces inequality.
+				\item AI has no impact.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Concentration of AI can widen gaps. Options A, C, and D are inaccurate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q505 --- Misinformation Campaigns}
+		\begin{block}{Question}
+			Why is GenAI particularly concerning for misinformation campaigns?
+			\begin{enumerate}
+				\item It cannot generate text.
+				\item It makes realistic content generation cheap and scalable.
+				\item It only produces truthful content.
+				\item It is too slow.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Generative AI makes content creation cheap and scalable. Options A, C, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q506 --- Privacy and Surveillance}
+		\begin{block}{Question}
+			AI's ability to infer sensitive attributes from data creates which risk?
+			\begin{enumerate}
+				\item Faster computation.
+				\item Privacy and surveillance risk.
+				\item Lower storage costs.
+				\item Higher accuracy.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Inference capabilities create privacy risks. Options A, C, and D are unrelated.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q507 --- GenAI Risk Categories}
+		\begin{block}{Question}
+			Which of the following is a category of GenAI risk?
+			\begin{enumerate}
+				\item Functional risks.
+				\item Data and information risks.
+				\item Organizational and strategic risks.
+				\item All of the above.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			GenAI risks span functional, data, organizational, strategic, and societal categories. All three are included.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q508 --- GenAI Data Risks}
+		\begin{block}{Question}
+			Which is a data risk unique to GenAI?
+			\begin{enumerate}
+				\item Storage cost.
+				\item Training data may include proprietary, personal, or copyrighted material, creating legal exposure.
+				\item Training time.
+				\item Model size.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Copyright, privacy, and proprietary data in training corpora create legal exposure. Options A, C, and D are operational.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q509 --- GenAI Organizational Risks}
+		\begin{block}{Question}
+			Which is an organizational risk of GenAI?
+			\begin{enumerate}
+				\item Responsibility gaps when multiple teams deploy GenAI without clear ownership.
+				\item Faster inference.
+				\item Lower cost.
+				\item Reduced storage.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Responsibility gaps are a key organizational risk. Options B, C, and D are benefits.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q510 --- GenAI Strategic Risks}
+		\begin{block}{Question}
+			Which is a strategic risk of GenAI?
+			\begin{enumerate}
+				\item Vendor lock-in and dependence on a small number of providers.
+				\item Faster inference.
+				\item Lower cost.
+				\item Reduced storage.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Vendor lock-in is a strategic risk. Options B, C, and D are benefits.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Module 4 --- Extended Ethics Topics}
+	% =================================================================
+	
+	\begin{frame}{Q511 --- Utilitarianism}
+		\begin{block}{Question}
+			Which statement best captures utilitarianism in AI ethics?
+			\begin{enumerate}
+				\item It judges actions by adherence to rules.
+				\item It judges actions by their consequences, maximising overall welfare.
+				\item It focuses on character.
+				\item It ignores outcomes.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Utilitarianism judges actions by consequences and aggregate welfare. Options A, C, and D are other frameworks or the opposite.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q512 --- Deontology}
+		\begin{block}{Question}
+			Which statement best captures deontology in AI ethics?
+			\begin{enumerate}
+				\item Actions are judged by consequences.
+				\item Actions are judged by adherence to duties and rules regardless of consequences.
+				\item Focus on character.
+				\item Focus on profit.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Deontology judges by duties and rules. Options A, C, and D are different frameworks.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q513 --- Virtue Ethics}
+		\begin{block}{Question}
+			Which statement best captures virtue ethics?
+			\begin{enumerate}
+				\item Focus on consequences.
+				\item Focus on duties.
+				\item Focus on character traits and living a good life.
+				\item Focus on laws.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			Virtue ethics focuses on character. Options A, B, and D are different or incomplete.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q514 --- Justice Conflicts}
+		\begin{block}{Question}
+			Why can different concepts of justice conflict?
+			\begin{enumerate}
+				\item They are identical.
+				\item Egalitarianism, utilitarianism, and meritocracy prioritise different values, which can yield conflicting allocations.
+				\item Only utilitarianism matters.
+				\item Justice is unambiguous.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Different justice concepts conflict. Options A, C, and D misstate.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q515 --- Autonomy and Consent}
+		\begin{block}{Question}
+			Which is essential for respecting autonomy in AI systems?
+			\begin{enumerate}
+				\item Ignoring user preferences.
+				\item Obtaining informed consent and avoiding manipulative designs.
+				\item Hiding decisions.
+				\item Coercion.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Respecting autonomy requires consent and non-manipulation. Options A, C, and D violate autonomy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q516 --- Nonmaleficence}
+		\begin{block}{Question}
+			Which is an example of applying nonmaleficence in AI?
+			\begin{enumerate}
+				\item Deploying untested models.
+				\item Testing AI thoroughly and removing unjustified risks before deployment.
+				\item Ignoring safety.
+				\item Racing to deploy.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Nonmaleficence requires avoiding harm, including unnecessary risk. Options A, C, and D violate the principle.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q517 --- Beneficence}
+		\begin{block}{Question}
+			Which is an example of beneficence in AI?
+			\begin{enumerate}
+				\item Avoiding harm only.
+				\item Actively designing AI to improve welfare, e.g., improving access to credit for underserved populations.
+				\item Ignoring user needs.
+				\item Maximising profit only.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Beneficence = actively doing good. Options A, C, and D are inconsistent with beneficence.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q518 --- Privacy Best Practices}
+		\begin{block}{Question}
+			Which of the following is a privacy best practice?
+			\begin{enumerate}
+				\item Data minimisation and purpose limitation.
+				\item Unlimited retention.
+				\item Sharing with third parties without consent.
+				\item Unencrypted storage.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Minimisation and purpose limitation are core privacy practices. Options B, C, and D violate them.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q519 --- GDPR Data Subject Rights}
+		\begin{block}{Question}
+			Which is NOT a GDPR data subject right?
+			\begin{enumerate}
+				\item Access.
+				\item Erasure.
+				\item Portability.
+				\item Right to sell data.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			GDPR grants access, erasure, portability, rectification, restriction, and objection. Selling data is not a right.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q520 --- EU AI Act Prohibited Practices}
+		\begin{block}{Question}
+			Which is explicitly prohibited under the EU AI Act?
+			\begin{enumerate}
+				\item Fraud detection.
+				\item Social scoring and manipulative AI.
+				\item Credit scoring.
+				\item Customer service chatbots.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Social scoring and manipulative AI are prohibited. Other uses are regulated but not prohibited.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q521 --- AI Ethics Framework Benefits}
+		\begin{block}{Question}
+			Which is NOT a benefit of an AI ethics framework?
+			\begin{enumerate}
+				\item Provides guidelines for ethical dilemmas.
+				\item Builds trust.
+				\item Reduces regulatory risk.
+				\item Guarantees model accuracy.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			Ethics frameworks do not guarantee model accuracy. Options A, B, and C are recognised benefits.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q522 --- Ethical AI Committee Role}
+		\begin{block}{Question}
+			The primary purpose of an AI ethics committee is to:
+			\begin{enumerate}
+				\item Write code.
+				\item Review high-risk use cases and provide guidance on ethical dilemmas.
+				\item Market AI products.
+				\item Train models.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Ethics committees review use cases and give guidance. Options A, C, and D are operational or unrelated.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q523 --- Privacy Regulation Landscape}
+		\begin{block}{Question}
+			Which is an example of a US state-level privacy law?
+			\begin{enumerate}
+				\item GDPR.
+				\item CCPA (California).
+				\item PIPL (China).
+				\item DSA (EU).
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			CCPA is California's privacy law. Options A, C, and D are non-US or different jurisdictions.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q524 --- GDPR Fines}
+		\begin{block}{Question}
+			GDPR fines can reach:
+			\begin{enumerate}
+				\item €1,000.
+				\item €100,000.
+				\item Up to €20 million or 4\% of global annual turnover.
+				\item No fines.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			GDPR fines reach €20M or 4\% of global turnover. Options A, B, and D understate the maximum.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q525 --- EU AI Act Fines}
+		\begin{block}{Question}
+			The EU AI Act's maximum fines reach:
+			\begin{enumerate}
+				\item €1 million.
+				\item €5 million.
+				\item Up to €35 million or 7\% of global turnover.
+				\item No fines.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: C}\end{exampleblock}
+		\begin{block}{Explanation}
+			The AI Act allows fines up to €35M or 7\% of global turnover. Options A, B, and D are incorrect.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q526 --- Responsible AI Principles}
+		\begin{block}{Question}
+			Which is a core Responsible AI principle?
+			\begin{enumerate}
+				\item Maximise profit only.
+				\item Fairness, transparency, accountability, and privacy.
+				\item Ignore stakeholders.
+				\item Hide AI use.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Responsible AI includes fairness, transparency, accountability, and privacy. Options A, C, and D are contrary.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q527 --- Local vs Global Explainability}
+		\begin{block}{Question}
+			Which is an example of global explainability?
+			\begin{enumerate}
+				\item SHAP for a single prediction.
+				\item Feature importance across the full model.
+				\item Counterfactual for one instance.
+				\item LIME for one case.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Feature importance is a global technique. Options A, C, and D are local.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q528 --- Explainability Requirements}
+		\begin{block}{Question}
+			In a regulated credit decision context, explainability requires:
+			\begin{enumerate}
+				\item Publishing all model internals.
+				\item Meaningful justifications for individual decisions, typically via SHAP, counterfactuals, or adverse action notices.
+				\item Only aggregate metrics.
+				\item Refusing to explain.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Explainability requires meaningful per-decision justification. Options A, C, and D are insufficient or wrong.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q529 --- Fairness Metrics Comparison}
+		\begin{block}{Question}
+			Which is a group fairness metric?
+			\begin{enumerate}
+				\item Individual fairness.
+				\item Demographic parity.
+				\item Consistency.
+				\item Predictability.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Demographic parity is a group fairness metric. Options A, C, and D are different or unrelated.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q530 --- Fairness Metric Conflict}
+		\begin{block}{Question}
+			Why can't all fairness metrics be satisfied simultaneously under unequal base rates?
+			\begin{enumerate}
+				\item Because fairness is subjective.
+				\item Because mathematical constraints make demographic parity, predictive rate parity, and equal opportunity mutually incompatible.
+				\item Because GDPR forbids it.
+				\item Because of computational limits.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			The impossibility result is mathematical. Options A, C, and D misstate the cause.
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Module 5 --- Extended Governance Topics}
+	% =================================================================
+	
+	\begin{frame}{Q531 --- Data Governance Committee}
+		\begin{block}{Question}
+			Which best describes the data governance committee's role?
+			\begin{enumerate}
+				\item Operationally process data.
+				\item Provide oversight on policies, standards, and practices, and resolve escalations.
+				\item Build models.
+				\item Market data.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			The committee provides oversight and resolves escalations. Options A, C, and D are operational roles.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q532 --- Data Quality Management}
+		\begin{block}{Question}
+			Which activity is part of data quality management?
+			\begin{enumerate}
+				\item Only storage.
+				\item Data profiling, cleansing, validation, and monitoring.
+				\item Only encryption.
+				\item Only backup.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Data quality management includes profiling, cleansing, validation, and monitoring. Options A, C, and D are related but partial.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q533 --- Data Lineage}
+		\begin{block}{Question}
+			Data lineage documents:
+			\begin{enumerate}
+				\item Only the file size.
+				\item The origin, movement, and transformations of data across systems.
+				\item Only the encryption status.
+				\item Only the storage location.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Lineage tracks origin, movement, and transformations. Options A, C, and D are partial.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q534 --- Metadata Repository}
+		\begin{block}{Question}
+			A metadata repository typically stores:
+			\begin{enumerate}
+				\item Raw data.
+				\item Definitions, relationships, schemas, and technical/business metadata.
+				\item Marketing content.
+				\item Only encryption keys.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Metadata repositories store definitions, schemas, and relationships. Options A, C, and D are unrelated or partial.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q535 --- Data Classification Levels}
+		\begin{block}{Question}
+			Which is a standard data classification level?
+			\begin{enumerate}
+				\item Public.
+				\item Internal.
+				\item Restricted.
+				\item All of the above.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: D}\end{exampleblock}
+		\begin{block}{Explanation}
+			Standard classification: public, internal, confidential, restricted. All three are typical levels.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q536 --- Data Access Control}
+		\begin{block}{Question}
+			The principle of least privilege requires:
+			\begin{enumerate}
+				\item Granting maximum access.
+				\item Granting users only the access necessary for their role.
+				\item No access.
+				\item Full open access.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Least privilege = only what is needed. Options A, C, and D are inconsistent.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q537 --- Data Encryption Standards}
+		\begin{block}{Question}
+			Which is a widely adopted standard for encrypting data at rest?
+			\begin{enumerate}
+				\item MD5.
+				\item AES-256.
+				\item SHA-1.
+				\item Base64.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			AES-256 is a standard symmetric encryption algorithm. Options A, C, and D are not encryption standards for confidentiality.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q538 --- Model Inventory Best Practices}
+		\begin{block}{Question}
+			Which practice should be part of maintaining a model inventory?
+			\begin{enumerate}
+				\item Update the inventory only annually.
+				\item Update on each material change, including new models, retirements, and changes in risk tier.
+				\item Never update.
+				\item Only capture model names.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			The inventory is updated on material changes. Options A, C, and D are insufficient.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q539 --- Model Risk Ranking}
+		\begin{block}{Question}
+			Which factor most raises the risk tier of an AI model?
+			\begin{enumerate}
+				\item Small user base.
+				\item High materiality, high complexity, or high exposure.
+				\item Short documentation.
+				\item Low cost.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Risk tiering considers materiality, complexity, and exposure. Options A, C, and D do not raise risk.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q540 --- Model Validation Scope}
+		\begin{block}{Question}
+			Which activity is part of independent model validation?
+			\begin{enumerate}
+				\item Rebuilding the model.
+				\item Assessing conceptual soundness, data quality, implementation, and performance.
+				\item Marketing the model.
+				\item Entering data.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Validation covers conceptual soundness, data, implementation, and performance. Options A, C, and D are not validation activities.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q541 --- Model Validation Report}
+		\begin{block}{Question}
+			A model validation report typically includes:
+			\begin{enumerate}
+				\item Validation opinion, findings, limitations, and recommendations.
+				\item Only the model's accuracy.
+				\item Only the code.
+				\item Only the training data.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: A}\end{exampleblock}
+		\begin{block}{Explanation}
+			Validation reports include opinion, findings, limitations, and recommendations. Options B, C, and D are partial.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q542 --- Model Risk Appetite Statement}
+		\begin{block}{Question}
+			Which is typically included in a model risk appetite statement?
+			\begin{enumerate}
+				\item A specific number of models.
+				\item The firm's tolerance for model risk and escalation criteria.
+				\item Marketing material.
+				\item Only costs.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Appetite statements define tolerance and escalation criteria. Options A, C, and D are unrelated.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q543 --- Model Risk Committee Membership}
+		\begin{block}{Question}
+			A model risk committee typically includes:
+			\begin{enumerate}
+				\item Only developers.
+				\item Senior representatives from risk, business, validation, and possibly audit.
+				\item Only IT.
+				\item Only external consultants.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Cross-functional membership ensures diverse oversight. Options A, C, and D are incomplete.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q544 --- Model Risk Reporting}
+		\begin{block}{Question}
+			Model risk reporting should be:
+			\begin{enumerate}
+				\item Occasional.
+				\item Regular and ad hoc, with appropriate escalation to the board.
+				\item Only annual.
+				\item Only when problems occur.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Reporting is regular and ad hoc. Options A, C, and D are insufficient.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q545 --- Model Risk Culture}
+		\begin{block}{Question}
+			Which is a hallmark of a strong model risk culture?
+			\begin{enumerate}
+				\item Silence about issues.
+				\item Open communication, accountability, and continuous learning.
+				\item Ignoring concerns.
+				\item Only senior leaders caring.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			A strong culture values openness, accountability, and learning. Options A, C, and D are contrary.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q546 --- Model Risk Training}
+		\begin{block}{Question}
+			Model risk training should cover:
+			\begin{enumerate}
+				\item Only technical content.
+				\item Technical, governance, ethical, and regulatory aspects.
+				\item Only ethics.
+				\item Only regulation.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Comprehensive training covers all four areas. Options A, C, and D are too narrow.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q547 --- Change Management}
+		\begin{block}{Question}
+			A material model change should trigger:
+			\begin{enumerate}
+				\item Immediate deployment.
+				\item Impact assessment, documentation, validation, and approval.
+				\item No action.
+				\item Retirement.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Material changes require structured review. Options A, C, and D violate governance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q548 --- Model Retirement}
+		\begin{block}{Question}
+			Model retirement requires:
+			\begin{enumerate}
+				\item Silent deletion.
+				\item Formal documentation, inventory update, and archival.
+				\item Continued use.
+				\item No governance involvement.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Retirement is formal and documented. Options A, C, and D violate governance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q549 --- Responsible AI Governance}
+		\begin{block}{Question}
+			Responsible AI governance requires:
+			\begin{enumerate}
+				\item Only technical controls.
+				\item A combination of technical controls, governance policies, and cultural elements.
+				\item Only policies.
+				\item Only culture.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Responsible AI governance integrates technical, policy, and cultural elements. Options A, C, and D are insufficient.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q550 --- Closing Principle}
+		\begin{block}{Question}
+			The most important guiding principle in AI risk and governance is:
+			\begin{enumerate}
+				\item Maximise model complexity.
+				\item Balance performance with governance, validation, monitoring, fairness, explainability, and ethical alignment with regulatory and business expectations.
+				\item Ignore risks.
+				\item Deploy all models without review.
+			\end{enumerate}
+		\end{block}
+		\begin{exampleblock}{Answer: B}\end{exampleblock}
+		\begin{block}{Explanation}
+			Responsible AI balances performance and governance. Options A, C, and D contradict the principle.
+		\end{block}
+	\end{frame}
+	
+\end{document}

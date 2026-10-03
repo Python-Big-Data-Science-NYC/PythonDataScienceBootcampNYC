@@ -1,0 +1,1511 @@
+
+
+
+\section{Module 3: Risks and Risk Factors}
+
+\QA{Model risk definition}
+{Which definition of model risk is most consistent with supervisory guidance such as SR 11-7?}
+{The potential for adverse consequences from decisions based on incorrect or misused model outputs.}
+{The risk that a model takes too long to train.}
+{The risk that market prices move against positions priced by a model.}
+{The risk that a model is too accurate to be independently validated.}
+{A}
+{Model risk arises from (i) \emph{fundamental errors} in design, data or implementation and (ii) \emph{incorrect or inappropriate use}. Consequences: financial loss, poor decisions, regulatory action, reputational damage. The other options confuse it with project, market or performance risk.}
+
+\QA{Model risk vs algorithmic bias}
+{Which statement best distinguishes model risk from algorithmic bias?}
+{Model risk concerns adverse consequences from erroneous or misused models; algorithmic bias is systematic, unfair treatment of groups, and is one possible source of model risk.}
+{They are identical concepts with different names.}
+{Algorithmic bias applies only to statistical models; model risk only to AI.}
+{Model risk is unfair discrimination; algorithmic bias is calculation error.}
+{A}
+{A perfectly ``accurate'' model can still be biased (e.g. reproduces historical discrimination), and a non-biased model can still carry model risk (drift, bugs, misuse). Bias creates legal, ethical and reputational exposure and therefore feeds model risk.}
+
+\QA{Model misuse}
+{A mortgage PD model built and validated for prime retail borrowers is used to price subprime auto loans. Which source of model risk is this?}
+{Misuse: applying the model outside its intended scope and validated population.}
+{Implementation error in the code.}
+{Concept drift caused by macroeconomic change.}
+{Label noise in the training data.}
+{A}
+{Every model has an intended use and limitations documented at validation. Use outside that perimeter (new product, population, horizon) invalidates validation evidence. Controls: use test, scope restrictions in policy, inventory with intended use, user training, change management.}
+
+\QA{Types of drift}
+{After a macroeconomic regime change, borrowers with the same observable characteristics now default at much higher rates than in the training data; the distribution of the inputs is largely unchanged. What is this?}
+{Concept drift: the relationship between inputs and outcome, $P(y|x)$, has changed.}
+{Data (covariate) drift: only $P(x)$ has changed.}
+{Sampling bias in the original training data.}
+{Multicollinearity among the predictors.}
+{A}
+{Data drift/covariate shift: input distribution changes. Concept drift: input--output relationship changes. Label (prior) drift: outcome frequency changes. Detection: performance monitoring against actuals (back-testing), PSI/KS on inputs and scores, challenger models. Response: recalibrate, retrain, redevelop, or overlay.}
+
+\QA{Population Stability Index}
+{A score band distribution was 50\%, 30\%, 20\% at development and is 30\%, 30\%, 40\% in production. Using $\text{PSI}=\sum(A_i-E_i)\ln(A_i/E_i)$ and the usual rule (below 0.10 stable, 0.10 to 0.25 moderate shift, above 0.25 major shift), what is the conclusion?}
+{PSI is about 0.24: a moderate shift that warrants investigation.}
+{PSI is about 0.02: the population is stable.}
+{PSI is about 0.50: major shift, retire the model at once.}
+{PSI is about $-0.24$: the population has improved.}
+{A}
+{Band 1: $(0.30-0.50)\ln(0.6)=0.1022$. Band 2: 0. Band 3: $(0.40-0.20)\ln(2)=0.1386$. Total $\approx0.241$. PSI is always $\ge0$ (each term is non-negative). It is close to the 0.25 trigger, so investigate drivers, check performance, and consider recalibration.}
+
+\TFrame{Model Risk, Misuse and Drift}
+{\begin{block}{Model risk (SR 11-7 view)}
+		\begin{itemize}
+			\item Sources: data problems, wrong assumptions/specification, implementation bugs, \textbf{misuse}, drift, vendor black boxes.
+			\item Components of MRM: development/implementation/use; independent validation; governance, policies, controls.
+			\item AI adds: opacity, instability, many hyper-parameters, dependence on huge data, rapid retraining.
+\end{itemize}\end{block}}
+{\begin{block}{Drift toolkit}
+		\begin{itemize}
+			\item Data drift $P(x)$, concept drift $P(y|x)$, label drift $P(y)$.
+			\item PSI: $<0.10$ stable; $0.10$--$0.25$ moderate; $>0.25$ major. Also KS, CSI (characteristic stability index), Gini/AUC trend.
+			\item Outcome: recalibrate $\rightarrow$ retrain $\rightarrow$ redevelop $\rightarrow$ retire.
+	\end{itemize}\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Example: Zillow Offers house-flipping losses are often cited as model/forecast error under changing market conditions. Which monitoring metric detects input drift without labels? (PSI/CSI.) What is model misuse?
+\end{alertblock}}
+
+\QA{LLM hallucination}
+{A bank's customer chatbot confidently quotes fee rules that do not exist. What is this risk and what is the most effective combined mitigation?}
+{Hallucination; ground answers in approved documents (retrieval-augmented generation) with guardrails and human escalation or review for high-impact answers.}
+{Overfitting; reduce the number of training epochs only.}
+{Data leakage; remove the test set.}
+{Concept drift; retrain the chatbot nightly on customer chats.}
+{A}
+{LLMs generate statistically plausible text, not verified facts. Mitigations: RAG over curated knowledge, citations, lower temperature, output filters, restricted scope, monitoring, red-teaming, human review. Accountability stays with the firm (Moffatt v. Air Canada, 2024: the airline was held liable for its chatbot's misstatement).}
+
+\QA{Prompt injection}
+{An LLM agent that reads customer emails is manipulated by hidden instructions inside one email and reveals internal data. Which threat is this?}
+{Prompt injection}
+{Data poisoning of the training set}
+{Membership inference}
+{Covariate shift}
+{A}
+{Prompt injection: untrusted input contains instructions that override the system prompt (direct) or arrive via documents/web pages (indirect). Defences: separate instructions from data, least-privilege tool access, output validation, human approval for sensitive actions, monitoring.}
+
+\QA{Data poisoning}
+{Attackers deliberately insert mislabelled and malicious records into a fraud model's retraining data feed so that certain fraud patterns are later ignored. Which attack is this?}
+{Data poisoning (a training-time attack)}
+{Adversarial evasion (an inference-time attack)}
+{Model extraction}
+{Membership inference}
+{A}
+{Poisoning corrupts training data or labels (including backdoors). Evasion crafts inputs that fool a deployed model. Extraction steals the model by querying it. Controls: data provenance and validation, access control on pipelines, outlier/label audits, robust training, monitoring after retraining.}
+
+\QA{Privacy attack}
+{An attacker queries a trained model to infer whether a specific individual's record was part of its training set. Which attack is this, and which defence helps?}
+{Membership inference; differential privacy, regularisation and limiting output detail help.}
+{Data poisoning; more labelled data helps.}
+{Adversarial evasion; scaling the features helps.}
+{Concept drift; recalibration helps.}
+{A}
+{Models can leak information about training data (overfit models especially). Related: model inversion (reconstruct inputs or sensitive attributes). Defences: differential privacy (calibrated noise), regularisation, access limits, minimise personal data, federated learning with secure aggregation.}
+
+\TFrame{Generative AI and AI Security Risks}
+{\begin{block}{GenAI risks}
+		\begin{itemize}
+			\item Hallucination and over-confidence; inconsistent outputs.
+			\item Prompt injection, jailbreaks, tool/agent misuse.
+			\item Confidential data entering prompts (e.g. staff pasting source code or client data into public tools).
+			\item IP / copyright, licensing, provenance of training data.
+			\item Bias and toxic content; deepfakes and fraud; third-party dependence.
+\end{itemize}\end{block}}
+{\begin{block}{Security taxonomy}
+		\begin{itemize}
+			\item \textbf{Evasion / adversarial examples} (inference time).
+			\item \textbf{Poisoning, backdoors} (training time).
+			\item \textbf{Model extraction} (steal the model), \textbf{inversion}, \textbf{membership inference} (privacy).
+			\item \textbf{Prompt injection} (LLMs).
+	\end{itemize}\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which control best reduces hallucination (RAG, grounding, human review)? Which attack happens at training time? Which attack steals the model? Which defence adds noise (differential privacy)?
+\end{alertblock}}
+
+\QA{Historical bias}
+{A hiring model trained on ten years of past hiring decisions learns to down-rank CVs containing the word ``women's'' (as in ``women's chess club''). Which bias is this?}
+{Historical bias: past discriminatory decisions embedded in the data are reproduced.}
+{Sampling bias: the sample is too small.}
+{Deployment bias: the model is used in the wrong country.}
+{Overfitting caused by too many trees.}
+{A}
+{The model optimised to imitate biased labels. Even with the gender field removed, correlated terms act as proxies. Remedies: audit labels and outcomes by group, re-define the target, fairness constraints, de-bias features, human review. (A widely reported Amazon recruiting-tool case is the classic example.)}
+
+\QA{Sampling bias}
+{A travel-fraud model is trained only on US customers and performs poorly when deployed in Brazil, Nigeria and Thailand. What is the primary cause?}
+{Sampling (representation) bias: the training sample does not represent the deployment population.}
+{Historical bias in the labels.}
+{Problem-specification bias in the target definition.}
+{Multicollinearity among the predictors.}
+{A}
+{Training data must reflect the population where the model is used. Mitigation: collect representative data, stratify, test performance by segment, monitor subgroup metrics after deployment, transfer learning or local re-calibration.}
+
+\QA{Measurement bias}
+{A recidivism model uses ``prior arrests'' as a proxy for criminal behaviour, but some neighbourhoods are policed far more heavily than others. Which bias is most directly illustrated?}
+{Measurement (proxy) bias: the recorded variable measures the target differently across groups.}
+{Sampling bias due to random sampling error.}
+{Concept drift.}
+{Survivorship bias in a time series.}
+{A}
+{Features or labels that are noisy, inconsistent or systematically different across groups distort the model's view of reality. The data also embed historical bias (policing intensity). Ask: is the proxy equally valid for all groups?}
+
+\QA{Proxy discrimination}
+{A lender removes ``race'' from its credit model, yet approval rates still differ sharply by race because the model uses postcode. What is this called and what does it show?}
+{Proxy discrimination; ``fairness through unawareness'' fails because other variables encode the protected attribute.}
+{Overfitting; the model needs fewer variables.}
+{Multicollinearity; it proves the model is fair.}
+{Concept drift; recalibration will fix it.}
+{A}
+{Postcode, education, device type, shopping behaviour and similar variables can reconstruct protected characteristics (redlining). Tests: outcome analysis by group (disparate impact), predicting the protected attribute from the features, less-discriminatory-alternative search. Mitigation: remove/transform proxies, fairness constraints, post-processing thresholds.}
+
+\QA{Neutralising an attribute at scoring time}
+{A trained model should not let an individual's education level influence predictions. Which practical measure most directly neutralises its direct effect at prediction time?}
+{Replace the attribute by a constant such as the population average for every applicant when scoring.}
+{Add interaction terms involving education.}
+{Create dummy variables for each education level.}
+{Increase the size of the training data set.}
+{A}
+{Setting the input to the same value for everyone removes its direct influence on individual scores. Caveat: correlated proxies still carry the information, and the model was fitted using the attribute, so test outcomes by group. Better still: pre-processing (re-weighting), in-processing (fairness constraints) and post-processing (group-specific thresholds) approaches.}
+
+\TFrame{Sources of Algorithmic Bias and Mitigation}
+{\begin{block}{Sources}
+		\begin{itemize}
+			\item \textbf{Historical}: biased past decisions in labels.
+			\item \textbf{Sampling / representation}: groups under-represented or population mismatch.
+			\item \textbf{Measurement / proxy}: features or labels measured differently by group.
+			\item \textbf{Aggregation}: one model for groups that behave differently.
+			\item \textbf{Class imbalance / data composition}: rare outcomes, skewed mix.
+			\item \textbf{Problem specification}: wrong target or objective.
+			\item \textbf{Deployment / feedback loops}: used in different context; predictions change future data (predictive policing).
+\end{itemize}\end{block}}
+{\begin{block}{Mitigation stages}
+		\begin{itemize}
+			\item Pre-processing: re-weight, re-sample, repair features.
+			\item In-processing: fairness constraints, adversarial debiasing.
+			\item Post-processing: adjust thresholds or outputs by group.
+			\item Governance: documentation, bias testing, human review, monitoring.
+	\end{itemize}\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Why does removing a protected attribute not suffice? Which bias arises from a feedback loop? What is the difference between bias in data and bias in the algorithm?
+\end{alertblock}}
+
+\QA{Disparate impact ratio}
+{A model approves 60\% of applicants in the reference group and 45\% in the protected group. What is the adverse-impact ratio and what does the four-fifths (80\%) rule suggest?}
+{0.75; below 0.80, so potential adverse impact is indicated}
+{0.75; above the threshold, so no concern}
+{1.33; above 0.80, so no concern}
+{0.15; below 0.80, so potential adverse impact is indicated}
+{A}
+{Ratio $=45/60=0.75<0.80$. The 0.15 is the demographic-parity \emph{difference} (15 percentage points) and is not compared with 0.8. The four-fifths rule is a screening heuristic from US employment guidelines, not proof of illegal discrimination.}
+
+\QA{Equal opportunity}
+{Which fairness criterion requires equal true-positive rates across groups, i.e. among people who truly would repay, the approval rate is the same for each group?}
+{Equal opportunity}
+{Demographic parity}
+{Predictive parity}
+{Individual fairness}
+{A}
+{Demographic parity: equal selection rates. Equal opportunity: equal TPR. Equalised odds: equal TPR \emph{and} FPR. Predictive parity: equal precision (PPV). Individual fairness: similar individuals receive similar outcomes. Calibration: scores mean the same across groups.}
+
+\QA{Conflicting fairness criteria}
+{In the COMPAS recidivism debate, one analysis found higher false-positive rates for Black defendants while the vendor showed that scores were equally calibrated across races. Why can both claims be true?}
+{When base rates differ between groups, an imperfect classifier cannot satisfy calibration and equal error rates simultaneously, so fairness definitions conflict.}
+{One of the analyses must contain an arithmetic mistake.}
+{The model used race as an explicit input.}
+{ROC curves cannot be compared across groups.}
+{A}
+{Impossibility results (Kleinberg et al.; Chouldechova) show that, unless base rates are equal or the classifier is perfect, one cannot equalise PPV and FPR/FNR. Choosing which metric to protect is an ethical and legal judgement that should be made, documented and approved by governance, not left to the data scientist.}
+
+\TFrame{Fairness Metrics}
+{\begin{block}{Group fairness}
+		\begin{center}\scriptsize
+			\begin{tabular}{@{}ll@{}}
+				\toprule
+				Criterion & Requires equal across groups \\
+				\midrule
+				Demographic (statistical) parity & selection rate $P(\hat y=1)$ \\
+				Equal opportunity & TPR \\
+				Equalised odds & TPR and FPR \\
+				Predictive parity & precision (PPV) \\
+				Calibration & $P(y=1|\text{score})$ \\
+				\bottomrule
+		\end{tabular}\end{center}
+		Four-fifths rule: selection-rate ratio $\ge0.8$.\end{block}}
+{\begin{block}{Key ideas}
+		\begin{itemize}
+			\item Individual fairness: similar people, similar outcomes. Counterfactual fairness: outcome unchanged if the protected attribute were different.
+			\item Fairness criteria generally cannot all hold when base rates differ.
+			\item Fairness vs accuracy trade-off; the choice is a governance decision.
+	\end{itemize}\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Compute selection-rate ratios and TPR gaps from group confusion matrices; which metric is relevant when a false negative harms the applicant?
+\end{alertblock}}
+
+\QA{Human oversight models}
+{A credit model auto-decides low-risk applications, while a supervisor monitors performance dashboards and can intervene or override. Which oversight model is this?}
+{Human-on-the-loop}
+{Human-in-the-loop (a person approves every decision)}
+{Human-out-of-the-loop (fully autonomous)}
+{Human-as-the-model (decisions made manually)}
+{A}
+{Human-in-the-loop: person decides or approves each case. Human-on-the-loop: person supervises and can intervene. Out-of-the-loop: no practical human control. Required oversight scales with impact: high-stakes or legally significant decisions need meaningful (not rubber-stamp) human review.}
+
+\QA{Third-party concentration}
+{Many banks use the same external foundation model through an API. A flaw or outage in that model affects all of them at the same time. What is the primary risk?}
+{Third-party concentration risk with systemic implications}
+{Idiosyncratic risk that diversification removes}
+{Overfitting risk}
+{Sampling bias in each bank's data}
+{A}
+{Common dependency on a single provider creates correlated failures, operational resilience and exit-strategy issues. Controls: due diligence, contractual audit/notification rights, exit plans, multi-vendor or fallback models, monitoring. The bank remains accountable for outsourced models.}
+
+\QA{Herding and model monoculture}
+{Many asset managers deploy similar ML trading signals trained on similar data. In a stress event they all sell at once, amplifying price falls. Which risk is this?}
+{Systemic risk from correlated behaviour (herding / model monoculture)}
+{Idiosyncratic model error that averages out}
+{Data poisoning}
+{Label leakage}
+{A}
+{When many firms use similar models, data and reaction functions, their errors are correlated and can amplify shocks (procyclicality, fire sales). Supervisors worry about concentration in data/model providers and speed of automated reactions. Controls: diversity of models, stress tests, circuit breakers, human oversight.}
+
+\QA{Explainability and reputational risk}
+{Customers complain that loan declines are unexplained. Which is the source of reputational risk and the best mitigation?}
+{Lack of explainability; provide clear, specific reasons for adverse decisions (e.g. adverse-action reasons or local explanations).}
+{Lack of data; collect more customers.}
+{Model overfitting; shorten training.}
+{Hallucination; raise the temperature.}
+{A}
+{Unexplained or seemingly arbitrary decisions erode trust and trigger complaints, regulatory scrutiny and (in the EU) GDPR/AI Act transparency issues; in the US adverse-action notices (ECOA / Regulation B, FCRA) require principal reasons. Other reputational sources: bias, privacy breaches, unsafe chatbot outputs.}
+
+\QA{Sensitivity for a rare, fatal disease}
+{A disease affects 0.1\% of the population and is fatal if untreated. A screening model is being chosen. Which metric deserves the most weight?}
+{Sensitivity (recall), because missing a case is the costly error.}
+{Accuracy, because it summarises performance overall.}
+{Specificity, because most people are healthy.}
+{Precision, because false alarms are cheap.}
+{A}
+{A model that says ``healthy'' for everyone is 99.9\% accurate but misses every case. When false negatives are the costly error, maximise sensitivity (accepting more false positives and follow-up tests). When false positives are costly (unnecessary treatment, blocked payments), focus on specificity or precision.}
+
+\TFrame{Operational and Systemic AI Risks}
+{\begin{block}{Human oversight}
+		Human-in-the-loop (approve), human-on-the-loop (supervise), human-out-of-the-loop (autonomous). Oversight must be meaningful: competent, informed, able to override, and not subject to automation bias.
+	\end{block}
+	\begin{block}{Third-party and concentration}
+		Vendors, cloud, foundation models. Controls: due diligence, SLAs, audit rights, exit plans, fallback, inventory of vendor models.
+\end{block}}
+{\begin{block}{Systemic channels}
+		Herding and model monoculture, procyclicality, common data sources, speed (flash events), concentration in a few providers, interconnected models.
+	\end{block}
+	\begin{block}{Cost-sensitive choice}
+		Match metric to error cost: sensitivity (miss is costly), specificity or precision (false alarm is costly).
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Name the three oversight models; why is a rubber-stamp review ineffective; how do correlated models create systemic risk; who is accountable for a vendor model? (The firm.)
+\end{alertblock}}
+
+\QA{Ridge vs LASSO}
+{A credit modeller has 150 candidate predictors, most believed to be irrelevant, and wants a sparse, explainable model. Which regularisation is most suitable and why?}
+{LASSO (L1): the absolute-value penalty can shrink coefficients exactly to zero, performing feature selection.}
+{Ridge (L2): the squared penalty sets irrelevant coefficients exactly to zero.}
+{Ridge (L2): it keeps all variables, which is what sparsity means.}
+{No regularisation: sparsity arises automatically from OLS.}
+{A}
+{Ridge penalty $\lambda\sum\beta_j^2$ shrinks coefficients toward zero but (almost) never to zero. LASSO penalty $\lambda\sum|\beta_j|$ yields exact zeros. With groups of highly correlated predictors LASSO picks one arbitrarily; \textbf{Elastic Net} (mix of L1 and L2) is more stable.}
+
+\QA{Effect of lambda}
+{In ridge or LASSO regression, what happens as the penalty $\lambda$ is increased from 0 towards a very large value?}
+{Coefficients shrink toward zero; bias rises and variance falls; $\lambda=0$ reproduces OLS.}
+{Coefficients grow; bias falls and variance rises.}
+{Training error falls while validation error rises.}
+{Nothing changes unless the data are standardised.}
+{A}
+{Larger $\lambda$ = simpler model = more bias, less variance. Choose $\lambda$ by cross-validation. Standardise predictors first so the penalty treats them equally; the intercept is not penalised.}
+
+\QA{K-fold cross-validation}
+{A dataset has 1{,}000 observations and is evaluated with 5-fold cross-validation. Which statement is correct?}
+{Each model trains on 800 observations and validates on 200; every observation is used for validation exactly once.}
+{Each model trains on 200 and validates on 800; observations are reused for validation five times.}
+{Each model trains on all 1{,}000 observations and is tested on a separate hold-out set.}
+{Cross-validation is used to increase the size of the training set.}
+{A}
+{K-fold: split into K parts, train on K$-$1, validate on 1, rotate, average the K scores. Stratified folds keep class proportions; leave-one-out is K = N; for time series use forward-chaining (never shuffle). CV estimates generalisation and supports hyper-parameter tuning.}
+
+\TFrame{Regularisation, Cross-Validation and Tuning}
+{\begin{block}{Regularisation}
+		\begin{itemize}
+			\item Ridge (L2): $\text{RSS}+\lambda\sum\beta_j^2$. Shrinks, keeps all variables; good with multicollinearity.
+			\item LASSO (L1): $\text{RSS}+\lambda\sum|\beta_j|$. Sparse; feature selection.
+			\item Elastic Net: both. Also: dropout, early stopping, pruning, weight decay (= L2).
+			\item Bigger $\lambda$ $\Rightarrow$ more bias, less variance.
+\end{itemize}\end{block}}
+{\begin{block}{Validation design}
+		\begin{itemize}
+			\item Parameters (learned) vs \textbf{hyper-parameters} (set: $\lambda$, K, depth, learning rate).
+			\item Tune on validation / CV; touch the \textbf{test set once}.
+			\item Search: grid, random (often better), Bayesian.
+			\item Nested CV for unbiased tuned estimates.
+	\end{itemize}\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which penalty gives sparsity? Why standardise before LASSO? CV for time series? Why is reporting tuned-on-validation performance optimistic?
+\end{alertblock}}
+
+\QA{Confusion matrix metrics}
+{A fraud model's results on 1{,}000 transactions are: TP = 40, FP = 10, FN = 60, TN = 890. What are precision, recall and F1?}
+{Precision 0.80; recall 0.40; F1 about 0.53}
+{Precision 0.40; recall 0.80; F1 about 0.53}
+{Precision 0.80; recall 0.40; F1 about 0.60}
+{Precision 0.93; recall 0.40; F1 about 0.56}
+{A}
+{Precision $=TP/(TP+FP)=40/50=0.80$. Recall $=TP/(TP+FN)=40/100=0.40$. $F1=2PR/(P+R)=2(0.8)(0.4)/1.2=0.533$. Accuracy is 930/1000 = 0.93 but hides that 60 of 100 frauds were missed.}
+
+\QA{Choosing a metric}
+{A bank wants the model that correctly identifies the highest percentage of loans that actually default. Which model should it choose?
+	\begin{center}\small
+		\begin{tabular}{@{}lcccc@{}}
+			\toprule
+			Model & Accuracy & Precision & Recall & F1 \\
+			\midrule
+			Logistic & 0.71 & 0.60 & 0.28 & 0.38 \\
+			Tree & 0.66 & 0.43 & 0.17 & 0.24 \\
+			SVM & 0.63 & 0.44 & 0.51 & 0.47 \\
+			KNN & 0.68 & 0.50 & 0.15 & 0.23 \\
+			\bottomrule
+\end{tabular}\end{center}}
+{SVM (recall 0.51)}
+{Logistic (highest accuracy and precision)}
+{Tree}
+{KNN}
+{A}
+{``Percentage of actual defaults that are caught'' = recall (sensitivity, true-positive rate). The SVM has the highest recall, although its accuracy is lowest. Choose the metric from the business cost: missed defaults (false negatives) $\Rightarrow$ recall; wasted reviews (false positives) $\Rightarrow$ precision.}
+
+\QA{ROC and AUC}
+{Which statement about the ROC curve and AUC is correct?}
+{Each point on the ROC curve is a classification threshold; lowering the threshold raises both TPR and FPR; AUC = 0.5 means no better than random ranking.}
+{The ROC curve plots precision against recall.}
+{AUC depends on a single chosen threshold.}
+{AUC equals the accuracy of the classifier.}
+{A}
+{ROC: TPR (sensitivity) on y-axis, FPR $=1-$specificity on x-axis. AUC = probability that a random positive is scored higher than a random negative; 0.5 random, 1.0 perfect. Gini coefficient $=2\,\text{AUC}-1$. With heavy class imbalance, the precision--recall curve is more informative.}
+
+\QA{Threshold trade-off}
+{A bank lowers its fraud-score alert threshold from 0.7 to 0.3. What is the most likely effect?}
+{Recall rises but precision typically falls: more fraud is caught, but there are many more false alerts to investigate.}
+{Both precision and recall rise.}
+{Recall falls and precision rises.}
+{No change, because the model itself is unchanged.}
+{A}
+{The model (ranking) is unchanged, but the operating point moves along the ROC/PR curve. Lower threshold: more positives predicted $\Rightarrow$ fewer false negatives, more false positives. Choose the threshold from the relative cost of missed fraud versus investigation capacity.}
+
+\QA{Imbalanced classes}
+{A fraud model trained on 10{,}000 transactions of which only 20 are fraudulent predicts ``not fraud'' for every case, achieving 99.8\% accuracy. What is the problem and a suitable remedy?}
+{Class imbalance makes accuracy misleading (recall is zero); use recall/F1/PR-AUC and techniques such as class weights, resampling or SMOTE.}
+{The model is excellent; 99.8\% accuracy proves it.}
+{The model is underfitting; add more layers and report accuracy.}
+{The test set is too large; reduce it.}
+{A}
+{The ``accuracy paradox'': a trivial majority-class classifier scores high accuracy. Remedies: cost-sensitive learning, over-sampling the minority (SMOTE), under-sampling the majority, anomaly detection, threshold tuning, stratified splits. Resample only the training folds, never the test data.}
+
+\QA{Test-set discipline}
+{After grid-searching hyper-parameters on a validation set, an analyst reports the best validation score as the model's expected performance. What is wrong?}
+{The score is optimistically biased because the validation set was used to select the model; an untouched test set (or nested CV) should provide the final estimate.}
+{Nothing; validation performance is always unbiased.}
+{The analyst should have tuned on the training set instead.}
+{The test set should be used repeatedly during tuning to improve robustness.}
+{A}
+{Repeated selection on the same data ``learns'' its noise (selection bias). Use train / validation / test, or nested cross-validation. Using the test set for tuning is a form of leakage.}
+
+\TFrame{Classification Metrics Cheat-Sheet}
+{\begin{block}{Confusion matrix}
+		\begin{center}\scriptsize
+			\begin{tabular}{@{}lcc@{}}
+				\toprule
+				& Pred + & Pred $-$ \\
+				\midrule
+				Actual + & TP & FN (Type II) \\
+				Actual $-$ & FP (Type I) & TN \\
+				\bottomrule
+		\end{tabular}\end{center}
+		\begin{itemize}
+			\item Accuracy $=(TP+TN)/N$; Precision $=TP/(TP+FP)$
+			\item Recall = Sensitivity = TPR $=TP/(TP+FN)$
+			\item Specificity $=TN/(TN+FP)$; FPR $=1-$Spec
+			\item F1 = harmonic mean of precision and recall
+\end{itemize}\end{block}}
+{\begin{block}{Which metric when?}
+		Missing a case is costly (cancer, fraud, default) $\Rightarrow$ recall. False alarms are costly (spam, account blocking) $\Rightarrow$ precision. Imbalance $\Rightarrow$ F1, PR-AUC, not accuracy. Ranking quality $\Rightarrow$ AUC, KS, Gini. Probability quality $\Rightarrow$ calibration, Brier score. Regression: MAE, RMSE, $R^2$.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Recompute precision after the threshold changes; rare disease (sensitivity); why AUC ignores the threshold; why F1 uses a harmonic mean; Type I vs Type II error.
+\end{alertblock}}
+
+\QA{Convolution}
+{A $2\times2$ kernel $W$ is slid with stride 1 and no padding over the input $X$ (multiply overlapping elements and sum). What is the feature map $F$?
+	\[
+	X=\begin{pmatrix}0&1&2\\1&0&0\\3&2&2\end{pmatrix},\quad
+	W=\begin{pmatrix}-1&0\\1&1\end{pmatrix}
+	\]}
+{$F=\begin{pmatrix}1&-1\\4&4\end{pmatrix}$}
+{$F=\begin{pmatrix}1&4\\-1&4\end{pmatrix}$}
+{$F=\begin{pmatrix}2&3\\6&4\end{pmatrix}$}
+{$F=\begin{pmatrix}2&6\\3&4\end{pmatrix}$}
+{A}
+{$F_{11}=0(-1)+1(0)+1(1)+0(1)=1$; $F_{12}=1(-1)+2(0)+0(1)+0(1)=-1$; $F_{21}=1(-1)+0(0)+3(1)+2(1)=4$; $F_{22}=0(-1)+0(0)+2(1)+2(1)=4$. The second option is the transpose (wrong scan order). Deep-learning ``convolution'' does not flip the kernel (strictly it is cross-correlation).}
+
+\QA{CNN output size}
+{A $32\times32$ image is passed through a $5\times5$ convolution with stride 1 and padding 2. What is the spatial size of the output feature map?}
+{$32\times32$}
+{$28\times28$}
+{$36\times36$}
+{$16\times16$}
+{A}
+{Output size $=(n+2p-f)/s+1=(32+4-5)/1+1=32$ (``same'' padding). With no padding it would be 28. A $2\times2$ max-pool with stride 2 afterwards would halve it to 16.}
+
+\QA{Unstable training}
+{While training a neural network, the loss oscillates wildly and sometimes increases from one step to the next. What is the most likely cause?}
+{The learning rate is too large, so gradient-descent steps overshoot the minimum.}
+{The learning rate is too small, which produces large oscillations.}
+{The network has too few layers.}
+{The training set is too large.}
+{A}
+{Update rule $w\leftarrow w-\eta\,\partial L/\partial w$. Too large $\eta$ overshoots or diverges; too small $\eta$ gives slow but smooth decrease. Remedies: smaller or scheduled learning rate, Adam optimiser, gradient clipping, batch normalisation.}
+
+\QA{Output activation}
+{Which output-layer activation is appropriate for a network that classifies each input into exactly one of five mutually exclusive classes?}
+{Softmax}
+{ReLU}
+{Independent sigmoids with no normalisation (they allow several classes at once)}
+{A linear (identity) output}
+{A}
+{Softmax turns scores into probabilities that sum to 1. Binary classification: one sigmoid. Multi-label: sigmoid per label. Regression: linear. Hidden layers: ReLU (cheap, reduces vanishing gradients; sigmoid/tanh saturate).}
+
+\TFrame{Neural Network Essentials}
+{\begin{block}{Training}
+		\begin{itemize}
+			\item Forward pass $\rightarrow$ loss $\rightarrow$ \textbf{backpropagation} (chain rule) $\rightarrow$ gradient-descent update.
+			\item Epoch = full pass over data; batch / mini-batch / stochastic GD; optimisers: SGD, momentum, Adam.
+			\item Vanishing gradients (sigmoid/tanh, deep nets) $\rightarrow$ ReLU, residual links, normalisation. Dying ReLU $\rightarrow$ leaky ReLU.
+			\item Overfitting remedies: dropout, early stopping, weight decay, data augmentation.
+\end{itemize}\end{block}}
+{\begin{block}{CNNs}
+		Kernels learn local patterns (edges, textures); weights shared across positions; pooling reduces size. Output $=\lfloor(n+2p-f)/s\rfloor+1$.
+	\end{block}
+	\begin{block}{Other architectures}
+		RNN / LSTM / GRU for sequences (vanishing gradient, sequential); autoencoders (compression, anomaly detection); GANs (generation); transformers (attention).
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which activation for which task? Effect of a high/low learning rate? Parameters vs hyper-parameters? Why do deep nets need more data? What does pooling do?
+\end{alertblock}}
+
+\QA{Text preprocessing}
+{In an NLP pipeline, what does tokenisation do?}
+{Splits text into units (tokens) such as words or sub-words.}
+{Removes common words that carry little meaning.}
+{Converts tokens into dense numerical vectors.}
+{Reduces words to their dictionary base form.}
+{A}
+{Tokenisation = splitting. Stop-word removal = removing common words. Embedding / feature extraction = vectors. Lemmatisation = dictionary base form (``running'' $\rightarrow$ ``run'', context-aware); stemming = crude suffix chopping (``studies'' $\rightarrow$ ``studi''). Modern LLMs use sub-word tokenisers (BPE).}
+
+\QA{TF-IDF intuition}
+{In a corpus of loan documents, the word ``the'' appears in virtually every document. What TF-IDF weight does it receive?}
+{Close to zero, because the inverse document frequency of a ubiquitous word is near zero.}
+{Very high, because it occurs often.}
+{Negative, since it is a stop word.}
+{Equal to its raw frequency in the document.}
+{A}
+{TF-IDF = term frequency $\times$ inverse document frequency ($\approx\log\frac{N}{df}$). It up-weights terms that are frequent in a document but rare in the corpus, so it highlights distinctive words. Bag-of-words and TF-IDF ignore word order and meaning.}
+
+\QA{CBoW and skip-gram}
+{In Word2Vec, what does the Continuous Bag-of-Words (CBoW) architecture do?}
+{Predicts a target word from its surrounding context words (fill-in-the-blank).}
+{Predicts the surrounding context words from a single target word.}
+{Processes the text sequentially with a recurrent memory cell.}
+{Compresses documents into a low-dimensional code and reconstructs them.}
+{A}
+{CBoW: many inputs $\rightarrow$ one output, fast, good for frequent words. Skip-gram: one input $\rightarrow$ many outputs, better for rare words. Both learn dense embeddings in which similar words have high cosine similarity (king $-$ man $+$ woman $\approx$ queen).}
+
+\QA{Transformers}
+{What is the key architectural innovation of the transformer relative to recurrent networks?}
+{Self-attention, which relates all positions in a sequence directly, captures long-range dependencies and allows parallel training.}
+{Recurrent memory cells that process one token at a time.}
+{Convolutions with pooling over local windows.}
+{Hand-written grammar rules.}
+{A}
+{``Attention Is All You Need'' (2017). Positional encodings supply word order. BERT = bidirectional encoder (understanding tasks); GPT = autoregressive decoder (generation). Cost grows quadratically with sequence length.}
+
+\QA{LLM pre-training}
+{How is a GPT-style large language model primarily pre-trained?}
+{Self-supervised next-token prediction on very large text corpora, typically followed by fine-tuning and alignment (e.g. RLHF).}
+{Supervised learning on human-labelled sentiment examples only.}
+{Clustering of documents into topics.}
+{Pure reinforcement learning with no text data.}
+{A}
+{Labels come from the text itself (the next word), so no manual labelling is needed. Then instruction-tuning and RLHF make the model follow instructions and reflect human preferences. LLMs predict plausible text, not verified truth, hence hallucination risk.}
+
+\QA{Co-training}
+{What is the main idea and advantage of co-training in semi-supervised learning?}
+{Two models are trained on different feature ``views''; each pseudo-labels its most confident unlabelled cases for the other, exploiting unlabelled data.}
+{Two identical models are trained in parallel to double the speed.}
+{The training labels are removed to reduce overfitting.}
+{All data are pooled into one model so that the views are interchangeable.}
+{A}
+{Semi-supervised learning uses few labels plus many unlabelled examples (labels are expensive, e.g. confirmed fraud). Self-training: one model labels its own confident predictions. Co-training: two models with conditionally independent views teach each other. Assumptions: smoothness, cluster, manifold.}
+
+\TFrame{NLP, Transformers and LLMs}
+{\begin{block}{NLP pipeline}
+		Clean text $\rightarrow$ \textbf{tokenise} $\rightarrow$ stop-word removal $\rightarrow$ stemming / lemmatisation $\rightarrow$ vectorise (bag-of-words, TF-IDF, embeddings) $\rightarrow$ model (classification, NER, sentiment, topics via LDA).
+	\end{block}
+	\begin{block}{Embeddings}
+		Word2Vec (CBoW, skip-gram), GloVe: static vectors. Contextual embeddings (BERT, GPT): vector depends on the sentence. Cosine similarity measures semantic closeness.
+\end{block}}
+{\begin{block}{LLM lifecycle}
+		Pre-train (self-supervised) $\rightarrow$ fine-tune / instruction-tune $\rightarrow$ RLHF alignment $\rightarrow$ deploy with prompts, RAG, guardrails. Temperature controls randomness (low = deterministic).
+	\end{block}
+	\begin{block}{Semi-supervised}
+		Self-training, co-training, cluster-then-label, label propagation.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Stemming vs lemmatisation; why TF-IDF down-weights common words; CBoW vs skip-gram; why transformers parallelise better than RNNs; difference between pre-training and fine-tuning.
+\end{alertblock}}
+\section{Module 2: Tools and Techniques}
+
+\QA{K-means algorithm}
+{Which sequence correctly describes the K-means algorithm?}
+{Choose K and (after scaling the features) initialise K centroids; assign each point to its nearest centroid; recompute centroids as cluster means; repeat until assignments stop changing.}
+{Choose K; label a sample of points; train a classifier on the labels; evaluate on a hold-out set.}
+{Build a full dendrogram; cut it at a chosen height; compute the centroid of each branch.}
+{Initialise K centroids; compute the silhouette; remove outliers; assign points once.}
+{A}
+{K-means (Lloyd's algorithm) alternates an \emph{assignment} step and an \emph{update} step; each step cannot increase WCSS, so it converges, but only to a \emph{local} optimum. Because it uses Euclidean distance, features must be scaled first.}
+
+\QA{Centroid calculation}
+{Three banks have the data below. K-means places them in one cluster. What is the cluster centroid (customers in millions, loan book in bn, branches)?
+	\begin{center}\small
+		\begin{tabular}{@{}lccc@{}}
+			\toprule
+			Feature & Bank A & Bank B & Bank C \\
+			\midrule
+			Customers (m) & 1.2 & 6.0 & 0.5 \\
+			Loan book (bn) & 5 & 25 & 7 \\
+			Branches & 80 & 400 & 50 \\
+			\bottomrule
+\end{tabular}\end{center}}
+{(2.567, 12.333, 176.667)}
+{(7.7, 37, 530)}
+{(1.2, 7, 80)}
+{(6.0, 25, 400)}
+{A}
+{Centroid = feature-wise \emph{mean}: $(1.2+6.0+0.5)/3=2.567$; $(5+25+7)/3=12.333$; $(80+400+50)/3=176.667$. The sums, the medians and the largest bank are the common wrong answers. The centroid need not be an actual data point.}
+
+\QA{Computing WCSS}
+{One-dimensional data are clustered as $\{1,2,3\}$ and $\{10,14\}$. What is the total within-cluster sum of squares (WCSS)?}
+{10}
+{6}
+{8}
+{20}
+{A}
+{Cluster 1 mean = 2: $(1-2)^2+0+(3-2)^2=2$. Cluster 2 mean = 12: $(10-12)^2+(14-12)^2=8$. Total $=10$. The value 6 results from summing absolute (not squared) deviations; 8 forgets the first cluster.}
+
+\QA{Choosing K with silhouette}
+{K-means is run for K = 2, 3, 4, 5. The average silhouette scores are 0.41, 0.58, 0.52 and 0.35 respectively, while WCSS falls steadily with K. Which K is best supported?}
+{K = 3}
+{K = 2}
+{K = 4}
+{K = 5}
+{A}
+{Choose the K with the highest average silhouette (0.58). WCSS always falls as K rises, so it cannot choose K on its own; the elbow of the scree plot is the complementary visual rule, and business meaning should also be considered.}
+
+\QA{WCSS and K}
+{Which statement about WCSS as K increases is most accurate?}
+{For the best partition at each K, WCSS is non-increasing and reaches zero at K = N, so K cannot be chosen by minimising WCSS.}
+{WCSS always increases because more centroids add distance terms.}
+{WCSS is minimised at K = 1.}
+{WCSS rises and falls randomly, so the elbow method is invalid.}
+{A}
+{Adding a cluster can only keep or reduce the error (analogy: adding a regressor never lowers $R^2$). K = N is a perfect but useless over-fit. In practice a particular run can look non-monotone because of local optima, so use several restarts.}
+
+\QA{Why K-means fails}
+{Customer records form two concentric rings in a scaled two-feature space. Which statement is correct about K-means with Euclidean distance?}
+{It will split the data incorrectly because it assumes compact, roughly spherical clusters of similar size around centroids.}
+{It will recover the two rings perfectly because it minimises WCSS.}
+{It will fail only because the data have not been standardised.}
+{It will produce one cluster per ring if K is set to 2 and several restarts are used.}
+{A}
+{Both rings share (almost) the same centre, so any centroid-based partition cuts across the rings. Fixes: DBSCAN, spectral clustering, kernel K-means, Gaussian mixtures, or engineered features (e.g. radius).}
+
+\QA{K-means++ and restarts}
+{Why is K-means++ initialisation combined with several random restarts commonly used?}
+{K-means only converges to a local optimum that depends on the start; spreading the initial centroids and keeping the run with the lowest WCSS gives better, more stable solutions.}
+{It guarantees the global minimum of WCSS.}
+{It removes the need to choose K.}
+{It makes K-means robust to outliers.}
+{A}
+{K-means++ picks the first centroid at random, then each next centroid with probability proportional to the squared distance from the nearest centroid already chosen, which spreads them out. It improves speed and quality but gives no guarantee of global optimality, and it does not fix outliers or K.}
+
+\TFrame{K-means Mechanics}
+{\begin{block}{Algorithm and objective}
+		\begin{itemize}
+			\item Minimise $\text{WCSS}=\sum_k\sum_{i\in C_k}\lVert x_i-\mu_k\rVert^2$.
+			\item Total SS = WCSS + BCSS, where $\text{BCSS}=\sum_k n_k\lVert\mu_k-\mu\rVert^2$ (separation).
+			\item Centroid $\mu_k=\frac{1}{n_k}\sum_{i\in C_k}x_i$ (a mean, not necessarily a data point).
+			\item Converges in finite steps to a \emph{local} optimum; cost about $O(nKdt)$.
+	\end{itemize}\end{block}
+	\begin{block}{Initialisation}
+		Random starts, \textbf{K-means++}, many restarts; keep lowest WCSS.
+\end{block}}
+{\begin{block}{Assumptions and weaknesses}
+		Spherical, similar-size, similar-density clusters; Euclidean distance; scale-sensitive; outliers drag centroids; K must be given; hard assignments only.
+	\end{block}
+	\begin{block}{Variants}
+		K-medoids (robust to outliers), K-modes (categorical), Gaussian mixture (soft assignment, elliptical), kernel K-means, mini-batch K-means (large data). Mixed data: Gower distance.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Is K-means supervised? Effect of a single outlier? Why scale? Manhattan distance gives diamond-shaped regions. WCSS vs BCSS: compactness vs separation.
+\end{alertblock}}
+
+\TFrame{Choosing K and Validating Clusters}
+{\begin{block}{Methods}
+		\begin{itemize}
+			\item \textbf{Elbow / scree plot}: plot WCSS vs K; pick the bend where improvements flatten. Can be ambiguous.
+			\item \textbf{Silhouette}: $s_i=\dfrac{b_i-a_i}{\max(a_i,b_i)}\in[-1,1]$, with $a_i$ = mean distance to own cluster, $b_i$ = mean distance to nearest other cluster. Pick K with the highest mean $s$.
+			\item \textbf{Gap statistic}, information criteria (Gaussian mixtures), stability, business usefulness.
+\end{itemize}\end{block}}
+{\begin{block}{Reading silhouette}
+		$s\approx1$ well inside its cluster; $s\approx0$ on a boundary; $s<0$ probably mis-assigned.
+		Example: $a=2$, $b=5$ gives $s=(5-2)/5=0.6$.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Rule of thumb $K\approx\sqrt{N/2}$; why WCSS alone fails; what negative silhouette means; how to compare two initialisations (lowest WCSS).
+\end{alertblock}}
+
+\QA{Silhouette calculation}
+{For one observation the average distance to the other points in its own cluster is $a=2$, and the average distance to the points of the nearest other cluster is $b=5$. What is its silhouette value, and how is it read?}
+{0.60: well matched to its own cluster}
+{0.40: weakly matched to its own cluster}
+{1.50: impossible value, indicates a data error}
+{$-0.60$: probably assigned to the wrong cluster}
+{A}
+{$s=(b-a)/\max(a,b)=(5-2)/5=0.6$. Values near +1 mean the point is much closer to its own cluster than to the next one; values near 0 sit on a boundary; negative values suggest mis-assignment. The statistic is bounded in $[-1,1]$, so 1.5 is impossible.}
+
+\QA{Linkage methods}
+{Which statement about linkage criteria in hierarchical clustering is correct?}
+{Single linkage uses the smallest pairwise distance between clusters and is prone to ``chaining'' into elongated clusters.}
+{Single linkage uses the largest pairwise distance and yields compact clusters.}
+{Complete linkage uses the smallest pairwise distance and is prone to chaining.}
+{Ward's method merges the pair of clusters that maximises the increase in within-cluster variance.}
+{A}
+{Single = nearest neighbour (min) $\Rightarrow$ chaining. Complete = furthest neighbour (max) $\Rightarrow$ compact, roughly equal-diameter clusters, but a single outlier can inflate cluster distances. Average = mean of all pairwise distances. Ward = merge that gives the \emph{smallest} increase in within-cluster variance.}
+
+\QA{Reading a dendrogram}
+{Agglomerative clustering of six points produced successive merge heights of 1, 1.5, 2, 6 and 7. Where is the most natural horizontal cut, and how many clusters result?}
+{Between heights 2 and 6, giving 3 clusters}
+{Between heights 6 and 7, giving 2 clusters}
+{Below height 1, giving 5 clusters}
+{Above height 7, giving 3 clusters}
+{A}
+{Cut where the vertical gap between successive merges is largest (2 $\rightarrow$ 6). Three merges lie below the cut, so 6 $-$ 3 = 3 clusters. Cutting above the top merge gives a single cluster. Long vertical lines = well-separated clusters.}
+
+\QA{DBSCAN}
+{Which statement about DBSCAN is correct?}
+{It finds arbitrarily shaped dense clusters, labels low-density points as noise, and does not need K, but it struggles with clusters of very different density.}
+{It requires the number of clusters to be specified in advance.}
+{Every point must belong to a cluster; there are no outliers.}
+{A border point must have at least minPts neighbours within $\varepsilon$.}
+{A}
+{Core point: at least minPts points within radius $\varepsilon$. Border point: within $\varepsilon$ of a core point but not itself core. Noise: neither. Parameters: $\varepsilon$ (k-distance plot helps) and minPts. HDBSCAN handles varying density.}
+
+\QA{Curse of dimensionality}
+{With a fixed number of observations, what happens to distance-based clustering as the number of features grows very large?}
+{Data become sparse and distances concentrate, so the nearest and furthest points look almost equally far and cluster structure is hard to detect.}
+{Clusters become easier to separate because there is more information.}
+{WCSS rises without bound, so K-means diverges.}
+{Only the run-time increases; clustering quality is unaffected.}
+{A}
+{In high dimensions volume grows exponentially, so data are sparse and the contrast between near and far neighbours vanishes. Remedies: feature selection, PCA, domain-driven features, cosine distance, subspace or model-based clustering. KNN and kernel methods suffer similarly.}
+
+\TFrame{Hierarchical Clustering, DBSCAN and Dimensionality}
+{\begin{block}{Hierarchical}
+		\begin{itemize}
+			\item \textbf{Agglomerative} (bottom-up, $n-1$ merges) vs \textbf{divisive} (top-down).
+			\item No K needed in advance; the dendrogram shows all solutions (cut horizontally; lines crossed = K).
+			\item Greedy and irreversible; memory about $O(n^2)$.
+			\item Linkage: single (min, chaining), complete (max, compact), average, Ward (min variance increase).
+\end{itemize}\end{block}}
+{\begin{block}{DBSCAN}
+		Density-based. Needs $\varepsilon$ and minPts, not K. Robust to outliers (noise label). Weak with varying density and in high dimension.
+	\end{block}
+	\begin{block}{Curse of dimensionality}
+		Sparsity and distance concentration; need exponentially more data; fix with PCA / feature selection.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which method detects outliers? Which needs a pre-set K? Difference between core/border/noise points. Why Manhattan vs Euclidean changes cluster shape.
+\end{alertblock}}
+
+\QA{Gini impurity}
+{A decision-tree node contains 10 loans, of which 6 defaulted and 4 did not. What is the Gini impurity of the node?}
+{0.48}
+{0.24}
+{0.52}
+{0.97}
+{A}
+{Gini $=1-\sum p_k^2=1-(0.6^2+0.4^2)=1-0.52=0.48$. The maximum for two classes is 0.5; a pure node gives 0. (Entropy for the same node is 0.971; 0.97 is entropy, not Gini.) The tree picks the split with the largest impurity reduction.}
+
+\QA{Tree overfitting}
+{An unpruned deep decision tree has 100\% training accuracy but 70\% test accuracy. Which action is most appropriate?}
+{Limit depth, require a minimum number of observations per leaf, or prune; consider an ensemble such as a random forest.}
+{Increase the maximum depth so the tree fits better.}
+{Evaluate only on the training set to avoid noise.}
+{Lower the classification threshold.}
+{A}
+{Fully grown trees memorise noise (high variance). Pre-pruning (max depth, min samples), post-pruning (cost-complexity) and ensembling reduce variance. Trees need no feature scaling and handle non-linearities and interactions, but are unstable.}
+
+\QA{Bagging}
+{An analyst draws many bootstrap samples (with replacement), fits a full tree to each using \emph{all} features, and averages the predictions. Which technique is this?}
+{Bootstrap aggregation (bagging)}
+{Random forest}
+{Adaptive boosting}
+{Gradient boosting}
+{A}
+{Bagging = bootstrap samples + all features + averaging/voting; it reduces variance. A random forest adds a random subset of features at each split. Boosting builds trees \emph{sequentially}, each correcting the previous errors.}
+
+\QA{Random forest advantage}
+{What is a key advantage of a random forest over a single bagged-tree ensemble?}
+{Random feature subsets at each split decorrelate the trees, so averaging reduces variance more and improves accuracy.}
+{It captures previous misclassifications by re-weighting observations.}
+{It is fully interpretable, since each tree is simple.}
+{It identifies outliers using Cook's distance.}
+{A}
+{Averaging $B$ trees with pairwise correlation $\rho$ has variance $\rho\sigma^2+\frac{1-\rho}{B}\sigma^2$; lowering $\rho$ via feature subsampling helps. Re-weighting misclassified cases is AdaBoost. Forests give feature importance and out-of-bag error but are less interpretable.}
+
+\QA{Boosting}
+{Which statement about gradient boosting is correct?}
+{Each new tree is fitted to the residual errors (negative gradient of the loss) of the current ensemble, with a learning rate that shrinks each step.}
+{Trees are grown independently in parallel on bootstrap samples.}
+{It mainly reduces variance and cannot overfit.}
+{It has no hyper-parameters to tune.}
+{A}
+{Boosting is sequential and mainly reduces bias (and, with shrinkage and subsampling, some variance). It can overfit noisy data, so tune number of trees, depth, learning rate and use early stopping. AdaBoost re-weights misclassified points; XGBoost/LightGBM add regularisation and speed.}
+
+\TFrame{Trees and Ensembles}
+{\begin{block}{Decision trees}
+		\begin{itemize}
+			\item Greedy recursive splits; impurity: Gini $1-\sum p^2$, entropy $-\sum p\log_2p$; information gain = impurity reduction.
+			\item Regression trees minimise squared error.
+			\item Pros: interpretable, non-linear, no scaling. Cons: unstable, overfit.
+	\end{itemize}\end{block}
+	\begin{block}{Bagging vs random forest}
+		Bagging: bootstrap + all features, average (cuts variance). Random forest: bagging + random feature subset per split; out-of-bag (OOB) error gives free validation.
+\end{block}}
+{\begin{block}{Boosting}
+		Sequential. AdaBoost re-weights errors; gradient boosting fits residuals; XGBoost, LightGBM, CatBoost. Cuts bias; watch overfitting and noisy labels.
+	\end{block}
+	\begin{block}{Quick rules}
+		``All features + average'' $\Rightarrow$ bagging. ``Random subset of features'' $\Rightarrow$ random forest. ``Sequential / corrects errors'' $\Rightarrow$ boosting. Bagging fights variance, boosting fights bias.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which ensembles can run in parallel? Which uses OOB error? Does a forest need scaling? Why are ensembles less interpretable?
+\end{alertblock}}
+
+\QA{SVM classification}
+{An SVM decision function is $f(x)=0.43x_1+2.55x_2+0.67$. For the observation $x_1=0.8$, $x_2=-0.75$, which class is predicted and what is the sign of the decision value? (Positive $\Rightarrow$ Class 1, negative $\Rightarrow$ Class 0.)}
+{Class 0; decision value below zero}
+{Class 0; decision value above zero}
+{Class 1; decision value below zero}
+{Class 1; decision value above zero}
+{A}
+{$f=0.43(0.8)+2.55(-0.75)+0.67=0.344-1.9125+0.67=-0.8985<0\Rightarrow$ Class 0. The magnitude of $f$ is proportional to the distance from the boundary (confidence).}
+
+\QA{SVM penalty parameter}
+{In a soft-margin SVM, what is the typical effect of increasing the penalty parameter C?}
+{It penalises margin violations more heavily, giving a narrower margin that fits the training data more tightly (lower bias, higher variance).}
+{It widens the margin and increases bias.}
+{It has no effect on the margin.}
+{It converts the SVM into a probabilistic model.}
+{A}
+{Small C = wide margin, tolerates misclassifications (more regularisation). Large C = narrow margin, risk of overfitting. Support vectors are the points on or inside the margin that define the boundary. Kernels (RBF, polynomial) allow non-linear boundaries; features should be scaled.}
+
+\QA{Scaling for distance-based models}
+{A KNN credit model uses age (20 to 80) and income (20,000 to 500,000) with plain Euclidean distance and no preprocessing. What is the likely consequence?}
+{Income dominates the distance, so age is effectively ignored; features should be standardised or normalised first.}
+{Age dominates the distance because it is measured in smaller units.}
+{No consequence, since KNN is scale-invariant.}
+{KNN will fail to run because the features have different ranges.}
+{A}
+{Distance is driven by the largest numerical ranges. Scaling is essential for KNN, K-means, SVM, PCA, regularised models and neural nets; not needed for trees/forests. Small K (K = 1) gives high variance (zero training error); large K gives high bias.}
+
+\TFrame{SVM and KNN}
+{\begin{block}{SVM}
+		\begin{itemize}
+			\item Maximum-margin hyperplane $w^\top x+b=0$; $f>0$ one class, $f<0$ the other.
+			\item Support vectors: points defining the margin. Margin width $2/\lVert w\rVert$.
+			\item Soft margin: C trades margin width vs errors. Kernel trick: RBF, polynomial for non-linear boundaries.
+			\item Hinge loss; scale features.
+\end{itemize}\end{block}}
+{\begin{block}{KNN}
+		Non-parametric, lazy learner: majority vote (or mean) of the K nearest points. K small $\Rightarrow$ high variance; K large $\Rightarrow$ high bias; choose K by CV. Needs scaling; hurt by irrelevant features and high dimensions; slow at prediction time.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Sign of the decision function; which points are support vectors; effect of C and of the kernel width; why KNN needs scaling; which algorithms are non-parametric.
+\end{alertblock}}
+
+\QA{Bayes and base rates}
+{1\% of transactions are fraudulent. A model flags 90\% of fraudulent transactions (sensitivity) and wrongly flags 5\% of legitimate ones. A transaction is flagged. Approximately what is the probability that it is truly fraudulent?}
+{15\%}
+{90\%}
+{5\%}
+{1\%}
+{A}
+{$P(F|\text{flag})=\dfrac{0.90\times0.01}{0.90\times0.01+0.05\times0.99}=\dfrac{0.009}{0.0585}\approx0.154$. Because fraud is rare, most alerts are false positives (low precision). This is the \emph{base-rate fallacy}, and it explains alert fatigue in AML and fraud monitoring.}
+
+\QA{Logistic regression output}
+{A logistic regression gives log-odds of default $=-2$ for a borrower. What is the implied probability of default?}
+{About 11.9\%}
+{About 13.5\%}
+{About 88.1\%}
+{About 20\%}
+{A}
+{Odds $=e^{-2}=0.135$ (this is the 13.5\%-looking distractor, but it is odds, not probability). $p=\text{odds}/(1+\text{odds})=1/(1+e^{2})=0.119$. A coefficient $\beta$ multiplies the odds by $e^{\beta}$ for a one-unit increase in the feature.}
+
+\QA{Multicollinearity}
+{In a linear regression, one predictor has a variance inflation factor (VIF) of 14. What does this indicate and what is a sensible response?}
+{Severe multicollinearity: coefficient standard errors are inflated and estimates unstable; drop or combine correlated predictors, or use ridge regression or PCA.}
+{Heteroskedasticity: use robust standard errors only.}
+{Autocorrelation of residuals: add lagged dependent variables.}
+{The model underfits: add more correlated predictors.}
+{A}
+{$\text{VIF}_j=1/(1-R_j^2)$ where $R_j^2$ regresses predictor $j$ on the others; values above about 5--10 are a warning. Multicollinearity hurts coefficient interpretation more than predictive accuracy.}
+
+\TFrame{Probabilistic and Linear Models}
+{\begin{block}{Bayes}
+		$P(A|B)=\dfrac{P(B|A)P(A)}{P(B)}$. Naive Bayes assumes features are conditionally independent given the class (fast, works well for text). Beware the \textbf{base-rate fallacy}.
+	\end{block}
+	\begin{block}{Logistic regression}
+		$\ln\frac{p}{1-p}=\beta_0+\sum\beta_jx_j$; $p=\frac{1}{1+e^{-z}}$; fitted by maximum likelihood; $e^{\beta}$ = odds ratio. Decision boundary is linear. Output is a probability, thresholded for class.
+\end{block}}
+{\begin{block}{Linear regression checks}
+		LINE assumptions: linearity, independence, normal (homoskedastic) errors. Problems: multicollinearity (VIF), heteroskedasticity (robust SE), autocorrelation (Durbin-Watson), outliers/leverage (Cook's distance). $R^2$ always rises with more regressors; use adjusted $R^2$/AIC.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Convert odds to probability; interpret an odds ratio; precision of an alert given a rare event; remedies for multicollinearity (drop, combine, ridge, PCA).
+\end{alertblock}}
+\section{Module 1: AI and Risk}
+
+\QA{Inscrutability}
+{A bank deploys a deep neural network for fraud detection. It is very accurate, but the model-risk team flags it as \emph{inscrutable}. Which statement best describes inscrutability?}
+{The internal mechanisms of the model cannot be understood by humans (``black box'').}
+{The accuracy of the model's predictions cannot be measured on out-of-sample data.}
+{The model cannot generalise to data it has not seen.}
+{The model gives different predictions each time it is run on the same input.}
+{A}
+{Inscrutability is opacity of the \emph{mechanism}. Accuracy and generalisation can still be tested out-of-sample on a black box, so those options describe performance/validation problems, not opacity. Determinism is unrelated. Do not confuse with \textbf{explainability} (giving a human-understandable reason for one output, often recovered post hoc).}
+
+\TFrame{Inscrutability, Interpretability, Explainability}
+{\begin{block}{Definitions (exam wording matters)}
+		\begin{itemize}
+			\item \textbf{Inscrutability}: humans cannot understand the internal mechanism (black box).
+			\item \textbf{Interpretability}: how well a human can understand the mechanism / cause-effect inside the model (global view).
+			\item \textbf{Explainability}: ability to give human-understandable reasons for a \emph{specific} output (local view), possibly post hoc.
+			\item \textbf{Transparency}: openness about data, design, use and limits (documentation, disclosure).
+	\end{itemize}\end{block}
+	\begin{block}{Spectrum of opacity}
+		Scorecard / linear / logistic $\rightarrow$ small tree $\rightarrow$ random forest / boosting $\rightarrow$ deep neural network / LLM.
+\end{block}}
+{\begin{block}{Why it matters}
+		\begin{itemize}
+			\item Validation, audit and challenge of the logic are harder.
+			\item Adverse-action reasons and GDPR/EU AI Act transparency duties.
+			\item Debugging and bias detection are harder.
+	\end{itemize}\end{block}
+	\begin{block}{Mitigants}
+		Interpretable-by-design models; post-hoc XAI (SHAP, LIME, PDP, surrogates); strong outcomes testing; documentation; challenger models; human oversight; use-limits proportional to materiality.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which model type is most interpretable? Is high accuracy a substitute for explainability? (No.) Interpretability vs explainability: which is global, which is local?
+\end{alertblock}}
+
+\QA{Classical AI}
+{Deep Blue defeated Kasparov in 1997. Which statement best describes the classical (symbolic) AI behind such systems?}
+{It relies on hand-coded rules, heuristics and search (e.g. look-ahead, minimax) in a well-defined domain.}
+{It learns its own features from raw data using backpropagation and gradient descent.}
+{It improves mainly by playing against itself without human-written evaluation rules.}
+{It scales easily to open-ended problems with unstructured data such as images and speech.}
+{A}
+{Classical AI (GOFAI) = explicit rules + search. It is transparent but brittle and suffers combinatorial explosion in complex domains. Learning features by gradient descent, self-play (AlphaZero-style) and handling unstructured data are \emph{deep learning} traits.}
+
+\QA{Deep learning feature}
+{Which feature most clearly differentiates deep learning from classical machine-learning models such as logistic regression or random forests?}
+{It learns multi-layer representations (features) directly from raw, often unstructured, data via backpropagation.}
+{It relies on hand-crafted features chosen by domain experts.}
+{It is generally more interpretable than a regression.}
+{It needs less data and computing power than classical models.}
+{A}
+{Deep nets stack many non-linear layers, so early layers learn simple patterns and later layers learn abstractions (edges $\rightarrow$ shapes $\rightarrow$ objects). That is why they excel with images, text and audio. They are data- and compute-hungry and inscrutable, the opposite of the distractors.}
+
+\TFrame{Classical AI vs Machine Learning vs Deep Learning}
+{\begin{block}{Nested relationship}
+		AI $\supset$ Machine Learning $\supset$ Deep Learning.
+		\begin{itemize}
+			\item \textbf{Classical AI}: rules, logic, search (A*, minimax, expert systems). Human writes the knowledge.
+			\item \textbf{Classical ML}: model learns parameters from data; humans engineer features (regression, trees, SVM, k-means).
+			\item \textbf{Deep learning}: neural nets with many layers learn the features too; backprop + gradient descent.
+	\end{itemize}\end{block}
+	\begin{block}{Timeline}
+		1950s--80s symbolic AI and expert systems; 1997 Deep Blue; 2012 AlexNet; 2016 AlphaGo; 2017 Transformer; 2020s large language models and generative AI.
+\end{block}}
+{\begin{block}{Quick comparison}
+		\begin{center}\scriptsize
+			\begin{tabular}{@{}lccc@{}}
+				\toprule
+				& Classical AI & Classical ML & Deep learning \\
+				\midrule
+				Knowledge from & humans & data & data \\
+				Features & rules & hand-made & learned \\
+				Unstructured data & poor & poor & strong \\
+				Interpretability & high & medium--high & low \\
+				Data needed & low & medium & very high \\
+				\bottomrule
+	\end{tabular}\end{center}\end{block}
+	\begin{alertblock}{Related questions to expect}
+		``Self-training / gradient descent / learned features'' $\Rightarrow$ deep learning. ``Lookahead / A* / adversarial search'' $\Rightarrow$ classical AI. Why do neural nets need GPUs and big data?
+\end{alertblock}}
+
+\QA{Learning paradigms}
+{Classify each task by learning paradigm: (i) predicting 12-month default from labelled historical loans; (ii) grouping retail clients by behaviour when no labels exist; (iii) an agent learns an order-execution policy by trial and error to maximise a reward.}
+{(i) supervised; (ii) unsupervised; (iii) reinforcement learning}
+{(i) unsupervised; (ii) supervised; (iii) reinforcement learning}
+{(i) supervised; (ii) reinforcement learning; (iii) unsupervised}
+{(i) semi-supervised; (ii) supervised; (iii) unsupervised}
+{A}
+{Labels present $\Rightarrow$ supervised. No labels, find structure $\Rightarrow$ unsupervised. Sequential decisions, rewards, trial and error $\Rightarrow$ reinforcement learning.}
+
+\QA{Reinforcement learning objective}
+{A trading-execution agent is trained with reinforcement learning (RL). Which description of the RL objective is correct?}
+{Choose actions in each state to maximise expected cumulative (discounted) reward.}
+{Minimise classification error on a labelled training set.}
+{Discover hidden structure in unlabelled data.}
+{Reduce the number of input features while keeping most of the variance.}
+{A}
+{RL has an agent, environment, states, actions, rewards and a policy. The agent is not told the right action; it learns from reward feedback. The other options describe supervised learning, clustering and PCA.}
+
+\QA{Exploration vs exploitation}
+{An RL agent always takes the action with the highest current value estimate and never tries alternatives. What is the main risk?}
+{It may lock into a sub-optimal policy because it under-explores (exploration--exploitation trade-off).}
+{It will overfit the test set because RL has no validation data.}
+{It over-explores and therefore never converges.}
+{It becomes a supervised model and now needs labels.}
+{A}
+{Pure exploitation (``greedy'') never discovers better actions. Typical fixes: epsilon-greedy, decaying exploration, optimism in the face of uncertainty. Too much exploration is the opposite failure (slow learning, costly trades).}
+
+\TFrame{Learning Paradigms}
+{\begin{block}{Paradigms}
+		\begin{itemize}
+			\item \textbf{Supervised}: labelled $(x,y)$. Regression (continuous $y$), classification (categorical $y$).
+			\item \textbf{Unsupervised}: no labels. Clustering, dimensionality reduction (PCA), anomaly detection, association rules.
+			\item \textbf{Semi-supervised}: few labels + many unlabelled (self-training, co-training).
+			\item \textbf{Self-supervised}: labels created from the data itself (predict masked/next word). Basis of LLM pre-training.
+			\item \textbf{Reinforcement}: agent--environment--reward; sequential decisions.
+\end{itemize}\end{block}}
+{\begin{block}{RL vocabulary}
+		State $s$, action $a$, reward $r$, policy $\pi(a|s)$, value $V(s)$ / $Q(s,a)$, discount factor $\gamma$, episode. Q-learning, policy gradients. RLHF = RL from human feedback to align LLMs.
+	\end{block}
+	\begin{block}{Finance examples}
+		Credit scoring (supervised); client segmentation (unsupervised); optimal execution, dynamic hedging (RL); fraud with few labels (semi-supervised).
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which paradigm needs labels? What does a reward function do? Why can badly specified rewards cause unintended behaviour (reward hacking)?
+\end{alertblock}}
+
+\QA{Societal risk}
+{Which scenario is best classified as a \emph{societal} (rather than individual or organisational) AI risk?}
+{A social-media recommender amplifies misinformation and shifts public opinion before an election.}
+{A robo-advisor mis-prices portfolios, causing losses to the firm.}
+{A hospital model leaks one patient's records.}
+{A hiring tool rejects one qualified applicant.}
+{A}
+{Societal risk = harm to society at large (democracy, trust, labour markets, market stability). The firm's loss is organisational; the leak and the rejected applicant are individual harms.}
+
+\TFrame{Levels of AI Risk}
+{\begin{block}{Three levels}
+		\begin{itemize}
+			\item \textbf{Individual}: privacy loss, discrimination, manipulation, wrong diagnosis, loss of autonomy.
+			\item \textbf{Organisational}: model risk, operational and cyber risk, legal/regulatory fines, reputational damage, third-party dependence, financial loss.
+			\item \textbf{Societal}: misinformation and deepfakes, erosion of trust, labour displacement, concentration of power, environmental cost, financial-stability risk (herding / model monoculture).
+\end{itemize}\end{block}}
+{\begin{block}{Exam shortcuts}
+		``Public opinion'', ``democracy'', ``inequality'', ``systemic'' $\Rightarrow$ societal. ``Customer'', ``patient'', ``applicant'' $\Rightarrow$ individual. ``Firm'', ``regulatory fine'', ``reputation'' $\Rightarrow$ organisational.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Same incident can hit several levels (a biased credit model harms individuals, exposes the firm to fines, and entrenches inequality). Which level does systemic herding belong to?
+\end{alertblock}}
+
+\QA{Levels of measurement}
+{A risk team records: (i) each issuer's credit rating (AAA, AA, A, BBB, \ldots); (ii) each issuer's sector (banks, energy, utilities); (iii) each loan's days past due. How are (i), (ii) and (iii) classified?}
+{(i) ordinal; (ii) nominal; (iii) ratio}
+{(i) nominal; (ii) ordinal; (iii) interval}
+{(i) ordinal; (ii) ordinal; (iii) ratio}
+{(i) ordinal; (ii) nominal; (iii) interval}
+{A}
+{Ratings are ranked but gaps are not equal $\Rightarrow$ ordinal. Sector has no order $\Rightarrow$ nominal. Days past due has a true zero (``not late'') and equal intervals $\Rightarrow$ ratio.}
+
+\QA{Missing data mechanism}
+{In a loan dataset, income is missing mostly for very-high-income applicants who prefer not to disclose it. Which statement is correct?}
+{It is MNAR (missing not at random): missingness depends on the unobserved value, so deletion or simple imputation can bias results.}
+{It is MCAR, so dropping the rows is unbiased.}
+{It is MAR, so mean imputation fully removes the bias.}
+{Missing data never affects model estimates if the sample is large.}
+{A}
+{MCAR: missingness unrelated to anything. MAR: depends on \emph{observed} variables only. MNAR: depends on the missing value itself, the hardest case. Large samples do not cure bias.}
+
+\TFrame{Data Types and Missing Data}
+{\begin{block}{Four levels of measurement}
+		\begin{itemize}
+			\item \textbf{Nominal}: labels, no order (sector, country). Mode only.
+			\item \textbf{Ordinal}: ordered, unequal gaps (ratings, Likert). Median, rank statistics.
+			\item \textbf{Interval}: equal gaps, arbitrary zero (temperature in $^\circ$C, IQ). Mean, SD, but ratios meaningless.
+			\item \textbf{Ratio}: equal gaps + true zero (income, age, balance). All statistics.
+	\end{itemize}\end{block}
+	\begin{block}{Other classifications}
+		Discrete vs continuous; cross-section vs time series vs panel; \textbf{structured} (tables) vs \textbf{unstructured} (text, images, audio) vs semi-structured (JSON, XML); alternative data (satellite, social media, transactions).
+\end{block}}
+{\begin{block}{Missing data}
+		\begin{itemize}
+			\item MCAR, MAR, MNAR (above).
+			\item Options: listwise deletion; mean/median imputation (shrinks variance); regression or KNN imputation; multiple imputation; missing-indicator flag.
+			\item Fit imputers on the \emph{training} set only (avoid leakage).
+	\end{itemize}\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Is temperature in Celsius interval or ratio? Which statistic is valid for ordinal data? Why is mean imputation risky? Which data type needs NLP or CNNs?
+\end{alertblock}}
+
+\QA{Standardisation and min-max}
+{A feature has mean 50 and standard deviation 10 in the training set, with minimum 20 and maximum 80. For the value $x=65$, what are the z-score and the min-max scaled value?}
+{z-score = 1.5; min-max = 0.75}
+{z-score = 1.5; min-max = 0.65}
+{z-score = 0.15; min-max = 0.75}
+{z-score = 0.75; min-max = 1.5}
+{A}
+{$z=(65-50)/10=1.5$. Min-max $=(65-20)/(80-20)=45/60=0.75$.}
+
+\QA{Scaling statements}
+{Which statement about feature scaling is correct?}
+{Min-max scaling is sensitive to outliers because the minimum and maximum define the range.}
+{Standardisation bounds every feature to the interval $[0,1]$.}
+{Standardisation converts a skewed distribution into a normal distribution.}
+{Min-max scaling changes the correlation between two variables.}
+{A}
+{Standardisation gives mean 0 and SD 1, \emph{not} bounded, and does not change distribution shape. Both transformations are affine, so correlations are preserved. One extreme value stretches the min-max range and squeezes everything else; consider robust scaling (median/IQR) or winsorising.}
+
+\QA{Outlier detection}
+{A feature has $Q_1=20$ and $Q_3=40$. Using the $1.5\times$IQR rule, which of the values 68, 72 and 95 are flagged as outliers?}
+{72 and 95}
+{95 only}
+{68, 72 and 95}
+{None of them}
+{A}
+{IQR $=20$. Upper fence $=40+1.5(20)=70$; lower fence $=20-30=-10$. So 72 and 95 exceed 70; 68 does not.}
+
+\QA{Encoding categorical variables}
+{A linear regression for loss-given-default includes ``country'' (5 nominal categories) coded 1 to 5 as a single numeric column. What is the problem and the fix?}
+{The coding imposes an arbitrary order and spacing; use one-hot dummy variables (k$-$1 dummies to avoid the dummy-variable trap).}
+{There is no problem because regression handles integer codes correctly.}
+{The coding is too coarse; apply PCA to the integer column.}
+{The codes must be standardised to mean 0 and SD 1.}
+{A}
+{Integer codes tell a linear model that country 5 is ``more'' than country 2. Nominal variables need one-hot (dummy) encoding. Ordinal variables (ratings, education) can use ordered integer codes. High-cardinality variables: frequency/target encoding (beware leakage) or embeddings.}
+
+\TFrame{Data Preparation Toolkit}
+{\begin{block}{Scaling}
+		\begin{itemize}
+			\item Standardisation: $z=(x-\mu)/\sigma$. Min-max: $(x-\min)/(\max-\min)\in[0,1]$.
+			\item Needed by: k-means, KNN, SVM, PCA, regularised regression, neural nets. Not needed by trees / forests.
+			\item Fit scaler on training data only.
+	\end{itemize}\end{block}
+	\begin{block}{Outliers}
+		IQR rule: outside $[Q_1-1.5\text{IQR},\,Q_3+1.5\text{IQR}]$; z-score beyond $\pm3$. Treat by winsorising, log transform, robust scaling. \textbf{Do not delete blindly}: in fraud and AML the outlier \emph{is} the signal.
+\end{block}}
+{\begin{block}{Encoding}
+		Nominal $\rightarrow$ one-hot; ordinal $\rightarrow$ ordered codes; high cardinality $\rightarrow$ target/frequency encoding or embeddings; text $\rightarrow$ tokens $\rightarrow$ vectors.
+	\end{block}
+	\begin{block}{Transformations}
+		Log for right-skew (income); Box-Cox; binning; interaction and polynomial terms; date features.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which algorithms are scale-sensitive? Which scaling is most outlier-sensitive? What is the dummy-variable trap? Why scale before PCA or LASSO?
+\end{alertblock}}
+
+\QA{Stepwise regression and AIC}
+{A forward stepwise procedure produced the AIC table below. Which model should the analyst select?
+	\begin{center}\scriptsize
+		\begin{tabular}{@{}llr@{\quad}llr@{}}
+			\toprule
+			Step & Model & AIC & Step & Model & AIC \\
+			\midrule
+			0 & No predictors & 3202.69 & 2 & Age + Age2 & 3125.50 \\
+			1 & Age & 3193.36 & 2 & Age + Age3 & 3123.20 \\
+			1 & Age3 & 3204.66 & 2 & Age + Age5 & 3132.87 \\
+			1 & Age5 & 3202.20 & 3 & Age + Age3 + Age2 & 3125.19 \\
+			& & & 3 & Age + Age3 + Age5 & 3124.50 \\
+			\bottomrule
+\end{tabular}\end{center}}
+{Age + Age3}
+{Age3}
+{Age + Age5}
+{Age + Age3 + Age5}
+{A}
+{Lower AIC is better. The best step-2 model (Age + Age3, 3123.20) has the lowest AIC overall; every step-3 model is higher (3124.50 to 3125.19), so adding a third term does not improve the penalised fit and the procedure stops.}
+
+\QA{Machine learning vs classical statistics}
+{Which statement best contrasts machine learning with classical statistical modelling?}
+{ML typically prioritises predictive accuracy on unseen data with weaker distributional assumptions; classical statistics emphasises inference about parameters under explicit assumptions.}
+{Classical statistics prioritises out-of-sample prediction, whereas ML prioritises parameter inference.}
+{ML models are always more transparent than statistical models.}
+{ML requires strict assumptions such as normal residuals and independence.}
+{A}
+{Statistics: inference, confidence intervals, hypothesis tests, interpretable coefficients. ML: generalisation error, flexible functional forms, often black-box. The boundary is blurry (regularised regression is both), but the emphasis differs.}
+
+\TFrame{Model Selection, AIC/BIC and Statistics vs ML}
+{\begin{block}{Information criteria}
+		\begin{itemize}
+			\item $\text{AIC}=2k-2\ln L$; $\text{BIC}=k\ln n-2\ln L$ ($k$ parameters, $L$ likelihood, $n$ observations).
+			\item Lower is better; both penalise complexity. BIC penalises more once $n>7$.
+			\item Differences below about 2 are practically equivalent: prefer the simpler model.
+	\end{itemize}\end{block}
+	\begin{block}{Stepwise}
+		Forward (add), backward (remove), bidirectional. Stop when no move lowers the criterion. Weaknesses: unstable, overfits, invalid p-values. LASSO or cross-validation are modern alternatives.
+\end{block}}
+{\begin{block}{Statistics vs ML}
+		\begin{itemize}
+			\item Statistics: inference, assumptions (linearity, normality, independence), interpretable.
+			\item ML: prediction and generalisation, validated by hold-out / CV, flexible, often opaque.
+			\item Occam's razor: among models with similar performance choose the simplest.
+	\end{itemize}\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Adjusted $R^2$ vs $R^2$; what does AIC penalise; why is a lower training error not proof of a better model; which is for inference, which for prediction?
+\end{alertblock}}
+
+\QA{PCA: how many components?}
+{PCA on five standardised variables gives eigenvalues 2.5, 1.2, 0.7, 0.4 and 0.2. What is the minimum number of principal components needed to retain at least 80\% of total variance?}
+{3}
+{2}
+{4}
+{5}
+{A}
+{Total variance = 5.0 (sum of eigenvalues). Cumulative shares: PC1 50\%, PC1--2 74\%, PC1--3 88\%. Three components are needed. (The Kaiser rule ``eigenvalue $>1$'' would keep only 2, but the question asks for $\ge80\%$.)}
+
+\QA{PCA properties}
+{Which statement about principal component analysis is correct?}
+{Components are linear combinations of the original variables that are mutually uncorrelated and ordered by variance explained.}
+{Components are a subset of the original variables with the highest variance.}
+{PCA uses the target label to maximise class separation.}
+{PCA improves the interpretability of the features.}
+{A}
+{PCA is unsupervised and based on the eigen-decomposition of the covariance (or correlation) matrix. It constructs \emph{new} features, which are harder to interpret. It is scale-sensitive, so standardise first, and it captures linear structure only.}
+
+\TFrame{Principal Component Analysis}
+{\begin{block}{How it works}
+		\begin{itemize}
+			\item Standardise $\rightarrow$ covariance matrix $\rightarrow$ eigenvectors (directions) and eigenvalues (variance along them).
+			\item PC1 has the largest eigenvalue; PCs are orthogonal.
+			\item Proportion explained by PC$_j$ = $\lambda_j/\sum\lambda$.
+			\item Number of PCs $\le \min(n-1,p)$.
+	\end{itemize}\end{block}
+	\begin{block}{Choosing the number}
+		Cumulative variance threshold (e.g. 80--95\%), scree plot elbow, Kaiser ($\lambda>1$ on standardised data), cross-validated model performance.
+\end{block}}
+{\begin{block}{Pros and cons}
+		Pros: removes multicollinearity, reduces noise and overfitting, speeds training, visualisation. Cons: components hard to interpret, linear only, scale-sensitive, variance $\neq$ predictive relevance (the target may relate to a low-variance PC).
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Is PCA supervised? (No.) Does PCA need scaling? (Yes.) PCA vs LASSO for dimension reduction; PCA vs t-SNE / autoencoders (non-linear).
+\end{alertblock}}
+
+\QA{Diagnosing overfitting}
+{A model has a training error of 2\% and a validation error of 18\%. What is the best diagnosis and response?}
+{High variance (overfitting): regularise or simplify the model, add data, use early stopping or cross-validation.}
+{High bias (underfitting): make the model more complex.}
+{Irreducible error: nothing can be done.}
+{Concept drift: retrain on the validation set.}
+{A}
+{Low training error with much higher validation error is the signature of overfitting. High bias would show \emph{both} errors high. Never tune on the test set.}
+
+\QA{Data leakage}
+{An analyst standardises all features using the mean and SD of the \emph{entire} dataset and only then splits it into training and test sets. What is the issue?}
+{Information from the test set leaks into training, giving an over-optimistic performance estimate.}
+{No issue, since scaling is unsupervised.}
+{The model will underfit.}
+{The test set becomes too small.}
+{A}
+{Any statistic (mean, SD, imputation value, PCA loadings, target encoding) must be learned from training data only and then applied to validation/test. Other leakage: features unavailable at prediction time (e.g. collection status in a default model), random splits of time-series data (use forward-chaining), duplicates across splits.}
+
+\QA{Regression vs classification}
+{Which prediction target requires a regression (rather than classification) model?}
+{Loss given default as a percentage of exposure}
+{Whether a borrower defaults within 12 months}
+{Whether a transaction is fraudulent}
+{Whether an email is spam}
+{A}
+{Continuous numeric target $\Rightarrow$ regression. Binary or categorical target $\Rightarrow$ classification (logistic regression, trees, SVM). PD is the \emph{probability} from a classifier; LGD and EAD are continuous.}
+
+\TFrame{Overfitting, Leakage and Problem Framing}
+{\begin{block}{Bias--variance}
+		Expected error = Bias$^2$ + Variance + Irreducible error.
+		\begin{itemize}
+			\item High bias: too simple, both train and validation error high (underfit).
+			\item High variance: too flexible, low train error but high validation error (overfit).
+		\end{itemize}
+		Fixes for overfitting: more data, simpler model, regularisation, pruning, dropout, early stopping, ensembling (bagging). Fixes for underfitting: richer features/model, less regularisation.
+	\end{block}
+	\begin{block}{Data splits}
+		Train (fit parameters), validation (tune hyper-parameters), test (final unbiased estimate, used once). Time series: split by time.
+\end{block}}
+{\begin{block}{Leakage checklist}
+		Scaling/imputation before split; future information; target-derived features; same customer in train and test; tuning on the test set.
+	\end{block}
+	\begin{block}{Framing}
+		Regression: LGD, EAD, price. Classification: default, fraud, churn. Ranking, clustering, anomaly detection are other framings.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Learning-curve interpretation; why test performance \emph{worse} than CV hints at leakage or drift; parameters vs hyper-parameters.
+\end{alertblock}}
+
+\section{Module 4: Responsible and Ethical AI}
+
+\QA{Shapley value calculation}
+{A model's average prediction is 0.10. For one applicant the prediction using features 1 and 2 is 0.40. The value function (expected prediction given only the listed features) is $v(\emptyset)=0.10$, $v(\{1\})=0.25$, $v(\{2\})=0.20$, $v(\{1,2\})=0.40$. What is the Shapley value of feature 1?}
+{0.175}
+{0.150}
+{0.200}
+{0.300}
+{A}
+{Average the marginal contribution of feature 1 over both orderings: $\tfrac12[(0.25-0.10)+(0.40-0.20)]=\tfrac12(0.15+0.20)=0.175$. Feature 2 gets $\tfrac12[(0.20-0.10)+(0.40-0.25)]=0.125$. Check \emph{efficiency}: $0.175+0.125=0.30=0.40-0.10$ (prediction minus baseline).}
+
+\QA{Matching XAI tools}
+{Which technique explains an individual prediction by fitting a simple, interpretable surrogate model in the neighbourhood of that observation?}
+{LIME}
+{Partial dependence plot}
+{Permutation feature importance}
+{K-fold cross-validation}
+{A}
+{LIME = local, model-agnostic, linear surrogate on perturbed samples. PDP shows the average (global) effect of a feature; ICE plots show it per observation. Permutation importance ranks features globally by the loss in performance when shuffled. SHAP gives additive local contributions with game-theoretic guarantees and can be aggregated to global importance.}
+
+\QA{Counterfactual explanation}
+{A declined applicant asks, ``What minimal change would have led to approval?'' Which type of explanation answers this?}
+{Counterfactual explanation (``had income been higher by X, you would be approved'')}
+{Global feature-importance ranking}
+{Silhouette analysis}
+{Partial dependence of the portfolio}
+{A}
+{Counterfactuals are actionable, local and understandable to customers, and support contestability. They must be feasible (you cannot change your age or protected characteristics) and consistent with policy.}
+
+\TFrame{Explainable AI (XAI) Methods}
+{\begin{block}{Local vs global}
+		\begin{itemize}
+			\item \textbf{Global}: how does the model behave overall? Feature importance, PDP, surrogate trees, SHAP summary.
+			\item \textbf{Local}: why this decision? LIME, SHAP values, counterfactuals, ICE.
+			\item \textbf{Intrinsic} (interpretable by design: scorecard, small tree, GAM) vs \textbf{post hoc}.
+\end{itemize}\end{block}}
+{\begin{block}{Shapley / SHAP}
+		Fair payout from cooperative game theory: average marginal contribution over all feature coalitions. Axioms: efficiency (contributions sum to prediction minus baseline), symmetry, dummy (null feature gets 0), additivity. SHAP properties: local accuracy, missingness, consistency.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which method is model-agnostic? Which is local? Why can explanations be unstable or misleading with correlated features? Do post-hoc explanations prove the model is fair? (No.)
+\end{alertblock}}
+
+\QA{Utilitarianism}
+{Which statement about utilitarianism (a consequentialist theory) is correct?}
+{It judges actions by aggregate welfare and can justify overriding the rights of a minority if the total benefit is larger.}
+{It judges actions by whether they follow universal duties, whatever the outcomes.}
+{It focuses on cultivating virtuous character traits.}
+{It treats the intention of the actor as the only relevant factor.}
+{A}
+{Utilitarianism: maximise overall good (``greatest happiness''). Strength: measurable trade-offs (cost--benefit). Weakness: ignores distribution and individual rights. For AI: an algorithm that maximises total profit or accuracy may harm a minority group.}
+
+\QA{Deontology}
+{Which description best fits deontological ethics?}
+{Actions are right or wrong according to duties and rules (e.g. Kant's categorical imperative), regardless of consequences.}
+{Actions are judged solely by their consequences.}
+{Actions are judged by a single quantifiable utility metric.}
+{Actions are right if a virtuous person would perform them.}
+{A}
+{Deontology: some acts (deceiving, violating privacy, using people merely as means) are wrong in themselves. For AI: red lines such as mass surveillance or manipulation, rights to consent and dignity.}
+
+\QA{Applying ethical theories}
+{A firm (i) refuses to build a covert employee-monitoring tool because people have a right to privacy even though it would raise productivity, and (ii) deploys a triage model because it saves the most lives overall despite slightly worse outcomes for a small group. Which frameworks drive (i) and (ii)?}
+{(i) deontology; (ii) utilitarian (consequentialist)}
+{(i) utilitarian; (ii) deontology}
+{(i) virtue ethics; (ii) deontology}
+{(i) virtue ethics; (ii) virtue ethics}
+{A}
+{Duty/rights-based refusal regardless of payoff = deontology. Maximising total outcome = utilitarianism. Virtue ethics asks what a person of good character (honesty, courage, prudence, fairness) would do and cultivates those dispositions in the organisation (culture, tone from the top).}
+
+\TFrame{Ethical Theories}
+{\begin{block}{Three classic frameworks}
+		\begin{itemize}
+			\item \textbf{Consequentialism / utilitarianism}: outcomes; maximise overall welfare; risk: minority harm.
+			\item \textbf{Deontology}: duties, rules, rights; categorical imperative; risk: rigid, conflicting duties.
+			\item \textbf{Virtue ethics}: character and practical wisdom; risk: vague guidance.
+\end{itemize}\end{block}}
+{\begin{block}{Memory hooks}
+		Ends justify means $\Rightarrow$ consequentialist. Means matter / rights / duties $\Rightarrow$ deontology. Character / integrity / culture $\Rightarrow$ virtue.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which theory permits trade-offs between individuals? Which underlies ``never use AI for X'' red lines? Which theory is most aligned with corporate culture and tone from the top?
+\end{alertblock}}
+
+\QA{Justice}
+{Which statement about justice in AI ethics is correct?}
+{Different principles of distributive justice (equality, utility, merit, need) can conflict, so trade-offs must be made explicitly.}
+{Procedural justice does not require impartial application of rules.}
+{Meritocracy is not a principle of distributive justice.}
+{Individual autonomy is always subordinate to social justice.}
+{A}
+{Distributive justice: who gets what (egalitarian, utilitarian, meritocratic, needs-based). Procedural justice: fair, consistent, impartial process and a chance to contest. Social justice: fairness across society. Real systems (credit, hiring, triage) must balance them.}
+
+\QA{Rawls}
+{A committee designs a model to allocate scarce loans without knowing which group it will belong to, and chooses rules that protect the worst-off. Which idea is this?}
+{Rawls' veil of ignorance and the difference principle (justice as fairness)}
+{Act utilitarianism}
+{The categorical imperative}
+{Survivorship bias}
+{A}
+{Rawls: choose principles behind a veil of ignorance; inequalities are acceptable only if they benefit the least advantaged. Useful design heuristic for fairness trade-offs in AI allocation systems.}
+
+\QA{Autonomy}
+{An AI system overrides a patient's informed preference and recommends a treatment the patient has refused. Which ethical principle is most directly infringed?}
+{Autonomy}
+{Beneficence}
+{Non-maleficence}
+{Explicability}
+{A}
+{Autonomy = respecting informed, voluntary choice (consent, right to refuse, human control; no manipulation or dark patterns). AI should support, not replace, human judgement.}
+
+\QA{Non-maleficence}
+{A dosing recommender occasionally outputs doses that can cause overdoses. Which principle is most directly at stake?}
+{Non-maleficence (do no harm)}
+{Autonomy}
+{Justice}
+{Explicability}
+{A}
+{Beneficence = actively do good; non-maleficence = avoid harm (safety, robustness, testing, fail-safes). Justice = fairness; autonomy = choice; explicability = intelligibility and accountability.}
+
+\QA{Fifth principle}
+{The AI4People framework adds a fifth principle to the four bioethics principles (beneficence, non-maleficence, autonomy, justice). What is it?}
+{Explicability (intelligibility plus accountability)}
+{Profitability}
+{Scalability}
+{Solidarity}
+{A}
+{Explicability enables the others: we need to understand how AI works (intelligibility) and who is responsible (accountability) to judge whether it is beneficent, non-maleficent, autonomy-respecting and just.}
+
+\QA{Ethics framework benefit}
+{What is the most likely benefit of a formal AI ethics framework in a financial institution?}
+{It reduces regulatory non-compliance, reputational and conduct risk by setting principles, roles, escalation paths and consistent decision rules.}
+{It automatically increases model accuracy.}
+{It guarantees legal compliance.}
+{It eliminates all conflicts of interest.}
+{A}
+{A framework gives consistent guidance for dilemmas, accountability and training, supports trust, and evidences due care to supervisors. It cannot guarantee compliance and does not replace judgement, validation or controls.}
+
+\TFrame{Core AI Ethics Principles}
+{\begin{block}{Five principles (AI4People)}
+		\begin{itemize}
+			\item \textbf{Beneficence}: promote well-being.
+			\item \textbf{Non-maleficence}: avoid harm (safety, security, privacy).
+			\item \textbf{Autonomy}: preserve human agency, consent, right to contest.
+			\item \textbf{Justice}: fairness, non-discrimination, fair access.
+			\item \textbf{Explicability}: intelligibility + accountability.
+\end{itemize}\end{block}}
+{\begin{block}{Justice types}
+		Distributive (equality, utility, merit, need), procedural (fair process), social (society-wide). Rawls: veil of ignorance.
+	\end{block}
+	\begin{block}{Framework contents}
+		Principles, risk assessment, roles and committees, escalation, training, monitoring, incident reporting.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Match a scenario to a principle (dark patterns = autonomy; harm = non-maleficence; discrimination = justice; black box = explicability). Why do principles alone not guarantee ethical behaviour (need operationalisation)?
+\end{alertblock}}
+
+\QA{EU AI Act risk tiers}
+{Under the EU AI Act, how is an AI system that evaluates the creditworthiness of natural persons generally classified?}
+{High-risk (subject to requirements such as risk management, data governance, documentation, human oversight and conformity assessment)}
+{Prohibited (unacceptable risk)}
+{Limited risk (transparency only)}
+{Minimal risk (no obligations)}
+{A}
+{Four tiers: unacceptable (banned, e.g. social scoring, manipulative techniques), high-risk (credit scoring, recruitment, education, essential services, law enforcement), limited risk (transparency, e.g. chatbots must disclose they are AI; deepfakes labelled), minimal risk. Fines for banned practices can reach 7\% of worldwide turnover. Check current application dates; obligations are phased in.}
+
+\QA{GDPR and automated decisions}
+{A customer is refused credit solely by an automated process with no human involvement. Under GDPR Article 22, which right typically applies?}
+{The right to obtain human intervention, express a point of view and contest the decision}
+{No rights, because credit decisions are exempt}
+{The right to receive the model's source code}
+{The right to a refund of application fees}
+{A}
+{Art. 22 restricts solely automated decisions with legal or similarly significant effects, subject to exceptions (contract, law, explicit consent) with safeguards. Arts. 13--15 require meaningful information about the logic involved. A full ``right to explanation'' is debated, but regulators expect understandable reasons.}
+
+\QA{Trustworthy AI requirements}
+{Which of the following is NOT one of the seven requirements of Trustworthy AI proposed by the EU High-Level Expert Group?}
+{Maximisation of shareholder profit}
+{Human agency and oversight}
+{Technical robustness and safety}
+{Accountability}
+{A}
+{The seven: human agency and oversight; technical robustness and safety; privacy and data governance; transparency; diversity, non-discrimination and fairness; societal and environmental well-being; accountability.}
+
+\TFrame{Regulation and Standards}
+{\begin{block}{EU AI Act (risk-based)}
+		\begin{itemize}
+			\item Unacceptable: banned practices (e.g. social scoring, manipulative AI).
+			\item High-risk: credit scoring, hiring, education, essential services, etc. Obligations: risk management, data quality, documentation, logging, transparency, human oversight, accuracy / robustness / cybersecurity, conformity assessment.
+			\item Limited risk: disclosure duties (chatbots, deepfakes).
+			\item General-purpose AI models: transparency duties; extra for systemic-risk models.
+\end{itemize}\end{block}}
+{\begin{block}{GDPR essentials}
+		Principles: lawfulness, fairness, transparency, purpose limitation, data minimisation, accuracy, storage limitation, integrity and confidentiality, accountability. Art. 22 on automated decisions; fines up to 4\% of turnover.
+	\end{block}
+	\begin{block}{Other}
+		SR 11-7 / OCC 2011-12 (US model risk), ECOA / Reg B and FCRA (adverse action), NIST AI RMF, ISO/IEC 42001, OECD AI principles, PRA SS1/23 (UK model risk).
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Which tier is a recruitment tool? What must a chatbot disclose? Which GDPR principle limits reuse of data? Which US rule requires reasons for adverse credit decisions?
+\end{alertblock}}
+
+\QA{Pseudonymisation}
+{A bank replaces customer names with random tokens but keeps a separate key table that can re-identify them. Under GDPR, how is this data treated?}
+{Pseudonymised data remain personal data and stay in scope of GDPR.}
+{Anonymous data, fully outside GDPR.}
+{Public data that can be freely shared.}
+{Encrypted data that are always lawful to export.}
+{A}
+{Pseudonymisation is a security/privacy measure, not anonymisation. Truly anonymised data (irreversibly de-identified, with re-identification not reasonably possible) fall outside GDPR. Beware re-identification by linking datasets; k-anonymity and differential privacy help.}
+
+\QA{Privacy-enhancing technologies}
+{Several banks want to build a joint fraud model without pooling their customers' raw data. Which approach best fits?}
+{Federated learning (each bank trains locally and only model updates are shared), ideally with secure aggregation or differential privacy}
+{Centralising all raw data with pseudonymised IDs}
+{K-means clustering of all banks' data}
+{Stemming the customer records}
+{A}
+{Federated learning keeps data on-premises. Differential privacy adds calibrated noise so individuals cannot be inferred. Homomorphic encryption and secure multi-party computation compute on protected data. Synthetic data can reduce exposure but may leak or distort rare patterns.}
+
+\QA{Accountability}
+{A regulator asks who is responsible when an automated decision, made by a vendor's model deployed by the bank, harms a customer. What is the appropriate governance position?}
+{The bank remains accountable, with named senior owners; responsibility cannot be delegated to the algorithm or the vendor.}
+{The vendor alone is accountable.}
+{No one, because the decision was automated.}
+{The customer, who accepted the terms.}
+{A}
+{Accountability needs named roles (model owner, executive sponsor), documented decisions, audit trails, escalation and redress mechanisms. Vendor contracts can allocate cost but not regulatory accountability.}
+
+\TFrame{Privacy, Transparency and Accountability}
+{\begin{block}{Privacy techniques}
+		\begin{itemize}
+			\item \textbf{Pseudonymisation}: still personal data. \textbf{Anonymisation}: out of scope if irreversible.
+			\item \textbf{Differential privacy}: noise limits what can be learned about any individual.
+			\item \textbf{Federated learning}: train where data live; share updates.
+			\item Homomorphic encryption, secure MPC, synthetic data, k-anonymity.
+\end{itemize}\end{block}}
+{\begin{block}{Accountability toolkit}
+		Named owners, inventory, documentation, audit trail and logging, incident management, contestability, board oversight, third-party management. Transparency: disclose AI use, limitations, data sources.
+	\end{block}
+	\begin{alertblock}{Related questions to expect}
+		Does removing names make data anonymous? Which technique keeps raw data local? Does the right to erasure complicate trained models? (Yes: machine unlearning is hard.) Who is liable for vendor models?
+\end{alertblock}}

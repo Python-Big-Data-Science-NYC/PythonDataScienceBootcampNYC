@@ -1,0 +1,3017 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\definecolor{garpblue}{RGB}{0,51,102}
+\definecolor{garpgold}{RGB}{204,153,0}
+\definecolor{correctgreen}{RGB}{0,128,0}
+\definecolor{wrongred}{RGB}{200,0,0}
+
+\setbeamercolor{structure}{fg=garpblue}
+\setbeamercolor{title}{fg=white,bg=garpblue}
+\setbeamercolor{frametitle}{fg=white,bg=garpblue}
+\setbeamercolor{block title}{fg=white,bg=garpblue}
+\setbeamercolor{block body}{bg=garpblue!5}
+\setbeamercolor{block title alerted}{fg=white,bg=wrongred}
+\setbeamercolor{block body alerted}{bg=wrongred!8}
+\setbeamercolor{block title example}{fg=white,bg=correctgreen}
+\setbeamercolor{block body example}{bg=correctgreen!8}
+\setbeamercolor{itemize item}{fg=garpgold}
+\setbeamercolor{itemize subitem}{fg=garpblue}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=garpblue,
+	urlcolor=garpgold,
+	pdftitle={GARP Risk and AI - 100 Practice Questions with Theory},
+	pdfauthor={Unofficial Exam Prep}
+}
+
+\title[GARP Risk \& AI]{GARP Risk and AI Exam Prep}
+\subtitle{100+ Practice Questions with Theory Slides}
+\author[Unofficial]{Unofficial Study Aid}
+\institute[GARP Risk \& AI]{Based on the official GARP Risk and AI curriculum}
+\date{\today}
+
+% --- Custom commands ---
+\newcommand{\question}[1]{\begin{block}{Question}#1\end{block}}
+\newcommand{\options}[4]{%
+	\begin{enumerate}[label=\Alph*.,leftmargin=*]
+		\item #1
+		\item #2
+		\item #3
+		\item #4
+	\end{enumerate}
+}
+\newcommand{\answerbox}[1]{\begin{exampleblock}{Correct Answer: #1}\end{exampleblock}}
+\newcommand{\explain}[1]{\begin{block}{Explanation}#1\end{block}}
+\newcommand{\theory}[1]{%
+	\begin{block}{Theory --- Learn This for the Exam}
+		\small #1
+	\end{block}
+}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{Outline}
+		\tableofcontents
+	\end{frame}
+	
+	% ============================================================
+	\section{Module 1: AI and Risk --- Introduction and Overview}
+	% ============================================================
+	
+	\begin{frame}{Module 1 --- Question 1}
+		\question{A bank uses AI models for detecting fraudulent transactions. While the bank's models are highly effective at identifying potential fraud, the risk management team is concerned about the inscrutability of the models. Which of the following statements correctly describes inscrutability in AI models?}
+		\options{Inscrutability is the inability to understand the internal mechanisms of a model.}{Inscrutability is the inability to determine the accuracy of a model's prediction.}{Inscrutability is the inability to explain a model's predictions.}{Inscrutability is the inability to generalize a model to out-of-sample data.}
+		\answerbox{A}
+		\explain{Inscrutability refers to the inability to understand the internal mechanisms of a model --- how it arrives at its outputs. It is distinct from accuracy, explainability, and generalizability.}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Theory: Inscrutability, Explainability, Interpretability}
+		\theory{
+			\textbf{Inscrutability} = inability to understand the \emph{internal mechanisms} of a model.\\[2mm]
+			\textbf{Explainability} = ability to explain \emph{why} a model made a specific decision.\\[2mm]
+			\textbf{Interpretability} = ability to understand the \emph{internal workings} of a model.\\[2mm]
+			\textbf{Key distinctions:}
+			\begin{itemize}
+				\item A model can be accurate but inscrutable (e.g., deep neural networks).
+				\item A model can be interpretable but not explainable in human terms (e.g., complex rule sets).
+				\item Inscrutability is a \textbf{model risk} because it hinders validation, audit, and regulatory compliance.
+				\item GARP exam frequently tests the difference between these three terms.
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Question 2}
+		\question{In March 1997, Deep Blue, an AI model developed by IBM, defeated the World Chess Champion Garry Kasparov. This event was considered a success for classical AI (also known as Good Old-Fashioned AI) development. Which of the following best describes a characteristic of classical AI?}
+		\options{Classical AI can optimize its performance by using the gradient descent method.}{Classical AI cannot process structured data like time series data.}{Classical AI typically relies on pre-defined rules within simple contexts.}{Classical AI can easily scale to large, complex problems.}
+		\answerbox{C}
+		\explain{Classical AI (GOFAI) relies on pre-defined rules and logic within simple, well-defined contexts. It does not use gradient descent (that is deep learning) and struggles to scale to complex problems.}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Theory: Classical AI vs. Deep Learning}
+		\theory{
+			\textbf{Classical AI (GOFAI --- Good Old-Fashioned AI):}
+			\begin{itemize}
+				\item Rule-based, symbolic logic
+				\item Uses search algorithms (A*, minimax, lookahead)
+				\item Works well in \emph{simple, well-defined} contexts (chess, tic-tac-toe)
+				\item Cannot scale to large, complex, unstructured problems
+				\item Does \textbf{not} learn from data using gradient descent
+			\end{itemize}
+			\textbf{Deep Learning:}
+			\begin{itemize}
+				\item Neural networks with many layers
+				\item Learns from data via backpropagation and gradient descent
+				\item Uses \textbf{self-training} (learning by competing against itself)
+				\item Scales to complex problems (image recognition, NLP, generative AI)
+				\item Can be inscrutable (black-box)
+			\end{itemize}
+			\textbf{Exam tip:} If a question mentions ``self-training'' or ``gradient descent,'' it is deep learning. If it mentions ``pre-defined rules'' or ``search,'' it is classical AI.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Question 3}
+		\question{Which of the following best describes a societal risk scenario regarding the impact of AI?}
+		\options{AI systems employed by a mid-size trading company makes errors resulting in losses for clients.}{AI systems employed by a large social media company spread misinformation that influences public opinion.}{AI systems used by a local manufacturer for hiring result in poor hiring decisions.}{AI systems used by a local hospital access personal information resulting in a loss of privacy.}
+		\answerbox{B}
+		\explain{A societal risk affects society at large. Misinformation spread by a large social media company influencing public opinion is a societal risk. The other options describe organizational or individual risks.}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Theory: Risks to Individuals, Organizations, Society}
+		\theory{
+			\textbf{Three levels of AI risk:}
+			\begin{itemize}
+				\item \textbf{Individual risk:} harm to a specific person (privacy breach, wrong hiring decision, wrong medical diagnosis).
+				\item \textbf{Organizational risk:} harm to a company (financial loss, reputational damage, regulatory fines).
+				\item \textbf{Societal risk:} harm to society at large (misinformation, inequality, erosion of trust, democratic impact).
+			\end{itemize}
+			\textbf{Examples:}
+			\begin{itemize}
+				\item Hospital accessing personal info $\rightarrow$ individual privacy risk
+				\item Trading company loses money $\rightarrow$ organizational risk
+				\item Social media spreads misinformation $\rightarrow$ societal risk
+				\item Hiring algorithm discriminates $\rightarrow$ individual + organizational risk
+			\end{itemize}
+			\textbf{Exam tip:} Read the scale of impact. ``Society,'' ``public opinion,'' ``democracy'' = societal.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Question 4}
+		\question{One of the key breakthroughs of AI and machine learning is the development of deep learning. Which of the following is a key differentiating feature of deep learning over classical AI?}
+		\options{A* ("A star") algorithm}{Recursive adversarial search}{Lookahead strategy}{Self-training}
+		\answerbox{D}
+		\explain{Self-training is an important aspect of deep learning, where the machine learning program learns by competing against itself. A*, recursive adversarial search, and lookahead are classical AI techniques.}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Theory: Key Breakthroughs in AI}
+		\theory{
+			\textbf{Timeline of AI breakthroughs:}
+			\begin{itemize}
+				\item \textbf{1950s--1980s:} Classical AI (GOFAI) --- logic, search, expert systems
+				\item \textbf{1997:} Deep Blue beats Kasparov --- classical AI success
+				\item \textbf{2010s:} Deep learning revolution (AlexNet, AlphaGo)
+				\item \textbf{2017:} Transformers introduced (``Attention Is All You Need'')
+				\item \textbf{2020s:} Large Language Models (GPT, Claude, Gemini)
+			\end{itemize}
+			\textbf{Key differentiating features of deep learning:}
+			\begin{itemize}
+				\item Self-training (learning by competing against itself)
+				\item Backpropagation + gradient descent
+				\item Automatic feature extraction (no manual feature engineering)
+				\item Handles unstructured data (images, text, audio)
+				\item Inscrutable (black-box)
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Question 5}
+		\question{To better tailor its products and advisory services, a private wealth advisor surveyed potential customers about their investment preferences. One set of survey questions asked customers to select the types of investments (stocks, bonds, mutual funds, ETFs, etc.) they held within specific industry sectors. What would be the most appropriate way to classify the results from these survey questions?}
+		\options{Ordinal data}{Nominal data}{Interval data}{Ratio data}
+		\answerbox{B}
+		\explain{The data are categorical with no inherent order --- stocks, bonds, mutual funds, and ETFs are distinct categories without ranking. This is nominal data.}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Theory: Data Types (Nominal, Ordinal, Interval, Ratio)}
+		\theory{
+			\textbf{Four levels of measurement:}
+			\begin{itemize}
+				\item \textbf{Nominal:} Categories with \emph{no order} (stocks, bonds, ETFs; red, blue, green)
+				\item \textbf{Ordinal:} Categories with \emph{order but no equal intervals} (education level, Likert scale)
+				\item \textbf{Interval:} Numeric with \emph{equal intervals but no true zero} (temperature in Celsius, IQ scores)
+				\item \textbf{Ratio:} Numeric with \emph{equal intervals and a true zero} (income, age, height, weight)
+			\end{itemize}
+			\textbf{Exam tip:}
+			\begin{itemize}
+				\item ``Types of'' or ``categories of'' = nominal
+				\item ``Ranked'' or ``ordered'' = ordinal
+				\item ``Temperature'' or ``score'' = interval
+				\item ``Amount'' or ``count'' = ratio
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Question 6}
+		\question{As part of cleaning and preparing a data set, an analyst is considering different data scaling techniques. Which of the following statements is correct regarding data scaling?}
+		\options{Standardization creates a distribution bounded by 0 and 1.}{Standardization transforms a highly skewed distribution into a standard normal distribution.}{Normalization results in a data set bounded by -1 and 1.}{Normalization preserves the correlations between data points.}
+		\answerbox{D}
+		\explain{Standardization creates a distribution with mean 0 and standard deviation 1 (not bounded by 0 and 1). Normalization creates a dataset bounded by 0 and 1. Normalization preserves correlations between data points.}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Theory: Standardization vs. Normalization}
+		\theory{
+			\textbf{Standardization (Z-score):}
+			\begin{itemize}
+				\item Formula: $z = (x - \mu) / \sigma$
+				\item Result: mean = 0, standard deviation = 1
+				\item \textbf{Not} bounded by 0 and 1
+				\item Does \textbf{not} change the shape of the distribution
+				\item Preserves correlations
+			\end{itemize}
+			\textbf{Normalization (Min-Max):}
+			\begin{itemize}
+				\item Formula: $x' = (x - \min) / (\max - \min)$
+				\item Result: bounded by 0 and 1
+				\item Preserves correlations between data points
+				\item Sensitive to outliers (because min/max are affected by outliers)
+			\end{itemize}
+			\textbf{Exam tip:} ``Bounded by 0 and 1'' = normalization. ``Mean 0, SD 1'' = standardization. ``Preserves correlations'' = both, but normalization is the classic answer.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Question 7}
+		\question{An analyst is researching the relationship between age and annual salary. Based on a review of published research, the analyst suspects that a polynomial regression is the best model to use. To determine the best form of the model, the analyst employs the forward stepwise regression technique. Based on the results of the first three steps shown below, which model should the analyst select?}
+		\begin{center}
+			\small
+			\begin{tabular}{@{}lll@{}}
+				\toprule
+				Step & Model & AIC \\
+				\midrule
+				0 & No predictors & 3202.69 \\
+				1 & Age & 3193.36 \\
+				1 & Age2 & 3203.33 \\
+				1 & Age3 & 3204.66 \\
+				1 & Age4 & 3203.63 \\
+				1 & Age5 & 3202.20 \\
+				2 & Age + Age2 & 3125.50 \\
+				2 & Age + Age3 & 3123.20 \\
+				2 & Age + Age4 & 3126.69 \\
+				2 & Age + Age5 & 3132.87 \\
+				3 & Age + Age3 + Age2 & 3125.19 \\
+				3 & Age + Age3 + Age4 & 3124.77 \\
+				3 & Age + Age3 + Age5 & 3124.50 \\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\options{Age + Age3}{Age3}{Age + Age5}{Age + Age3 + Age5}
+		\answerbox{A}
+		\explain{Forward stepwise regression selects the model with the lowest AIC at each step. At step 2, Age + Age3 has the lowest AIC (3123.20). At step 3, adding Age5 gives AIC 3124.50, which is higher, so the model stops at Age + Age3.}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Theory: Stepwise Regression and AIC}
+		\theory{
+			\textbf{Stepwise regression:} automated feature selection method.
+			\begin{itemize}
+				\item \textbf{Forward:} start with no predictors, add one at a time
+				\item \textbf{Backward:} start with all predictors, remove one at a time
+				\item \textbf{Bidirectional:} combine forward and backward
+			\end{itemize}
+			\textbf{AIC (Akaike Information Criterion):}
+			\begin{itemize}
+				\item Measures model fit penalized by complexity
+				\item \textbf{Lower AIC = better model}
+				\item AIC = $2k - 2\ln(L)$, where $k$ = number of parameters, $L$ = likelihood
+			\end{itemize}
+			\textbf{How to use in stepwise:}
+			\begin{itemize}
+				\item At each step, add/remove the variable that reduces AIC the most
+				\item Stop when no further reduction is possible
+			\end{itemize}
+			\textbf{Exam tip:} Lower AIC is always better. If adding a variable increases AIC, stop.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Question 8}
+		\question{Which of the following is a key characteristic of machine learning compared to classical statistics?}
+		\options{Machine learning focuses on inference and parameter estimation.}{Machine learning emphasizes prediction accuracy over model interpretability.}{Machine learning requires strict assumptions about data distribution.}{Machine learning is always more interpretable than classical statistics.}
+		\answerbox{B}
+		\explain{Machine learning prioritizes predictive performance over inference and interpretability. Classical statistics focuses on inference, parameter estimation, and assumptions about data distribution.}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Theory: ML vs. Classical Statistics}
+		\theory{
+			\textbf{Classical statistics:}
+			\begin{itemize}
+				\item Goal: inference (understand relationships, test hypotheses)
+				\item Emphasizes parameter estimation and confidence intervals
+				\item Requires strict assumptions (normality, independence, linearity)
+				\item More interpretable (coefficients have meaning)
+			\end{itemize}
+			\textbf{Machine learning:}
+			\begin{itemize}
+				\item Goal: prediction (maximize accuracy on unseen data)
+				\item Emphasizes generalization over inference
+				\item Fewer distributional assumptions
+				\item Often less interpretable (black-box)
+			\end{itemize}
+			\textbf{Exam tip:} ``Inference'' or ``parameter estimation'' = classical statistics. ``Prediction'' or ``accuracy'' = machine learning.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Question 9}
+		\question{An analyst is preparing a dataset for a machine learning model. The dataset contains features with vastly different scales --- age in years (20--80) and income in dollars (20,000--500,000). Which data preparation technique should the analyst apply?}
+		\options{Remove the income feature}{Apply feature scaling}{Add more features}{Reduce the number of observations}
+		\answerbox{B}
+		\explain{Feature scaling (standardization or normalization) is essential when features have different scales, to prevent features with larger magnitudes from dominating the learning process.}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Theory: Feature Scaling}
+		\theory{
+			\textbf{Why scale features?}
+			\begin{itemize}
+				\item Many algorithms (K-means, KNN, SVM, neural networks) use distance measures
+				\item Features with larger scales dominate distance calculations
+				\item Example: income (\$20k--\$500k) vs. age (20--80) --- income would dominate
+			\end{itemize}
+			\textbf{When to scale:}
+			\begin{itemize}
+				\item Distance-based algorithms: K-means, KNN, SVM, PCA
+				\item Gradient-based algorithms: neural networks, logistic regression
+				\item \textbf{Not} needed for tree-based models (decision trees, random forests)
+			\end{itemize}
+			\textbf{Methods:}
+			\begin{itemize}
+				\item Standardization (Z-score): mean 0, SD 1
+				\item Normalization (Min-Max): bounded 0--1
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Question 10}
+		\question{What is the primary purpose of Principal Component Analysis (PCA) in machine learning?}
+		\options{To increase the number of features}{To reduce dimensionality while preserving variance}{To classify data into categories}{To cluster data points}
+		\answerbox{B}
+		\explain{PCA is a dimensionality reduction technique that transforms data into a smaller set of uncorrelated components while preserving as much variance as possible.}
+	\end{frame}
+	
+	\begin{frame}{Module 1 --- Theory: Principal Component Analysis (PCA)}
+		\theory{
+			\textbf{PCA = dimensionality reduction technique.}
+			\begin{itemize}
+				\item Transforms original features into new uncorrelated components
+				\item Components are ordered by variance explained
+				\item First component captures the most variance
+				\item Used to reduce features before clustering or regression
+			\end{itemize}
+			\textbf{Benefits:}
+			\begin{itemize}
+				\item Reduces overfitting
+				\item Speeds up training
+				\item Handles multicollinearity
+				\item Enables visualization of high-dimensional data
+			\end{itemize}
+			\textbf{Limitations:}
+			\begin{itemize}
+				\item Components are linear combinations --- harder to interpret
+				\item Assumes linear relationships
+				\item Sensitive to scaling (must standardize first)
+			\end{itemize}
+			\textbf{Exam tip:} PCA is \emph{unsupervised} --- it does not use labels.
+		}
+	\end{frame}
+	
+	% ============================================================
+	\section{Module 2: Tools \& Techniques}
+	% ============================================================
+	
+	\begin{frame}{Module 2 --- Question 11}
+		\question{How would you choose the number of clusters when using unsupervised learning?}
+		\options{Always use K = 2}{Use a scree plot and look for the elbow}{Set K equal to the number of data points}{Use the highest possible K value}
+		\answerbox{B}
+		\explain{A scree plot charts inertia (WCSS) against the number of clusters. The ``elbow'' point where the rate of decrease sharply changes indicates the optimal K. Silhouette scores can also be used.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Choosing K --- Scree Plot and Silhouette}
+		\theory{
+			\textbf{Scree plot (elbow method):}
+			\begin{itemize}
+				\item Plot WCSS (inertia) vs. K
+				\item Look for the ``elbow'' where the rate of decrease sharply changes
+				\item Beyond the elbow, adding clusters gives diminishing returns
+			\end{itemize}
+			\textbf{Silhouette score:}
+			\begin{itemize}
+				\item For each point: $s = (b - a) / \max(a, b)$
+				\item $a$ = average distance to points in own cluster
+				\item $b$ = average distance to points in nearest other cluster
+				\item Range: $-1$ to $1$; higher is better
+				\item Choose K with the highest average silhouette score
+			\end{itemize}
+			\textbf{Rule of thumb (weak):} $K \approx \sqrt{N/2}$
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 12}
+		\question{Explain the steps in using the K-means clustering algorithm.}
+		\options{Specify K, scale features, select K random centroids, assign points, recalculate centroids, repeat until convergence}{Specify K, assign labels, train a classifier, evaluate accuracy}{Select K random points, remove outliers, apply PCA, cluster}{Normalize data, apply hierarchical clustering, cut the dendrogram}
+		\answerbox{A}
+		\explain{The K-means algorithm: (1) Specify K and choose a distance measure, (2) Scale features, (3) Select K random centroids, (4) Assign each point to nearest centroid, (5) Recalculate centroids, (6) Repeat steps 4--5 until centroids stabilize.}
+	\end{frame}
+	
+\begin{frame}{Module 2 --- Theory: K-means Algorithm Steps}
+	\small
+	\textbf{K-means algorithm (Lloyd's algorithm):}
+	\begin{enumerate}
+		\item Specify K (number of clusters) and choose a distance measure (Euclidean or Manhattan).
+		\item Scale features (standardization or normalization).
+		\item Select K random initial centroids.
+		\item \textbf{Assignment step:} Assign each point to the nearest centroid.
+		\item \textbf{Update step:} Recalculate centroids as the mean of assigned points.
+		\item Repeat steps 4--5 until centroids stabilize (convergence).
+	\end{enumerate}
+	
+	\vspace{0.2cm}
+	\textbf{Key properties:}
+	\begin{itemize}
+		\item Guaranteed to converge, but may find a local optimum.
+		\item Sensitive to initial centroid positions.
+		\item Use K-means++ for better initialization.
+		\item Run multiple times and choose the lowest WCSS.
+	\end{itemize}
+\end{frame}
+
+
+	\begin{frame}{Module 2 --- Question 13}
+		\question{In practice, the K-means clustering algorithm is often carried out with several different initial values for the centroids. How would you choose between clusters that result from different initial choices for the centroids?}
+		\options{Select the solution with the highest WCSS}{Select the solution with the lowest WCSS}{Select the solution with the most clusters}{Select the first solution found}
+		\answerbox{B}
+		\explain{Select the clustering solution with the lowest total inertia (WCSS), as this represents the best fit to the feature data.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: WCSS and BCSS}
+		\theory{
+			\textbf{Within-Cluster Sum of Squares (WCSS):}
+			\begin{itemize}
+				\item Measures cluster \emph{compactness}
+				\item Sum of squared distances from each point to its centroid
+				\item Lower WCSS = better fit
+				\item Always decreases as K increases
+			\end{itemize}
+			\textbf{Between-Cluster Sum of Squares (BCSS):}
+			\begin{itemize}
+				\item Measures cluster \emph{separation}
+				\item Sum of squared distances from each cluster centroid to the overall centroid, weighted by cluster size
+				\item Higher BCSS = better separation
+			\end{itemize}
+			\textbf{Relationship:} Minimizing WCSS implicitly maximizes BCSS.
+			\textbf{Exam tip:} WCSS = compactness; BCSS = separation.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 14}
+		\question{How do you use the scree plot for choosing the number of K-means clusters?}
+		\options{Look for the highest point}{Look for the lowest point}{Look for an ``elbow'' where the gradient changes from steep to almost flat}{Look for the point where WCSS equals zero}
+		\answerbox{C}
+		\explain{A scree plot has the number of clusters on the x-axis and WCSS on the y-axis. We look for an ``elbow'' where the gradient changes from steep to almost flat --- that is the optimal K.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Scree Plot Interpretation}
+		\theory{
+			\textbf{Scree plot anatomy:}
+			\begin{itemize}
+				\item X-axis: number of clusters (K)
+				\item Y-axis: WCSS (inertia)
+				\item Curve always decreases as K increases
+				\item Look for the ``elbow'' --- the point of maximum curvature
+			\end{itemize}
+			\textbf{How to identify the elbow:}
+			\begin{itemize}
+				\item Before elbow: steep decrease (adding clusters helps a lot)
+				\item After elbow: flat decrease (adding clusters helps little)
+				\item Elbow = optimal trade-off between fit and complexity
+			\end{itemize}
+			\textbf{Common pitfalls:}
+			\begin{itemize}
+				\item Elbow may be ambiguous (multiple elbows)
+				\item No elbow may be visible
+				\item Use domain knowledge + silhouette score to confirm
+			\end{itemize}
+			\textbf{Exam tip:} The elbow is where the gradient changes from steep to flat.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 15}
+		\question{What are the two types of hierarchical clustering? What are the advantages of hierarchical clustering?}
+		\options{Divisive and agglomerative; advantages: no need to pre-define K, uncovers hierarchical relationships, dendrograms are interpretable}{Supervised and unsupervised; advantages: faster, more accurate}{Partitional and density-based; advantages: handles outliers, finds arbitrary shapes}{Single and complete linkage; advantages: simpler, more scalable}
+		\answerbox{A}
+		\explain{Hierarchical clustering can be divisive (top-down) or agglomerative (bottom-up). Advantages: does not require pre-defining K, uncovers hierarchical relationships, and dendrograms are straightforward to interpret.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Hierarchical Clustering}
+		\theory{
+			\textbf{Two approaches:}
+			\begin{itemize}
+				\item \textbf{Divisive (top-down):} start with all data in one cluster, split recursively
+				\item \textbf{Agglomerative (bottom-up):} start with each point as its own cluster, merge recursively
+			\end{itemize}
+			\textbf{Linkage criteria:}
+			\begin{itemize}
+				\item \textbf{Single linkage:} distance = shortest distance between clusters
+				\item \textbf{Complete linkage:} distance = greatest distance between clusters
+				\item Average linkage: distance = average distance
+				\item Ward's method: minimizes within-cluster variance
+			\end{itemize}
+			\textbf{Advantages:}
+			\begin{itemize}
+				\item No need to pre-define K
+				\item Dendrogram shows all possible clusterings
+				\item Uncovers nested relationships
+			\end{itemize}
+			\textbf{Disadvantages:} Computationally expensive for large N.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 16}
+		\question{State whether the following is true or false: K-means with Euclidean distance can only be used when the clusters are approximately spherical.}
+		\options{True}{False}{True only for large datasets}{True only for small datasets}
+		\answerbox{A}
+		\explain{True. K-means with Euclidean distance is based on linear distances and runs into problems when clusters are not approximately spherically shaped. Manhattan distance produces rhombus-shaped clusters.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: K-means Limitations}
+		\theory{
+			\textbf{K-means produces spherical clusters.}
+			\begin{itemize}
+				\item Because it minimizes distance to centroids
+				\item Euclidean distance $\rightarrow$ spherical clusters
+				\item Manhattan distance $\rightarrow$ rhombus-shaped clusters
+			\end{itemize}
+			\textbf{Problems with K-means:}
+			\begin{itemize}
+				\item \textbf{Outliers:} can distort centroids or form their own cluster
+				\item \textbf{Curse of dimensionality:} distances become similar in high dimensions
+				\item \textbf{Non-spherical clusters:} fails on rings, moons, elongated shapes
+				\item \textbf{Correlated features:} struggles when features are highly correlated
+			\end{itemize}
+			\textbf{Solutions:}
+			\begin{itemize}
+				\item Standardize data (min-max)
+				\item Remove outliers
+				\item Apply PCA to reduce dimensions
+				\item Use kernel functions or switch to DBSCAN
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 17}
+		\question{State whether the following is true or false: The within-cluster sum of squares will never rise when the number of clusters is increased in a K-means application.}
+		\options{True}{False}{True only if K is even}{True only if K is odd}
+		\answerbox{A}
+		\explain{True. As K increases, the fit cannot get worse because each new cluster captures at least one data point better. This is analogous to residual sum of squares in regression.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: WCSS Monotonicity}
+		\theory{
+			\textbf{WCSS is monotonically non-increasing in K.}
+			\begin{itemize}
+				\item Adding a cluster can never increase WCSS
+				\item At K = N, each point is its own cluster, WCSS = 0
+				\item But K = N is meaningless (overfitting)
+			\end{itemize}
+			\textbf{Analogy:}
+			\begin{itemize}
+				\item In regression, adding features never decreases $R^2$
+				\item In K-means, adding clusters never increases WCSS
+			\end{itemize}
+			\textbf{Implication:}
+			\begin{itemize}
+				\item Cannot choose K by minimizing WCSS alone
+				\item Must use elbow method, silhouette, or domain knowledge
+				\item Balance fit vs. interpretability
+			\end{itemize}
+			\textbf{Exam tip:} WCSS always decreases or stays the same as K increases. Never rises.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 18}
+		\question{What is a dendrogram and how would we interpret one?}
+		\options{A bar chart showing feature importance}{A tree-like diagram showing hierarchical clustering steps; long vertical lines indicate important clusters}{A scatter plot of clusters}{A line chart of WCSS vs. K}
+		\answerbox{B}
+		\explain{A dendrogram is a pictorial representation of hierarchical clustering. Each bifurcation or combination shows a cluster being formed. Long vertical lines suggest the additional cluster has a considerable effect on model fit.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Dendrograms}
+		\theory{
+			\textbf{Dendrogram = tree-like diagram of hierarchical clustering.}
+			\begin{itemize}
+				\item X-axis: data points (or clusters)
+				\item Y-axis: distance (or dissimilarity)
+				\item Each merge/split is shown as a horizontal line
+				\item Height of vertical lines = distance at which merge occurs
+			\end{itemize}
+			\textbf{Interpretation:}
+			\begin{itemize}
+				\item Long vertical lines $\rightarrow$ important clusters (big effect on fit)
+				\item Short vertical lines $\rightarrow$ minor clusters
+				\item Cut the dendrogram horizontally to choose K
+				\item Number of vertical lines crossed = number of clusters
+			\end{itemize}
+			\textbf{Exam tip:} Long vertical lines = significant cluster boundary. Cut horizontally where the gap is largest.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 19}
+		\question{Suppose that we have the following data on three features for each of three banks, A, B, and C. Determine the centroid of a cluster comprising banks A, B, and C using the raw (unscaled) data.}
+		\begin{center}
+			\small
+			\begin{tabular}{@{}lccc@{}}
+				\toprule
+				Feature & Bank A & Bank B & Bank C \\
+				\midrule
+				Number of customers (millions) & 1.2 & 6.0 & 0.5 \\
+				Total size of loan book (USD bn) & 5 & 25 & 7 \\
+				Number of branches & 80 & 400 & 50 \\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\options{(2.567, 12.333, 176.667)}{(2.567, 12.333, 176.667)}{(2.567, 12.333, 176.667)}{(2.567, 12.333, 176.667)}
+		\answerbox{A}
+		\explain{Centroid = average of feature values: (1.2+6.0+0.5)/3 = 2.567; (5+25+7)/3 = 12.333; (80+400+50)/3 = 176.667.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Centroids}
+		\theory{
+			\textbf{Centroid = mean of all points in a cluster.}
+			\begin{itemize}
+				\item For each feature, take the average across all points in the cluster
+				\item In K-means, centroids are recalculated each iteration
+				\item Centroids do not have to correspond to actual data points
+			\end{itemize}
+			\textbf{Formula:}
+			\[
+			\mu_j = \frac{1}{n_k} \sum_{i \in C_k} x_i
+			\]
+			where $C_k$ is the set of points in cluster $k$, $n_k$ is the number of points.
+			\textbf{Exam tip:} Centroid = average. Just add and divide by count for each feature.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 20}
+		\question{An analyst is given a set of data with two features. As part of the exploratory data analysis process, the analyst examines a scatter plot of the data. Which of the following best identifies an issue with the data that might pose problems for the K-means clustering algorithm?}
+		\options{Outliers in the data}{High dimensionality of the data}{Non-linearity of the relationships in the data}{Non-spherical clusters in the data}
+		\answerbox{D}
+		\explain{K-means struggles with non-spherical clusters because it is based on distances from centroids and tends to produce spherical clusters.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: K-means Failure Modes}
+		\theory{
+			\textbf{Two pathological cases for K-means:}
+			\begin{itemize}
+				\item \textbf{Concentric circles:} two rings, one inside the other. Centroids end up in the same place, algorithm cannot separate them.
+				\item \textbf{Elongated clusters:} two ovals side by side. Points on the edge of one oval may be closer to the other cluster's centroid.
+			\end{itemize}
+			\textbf{Why K-means fails:}
+			\begin{itemize}
+				\item Assumes clusters are spherical and similar size
+				\item Uses distance to centroid only
+				\item Cannot capture complex shapes
+			\end{itemize}
+			\textbf{Solutions:}
+			\begin{itemize}
+				\item Kernel K-means (non-linear transformation)
+				\item DBSCAN (density-based)
+				\item Spectral clustering
+				\item Gaussian Mixture Models
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 21}
+		\question{What is the main advantage of DBSCAN over K-means?}
+		\options{DBSCAN is faster}{DBSCAN can find clusters of arbitrary shapes and handle outliers}{DBSCAN requires fewer parameters}{DBSCAN always produces spherical clusters}
+		\answerbox{B}
+		\explain{DBSCAN defines clusters as dense regions separated by low-density regions. It can find arbitrary-shaped clusters and is robust to outliers (noise points).}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: DBSCAN}
+		\theory{
+			\textbf{DBSCAN = Density-Based Spatial Clustering of Applications with Noise.}
+			\begin{itemize}
+				\item Defines clusters as \emph{dense regions} separated by low-density regions
+				\item Three types of points:
+				\begin{itemize}
+					\item \textbf{Core point:} has at least \texttt{minPts} neighbors within radius $\varepsilon$
+					\item \textbf{Border point:} within $\varepsilon$ of a core point but not a core point itself
+					\item \textbf{Noise point:} neither core nor border $\rightarrow$ outlier
+				\end{itemize}
+			\end{itemize}
+			\textbf{Advantages:}
+			\begin{itemize}
+				\item Finds arbitrary-shaped clusters (not just spherical)
+				\item Robust to outliers (noise points are excluded)
+				\item Does not require specifying K
+			\end{itemize}
+			\textbf{Disadvantages:}
+			\begin{itemize}
+				\item Struggles with varying densities
+				\item Sensitive to $\varepsilon$ and \texttt{minPts}
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 22}
+		\question{What is the purpose of the silhouette score in clustering?}
+		\options{To measure the accuracy of predictions}{To compare cluster cohesion and separation}{To count the number of clusters}{To visualize high-dimensional data}
+		\answerbox{B}
+		\explain{The silhouette score compares the average distance of a point to its own cluster (cohesion) with the average distance to the nearest other cluster (separation). Higher scores indicate better-defined clusters.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Silhouette Score}
+		\theory{
+			\textbf{Silhouette score for point $i$:}
+			\[
+			s_i = \frac{b_i - a_i}{\max(b_i, a_i)}
+			\]
+			\begin{itemize}
+				\item $a_i$ = mean distance to points in own cluster (cohesion)
+				\item $b_i$ = mean distance to points in nearest other cluster (separation)
+				\item Range: $-1$ to $1$
+			\end{itemize}
+			\textbf{Interpretation:}
+			\begin{itemize}
+				\item $s \approx 1$: point is well inside its cluster
+				\item $s \approx 0$: point is on the boundary between clusters
+				\item $s < 0$: point may be mis-clustered
+			\end{itemize}
+			\textbf{Overall silhouette score:} average of all $s_i$.
+			\textbf{Choose K with highest average silhouette score.}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 23}
+		\question{What is the curse of dimensionality in the context of K-means clustering?}
+		\options{The algorithm becomes too slow with many observations}{Data points become sparse in high-dimensional space, making clustering difficult}{The number of clusters increases exponentially}{The centroids become unstable}
+		\answerbox{B}
+		\explain{As the number of features increases, data points become increasingly sparse in feature space. Distances between points and centroids become more similar, making it hard for K-means to identify clusters.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Curse of Dimensionality}
+		\theory{
+			\textbf{Curse of dimensionality:} as features increase, data becomes sparse.
+			\begin{itemize}
+				\item Distances between points become more similar
+				\item K-means cannot distinguish clusters
+				\item Convergence slows down
+			\end{itemize}
+			\textbf{Solutions:}
+			\begin{itemize}
+				\item Remove irrelevant features
+				\item Apply PCA or other dimensionality reduction
+				\item Use cosine distance (does not grow with dimensions)
+				\item Use algorithms designed for high dimensions
+			\end{itemize}
+			\textbf{Exam tip:} ``Curse of dimensionality'' = problems caused by too many features.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 24}
+		\question{What is the difference between single linkage and complete linkage in hierarchical clustering?}
+		\options{Single linkage uses the shortest distance between clusters; complete linkage uses the greatest distance}{Single linkage uses the greatest distance; complete linkage uses the shortest distance}{Single linkage is for agglomerative; complete linkage is for divisive}{Single linkage is for divisive; complete linkage is for agglomerative}
+		\answerbox{A}
+		\explain{Single linkage defines cluster distance as the shortest distance between any two points in different clusters. Complete linkage uses the greatest distance.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Linkage Criteria}
+		\theory{
+			\textbf{Linkage = how to measure distance between clusters.}
+			\begin{itemize}
+				\item \textbf{Single linkage:} shortest distance between any two points
+				\item \textbf{Complete linkage:} greatest distance between any two points
+				\item \textbf{Average linkage:} average distance between all pairs
+				\item \textbf{Ward's method:} minimizes within-cluster variance
+			\end{itemize}
+			\textbf{Properties:}
+			\begin{itemize}
+				\item Single linkage: can produce elongated clusters, sensitive to outliers
+				\item Complete linkage: produces compact clusters, robust to outliers
+				\item Average linkage: balance between single and complete
+			\end{itemize}
+			\textbf{Exam tip:} Single = shortest. Complete = greatest. Both apply to agglomerative and divisive.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 25}
+		\question{What is the purpose of K-means++ initialization?}
+		\options{To speed up convergence by choosing centroids far apart}{To reduce the number of clusters}{To increase the WCSS}{To eliminate outliers}
+		\answerbox{A}
+		\explain{K-means++ selects initial centroids that are far apart, reducing the chance of poor clustering and helping the algorithm converge more quickly to a good solution.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: K-means++ Initialization}
+		\theory{
+			\textbf{Problem:} Random initialization can lead to poor clustering.
+			\begin{itemize}
+				\item If centroids start close together, algorithm may converge to local optimum
+			\end{itemize}
+			\textbf{K-means++ solution:}
+			\begin{enumerate}
+				\item Choose first centroid randomly from data points
+				\item For each subsequent centroid, choose a point with probability proportional to its squared distance from the nearest existing centroid
+				\item This spreads centroids out
+			\end{enumerate}
+			\textbf{Benefits:}
+			\begin{itemize}
+				\item Better clustering results
+				\item Faster convergence
+				\item Reduces chance of poor local optima
+			\end{itemize}
+			\textbf{Exam tip:} K-means++ = smarter initialization = centroids far apart.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 26}
+		\question{A software engineer is using a facial recognition system. The engineer provides an input matrix X and a kernel matrix W. What is the correct feature map (F)?}
+		\begin{center}
+			$X = \begin{pmatrix} 0 & 1 & 2 \\ 1 & 0 & 0 \\ 3 & 2 & 2 \end{pmatrix}$,
+			$W = \begin{pmatrix} -1 & 0 \\ 1 & 1 \end{pmatrix}$
+		\end{center}
+		\options{$F = \begin{pmatrix} 1 & -1 \\ 4 & 4 \end{pmatrix}$}{$F = \begin{pmatrix} 1 & 4 \\ -1 & 4 \end{pmatrix}$}{$F = \begin{pmatrix} 2 & 3 \\ 6 & 4 \end{pmatrix}$}{$F = \begin{pmatrix} 2 & 6 \\ 3 & 4 \end{pmatrix}$}
+		\answerbox{A}
+		\explain{Convolution: F11 = 0(-1)+1(0)+1(1)+0(1) = 1; F12 = 1(-1)+2(0)+0(1)+0(1) = -1; F21 = 1(-1)+0(0)+3(1)+2(1) = 4; F22 = 0(-1)+0(0)+2(1)+2(1) = 4.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Convolution Operation}
+		\theory{
+			\textbf{Convolution = element-wise multiplication + sum.}
+			\begin{itemize}
+				\item Slide kernel $W$ over input $X$
+				\item At each position, multiply overlapping elements and sum
+				\item Result is the feature map $F$
+			\end{itemize}
+			\textbf{Example (2×2 kernel on 3×3 input):}
+			\begin{itemize}
+				\item Output size = $(3-2+1) \times (3-2+1) = 2 \times 2$
+				\item $F_{11} = X_{11}W_{11} + X_{12}W_{12} + X_{21}W_{21} + X_{22}W_{22}$
+				\item $F_{12} = X_{12}W_{11} + X_{13}W_{12} + X_{22}W_{21} + X_{23}W_{22}$
+				\item And so on...
+			\end{itemize}
+			\textbf{Used in:} CNNs for image recognition, facial recognition, feature extraction.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 27}
+		\question{An analyst is using an ensemble technique to improve the performance of a decision tree prediction model. The analyst samples with replacement from the training data and creates multiple decision trees using all available features. The analyst then averages the results. Which technique is this?}
+		\options{Adaptive boosting}{Random forest}{Gradient boosting}{Bootstrap aggregation}
+		\answerbox{D}
+		\explain{The question describes bootstrap aggregation (bagging). Random forest would use a random subset of features at each split, not all available features.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Ensemble Techniques}
+		\theory{
+			\textbf{Ensemble = combine multiple models for better performance.}
+			\begin{itemize}
+				\item \textbf{Bagging (Bootstrap Aggregation):} train models on bootstrap samples, average predictions. Uses \emph{all} features.
+				\item \textbf{Random Forest:} bagging + random feature subset at each split. Reduces correlation across trees.
+				\item \textbf{Boosting:} train models sequentially, each focusing on previous errors.
+				\begin{itemize}
+					\item \textbf{Adaptive Boosting (AdaBoost):} reweights misclassified points
+					\item \textbf{Gradient Boosting:} fits new model to residuals
+				\end{itemize}
+			\end{itemize}
+			\textbf{Exam tip:}
+			\begin{itemize}
+				\item ``All features'' + ``average'' = bagging
+				\item ``Random subset of features'' = random forest
+				\item ``Sequential'' + ``correct errors'' = boosting
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 28}
+		\question{A data scientist is working to improve the performance of a decision tree model. The data scientist thinks the model can be improved by implementing a random forest technique. Which of the following best describes an advantage of using a random forest?}
+		\options{Random forest can capture previous misclassifications through self-learning}{Random forest can improve interpretability by linking information from previously grown trees}{Random forest can improve prediction accuracy by reducing correlation across trees}{Random forest can capture outliers by calculating Cook's distance}
+		\answerbox{C}
+		\explain{In random forest, some trees ignore some strong features and give other features a chance, resulting in less correlated forecasts and improved prediction accuracy.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Random Forest}
+		\theory{
+			\textbf{Random Forest = bagging + random feature subset.}
+			\begin{itemize}
+				\item Each tree is trained on a bootstrap sample
+				\item At each split, consider only a random subset of features
+				\item Final prediction = average (regression) or majority vote (classification)
+			\end{itemize}
+			\textbf{Advantages:}
+			\begin{itemize}
+				\item Reduces overfitting compared to single tree
+				\item Reduces correlation across trees
+				\item Handles high-dimensional data
+				\item Robust to outliers
+				\item Provides feature importance
+			\end{itemize}
+			\textbf{Disadvantages:}
+			\begin{itemize}
+				\item Less interpretable than single tree
+				\item Computationally expensive
+				\item Can overfit with noisy data
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 29}
+		\question{An asset manager uses an SVM model. The boundary line is $0.43x_1 + 2.55x_2 + 0.67 = 0$. For a stock with $x_1 = 0.8$ and $x_2 = -0.75$, which is the correct classification?}
+		\options{Class 0, because the decision value is lower than 0}{Class 0, because the decision value is higher than 0}{Class 1, because the decision value is lower than 0}{Class 1, because the decision value is higher than 0}
+		\answerbox{A}
+		\explain{Substituting: $0.43(0.8) + 2.55(-0.75) + 0.67 = 0.344 - 1.9125 + 0.67 = -0.8985$. Since this is below zero, the stock belongs to Class 0.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Support Vector Machines (SVM)}
+		\theory{
+			\textbf{SVM = finds the optimal hyperplane separating classes.}
+			\begin{itemize}
+				\item Boundary: $w_1x_1 + w_2x_2 + b = 0$
+				\item Decision value: $f(x) = w_1x_1 + w_2x_2 + b$
+				\item If $f(x) > 0$: Class 1
+				\item If $f(x) < 0$: Class 0
+			\end{itemize}
+			\textbf{Key concepts:}
+			\begin{itemize}
+				\item \textbf{Support vectors:} points closest to the boundary
+				\item \textbf{Margin:} distance between boundary and support vectors
+				\item \textbf{Kernel trick:} maps data to higher dimensions for non-linear separation
+			\end{itemize}
+			\textbf{Extensions:}
+			\begin{itemize}
+				\item Linear SVM (linear boundary)
+				\item Polynomial kernel
+				\item Radial Basis Function (RBF) kernel
+			\end{itemize}
+			\textbf{Exam tip:} Plug in values, if positive $\rightarrow$ Class 1, if negative $\rightarrow$ Class 0.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 30}
+		\question{An analyst trained four models to classify consumer loans. Based on the results, which model correctly identifies the highest percent of defaulted loans?}
+		\begin{center}
+			\small
+			\begin{tabular}{@{}lcccc@{}}
+				\toprule
+				Model & Accuracy & Precision & Recall & F1 \\
+				\midrule
+				A (Logistic regression) & 0.71 & 0.60 & 0.28 & 0.38 \\
+				B (Unrestricted decision tree) & 0.66 & 0.43 & 0.17 & 0.24 \\
+				C (SVM) & 0.63 & 0.44 & 0.51 & 0.47 \\
+				D (K-nearest neighbors) & 0.68 & 0.50 & 0.15 & 0.23 \\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\options{Model A}{Model B}{Model C}{Model D}
+		\answerbox{C}
+		\explain{Model C has the highest recall (0.51). Recall is the true positive rate --- the number of correctly classified positives over the total number of positives.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Classification Metrics}
+		\theory{
+			\textbf{Confusion matrix:}
+			\begin{center}
+				\small
+				\begin{tabular}{@{}lcc@{}}
+					\toprule
+					& Predicted Positive & Predicted Negative \\
+					\midrule
+					Actual Positive & True Positive (TP) & False Negative (FN) \\
+					Actual Negative & False Positive (FP) & True Negative (TN) \\
+					\bottomrule
+				\end{tabular}
+			\end{center}
+			\textbf{Metrics:}
+			\begin{itemize}
+				\item \textbf{Accuracy} = (TP + TN) / Total
+				\item \textbf{Precision} = TP / (TP + FP) --- how many predicted positives are correct
+				\item \textbf{Recall (Sensitivity)} = TP / (TP + FN) --- how many actual positives are captured
+				\item \textbf{F1} = 2 × (Precision × Recall) / (Precision + Recall)
+				\item \textbf{Specificity} = TN / (TN + FP)
+			\end{itemize}
+			\textbf{Exam tip:} ``Highest percent of defaulted loans'' = highest recall.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 31}
+		\question{A newly hired analyst has been asked to ``tokenize'' a text passage as part of data pre-processing for NLP. Which of the following best describes tokenization?}
+		\options{Remove words that have no informational value}{Separate text sentences into words}{Convert each word into a numeric vector}{Replace words with similar meanings with one unique word}
+		\answerbox{B}
+		\explain{Tokenization is the process of separating text into individual words or tokens. Stop word removal, feature extraction, and lemmatization are different pre-processing steps.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: NLP Pre-processing}
+		\theory{
+			\textbf{NLP pre-processing steps:}
+			\begin{enumerate}
+				\item \textbf{Tokenization:} split text into words/tokens
+				\item \textbf{Stop word removal:} remove words with no informational value (the, a, is)
+				\item \textbf{Lemmatization:} reduce words to base form (running $\rightarrow$ run)
+				\item \textbf{Stemming:} crude version of lemmatization (running $\rightarrow$ run)
+				\item \textbf{Feature extraction:} convert words to numeric vectors (TF-IDF, word embeddings)
+			\end{enumerate}
+			\textbf{Exam tip:}
+			\begin{itemize}
+				\item ``Separate into words'' = tokenization
+				\item ``Remove common words'' = stop word removal
+				\item ``Convert to numbers'' = feature extraction
+				\item ``Replace with base form'' = lemmatization
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 32}
+		\question{What does the Continuous Bag of Words (CBoW) architecture represent?}
+		\options{A recurrent neural network}{A ``fill in the blank'' technique that predicts a missing word}{A skip-gram model}{An auto-encoder}
+		\answerbox{B}
+		\explain{CBoW is a ``fill in the blank'' technique that proposes a probability-ordered list of words that would fill in the gap between words before and after a missing word.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Word2Vec Architectures}
+		\theory{
+			\textbf{Word2Vec = word embedding technique.}
+			\begin{itemize}
+				\item Converts words to dense vectors
+				\item Captures semantic relationships
+			\end{itemize}
+			\textbf{Two architectures:}
+			\begin{itemize}
+				\item \textbf{CBoW (Continuous Bag of Words):}
+				\begin{itemize}
+					\item Predicts a missing word from context words
+					\item ``Fill in the blank''
+					\item Multiple input neurons, one output neuron
+				\end{itemize}
+				\item \textbf{Skip-gram:}
+				\begin{itemize}
+					\item Predicts context words from a target word
+					\item One input neuron, multiple output neurons
+					\item Works better with rare words
+				\end{itemize}
+			\end{itemize}
+			\textbf{Exam tip:} CBoW = many inputs, one output. Skip-gram = one input, many outputs.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 33}
+		\question{An analyst is working on a text classification task with a small set of labeled articles and a larger set of unlabeled articles. The analyst plans to use a co-training approach. What is an advantage of co-training?}
+		\options{Co-training provides different views of the data by letting the two models learn from each other}{Co-training has higher productivity since the technique employs parallel computing}{Co-training improves accuracy by decreasing the weights on unrelated features}{Co-training is more reliable since the data is not interchangeable between the two models}
+		\answerbox{A}
+		\explain{Co-training provides different views of the data by letting the two models learn from each other, improving performance with limited labeled data.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Semi-Supervised Learning}
+		\theory{
+			\textbf{Semi-supervised learning = small labeled + large unlabeled data.}
+			\begin{itemize}
+				\item Between supervised and unsupervised
+				\item Uses unlabeled data to improve performance
+			\end{itemize}
+			\textbf{Techniques:}
+			\begin{itemize}
+				\item \textbf{Self-training:} train on labeled, predict unlabeled, add confident predictions to training set, repeat
+				\item \textbf{Co-training:} split features into two views, train two models, each labels data for the other
+				\item \textbf{Unsupervised pre-processing:} use clustering to initialize supervised model
+			\end{itemize}
+			\textbf{Assumptions:}
+			\begin{itemize}
+				\item \textbf{Smoothness:} nearby points have similar labels
+				\item \textbf{Cluster:} points in same cluster have same label
+				\item \textbf{Manifold:} data lies on a lower-dimensional manifold
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 34}
+		\question{What is the primary purpose of regularization in machine learning?}
+		\options{To increase model complexity}{To prevent overfitting by penalizing large coefficients}{To speed up training}{To increase the number of features}
+		\answerbox{B}
+		\explain{Regularization (Ridge, LASSO, Elastic Net) prevents overfitting by adding a penalty term for large coefficients, discouraging complex models.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Regularization}
+		\theory{
+			\textbf{Regularization = penalize complexity to prevent overfitting.}
+			\begin{itemize}
+				\item \textbf{Ridge (L2):} adds $\lambda \sum \beta_j^2$ to loss
+				\item \textbf{LASSO (L1):} adds $\lambda \sum |\beta_j|$ to loss
+				\item \textbf{Elastic Net:} combines L1 and L2
+			\end{itemize}
+			\textbf{Properties:}
+			\begin{itemize}
+				\item Ridge: shrinks coefficients, keeps all features
+				\item LASSO: can shrink coefficients to exactly zero (feature selection)
+				\item Elastic Net: balance between Ridge and LASSO
+				\item $\lambda$ controls strength of regularization
+			\end{itemize}
+			\textbf{Exam tip:}
+			\begin{itemize}
+				\item ``Feature selection'' = LASSO
+				\item ``Shrink coefficients'' = Ridge
+				\item ``Both'' = Elastic Net
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 35}
+		\question{What is the difference between Ridge regression and LASSO?}
+		\options{Ridge uses L1 penalty; LASSO uses L2 penalty}{Ridge uses L2 penalty; LASSO uses L1 penalty}{Both use L1 penalty}{Both use L2 penalty}
+		\answerbox{B}
+		\explain{Ridge regression uses L2 penalty (sum of squared coefficients). LASSO uses L1 penalty (sum of absolute coefficients), which can shrink some coefficients to exactly zero, performing feature selection.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Ridge vs. LASSO}
+		\theory{
+			\textbf{Ridge (L2):}
+			\[
+			\text{Loss} = \text{RSS} + \lambda \sum_{j=1}^{p} \beta_j^2
+			\]
+			\begin{itemize}
+				\item Shrinks coefficients toward zero
+				\item Never exactly zero
+				\item Keeps all features
+				\item Good when all features are useful
+			\end{itemize}
+			\textbf{LASSO (L1):}
+			\[
+			\text{Loss} = \text{RSS} + \lambda \sum_{j=1}^{p} |\beta_j|
+			\]
+			\begin{itemize}
+				\item Can shrink coefficients to exactly zero
+				\item Performs feature selection
+				\item Good when many features are irrelevant
+			\end{itemize}
+			\textbf{Elastic Net:} combines both penalties.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 36}
+		\question{What is the purpose of cross-validation?}
+		\options{To increase the training set size}{To estimate model performance on unseen data}{To reduce the number of features}{To speed up training}
+		\answerbox{B}
+		\explain{Cross-validation splits data into folds, training on some and validating on others, to estimate how well the model generalizes to unseen data.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Cross-Validation}
+		\theory{
+			\textbf{Cross-validation = estimate generalization performance.}
+			\begin{itemize}
+				\item \textbf{K-fold:} split data into K folds, train on K-1, validate on 1, repeat K times
+				\item \textbf{Stratified K-fold:} preserve class proportions in each fold
+				\item \textbf{Leave-One-Out (LOO):} K = N
+				\item \textbf{Time-series CV:} respect temporal order
+			\end{itemize}
+			\textbf{Benefits:}
+			\begin{itemize}
+				\item More reliable performance estimate
+				\item Uses all data for both training and validation
+				\item Helps detect overfitting
+			\end{itemize}
+			\textbf{Exam tip:} Cross-validation is for \emph{model evaluation}, not training.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 37}
+		\question{What is the bias-variance tradeoff?}
+		\options{The tradeoff between model accuracy and training time}{The tradeoff between underfitting and overfitting}{The tradeoff between the number of features and observations}{The tradeoff between precision and recall}
+		\answerbox{B}
+		\explain{High bias leads to underfitting (model too simple). High variance leads to overfitting (model too complex). The goal is to find the balance that minimizes total error.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Bias-Variance Tradeoff}
+		\theory{
+			\textbf{Total error = Bias$^2$ + Variance + Irreducible Error.}
+			\begin{itemize}
+				\item \textbf{Bias:} error from overly simple assumptions (underfitting)
+				\item \textbf{Variance:} error from sensitivity to training data (overfitting)
+			\end{itemize}
+			\textbf{Tradeoff:}
+			\begin{itemize}
+				\item Simple model: high bias, low variance
+				\item Complex model: low bias, high variance
+				\item Optimal: balance between the two
+			\end{itemize}
+			\textbf{How to diagnose:}
+			\begin{itemize}
+				\item High training error + high test error = underfitting (high bias)
+				\item Low training error + high test error = overfitting (high variance)
+			\end{itemize}
+			\textbf{Exam tip:} Underfitting = high bias. Overfitting = high variance.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 38}
+		\question{What is the purpose of a confusion matrix?}
+		\options{To visualize the decision boundary}{To summarize classification performance with true/false positives and negatives}{To plot the ROC curve}{To cluster data points}
+		\answerbox{B}
+		\explain{A confusion matrix is a table showing true positives, true negatives, false positives, and false negatives, used to evaluate classification models.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Confusion Matrix}
+		\theory{
+			\textbf{Confusion matrix for binary classification:}
+			\begin{center}
+				\small
+				\begin{tabular}{@{}lcc@{}}
+					\toprule
+					& Predicted Positive & Predicted Negative \\
+					\midrule
+					Actual Positive & True Positive (TP) & False Negative (FN) \\
+					Actual Negative & False Positive (FP) & True Negative (TN) \\
+					\bottomrule
+				\end{tabular}
+			\end{center}
+			\textbf{Derived metrics:}
+			\begin{itemize}
+				\item Accuracy = (TP + TN) / (TP + TN + FP + FN)
+				\item Precision = TP / (TP + FP)
+				\item Recall = TP / (TP + FN)
+				\item Specificity = TN / (TN + FP)
+				\item F1 = 2 × Precision × Recall / (Precision + Recall)
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 39}
+		\question{What does the AUC-ROC curve measure?}
+		\options{The accuracy of a regression model}{The ability of a classifier to distinguish between classes across all thresholds}{The speed of a clustering algorithm}{The number of clusters in a dataset}
+		\answerbox{B}
+		\explain{AUC-ROC (Area Under the Receiver Operating Characteristic Curve) measures how well a classifier distinguishes between classes across all possible thresholds.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: ROC and AUC}
+		\theory{
+			\textbf{ROC curve = True Positive Rate vs. False Positive Rate.}
+			\begin{itemize}
+				\item X-axis: False Positive Rate (1 - Specificity)
+				\item Y-axis: True Positive Rate (Sensitivity/Recall)
+				\item Each point = a different classification threshold
+			\end{itemize}
+			\textbf{AUC (Area Under Curve):}
+			\begin{itemize}
+				\item Range: 0 to 1
+				\item 0.5 = random classifier (no discrimination)
+				\item 1.0 = perfect classifier
+				\item Higher AUC = better discrimination
+			\end{itemize}
+			\textbf{Exam tip:} AUC measures discrimination ability, not accuracy. 0.5 is useless, 1.0 is perfect.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Question 40}
+		\question{What is the difference between precision and recall?}
+		\options{Precision measures true positives out of all predicted positives; recall measures true positives out of all actual positives}{Precision measures true positives out of all actual positives; recall measures true positives out of all predicted positives}{Precision and recall are the same}{Precision is for regression; recall is for classification}
+		\answerbox{A}
+		\explain{Precision = TP / (TP + FP); Recall = TP / (TP + FN). Precision focuses on the accuracy of positive predictions; recall focuses on capturing all positive instances.}
+	\end{frame}
+	
+	\begin{frame}{Module 2 --- Theory: Precision vs. Recall}
+		\theory{
+			\textbf{Precision:} Of all predicted positives, how many are actually positive?
+			\[
+			\text{Precision} = \frac{TP}{TP + FP}
+			\]
+			\textbf{Recall (Sensitivity):} Of all actual positives, how many did we catch?
+			\[
+			\text{Recall} = \frac{TP}{TP + FN}
+			\]
+			\textbf{When to use which:}
+			\begin{itemize}
+				\item \textbf{High precision:} when false positives are costly (spam filter)
+				\item \textbf{High recall:} when false negatives are costly (cancer detection, fraud detection)
+				\item \textbf{F1 score:} harmonic mean of precision and recall
+			\end{itemize}
+			\textbf{Exam tip:} ``Catch all positives'' = recall. ``Avoid false alarms'' = precision.
+		}
+	\end{frame}
+	
+	% ============================================================
+	\section{Module 3: Risk and Risk Factors}
+	% ============================================================
+	
+	\begin{frame}{Module 3 --- Question 41}
+		\question{Consider a medical diagnostic algorithm to diagnose a rare disease that occurs in 0.1\% of the population. The disease is easily cured with a drug that has few side effects. Failing to treat the disease, however, will almost certainly lead to death. Which measure would you use to assess the algorithm's performance?}
+		\options{Sensitivity}{Precision}{Accuracy}{Specificity}
+		\answerbox{A}
+		\explain{Sensitivity (true positive rate) is the correct measure because failing to detect the disease is fatal. We want to correctly identify all positive cases.}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Theory: Sensitivity vs. Specificity}
+		\theory{
+			\textbf{Sensitivity (Recall, True Positive Rate):}
+			\[
+			\text{Sensitivity} = \frac{TP}{TP + FN}
+			\]
+			\begin{itemize}
+				\item Ability to correctly identify positive cases
+				\item Use when false negatives are costly (missing a disease)
+			\end{itemize}
+			\textbf{Specificity (True Negative Rate):}
+			\[
+			\text{Specificity} = \frac{TN}{TN + FP}
+			\]
+			\begin{itemize}
+				\item Ability to correctly identify negative cases
+				\item Use when false positives are costly (unnecessary treatment)
+			\end{itemize}
+			\textbf{Exam tip:} Rare disease + fatal if missed = sensitivity. Common disease + costly treatment = specificity.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Question 42}
+		\question{A bank has implemented a model to detect fraudulent transactions. The model uses a data set with 10,000 randomly sampled transactions, 20 of which are fraudulent. What form of algorithmic bias is most likely to occur?}
+		\options{Measurement bias}{Representation bias}{Data composition bias}{Historical bias}
+		\answerbox{C}
+		\explain{The dataset is highly imbalanced (20 fraudulent out of 10,000). When the dataset is not balanced, the model will underperform in identifying the minority group --- this is data composition bias.}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Theory: Sources of Algorithmic Bias}
+		\theory{
+			\textbf{Types of bias:}
+			\begin{itemize}
+				\item \textbf{Measurement bias:} features are measured differently across groups
+				\item \textbf{Representation bias:} sample does not represent the population
+				\item \textbf{Data composition bias:} dataset is imbalanced (minority class underrepresented)
+				\item \textbf{Historical bias:} past discrimination is encoded in data
+				\item \textbf{Problem specification bias:} target variable does not capture the real objective
+				\item \textbf{Deployment bias:} model used in a context it was not designed for
+			\end{itemize}
+			\textbf{Exam tip:} Imbalanced dataset = data composition bias. Underrepresented group = representation bias.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Question 43}
+		\question{A logistic model determines job candidate suitability based on work experience, certifications, and education level. To ensure education level does not affect predictions unfairly, what is the best approach?}
+		\options{Remove the education level variable from the model}{Replace the education level with its average during prediction}{Incorporate interaction terms during training}{Create dummy variables to represent education level}
+		\answerbox{B}
+		\explain{Using the average education level during prediction ensures that people who are alike in all relevant respects but have different education levels are treated the same. Removing the variable does not fully eliminate its influence.}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Theory: Fairness and Bias Mitigation}
+		\theory{
+			\textbf{Fairness approaches:}
+			\begin{itemize}
+				\item \textbf{Pre-processing:} fix the data before training
+				\item \textbf{In-processing:} modify the algorithm during training
+				\item \textbf{Post-processing:} adjust predictions after training
+			\end{itemize}
+			\textbf{Bias mitigation techniques:}
+			\begin{itemize}
+				\item Remove sensitive features (can leave proxy effects)
+				\item Replace with average during prediction (equal treatment)
+				\item Use fairness constraints during training
+				\item Reweight samples to balance groups
+			\end{itemize}
+			\textbf{Exam tip:} Removing a variable does not remove its influence (proxies remain). Replacing with average ensures equal treatment.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Question 44}
+		\question{A company is testing the fairness of a model that predicts purchasing decisions. How does demographic parity contribute to group fairness?}
+		\options{Demographic parity ensures equal accuracy of purchasing rates across subgroups}{Demographic parity ensures identical predicted purchasing rates across subgroups}{Demographic parity ensures identical sensitivity of purchasing rates across subgroups}{Demographic parity ensures equal precision of purchasing rates across subgroups}
+		\answerbox{B}
+		\explain{Demographic parity requires that the predicted positive rate is the same across subgroups. It does not ensure equal accuracy, precision, or sensitivity.}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Theory: Fairness Metrics}
+		\theory{
+			\textbf{Group fairness metrics:}
+			\begin{itemize}
+				\item \textbf{Demographic parity:} equal positive prediction rates across groups
+				\item \textbf{Equal opportunity:} equal true positive rates across groups
+				\item \textbf{Equalized odds:} equal true positive and false positive rates
+				\item \textbf{Predictive parity:} equal precision across groups
+			\end{itemize}
+			\textbf{Individual fairness:} similar individuals receive similar predictions.
+			\textbf{Exam tip:} Demographic parity = equal prediction rates. Equal opportunity = equal recall.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Question 45}
+		\question{A bank uses a chatbot for customer inquiries. Tests revealed incorrect information was provided. What is the most appropriate action?}
+		\options{Upgrade the chatbot model by collecting more information}{Develop an ethical framework and review chatbot responses}{Generate periodic reports of risk analysis}{Implement design mechanisms that require human verification}
+		\answerbox{D}
+		\explain{Implementing design mechanisms that require periodic human input and verification mitigates the risk of incorrect information being provided to customers.}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Theory: Human-in-the-Loop}
+		\theory{
+			\textbf{Human-in-the-loop (HITL) = human verification of AI outputs.}
+			\begin{itemize}
+				\item Critical for high-stakes decisions
+				\item Mitigates risks from AI errors
+				\item Required by many regulations
+			\end{itemize}
+			\textbf{Applications:}
+			\begin{itemize}
+				\item Chatbots: human review of responses
+				\item Medical diagnosis: doctor confirms AI recommendation
+				\item Credit decisions: loan officer reviews AI decision
+				\item Fraud detection: analyst investigates AI alerts
+			\end{itemize}
+			\textbf{Exam tip:} When AI makes errors with real-world consequences, human verification is the answer.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Question 46}
+		\question{What is the difference between model risk and algorithmic bias?}
+		\options{Model risk is about model errors; algorithmic bias is about unfair discrimination}{Model risk is about unfair discrimination; algorithmic bias is about model errors}{They are the same thing}{Model risk applies to AI; algorithmic bias applies to statistics}
+		\answerbox{A}
+		\explain{Model risk refers to the potential for adverse consequences from model errors or misuse. Algorithmic bias refers to systematic and unfair discrimination in model outputs.}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Theory: Model Risk vs. Algorithmic Bias}
+		\theory{
+			\textbf{Model risk:}
+			\begin{itemize}
+				\item Potential for adverse consequences from model errors
+				\item Sources: wrong assumptions, bad data, implementation errors, misuse
+				\item Applies to all models (statistical, ML, AI)
+			\end{itemize}
+			\textbf{Algorithmic bias:}
+			\begin{itemize}
+				\item Systematic and unfair discrimination in model outputs
+				\item Sources: biased data, biased features, biased objectives
+				\item Affects protected groups (race, gender, age)
+			\end{itemize}
+			\textbf{Relationship:} Bias is a source of model risk.
+			\textbf{Exam tip:} Model risk = errors. Algorithmic bias = unfair discrimination.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Question 47}
+		\question{What is the purpose of explainability in AI models?}
+		\options{To increase model accuracy}{To provide human-understandable reasons for model decisions}{To reduce training time}{To increase the number of features}
+		\answerbox{B}
+		\explain{Explainability aims to provide human-understandable explanations for how a model arrives at its decisions, which is important for trust, accountability, and regulatory compliance.}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Theory: Explainability}
+		\theory{
+			\textbf{Explainability = ability to explain model decisions in human terms.}
+			\begin{itemize}
+				\item Why did the model make this prediction?
+				\item Which features were most important?
+				\item How would the prediction change if inputs changed?
+			\end{itemize}
+			\textbf{Techniques:}
+			\begin{itemize}
+				\item \textbf{SHAP values:} marginal contribution of each feature
+				\item \textbf{LIME:} local approximation of model behavior
+				\item \textbf{Feature importance:} global ranking of features
+				\item \textbf{Partial dependence plots:} effect of a feature on predictions
+			\end{itemize}
+			\textbf{Why it matters:}
+			\begin{itemize}
+				\item Regulatory compliance (GDPR ``right to explanation'')
+				\item Trust and accountability
+				\item Model validation and debugging
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Question 48}
+		\question{What is the difference between interpretability and explainability?}
+		\options{Interpretability is about understanding the model's internal mechanisms; explainability is about explaining its decisions}{Interpretability is about explaining decisions; explainability is about understanding internal mechanisms}{They are the same thing}{Interpretability applies to linear models; explainability applies to neural networks}
+		\answerbox{A}
+		\explain{Interpretability refers to the ability to understand the internal workings of a model. Explainability refers to the ability to explain the model's decisions in human terms.}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Theory: Interpretability vs. Explainability}
+		\theory{
+			\textbf{Interpretability:}
+			\begin{itemize}
+				\item Can you understand the model's internal logic?
+				\item Linear regression: highly interpretable (coefficients)
+				\item Deep neural network: not interpretable (black box)
+			\end{itemize}
+			\textbf{Explainability:}
+			\begin{itemize}
+				\item Can you explain a specific decision?
+				\item Even black-box models can be explained post-hoc
+				\item SHAP, LIME provide explanations
+			\end{itemize}
+			\textbf{Relationship:}
+			\begin{itemize}
+				\item Interpretable models are inherently explainable
+				\item Non-interpretable models need post-hoc explainability tools
+			\end{itemize}
+			\textbf{Exam tip:} Interpretability = internal. Explainability = external explanation.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Question 49}
+		\question{What is the ``black box'' problem in AI?}
+		\options{AI models are stored in black boxes}{AI models make decisions that cannot be understood by humans}{AI models are too large to fit in memory}{AI models are trained on black market data}
+		\answerbox{B}
+		\explain{The ``black box'' problem refers to AI models (especially deep neural networks) making decisions that cannot be easily understood or explained by humans.}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Theory: The Black Box Problem}
+		\theory{
+			\textbf{Black box = model whose internal workings are opaque.}
+			\begin{itemize}
+				\item Deep neural networks have millions of parameters
+				\item No simple formula explains decisions
+				\item Cannot trace how inputs lead to outputs
+			\end{itemize}
+			\textbf{Consequences:}
+			\begin{itemize}
+				\item Difficult to validate
+				\item Difficult to audit
+				\item Difficult to trust
+				\item Regulatory challenges
+			\end{itemize}
+			\textbf{Solutions:}
+			\begin{itemize}
+				\item Use interpretable models when possible
+				\item Apply post-hoc explainability (SHAP, LIME)
+				\item Use attention mechanisms (for NLP)
+				\item Hybrid models (interpretable + accurate)
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Question 50}
+		\question{What is the primary concern with using AI in hiring decisions?}
+		\options{AI is too slow}{AI may perpetuate historical bias and discrimination}{AI is too expensive}{AI cannot process resumes}
+		\answerbox{B}
+		\explain{AI models trained on historical hiring data may perpetuate past discrimination, leading to unfair outcomes for protected groups.}
+	\end{frame}
+	
+	\begin{frame}{Module 3 --- Theory: AI in Hiring}
+		\theory{
+			\textbf{Risks of AI in hiring:}
+			\begin{itemize}
+				\item Historical bias: past discrimination encoded in data
+				\item Proxy discrimination: features correlated with protected attributes
+				\item Lack of transparency: candidates cannot understand decisions
+				\item Regulatory risk: violation of anti-discrimination laws
+			\end{itemize}
+			\textbf{Mitigation:}
+			\begin{itemize}
+				\item Audit training data for bias
+				\item Remove or de-bias proxy features
+				\item Use fairness constraints
+				\item Provide explanations to candidates
+				\item Human review of AI decisions
+			\end{itemize}
+			\textbf{Exam tip:} AI in hiring is a classic example of algorithmic bias risk.
+		}
+	\end{frame}
+	
+	% ============================================================
+	\section{Module 4: Responsible \& Ethical AI}
+	% ============================================================
+	
+	\begin{frame}{Module 4 --- Question 51}
+		\question{A sport analyst is developing an AI system to predict winners of a basketball league. The analyst would like to explain the model by understanding the marginal effect of each feature. Which technique is best?}
+		\options{Shapley values}{Feature importance scores}{Grid search}{Feature scaling}
+		\answerbox{A}
+		\explain{Shapley values provide the marginal contribution of each feature to the prediction, making them ideal for understanding marginal effects.}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Theory: Shapley Values}
+		\theory{
+			\textbf{Shapley values = marginal contribution of each feature.}
+			\begin{itemize}
+				\item From cooperative game theory
+				\item Fairly distributes the ``payout'' (prediction) among features
+				\item Considers all possible feature subsets
+			\end{itemize}
+			\textbf{Properties:}
+			\begin{itemize}
+				\item Additivity: sum of Shapley values = prediction - baseline
+				\item Consistency: if a feature's contribution increases, its Shapley value increases
+				\item Symmetry: identical features get identical values
+			\end{itemize}
+			\textbf{vs. Feature importance:}
+			\begin{itemize}
+				\item Feature importance: global ranking (not per-prediction)
+				\item Shapley values: per-prediction attribution
+			\end{itemize}
+			\textbf{Exam tip:} Marginal effect of each feature = Shapley values.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Question 52}
+		\question{A bank uses a model to determine if loan applications should be approved. Customers have raised concerns about how the model reaches the decision. Which is the source of reputational risk and what can be done?}
+		\options{Privacy Breaches --- Mitigated by securing data access}{Algorithmic Bias --- Mitigated by using diverse training data}{Lack of Explainability --- Mitigated by providing reasons for a loan being rejected}{Lack of Transparency --- Mitigated by disclosing the full details of the training data}
+		\answerbox{C}
+		\explain{Customers want to understand why their loan was rejected. Lack of explainability is the source of reputational risk. Providing reasons for rejection mitigates this.}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Theory: Reputational Risk from AI}
+		\theory{
+			\textbf{Sources of AI-related reputational risk:}
+			\begin{itemize}
+				\item \textbf{Lack of explainability:} customers do not understand decisions
+				\item \textbf{Algorithmic bias:} unfair treatment of groups
+				\item \textbf{Privacy breaches:} mishandling personal data
+				\item \textbf{Lack of transparency:} hiding how AI works
+			\end{itemize}
+			\textbf{Mitigation:}
+			\begin{itemize}
+				\item Explainability: provide reasons for decisions
+				\item Bias audits: test for fairness
+				\item Privacy: secure data, get consent
+				\item Transparency: disclose AI use, provide recourse
+			\end{itemize}
+			\textbf{Exam tip:} ``Why was I rejected?'' = lack of explainability.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Question 53}
+		\question{Which of the following is considered an advantage of implementing a practical ethics framework?}
+		\options{A practical ethics framework can provide clear guidelines for evaluating ethical dilemmas}{A practical ethics framework can eliminate conflicts of interest between stakeholders}{A practical ethics framework can guarantee compliance with legal requirements}{A practical ethics framework can simplify decision making by focusing on profit maximization}
+		\answerbox{A}
+		\explain{A practical ethics framework provides clear guidelines for evaluating ethical dilemmas. It cannot eliminate conflicts of interest, guarantee legal compliance, or focus only on profit.}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Theory: Practical Ethics Frameworks}
+		\theory{
+			\textbf{Practical ethics framework = structured approach to ethical decisions.}
+			\begin{itemize}
+				\item Provides guidelines for evaluating dilemmas
+				\item Helps ensure consistency
+				\item Supports accountability
+				\item Builds trust with stakeholders
+			\end{itemize}
+			\textbf{What it does NOT do:}
+			\begin{itemize}
+				\item Eliminate all conflicts of interest
+				\item Guarantee legal compliance
+				\item Focus only on profit
+				\item Replace human judgment
+			\end{itemize}
+			\textbf{Components:}
+			\begin{itemize}
+				\item Principles (beneficence, nonmaleficence, justice, autonomy)
+				\item Processes (review, escalation, documentation)
+				\item Roles (ethics committee, AI ethics officer)
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Question 54}
+		\question{What is the most likely advantage of implementing an AI ethics framework?}
+		\options{An AI ethics framework helps increase the accuracy of the models it is applied to}{An AI ethics framework strengthens the firewall that defends against hackers}{An AI ethics framework helps increase the productivity of model testing}{An AI ethics framework helps reduce the risk of regulatory non-compliance}
+		\answerbox{D}
+		\explain{An AI ethics framework helps reduce the risk of regulatory non-compliance by ensuring AI systems align with legal and ethical standards.}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Theory: AI Ethics Frameworks and Regulation}
+		\theory{
+			\textbf{Why AI ethics frameworks matter:}
+			\begin{itemize}
+				\item Regulatory compliance (EU AI Act, GDPR, CCPA)
+				\item Reputational protection
+				\item Stakeholder trust
+				\item Risk management
+			\end{itemize}
+			\textbf{Key regulations:}
+			\begin{itemize}
+				\item \textbf{EU AI Act:} risk-based classification of AI systems
+				\item \textbf{GDPR:} right to explanation, data protection
+				\item \textbf{CCPA:} California privacy rights
+				\item \textbf{SEC/FCA:} model risk management guidance
+			\end{itemize}
+			\textbf{Exam tip:} Ethics frameworks reduce regulatory risk, not model accuracy or cybersecurity.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Question 55}
+		\question{Utilitarianism is one ethical theory that can be incorporated into an AI ethics framework. Which statement is correct regarding Utilitarianism?}
+		\options{Utilitarian approach can lead to violations of individual rights}{Utilitarian approach tends to focus on virtuous character traits}{Utilitarian approach relies heavily on laws and regulations}{Utilitarian approach values the intrinsic morality of actions}
+		\answerbox{A}
+		\explain{Utilitarianism focuses on maximizing overall good, which can lead to actions that violate individual rights for the greater good.}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Theory: Ethical Frameworks}
+		\theory{
+			\textbf{Three main ethical frameworks:}
+			\begin{itemize}
+				\item \textbf{Consequentialism (Utilitarianism):}
+				\begin{itemize}
+					\item Judges actions by their consequences
+					\item Goal: maximize overall good/happiness
+					\item Can justify violating individual rights for greater good
+				\end{itemize}
+				\item \textbf{Deontology:}
+				\begin{itemize}
+					\item Judges actions by adherence to rules and duties
+					\item Some actions are inherently right or wrong
+					\item Does not consider consequences
+				\end{itemize}
+				\item \textbf{Virtue Ethics:}
+				\begin{itemize}
+					\item Focuses on character traits and virtues
+					\item What would a virtuous person do?
+					\item Emphasis on living a good life
+				\end{itemize}
+			\end{itemize}
+			\textbf{Exam tip:} Utilitarianism = consequences. Deontology = rules. Virtue = character.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Question 56}
+		\question{The CRO of a large international bank is considering ethical frameworks for AI models. A consultant proposes a deontological ethics framework. Which best describes a characteristic of deontology?}
+		\options{A deontological ethical framework judges morality based on consequences}{A deontological ethical framework judges morality based on adherence to ethical duties and rules}{A deontological ethical framework provides a single, quantifiable metric for moral value}{A deontological ethical framework emphasizes virtuous character traits}
+		\answerbox{B}
+		\explain{Deontology judges morality based on adherence to ethical duties and rules, not on consequences.}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Theory: Deontology}
+		\theory{
+			\textbf{Deontology = duty-based ethics.}
+			\begin{itemize}
+				\item Actions are right or wrong in themselves
+				\item Consequences do not determine morality
+				\item Key concept: categorical imperative (Kant)
+				\item ``Do not lie'' is a duty, regardless of consequences
+			\end{itemize}
+			\textbf{vs. Consequentialism:}
+			\begin{itemize}
+				\item Consequentialism: the ends justify the means
+				\item Deontology: the means matter, not just the ends
+			\end{itemize}
+			\textbf{Application to AI:}
+			\begin{itemize}
+				\item Certain AI uses are inherently wrong (e.g., mass surveillance)
+				\item Rules must be followed regardless of benefits
+			\end{itemize}
+			\textbf{Exam tip:} Deontology = rules and duties. Consequentialism = outcomes.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Question 57}
+		\question{A government legislator is considering the principle of justice in AI ethics. Which is correct regarding justice?}
+		\options{Conflicts can exist between different concepts of distributive justice such as egalitarianism and utilitarianism}{Impartial application of the law is not typically considered as a requirement to achieve procedural justice}{Personal autonomy is generally considered secondary to achieving social justice}{Meritocracy is not one of the principles of distributive justice}
+		\answerbox{A}
+		\explain{Different concepts of justice (egalitarianism, utilitarianism, meritocracy) can conflict with each other. Procedural justice requires impartial application of the law.}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Theory: Justice in AI Ethics}
+		\theory{
+			\textbf{Types of justice:}
+			\begin{itemize}
+				\item \textbf{Distributive justice:} fair allocation of resources
+				\begin{itemize}
+					\item Egalitarianism: equal distribution
+					\item Utilitarianism: maximize total welfare
+					\item Meritocracy: distribute based on merit
+				\end{itemize}
+				\item \textbf{Procedural justice:} fair processes
+				\begin{itemize}
+					\item Impartial application of the law
+					\item Transparent decision-making
+				\end{itemize}
+				\item \textbf{Social justice:} fairness in society
+			\end{itemize}
+			\textbf{Conflicts:} Different concepts of justice can conflict (e.g., egalitarianism vs. meritocracy).
+			\textbf{Exam tip:} Justice concepts can conflict. Procedural justice requires impartiality.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Question 58}
+		\question{An AI system recommends treatment plans for unconscious patients. In some cases, the AI suggests a treatment that conflicts with the patient's personal preferences. Which AI ethics principle is violated?}
+		\options{Explainability}{Beneficence}{Autonomy}{Non-maleficence}
+		\answerbox{C}
+		\explain{Autonomy refers to respecting the patient's right to make their own decisions. The AI conflicting with patient preferences violates autonomy.}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Theory: Principles of AI Ethics}
+		\theory{
+			\textbf{Five principles of AI ethics:}
+			\begin{itemize}
+				\item \textbf{Nonmaleficence:} do no harm
+				\item \textbf{Beneficence:} do good
+				\item \textbf{Justice:} fairness
+				\item \textbf{Autonomy:} respect individual choice
+				\item \textbf{Explainability:} provide understandable reasons
+			\end{itemize}
+			\textbf{Autonomy in AI:}
+			\begin{itemize}
+				\item Patients have the right to refuse treatment
+				\item Users must consent to AI decisions
+				\item AI should support, not replace, human judgment
+			\end{itemize}
+			\textbf{Exam tip:} ``Conflicts with patient preferences'' = autonomy violation.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Question 59}
+		\question{A pharmaceutical company developed a model for tropical diseases using data from travelers returning to the US and Canada. The model performed poorly in Brazil, Nigeria, and Thailand. What is the most likely cause?}
+		\options{Bias in problem specification}{Bias in model deployment}{Historical bias}{Sampling bias}
+		\answerbox{D}
+		\explain{College students from the US and Canada may not be representative of hospital patients in Brazil, Nigeria, and Thailand. This is sampling bias.}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Theory: Sampling Bias}
+		\theory{
+			\textbf{Sampling bias = sample does not represent the target population.}
+			\begin{itemize}
+				\item Training data from one population
+				\item Deployment in a different population
+				\item Model performs poorly on new population
+			\end{itemize}
+			\textbf{Examples:}
+			\begin{itemize}
+				\item Medical AI trained on US travelers, deployed in developing countries
+				\item Hiring AI trained on one demographic, deployed globally
+				\item Credit model trained on one region, deployed in another
+			\end{itemize}
+			\textbf{Mitigation:}
+			\begin{itemize}
+				\item Collect representative data
+				\item Test on diverse populations
+				\item Monitor performance across subgroups
+				\item Use transfer learning
+			\end{itemize}
+			\textbf{Exam tip:} Model works in training population but fails in new population = sampling bias.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Question 60}
+		\question{What is the primary purpose of an AI ethics framework?}
+		\options{To maximize model accuracy}{To provide guidelines for ethical AI development and use}{To reduce training time}{To increase the number of features}
+		\answerbox{B}
+		\explain{An AI ethics framework provides guidelines for ethical AI development and use, ensuring AI systems align with societal values and legal requirements.}
+	\end{frame}
+	
+	\begin{frame}{Module 4 --- Theory: AI Ethics Frameworks}
+		\theory{
+			\textbf{AI ethics framework = structured approach to ethical AI.}
+			\begin{itemize}
+				\item Defines principles (beneficence, nonmaleficence, justice, autonomy, explainability)
+				\item Establishes processes (review, escalation, documentation)
+				\item Assigns roles (ethics committee, AI ethics officer)
+				\item Provides training and awareness
+			\end{itemize}
+			\textbf{Benefits:}
+			\begin{itemize}
+				\item Reduces regulatory risk
+				\item Builds trust
+				\item Ensures consistency
+				\item Protects reputation
+			\end{itemize}
+			\textbf{Exam tip:} Ethics framework = guidelines for ethical AI, not technical accuracy.
+		}
+	\end{frame}
+	
+	% ============================================================
+	\section{Module 5: Data and AI Model Governance}
+	% ============================================================
+	
+	\begin{frame}{Module 5 --- Question 61}
+		\question{The CRO of an investment firm oversees model risk governance. What is a crucial consideration when evaluating the model landscape?}
+		\options{Verify that each model operates independently}{Ensure that all models use the same input data}{Assess whether models can be consolidated}{Ensure that interdependencies between models are identified}
+		\answerbox{D}
+		\explain{A model landscape illustrates the interactions among models. Identifying interdependencies is crucial to understanding how one model's failure could affect others.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Landscape and Interdependencies}
+		\theory{
+			\textbf{Model landscape = overview of all models and their interactions.}
+			\begin{itemize}
+				\item Shows relationships between models
+				\item Identifies critical models
+				\item Maps data flows
+				\item Highlights interdependencies
+			\end{itemize}
+			\textbf{Why interdependencies matter:}
+			\begin{itemize}
+				\item One model's output may be another's input
+				\item Failure can cascade
+				\item Correlated errors can amplify risk
+				\item Systemic risk across the organization
+			\end{itemize}
+			\textbf{Exam tip:} Model landscape = map of models and their interdependencies.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 62}
+		\question{A sovereign wealth fund is reviewing model governance at a bank. Which correctly describes roles and responsibilities?}
+		\options{The board of directors should maintain a model inventory}{The model risk function should set the model-risk appetite}{Model ownership should never be shared}{Internal and external auditors are necessary independent checks on model validation}
+		\answerbox{D}
+		\explain{Internal and external auditors provide independent checks on the model validation process. The board sets risk appetite, and the model risk function maintains the inventory.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Governance Roles}
+		\theory{
+			\textbf{Key roles in model governance:}
+			\begin{itemize}
+				\item \textbf{Board of directors:} sets model risk appetite
+				\item \textbf{Model risk function:} maintains model inventory, develops policies
+				\item \textbf{Model developers:} build and document models
+				\item \textbf{Model validators:} independently validate models
+				\item \textbf{Internal auditors:} independent check on validation
+				\item \textbf{External auditors:} external independent check
+				\item \textbf{Model owners:} accountable for model use
+			\end{itemize}
+			\textbf{Exam tip:}
+			\begin{itemize}
+				\item Board sets appetite
+				\item Model risk function maintains inventory
+				\item Auditors check validation
+			\end{itemize}
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 63}
+		\question{When implementing a new ML model, which team ensures integration with existing IT systems does not disrupt operations?}
+		\options{The Core Implementation Team}{The System Implementation Team}{The Model Design Team}{The Data Management Team}
+		\answerbox{B}
+		\explain{The system implementation team is responsible for ensuring the model is properly integrated with existing IT systems and functions correctly in the environment.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Implementation Teams}
+		\theory{
+			\textbf{Teams involved in model implementation:}
+			\begin{itemize}
+				\item \textbf{Model Design Team:} designs the model architecture and methodology
+				\item \textbf{Core Implementation Team:} builds and codes the model
+				\item \textbf{System Implementation Team:} integrates model with IT systems
+				\item \textbf{Data Management Team:} ensures data quality and availability
+			\end{itemize}
+			\textbf{System implementation team responsibilities:}
+			\begin{itemize}
+				\item Integration with existing IT infrastructure
+				\item Ensuring model functions correctly in production
+				\item Managing deployment
+				\item Monitoring system performance
+			\end{itemize}
+			\textbf{Exam tip:} IT integration = System Implementation Team.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 64}
+		\question{A bank developed a new AI model for mortgage prepayments. It outperformed the traditional model. What is the appropriate next step?}
+		\options{Deployment of the model for production use}{Informing IT that a new model needs to be rolled out}{Retirement of the existing model}{Requesting an initial validation of the model from the model validation team}
+		\answerbox{D}
+		\explain{Before deployment, the model must be independently validated by the model validation team. This is a regulatory requirement and best practice.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Validation}
+		\theory{
+			\textbf{Model validation = independent assessment of model.}
+			\begin{itemize}
+				\item Conducted by independent team (not developers)
+				\item Assesses conceptual soundness
+				\item Evaluates data quality
+				\item Tests model performance
+				\item Reviews implementation
+			\end{itemize}
+			\textbf{When to validate:}
+			\begin{itemize}
+				\item Before initial deployment
+				\item Periodically (annual or risk-based)
+				\item After significant changes
+				\item When performance degrades
+			\end{itemize}
+			\textbf{Exam tip:} New model $\rightarrow$ validate before deployment. Never deploy without validation.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 65}
+		\question{A bank developed a new AI credit scoring model using alternative data (school transcripts, social media, landlord-tenant disputes). What is an appropriate finding by the validation team?}
+		\options{No material concerns, as the augmented data appears appropriate}{Raise material concerns around potentially improper inclusion of sensitive alternative data}{Approve the model if back testing showed improvement}{Recommend that additional alternative data be included}
+		\answerbox{B}
+		\explain{Use of alternative data requires heightened scrutiny. Sensitive data used to make credit decisions could give rise to ethical breaches and may not have been approved by the applicant.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Alternative Data and Data Governance}
+		\theory{
+			\textbf{Alternative data = non-traditional data sources.}
+			\begin{itemize}
+				\item Social media, school transcripts, rent payments
+				\item Can expand credit access
+				\item Raises ethical and legal concerns
+			\end{itemize}
+			\textbf{Data governance requirements:}
+			\begin{itemize}
+				\item \textbf{Provenance:} legal right to use data
+				\item \textbf{Consent:} applicants must approve use
+				\item \textbf{Privacy:} protect sensitive information
+				\item \textbf{Fairness:} avoid discriminatory features
+				\item \textbf{Transparency:} disclose data use
+			\end{itemize}
+			\textbf{Exam tip:} Alternative data = heightened scrutiny. Sensitive data = material concerns.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 66}
+		\question{In a financial institution, ML models are exposed to rapidly changing data environments. What is an advantage of increasing the frequency of model monitoring?}
+		\options{It reduces the need for model retraining}{It allows detection of performance degradation or drift, enabling timely intervention}{It minimizes the involvement of the IT team}{It improves the model's interpretability}
+		\answerbox{B}
+		\explain{Increasing monitoring frequency allows early detection of performance degradation or drift, enabling timely intervention to maintain model accuracy.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Monitoring and Drift}
+		\theory{
+			\textbf{Model monitoring = ongoing oversight of model performance.}
+			\begin{itemize}
+				\item Detect performance degradation
+				\item Identify data drift
+				\item Identify concept drift
+				\item Trigger retraining or recalibration
+			\end{itemize}
+			\textbf{Types of drift:}
+			\begin{itemize}
+				\item \textbf{Data drift:} input distribution changes
+				\item \textbf{Concept drift:} relationship between inputs and outputs changes
+				\item \textbf{Label drift:} target distribution changes
+			\end{itemize}
+			\textbf{Monitoring frequency:}
+			\begin{itemize}
+				\item Higher risk = more frequent monitoring
+				\item Rapidly changing environments = more frequent
+				\item Stable environments = less frequent
+			\end{itemize}
+			\textbf{Exam tip:} Monitoring detects drift. Drift triggers retraining.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 67}
+		\question{What is the purpose of a model inventory?}
+		\options{To store model code}{To list all models in use and track their risk}{To train models}{To visualize model performance}
+		\answerbox{B}
+		\explain{A model inventory is a comprehensive list of all models in use, tracking their purpose, risk level, owner, and validation status.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Inventory}
+		\theory{
+			\textbf{Model inventory = registry of all models.}
+			\begin{itemize}
+				\item Maintained by model risk function
+				\item Tracks all models in use
+				\item Documents purpose, owner, risk level
+				\item Records validation status
+				\item Identifies interdependencies
+			\end{itemize}
+			\textbf{Contents:}
+			\begin{itemize}
+				\item Model name and description
+				\item Purpose and use case
+				\item Owner and developer
+				\item Risk classification
+				\item Validation date and status
+				\item Last review date
+			\end{itemize}
+			\textbf{Exam tip:} Model inventory = list of all models with their risk and validation status.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 68}
+		\question{What is the primary purpose of model documentation?}
+		\options{To increase model accuracy}{To provide a record of model design, assumptions, and limitations}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model documentation provides a record of model design, assumptions, limitations, and usage, supporting validation, audit, and governance.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Documentation}
+		\theory{
+			\textbf{Model documentation = comprehensive record of the model.}
+			\begin{itemize}
+				\item Purpose and intended use
+				\item Methodology and assumptions
+				\item Data sources and preparation
+				\item Model limitations
+				\item Performance metrics
+				\item Validation results
+				\item Usage guidelines
+			\end{itemize}
+			\textbf{Why it matters:}
+			\begin{itemize}
+				\item Supports validation
+				\item Enables audit
+				\item Facilitates knowledge transfer
+				\item Ensures regulatory compliance
+			\end{itemize}
+			\textbf{Exam tip:} Documentation = record of design, assumptions, limitations.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 69}
+		\question{What is the purpose of the use test in model validation?}
+		\options{To test if the model is used in production}{To assess whether the model is appropriate for its intended use}{To test the model's speed}{To test the model's accuracy}
+		\answerbox{B}
+		\explain{The use test assesses whether the model is appropriate for its intended use and whether users understand its limitations.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: The Use Test}
+		\theory{
+			\textbf{Use test = assess whether model is fit for its intended purpose.}
+			\begin{itemize}
+				\item Is the model being used as intended?
+				\item Do users understand its limitations?
+				\item Is the model appropriate for the business context?
+				\item Are outputs being interpreted correctly?
+			\end{itemize}
+			\textbf{Questions to ask:}
+			\begin{itemize}
+				\item What decisions does the model support?
+				\item Who uses the model?
+				\item Do users understand the model's assumptions?
+				\item Are there alternative models that would be better?
+			\end{itemize}
+			\textbf{Exam tip:} Use test = is the model appropriate for its intended use?
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 70}
+		\question{What is the difference between white-box and black-box testing?}
+		\options{White-box tests internal logic; black-box tests inputs and outputs}{White-box tests inputs and outputs; black-box tests internal logic}{They are the same}{White-box is for AI; black-box is for statistics}
+		\answerbox{A}
+		\explain{White-box testing examines the internal logic and code of the model. Black-box testing examines inputs and outputs without knowledge of internal workings.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: White-Box vs. Black-Box Testing}
+		\theory{
+			\textbf{White-box testing:}
+			\begin{itemize}
+				\item Examines internal logic and code
+				\item Requires knowledge of model structure
+				\item Tests specific components
+				\item Identifies implementation errors
+			\end{itemize}
+			\textbf{Black-box testing:}
+			\begin{itemize}
+				\item Examines inputs and outputs only
+				\item No knowledge of internal workings
+				\item Tests overall behavior
+				\item Simulates real-world use
+			\end{itemize}
+			\textbf{Both are needed for comprehensive validation.}
+			\textbf{Exam tip:} White-box = internal. Black-box = external.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 71}
+		\question{What is the purpose of data provenance in AI governance?}
+		\options{To verify the legal right to use data}{To increase data volume}{To speed up training}{To reduce data quality}
+		\answerbox{A}
+		\explain{Data provenance verifies the legal right to use data, especially alternative data, ensuring compliance with regulations and ethical standards.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Data Provenance}
+		\theory{
+			\textbf{Data provenance = origin and history of data.}
+			\begin{itemize}
+				\item Where did the data come from?
+				\item Do we have the legal right to use it?
+				\item Was consent obtained?
+				\item Is it accurate and up-to-date?
+			\end{itemize}
+			\textbf{Why it matters:}
+			\begin{itemize}
+				\item Legal compliance (GDPR, CCPA)
+				\item Ethical use of data
+				\item Regulatory requirements
+				\item Reputational protection
+			\end{itemize}
+			\textbf{Exam tip:} Provenance = legal right to use data.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 72}
+		\question{What is the primary purpose of data classification?}
+		\options{To increase data volume}{To categorize data by sensitivity and structure}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Data classification categorizes data by sensitivity (public, internal, confidential, restricted) and structure (structured, unstructured) to determine appropriate handling.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Data Classification}
+		\theory{
+			\textbf{Data classification = categorizing data by sensitivity and structure.}
+			\begin{itemize}
+				\item \textbf{Sensitivity levels:}
+				\begin{itemize}
+					\item Public: freely available
+					\item Internal: for employees only
+					\item Confidential: restricted access
+					\item Restricted: highly sensitive (PII, PHI)
+				\end{itemize}
+				\item \textbf{Structure:}
+				\begin{itemize}
+					\item Structured: tables, databases
+					\item Unstructured: text, images, audio
+				\end{itemize}
+			\end{itemize}
+			\textbf{Purpose:} Determine appropriate handling, access controls, and protection.
+			\textbf{Exam tip:} Classification = sensitivity and structure.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 73}
+		\question{What is the purpose of metadata management?}
+		\options{To increase data volume}{To document data origin, structure, definitions, and relationships}{To speed up training}{To reduce data quality}
+		\answerbox{B}
+		\explain{Metadata management documents data origin, structure, definitions, and relationships to other data, supporting data governance and usability.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Metadata Management}
+		\theory{
+			\textbf{Metadata = data about data.}
+			\begin{itemize}
+				\item Origin and history
+				\item Structure and format
+				\item Definitions and business meaning
+				\item Relationships to other data
+				\item Access permissions
+			\end{itemize}
+			\textbf{Why it matters:}
+			\begin{itemize}
+				\item Data discovery and understanding
+				\item Data lineage tracking
+				\item Regulatory compliance
+				\item Effective data governance
+			\end{itemize}
+			\textbf{Exam tip:} Metadata = data about data (origin, structure, definitions, relationships).
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 74}
+		\question{What is the purpose of data access controls?}
+		\options{To increase data volume}{To ensure only authorized users can access data}{To speed up training}{To reduce data quality}
+		\answerbox{B}
+		\explain{Data access controls ensure only authorized users can access data, protecting privacy and security.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Data Access Controls}
+		\theory{
+			\textbf{Data access controls = who can access what data.}
+			\begin{itemize}
+				\item Role-based access control (RBAC)
+				\item Attribute-based access control (ABAC)
+				\item Least privilege principle
+				\item Need-to-know basis
+			\end{itemize}
+			\textbf{Why it matters:}
+			\begin{itemize}
+				\item Privacy protection
+				\item Security
+				\item Regulatory compliance
+				\item Preventing misuse
+			\end{itemize}
+			\textbf{Exam tip:} Access controls = authorized users only.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 75}
+		\question{What is the primary purpose of a data governance framework?}
+		\options{To increase data volume}{To ensure data quality, security, and compliance}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{A data governance framework ensures data quality, security, compliance, and proper use across the organization.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Data Governance Framework}
+		\theory{
+			\textbf{Data governance = framework for managing data as an asset.}
+			\begin{itemize}
+				\item Data strategy and vision
+				\item Data quality (accuracy, consistency, integrity)
+				\item Data provenance and legal rights
+				\item Data classification
+				\item Metadata management
+				\item Data protection and security
+				\item Data access controls
+				\item Compliance with regulations
+				\item Roles and responsibilities
+			\end{itemize}
+			\textbf{Exam tip:} Data governance = quality, security, compliance, proper use.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 76}
+		\question{What is the purpose of model risk management?}
+		\options{To increase model accuracy}{To identify, assess, and mitigate risks from models}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model risk management identifies, assesses, and mitigates risks from model errors, misuse, and limitations.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Risk Management}
+		\theory{
+			\textbf{Model risk management = framework for managing model risk.}
+			\begin{itemize}
+				\item Model identification and inventory
+				\item Risk assessment and classification
+				\item Model development and documentation
+				\item Independent validation
+				\item Ongoing monitoring
+				\item Governance and oversight
+			\end{itemize}
+			\textbf{Sources of model risk:}
+			\begin{itemize}
+				\item Wrong assumptions
+				\item Bad data
+				\item Implementation errors
+				\item Misuse
+				\item Model drift
+			\end{itemize}
+			\textbf{Exam tip:} Model risk management = identify, assess, mitigate model risk.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 77}
+		\question{What is the role of the model risk function?}
+		\options{To build models}{To maintain the model inventory and develop policies}{To use models}{To reduce the number of features}
+		\answerbox{B}
+		\explain{The model risk function maintains the model inventory, develops policies, and oversees model risk management across the organization.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Risk Function}
+		\theory{
+			\textbf{Model risk function responsibilities:}
+			\begin{itemize}
+				\item Maintain model inventory
+				\item Develop model risk policies
+				\item Classify model risk
+				\item Coordinate validation
+				\item Monitor model performance
+				\item Report to senior management
+				\item Ensure regulatory compliance
+			\end{itemize}
+			\textbf{Independence:} Must be independent from model developers.
+			\textbf{Exam tip:} Model risk function = inventory + policies.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 78}
+		\question{What is the purpose of periodic model validation?}
+		\options{To increase model accuracy}{To confirm the model remains fit for purpose over time}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Periodic model validation confirms the model remains aligned with its intended purpose, assumptions remain valid, and performance is as expected.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Periodic Model Validation}
+		\theory{
+			\textbf{Periodic validation = ongoing assessment of model fitness.}
+			\begin{itemize}
+				\item Confirm assumptions remain valid
+				\item Verify data is still appropriate
+				\item Check performance hasn't degraded
+				\item Ensure methodology reflects best practices
+				\item Confirm model still aligns with purpose
+			\end{itemize}
+			\textbf{Frequency:}
+			\begin{itemize}
+				\item Based on model risk ranking
+				\item Higher risk = more frequent
+				\item Typically annually or risk-based
+				\item Also triggered by significant changes
+			\end{itemize}
+			\textbf{Exam tip:} Periodic validation = is the model still fit for purpose?
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 79}
+		\question{What is the purpose of model implementation tasks?}
+		\options{To design the model}{To deploy the model into production and integrate with IT systems}{To validate the model}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model implementation tasks involve deploying the model into production, integrating with IT systems, and ensuring it functions correctly in the environment.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Implementation}
+		\theory{
+			\textbf{Model implementation = deploying model into production.}
+			\begin{itemize}
+				\item Integration with IT systems
+				\item Data pipeline setup
+				\item Performance testing
+				\item User training
+				\item Documentation
+				\item Monitoring setup
+			\end{itemize}
+			\textbf{Challenges:}
+			\begin{itemize}
+				\item Legacy system integration
+				\item Data quality issues
+				\item Scalability
+				\item Security
+				\item Change management
+			\end{itemize}
+			\textbf{Exam tip:} Implementation = deployment and integration.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 80}
+		\question{What is the purpose of model adaptation tasks?}
+		\options{To design the model}{To update the model to reflect changing conditions}{To validate the model}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model adaptation tasks update the model to reflect changing conditions, such as new data, changing business needs, or regulatory requirements.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Adaptation}
+		\theory{
+			\textbf{Model adaptation = updating model for changing conditions.}
+			\begin{itemize}
+				\item Retraining with new data
+				\item Recalibrating parameters
+				\item Updating assumptions
+				\item Adding new features
+				\item Responding to regulatory changes
+			\end{itemize}
+			\textbf{Triggers:}
+			\begin{itemize}
+				\item Performance degradation
+				\item Data drift
+				\item Concept drift
+				\item Business changes
+				\item Regulatory changes
+			\end{itemize}
+			\textbf{Exam tip:} Adaptation = updating model for changing conditions.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 81}
+		\question{What is the purpose of a model risk appetite?}
+		\options{To increase model accuracy}{To define the level of model risk the organization is willing to accept}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model risk appetite defines the level of model risk the organization is willing to accept, set by the board of directors.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Risk Appetite}
+		\theory{
+			\textbf{Model risk appetite = level of model risk organization accepts.}
+			\begin{itemize}
+				\item Set by board of directors
+				\item Defines tolerance for model risk
+				\item Guides model risk management
+				\item Aligns with overall risk appetite
+			\end{itemize}
+			\textbf{Considerations:}
+			\begin{itemize}
+				\item Business strategy
+				\item Regulatory requirements
+				\item Risk capacity
+				\item Stakeholder expectations
+			\end{itemize}
+			\textbf{Exam tip:} Board sets model risk appetite.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 82}
+		\question{What is the purpose of model governance policies?}
+		\options{To increase model accuracy}{To establish rules and procedures for model development, validation, and use}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model governance policies establish rules and procedures for model development, validation, and use, ensuring consistency and accountability.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Governance Policies}
+		\theory{
+			\textbf{Model governance policies = rules for model management.}
+			\begin{itemize}
+				\item Model development standards
+				\item Validation requirements
+				\item Documentation standards
+				\item Approval processes
+				\item Monitoring requirements
+				\item Roles and responsibilities
+			\end{itemize}
+			\textbf{Purpose:}
+			\begin{itemize}
+				\item Consistency across models
+				\item Accountability
+				\item Regulatory compliance
+				\item Risk management
+			\end{itemize}
+			\textbf{Exam tip:} Policies = rules for model management.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 83}
+		\question{What is the purpose of model documentation standards?}
+		\options{To increase model accuracy}{To ensure consistent and comprehensive documentation of models}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model documentation standards ensure consistent and comprehensive documentation of models, supporting validation, audit, and knowledge transfer.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Documentation Standards}
+		\theory{
+			\textbf{Documentation standards = requirements for model documentation.}
+			\begin{itemize}
+				\item Purpose and intended use
+				\item Methodology and assumptions
+				\item Data sources and preparation
+				\item Model limitations
+				\item Performance metrics
+				\item Validation results
+				\item Usage guidelines
+			\end{itemize}
+			\textbf{Benefits:}
+			\begin{itemize}
+				\item Consistency
+				\item Knowledge transfer
+				\item Audit readiness
+				\item Regulatory compliance
+			\end{itemize}
+			\textbf{Exam tip:} Standards = consistent documentation requirements.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 84}
+		\question{What is the purpose of model inventory and model landscape?}
+		\options{To increase model accuracy}{To track all models and their interdependencies}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model inventory tracks all models in use. Model landscape shows interactions and interdependencies between models.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Inventory vs. Model Landscape}
+		\theory{
+			\textbf{Model inventory:}
+			\begin{itemize}
+				\item List of all models
+				\item Name, purpose, owner, risk level
+				\item Validation status
+				\item Last review date
+			\end{itemize}
+			\textbf{Model landscape:}
+			\begin{itemize}
+				\item Visual representation of model interactions
+				\item Shows data flows between models
+				\item Identifies critical models
+				\item Highlights interdependencies
+			\end{itemize}
+			\textbf{Exam tip:} Inventory = list. Landscape = map of interactions.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 85}
+		\question{What is the purpose of model risk reporting?}
+		\options{To increase model accuracy}{To inform senior management and board about model risk}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model risk reporting informs senior management and the board about model risk, including inventory, validation status, and key issues.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Risk Reporting}
+		\theory{
+			\textbf{Model risk reporting = communication of model risk to stakeholders.}
+			\begin{itemize}
+				\item Model inventory summary
+				\item Validation status
+				\item Key risk issues
+				\item Performance metrics
+				\item Remediation plans
+			\end{itemize}
+			\textbf{Audience:}
+			\begin{itemize}
+				\item Board of directors
+				\item Senior management
+				\item Risk committee
+				\item Regulators
+			\end{itemize}
+			\textbf{Exam tip:} Reporting = informing management about model risk.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 86}
+		\question{What is the purpose of model change management?}
+		\options{To increase model accuracy}{To control changes to models and ensure proper review}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model change management controls changes to models, ensuring proper review, approval, and documentation of changes.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Change Management}
+		\theory{
+			\textbf{Change management = controlling changes to models.}
+			\begin{itemize}
+				\item Identify need for change
+				\item Assess impact
+				\item Obtain approval
+				\item Implement change
+				\item Document change
+				\item Validate change
+			\end{itemize}
+			\textbf{Types of changes:}
+			\begin{itemize}
+				\item Minor: parameter updates
+				\item Major: methodology changes
+				\item Emergency: urgent fixes
+			\end{itemize}
+			\textbf{Exam tip:} Change management = control and review of model changes.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 87}
+		\question{What is the purpose of model review?}
+		\options{To increase model accuracy}{To periodically assess model performance and continued fitness}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model review periodically assesses model performance and continued fitness, identifying issues and recommending actions.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Review}
+		\theory{
+			\textbf{Model review = periodic assessment of model.}
+			\begin{itemize}
+				\item Performance monitoring
+				\item Assumption validation
+				\item Data quality check
+				\item Methodology review
+				\item Documentation update
+			\end{itemize}
+			\textbf{Frequency:}
+			\begin{itemize}
+				\item Based on model risk
+				\item Higher risk = more frequent
+				\item Triggered by significant changes
+			\end{itemize}
+			\textbf{Outcomes:}
+			\begin{itemize}
+				\item Continue use
+				\item Modify model
+				\item Replace model
+				\item Retire model
+			\end{itemize}
+			\textbf{Exam tip:} Review = periodic assessment of model fitness.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 88}
+		\question{What is the purpose of model retirement?}
+		\options{To increase model accuracy}{To formally decommission a model that is no longer needed}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model retirement formally decommissions a model that is no longer needed, ensuring proper documentation and transition.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Retirement}
+		\theory{
+			\textbf{Model retirement = formal decommissioning of a model.}
+			\begin{itemize}
+				\item Document reason for retirement
+				\item Obtain approval
+				\item Transition to replacement model
+				\item Archive documentation
+				\item Update model inventory
+			\end{itemize}
+			\textbf{Reasons for retirement:}
+			\begin{itemize}
+				\item Model no longer needed
+				\item Better model available
+				\item Regulatory changes
+				\item Business changes
+			\end{itemize}
+			\textbf{Exam tip:} Retirement = formal decommissioning.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 89}
+		\question{What is the purpose of model risk culture?}
+		\options{To increase model accuracy}{To promote awareness and accountability for model risk across the organization}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model risk culture promotes awareness and accountability for model risk across the organization, from board to front-line staff.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Risk Culture}
+		\theory{
+			\textbf{Model risk culture = shared values and behaviors around model risk.}
+			\begin{itemize}
+				\item Awareness of model risk
+				\item Accountability at all levels
+				\item Open communication
+				\item Continuous learning
+				\item Ethical behavior
+			\end{itemize}
+			\textbf{Building blocks:}
+			\begin{itemize}
+				\item Tone from the top
+				\item Training and education
+				\item Incentives aligned with risk management
+				\item Reporting and transparency
+			\end{itemize}
+			\textbf{Exam tip:} Culture = awareness and accountability for model risk.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 90}
+		\question{What is the purpose of model risk training?}
+		\options{To increase model accuracy}{To ensure staff understand model risk and their responsibilities}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model risk training ensures staff understand model risk and their responsibilities in managing it.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Risk Training}
+		\theory{
+			\textbf{Model risk training = education on model risk.}
+			\begin{itemize}
+				\item What is model risk?
+				\item Roles and responsibilities
+				\item Policies and procedures
+				\item Best practices
+				\item Case studies
+			\end{itemize}
+			\textbf{Audience:}
+			\begin{itemize}
+				\item Board and senior management
+				\item Model developers
+				\item Model validators
+				\item Model users
+				\item All staff
+			\end{itemize}
+			\textbf{Exam tip:} Training = education on model risk.
+		}
+	\end{frame}
+	
+	% ============================================================
+	\section{Module 5: Additional Practice}
+	% ============================================================
+	
+	\begin{frame}{Module 5 --- Question 91}
+		\question{A bank uses AI for fraud detection. The model is highly effective but the risk team is concerned about inscrutability. Which statement correctly describes inscrutability?}
+		\options{Inscrutability is the inability to understand the internal mechanisms of a model}{Inscrutability is the inability to determine accuracy}{Inscrutability is the inability to explain predictions}{Inscrutability is the inability to generalize}
+		\answerbox{A}
+		\explain{Inscrutability refers to the inability to understand the internal mechanisms of a model --- how it arrives at its outputs.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Inscrutability in Model Risk}
+		\theory{
+			\textbf{Inscrutability = model risk.}
+			\begin{itemize}
+				\item Cannot understand internal workings
+				\item Difficult to validate
+				\item Difficult to audit
+				\item Regulatory challenges
+			\end{itemize}
+			\textbf{Mitigation:}
+			\begin{itemize}
+				\item Use interpretable models when possible
+				\item Apply post-hoc explainability
+				\item Document model behavior
+				\item Human oversight
+			\end{itemize}
+			\textbf{Exam tip:} Inscrutability = cannot understand internal mechanisms.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 92}
+		\question{What is the primary purpose of a data governance framework?}
+		\options{To increase data volume}{To ensure data quality, security, and compliance}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{A data governance framework ensures data quality, security, and compliance across the organization.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Data Governance}
+		\theory{
+			\textbf{Data governance = managing data as an asset.}
+			\begin{itemize}
+				\item Data strategy and vision
+				\item Data quality
+				\item Data provenance
+				\item Data classification
+				\item Metadata management
+				\item Data protection
+				\item Data access
+				\item Compliance
+				\item Roles and responsibilities
+			\end{itemize}
+			\textbf{Exam tip:} Data governance = quality, security, compliance.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 93}
+		\question{What is the purpose of model risk appetite?}
+		\options{To increase model accuracy}{To define the level of model risk the organization is willing to accept}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model risk appetite defines the level of model risk the organization is willing to accept, set by the board of directors.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Risk Appetite}
+		\theory{
+			\textbf{Model risk appetite = level of model risk accepted.}
+			\begin{itemize}
+				\item Set by board of directors
+				\item Defines tolerance for model risk
+				\item Guides model risk management
+				\item Aligns with overall risk appetite
+			\end{itemize}
+			\textbf{Exam tip:} Board sets model risk appetite.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 94}
+		\question{What is the purpose of model validation?}
+		\options{To increase model accuracy}{To independently assess model soundness and fitness}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model validation independently assesses model soundness, data quality, performance, and fitness for purpose.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Validation}
+		\theory{
+			\textbf{Model validation = independent assessment.}
+			\begin{itemize}
+				\item Conceptual soundness
+				\item Data quality
+				\item Performance testing
+				\item Implementation review
+				\item Documentation review
+			\end{itemize}
+			\textbf{Independence:} Must be conducted by team independent from developers.
+			\textbf{When:} Before deployment, periodically, after changes.
+			\textbf{Exam tip:} Validation = independent assessment of model.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 95}
+		\question{What is the purpose of model monitoring?}
+		\options{To increase model accuracy}{To detect performance degradation and drift}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model monitoring detects performance degradation and drift, enabling timely intervention.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Monitoring}
+		\theory{
+			\textbf{Model monitoring = ongoing oversight.}
+			\begin{itemize}
+				\item Performance metrics
+				\item Data drift detection
+				\item Concept drift detection
+				\item Alert thresholds
+				\item Reporting
+			\end{itemize}
+			\textbf{Triggers for action:}
+			\begin{itemize}
+				\item Performance below threshold
+				\item Significant drift
+				\item Regulatory changes
+				\item Business changes
+			\end{itemize}
+			\textbf{Exam tip:} Monitoring = detect degradation and drift.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 96}
+		\question{What is the purpose of model documentation?}
+		\options{To increase model accuracy}{To provide a record of model design, assumptions, and limitations}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model documentation provides a record of model design, assumptions, limitations, and usage, supporting validation and audit.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Documentation}
+		\theory{
+			\textbf{Model documentation = comprehensive record.}
+			\begin{itemize}
+				\item Purpose and intended use
+				\item Methodology and assumptions
+				\item Data sources
+				\item Limitations
+				\item Performance metrics
+				\item Validation results
+				\item Usage guidelines
+			\end{itemize}
+			\textbf{Exam tip:} Documentation = record of design, assumptions, limitations.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 97}
+		\question{What is the purpose of a model inventory?}
+		\options{To increase model accuracy}{To list all models in use and track their risk}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{A model inventory lists all models in use, tracking their purpose, risk level, owner, and validation status.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Inventory}
+		\theory{
+			\textbf{Model inventory = registry of all models.}
+			\begin{itemize}
+				\item Model name and description
+				\item Purpose and use case
+				\item Owner and developer
+				\item Risk classification
+				\item Validation status
+				\item Last review date
+			\end{itemize}
+			\textbf{Maintained by:} Model risk function.
+			\textbf{Exam tip:} Inventory = list of all models with risk and validation status.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 98}
+		\question{What is the purpose of model landscape?}
+		\options{To increase model accuracy}{To show interactions and interdependencies between models}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model landscape shows interactions and interdependencies between models, identifying critical models and data flows.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Landscape}
+		\theory{
+			\textbf{Model landscape = map of model interactions.}
+			\begin{itemize}
+				\item Shows relationships between models
+				\item Identifies critical models
+				\item Maps data flows
+				\item Highlights interdependencies
+			\end{itemize}
+			\textbf{Why it matters:}
+			\begin{itemize}
+				\item One model's output may be another's input
+				\item Failure can cascade
+				\item Correlated errors amplify risk
+			\end{itemize}
+			\textbf{Exam tip:} Landscape = map of model interactions.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 99}
+		\question{What is the purpose of model risk reporting?}
+		\options{To increase model accuracy}{To inform senior management and board about model risk}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model risk reporting informs senior management and the board about model risk, including inventory, validation status, and key issues.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Risk Reporting}
+		\theory{
+			\textbf{Model risk reporting = communication of model risk.}
+			\begin{itemize}
+				\item Model inventory summary
+				\item Validation status
+				\item Key risk issues
+				\item Performance metrics
+				\item Remediation plans
+			\end{itemize}
+			\textbf{Audience:} Board, senior management, risk committee, regulators.
+			\textbf{Exam tip:} Reporting = informing management about model risk.
+		}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Question 100}
+		\question{What is the purpose of model change management?}
+		\options{To increase model accuracy}{To control changes to models and ensure proper review}{To speed up training}{To reduce the number of features}
+		\answerbox{B}
+		\explain{Model change management controls changes to models, ensuring proper review, approval, and documentation.}
+	\end{frame}
+	
+	\begin{frame}{Module 5 --- Theory: Model Change Management}
+		\theory{
+			\textbf{Change management = controlling changes to models.}
+			\begin{itemize}
+				\item Identify need for change
+				\item Assess impact
+				\item Obtain approval
+				\item Implement change
+				\item Document change
+				\item Validate change
+			\end{itemize}
+			\textbf{Types of changes:}
+			\begin{itemize}
+				\item Minor: parameter updates
+				\item Major: methodology changes
+				\item Emergency: urgent fixes
+			\end{itemize}
+			\textbf{Exam tip:} Change management = control and review of model changes.
+		}
+	\end{frame}
+	
+	% ============================================================
+	\section{Final Review}
+	% ============================================================
+	
+	\begin{frame}{Final Review --- Key Takeaways}
+		\begin{block}{Module 1: AI and Risk}
+			\begin{itemize}
+				\item Inscrutability vs. explainability vs. interpretability
+				\item Classical AI vs. deep learning
+				\item Data types, scaling, PCA
+			\end{itemize}
+		\end{block}
+		\begin{block}{Module 2: Tools \& Techniques}
+			\begin{itemize}
+				\item K-means, hierarchical clustering, DBSCAN
+				\item WCSS, BCSS, silhouette, scree plot
+				\item Random forest, SVM, NLP, regularization
+				\item Classification metrics: precision, recall, F1, AUC
+			\end{itemize}
+		\end{block}
+		\begin{block}{Module 3: Risk and Risk Factors}
+			\begin{itemize}
+				\item Sensitivity vs. specificity
+				\item Algorithmic bias sources
+				\item Fairness metrics
+			\end{itemize}
+		\end{block}
+		\begin{block}{Module 4: Responsible \& Ethical AI}
+			\begin{itemize}
+				\item Ethical frameworks: consequentialism, deontology, virtue ethics
+				\item Principles: beneficence, nonmaleficence, justice, autonomy, explainability
+				\item Bias, fairness, privacy
+			\end{itemize}
+		\end{block}
+		\begin{block}{Module 5: Data and AI Model Governance}
+			\begin{itemize}
+				\item Data governance, model governance
+				\item Model validation, monitoring, inventory, landscape
+				\item Roles and responsibilities
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Good Luck!}
+		\centering
+		\Huge \textcolor{garpblue}{Good Luck!}
+		\vspace{1cm}
+		
+		\Large You are ready for the GARP Risk and AI exam.
+		\vspace{1cm}
+		
+		\normalsize
+		\textit{Unofficial study aid --- not affiliated with GARP.}
+	\end{frame}
+	
+\end{document}
