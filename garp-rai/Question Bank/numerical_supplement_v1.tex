@@ -1,0 +1,318 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI]{GARP Risk \& AI --- Conceptual Q\&A Slides}
+\subtitle{Unofficial Exam Prep --- With Detailed Definitions}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% =================================================================
+	\section{Group Fairness Measures}
+	% =================================================================
+	
+	\begin{frame}{C001 --- Three Group Fairness Measures}
+		\begin{block}{Question}
+			Name three group fairness measures and provide either their informal or formal definition.
+		\end{block}
+		\begin{block}{Answer}
+			\begin{enumerate}
+				\item \textbf{Demographic Parity:} The distribution of predictions is identical across subgroups. Formally: $P(\hat{Y}=1 \mid A=0) = P(\hat{Y}=1 \mid A=1)$, where $\hat{Y}$ is the predicted outcome and $A$ indicates group membership.\\
+				\item \textbf{Predictive Rate Parity:} The proportion of individuals correctly identified as positive is equal across subgroups. Formally: $P(Y=1 \mid \hat{Y}=1, A=0) = P(Y=1 \mid \hat{Y}=1, A=1)$. Also expressible in terms of precision: TP/(TP+FP) equal across groups.\\
+				\item \textbf{Equal Opportunity:} The proportion of positive individuals that are correctly identified as positive is equal across subgroups. Formally: $P(\hat{Y}=1 \mid Y=1, A=0) = P(\hat{Y}=1 \mid Y=1, A=1)$. Also expressible in terms of sensitivity: TP/(TP+FN) equal across groups.
+			\end{enumerate}
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Group fairness focuses on statistical differences across groups defined by protected characteristics (e.g., race, gender). It does not consider individuals but rather aggregate outcomes.\\
+			\textbf{Key Insight:} When base rates differ between groups, it is mathematically impossible to satisfy all three fairness measures simultaneously (the impossibility theorem).\\
+			\textbf{Learning Objective:} Describe various measures of group fairness.\\
+			\textbf{Reference:} Module 3, Chapter 2
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{C002 --- Representative Sample and Algorithm Performance}
+		\begin{block}{Question}
+			True or False: Regarding bias, if a sample is representative of the population, algorithms will always perform equally well or equally bad across all subgroups.
+		\end{block}
+		\begin{exampleblock}{Answer: False}\end{exampleblock}
+		\begin{block}{Explanation}
+			\textbf{Definition:} A representative sample means the sample reflects the population's statistical distribution. However, even with a representative sample, algorithms can perform differently across subgroups.\\
+			\textbf{Why False:} \\
+			\begin{itemize}
+				\item Subgroups may have different sample sizes within the representative sample (e.g., 90\% majority, 10\% minority), leading to poorer performance on the minority subgroup.
+				\item The algorithm may optimize overall accuracy, which can disproportionately harm smaller subgroups.
+				\item Historical bias in the data can still be present even if the sample is representative of the current population.
+				\item Intersectional subgroups (e.g., race AND gender) may be underrepresented even if each characteristic individually is representative.
+			\end{itemize}
+			\textbf{Learning Objective:} Describe sources of algorithmic bias and unfairness.\\
+			\textbf{Reference:} Module 3, Chapter 2
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Naive Bayes Assumptions}
+	% =================================================================
+	
+	\begin{frame}{C003 --- Naive Bayes Assumptions}
+		\begin{block}{Question}
+			State and explain two assumptions that underpin the use of the naive Bayes classifier technique for document grouping.
+		\end{block}
+		\begin{block}{Answer}
+			\begin{enumerate}
+				\item \textbf{Conditional Independence:} Each word in a document is independent of all other words in the document. This independence assumption is required so that the joint probability can be expressed as a product of all the marginal probabilities, e.g., for two events A and B, $P(A \text{ and } B) = P(A) \times P(B)$.\\
+				\item \textbf{Equal Weighting:} Each word is given equal weighting in constructing the outcome. We could remove stop words prior to analysis, but once that is done, each word is assumed to have equal information value.
+			\end{enumerate}
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Naive Bayes is a probabilistic classifier based on Bayes' theorem with the ``naive'' assumption of conditional independence between features.\\
+			\textbf{Formula:} $\hat{c} = \arg\max_{c} P(c) \prod_{i=1}^{N} P(w_i \mid c)$\\
+			\textbf{Why It Works:} Despite the unrealistic independence assumption, Naive Bayes often performs well in practice for text classification because it is robust to irrelevant features.\\
+			\textbf{Limitation:} The independence assumption is rarely true in natural language (words are highly context-dependent), but the classifier still often performs adequately.\\
+			\textbf{Learning Objective:} Explain how the Naive Bayes classifier is used to categorize documents.\\
+			\textbf{Reference:} Module 2, Chapter 9
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{TF-IDF}
+	% =================================================================
+	
+	\begin{frame}{C004 --- Zero TF-IDF Values}
+		\begin{block}{Question}
+			Why do some words have zero TF-IDF values?
+		\end{block}
+		\begin{block}{Answer}
+			A word will have a zero score if it appears in every document. In such cases, the word will have no power to discriminate between documents and so it has no value and would be assigned no weight.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} TF-IDF (Term Frequency-Inverse Document Frequency) weighs words by how often they appear in a document (TF) versus how common they are across all documents (IDF).\\
+			\textbf{Formula:} TF-IDF$_{i,j}$ = TF$_{i,j}$ $\times$ IDF$_i$, where IDF$_i$ = ln(D / d$_i$), D = total documents, d$_i$ = documents containing term i.\\
+			\textbf{Calculation:} If a word appears in every document, d$_i$ = D, so IDF = ln(D/D) = ln(1) = 0. Therefore TF-IDF = TF $\times$ 0 = 0.\\
+			\textbf{Interpretation:} Words that appear in every document (e.g., ``the'', ``is'') carry no discriminating information.\\
+			\textbf{Learning Objective:} Illustrate how TF-IDF can be used to determine the appropriate weighting of words.\\
+			\textbf{Reference:} Module 2, Chapter 9
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{C005 --- TF-IDF Variation Across Documents}
+		\begin{block}{Question}
+			Why does the same word have a higher TF-IDF score in one document than another?
+		\end{block}
+		\begin{block}{Answer}
+			The inverse document frequency (IDF) does not vary by document, but when this is multiplied by the term frequency within the document, this can lead the same word to have different TF-IDF values across documents because of the differing lengths of the documents, which lead to different term frequency values. In the very short document examples here, each word was only used at most once in each document, but in any practical scenario, some words are likely to be used several times in particular documents, which would lead the TF-IDF for a given word to change further between one document and another.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} TF-IDF combines term frequency (local importance) with inverse document frequency (global rarity).\\
+			\textbf{Formula:} TF-IDF$_{i,j}$ = (w$_{i,j}$ / $|$v$_j$$|$) $\times$ ln(D / d$_i$), where w$_{i,j}$ = count of term i in document j, $|$v$_j$$|$ = total terms in document j.\\
+			\textbf{Key Insight:} IDF is constant for a word across all documents, but TF varies because document lengths and word counts differ.\\
+			\textbf{Example:} If ``risk'' appears 3 times in a 100-word document, TF = 0.03. If it appears 1 time in a 50-word document, TF = 0.02. The IDF is the same, but TF-IDF differs.\\
+			\textbf{Learning Objective:} Illustrate how TF-IDF can be used to determine the appropriate weighting of words.\\
+			\textbf{Reference:} Module 2, Chapter 9
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Bias-Variance Trade-off}
+	% =================================================================
+	
+	\begin{frame}{C006 --- Bias-Variance Trade-off}
+		\begin{block}{Question}
+			Define the term ``bias-variance trade-off.''
+		\end{block}
+		\begin{block}{Answer}
+			The trade-off between choosing a model that is not complex enough to capture the true nature of the relationship between the outcome and the features (underfitting) and choosing a model that is too complex and will model the random noise in the training sample (overfitting) is generally known as the bias-variance trade-off.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The bias-variance trade-off describes the tension between two sources of error in predictive models: bias (error from overly simplistic assumptions) and variance (error from sensitivity to training data fluctuations).\\
+			\textbf{Formal Decomposition:} Expected Error = Bias$^2$ + Variance + Irreducible Error.\\
+			\textbf{Underfitting (High Bias):} Model is too simple; misses relevant patterns; performs poorly on both training and test data.\\
+			\textbf{Overfitting (High Variance):} Model is too complex; captures noise; performs well on training data but poorly on test data.\\
+			\textbf{Optimal Complexity:} The goal is to find the model complexity that minimizes total expected error (the sum of bias$^2$ and variance).\\
+			\textbf{Learning Objective:} Describe the tradeoff between a model's bias and its variance.\\
+			\textbf{Reference:} Module 2, Chapter 7
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Gradient Descent}
+	% =================================================================
+	
+	\begin{frame}{C007 --- Gradient Descent Algorithm}
+		\begin{block}{Question}
+			Explain how the gradient descent algorithm works.
+		\end{block}
+		\begin{block}{Answer}
+			The gradient descent algorithm is designed to minimize an objective function. By first setting the starting values for the weights, the algorithm computes the initial value of the gradient of the function. Then the values of the weights are updated by going one small step in the opposite direction of the gradient. Such a series of computations is repeated until convergence (i.e., the magnitude of the gradient is smaller than a prespecified threshold, or the change in the objective function's value is within a prespecified threshold) or the maximum number of iterations is reached.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Gradient descent is an iterative optimization algorithm that finds the minimum of a function by moving in the direction of steepest descent (negative gradient).\\
+			\textbf{Update Rule:} w$_{new}$ = w$_{old}$ $-$ $\eta$ $\times$ $\nabla$L(w), where $\eta$ is the learning rate and $\nabla$L is the gradient of the loss function.\\
+			\textbf{Learning Rate:} Controls step size. Too small = slow convergence. Too large = overshooting, oscillation, or divergence.\\
+			\textbf{Convergence:} Stops when gradient is near zero (minimum reached) or max iterations reached.\\
+			\textbf{Variants:} Batch GD (uses all data), Stochastic GD (uses one sample), Mini-batch GD (uses subset).\\
+			\textbf{Learning Objective:} Explain how gradient descent method is used for estimating model parameters.\\
+			\textbf{Reference:} Module 2, Chapter 7
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Maximum Likelihood Estimation}
+	% =================================================================
+	
+	\begin{frame}{C008 --- Why Not MLE for Linear Regression?}
+		\begin{block}{Question}
+			Given that it is applicable to a wider range of model classes, why do we not typically use maximum likelihood estimation (MLE) to estimate the parameters of linear regression models?
+		\end{block}
+		\begin{block}{Answer}
+			Maximum likelihood estimation (MLE) is a more general and flexible method than OLS. But MLE is less tractable --- in other words, it is inherently more complex to understand, and parameter estimation is also more complex. Both methods give the same optimal coefficients in linear regression models, but OLS is a simpler method. Hence, it is usually preferred to use OLS when the model structure allows it.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} MLE finds parameter values that maximize the likelihood of observing the data. OLS minimizes the sum of squared residuals.\\
+			\textbf{Equivalence:} For linear regression with normally distributed errors, MLE and OLS yield identical coefficient estimates.\\
+			\textbf{Tractability:} OLS has a closed-form solution: $\hat{\beta} = (X^TX)^{-1}X^Ty$. MLE requires numerical optimization for most models.\\
+			\textbf{When to Use MLE:} Logistic regression, probit models, GARCH models, and other nonlinear models where OLS is not applicable.\\
+			\textbf{Learning Objective:} Compare and contrast OLS, NLS, and MLE methods.\\
+			\textbf{Reference:} Module 2, Chapter 7
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Learning Rate}
+	% =================================================================
+	
+	\begin{frame}{C009 --- Role of Learning Rate}
+		\begin{block}{Question}
+			What is the role of the learning rate $\eta$ in determining the weights in a neural network?
+		\end{block}
+		\begin{block}{Answer}
+			$\eta$ is a hyperparameter that regulates the speed of adjustment of the weights. If $\eta$ is too small, the learning can take considerable time; on the other hand, if $\eta$ is too large, the algorithm may fail to achieve convergence. A common solution is to start with a large $\eta$ but then let it decay as the learning process progresses. Popular choices are to subject the learning rate to exponential or inverse decay.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The learning rate controls how much the weights are updated during each iteration of gradient descent.\\
+			\textbf{Update Rule:} w$_{new}$ = w$_{old}$ $-$ $\eta$ $\times$ $\nabla$L(w)\\
+			\textbf{Effect of $\eta$:} \\
+			\begin{itemize}
+				\item $\eta$ too small: Slow convergence, many iterations needed.
+				\item $\eta$ too large: Overshooting, oscillation, possible divergence.
+				\item $\eta$ optimal: Smooth, efficient convergence to minimum.
+			\end{itemize}
+			\textbf{Decay Schedules:} Exponential decay: $\eta_t = \eta_0 e^{-kt}$. Inverse decay: $\eta_t = \eta_0 / (1+kt)$.\\
+			\textbf{Learning Objective:} Discuss how dynamic learning rate techniques are used for improving convergence.\\
+			\textbf{Reference:} Module 2, Chapter 7
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Regularization}
+	% =================================================================
+	
+	\begin{frame}{C010 --- Benefits of Regularization}
+		\begin{block}{Question}
+			Explain the benefit of regularization for regression models and how it works.
+		\end{block}
+		\begin{block}{Answer}
+			Regularization is useful for several different types of models --- both linear regression and machine learning --- where there are several highly correlated features that make coefficient determination difficult. For instance, where coefficient estimates are offsetting one another to some extent, and are unstable in the face of minor changes in the specification. Regularization works by adding a penalty term to the loss function (e.g., the residual sum of squares) that penalizes the model for including large parameter values of either sign. Depending on the nature of the penalty term, some parameters are either shrunk toward zero or set to zero. This process will make the fitted model more parsimonious, which will usually improve its performance when applied to a validation or test data set.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Regularization adds a penalty term to the loss function to prevent overfitting by discouraging complex models.\\
+			\textbf{Ridge (L2):} Loss = RSS + $\lambda$ $\sum$ $\beta_j^2$. Shrinks coefficients toward zero but never exactly zero.\\
+			\textbf{LASSO (L1):} Loss = RSS + $\lambda$ $\sum$ $|$$\beta_j$$|$. Can set coefficients exactly to zero (feature selection).\\
+			\textbf{Elastic Net:} Combines L1 and L2 penalties.\\
+			\textbf{Benefit:} Reduces variance, improves generalization, handles multicollinearity, simplifies model.\\
+			\textbf{Learning Objective:} Explain the use of regularization techniques to prevent overfitting.\\
+			\textbf{Reference:} Module 2, Chapter 7
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{C011 --- LASSO vs Ridge Regression}
+		\begin{block}{Question}
+			How do LASSO and ridge regression differ?
+		\end{block}
+		\begin{block}{Answer}
+			LASSO and ridge regression are identical in spirit and approach; the only difference is the penalty term. In LASSO, this takes the form of the sum of the absolute values of the coefficients (the so-called L1 measure), while in ridge regressions it is the sum of the squared coefficients (the L2 measure). LASSO can set coefficients to zero, whereas ridge regression will simply push their values towards zero.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} Both are regularization techniques that add a penalty to the loss function.\\
+			\textbf{LASSO (L1):} Penalty = $\lambda$ $\sum$ $|$$\beta_j$$|$. Produces sparse models (some coefficients exactly zero). Useful for feature selection.\\
+			\textbf{Ridge (L2):} Penalty = $\lambda$ $\sum$ $\beta_j^2$. Shrinks all coefficients but keeps them non-zero. Useful when all features are relevant.\\
+			\textbf{Geometric Intuition:} L1 constraint region is a diamond (corners at axes), so solutions often hit corners (zero coefficients). L2 constraint region is a circle, so solutions rarely hit axes.\\
+			\textbf{Learning Objective:} Explain the use of regularization techniques to prevent overfitting.\\
+			\textbf{Reference:} Module 2, Chapter 7
+		\end{block}
+	\end{frame}
+	
+	% =================================================================
+	\section{Multi-Arm Bandit}
+	% =================================================================
+	
+	\begin{frame}{C012 --- Epsilon Decay in Multi-Arm Bandit}
+		\begin{block}{Question}
+			Consider a multi-arm bandit problem with $\beta$ equal to 0.99 and five slot machines. What would be the value of $\epsilon$ at the 89th trial assuming an exponential decay factor is used?
+		\end{block}
+		\begin{block}{Answer}
+			The value of $\epsilon$ at the 89th trial can be computed using the formula: $\epsilon = \beta^{t-1} = 0.99^{89-1} = 0.99^{88} = 0.41$.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} In epsilon-greedy with decay, the exploration rate $\epsilon$ decreases over time, shifting from exploration to exploitation.\\
+			\textbf{Formula:} $\epsilon_t = \beta^{t-1}$, where $\beta$ is the decay factor and t is the trial number.\\
+			\textbf{Calculation:} $\beta = 0.99$, t = 89. $\epsilon = 0.99^{88} = 0.41$.\\
+			\textbf{Interpretation:} At trial 89, there is a 41 percent chance of exploring and a 59 percent chance of exploiting.\\
+			\textbf{Learning Objective:} Explain the multi-arm bandit problem.\\
+			\textbf{Reference:} Module 2, Chapter 6
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{C013 --- Explore or Exploit Decision}
+		\begin{block}{Question}
+			Assume that a random number of 0.8 has been extracted at the 89th trial. Should you explore or exploit?
+		\end{block}
+		\begin{block}{Answer}
+			The value of $\epsilon$ calculated above is 0.41, which is smaller than 0.8. Therefore, we should exploit the machine that has been the most successful so far.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} In epsilon-greedy, if the random number is less than $\epsilon$, explore; otherwise, exploit.\\
+			\textbf{Decision Rule:} If random number $<$ $\epsilon$, explore. If random number $\geq$ $\epsilon$, exploit.\\
+			\textbf{Calculation:} Random number = 0.8, $\epsilon$ = 0.41. Since 0.8 $>$ 0.41, we exploit.\\
+			\textbf{Interpretation:} The agent chooses the arm with the highest estimated reward.\\
+			\textbf{Learning Objective:} Explain the multi-arm bandit problem.\\
+			\textbf{Reference:} Module 2, Chapter 6
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{C014 --- Updating Expected Reward}
+		\begin{block}{Question}
+			At trial 150, you explore the third machine for the 50th time; the current value of the expected reward for this machine is 1.8. You obtain a payoff equal to 1. What is the updated expected reward for the machine?
+		\end{block}
+		\begin{block}{Answer}
+			Using the incremental update formula: $Q_3^n = Q_3^{n-1} + \frac{1}{n}(R_n - Q_3^{n-1})$. Here, n = 50, $Q_3^{n-1} = 1.8$, and $R_n = 1$. Therefore: $Q_3^n = 1.8 + \frac{1}{50}(1 - 1.8) = 1.8 + 0.02(-0.8) = 1.8 - 0.016 = 1.784$.
+		\end{block}
+		\begin{block}{Explanation}
+			\textbf{Definition:} The expected reward for an arm is updated incrementally as new payoffs are observed.\\
+			\textbf{Formula:} $Q_n = Q_{n-1} + \frac{1}{n}(R_n - Q_{n-1})$\\
+			\textbf{Calculation:} $Q_{50} = 1.8 + \frac{1}{50}(1 - 1.8) = 1.8 + 0.02(-0.8) = 1.8 - 0.016 = 1.784$\\
+			\textbf{Interpretation:} The updated expected reward for machine 3 is 1.784.\\
+			\textbf{Learning Objective:} Explain the multi-arm bandit problem.\\
+			\textbf{Reference:} Module 2, Chapter 6
+		\end{block}
+	\end{frame}
+	
+\end{document}
