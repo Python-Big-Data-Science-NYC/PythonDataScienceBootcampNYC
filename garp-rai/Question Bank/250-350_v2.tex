@@ -1,0 +1,1510 @@
+% =================================================================
+% ==================== CONTINUATION: Q251--Q350 ===================
+% =================================================================
+% =================================================================
+% ==================== CONTINUATION: Q151--Q250 ===================
+% =================================================================
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI]{GARP Risk \& AI --- 250 Detailed Hard Questions}
+\subtitle{Unofficial Exam Prep}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+\section{Extended Practice: Modules 1--5 (Hard)}
+
+% ---------------- MODULE 1 — AI AND RISK ----------------
+
+
+\begin{frame}{Q252 --- Human Oversight in Critical Decisions}
+\begin{block}{Question}
+A bank's automated credit-approval system generates a recommended decision for every application. The bank has decided that for applications with a predicted default probability between 15\% and 25\% (an uncertain band), the model's recommendation should be reviewed by a human underwriter. What is the most appropriate rationale for this design choice?
+\end{block}
+\begin{enumerate}
+\item To reduce compute costs.
+\item To ensure meaningful human oversight in a zone of genuine uncertainty, catching model errors and exercising judgment where the model is not confident.
+\item Because the regulator requires it for all applications.
+\item Because humans are always more accurate than models.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Human-in-the-loop review is best used in zones of genuine model uncertainty, where the marginal value of human judgment is greatest. Option A is a secondary benefit. Option C is over-broad. Option D is an overstatement.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q253 --- Deep Learning vs Traditional Econometrics}
+\begin{block}{Question}
+A quant team needs to build a daily volume forecast for a large-cap equity. Two approaches are proposed: (i) a traditional ARIMA model, and (ii) a recurrent neural network (LSTM) trained on high-frequency order-book data. The team has 8 years of minute-level data. Which approach is most likely to be appropriate, and why?
+\end{block}
+\begin{enumerate}
+\item ARIMA, because neural networks cannot handle sequential data.
+\item LSTM, because it can capture complex non-linear dependencies in high-frequency data that linear time-series models may miss, provided sufficient data and computational resources.
+\item ARIMA, because it is always more accurate for financial time series.
+\item Neither approach; only tree-based models apply.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+LSTMs are specifically designed for sequential data and can capture non-linear patterns in high-frequency series. ARIMA remains useful but is linear and limited. Option A is wrong. Option C is not generally true. Option D is incorrect.
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Q255 --- Data Cleaning Trade-offs}
+\begin{block}{Question}
+A junior analyst decides to remove all observations with any missing value from a dataset used for a credit-scoring model. The dataset originally had 100,000 rows; after the removal, only 62,000 remain. The senior data scientist raises a concern. What is the most likely concern?
+\end{block}
+\begin{enumerate}
+\item The dataset is too small.
+\item Listwise deletion can introduce bias if missingness is systematic, distorting the model's representation of the underlying population.
+\item The dataset should be expanded.
+\item The dataset cannot be used.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Listwise deletion is problematic when missingness is non-random. Biases can be introduced if missingness correlates with the target or other important features. Option A ignores the deeper issue. Options C and D are secondary or incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q256 --- Feature Engineering in Credit Models}
+\begin{block}{Question}
+A credit risk team considers adding a new feature to a default model: ``number of missed payments in the last 6 months.'' The team debates whether this feature should be used at training and prediction time. Which is the best approach?
+\end{block}
+\begin{enumerate}
+\item Use it at training only.
+\item Use it at both training and prediction if it is available at prediction time in real-world deployment; otherwise it introduces leakage.
+\item Use it at prediction only.
+\item Do not use it at all.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Features must be available at both training and prediction time. Features computed using future information cause leakage. Options A, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q257 --- Regularization in Practice}
+\begin{block}{Question}
+A team fits a logistic regression with L2 penalty to a credit-default dataset with 5,000 observations and 200 features. They observe that increasing the regularization strength decreases both training and test accuracy. What does this suggest?
+\end{block}
+\begin{enumerate}
+\item The regularization strength should be further increased.
+\item The model may be underfitting; regularization strength is too high, or the model needs more complexity/features.
+\item Regularization is not needed.
+\item The target variable is wrong.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+If increasing regularization decreases both training and test performance, the model is being over-penalised (bias dominates). The right regularization strength balances bias and variance. Options A, C, and D are not supported by the symptom.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q258 --- PCA and Interpretability Trade-off}
+\begin{block}{Question}
+An analyst applies PCA to 20 correlated macro features and retains 4 components capturing 92\% of variance. The resulting model performs well but the business team complains that the components are hard to interpret. Which trade-off is at play?
+\end{block}
+\begin{enumerate}
+\item Accuracy vs cost.
+\item Dimensionality reduction and stability vs interpretability --- components are linear combinations of features, obscuring business meaning.
+\item Overfitting vs underfitting.
+\item Randomness vs determinism.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+PCA improves dimensionality and stability but sacrifices interpretability, since components do not correspond to individual business features. Options A, C, and D are not the primary trade-off.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q259 --- Tree-Based Feature Importance}
+\begin{block}{Question}
+A random forest model ranks ``age'' as the most important feature for predicting fraud. A careful analyst notices that ``age'' and ``retirementstatus'' are highly correlated. What is a known limitation of feature importance in this context?
+\begin{enumerate}
+\item Feature importance is always wrong.
+\item Feature importance can be inflated for correlated features; the model may arbitrarily select one and mask the importance of the correlated sibling.
+\item Feature importance is only valid for linear models.
+\item Feature importance is a fairness metric.
+\end{enumerate}
+\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Impurity-based feature importance is biased toward correlated features. Permutation importance or SHAP is often more reliable in the presence of correlation. Options A, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q260 --- Data Transformation and Interpretability}
+\begin{block}{Question}
+A model uses log-transformed revenue as a feature. The coefficient on log(revenue) is 0.30. How should this coefficient be interpreted?
+\end{block}
+\begin{enumerate}
+\item A one-unit increase in revenue increases the target by 0.30.
+\item A 1\% increase in revenue increases the target by approximately 0.30\% (if target is also in logs) or by 0.003 units (if target is in levels), depending on the model specification.
+\item The coefficient is meaningless.
+\item Log transformation destroys interpretability.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+In log-log models, coefficients are elasticities. In log-linear models, coefficients are semi-elasticities. Option A misses the log scale. Options C and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q261 --- The Bias-Variance Trade-off in Neural Nets}
+\begin{block}{Question}
+A deep neural network with 10 million parameters achieves 99.5\% training accuracy and 68\% test accuracy on a labelled financial dataset of 100,000 observations. What should the team do?
+\end{block}
+\begin{enumerate}
+\item Increase model size.
+\item Reduce model complexity, add regularization (dropout, weight decay), gather more data, or use early stopping --- the model is overfitting.
+\item Use a simpler loss function.
+\item Change the target variable.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+The huge gap between training and test accuracy signals overfitting. Standard remedies: reduce complexity, regularize, gather more data. Options A, C, and D do not address overfitting.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q262 --- Interpretability vs Accuracy in Regulated Environments}
+\begin{block}{Question}
+In a regulated credit-scoring context, a bank must explain individual decisions to customers and regulators. The bank's data science team proposes a highly accurate gradient-boosted model. Which combination of strategies best satisfies both accuracy and explainability needs?
+\end{block}
+\begin{enumerate}
+\item Use the model as-is without explanation.
+\item Use the model with post-hoc explainability (SHAP, counterfactuals) plus a simpler interpretable benchmark model for comparison and documentation.
+\item Use only a logistic regression regardless of accuracy loss.
+\item Use a black-box model and refuse to explain.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Regulated environments commonly combine high-performance models with post-hoc explainability and interpretable benchmarks. Options A and D are non-compliant. Option C sacrifices accuracy without an explanation framework.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q263 --- Data Scaling Pitfalls}
+\begin{block}{Question}
+A data scientist standardizes features using the full dataset, including test data, and then splits into train/test. Another analyst says this is wrong. Which is the correct critique?
+\end{block}
+\begin{enumerate}
+\item It is fine because standardization is a linear transformation.
+\item It leaks test-set information (mean and standard deviation) into the training process, biasing performance estimates.
+\item Standardization should only be applied to categorical features.
+\item Standardization is unnecessary.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Scaling parameters must be estimated on the training set only. Using the full dataset leaks test information. Options A, C, and D misstate the issue.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q264 --- Non-Linearity in Financial Models}
+\begin{block}{Question}
+A risk analyst wants to capture the relationship between interest rates and bond returns, which is known to be non-linear (convexity). Which modeling approach is most appropriate?
+\end{block}
+\begin{enumerate}
+\item A linear regression of returns on rates.
+\item A model that explicitly allows for non-linearity, such as a polynomial regression, spline, tree-based model, or neural network.
+\item A logistic regression.
+\item A KNN classifier.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Non-linear relationships require models that can capture curvature: polynomial regressions, splines, trees, or neural networks. Options A, C, and D are inappropriate.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q265 --- Overfitting in Small Datasets}
+\begin{block}{Question}
+A research team fits a deep neural network to only 500 observations with 100 features. Test performance is poor. What is the most likely explanation, and what should be done?
+\end{block}
+\begin{enumerate}
+\item The model is too simple; increase depth.
+\item Overfitting due to small sample and high dimensionality; use simpler models, regularization, dimensionality reduction, or gather more data.
+\item The test set is corrupted.
+\item The target is mislabelled.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+With 500 observations and 100 features, a deep network will overfit. Remedies: simpler models, regularization, PCA, more data. Options A, C, and D are unlikely explanations.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q266 --- Missing Data in Time Series}
+\begin{block}{Question}
+A time-series dataset of daily FX rates has occasional gaps (weekends, holidays, occasional missing days). Which imputation approach is generally most appropriate?
+\begin{enumerate}
+\item Drop all rows with missing values.
+\item Forward-fill, interpolation, or model-based imputation that respects temporal structure.
+\item Replace with zeros.
+\item Replace with the global mean.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Time-series missingness should be handled with methods that respect temporal order (forward-fill, interpolation, state-space models). Options A, C, and D distort the series.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q267 --- Categorical Encoding Pitfalls}
+\begin{block}{Question}
+A dataset has a high-cardinality categorical variable ``merchantid'' with 10,000 unique values. One-hot encoding would produce 10,000 new columns. What is a better approach?
+\begin{enumerate}
+\item Use one-hot encoding anyway.
+\item Use target encoding (with proper cross-validation to avoid leakage), hashing, or embedding-based representations.
+\item Remove the feature.
+\item Convert to ordinal codes.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+High-cardinality categoricals should use target encoding (with regularization), hashing, or embeddings. Option A causes dimension explosion; C loses information; D implies an order that does not exist.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q268 --- Outliers and Model Choice}
+\begin{block}{Question}
+A portfolio returns dataset has a few extreme observations due to flash-crash-type events. Two models are being compared: OLS regression and quantile regression. Which is generally more robust to these extremes?
+\begin{enumerate} 
+\item OLS, because it uses all information.
+\item Quantile regression, because it targets conditional quantiles rather than the mean and is therefore less influenced by extreme observations.
+\item Both are equally robust.
+\item Neither; only tree models work.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Quantile regression estimates conditional quantiles, providing robustness to extreme values. OLS is sensitive. Options A, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Q270 --- Feature Selection in Practice}
+\begin{block}{Question}
+A team reduces 300 candidate features to 25 using LASSO, then fits a logistic regression on the selected 25. Is this valid?
+\begin{enumerate}
+\item Yes, this is standard and correct.
+\item It can be valid but has a subtle issue: feature selection using the full data introduces selection bias. Ideally, LASSO selection should be done inside each cross-validation fold to avoid leakage.
+\item No, LASSO should not be used for feature selection.
+\item No, logistic regression should be used directly.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Selection on the full data leaks information. Nested CV avoids this by doing selection within each fold. Options A, C, and D misstate the issue or the role of LASSO.
+\end{block}
+\end{frame}
+
+% ---------------- MODULE 2 — TOOLS AND TECHNIQUES ----------------
+
+\begin{frame}{Q271 --- K-Means Feature Scaling}
+\begin{block}{Question}
+A K-means clustering is run on customer data with features: annual spend (USD 100--1M), tenure (months, 1--240), and number of products (1--10). The result is dominated by annual spend. What should the analyst do?
+\end{block}
+\begin{enumerate}
+\item Remove annual spend.
+\item Standardize or normalize the features before running K-means.
+\item Use fewer observations.
+\item Increase K.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+K-means uses distances; features on different scales dominate. Scaling fixes this. Options A, C, and D do not address the scale issue.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q272 --- Silhouette Score Interpretation}
+\begin{block}{Question}
+A clustering with K=4 has average silhouette score 0.32. With K=5, the score is 0.15. What do these scores indicate?
+\begin{enumerate}
+\item K=5 is better because the score is lower.
+\item K=4 is preferred because the average silhouette score is higher, indicating better-defined clusters.
+\item Neither is good.
+\item Silhouette scores only apply to K=2.
+\end{enumerate}  \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Higher silhouette = better-separated clusters. K=4 is preferred. Options A, C, and D misstate the interpretation.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q273 --- Dendrogram Cut}
+\begin{block}{Question}
+A dendrogram on 500 customers shows two very long vertical branches near the top, then progressively shorter merges. How many clusters are suggested?
+\end{block}
+\begin{enumerate}
+\item 500 (each customer is its own cluster).
+\item 2 (the two branches separated by the long vertical lines).
+\item 10 (based on the number of intermediate branches).
+\item 1 (all merged).
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Long vertical lines indicate significant separation. Cutting above the long vertical lines yields 2 clusters. Options A, C, and D misread the dendrogram.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q274 --- Random Forest vs Gradient Boosting}
+\begin{block}{Question}
+A quant team is deciding between random forest and gradient-boosted trees for a medium-sized tabular classification problem (10,000 rows, 40 features). Which is generally true?
+\end{block}
+\begin{enumerate}
+\item Random forest is always better.
+\item Both are competitive; gradient boosting often achieves slightly higher accuracy with careful tuning, while random forest is generally more robust to hyperparameter choices and slightly faster to train.
+\item Gradient boosting is always better.
+\item Neither is suitable.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Both are strong; boosting often wins on accuracy with tuning, while RF is easier to use. Options A, C, and D are overstated.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q275 --- SVM and Kernel Choice}
+\begin{block}{Question}
+An SVM with a linear kernel underperforms; with an RBF kernel it performs better. What does this suggest about the data?
+\end{block}
+\begin{enumerate}
+\item The classes are linearly separable.
+\item The classes are not linearly separable, and a non-linear decision boundary is required.
+\item The data is noisy.
+\item The SVM is broken.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+The improved performance with a non-linear kernel indicates the boundary is non-linear. Options A, C, and D are not supported.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q276 --- KNN in High Dimensions}
+\begin{block}{Question}
+KNN performs poorly on a dataset with 200 features and 1,000 observations. What is a likely cause and remedy?
+\begin{enumerate} 
+\item Too many observations; reduce.
+\item Curse of dimensionality; use dimensionality reduction (PCA, feature selection) or a different algorithm.
+\item Wrong distance metric; use Manhattan.
+\item Increase k.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+High-dimensional spaces suffer from distance concentration, making KNN unreliable. Dimensionality reduction or alternative algorithms are recommended. Options A, C, and D are secondary.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q277 --- Decision Trees and Pruning}
+\begin{block}{Question}
+A fully grown decision tree achieves 100\% accuracy on training data and poor accuracy on test data. What should be done?
+\begin{enumerate}
+\item Grow the tree deeper.
+\item Prune the tree (or apply pre-pruning constraints on depth, minimum samples per leaf, etc.) to reduce overfitting.
+\item Use a different dataset.
+\item Remove all features.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Unpruned trees overfit; pruning reduces variance. Options A, C, and D do not address overfitting.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q278 --- Ensemble Diversity}
+\begin{block}{Question}
+An ensemble of 50 identical decision trees performs no better than a single tree. What is the explanation?
+\end{block}
+\begin{enumerate}
+\item Ensembles always improve performance.
+\item Diversity is essential: identical trees give identical predictions, so the ensemble has no variance reduction benefit. Bagging and feature randomness introduce the needed diversity.
+\item The trees are too shallow.
+\item The ensemble is too small.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Ensembles improve performance when base learners are diverse and individually reasonable. Identical trees defeat the purpose. Options A, C, and D miss the point.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q279 --- Naive Bayes Assumptions}
+\begin{block}{Question}
+A Naive Bayes classifier performs surprisingly well on text despite the conditional independence assumption being violated. Why?
+\begin{enumerate}
+\item The assumption is satisfied in text data.
+\item Classification depends only on ranking class posteriors, not on exact probability calibration; Naive Bayes often ranks correctly even when probabilities are miscalibrated.
+\item Text data has no dependencies.
+\item Naive Bayes ignores the assumption in practice.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Naive Bayes often ranks classes correctly even with miscalibrated probabilities because the decision boundary depends on the maximum, not on calibration. Options A, C, and D are wrong.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q280 --- Logistic Regression vs LDA}
+\begin{block}{Question}
+A binary classification problem has features that are approximately normally distributed within each class with equal covariance matrices. Which is theoretically preferable: logistic regression or linear discriminant analysis?
+\end{block}
+\begin{enumerate}
+\item Logistic regression, always.
+\item LDA, because when its assumptions (normal features, equal covariance) hold, it is the optimal Bayes classifier.
+\item Both are equally good regardless of assumptions.
+\item SVM.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Under normality and equal covariance, LDA is the Bayes-optimal classifier. Logistic regression is more robust to assumption violations and often used when these don't hold. Options A, C, and D are not correct.
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Q282 --- LDA Assumptions}
+\begin{block}{Question}
+Which of the following is NOT an assumption of standard Linear Discriminant Analysis?
+\begin{enumerate}
+\item Features are normally distributed within each class.
+\item Classes share a common covariance matrix.
+\item Features are continuous.
+\item Classes have equal prior probabilities.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: D}\end{exampleblock}
+\begin{block}{Explanation}
+LDA allows for unequal priors (estimated from data or specified). The other three assumptions are standard. Option D is not required.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q283 --- ROC AUC in Imbalanced Data}
+\begin{block}{Question}
+Two models are compared on a fraud dataset with 1\% positives. Model A has AUC 0.90; Model B has AUC 0.75. But Model B has a higher precision-recall AUC (PR-AUC). Which model is better?
+\end{block}
+\begin{enumerate}
+\item Model A, because ROC AUC is always the criterion.
+\item Depends on the use case; PR-AUC is often more informative for highly imbalanced data, so Model B might be preferable if precision at high recall matters.
+\item Model B, always.
+\item Neither; discard both.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+For imbalanced data, PR-AUC often better reflects performance on the minority class. Choice depends on business context. Options A, C, and D are overstated.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q284 --- Classification Threshold and Business Cost}
+\begin{block}{Question}
+A bank has a default prediction model. Cost of approving a defaulter (FP) is \$50k; cost of rejecting a good borrower (FN) is \$5k. How should the threshold be chosen?
+\begin{enumerate}
+\item Threshold = 0.5 always.
+\item Threshold should be higher than 0.5 to reduce false positives, since FP cost >> FN cost.
+\item Threshold should be lower than 0.5 to increase recall.
+\item Threshold choice is irrelevant.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+When FP is much costlier than FN, raising the threshold reduces FPs. Options A, C, and D misapply the cost matrix.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q285 --- Precision, Recall, and F1}
+\begin{block}{Question}
+Model A has precision 0.9, recall 0.2. Model B has precision 0.4, recall 0.9. Which model is likely appropriate for a fraud-detection system where missing fraud is very costly?
+\end{block}
+\begin{enumerate}
+\item Model A, because precision is high.
+\item Model B, because recall is high, catching more actual frauds.
+\item Both are equivalent.
+\item Neither.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+When missing positives is very costly, recall is prioritised. Model B's high recall is preferable. Options A, C, and D are less appropriate.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q286 --- Confusion Matrix Arithmetic}
+\begin{block}{Question}
+A confusion matrix shows TP=80, FP=20, FN=40, TN=860. Compute the F1 score.
+\end{block}
+\begin{enumerate}
+\item 0.615.
+\item 0.727.
+\item 0.842.
+\item 0.500.
+\end{enumerate} 
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Precision  0.80; Options A, C, and D miscompute.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q287 --- Regularization Choice}
+\begin{block}{Question}
+A team has 50 features and 200 observations. They expect some features to be irrelevant. Which regularization is most appropriate?
+\begin{enumerate}
+\item L2 (Ridge).
+\item L1 (LASSO).
+\item Elastic Net.
+\item None.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+When many features may be irrelevant, LASSO's feature selection is valuable. Elastic Net is also reasonable if features are correlated. Options A and D are less appropriate.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q288 --- Cross-Validation in Small Samples}
+\begin{block}{Question}
+With only 100 observations, why might leave-one-out cross-validation (LOOCV) be preferred over k-fold?
+\begin{enumerate}
+\item Because it is faster.
+\item Because it uses almost all data for training in each fold, reducing bias in the performance estimate when the sample is very small.
+\item Because it is more random.
+\item Because it avoids overfitting.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+LOOCV maximises training data per fold; useful for very small samples. It is computationally expensive and higher variance, but lower bias. Options A, C, and D misstate the trade-off.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q289 --- Bootstrap vs Cross-Validation}
+\begin{block}{Question}
+Which is a key difference between bootstrapping and k-fold cross-validation for model evaluation?
+\begin{enumerate}
+\item Bootstrapping samples with replacement; k-fold partitions the data without replacement.
+\item Bootstrapping is always better.
+\item k-fold can only be used for classification.
+\item They are identical.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: A}\end{exampleblock}
+\begin{block}{Explanation}
+Bootstrapping uses sampling with replacement; k-fold partitions the data. Both estimate generalisation. Options B, C, and D misstate the distinction.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q290 --- Regularization and Feature Scaling}
+\begin{block}{Question}
+Why is standardization recommended before applying L1 or L2 regularization?
+\begin{enumerate}
+\item It is not recommended.
+\item Because regularization penalises coefficients, and coefficients on differently scaled features are not directly comparable; standardizing puts them on equal footing.
+\item It removes outliers.
+\item It speeds up training.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Regularization penalises coefficient magnitude. If features are not on comparable scales, the penalty is unfairly applied. Options A, C, and D are not the reason.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q291 --- Neural Network Activation Functions}
+\begin{block}{Question}
+A hidden layer uses sigmoid activation. After many layers, gradients vanish and training stalls. Which alternative activation is most likely to help?
+\begin{enumerate}
+\item Another sigmoid layer.
+\item ReLU (or its variants like Leaky ReLU, ELU).
+\item Softmax.
+\item Linear.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+ReLU avoids saturation for positive inputs and mitigates vanishing gradients. Softmax is for output; linear is not typically used in hidden layers. Options A, C, and D are less appropriate.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q292 --- Weight Initialization}
+\begin{block}{Question}
+Why is Xavier or He initialization used for neural network weights?
+\begin{enumerate}
+\item To initialize weights to zero.
+\item To maintain variance of activations and gradients across layers, avoiding vanishing/exploding gradients.
+\item To speed up training at the cost of accuracy.
+\item To reduce model size.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Xavier/He initialization scales weights based on layer sizes, preserving signal magnitude. Options A, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q293 --- Batch Normalization}
+\begin{block}{Question}
+Batch normalization improves deep network training primarily by:
+\begin{enumerate}
+\item Reducing model complexity.
+\item Normalizing layer inputs, which stabilises training, mitigates internal covariate shift, and often allows higher learning rates.
+\item Eliminating the need for activation functions.
+\item Reducing the number of parameters.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Batch norm normalizes intermediate activations, improving stability and convergence. Options A, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q294 --- Dropout at Inference}
+\begin{block}{Question}
+Dropout is used during training. What happens at inference time?
+\begin{enumerate}
+\item Dropout is applied again.
+\item Dropout is turned off; weights are scaled to account for the expected effect of dropout during training.
+\item Model is retrained without dropout.
+\item Model is discarded.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Dropout is a training-time regularizer. At inference, dropout is disabled and weights are scaled (or the framework handles it). Options A, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q295 --- Early Stopping}
+\begin{block}{Question}
+Early stopping in neural network training means:
+\begin{enumerate}
+\item Stopping before training starts.
+\item Monitoring validation error during training and stopping when it stops improving, preventing overfitting.
+\item Stopping after a fixed number of epochs regardless of performance.
+\item Stopping when training error is zero.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Early stopping is a form of regularization: training halts when validation performance degrades. Options A, C, and D are different or incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q296 --- Convolutional Layers}
+\begin{block}{Question}
+Why do CNNs use shared weights (convolutional filters) across spatial positions?
+\begin{enumerate}
+\item To reduce training time only.
+\item To exploit spatial invariance and dramatically reduce the number of parameters compared to fully connected layers.
+\item Because convolution is faster than matrix multiplication.
+\item To avoid using activation functions.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Weight sharing reduces parameters and provides translational invariance. Options A, C, and D miss the architectural rationale.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q297 --- Pooling Layers}
+\begin{block}{Question}
+What is the primary purpose of pooling layers in CNNs?
+\begin{enumerate}
+\item To increase spatial resolution.
+\item To reduce spatial dimensions (downsampling), control overfitting, and provide translation invariance.
+\item To add parameters.
+\item To replace convolution.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Pooling reduces spatial size and provides robustness to small translations. Options A, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q298 --- Attention Mechanism}
+\begin{block}{Question}
+In a transformer, self-attention computes pairwise interactions between tokens. What is the primary benefit?
+\begin{enumerate}
+\item Faster training on small data.
+\item Modelling long-range dependencies and contextual relationships regardless of token distance.
+\item Reducing parameter count.
+\item Handling images only.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Self-attention captures relationships between tokens regardless of distance, unlike RNNs. Options A, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q299 --- Positional Encoding}
+\begin{block}{Question}
+Why do transformers need positional encodings?
+\begin{enumerate} 
+\item Because transformers lack recurrence and therefore have no inherent notion of order.
+\item Because transformers are too slow without them.
+\item Because they help with image processing.
+\item Because they increase model size.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: A}\end{exampleblock}
+\begin{block}{Explanation}
+Self-attention is permutation-invariant; positional encodings inject order information. Options B, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q300 --- Transformers vs RNNs}
+\begin{block}{Question}
+A key advantage of transformers over RNNs is:
+\begin{enumerate}
+\item Less computational cost.
+\item Parallelism over sequence positions and better handling of long-range dependencies.
+\item Better handling of small datasets.
+\item Simpler architecture.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Transformers parallelise across tokens and capture long-range dependencies via attention. RNNs are sequential. Options A, C, and D are less accurate.
+\end{block}
+\end{frame}
+
+% ---------------- MODULE 3 — RISK AND RISK FACTORS ----------------
+
+\begin{frame}{Q301 --- Fairness Metrics}
+\begin{block}{Question}
+Two groups have equal true positive rates but unequal false positive rates under a model. Which fairness metric does the model satisfy?
+\begin{enumerate}
+\item Demographic parity.
+\item Equal opportunity.
+\item Predictive rate parity.
+\item None.
+\end{enumerate} \end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Equal opportunity requires equal TPR across groups. The model satisfies that but violates equalized odds (which requires equal FPR too) and demographic parity. Options A, C, and D are not satisfied.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q302 --- Bias Types}
+\begin{block}{Question}
+An algorithm trained to predict job performance is disproportionately rejecting female candidates. Removing gender from features does not fix the issue. What is the most likely cause?
+\begin{enumerate}
+\item Random noise.
+\item Proxy discrimination via correlated features (e.g., university, career gaps).
+\item The training set is too small.
+\item The target is wrong.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Protected attributes are often captured by correlated proxies. Options A, C, and D are secondary or incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q303 --- Fairness Impossibility}
+\begin{block}{Question}
+Which of the following cannot be simultaneously satisfied when base rates differ between groups?
+\begin{enumerate}
+\item Accuracy and precision.
+\item Demographic parity, predictive rate parity, and equal opportunity.
+\item Recall and F1.
+\item ROC and AUC.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+The Kleinberg-Chouldechova impossibility result applies to these three fairness metrics. Options A, C, and D are not the impossibility case.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q304 --- Historical Bias}
+\begin{block}{Question}
+A model trained on 20 years of hiring data favours male candidates. Which type of bias?
+\begin{enumerate}
+\item Measurement bias.
+\item Historical bias.
+\item Sampling bias.
+\item Deployment bias.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Historical bias reflects past discrimination encoded in data. Options A, C, and D are other sources.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q305 --- Feedback Loops}
+\begin{block}{Question}
+A model trained on data generated by its own past predictions can become increasingly extreme. What is this phenomenon?
+\begin{enumerate}
+\item Random noise.
+\item Feedback loop or self-reinforcing bias.
+\item Overfitting.
+\item Underfitting.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Feedback loops occur when model outputs influence future training data, amplifying biases. Options A, C, and D are different phenomena.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q306 --- Interpretability vs Explainability}
+\begin{block}{Question}
+A neural network's internal weights are not human-interpretable, but SHAP values explain individual predictions. What is this model?
+\begin{enumerate}
+\item Interpretable and explainable.
+\item Explainable but not interpretable.
+\item Interpretable but not explainable.
+\item Neither.
+\end{enumerate}\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+SHAP provides post-hoc explainability; the network's internals remain opaque. Options A, C, and D misstate.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q307 --- Transparency}
+	\begin{block}{Question}
+		Which is an example of opacity by ``specialised knowledge''?
+		\begin{enumerate}
+			\item Being unaware a decision was made by an algorithm.
+			\item Even with access to the code, only experts can interpret it.
+			\item Hiding the algorithm.
+			\item Using encrypted data.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Specialised-knowledge opacity arises when understanding requires expertise. Option A is secrecy; C is confidentiality; D is unrelated.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q308 --- Automation Bias}
+	\begin{block}{Question}
+		An operator accepts AI recommendations without independent verification. What is this?
+		\begin{enumerate}
+			\item Confirmation bias.
+			\item Automation bias.
+			\item Selection bias.
+			\item Survivorship bias.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Automation bias is over-reliance on automated systems. Options A, C, and D are different biases.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q309 --- Reputational Risk Sources}
+	\begin{block}{Question}
+		Which of the following are recognised sources of AI-related reputational risk?
+		\begin{enumerate}
+			\item Privacy breaches, algorithmic bias, and lack of explainability.
+			\item Only privacy.
+			\item Only financial losses.
+			\item Only regulatory fines.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: A}\end{exampleblock}
+	\begin{block}{Explanation}
+		Privacy, bias, and explainability are the three primary sources of AI-related reputational risk. Options B, C, and D are too narrow.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q310 --- Societal Risks of GenAI}
+	\begin{block}{Question}
+		Which is a societal risk of GenAI?
+		\begin{enumerate}
+			\item High compute cost.
+			\item Misinformation at scale and deepfake-enabled fraud.
+			\item Slow inference.
+			\item Privacy only.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		GenAI's societal risks include misinformation and deepfakes. Options A and C are technical; D is too narrow.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q311 --- Autonomy Violation}
+	\begin{block}{Question}
+		An AI system overrides a patient's stated preference for a treatment. Which principle is violated?
+		\begin{enumerate}
+			\item Nonmaleficence.
+			\item Beneficence.
+			\item Autonomy.
+			\item Explainability.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: C}\end{exampleblock}
+	\begin{block}{Explanation}
+		Autonomy is the patient's right to decide. Options A, B, and D are distinct principles.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q312 --- Nonmaleficence vs Beneficence}
+	\begin{block}{Question}
+		Which is the difference between nonmaleficence and beneficence?
+		\begin{enumerate}
+			\item Nonmaleficence: avoid harm; beneficence: actively do good.
+			\item Both mean the same.
+			\item Beneficence: avoid harm; nonmaleficence: actively do good.
+			\item Neither applies to AI.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: A}\end{exampleblock}
+	\begin{block}{Explanation}
+		Nonmaleficence = do no harm; beneficence = do good. Options B, C, and D misstate.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q313 --- Justice Conflicts}
+	\begin{block}{Question}
+		Egalitarianism and meritocracy can conflict. What does this illustrate about justice in AI ethics?
+		\begin{enumerate}
+			\item Justice is uncontroversial.
+			\item Different distributive justice concepts can conflict, requiring trade-offs.
+			\item Justice is a mathematical rule.
+			\item Justice is irrelevant to AI.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Justice concepts can conflict; choosing between them is a normative judgment. Options A, C, and D are incorrect.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q314 --- Human Autonomy in Practice}
+	\begin{block}{Question}
+		A robo-advisor nudges users toward certain products through manipulative design. Which principle does this threaten?
+		\begin{enumerate}
+			\item Autonomy.
+			\item Justice.
+			\item Nonmaleficence.
+			\item Explainability.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: A}\end{exampleblock}
+	\begin{block}{Explanation}
+		Manipulative design undermines autonomy. Options B, C, and D are different principles.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q315 --- Manipulation and AI}
+	\begin{block}{Question}
+		Which of the following is an example of AI-driven manipulation?
+		\begin{enumerate}
+			\item A calculator computes sums.
+			\item A recommendation engine leverages detailed user profiles to shape opinions or behaviour without user awareness.
+			\item A chatbot answers FAQs.
+			\item An OCR system reads text.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Manipulation involves leveraging profiling to influence users. Options A, C, and D are not manipulative.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q316 --- Existential Risk}
+	\begin{block}{Question}
+		Which of the following is a key concern in AI existential risk discussions?
+		\begin{enumerate}
+			\item Model accuracy.
+			\item Superintelligence and the alignment problem.
+			\item Data storage costs.
+			\item IT infrastructure.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Existential risk focuses on superintelligence and alignment with human values. Options A, C, and D are operational.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q317 --- Global Inequality}
+	\begin{block}{Question}
+		What is a concern regarding AI and global inequality?
+		\begin{enumerate}
+			\item AI is equally accessible everywhere.
+			\item Countries with advanced AI capabilities may pull ahead economically, widening global inequality.
+			\item AI reduces inequality.
+			\item AI is irrelevant to inequality.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Concentration of AI capability can widen global economic and political gaps. Options A, C, and D are incorrect or unsupported.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q318 --- Misinformation Campaigns}
+	\begin{block}{Question}
+		Why is AI particularly relevant to misinformation campaigns?
+		\begin{enumerate}
+			\item AI cannot generate text.
+			\item AI can generate realistic content at scale cheaply, amplifying misinformation and disinformation.
+			\item AI only produces accurate information.
+			\item AI is too slow to matter.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Generative AI makes content creation cheap and scalable, increasing misinformation risk. Options A, C, and D are incorrect.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q319 --- Privacy and Surveillance}
+	\begin{block}{Question}
+		Which is a privacy concern associated with AI?
+		\begin{enumerate}
+			\item AI improves accuracy only.
+			\item AI systems can infer sensitive attributes or habits from seemingly innocuous data, potentially enabling surveillance.
+			\item AI always protects privacy.
+			\item AI has no privacy implications.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		AI can infer sensitive information from data, raising privacy and surveillance risks. Options A, C, and D are incorrect.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q320 --- GenAI Functional Risks}
+	\begin{block}{Question}
+		Which of the following is a functional risk of GenAI?
+		\begin{enumerate}
+			\item Hallucination of plausible but incorrect outputs.
+			\item Reduced model size.
+			\item Faster inference.
+			\item Lower training cost.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: A}\end{exampleblock}
+	\begin{block}{Explanation}
+		Hallucination is a functional risk of GenAI. Options B, C, and D are benefits, not risks.
+	\end{block}
+\end{frame}
+
+% ---------------- MODULE 4 — RESPONSIBLE AND ETHICAL AI ----------------
+
+\begin{frame}{Q321 --- Utilitarian Trade-offs}
+	\begin{block}{Question}
+		A self-driving car algorithm is tuned to minimise total harm, potentially at the cost of the passenger. Which ethical framework best supports this?
+		\begin{enumerate}
+			\item Deontology.
+			\item Virtue ethics.
+			\item Utilitarianism.
+			\item Divine command theory.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: C}\end{exampleblock}
+	\begin{block}{Explanation}
+		Utilitarianism maximises aggregate welfare, potentially overriding individual rights. Options A, B, and D are different frameworks.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q322 --- Deontological Constraints}
+	\begin{block}{Question}
+		A company refuses to use AI for certain tasks even if it would improve aggregate outcomes, because the tasks violate fundamental rights. Which ethical framework guides this?
+		\begin{enumerate}
+			\item Utilitarianism.
+			\item Deontology.
+			\item Virtue ethics.
+			\item Pragmatism.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Deontology prioritises duties and rights over consequences. Options A, C, and D are different.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q323 --- Virtue Ethics in AI}
+	\begin{block}{Question}
+		What question would a virtue ethicist ask when designing an AI system?
+		\begin{enumerate}
+			\item What maximises utility?
+			\item What would a virtuous person/organisation do?
+			\item What does the law say?
+			\item What is cheapest?
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Virtue ethics focuses on character and virtuous behaviour. Options A, C, and D are other frameworks or criteria.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q324 --- Consent and Privacy}
+	\begin{block}{Question}
+		Which of the following is essential for ethical data collection under GDPR?
+		\begin{enumerate}
+			\item No notice.
+			\item Explicit consent (in many cases) or another lawful basis, data minimisation, and transparent purpose specification.
+			\item Unlimited retention.
+			\item Sharing with third parties.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		GDPR requires lawful basis, minimisation, and transparency. Options A, C, and D violate GDPR.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q325 --- Right to be Forgotten}
+	\begin{block}{Question}
+		Which of the following best captures the GDPR right to be forgotten?
+		\begin{enumerate}
+			\item Right to access data.
+			\item Right to request erasure of personal data under certain conditions.
+			\item Right to sell data.
+			\item Right to receive compensation for processing.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		The right to erasure (Art. 17) allows deletion under specified conditions. Options A, C, and D are other rights.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q326 --- Contextual Integrity}
+	\begin{block}{Question}
+		What does contextual integrity require?
+		\begin{enumerate}
+			\item Data can be used freely once collected.
+			\item Data use must respect the norms of the context in which it was provided.
+			\item Data should be encrypted.
+			\item Data should be sold.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Contextual integrity (Nissenbaum) requires data use to align with context-specific norms. Options A, C, and D misstate or miss the concept.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q327 --- EU AI Act}
+	\begin{block}{Question}
+		Which of the following is explicitly prohibited by the EU AI Act?
+		\begin{enumerate}
+			\item Fraud detection.
+			\item Social scoring and manipulative AI exploiting vulnerabilities.
+			\item Credit scoring.
+			\item Customer service chatbots.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Social scoring, manipulative AI, and exploitation of vulnerabilities are prohibited. Other uses are regulated but permitted.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q328 --- GDPR Extraterritoriality}
+	\begin{block}{Question}
+		A US firm serves EU customers. Does GDPR apply?
+		\begin{enumerate}
+			\item No.
+			\item Yes, GDPR applies extraterritorially when serving EU data subjects.
+			\item Only if the firm has an EU office.
+			\item Only if the customer complains.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		GDPR Art. 3 provides extraterritorial scope. Options A, C, and D are incorrect.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q329 --- NIST AI RMF}
+	\begin{block}{Question}
+		The NIST AI RMF functions are:
+		\begin{enumerate}
+			\item Train, Test, Deploy, Monitor.
+			\item Govern, Map, Measure, Manage.
+			\item Design, Build, Audit, Retire.
+			\item Plan, Do, Check, Act.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		NIST AI RMF functions: Govern, Map, Measure, Manage. Options A, C, and D are other frameworks.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q330 --- Kantian Ethics}
+	\begin{block}{Question}
+		Kant's categorical imperative asks us to:
+		\begin{enumerate}
+			\item Maximise utility.
+			\item Act only on maxims that could be universal laws.
+			\item Cultivate virtue.
+			\item Follow the sovereign.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Kant's imperative demands universalizability. Options A, C, and D are other traditions.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q331 --- Ethical Frameworks Comparison}
+	\begin{block}{Question}
+		Which statement correctly distinguishes the three main ethical frameworks?
+		\begin{enumerate}
+			\item All three are identical.
+			\item Consequentialism focuses on outcomes; deontology on duties; virtue ethics on character.
+			\item All three focus on outcomes.
+			\item All three ignore outcomes.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		The three frameworks differ in focus: consequences, duties, character. Options A, C, and D are incorrect.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q332 --- Privacy Principles}
+	\begin{block}{Question}
+		Which of the following is NOT typically considered a privacy best practice?
+		\begin{enumerate}
+			\item Data minimisation.
+			\item Right to be forgotten.
+			\item Contextual integrity.
+			\item Unlimited data retention.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: D}\end{exampleblock}
+	\begin{block}{Explanation}
+		Unlimited retention is contrary to privacy best practices. Options A, B, and C are established practices.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q333 --- Synthetic Data Trade-offs}
+	\begin{block}{Question}
+		Which of the following best describes a trade-off when using synthetic data?
+		\begin{enumerate}
+			\item It is always superior to real data.
+			\item It reduces privacy risk and can be designed to remove bias, but may not capture the full complexity of real data.
+			\item It eliminates the need for validation.
+			\item It is always cheaper to generate.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Synthetic data reduces privacy risk but may lack realism. Options A, C, and D are overstatements.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q334 --- Fairness Trade-offs}
+	\begin{block}{Question}
+		Why must an organisation make a normative choice among fairness metrics?
+		\begin{enumerate}
+			\item Because all metrics agree.
+			\item Because different metrics can conflict when base rates differ, so the choice reflects values and business context.
+			\item Because fairness is a technical problem.
+			\item Because regulators prescribe one metric.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		The impossibility result forces a choice among fairness criteria, reflecting normative considerations. Options A, C, and D are incorrect.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q335 --- Local vs Global Explainability}
+	\begin{block}{Question}
+		Which is an example of local explainability?
+		\begin{enumerate}
+			\item Feature importance for the whole model.
+			\item SHAP values for a specific prediction.
+			\item Partial dependence plot.
+			\item Global surrogate model.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		SHAP for a single prediction is local. Options A, C, and D are typically global.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q336 --- Explainability in Practice}
+	\begin{block}{Question}
+		A company wants to give actionable advice to rejected applicants. Which technique is most appropriate?
+		\begin{enumerate}
+			\item Global feature importance.
+			\item Counterfactual explanations (e.g., ``If income were \$X higher, you would be approved'').
+			\item Model training accuracy.
+			\item Model architecture description.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Counterfactuals provide actionable insights. Options A, C, and D are not actionable for the individual.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q337 --- Fairness Automation Limits}
+	\begin{block}{Question}
+		Why can't fairness be fully automated?
+		\begin{enumerate}
+			\item It is too expensive.
+			\item Because it involves normative choices among conflicting criteria, especially when base rates differ.
+			\item Because there is not enough data.
+			\item Because GDPR forbids it.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Fairness involves value judgments. Options A, C, and D are not the fundamental reason.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q338 --- Global Inequality}
+	\begin{block}{Question}
+		Which of the following is a legitimate concern about AI and global inequality?
+		\begin{enumerate}
+			\item AI is naturally equitable.
+			\item The concentration of AI capability in a few countries could worsen global disparities.
+			\item AI is too slow to matter.
+			\item AI reduces inequality automatically.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Concentration of AI capability can widen global gaps. Options A, C, and D are incorrect or unsupported.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q339 --- Privacy vs Utility}
+	\begin{block}{Question}
+		Which best describes the privacy-utility trade-off in AI?
+		\begin{enumerate}
+			\item More data always improves privacy.
+			\item More data can improve model utility but increases privacy risk; techniques like differential privacy can help balance.
+			\item Privacy and utility never conflict.
+			\item Privacy is always more important.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Data utility comes at privacy cost; techniques like differential privacy manage the trade-off. Options A, C, and D are oversimplifications.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q340 --- AI Ethics Frameworks Benefit}
+	\begin{block}{Question}
+		The primary benefit of an AI ethics framework is:
+		\begin{enumerate}
+			\item Increasing model accuracy.
+			\item Providing structured guidance for ethical decisions and reducing regulatory and reputational risk.
+			\item Reducing training time.
+			\item Eliminating all ethical issues.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Ethics frameworks provide guidance and risk reduction. Options A, C, and D are not their primary purpose.
+	\end{block}
+\end{frame}
+
+% ---------------- MODULE 5 — DATA AND AI MODEL GOVERNANCE ----------------
+
+\begin{frame}{Q341 --- Data Governance Framework}
+	\begin{block}{Question}
+		Which of the following is NOT typically a component of a data governance framework?
+		\begin{enumerate}
+			\item Data strategy and quality.
+			\item Data provenance and classification.
+			\item Metadata management.
+			\item Marketing strategy.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: D}\end{exampleblock}
+	\begin{block}{Explanation}
+		Data governance covers strategy, quality, provenance, classification, metadata, protection, access, and compliance. Marketing is separate.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q342 --- Data Provenance}
+	\begin{block}{Question}
+		Data provenance refers to:
+		\begin{enumerate}
+			\item The data storage location.
+			\item The origin, history, and legal right to use data.
+			\item The data transformation steps only.
+			\item The data format.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Provenance tracks origin, ownership, and legal rights. Options A, C, and D are partial or incorrect.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q343 --- Data Classification}
+	\begin{block}{Question}
+		Which of the following best describes data classification?
+		\begin{enumerate}
+			\item Sorting data alphabetically.
+			\item Categorising data by sensitivity and structure to determine handling and controls.
+			\item Storing data in a database.
+			\item Compressing data.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Classification determines appropriate handling and protections. Options A, C, and D are unrelated.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q344 --- Metadata Management}
+	\begin{block}{Question}
+		Metadata management is important because:
+		\begin{enumerate}
+			\item Metadata replaces data.
+			\item Metadata supports discovery, lineage, governance, and understanding of data assets.
+			\item Metadata is encrypted data.
+			\item Metadata is unnecessary.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Metadata enables discovery, lineage, and governance. Options A, C, and D misstate or dismiss.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q345 --- Data Access Controls}
+	\begin{block}{Question}
+		Role-Based Access Control (RBAC) grants access based on:
+		\begin{enumerate}
+			\item Individual discretion.
+			\item User roles within the organisation.
+			\item Random selection.
+			\item Data size.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		RBAC grants access based on roles. Options A, C, and D are not RBAC.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q346 --- Model Governance Framework}
+	\begin{block}{Question}
+		A comprehensive model governance framework should include:
+		\begin{enumerate}
+			\item Definitions of models and non-models, risk tiering, validation standards, documentation, monitoring, and reporting.
+			\item Only model training.
+			\item Only model deployment.
+			\item Only model retirement.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: A}\end{exampleblock}
+	\begin{block}{Explanation}
+		Governance covers definitions, tiering, validation, documentation, monitoring, and reporting. Options B, C, and D are partial.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q347 --- Model Documentation}
+	\begin{block}{Question}
+		The primary purpose of model documentation is to:
+		\begin{enumerate}
+			\item Improve accuracy.
+			\item Provide a record of design, assumptions, limitations, and usage to support validation, audit, and governance.
+			\item Speed training.
+			\item Reduce features.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Documentation supports validation, audit, and governance. Options A, C, and D are incorrect purposes.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q348 --- Model Inventory}
+	\begin{block}{Question}
+		A model inventory should typically include:
+		\begin{enumerate}
+			\item Model owner, purpose, risk tier, validation status, and interdependencies.
+			\item Only model names.
+			\item Only model versions.
+			\item Only model code.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: A}\end{exampleblock}
+	\begin{block}{Explanation}
+		A model inventory is comprehensive: owner, purpose, risk tier, validation, and interdependencies. Options B, C, and D are incomplete.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q349 --- Model Landscape}
+	\begin{block}{Question}
+		A model landscape differs from a model inventory in that it:
+		\begin{enumerate}
+			\item Lists all models.
+			\item Shows interactions and interdependencies between models, highlighting cascade risks.
+			\item Lists model code.
+			\item Replaces the inventory.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Landscape shows interactions; inventory is a registry. Options A, C, and D are incorrect.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q350 --- Model Risk Management Roles}
+	\begin{block}{Question}
+		In the Three Lines of Defence model for AI/ML, who is primarily responsible for independent validation?
+		\begin{enumerate}
+			\item First line (model developers).
+			\item Second line (independent risk management/model validation).
+			\item Third line (internal audit).
+			\item External auditors.
+	\end{enumerate}  \end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		The second line performs independent validation. First line owns; third line audits; external auditors add extra assurance. Options A, C, and D misstate the roles.
+	\end{block}
+\end{frame}
+
+\end{document}
