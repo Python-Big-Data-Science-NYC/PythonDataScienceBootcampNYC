@@ -1,0 +1,956 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI]{GARP Risk \& AI --- 250 Detailed Hard Questions}
+\subtitle{Unofficial Exam Prep}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	% =================================================================
+% ==================== CONTINUATION: Q81--Q150 ====================
+% =================================================================
+
+
+
+\begin{frame}{Q82 --- Bag-of-Words Limitations}
+\begin{block}{Question}
+A risk team builds a sentiment classifier using a binary bag-of-words representation of news articles about a firm. The model performs well on formal news but struggles with sarcastic social media posts. Which of the following best explains this limitation?
+\end{block}
+\begin{enumerate}
+\item The vocabulary is too small.
+\item Bag-of-words ignores word order and context, so sarcasm, negation, and contextual reversal of meaning are lost in the vector representation.
+\item The model requires more data.
+\item The binary representation ignores word frequencies.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+BoW treats each word independently and discards order and context. Sarcasm depends on context and word co-occurrence patterns that BoW cannot capture. Options A, C, and D are less fundamental --- even with large vocabularies and count-based BoW, the context problem persists.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q83 --- TF-IDF Interpretation}
+\begin{block}{Question}
+A risk analyst computes TF-IDF scores across 1,000 earnings call transcripts. The word ``million'' appears in almost every document; the word ``impairment'' appears in a small subset. What will TF-IDF assign to each word, and why?
+\end{block}
+\begin{enumerate}
+\item High score to both words because both are common.
+\item High score to ``impairment'' (high IDF due to rarity), low score to ``million'' (low IDF because it appears in most documents).
+\item High score to ``million'' (high frequency), low score to ``impairment''.
+\item Equal scores because TF-IDF normalizes frequencies.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+TF-IDF increases weight for terms that are frequent in a document but rare across the corpus. ``Million'' is ubiquitous and therefore uninformative (low IDF); ``impairment'' is rare and thus discriminative (high IDF). Options A, C, and D misinterpret TF-IDF.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q84 --- N-gram Usage}
+\begin{block}{Question}
+A sentiment classifier misclassifies the phrase ``not bad'' as negative because it identifies ``bad''. Which NLP technique would most directly address this issue?
+\end{block}
+\begin{enumerate}
+\item Lemmatization.
+\item Stop-word removal.
+\item Bi-grams (or higher-order n-grams) that treat ``not bad'' as a single unit.
+\item Dimensionality reduction.
+\end{enumerate}
+\begin{exampleblock}{Answer: C}\end{exampleblock}
+\begin{block}{Explanation}
+N-grams preserve local word order, allowing the model to treat phrases like ``not bad'' or ``no loss'' as single features. This addresses negation explicitly. Options A and B do not capture context. Option D is unrelated.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q85 --- Cosine Similarity in Word Embeddings}
+\begin{block}{Question}
+Using pre-trained word embeddings, an analyst computes cosine similarity between the following pairs: (a) ``bank'' and ``financial''; (b) ``bank'' and ``tree''; (c) ``bank'' and ``river''. Which is likely to have the highest cosine similarity and why?
+\end{block}
+\begin{enumerate}
+\item ``bank''--``tree'' because both are nouns.
+\item ``bank''--``financial'' if the embedding was trained on financial text, because ``bank'' in that context appears in similar semantic neighborhoods as ``financial''; embeddings capture context-dependent meaning.
+\item ``bank''--``river'' because both are physical locations.
+\item All three pairs will have equal similarity.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Word embeddings are trained on large corpora and capture distributional context. In a financial corpus, ``bank'' co-occurs with ``financial'' and thus has high similarity. The polysemy of ``bank'' (financial institution vs river bank) is captured by distinct embedding neighborhoods depending on the training corpus. Options A, C, and D ignore context.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q86 --- Attention Mechanism}
+\begin{block}{Question}
+In the sentence ``The trader liquidated the position because it breached the risk limit'', a transformer model correctly associates ``it'' with ``the position'' rather than ``the trader''. Which mechanism enables this?
+\end{block}
+\begin{enumerate}
+\item Random initialization.
+\item Self-attention, which computes pairwise relevance scores between all tokens and allows the model to weight the contribution of ``the position'' more heavily when processing ``it''.
+\item Stop-word removal.
+\item Lemmatization.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Self-attention learns to weight each token's contribution to every other token based on relevance. This enables coreference resolution and long-range dependency modelling. Options A, C, and D do not explain the mechanism.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q87 --- LLM Context Length}
+\begin{block}{Question}
+A legal analyst uses an LLM to review a 500-page contract. The LLM has a context length of 32,000 tokens. The analyst pastes the entire contract but the model's responses are truncated and unreliable. What is the most likely issue?
+\end{block}
+\begin{enumerate}
+\item The model's temperature is too high.
+\item The document exceeds the effective context length; even if the maximum is nominally 32,000 tokens, effective performance degrades for very long inputs. The analyst should use chunking, retrieval-augmented generation (RAG), or a model with larger context.
+\item The contract has too much text.
+\item The model cannot process PDFs.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Context length limits are the maximum tokens the model can process in a single input/output sequence. Even large context windows lose effectiveness at extreme lengths. Chunking or RAG are the standard remedies. Options A, C, and D are secondary or irrelevant.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q88 --- Temperature and Top-P}
+\begin{block}{Question}
+A risk analyst uses an LLM to generate written commentary on VaR breaches. Setting temperature high yields creative but inconsistent outputs; setting temperature low yields repetitive but predictable outputs. The analyst wants factual, consistent outputs. What is the most appropriate setting?
+\end{block}
+\begin{enumerate}
+\item High temperature.
+\item Low temperature (e.g., 0.1--0.3) to narrow the sampling distribution, and consider using a moderate Top-P to exclude implausible tokens while retaining some diversity.
+\item Set temperature to 2.0.
+\item Ignore these parameters; they have no effect.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Low temperature sharpens the probability distribution, favouring high-probability tokens and reducing randomness. Top-P (nucleus sampling) complements this by excluding the long tail. Option A increases randomness. Option C is extreme. Option D is wrong --- these parameters strongly influence output.
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Q90 --- RAG and Retrieval}
+\begin{block}{Question}
+An insurance company wants an LLM to answer questions about its internal claims-handling manual. The manual is proprietary and not in any public training data. Which approach is most appropriate?
+\end{block}
+\begin{enumerate}
+\item Fine-tune the LLM on the manual.
+\item Use retrieval-augmented generation (RAG): index the manual, retrieve relevant passages at query time, and pass them to the LLM as context.
+\item Use a larger LLM.
+\item Increase temperature.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+RAG is specifically designed for this scenario: proprietary, up-to-date, or specialised knowledge is retrieved from a knowledge base and provided as context to the LLM. Fine-tuning is expensive and can become stale; a larger LLM does not solve the missing data issue; temperature is unrelated.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q91 --- Prompt Engineering}
+\begin{block}{Question}
+A risk team needs to extract structured risk categories from unstructured news articles. An analyst uses an LLM with a simple prompt: ``What risk categories are in this article?'' The outputs are inconsistent. Which prompt engineering improvement is most likely to help?
+\end{block}
+\begin{enumerate}
+\item Increase temperature.
+\item Provide a clear role, specify the desired output format (e.g., JSON), and give a few-shot example showing the expected structure.
+\item Reduce context length.
+\item Use a different language.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Effective prompt engineering includes role specification, output format, and few-shot examples. These reduce ambiguity and variance in outputs. Option A increases randomness. Options C and D are unlikely to address the underlying ambiguity.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q92 --- Chain-of-Thought Prompting}
+\begin{block}{Question}
+An analyst asks an LLM to solve a break-even analysis problem. With a direct question, the model gives the wrong answer. With the instruction ``Let's think step by step'', the model arrives at the correct answer. Why does this help?
+\end{block}
+\begin{enumerate}
+\item The instruction is a magic phrase.
+\item Chain-of-thought prompting encourages the model to generate intermediate reasoning steps, which improves multi-step arithmetic and logical tasks by giving the model more tokens to compute intermediate quantities.
+\item The model has more time to compute.
+\item The instruction changes the model weights.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Chain-of-thought prompting uses the model's own token generation to perform intermediate reasoning. Multi-step problems benefit from this because the model can attend to its own intermediate steps. Option A trivialises the mechanism. Option C is inaccurate. Option D is wrong (no weight updates occur).
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Q95 --- LLM Benchmarking}
+\begin{block}{Question}
+A vendor claims their LLM achieves 95\% on MMLU. Which of the following is a valid caveat about this claim?
+\end{block}
+\begin{enumerate}
+\item MMLU is a comprehensive benchmark that covers all possible tasks.
+\item MMLU scores can be inflated by data leakage (if the benchmark dataset was included in the training corpus), and benchmark saturation means top models cluster near the maximum, reducing discrimination.
+\item MMLU cannot be used to compare models.
+\item MMLU is a qualitative metric.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Benchmark caveats include data leakage and saturation. Benchmarks are useful but not sufficient. Options A, C, and D are inaccurate.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q96 --- GenAI Operational Risk}
+\begin{block}{Question}
+A bank deploys an LLM-based chatbot to answer customer inquiries. After several months, the bot starts giving subtly incorrect answers on loan eligibility rules, though it remains fluent and confident. What is the most likely cause, and what should be done?
+\end{block}
+\begin{enumerate}
+\item Random failure; restart the model.
+\item Drift or contamination of the retrieval corpus --- if the bot uses RAG, the underlying knowledge base may have become outdated, or the model may have been updated by the vendor. Regular validation and monitoring of GenAI outputs are essential.
+\item The temperature is too low.
+\item The prompt is wrong.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+GenAI systems require continuous monitoring because outputs are non-deterministic and dependent on retrieval data and vendor updates. Drift in the retrieval corpus or model version can cause subtle errors. Options A, C, and D are less likely given the scenario.
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Q98 --- Regularization and Interpretability Trade-off}
+\begin{block}{Question}
+A model with no regularization fits the training data perfectly but generalizes poorly. Adding an L1 penalty improves test performance but zeroes out half the coefficients. How would you characterise this trade-off?
+\end{block}
+\begin{enumerate}
+\item Regularization reduces bias and increases variance.
+\item Regularization reduces variance (overfitting) at the cost of increased bias; L1 also produces sparsity, improving interpretability at the cost of potentially dropping weak but real signals.
+\item Regularization has no effect on bias or variance.
+\item Regularization always improves both bias and variance.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Regularization trades off bias for variance: it reduces overfitting by shrinking coefficients, at the cost of introducing bias. L1 additionally performs feature selection, improving interpretability. Options A, C, and D misstate the trade-off.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q99 --- Model Interpretability vs Accuracy}
+\begin{block}{Question}
+A regulator asks a bank to explain how its credit-scoring model arrives at a specific decision. The model is a gradient-boosted ensemble that outperforms a logistic regression by 3 percentage points AUC. The bank considers swapping in the logistic regression for compliance reasons. Which statement best captures the trade-off?
+\end{block}
+\begin{enumerate}
+\item The bank should always prioritise interpretability.
+\item The bank should always prioritise accuracy.
+\item The bank should weigh accuracy loss against interpretability gain. A common approach is to keep the high-performing model for production and use post-hoc explainability techniques (SHAP, LIME) to satisfy regulators, rather than downgrade to a simpler model.
+\item The bank should use both models simultaneously and choose randomly.
+\end{enumerate}
+\begin{exampleblock}{Answer: C}\end{exampleblock}
+\begin{block}{Explanation}
+Interpretability and accuracy are often in tension. Modern practice uses high-performing models with post-hoc explainability rather than sacrificing performance. Options A and B are too categorical. Option D is nonsensical.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q100 --- Bootstrap Aggregation}
+\begin{block}{Question}
+An analyst trains 100 decision trees on bootstrap samples of the training data and averages their predictions. Each tree is trained on all available features. What is this technique called, and how does it improve performance over a single tree?
+\end{block}
+\begin{enumerate}
+\item Random forest; it introduces feature randomness.
+\item Bagging (bootstrap aggregation); it reduces variance by averaging decorrelated trees that each see different samples of the training data.
+\item Boosting; it corrects sequential errors.
+\item Gradient descent; it optimises weights.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Bagging reduces variance by training on bootstrap samples and averaging. Random forest adds feature subsampling. Boosting is sequential. Gradient descent is an optimisation method. Only B correctly identifies the technique described.
+\end{block}
+\end{frame}
+
+% =================================================================
+\section{Module 3: Risk and Risk Factors}
+% =================================================================
+
+\begin{frame}{Q101 --- Sensitivity in Rare-Disease Screening}
+\begin{block}{Question}
+A diagnostic algorithm screens for a rare but fatal disease that affects 0.1\% of the population. The disease is curable if caught early. In testing the algorithm, which metric should be prioritised, and why?
+\end{block}
+\begin{enumerate}
+\item Specificity, to avoid false alarms.
+\item Sensitivity, because false negatives (missed cases) have fatal consequences, while false positives only lead to additional testing.
+\item Precision, because positives should be reliable.
+\item Accuracy, because it balances all errors.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+With rare fatal diseases, the cost of a false negative (missing a real case) is catastrophic. Sensitivity = TP/(TP+FN) measures how many actual positives are caught. Option A optimises for rejecting negatives, which is not the priority. Option C emphasises alert reliability. Option D averages over both, hiding the asymmetry in costs.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q102 --- Data Composition Bias}
+\begin{block}{Question}
+A fraud-detection model is trained on 10,000 transactions, of which 20 are fraudulent. After deployment, the model performs well on non-fraudulent transactions but misses most fraud. What is the most likely cause?
+\end{block}
+\begin{enumerate}
+\item Measurement bias.
+\item Representation bias.
+\item Data composition bias due to the extreme class imbalance.
+\item Historical bias.
+\end{enumerate}
+\begin{exampleblock}{Answer: C}\end{exampleblock}
+\begin{block}{Explanation}
+Extreme class imbalance (0.2\% positives) causes the model to optimise for the majority class. This is data composition bias. Options A, B, and D describe different mechanisms that are not the primary cause in this scenario.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q103 --- Fairness Intervention}
+\begin{block}{Question}
+A logistic regression for hiring decisions includes ``years of experience'', ``certifications'', and ``education level'' (coded 1--5). The company realises that including education level may unfairly disadvantage experienced candidates with lower education. Which intervention best ensures equal treatment without removing the variable?
+\end{block}
+\begin{enumerate}
+\item Remove the education variable entirely.
+\item Replace education level with its mean at prediction time, ensuring that the coefficient does not influence individual predictions.
+\item Add interaction terms between education and experience.
+\item Convert education to dummy variables.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+By substituting the mean education level at inference time, the effect of education on predictions is neutralised across all candidates --- they are treated as if they had the same education level. Option A removes the variable but leaves its influence partially embedded in correlated features. Options C and D do not achieve the fairness objective.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q104 --- Demographic Parity}
+\begin{block}{Question}
+A model predicts loan approvals. Group A has 30\% approval rate; Group B has 30\%. Which fairness metric is satisfied?
+\end{block}
+\begin{enumerate}
+\item Equal opportunity.
+\item Predictive rate parity.
+\item Demographic parity.
+\item Individual fairness.
+\end{enumerate}
+\begin{exampleblock}{Answer: C}\end{exampleblock}
+\begin{block}{Explanation}
+Demographic parity requires equal positive prediction rates across groups. Both groups have 30\%, so parity is satisfied. Equal opportunity concerns TPR, predictive rate parity concerns precision, and individual fairness concerns similar treatment of similar individuals. Options A, B, and D refer to different criteria.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q105 --- Fairness Impossibility}
+\begin{block}{Question}
+A regulator demands simultaneous demographic parity, predictive rate parity, and equal opportunity across two demographic groups with different base rates of default. A mathematical result shows these cannot all be satisfied simultaneously when base rates differ. What is the best practical response?
+\end{block}
+\begin{enumerate}
+\item Demand all three and reject any model that does not achieve them.
+\item Choose the fairness metric most aligned with the business context, document the choice, and accept the trade-offs; involve legal and ethics stakeholders in the decision.
+\item Ignore the impossibility result.
+\item Only use demographic parity in all cases.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+The Kleinberg-Chouldechova impossibility theorem shows that when base rates differ, demographic parity, predictive rate parity, and equal opportunity cannot all hold. Practical response is to select the metric appropriate to the use case, document the trade-off, and engage governance. Options A, C, and D are impractical or incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q106 --- Black-Box Validation}
+\begin{block}{Question}
+A firm uses a third-party deep learning model for credit decisions. The vendor refuses to share the model weights or architecture. The firm must validate the model. Which approach is most appropriate?
+\end{block}
+\begin{enumerate}
+\item Refuse to deploy the model because full transparency is impossible.
+\item Perform black-box validation: test the model extensively on input-output pairs, benchmark against internal challenger models, examine outcome distributions, and assess fairness metrics across subgroups.
+\item Trust the vendor's claims and deploy without validation.
+\item Use the model without validation but document the risk.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Black-box validation is standard practice for vendor models. It uses input-output testing, benchmarking, and outcomes analysis. Option A is too restrictive and impractical. Option C skips essential governance. Option D is non-compliant.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q107 --- Explainability vs Interpretability}
+\begin{block}{Question}
+A model is described as ``interpretable but not explainable''. Which type of model best fits this description?
+\end{block}
+\begin{enumerate}
+\item A deep neural network with SHAP explanations.
+\item A simple linear regression whose coefficients are known, but whose behaviour on specific complex cases is difficult to describe in narrative form.
+\item A black-box ensemble with no diagnostic tool.
+\item A random assignment process.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Interpretable = internal logic is understandable (linear regression, decision trees). Explainable = specific decisions can be justified in narrative. A linear regression is interpretable but narratives around specific outlier cases may be complex. Option A is the opposite (explainable, not interpretable). Options C and D do not fit.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q108 --- Automation Bias}
+\begin{block}{Question}
+A trader uses an AI-driven pricing tool that occasionally produces incorrect quotes. Despite known flaws, the trader rarely overrides the tool's outputs. Which phenomenon is at play?
+\end{block}
+\begin{enumerate}
+\item Confirmation bias.
+\item Automation bias --- over-reliance on automated systems, reducing vigilance and independent verification.
+\item Survivorship bias.
+\item Selection bias.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Automation bias is the tendency to trust automated systems too readily, leading to reduced verification and occasional costly errors. Options A, C, and D refer to other cognitive or statistical biases.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q109 --- Group Fairness vs Individual Fairness}
+\begin{block}{Question}
+Which statement best characterises the difference between group fairness and individual fairness?
+\end{block}
+\begin{enumerate}
+\item Group fairness examines statistical properties across demographic groups; individual fairness requires treating similar individuals similarly.
+\item Group fairness concerns one individual; individual fairness concerns populations.
+\item They are the same concept.
+\item Individual fairness is impossible to define.
+\end{enumerate}
+\begin{exampleblock}{Answer: A}\end{exampleblock}
+\begin{block}{Explanation}
+Group fairness examines outcomes across groups (e.g., demographic parity, equal opportunity). Individual fairness, from Aristotle's ``treat like cases alike'', requires similar individuals to be treated similarly. Options B, C, and D misstate the concepts.
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Q112 --- Feedback Loops in Hiring}
+\begin{block}{Question}
+An AI system ranks candidates and invites the top-ranked for interviews. Over time, the system's training data increasingly reflects past system decisions. Which risk does this represent?
+\end{block}
+\begin{enumerate}
+\item A self-reinforcing feedback loop, where the model's past biases are amplified in successive training cycles.
+\item Random noise.
+\item Measurement error.
+\item Model overfitting to training data only.
+\end{enumerate}
+\begin{exampleblock}{Answer: A}\end{exampleblock}
+\begin{block}{Explanation}
+Feedback loops occur when model outputs influence future training data, reinforcing initial biases. This is a form of compounding historical bias. Options B, C, and D do not capture the dynamic.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q113 --- Interpretability vs Explainability}
+\begin{block}{Question}
+Which of the following best distinguishes ``interpretability'' from ``explainability''?
+\end{block}
+\begin{enumerate}
+\item They are interchangeable terms.
+\item Interpretability is about understanding internal model mechanisms; explainability is about providing human-understandable justifications for specific decisions.
+\item Explainability applies only to linear models.
+\item Interpretability is a legal requirement; explainability is optional.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Interpretability = internal understanding; explainability = specific-decision justification. Option A conflates them. Options C and D are incorrect.
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Q116 --- Human Autonomy}
+\begin{block}{Question}
+An AI mental health chatbot recommends a course of action that conflicts with a patient's stated preference. Which ethical principle is most directly violated?
+\end{block}
+\begin{enumerate}
+\item Nonmaleficence.
+\item Beneficence.
+\item Autonomy --- the patient's right to make their own decisions is overridden.
+\item Explainability.
+\end{enumerate}
+\begin{exampleblock}{Answer: C}\end{exampleblock}
+\begin{block}{Explanation}
+Autonomy is the principle of respecting individual decision-making. Overriding patient preference violates autonomy. Options A, B, and D are distinct principles.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q117 --- Fairness Metrics Comparison}
+\begin{block}{Question}
+Model A has equal true positive rates but unequal false positive rates across groups. Model B has equal false positive rates but unequal true positive rates. Which fairness metric does each satisfy?
+\end{block}
+\begin{enumerate}
+\item Both satisfy demographic parity.
+\item Model A satisfies equal opportunity; Model B satisfies a form of predictive parity (though not the standard definition). Neither satisfies demographic parity.
+\item Both satisfy predictive rate parity.
+\item Both violate all fairness measures.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Equal opportunity = equal TPR across groups (Model A). Equal FPR across groups is a form of equalised odds but not standard predictive rate parity. Neither satisfies demographic parity (equal positive prediction rates). Option B is the most accurate.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q118 --- Model Risk vs Algorithmic Bias}
+\begin{block}{Question}
+Which statement correctly distinguishes model risk from algorithmic bias?
+\end{block}
+\begin{enumerate}
+\item Model risk refers to errors and misuse that could cause adverse outcomes; algorithmic bias refers to systematic and unfair discrimination against protected groups.
+\item They are synonymous.
+\item Model risk applies only to AI models; algorithmic bias applies only to statistical models.
+\item Model risk is a legal term; algorithmic bias is a technical term.
+\end{enumerate}
+\begin{exampleblock}{Answer: A}\end{exampleblock}
+\begin{block}{Explanation}
+Model risk encompasses all adverse outcomes from model errors or misuse. Algorithmic bias is a subset focused on unfair discrimination. Options B, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q119 --- Deepfake Fraud}
+\begin{block}{Question}
+A criminal uses an AI-generated voice clone of a CEO to authorise a wire transfer. Which category of risk does this represent?
+\end{block}
+\begin{enumerate}
+\item Only individual risk.
+\item Only societal risk.
+\item Both organizational/individual risk (fraudulent loss) and societal risk (undermining trust in voice communications).
+\item Measurement bias.
+\end{enumerate}
+\begin{exampleblock}{Answer: C}\end{exampleblock}
+\begin{block}{Explanation}
+Deepfake-enabled fraud harms the targeted organisation and individual victims, and it erodes trust in the integrity of voice communications more broadly. Options A, B, and D are partial or unrelated.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q120 --- Unfairness Sources}
+	
+	\begin{block}{Question}
+		Which of the following is NOT a recognised source of algorithmic bias?
+		
+		\begin{enumerate}
+			\item Problem specification errors.
+			\item Data collection and composition.
+			\item Model development choices.
+			\item Increased computational power.
+		\end{enumerate}
+	\end{block}
+	
+	\begin{block}{Explanation}
+		The four recognised sources are problem specification, data, model development, and deployment. Computational power is not a source of bias. Options A, B, and C are all real sources.
+	\end{block}
+	
+	\begin{exampleblock}{Answer: D}
+	\end{exampleblock}
+	
+\end{frame}
+
+
+
+% =================================================================
+\section{Module 4: Responsible \& Ethical AI}
+% =================================================================
+
+\begin{frame}{Q121 --- Shapley Values in Explainability}
+\begin{block}{Question}
+A data scientist wants to understand which features drive a complex model's prediction on individual cases. Which technique is most appropriate?
+\end{block}
+\begin{enumerate}
+\item Feature importance scores (global).
+\item Shapley values --- they distribute the model's prediction among input features based on marginal contributions.
+\item Grid search.
+\item Feature scaling.
+\end{enumerate}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Shapley values from cooperative game theory provide per-prediction feature attribution. Feature importance is global. Options C and D are unrelated.
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Q122 --- Loan Rejection Explainability}
+	
+	\begin{block}{Question}
+		Applicants demand to know why their loan applications were rejected. Which response is most appropriate?
+		
+		\begin{enumerate}
+			\item Publish the full model code.
+			\item Provide meaningful reasons for each rejection, using explainability tools and consistent criteria.
+			\item Refuse to explain, citing trade secrets.
+			\item Explain only to rejected applicants from certain demographics.
+		\end{enumerate}
+	\end{block}
+	
+	\begin{exampleblock}{Answer: B}
+	\end{exampleblock}
+	
+	\begin{block}{Explanation}
+		Regulators and customers expect meaningful explanations. Publish the top contributing factors or counterfactual reasoning. Options A, C, and D are impractical, non-compliant, or discriminatory.
+	\end{block}
+	
+\end{frame}
+
+
+
+
+
+\begin{frame}{Q124 --- Utilitarianism in AI Ethics}
+\begin{block}{Question}
+Which statement correctly describes a criticism of utilitarianism when applied to AI ethics?
+\begin{enumerate}
+\item It ignores consequences.
+\item It can justify violating individual rights when doing so produces greater aggregate benefit.
+\item It emphasises character over actions.
+\item It relies on rigid rules.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Utilitarianism maximises aggregate welfare and can justify rights violations for greater total benefit. Option A is the opposite. Options C and D describe virtue ethics and deontology, respectively.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q125 --- Deontology}
+\begin{block}{Question}
+Which best describes a deontological ethics framework?
+\begin{enumerate}
+\item Judges actions by their consequences.
+\item Judges actions by adherence to duties and rules regardless of consequences.
+\item Emphasises virtuous character traits.
+\item Relies on quantitative utility.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Deontology (Kant) judges by adherence to moral duties and rules. Options A and D are consequentialist. Option C is virtue ethics.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q126 --- Virtue Ethics}
+\begin{block}{Question}
+Which of the following is the defining feature of virtue ethics?
+\begin{enumerate}
+\item Rigid adherence to rules.
+\item Maximisation of utility.
+\item Focus on character traits and living a good life, with practical wisdom guiding action.
+\item Emphasis on legal compliance.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: C}\end{exampleblock}
+\begin{block}{Explanation}
+Virtue ethics asks ``what kind of person should I be?'' and emphasises character traits (courage, justice, temperance). Options A, B, and D are distinct frameworks.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q127 --- Justice}
+\begin{block}{Question}
+Which statement is correct about the principle of justice in AI ethics?
+\begin{enumerate}
+\item Different concepts of distributive justice (egalitarianism, utilitarianism, meritocracy) can conflict with each other.
+\item Impartial application of the law is not required for procedural justice.
+\item Personal autonomy is always secondary to social justice.
+\item Meritocracy is not a recognised distributive justice principle.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: A}\end{exampleblock}
+\begin{block}{Explanation}
+Distributive justice concepts can conflict; e.g., egalitarianism vs meritocracy. Options B, C, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q129 --- Privacy Principles}
+\begin{block}{Question}
+Which of the following is the most effective way to minimise privacy risk in AI systems?
+\begin{enumerate}
+\item Collect all possible data to improve model accuracy.
+\item Apply data minimisation and give data subjects control over their data (access, transfer, deletion rights).
+\item Store data unencrypted for analytical flexibility.
+\item Share data with third parties without consent.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Data minimisation (collect only what is needed) and subject control (access, portability, deletion) are foundational privacy principles. Options A, C, and D violate them.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q130 --- GDPR Right to Erasure}
+\begin{block}{Question}
+Under GDPR, the right to be forgotten allows data subjects to:
+\begin{enumerate}
+\item Access their personal data.
+\item Request erasure of their personal data under certain conditions.
+\item Sell their data.
+\item Demand compensation for any processing.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Right to erasure (Art. 17) allows subjects to request deletion under conditions (e.g., no longer necessary, withdrawn consent). Option A describes the right of access. Options C and D misstate the right.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q131 --- Contextual Integrity}
+\begin{block}{Question}
+A patient provides health data to a physician for treatment. The physician's hospital then sells the data to a marketing firm. Which principle does this violate?
+\begin{enumerate}
+\item Data minimisation.
+\item Contextual integrity --- data provided in one context (medical treatment) should not be used in an incompatible context (marketing).
+\item Right to be forgotten.
+\item Autonomy.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Contextual integrity (Nissenbaum) says data use must respect the norms of the context in which it was provided. Medical data given for treatment cannot be repurposed for marketing. Options A, C, and D describe distinct principles.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q132 --- EU AI Act}
+\begin{block}{Question}
+Which of the following AI practices is explicitly prohibited by the EU AI Act?
+\begin{enumerate}
+\item AI for fraud detection in banking.
+\item Social scoring by governments and manipulative AI exploiting vulnerabilities.
+\item Medical AI for diagnostic support.
+\item Chatbots for customer service.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+The EU AI Act prohibits social scoring, manipulative AI, exploitation of vulnerabilities, and certain biometric categorisation. Options A, C, and D are regulated but not prohibited.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q133 --- GDPR Extraterritoriality}
+\begin{block}{Question}
+A US-based company provides online services to EU residents but has no physical presence in the EU. Does GDPR apply?
+\begin{enumerate}
+\item No, GDPR only applies to EU-based organisations.
+\item Yes, GDPR has extraterritorial scope: it applies to organisations offering goods or services to EU residents or monitoring their behaviour, regardless of location.
+\item Only if the EU data subject files a complaint.
+\item Only if the company uses EU-based servers.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+GDPR (Art. 3) applies extraterritorially to organisations targeting EU data subjects. Options A, C, and D misstate the law.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q134 --- NIST AI RMF Functions}
+\begin{block}{Question}
+The NIST AI Risk Management Framework is organised around four functions. Which of the following correctly lists them?
+\begin{enumerate}
+\item Train, Test, Deploy, Monitor.
+\item Govern, Map, Measure, Manage.
+\item Design, Build, Audit, Retire.
+\item Collect, Clean, Model, Predict.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+NIST AI RMF = Govern (structures), Map (context), Measure (assessment), Manage (mitigation). Options A, C, and D are not the framework's functions.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q135 --- Utilitarianism Founders}
+\begin{block}{Question}
+Who are the classical proponents of utilitarianism?
+\begin{enumerate}
+\item Kant and Aristotle.
+\item Bentham and Mill.
+\item Rawls and Nozick.
+\item Plato and Socrates.
+\end{enumerate}
+	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Jeremy Bentham and John Stuart Mill are the classical utilitarian philosophers. Options A, C, and D are associated with other traditions.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q136 --- Kant's Categorical Imperative}
+\begin{block}{Question}
+What does Kant's categorical imperative require?
+\begin{enumerate}
+\item Maximise aggregate utility.
+\item Act only according to maxims that could be willed as universal laws.
+\item Cultivate virtuous character.
+\item Obey the sovereign's commands.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Kant's categorical imperative demands universalizability: act only on maxims you would will as universal laws. Options A and C describe utilitarianism and virtue ethics.
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Q138 --- Privacy as a Wrong}
+\begin{block}{Question}
+Why is violating privacy considered morally wrong even when no tangible harm results?
+\begin{enumerate}
+\item It costs money.
+\item It violates individuals' rights and treats them instrumentally, as means to others' ends.
+\item It slows model training.
+\item It confuses regulators.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Privacy violations wrong individuals by disrespecting their rights and autonomy, regardless of downstream harm. Options A, C, and D are beside the point.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q139 --- Synthetic Data}
+\begin{block}{Question}
+Which is a primary advantage of using synthetic data in AI development?
+\begin{enumerate}
+\item It is always more accurate than real data.
+\item It reduces privacy risk because it does not come from real data subjects, and can mitigate bias by design.
+\item It is always cheaper to generate.
+\item It eliminates the need for validation.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Synthetic data reduces privacy risk and can be designed to be balanced. Option A is false. Option C is not always true. Option D is wrong; synthetic-data models still require validation.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q140 --- Algorithmic Auditing}
+\begin{block}{Question}
+Which is the most effective way to detect algorithmic bias?
+\begin{enumerate}
+\item Ignore it.
+\item Regular, independent algorithmic audits combining statistical analysis with domain expertise.
+\item Use only open-source models.
+\item Remove all sensitive features.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Independent algorithmic audits are the gold standard for detecting bias. Options A, C, and D are insufficient or incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q141 --- Fairness Automation Limits}
+\begin{block}{Question}
+Why can fairness not be fully automated?
+\begin{enumerate}
+\item Because it is too expensive.
+\item Because when base rates differ, no algorithm can simultaneously satisfy multiple fairness criteria; choosing among them is a normative judgment.
+\item Because there is not enough data.
+\item Because GDPR forbids it.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Fairness involves a choice among conflicting criteria (impossibility result) and normative trade-offs that require human judgment. Options A, C, and D are not the fundamental reason.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q142 --- Local vs Global Explainability}
+\begin{block}{Question}
+How does local explainability differ from global explainability?
+\begin{enumerate}
+\item Local explains a specific prediction; global explains overall model behaviour.
+\item Local explains the entire model; global explains a specific case.
+\item They are identical.
+\item Local applies to linear models; global applies to nonlinear ones.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: A}\end{exampleblock}
+\begin{block}{Explanation}
+Local = specific prediction (SHAP, LIME). Global = overall behaviour (feature importance, partial dependence). Options B, C, and D misstate the distinction.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q143 --- Counterfactual Explanations}
+\begin{block}{Question}
+An applicant denied a loan is told: ``If you had \$10,000 more in savings, your application would have been approved.'' What type of explanation is this?
+\begin{enumerate}
+\item SHAP value.
+\item Counterfactual explanation.
+\item LIME surrogate.
+\item Global feature importance.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Counterfactuals describe minimal changes to inputs that would change the output. This is actionable and intuitive. Options A, C, and D describe other techniques.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q144 --- Accuracy-Interpretability Trade-off}
+\begin{block}{Question}
+Which statement best captures the accuracy-interpretability trade-off in AI?
+\begin{enumerate}
+\item Simple models always win.
+\item Complex models (neural networks, ensembles) often achieve higher accuracy but are typically less interpretable; the trade-off should be evaluated in context.
+\item Interpretability is irrelevant in regulated industries.
+\item Complex models are always preferable.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: B}\end{exampleblock}
+\begin{block}{Explanation}
+Higher flexibility often means higher accuracy but lower interpretability. The right balance depends on the use case. Options A, C, and D over-generalise.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q145 --- EU AI Act Fines}
+\begin{block}{Question}
+What is the maximum fine under the EU AI Act for the most serious violations?
+\begin{enumerate}
+\item €1 million.
+\item €10 million.
+\item Up to €35 million or 7\% of global annual turnover, whichever is higher.
+\item No fines; only warnings.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: C}\end{exampleblock}
+\begin{block}{Explanation}
+The AI Act provides tiered fines, up to €35M or 7\% of global turnover for prohibited practices. Options A, B, and D understate the penalties.
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Q147 --- GDPR Breach Notification}
+\begin{block}{Question}
+Under GDPR, organisations must notify the supervisory authority of a personal data breach within:
+\begin{enumerate}
+\item 24 hours.
+\item 48 hours.
+\item 72 hours.
+\item 7 days.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: C}\end{exampleblock}
+\begin{block}{Explanation}
+GDPR Art. 33 requires notification within 72 hours of becoming aware of a breach. Options A, B, and D are incorrect.
+\end{block}
+\end{frame}
+
+\begin{frame}{Q148 --- Digital Services Act}
+\begin{block}{Question}
+Which of the following obligations does the EU Digital Services Act impose on large online platforms?
+\begin{enumerate}
+\item Preventing dissemination of illegal content.
+\item Transparency about content moderation practices.
+\item Addressing disinformation.
+\item All of the above.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: D}\end{exampleblock}
+\begin{block}{Explanation}
+The DSA imposes obligations on illegal content, transparency, disinformation, algorithmic bias mitigation, and user opt-out from personalised recommendations.
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Q150 --- Virtue Ethics Critique}
+\begin{block}{Question}
+Which is a standard criticism of virtue ethics?
+\begin{enumerate}
+\item It provides no clear guidance for resolving moral dilemmas.
+\item It ignores character.
+\item It is rule-based.
+\item It only considers consequences.
+\end{enumerate} 	\end{block}
+\begin{exampleblock}{Answer: A}\end{exampleblock}
+\begin{block}{Explanation}
+Critics argue virtue ethics lacks clear decision procedures and may not resolve conflicting virtues. Options B, C, and D misstate the framework.
+\end{block}
+\end{frame}
+
+\end{document}
