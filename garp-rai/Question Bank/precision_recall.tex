@@ -1,0 +1,606 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI]{GARP Risk \& AI --- Q351--Q450}
+\subtitle{Unofficial Exam Prep}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}{Q540 --- Recall}
+		\begin{block}{Question}
+			Four fraud detection models are evaluated:
+			
+			\begin{center}
+				\begin{tabular}{lccc}
+					\hline
+					Model & Precision & Recall & F1 \\
+					\hline
+					A & 0.80 & 0.22 & 0.34 \\
+					B & 0.55 & 0.71 & 0.62 \\
+					C & 0.77 & 0.41 & 0.54 \\
+					D & 0.61 & 0.36 & 0.45 \\
+					\hline
+				\end{tabular}
+			\end{center}
+			
+			Which model catches the largest percentage of actual fraud cases?
+			\begin{enumerate}
+				\item A
+				\item B
+				\item C
+				\item D
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: B}
+			Model B
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			\textbf{Recall} (also called sensitivity or true positive rate) measures:
+			\[
+			\text{Recall} = \frac{TP}{TP+FN}
+			\]
+			``Of all the \emph{actual} fraud cases, what fraction did the model catch?''
+			
+			Comparing the recall column:
+			\begin{itemize}
+				\item A: 0.22
+				\item \textbf{B: 0.71} \(\leftarrow\) highest
+				\item C: 0.41
+				\item D: 0.36
+			\end{itemize}
+			
+			Model B has the highest recall (0.71), so it catches the largest percentage
+			of actual fraud cases. Precision is irrelevant to this question---the question
+			specifically asks about \emph{actual} fraud being caught, which is recall.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q541 --- Precision}
+		\begin{block}{Question}
+			Which model produces the highest percentage of correct fraud alerts once it flags a transaction?
+			
+			\begin{center}
+				\begin{tabular}{lcc}
+					\hline
+					Model & Precision & Recall\\
+					\hline
+					A & 0.91 & 0.18\\
+					B & 0.62 & 0.70\\
+					C & 0.71 & 0.52\\
+					D & 0.68 & 0.44\\
+					\hline
+				\end{tabular}
+			\end{center}
+			
+			\begin{enumerate}
+				\item A
+				\item B
+				\item C
+				\item D
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: A}
+			Model A
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			\textbf{Precision} answers:
+			\[
+			\text{Precision} = \frac{TP}{TP+FP}
+			\]
+			``Of all the transactions the model \emph{flagged} as fraud, how many were
+			actually fraudulent?''
+			
+			The phrase ``once it flags a transaction'' is the key: it conditions on the
+			\emph{prediction} being positive. That is exactly precision.
+			
+			Comparing the precision column:
+			\begin{itemize}
+				\item \textbf{A: 0.91} \(\leftarrow\) highest
+				\item B: 0.62
+				\item C: 0.71
+				\item D: 0.68
+			\end{itemize}
+			
+			Model A has the highest precision (0.91), meaning when it raises a fraud alert,
+			it is correct 91\% of the time. Note that Model A has very low recall (0.18),
+			so it misses most fraud---but the question only asks about correctness of
+			alerts, not coverage.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q542 --- Accuracy Trap}
+		\begin{block}{Question}
+			A loan portfolio contains 98\% good loans and 2\% defaults.
+			
+			A model predicts every loan as non-default.
+			
+			What is the model's approximate accuracy?
+			\begin{enumerate}
+				\item 2\%
+				\item 50\%
+				\item 98\%
+				\item 100\%
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: C}
+			98\%
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			\textbf{Accuracy} is:
+			\[
+			\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+			\]
+			
+			If the model predicts \emph{non-default} for every loan:
+			\begin{itemize}
+				\item It correctly classifies all 98\% good loans (true negatives).
+				\item It incorrectly classifies all 2\% defaults as good (false negatives).
+			\end{itemize}
+			
+			\[
+			\text{Accuracy} = \frac{98\%}{100\%} = 98\%
+			\]
+			
+			\textbf{The trap:} 98\% accuracy sounds excellent, but the model has
+			\emph{zero} recall for defaults---it catches \emph{none} of the actual
+			defaults. This is the classic \textbf{class imbalance problem}: a trivial
+			majority-class predictor can achieve high accuracy while being completely
+			useless for the minority (and usually more important) class.
+			
+			This is why accuracy alone is a poor metric for imbalanced problems, and
+			why precision, recall, and F1 are preferred.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q543 --- F1 Score}
+		\begin{block}{Question}
+			Which metric combines precision and recall into a single measure?
+			
+			\begin{enumerate}
+				\item Accuracy
+				\item FPR
+				\item F1 Score
+				\item AUC
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: C}
+			F1 Score
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			The \textbf{F1 score} is the \textbf{harmonic mean} of precision and recall:
+			\[
+			F1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+			\]
+			
+			\textbf{Why harmonic mean and not arithmetic mean?}
+			The harmonic mean punishes extreme values. If a model has precision = 1.0
+			and recall = 0.0, the arithmetic mean would be 0.5, but the harmonic mean
+			is 0. So F1 is only high when \emph{both} precision and recall are
+			reasonably high---it forces a balance.
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{Accuracy:} measures overall correctness, not a
+				precision/recall combination.
+				\item \textbf{FPR:} false positive rate, a single error rate.
+				\item \textbf{AUC:} area under the ROC curve, a threshold-independent
+				ranking measure.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q544 --- F1 Ranking}
+		\begin{block}{Question}
+			Which model provides the best balance between precision and recall?
+			
+			\begin{center}
+				\begin{tabular}{lccc}
+					\hline
+					Model & Precision & Recall & F1 \\
+					\hline
+					A & 0.90 & 0.15 & 0.26 \\
+					B & 0.60 & 0.70 & 0.65 \\
+					C & 0.75 & 0.30 & 0.43 \\
+					D & 0.55 & 0.40 & 0.46 \\
+					\hline
+				\end{tabular}
+			\end{center}
+			
+			\begin{enumerate}
+				\item A
+				\item B
+				\item C
+				\item D
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: B}
+			Model B
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			``Best balance between precision and recall'' means the highest \textbf{F1 score},
+			since F1 is the harmonic mean of the two.
+			
+			Comparing the F1 column:
+			\begin{itemize}
+				\item A: 0.26 (high precision 0.90 but terrible recall 0.15)
+				\item \textbf{B: 0.65} \(\leftarrow\) highest
+				\item C: 0.43
+				\item D: 0.46
+			\end{itemize}
+			
+			Model B has the highest F1 (0.65), meaning it achieves the best trade-off
+			between catching positives (recall 0.70) and being correct when it predicts
+			positive (precision 0.60).
+			
+			\textbf{Note:} Model A has the highest precision (0.90) but the \emph{worst}
+			F1, because its recall is only 0.15. This illustrates why you should not
+			judge a model by a single metric---high precision alone does not mean a
+			good balance.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q545 --- ROC Curve}
+		\begin{block}{Question}
+			An ROC curve plots:
+			
+			\begin{enumerate}
+				\item Precision against Recall
+				\item TPR against FPR
+				\item Accuracy against Threshold
+				\item Recall against Accuracy
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: B}
+			TPR against FPR
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			An \textbf{ROC curve} (Receiver Operating Characteristic) plots:
+			\[
+			\text{True Positive Rate (TPR)} \quad \text{vs.} \quad \text{False Positive Rate (FPR)}
+			\]
+			across all possible classification thresholds.
+			
+			Where:
+			\[
+			\text{TPR} = \frac{TP}{TP+FN} = \text{Recall / Sensitivity}
+			\]
+			\[
+			\text{FPR} = \frac{FP}{FP+TN} = 1 - \text{Specificity}
+			\]
+			
+			\textbf{How to read it:}
+			\begin{itemize}
+				\item The top-left corner (TPR = 1, FPR = 0) is perfect classification.
+				\item The diagonal line (TPR = FPR) represents random guessing.
+				\item A curve closer to the top-left corner is a better model.
+			\end{itemize}
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A:} Precision vs. Recall is the \emph{Precision-Recall curve},
+				a different (and often more informative) plot for imbalanced data.
+				\item \textbf{C:} Accuracy vs. Threshold is a threshold-sweep plot, not ROC.
+				\item \textbf{D:} Recall vs. Accuracy is not a standard curve.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q546 --- AUC Interpretation}
+		\begin{block}{Question}
+			Two models have AUC values:
+			
+			\[
+			AUC_A = 0.94
+			\]
+			
+			\[
+			AUC_B = 0.72
+			\]
+			
+			Which statement is most accurate?
+			
+			\begin{enumerate}
+				\item Model B separates classes better.
+				\item Model A separates classes better.
+				\item Both models perform identically.
+				\item AUC measures precision.
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: B}
+			Model A separates classes better.
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			\textbf{AUC} (Area Under the ROC Curve) measures the model's ability to
+			\emph{discriminate} between positive and negative classes.
+			
+			\textbf{Interpretation:} AUC is the probability that a randomly chosen
+			positive example is ranked higher (scored more positively) than a randomly
+			chosen negative example.
+			
+			\textbf{Range and meaning:}
+			\begin{itemize}
+				\item AUC = 0.5: random guessing (no discrimination)
+				\item AUC = 1.0: perfect separation
+				\item AUC = 0.94 (Model A): excellent discrimination
+				\item AUC = 0.72 (Model B): acceptable discrimination
+			\end{itemize}
+			
+			Since \(AUC_A = 0.94 > AUC_B = 0.72\), \textbf{Model A separates the classes
+				better}.
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A:} Model B has the \emph{lower} AUC, so it separates worse.
+				\item \textbf{C:} The AUCs are clearly different, so they do not perform identically.
+				\item \textbf{D:} AUC is not precision. Precision is a single-threshold
+				metric; AUC is threshold-independent.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q547 --- Threshold Effects}
+		\begin{block}{Question}
+			A bank lowers its approval threshold for identifying risky loans.
+			
+			What is the most likely outcome?
+			
+			\begin{enumerate}
+				\item Lower recall and lower FPR
+				\item Higher recall and higher FPR
+				\item Higher precision and lower recall
+				\item Lower precision and lower recall
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: B}
+			Higher recall and higher FPR
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			Lowering the threshold means the model becomes \textbf{more eager to predict
+				the positive class} (``risky loan''). It flags more loans as risky.
+			
+			\textbf{Effect on recall (TPR):}
+			\begin{itemize}
+				\item More loans are flagged positive.
+				\item More of the truly risky loans get caught.
+				\item \(\Rightarrow\) Recall \textbf{increases}.
+			\end{itemize}
+			
+			\textbf{Effect on FPR:}
+			\begin{itemize}
+				\item More loans are flagged positive overall.
+				\item More \emph{safe} loans get incorrectly flagged as risky.
+				\item \(\Rightarrow\) FPR \textbf{increases}.
+			\end{itemize}
+			
+			This is the fundamental \textbf{threshold trade-off}: lowering the threshold
+			increases both TPR and FPR. You cannot increase recall without also
+			increasing false positives (unless the model is perfect).
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A:} Recall does not decrease when you lower the threshold.
+				\item \textbf{C:} Precision typically \emph{decreases} (more false positives),
+				and recall \emph{increases}, not the reverse.
+				\item \textbf{D:} Recall increases, not decreases.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q548 --- False Positive Rate}
+		\begin{block}{Question}
+			A model incorrectly flags 200 legitimate transactions out of 5,000 legitimate transactions.
+			
+			The FPR is closest to:
+			
+			\begin{enumerate}
+				\item 1\%
+				\item 4\%
+				\item 20\%
+				\item 40\%
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: B}
+			4\%
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			\textbf{False Positive Rate (FPR)} is:
+			\[
+			FPR = \frac{FP}{FP + TN}
+			\]
+			
+			Here:
+			\begin{itemize}
+				\item \(FP = 200\) (legitimate transactions incorrectly flagged)
+				\item \(TN = 5000 - 200 = 4800\) (legitimate transactions correctly not flagged)
+				\item Total legitimate transactions (actual negatives) \(= 5000\)
+			\end{itemize}
+			
+			\[
+			FPR = \frac{200}{5000} = 0.04 = 4\%
+			\]
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A (1\%):} Would require only 50 false positives.
+				\item \textbf{C (20\%):} Would require 1,000 false positives.
+				\item \textbf{D (40\%):} Would require 2,000 false positives.
+			\end{itemize}
+			
+			\textbf{Note:} The denominator is the total number of \emph{actual negatives}
+			(all legitimate transactions), not the number of predicted positives. This is
+			a common point of confusion---do not use \(FP/(FP+TP)\) (that would be
+			\(1 - \text{precision}\)).
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q549 --- Metric Matching}
+		\begin{block}{Question}
+			Which pairing is correct?
+			
+			\begin{enumerate}
+				\item Precision = Of actual positives, how many were found?
+				\item Recall = Of predicted positives, how many were correct?
+				\item Precision = Of predicted positives, how many were correct?
+				\item FPR = Of actual positives, how many were missed?
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: C}
+			Precision = Of predicted positives, how many were correct?
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			The correct definitions:
+			\[
+			\text{Precision} = \frac{TP}{TP + FP} \quad \text{(of \emph{predicted} positives, how many are correct?)}
+			\]
+			\[
+			\text{Recall} = \frac{TP}{TP + FN} \quad \text{(of \emph{actual} positives, how many are found?)}
+			\]
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A:} ``Of actual positives, how many were found?'' is the
+				definition of \textbf{recall}, not precision.
+				\item \textbf{B:} ``Of predicted positives, how many were correct?'' is the
+				definition of \textbf{precision}, not recall. (The pairing is swapped.)
+				\item \textbf{D:} ``Of actual positives, how many were missed?'' is the
+				\textbf{false negative rate} \((FN/(TP+FN) = 1 - \text{recall})\),
+				not FPR. FPR is ``of actual \emph{negatives}, how many were
+				incorrectly flagged?''
+			\end{itemize}
+			
+			\textbf{Memory aid:}
+			\begin{center}
+				\begin{tabular}{ll}
+					\hline
+					\textbf{Metric} & \textbf{Conditions on} \\
+					\hline
+					Precision & Predicted positives (\(\hat{Y}=1\)) \\
+					Recall & Actual positives (\(Y=1\)) \\
+					FPR & Actual negatives (\(Y=0\)) \\
+					\hline
+				\end{tabular}
+			\end{center}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q541 --- Precision}
+		\begin{block}{Question}
+			Which model produces the highest percentage of correct fraud alerts once it flags a transaction?
+			
+			\begin{center}
+				\begin{tabular}{lcc}
+					\hline
+					Model & Precision & Recall\\
+					\hline
+					A & 0.91 & 0.18\\
+					B & 0.62 & 0.70\\
+					C & 0.71 & 0.52\\
+					D & 0.68 & 0.44\\
+					\hline
+				\end{tabular}
+			\end{center}
+			
+			\begin{enumerate}
+				\item A
+				\item B
+				\item C
+				\item D
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: A}
+			Model A
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			\textbf{Precision} answers:
+			\[
+			\text{Precision} = \frac{TP}{TP+FP}
+			\]
+			``Of all the transactions the model \emph{flagged} as fraud, how many were
+			actually fraudulent?''
+			
+			The phrase ``once it flags a transaction'' is the key: it conditions on the
+			\emph{prediction} being positive. That is exactly precision.
+			
+			Comparing the precision column:
+			\begin{itemize}
+				\item \textbf{A: 0.91} \(\leftarrow\) highest
+				\item B: 0.62
+				\item C: 0.71
+				\item D: 0.68
+			\end{itemize}
+			
+			Model A has the highest precision (0.91), meaning when it raises a fraud alert,
+			it is correct 91\% of the time. Note that Model A has very low recall (0.18),
+			so it misses most fraud---but the question only asks about correctness of
+			alerts, not coverage.
+		\end{block}
+		
+		\begin{block}{Why A is correct and B is wrong}
+			\textbf{A is correct.} The question asks about the percentage of
+			\emph{correct fraud alerts once a transaction is flagged}. This conditions
+			on the model having \emph{predicted} positive, which is exactly the
+			definition of \textbf{precision}. Model A has the highest precision
+			(0.91), so it is the correct answer.
+			
+			\textbf{B is incorrect.} Model B has the highest recall (0.70)---meaning
+			it catches the most actual fraud cases (sensitivity / true positive rate).
+			But recall \emph{ignores false positives}. A model can have high recall
+			by flagging almost everything as fraud, which would produce many
+			incorrect alerts. Precision, not recall, measures the correctness of
+			the alerts that were actually raised.
+			
+			\textbf{Key distinction:}
+			\begin{itemize}
+				\item \textbf{Precision} = of predicted positives, how many were
+				correct? (used here --- ``once it flags'')
+				\item \textbf{Recall / Sensitivity} = of actual positives, how many
+				were found? (used when missing a true case is the concern)
+			\end{itemize}
+			
+			In a scenario where \emph{missing a true fraud case is fatal}, you would
+			prioritize \textbf{recall} (sensitivity) and choose Model B. But in a
+			scenario where \emph{every alert must be trustworthy} (e.g., to avoid
+			annoying customers with false alarms), you prioritize \textbf{precision}
+			and choose Model A.
+		\end{block}
+	\end{frame}
+	
+\end{document}

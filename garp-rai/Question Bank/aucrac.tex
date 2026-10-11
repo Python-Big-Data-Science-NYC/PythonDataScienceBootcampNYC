@@ -1,0 +1,394 @@
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\begin{document}
+	
+	\begin{frame}{Q550 --- ROC Curve}
+		\begin{block}{Question}
+			An ROC curve plots:
+			\begin{enumerate}
+				\item Precision against Recall
+				\item True Positive Rate against False Positive Rate
+				\item Accuracy against Threshold
+				\item Recall against Precision
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: B}
+			True Positive Rate against False Positive Rate
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			An \textbf{ROC curve} (Receiver Operating Characteristic) plots the
+			\textbf{True Positive Rate (TPR)} against the \textbf{False Positive Rate (FPR)}
+			across all possible classification thresholds:
+			\[
+			\text{TPR} = \frac{TP}{TP+FN} = \text{Sensitivity / Recall}
+			\]
+			\[
+			\text{FPR} = \frac{FP}{FP+TN} = 1 - \text{Specificity}
+			\]
+			
+			\textbf{How to read it:}
+			\begin{itemize}
+				\item The top-left corner (TPR = 1, FPR = 0) is perfect classification.
+				\item The diagonal line (TPR = FPR) represents random guessing.
+				\item A curve closer to the top-left corner is a better model.
+			\end{itemize}
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A:} Precision vs. Recall is the \emph{Precision-Recall curve},
+				a different plot (often better for imbalanced data).
+				\item \textbf{C:} Accuracy vs. Threshold is a threshold-sweep plot, not ROC.
+				\item \textbf{D:} Recall vs. Precision is not a standard ROC curve.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q551 --- AUC Interpretation}
+		\begin{block}{Question}
+			What does AUC primarily measure?
+			\begin{enumerate}
+				\item Overall prediction accuracy
+				\item Calibration quality
+				\item Ability to distinguish positives from negatives
+				\item Number of correct classifications
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: C}
+			Ability to distinguish positives from negatives
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			\textbf{AUC} (Area Under the ROC Curve) measures \textbf{discrimination}---the
+			model's ability to \emph{separate} positives from negatives.
+			
+			\textbf{Probabilistic interpretation:} AUC is the probability that a randomly
+			chosen positive example receives a higher predicted score than a randomly
+			chosen negative example.
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A:} AUC is not accuracy. A model can have high AUC but low
+				accuracy at a specific threshold (and vice versa).
+				\item \textbf{B:} Calibration measures whether predicted probabilities match
+				observed frequencies---a different concept from discrimination.
+				\item \textbf{D:} AUC is threshold-independent and does not count correct
+				classifications directly.
+			\end{itemize}
+			
+			\textbf{Key point:} AUC is about \emph{ranking}, not about correctness at a
+			single operating point.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q552 --- Random Classifier}
+		\begin{block}{Question}
+			An AUC of 0.50 suggests:
+			\begin{enumerate}
+				\item Perfect classification
+				\item Random guessing
+				\item Severe overfitting
+				\item High precision
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: B}
+			Random guessing
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			An AUC of \textbf{0.50} means the ROC curve lies on the diagonal line
+			(TPR = FPR). The model has \textbf{no discrimination ability}---it performs
+			exactly like random guessing.
+			
+			\textbf{AUC scale:}
+			\begin{itemize}
+				\item 0.50 = random guessing (no discrimination)
+				\item 0.50--0.70 = poor
+				\item 0.70--0.80 = acceptable
+				\item 0.80--0.90 = excellent
+				\item 0.90--1.00 = outstanding
+				\item 1.00 = perfect separation
+			\end{itemize}
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A:} Perfect classification corresponds to AUC = 1.00.
+				\item \textbf{C:} AUC = 0.50 says nothing about overfitting; it means no
+				signal.
+				\item \textbf{D:} AUC does not measure precision.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q553 --- Perfect Classifier}
+		\begin{block}{Question}
+			Which AUC value corresponds to a perfect classifier?
+			\begin{enumerate}
+				\item 0.50
+				\item 0.75
+				\item 0.90
+				\item 1.00
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: D}
+			1.00
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			An AUC of \textbf{1.00} means the ROC curve passes through the top-left corner
+			(TPR = 1, FPR = 0). The model perfectly separates positives from negatives at
+			some threshold.
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A (0.50):} Random guessing.
+				\item \textbf{B (0.75):} Acceptable but not perfect.
+				\item \textbf{C (0.90):} Excellent but not perfect.
+			\end{itemize}
+			
+			\textbf{Note:} In practice, AUC = 1.00 usually indicates a data leak, label
+			leakage, or an overly easy problem---real-world models rarely achieve it.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q554 --- Threshold Independence}
+		\begin{block}{Question}
+			Why is AUC often preferred to accuracy?
+			\begin{enumerate}
+				\item It avoids the need for labels
+				\item It evaluates performance across all thresholds
+				\item It measures clustering quality
+				\item It measures calibration
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: B}
+			It evaluates performance across all thresholds
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			Accuracy depends on a \textbf{single threshold} (usually 0.5). AUC summarizes
+			performance across \textbf{all possible thresholds}, so it is
+			\textbf{threshold-independent}.
+			
+			\textbf{Why this matters:}
+			\begin{itemize}
+				\item You can compare models without committing to a threshold.
+				\item AUC is robust to class imbalance (unlike accuracy).
+				\item It reflects the model's ranking quality overall.
+			\end{itemize}
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A:} AUC still requires ground-truth labels.
+				\item \textbf{C:} Clustering is unsupervised; AUC is for classification.
+				\item \textbf{D:} Calibration is a separate concept (predicted probability
+				vs. observed frequency).
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q555 --- AUC Comparison}
+		\begin{block}{Question}
+			Two models have AUC values of 0.91 and 0.73.
+			
+			What can be concluded?
+			\begin{enumerate}
+				\item The first model has better discrimination ability
+				\item The first model has higher precision
+				\item The first model has higher recall
+				\item The first model has higher accuracy
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: A}
+			The first model has better discrimination ability
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			AUC measures \textbf{discrimination / ranking ability}. Since
+			\(0.91 > 0.73\), the first model separates positives from negatives better.
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{B:} AUC says nothing about precision at a specific threshold.
+				\item \textbf{C:} AUC says nothing about recall at a specific threshold.
+				\item \textbf{D:} AUC is not accuracy; a model with higher AUC can have
+				lower accuracy at a poorly chosen threshold.
+			\end{itemize}
+			
+			\textbf{Key point:} AUC compares \emph{overall ranking quality}, not any single
+			threshold metric like precision, recall, or accuracy.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q556 --- Ranking Interpretation}
+		\begin{block}{Question}
+			An AUC of 0.85 means approximately:
+			\begin{enumerate}
+				\item 85\% of predictions are correct
+				\item 85\% recall
+				\item An 85\% chance a randomly chosen positive receives a higher score than a randomly chosen negative
+				\item An 85\% false positive rate
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: C}
+			An 85\% chance a randomly chosen positive receives a higher score than a randomly chosen negative
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			This is the standard \textbf{probabilistic interpretation} of AUC:
+			\[
+			AUC = P(\text{score of a random positive} > \text{score of a random negative})
+			\]
+			
+			An AUC of 0.85 means that in 85\% of randomly drawn (positive, negative) pairs,
+			the model assigns the positive a higher score.
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A:} 85\% accuracy is unrelated to AUC = 0.85.
+				\item \textbf{B:} AUC is not recall.
+				\item \textbf{D:} AUC is not FPR; FPR is a single-threshold quantity.
+			\end{itemize}
+			
+			\textbf{Memory aid:} AUC = probability of correct ranking of a random pair.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q557 --- Accuracy vs AUC}
+		\begin{block}{Question}
+			A highly imbalanced fraud dataset contains 99\% non-fraud observations.
+			
+			Which metric is often more informative than accuracy?
+			\begin{enumerate}
+				\item AUC
+				\item Mean
+				\item Variance
+				\item R-squared
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: A}
+			AUC
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			With 99\% non-fraud, a trivial model that predicts ``non-fraud'' for every
+			observation achieves \textbf{99\% accuracy} while catching \textbf{zero}
+			fraud cases. This is the classic \textbf{class imbalance trap}.
+			
+			\textbf{AUC is more informative} because:
+			\begin{itemize}
+				\item It measures discrimination across all thresholds.
+				\item It is insensitive to the class distribution.
+				\item A random classifier still gives AUC = 0.50, regardless of imbalance.
+			\end{itemize}
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{B:} Mean is a descriptive statistic, not a classifier metric.
+				\item \textbf{C:} Variance is not a classification metric.
+				\item \textbf{D:} R-squared is for regression, not classification.
+			\end{itemize}
+			
+			\textbf{Other useful metrics for imbalanced data:} precision, recall, F1,
+			and the Precision-Recall curve.
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q558 --- ROC Movement}
+		\begin{block}{Question}
+			Moving along an ROC curve is typically caused by:
+			\begin{enumerate}
+				\item Changing the classification threshold
+				\item Retraining the model
+				\item Increasing sample size
+				\item Changing the target variable
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: A}
+			Changing the classification threshold
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			Each point on an ROC curve corresponds to a \textbf{specific classification
+				threshold}. As you slide the threshold from 0 to 1:
+			\begin{itemize}
+				\item Lower threshold \(\rightarrow\) more positives predicted
+				\(\rightarrow\) higher TPR and higher FPR (move up-right).
+				\item Higher threshold \(\rightarrow\) fewer positives predicted
+				\(\rightarrow\) lower TPR and lower FPR (move down-left).
+			\end{itemize}
+			
+			So \textbf{moving along the curve} = changing the threshold on a
+			\emph{fixed} model.
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{B:} Retraining produces a \emph{different} ROC curve (the
+				whole curve shifts), not movement along the same curve.
+				\item \textbf{C:} Increasing sample size does not move you along the curve.
+				\item \textbf{D:} Changing the target variable changes the problem entirely.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q559 --- GARP Trap}
+		\begin{block}{Question}
+			Which statement regarding AUC is TRUE?
+			\begin{enumerate}
+				\item AUC equals accuracy
+				\item AUC requires a single threshold
+				\item AUC measures discrimination across thresholds
+				\item AUC measures precision
+			\end{enumerate}
+		\end{block}
+		
+		\begin{exampleblock}{Answer: C}
+			AUC measures discrimination across thresholds
+		\end{exampleblock}
+		
+		\begin{block}{Explanation}
+			AUC is \textbf{threshold-independent}: it summarizes the model's
+			\textbf{discrimination ability} across \emph{all} thresholds by integrating
+			the area under the ROC curve.
+			
+			\textbf{Why the others are wrong:}
+			\begin{itemize}
+				\item \textbf{A:} AUC \(\neq\) accuracy. They measure different things;
+				accuracy is threshold-dependent, AUC is not.
+				\item \textbf{B:} AUC requires \emph{no} single threshold---that is its
+				main advantage.
+				\item \textbf{D:} AUC is not precision. Precision is a single-threshold
+				metric.
+			\end{itemize}
+			
+			\textbf{The GARP trap:} The distractors mix up AUC with accuracy, precision,
+			and threshold-dependent metrics. Remember: AUC = discrimination across all
+			thresholds.
+		\end{block}
+	\end{frame}
+	
+\end{document}

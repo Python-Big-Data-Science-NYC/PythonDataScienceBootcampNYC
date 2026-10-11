@@ -1,0 +1,757 @@
+
+\documentclass[aspectratio=169,8pt]{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\Alph*.,leftmargin=*,itemsep=1pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+\setbeamerfont{block body}{size=\tiny}
+\setbeamerfont{block title}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\tiny$\bullet$}
+\setbeamertemplate{itemize subitem}{\tiny$\circ$}
+
+\title[GARP RAI]{GARP Risk \& AI --- Q351--Q450}
+\subtitle{Unofficial Exam Prep}
+\author{Unofficial}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% =================================================================
+	\section{Data Governance (continued)}
+	% =================================================================
+	
+
+
+
+\begin{frame}{Q520 --- Demographic Parity}
+	\begin{block}{Question}
+		Demographic parity requires equality of:
+		\begin{enumerate}
+			\item True positive rates
+			\item False positive rates
+			\item Positive prediction rates
+			\item Precision
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}\end{exampleblock}
+	\begin{block}{Explanation}
+		Demographic parity requires:
+		\[
+		P(\hat{Y}=1|A=a)
+		=
+		P(\hat{Y}=1|A=b)
+		\]
+		Positive prediction rates must be equal across groups.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q521 --- Equal Opportunity}
+	\begin{block}{Question}
+		Equal opportunity requires equality of:
+		\begin{enumerate}
+			\item Precision
+			\item Sensitivity (True Positive Rate)
+			\item Accuracy
+			\item Positive prediction rate
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Equal opportunity requires:
+		\[
+		P(\hat{Y}=1|Y=1,A)
+		\]
+		to be equal across groups.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q522 --- Predictive Rate Parity}
+	\begin{block}{Question}
+		Predictive rate parity requires equality of:
+		\begin{enumerate}
+			\item Precision
+			\item Recall
+			\item False Positive Rate
+			\item Accuracy
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: A}\end{exampleblock}
+	\begin{block}{Explanation}
+		Predictive rate parity requires:
+		\[
+		P(Y=1|\hat{Y}=1,A)
+		\]
+		to be equal across groups.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q523 --- Equalized Odds}
+	\begin{block}{Question}
+		Equalized odds requires equality of:
+		\begin{enumerate}
+			\item Precision and Accuracy
+			\item TPR and FPR
+			\item Precision and Recall
+			\item Positive Prediction Rate and Precision
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Equalized odds requires:
+		\[
+		TPR_A = TPR_B
+		\]
+		and
+		\[
+		FPR_A = FPR_B
+		\]
+		simultaneously.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q524 --- Fairness Conditioning Trap}
+	\begin{block}{Question}
+		Which fairness metric conditions on predicted positives?
+		\begin{enumerate}
+			\item Demographic Parity
+			\item Equal Opportunity
+			\item Predictive Rate Parity
+			\item Equalized Odds
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}\end{exampleblock}
+	\begin{block}{Explanation}
+		Predictive rate parity evaluates:
+		\[
+		P(Y=1|\hat{Y}=1)
+		\]
+		which conditions on predicted positives.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q525 --- Precision}
+	\begin{block}{Question}
+		Precision answers which question?
+		\begin{enumerate}
+			\item Of all actual positives, how many were found?
+			\item Of all predicted positives, how many were correct?
+			\item Of all negatives, how many were correct?
+			\item Of all predictions, how many were correct?
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		\[
+		Precision = \frac{TP}{TP+FP}
+		\]
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q526 --- Recall / Sensitivity}
+	\begin{block}{Question}
+		Recall (Sensitivity) answers which question?
+		\begin{enumerate}
+			\item Of all actual positives, how many were correctly identified?
+			\item Of all predicted positives, how many were correct?
+			\item Of all negatives, how many were correct?
+			\item Of all predictions, how many were correct?
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: A}\end{exampleblock}
+	\begin{block}{Explanation}
+		\[
+		Recall = \frac{TP}{TP+FN}
+		\]
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q527 --- False Positive Rate}
+	\begin{block}{Question}
+		False Positive Rate (FPR) measures:
+		\begin{enumerate}
+			\item The fraction of actual positives missed
+			\item The fraction of actual negatives incorrectly predicted positive
+			\item The fraction of predicted positives that are wrong
+			\item The fraction of predictions that are correct
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		\[
+		FPR=\frac{FP}{FP+TN}
+		\]
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q528 --- ROC Curve}
+	\begin{block}{Question}
+		An ROC curve plots:
+		\begin{enumerate}
+			\item Precision vs Recall
+			\item Accuracy vs Threshold
+			\item TPR vs FPR
+			\item FPR vs Precision
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}\end{exampleblock}
+	\begin{block}{Explanation}
+		The ROC curve plots:
+		\[
+		TPR
+		\]
+		against
+		\[
+		FPR
+		\]
+		across thresholds.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q529 --- AUC}
+	\begin{block}{Question}
+		AUC is BEST interpreted as:
+		\begin{enumerate}
+			\item Average precision
+			\item Average accuracy
+			\item Overall ability to distinguish positives from negatives
+			\item Probability that a prediction is correct
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Q530 --- Perfect AUC}
+	\begin{block}{Question}
+		What AUC corresponds to a perfect classifier?
+		\begin{enumerate}
+			\item 0
+			\item 0.5
+			\item 0.75
+			\item 1.0
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: D}\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Q531 --- Random Guessing}
+	\begin{block}{Question}
+		An AUC of 0.5 suggests:
+		\begin{enumerate}
+			\item Perfect classification
+			\item Random guessing
+			\item Severe overfitting
+			\item High precision
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Q532 --- Threshold Effect}
+	\begin{block}{Question}
+		Lowering a decision threshold will generally:
+		\begin{enumerate}
+			\item Increase Recall and Increase FPR
+			\item Increase Recall and Decrease FPR
+			\item Decrease Recall and Increase FPR
+			\item Decrease Recall and Decrease FPR
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: A}\end{exampleblock}
+	\begin{block}{Explanation}
+		A lower threshold classifies more observations as positive, increasing both true positives and false positives.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q533 --- Threshold Tradeoff}
+	\begin{block}{Question}
+		A fraud team lowers its model threshold. What is the MOST likely outcome?
+		\begin{enumerate}
+			\item More fraud caught and more false alarms
+			\item Less fraud caught and fewer false alarms
+			\item Higher precision and lower recall
+			\item Lower recall and higher specificity
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: A}\end{exampleblock}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Q510 --- Predictive Rate Parity}
+	\begin{block}{Question}
+		Predictive rate parity requires equality of:
+		\begin{enumerate}
+			\item Positive prediction rates
+			\item Precision across groups
+			\item Sensitivity across groups
+			\item False positive rates across groups
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: B}
+		Precision across groups
+	\end{exampleblock}
+	\begin{block}{Explanation}
+		Predictive rate parity (also called \textbf{conditional use accuracy equality} or
+		\textbf{predictive parity}) requires that the \textbf{positive predictive value (precision)}
+		be equal across groups:
+		\[
+		P(Y = 1 \mid \hat{Y} = 1, A = 0) = P(Y = 1 \mid \hat{Y} = 1, A = 1)
+		\]
+		In words: among all individuals who are \emph{predicted} to be positive,
+		the proportion who are \emph{actually} positive must be the same for every group.
+		This conditions on the \textbf{prediction} (the predicted positive class), not on the
+		true label. It does \emph{not} require equal positive prediction rates
+		(that is demographic parity), nor equal sensitivity (that is equal opportunity),
+		nor equal false positive rates (that is predictive equality).
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q511 --- Equal Opportunity}
+	\begin{block}{Question}
+		Equal opportunity requires equality of:
+		\begin{enumerate}
+			\item Precision
+			\item Overall accuracy
+			\item Sensitivity (true positive rate)
+			\item Positive prediction rate
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}
+		Sensitivity (true positive rate)
+	\end{exampleblock}
+	\begin{block}{Explanation}
+		Equal opportunity requires that the \textbf{true positive rate (sensitivity / recall)}
+		be equal across groups:
+		\[
+		P(\hat{Y} = 1 \mid Y = 1, A = 0) = P(\hat{Y} = 1 \mid Y = 1, A = 1)
+		\]
+		In words: among all individuals who are \emph{truly} positive,
+		the proportion who are \emph{correctly} identified as positive must be the same
+		for every group. This conditions on the \textbf{true label} (the actual positive class).
+		It does \emph{not} require equal precision (that is predictive rate parity),
+		nor equal overall accuracy, nor equal positive prediction rates
+		(that is demographic parity).
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q512 --- Direction of Conditioning}
+	\begin{block}{Question}
+		Which fairness criterion conditions on the predicted positive class?
+		\begin{enumerate}
+			\item Equal Opportunity
+			\item Predictive Rate Parity
+			\item Equalized Odds
+			\item Demographic Parity
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: B}
+		Predictive Rate Parity
+	\end{exampleblock}
+	\begin{block}{Explanation}
+		Predictive rate parity conditions on the \textbf{predicted positive class}
+		(\(\hat{Y} = 1\)). It asks: given that the model predicted positive,
+		what is the probability that the individual is truly positive?
+		\[
+		P(Y = 1 \mid \hat{Y} = 1, A = 0) = P(Y = 1 \mid \hat{Y} = 1, A = 1)
+		\]
+		This is exactly the definition of \textbf{precision} (positive predictive value).
+		By contrast:
+		\begin{itemize}
+			\item \textbf{Equal Opportunity} conditions on the \emph{true} positive class
+			(\(Y = 1\)) and equalizes sensitivity (TPR).
+			\item \textbf{Equalized Odds} conditions on \emph{both} the true positive and
+			true negative classes, equalizing TPR and FPR simultaneously.
+			\item \textbf{Demographic Parity} does not condition on any outcome label;
+			it simply equalizes the positive prediction rate \(P(\hat{Y} = 1 \mid A)\).
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q513 --- Reverse Conditioning Trap}
+	\begin{block}{Question}
+		Which fairness criterion conditions on those who are truly positive?
+		\begin{enumerate}
+			\item Equal Opportunity
+			\item Predictive Rate Parity
+			\item Demographic Parity
+			\item Predictive Equality
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: A}
+		Equal Opportunity
+	\end{exampleblock}
+	\begin{block}{Explanation}
+		Equal opportunity conditions on the \textbf{true positive class} (\(Y = 1\)).
+		It requires equal sensitivity (true positive rate) across groups:
+		\[
+		P(\hat{Y} = 1 \mid Y = 1, A = 0) = P(\hat{Y} = 1 \mid Y = 1, A = 1)
+		\]
+		In words: among those who are \emph{truly} positive, the probability of being
+		correctly predicted positive must be the same for all groups.
+		
+		\textbf{Why the others are wrong:}
+		\begin{itemize}
+			\item \textbf{Predictive Rate Parity} conditions on the \emph{predicted}
+			positive class (\(\hat{Y} = 1\)), not the true positive class.
+			\item \textbf{Demographic Parity} does not condition on any outcome;
+			it equalizes the positive prediction rate.
+			\item \textbf{Predictive Equality} conditions on the \emph{true negative}
+			class (\(Y = 0\)) and equalizes the false positive rate.
+		\end{itemize}
+		This question is a ``reverse conditioning trap'' because it swaps the
+		conditioning direction relative to Q512.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q514 --- Demographic Parity}
+	\begin{block}{Question}
+		Demographic parity equalizes:
+		\begin{enumerate}
+			\item Precision
+			\item Sensitivity
+			\item Positive prediction rates
+			\item Accuracy
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}
+		Positive prediction rates
+	\end{exampleblock}
+	\begin{block}{Explanation}
+		Demographic parity (also called \textbf{statistical parity} or
+		\textbf{independence}) requires that the \textbf{positive prediction rate}
+		be equal across groups:
+		\[
+		P(\hat{Y} = 1 \mid A = 0) = P(\hat{Y} = 1 \mid A = 1)
+		\]
+		In words: the proportion of individuals predicted positive must be the same
+		for every group, regardless of the true labels.
+		
+		\textbf{Why the others are wrong:}
+		\begin{itemize}
+			\item \textbf{Precision} is equalized by predictive rate parity.
+			\item \textbf{Sensitivity} (TPR) is equalized by equal opportunity.
+			\item \textbf{Accuracy} is not the target of any of these standard
+			group-fairness criteria (though it may be equal in some settings).
+		\end{itemize}
+		Demographic parity is the only criterion here that can be evaluated
+		\emph{without} observing ground-truth outcomes, because it depends only on
+		predictions and group membership.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q515 --- Fairness Mapping}
+	\begin{block}{Question}
+		Which pairing is correct?
+		\begin{enumerate}
+			\item Demographic Parity -- Equal Precision
+			\item Equal Opportunity -- Equal Sensitivity
+			\item Predictive Rate Parity -- Equal Recall
+			\item Predictive Equality -- Equal Precision
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: B}
+		Equal Opportunity -- Equal Sensitivity
+	\end{exampleblock}
+	\begin{block}{Explanation}
+		The correct pairing is \textbf{Equal Opportunity -- Equal Sensitivity}.
+		Equal opportunity requires equal true positive rates (sensitivity/recall)
+		across groups.
+		
+		\textbf{Why the others are wrong:}
+		\begin{itemize}
+			\item \textbf{A:} Demographic parity equalizes \emph{positive prediction rates},
+			not precision.
+			\item \textbf{C:} Predictive rate parity equalizes \emph{precision}
+			(positive predictive value), not recall (sensitivity).
+			\item \textbf{D:} Predictive equality equalizes \emph{false positive rates},
+			not precision.
+		\end{itemize}
+		A useful memory aid:
+		\begin{center}
+			\begin{tabular}{ll}
+				\textbf{Criterion} & \textbf{Equalized Metric} \\
+				\hline
+				Demographic Parity & Positive Prediction Rate \\
+				Equal Opportunity & True Positive Rate (Sensitivity/Recall) \\
+				Predictive Rate Parity & Precision (PPV) \\
+				Predictive Equality & False Positive Rate \\
+				Equalized Odds & TPR \emph{and} FPR \\
+			\end{tabular}
+		\end{center}
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q516 --- Predictive Equality}
+	\begin{block}{Question}
+		Predictive equality requires equality of:
+		\begin{enumerate}
+			\item False positive rates
+			\item Precision
+			\item Accuracy
+			\item Positive prediction rates
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: A}
+		False positive rates
+	\end{exampleblock}
+	\begin{block}{Explanation}
+		Predictive equality requires that the \textbf{false positive rate (FPR)}
+		be equal across groups:
+		\[
+		P(\hat{Y} = 1 \mid Y = 0, A = 0) = P(\hat{Y} = 1 \mid Y = 0, A = 1)
+		\]
+		In words: among all individuals who are \emph{truly negative},
+		the proportion who are \emph{incorrectly} predicted positive must be the
+		same for every group. This conditions on the \textbf{true negative class}
+		(\(Y = 0\)).
+		
+		\textbf{Why the others are wrong:}
+		\begin{itemize}
+			\item \textbf{Precision} is equalized by predictive rate parity.
+			\item \textbf{Accuracy} is not a group-fairness criterion in this family.
+			\item \textbf{Positive prediction rates} are equalized by demographic parity.
+		\end{itemize}
+		Predictive equality is sometimes called \textbf{equal false positive rate}
+		and is one half of equalized odds (the other half being equal opportunity).
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q517 --- Equalized Odds}
+	\begin{block}{Question}
+		Equalized odds requires equality of:
+		\begin{enumerate}
+			\item Precision and accuracy
+			\item Positive prediction rates and precision
+			\item True positive rates and false positive rates
+			\item Accuracy and sensitivity
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}
+		True positive rates and false positive rates
+	\end{exampleblock}
+	\begin{block}{Explanation}
+		Equalized odds requires that \textbf{both} the true positive rate (TPR)
+		\textbf{and} the false positive rate (FPR) be equal across groups:
+		\[
+		P(\hat{Y} = 1 \mid Y = 1, A = 0) = P(\hat{Y} = 1 \mid Y = 1, A = 1)
+		\]
+		\[
+		P(\hat{Y} = 1 \mid Y = 0, A = 0) = P(\hat{Y} = 1 \mid Y = 0, A = 1)
+		\]
+		In words: the model must have equal sensitivity \emph{and} equal
+		false positive rate for every group. Equivalently, the prediction
+		\(\hat{Y}\) must be independent of the protected attribute \(A\)
+		\emph{conditional on the true label} \(Y\).
+		
+		\textbf{Why the others are wrong:}
+		\begin{itemize}
+			\item \textbf{A:} Precision and accuracy are not the targets of equalized odds.
+			\item \textbf{B:} Positive prediction rates and precision are targets of
+			demographic parity and predictive rate parity, respectively.
+			\item \textbf{D:} Accuracy and sensitivity are not jointly equalized by
+			equalized odds (only TPR and FPR are).
+		\end{itemize}
+		Equalized odds is a \textbf{combination} of equal opportunity (equal TPR)
+		and predictive equality (equal FPR).
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q518 --- Label Requirement}
+	\begin{block}{Question}
+		Which fairness criterion can be evaluated without observing ground-truth outcomes?
+		\begin{enumerate}
+			\item Equal Opportunity
+			\item Predictive Rate Parity
+			\item Equalized Odds
+			\item Demographic Parity
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: D}
+		Demographic Parity
+	\end{exampleblock}
+	\begin{block}{Explanation}
+		Demographic parity can be evaluated \textbf{without observing ground-truth
+			outcomes} because it depends only on the \textbf{predicted labels} and
+		\textbf{group membership}:
+		\[
+		P(\hat{Y} = 1 \mid A = 0) = P(\hat{Y} = 1 \mid A = 1)
+		\]
+		No true labels \(Y\) are needed.
+		
+		\textbf{Why the others require ground truth:}
+		\begin{itemize}
+			\item \textbf{Equal Opportunity} requires \(Y = 1\) to compute sensitivity.
+			\item \textbf{Predictive Rate Parity} requires \(Y = 1\) to compute precision.
+			\item \textbf{Equalized Odds} requires both \(Y = 1\) and \(Y = 0\) to
+			compute TPR and FPR.
+		\end{itemize}
+		This is why demographic parity is often attractive in settings where
+		labels are unavailable, delayed, or expensive to obtain. However, it can
+		be satisfied even when the model is inaccurate, which is a known limitation.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q519 --- Memorization Trap}
+	\begin{block}{Question}
+		A candidate says:
+		``Predictive rate parity equals the share of actual positives correctly identified.''
+		
+		Which metric are they accidentally describing?
+		\begin{enumerate}
+			\item Predictive Rate Parity
+			\item Demographic Parity
+			\item Equal Opportunity
+			\item Calibration
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}
+		Equal Opportunity
+	\end{exampleblock}
+	\begin{block}{Explanation}
+		The phrase ``the share of actual positives correctly identified'' is the
+		definition of \textbf{sensitivity} (true positive rate / recall):
+		\[
+		\text{Sensitivity} = P(\hat{Y} = 1 \mid Y = 1)
+		\]
+		Equal opportunity requires \emph{equal} sensitivity across groups.
+		So the candidate is accidentally describing \textbf{Equal Opportunity},
+		not predictive rate parity.
+		
+		\textbf{What predictive rate parity actually is:}
+		Predictive rate parity requires equal \textbf{precision} (positive predictive
+		value) across groups:
+		\[
+		P(Y = 1 \mid \hat{Y} = 1, A = 0) = P(Y = 1 \mid \hat{Y} = 1, A = 1)
+		\]
+		Precision is ``the share of \emph{predicted} positives that are actually positive,''
+		which is the reverse conditioning of sensitivity.
+		
+		\textbf{Why the others are wrong:}
+		\begin{itemize}
+			\item \textbf{A:} Predictive rate parity is precision, not sensitivity.
+			\item \textbf{B:} Demographic parity is the positive prediction rate,
+			\(P(\hat{Y} = 1 \mid A)\).
+			\item \textbf{D:} Calibration refers to the agreement between predicted
+			probabilities and observed frequencies, not this quantity.
+		\end{itemize}
+		\textbf{Key distinction:}
+		\begin{center}
+			\begin{tabular}{ll}
+				\textbf{Metric} & \textbf{Conditioning} \\
+				\hline
+				Sensitivity (Equal Opportunity) & \(P(\hat{Y}=1 \mid Y=1)\) \\
+				Precision (Predictive Rate Parity) & \(P(Y=1 \mid \hat{Y}=1)\) \\
+			\end{tabular}
+		\end{center}
+		The candidate has confused the direction of conditioning.
+	\end{block}
+\end{frame}
+\begin{frame}
+	\href{https://www.youtube.com/watch?v=D035nSq7LaU}{Watch the video}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Q500 --- Ground Truth Availability}
+	\begin{block}{Question}
+		A bank wants to assess fairness immediately after making lending decisions. Loan defaults typically occur years later. Which fairness criterion is MOST practical at decision time?
+		\begin{enumerate}
+			\item Predictive Parity
+			\item Equal Opportunity
+			\item Demographic Parity
+			\item Equalized Odds
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}\end{exampleblock}
+	\begin{block}{Explanation}
+		Demographic parity does not require knowledge of future outcomes. The other metrics depend on ground-truth labels that become available only later.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q501 --- Base Rates}
+	\begin{block}{Question}
+		Why can demographic parity be problematic in medical diagnosis?
+		\begin{enumerate}
+			\item It requires too much training data.
+			\item It ignores legitimate differences in disease prevalence across groups.
+			\item It requires causal models.
+			\item It maximizes false negatives.
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		If disease prevalence differs across groups, forcing equal positive prediction rates may reduce predictive usefulness and medical effectiveness.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q502 --- Predictive Quality}
+	\begin{block}{Question}
+		Which statement about demographic parity is TRUE?
+		\begin{enumerate}
+			\item It guarantees equal error rates.
+			\item It guarantees equal predictive value.
+			\item It says nothing about whether predictions are correct.
+			\item It guarantees equal opportunity.
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}\end{exampleblock}
+	\begin{block}{Explanation}
+		Demographic parity focuses only on equal prediction rates across groups and does not evaluate prediction quality.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q503 --- Impossibility Theorem}
+	\begin{block}{Question}
+		When base rates differ across groups, what does the fairness impossibility theorem imply?
+		\begin{enumerate}
+			\item Demographic parity, predictive parity, and equal opportunity can generally be satisfied simultaneously.
+			\item One fairness definition becomes objectively correct.
+			\item Certain fairness criteria cannot all be satisfied at the same time.
+			\item Fairness measurement becomes impossible.
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: C}\end{exampleblock}
+	\begin{block}{Explanation}
+		The theorem highlights that competing fairness definitions may conflict when underlying group base rates differ.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Q504 --- Fraud Detection}
+	\begin{block}{Question}
+		A fraud model is deployed in an environment where confirmed fraud labels may take months to establish and many fraud cases are never confirmed. Why might demographic parity still be considered?
+		\begin{enumerate}
+			\item It guarantees fairness.
+			\item It does not require reliable ground-truth labels.
+			\item It guarantees equal precision.
+			\item It eliminates bias.
+		\end{enumerate}
+	\end{block}
+	\begin{exampleblock}{Answer: B}\end{exampleblock}
+	\begin{block}{Explanation}
+		Demographic parity can be evaluated without waiting for true fraud outcomes, making it attractive in settings where labels are delayed, incomplete, or extremely rare.
+	\end{block}
+\end{frame}
+
+
+
+
+
+
+
+
+\end{document}
