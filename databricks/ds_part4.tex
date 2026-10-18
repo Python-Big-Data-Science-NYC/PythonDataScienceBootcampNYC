@@ -1,0 +1,1542 @@
+\documentclass[aspectratio=169,9pt]{beamer}
+\usetheme{Madrid}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlist[enumerate]{itemsep=1pt,topsep=1pt,leftmargin=*}
+
+\title{Databricks ML Associate\\100 More Databricks-Specific Q\&A (Q101--Q200)}
+\author{Exam Blueprint Aligned}
+\date{}
+
+\begin{document}
+	
+	\frame{\titlepage}
+	
+	% ============================================================
+	% DOMAIN 1: DATABRICKS MACHINE LEARNING (additional)
+	% ============================================================
+	
+	\begin{frame}{Q101 --- Unity Catalog Governance for Models}
+		A team needs fine-grained access control on registered models across workspaces. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Workspace MLflow registry.
+			\item Unity Catalog model registry with catalog/schema/model grants.
+			\item A shared DBFS folder.
+			\item Notebook permissions only.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A101 --- Answer: B}
+		\textbf{Correct: B.}
+		\begin{itemize}
+			\item UC grants apply at catalog, schema, and model level.
+			\item Workspace registry cannot enforce cross-workspace governance.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q102 --- MLflow Artifact Path}
+		A run logs a large model artifact. Where is it stored by default in Databricks?
+		\begin{enumerate}[label=\Alph*.]
+			\item Driver local disk.
+			\item The experiment's artifact location (DBFS or cloud storage).
+			\item Notebook revision history.
+			\item The MLflow registry only.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A102 --- Answer: B}
+		\textbf{Correct: B.}
+		\begin{itemize}
+			\item Each experiment defines an artifact location.
+			\item Registry stores metadata/lineage, not the raw artifact file.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q103 --- AutoML Generated Notebook}
+		What can a data scientist do with the best-trial notebook AutoML generates?
+		\begin{enumerate}[label=\Alph*.]
+			\item Only view it read-only.
+			\item Open, edit, and re-run it to customize the pipeline.
+			\item Delete it permanently.
+			\item Convert it to SQL only.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A103 --- Answer: B}
+		\textbf{Correct: B.}
+		\begin{itemize}
+			\item AutoML notebooks are editable starting points for production code.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q104 --- AutoML Evaluation Metric}
+		How can a data scientist specify the metric AutoML optimizes?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{primary\_metric} argument to \texttt{automl.regress()} / \texttt{automl.classify()}.
+			\item By deleting runs until the metric is right.
+			\item Metrics cannot be specified.
+			\item Only via UI.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A104 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{primary\_metric} controls the optimization target.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q105 --- MLflow Search Filter}
+		Which expression filters runs by a logged metric in \texttt{search\_runs}?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{metrics.accuracy > 0.9}.
+			\item \texttt{params.accuracy > 0.9}.
+			\item \texttt{tags.accuracy > 0.9}.
+			\item \texttt{artifacts.accuracy > 0.9}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A105 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Metrics use the \texttt{metrics.} prefix; params use \texttt{params.}, tags use \texttt{tags.}.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q106 --- Feature Store Lookup Order}
+		For point-in-time lookups, which two keys are required on a feature table?
+		\begin{enumerate}[label=\Alph*.]
+			\item Primary keys and timestamp keys.
+			\item Only primary keys.
+			\item Only timestamp keys.
+			\item Only a row ID.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A106 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Primary keys identify entities; timestamp keys define feature value timing.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q107 --- MLflow Model Loading by Alias}
+		How is a model loaded by alias from the registry?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.pyfunc.load\_model("models:/my\_model@champion")}.
+			\item \texttt{mlflow.log\_model()}.
+			\item \texttt{mlflow.start\_run()}.
+			\item \texttt{mlflow.get\_run()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A107 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item The \texttt{models:/} URI with \texttt{@alias} resolves to the version the alias points to.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q108 --- Model Version URI}
+		Which URI references a specific model version in MLflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{models:/my\_model/3}.
+			\item \texttt{runs:/<run\_id>/model}.
+			\item \texttt{models:/my\_model@champion}.
+			\item \texttt{artifacts:/model}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A108 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{models:/name/version} is a specific version; \texttt{@alias} is a moving pointer.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q109 --- Feature Engineering Write}
+		Which method writes a DataFrame into a feature table?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{fe.write\_table()}.
+			\item \texttt{df.write.saveAsTable()}.
+			\item \texttt{mlflow.log\_artifact()}.
+			\item \texttt{spark.sql("INSERT")}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A109 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{write\_table()} registers data as a feature table with metadata.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q110 --- Serving Endpoint Update}
+		How is a serving endpoint updated to a new model version?
+		\begin{enumerate}[label=\Alph*.]
+			\item Delete the endpoint.
+			\item Update the served entity config to point to a new version or alias.
+			\item Restart the cluster.
+			\item Create a new workspace.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A110 --- Answer: B}
+		\textbf{Correct: B.}
+		\begin{itemize}
+			\item Endpoint config references version/alias; update config and the endpoint rolls to new model.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q111 --- Model Serving Provisioned Throughput}
+		A high-traffic endpoint needs guaranteed capacity. What should be configured?
+		\begin{enumerate}[label=\Alph*.]
+			\item Scale to Zero only.
+			\item Provisioned throughput / dedicated capacity.
+			\item A larger driver only.
+			\item Fewer workers.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A111 --- Answer: B}
+		\textbf{Correct: B.}
+		\begin{itemize}
+			\item Provisioned throughput reserves capacity; scale-to-zero is for occasional traffic.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q112 --- MLflow Log Model with Signature}
+		How is a model logged with an input signature?
+		\begin{enumerate}[label=\Alph*.]
+			\item Pass \texttt{signature} to \texttt{mlflow.log\_model()} or use \texttt{infer\_signature()}.
+			\item Signatures are automatic only.
+			\item Use \texttt{log\_metric()}.
+			\item Use \texttt{set\_tag()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A112 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{mlflow.models.infer\_signature()} + \texttt{log\_model(signature=...)} records schema.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q113 --- Experiment Deletion}
+		Which API call permanently deletes an MLflow experiment?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{client.delete\_experiment()}.
+			\item \texttt{mlflow.end\_run()}.
+			\item \texttt{client.delete\_run()}.
+			\item \texttt{mlflow.set\_experiment()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A113 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{delete\_experiment()} marks the experiment deleted; \texttt{delete\_run()} is for runs.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q114 --- MLflow Client Run Retrieval}
+		Which call retrieves full run details using a run ID?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{client.get\_run(run\_id)}.
+			\item \texttt{client.search\_runs()}.
+			\item \texttt{mlflow.start\_run()}.
+			\item \texttt{mlflow.log\_artifact()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A114 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{get\_run()} returns a \texttt{Run} object with params, metrics, tags, artifacts.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q115 --- Model Registry Version Lineage}
+		What links a UC model version to its training data?
+		\begin{enumerate}[label=\Alph*.]
+			\item The model signature.
+			\item UC lineage from the source run and experiment.
+			\item The cluster event log.
+			\item The endpoint config.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A115 --- Answer: B}
+		\textbf{Correct: B.}
+		\begin{itemize}
+			\item UC records lineage from model version → run → inputs → tables used.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q116 --- Feature Store Time Series}
+		Which key is used alongside primary keys in a time-series feature table?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{timestamp\_keys}.
+			\item \texttt{row\_id}.
+			\item \texttt{partition\_col}.
+			\item \texttt{label\_col}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A116 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{create\_table(timestamp\_keys=...)} enables PIT joins.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q117 --- Serving Endpoint Logging Table}
+		Where are request/response logs from an endpoint written when inference tables are enabled?
+		\begin{enumerate}[label=\Alph*.]
+			\item A Delta table.
+			\item A JSON file only.
+			\item The driver's stdout.
+			\item Notebook output.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A117 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Inference tables are Delta tables queryable for monitoring and retraining.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q118 --- Model Serving Auth}
+		What mechanism authenticates calls to a Databricks serving endpoint?
+		\begin{enumerate}[label=\Alph*.]
+			\item A personal access token (PAT) or OAuth token.
+			\item No auth required.
+			\item The model version only.
+			\item A cluster token.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A118 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Endpoint requests use Databricks auth (PAT or OAuth M2M).
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q119 --- MLflow Experiment Renaming}
+		Which API renames an experiment?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{client.rename\_experiment()}.
+			\item \texttt{mlflow.start\_run()}.
+			\item \texttt{client.delete\_experiment()}.
+			\item \texttt{mlflow.log\_model()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A119 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{rename\_experiment()} changes the experiment's name and path.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q120 --- Feature Store Serving Endpoint}
+		An online feature table is used at inference. Which method retrieves features for a batch of entity IDs?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{fe.get\_online\_features()}.
+			\item \texttt{spark.read.table()} only.
+			\item \texttt{mlflow.load\_model()}.
+			\item \texttt{dbutils.fs.head()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A120 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{get\_online\_features()} performs low-latency lookup from the online store.
+		\end{itemize}
+	\end{frame}
+	
+	% ============================================================
+	% DOMAIN 2: MODEL DEVELOPMENT (additional)
+	% ============================================================
+	
+	\begin{frame}{Q121 --- Spark ML Evaluator for Regression}
+		Which evaluator with \texttt{CrossValidator} for regression?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{RegressionEvaluator}.
+			\item \texttt{BinaryClassificationEvaluator}.
+			\item \texttt{MulticlassClassificationEvaluator}.
+			\item \texttt{ClusteringEvaluator}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A121 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{RegressionEvaluator} supports RMSE, MAE, R².
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q122 --- Spark ML Logistic Regression}
+		Which class trains binary logistic regression?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{LogisticRegression}.
+			\item \texttt{LinearRegression}.
+			\item \texttt{DecisionTreeClassifier}.
+			\item \texttt{RandomForestRegressor}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A122 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q123 --- Spark ML Linear Regression}
+		Which class trains linear regression?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{LinearRegression}.
+			\item \texttt{LogisticRegression}.
+			\item \texttt{DecisionTreeClassifier}.
+			\item \texttt{NaiveBayes}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A123 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q124 --- Feature Importance Access}
+		How is feature importance accessed for a tree-based model?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{model.featureImportances}.
+			\item \texttt{model.coefficients}.
+			\item \texttt{model.intercept}.
+			\item \texttt{model.summary}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A124 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Tree models expose \texttt{featureImportances}; linear models use \texttt{coefficients}.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q125 --- Linear Coefficients Access}
+		How are coefficients accessed for a linear regression model?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{model.coefficients}.
+			\item \texttt{model.featureImportances}.
+			\item \texttt{model.intercept} only.
+			\item \texttt{model.summary} only.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A125 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q126 --- Decision Tree Classifier}
+		Which class trains a decision tree classifier?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{DecisionTreeClassifier}.
+			\item \texttt{LinearRegression}.
+			\item \texttt{LogisticRegression}.
+			\item \texttt{KMeans}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A126 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q127 --- Random Forest Classifier}
+		Which class trains a random forest classifier?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{RandomForestClassifier}.
+			\item \texttt{DecisionTreeRegressor}.
+			\item \texttt{LinearSVC}.
+			\item \texttt{NaiveBayes}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A127 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q128 --- Gradient-Boosted Trees}
+		Which class trains a gradient-boosted tree classifier?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{GBTClassifier}.
+			\item \texttt{RandomForestClassifier}.
+			\item \texttt{DecisionTreeClassifier}.
+			\item \texttt{LogisticRegression}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A128 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q129 --- KMeans Clustering}
+		Which class performs k-means clustering?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{KMeans}.
+			\item \texttt{LogisticRegression}.
+			\item \texttt{LinearRegression}.
+			\item \texttt{RandomForestClassifier}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A129 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q130 --- VectorAssembler Input Types}
+		Which column types can \texttt{VectorAssembler} accept?
+		\begin{enumerate}[label=\Alph*.]
+			\item Numeric, boolean, and vector columns.
+			\item Only string columns.
+			\item Only categorical columns.
+			\item Only binary columns.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A130 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q131 --- MinMaxScaler Default Range}
+		Default output range of \texttt{MinMaxScaler}?
+		\begin{enumerate}[label=\Alph*.]
+			\item $[0,1]$.
+			\item $[-1,1]$.
+			\item $[0,100]$.
+			\item Mean 0, variance 1.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A131 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{MinMaxScaler(min=0.0, max=1.0)} is the default.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q132 --- StandardScaler Parameters}
+		Which parameters does \texttt{StandardScaler} compute during fit?
+		\begin{enumerate}[label=\Alph*.]
+			\item Mean and standard deviation.
+			\item Minimum and maximum.
+			\item Median and IQR.
+			\item Mode and variance.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A132 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q133 --- Imputer Supported Strategies}
+		Which strategies does Spark ML \texttt{Imputer} support?
+		\begin{enumerate}[label=\Alph*.]
+			\item Mean, median, mode.
+			\item Only mean.
+			\item Only zero.
+			\item Only median.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A133 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q134 --- FeatureHasher Purpose}
+		What does \texttt{FeatureHasher} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Hashes categorical features into a fixed-length vector without a vocabulary.
+			\item Imputes missing values.
+			\item Scales features.
+			\item Splits data.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A134 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Constant memory; possible hash collisions.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q135 --- SQLTransformer Purpose}
+		What does \texttt{SQLTransformer} do in a pipeline?
+		\begin{enumerate}[label=\Alph*.]
+			\item Applies a SQL expression to transform the DataFrame.
+			\item Trains a model.
+			\item Evaluates a model.
+			\item Deploys a model.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A135 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q136 --- VectorSlicer Purpose}
+		What does \texttt{VectorSlicer} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Selects a subset of features from a vector column.
+			\item Combines columns into a vector.
+			\item Scales features.
+			\item Imputes missing values.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A136 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q137 --- PolynomialExpansion Purpose}
+		What does \texttt{PolynomialExpansion} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Generates polynomial and interaction features.
+			\item Encodes categorical features.
+			\item Scales features.
+			\item Splits data.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A137 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q138 --- Binarizer Purpose}
+		What does \texttt{Binarizer} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Thresholds a continuous feature into a binary feature.
+			\item Encodes categorical features.
+			\item Scales features.
+			\item Imputes missing values.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A138 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q139 --- CV numFolds Meaning}
+		What does \texttt{numFolds} control in \texttt{CrossValidator}?
+		\begin{enumerate}[label=\Alph*.]
+			\item Number of k folds.
+			\item Number of models to deploy.
+			\item Number of features to select.
+			\item Number of clusters.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A139 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q140 --- trainRatio Meaning}
+		What does \texttt{trainRatio} control in \texttt{TrainValidationSplit}?
+		\begin{enumerate}[label=\Alph*.]
+			\item Fraction of data used for training.
+			\item Number of folds.
+			\item Number of trials.
+			\item Learning rate.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A140 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q141 --- Binary Metric}
+		Which metric belongs to \texttt{BinaryClassificationEvaluator}?
+		\begin{enumerate}[label=\Alph*.]
+			\item Area under ROC.
+			\item RMSE.
+			\item MAE.
+			\item R².
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A141 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q142 --- Regression Metric}
+		Which metric belongs to \texttt{RegressionEvaluator}?
+		\begin{enumerate}[label=\Alph*.]
+			\item RMSE.
+			\item Precision.
+			\item Recall.
+			\item F1.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A142 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q143 --- Multiclass Metric}
+		Which metric belongs to \texttt{MulticlassClassificationEvaluator}?
+		\begin{enumerate}[label=\Alph*.]
+			\item F1.
+			\item RMSE.
+			\item MAE.
+			\item R².
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A143 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q144 --- Pipeline Fit Output}
+		Fitting a \texttt{Pipeline} produces what?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{PipelineModel}.
+			\item A raw DataFrame.
+			\item A cluster.
+			\item An MLflow experiment.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A144 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q145 --- Spark ML Save Format}
+		What format does Spark ML use to save a model?
+		\begin{enumerate}[label=\Alph*.]
+			\item A directory containing metadata and Parquet files.
+			\item A single CSV file.
+			\item A pickle file only.
+			\item A JSON file only.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A145 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q146 --- MLflow Model Flavor Definition}
+		What is an MLflow model flavor?
+		\begin{enumerate}[label=\Alph*.]
+			\item A convention for saving/loading models from different libraries.
+			\item A cluster type.
+			\item A visualization tool.
+			\item A data source.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A146 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q147 --- Model Signature Purpose}
+		What is the purpose of a model signature?
+		\begin{enumerate}[label=\Alph*.]
+			\item Defines expected input/output schema.
+			\item Encrypts the model.
+			\item Compresses the model.
+			\item Deletes the model.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A147 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q148 --- StringIndexer handleInvalid Default}
+		Default behavior for unseen label at transform time?
+		\begin{enumerate}[label=\Alph*.]
+			\item Throws an error unless \texttt{handleInvalid} is set.
+			\item Silently ignores the row.
+			\item Maps to index 0.
+			\item Maps to the most frequent label.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A148 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q149 --- OneHotEncoder Input Type}
+		What input does \texttt{OneHotEncoder} expect?
+		\begin{enumerate}[label=\Alph*.]
+			\item A numeric index column (typically from \texttt{StringIndexer}).
+			\item A raw string column.
+			\item A continuous feature.
+			\item A vector column.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A149 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q150 --- Hyperopt Search Space Loguniform}
+		Which expression defines a log-uniform distribution?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{hp.loguniform('x', low, high)}.
+			\item \texttt{hp.uniform('x', low, high)}.
+			\item \texttt{hp.choice('x', [a,b])}.
+			\item \texttt{hp.quniform('x', low, high, q)}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A150 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Useful for learning rates and regularization strengths.
+		\end{itemize}
+	\end{frame}
+	
+	% ============================================================
+	% DOMAIN 3: ML WORKFLOWS (additional)
+	% ============================================================
+	
+	\begin{frame}{Q151 --- Delta Lake for ML}
+		Why is Delta Lake often used for ML training data?
+		\begin{enumerate}[label=\Alph*.]
+			\item ACID transactions, time travel, and schema enforcement.
+			\item Only for streaming.
+			\item Only for images.
+			\item It replaces MLflow.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A151 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Time travel enables reproducible training sets.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q152 --- Delta Time Travel}
+		Which clause queries a Delta table's historical version?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{VERSION AS OF} / \texttt{TIMESTAMP AS OF}.
+			\item \texttt{WHERE version=}.
+			\item \texttt{SELECT history}.
+			\item \texttt{UNDROP}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A152 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q153 --- Workflow Job for ML}
+		A recurring training job should run nightly on a schedule. What Databricks feature?
+		\begin{enumerate}[label=\Alph*.]
+			\item A notebook opened manually.
+			\item Databricks Workflows job with a schedule.
+			\item A dashboard.
+			\item A cluster event log.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A153 --- Answer: B}
+		\textbf{Correct: B.}
+		\begin{itemize}
+			\item Workflows schedules notebooks/jobs and manages retries and alerts.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q154 --- Job Cluster vs All-Purpose}
+		Why use a job cluster for scheduled training?
+		\begin{enumerate}[label=\Alph*.]
+			\item Cheaper: cluster terminates after the job.
+			\item Always more expensive.
+			\item It has no compute.
+			\item It is shared with all users.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A154 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Job clusters are ephemeral and cost-efficient for scheduled workloads.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q155 --- mlflow.start\_run nesting}
+		What argument nests a child run inside a parent run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{nested=True}.
+			\item \texttt{parent=run\_id}.
+			\item \texttt{child=True}.
+			\item \texttt{tag="child"}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A155 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item \texttt{mlflow.start\_run(nested=True)} creates a child run.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q156 --- MLflow Active Run}
+		How is the currently active run retrieved?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.active\_run()}.
+			\item \texttt{mlflow.start\_run()}.
+			\item \texttt{mlflow.get\_run()}.
+			\item \texttt{mlflow.end\_run()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A156 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q157 --- MLflow Tracking URI}
+		How is a custom tracking URI set?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.set\_tracking\_uri()}.
+			\item \texttt{mlflow.set\_experiment()}.
+			\item \texttt{mlflow.log\_param()}.
+			\item \texttt{spark.conf.set()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A157 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q158 --- Summary Statistics Command}
+		Which command computes summary statistics on a Spark DataFrame?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.summary()}.
+			\item \texttt{df.show()}.
+			\item \texttt{df.printSchema()}.
+			\item \texttt{df.count()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A158 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q159 --- Describe Command}
+		Which command gives count/mean/std/min/max?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.describe()}.
+			\item \texttt{df.show()}.
+			\item \texttt{df.columns}.
+			\item \texttt{df.dtypes}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A159 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q160 --- IQR Rule}
+		What is the IQR outlier rule?
+		\begin{enumerate}[label=\Alph*.]
+			\item Remove below Q1 or above Q3.
+			\item Remove below $Q1 - 1.5\,IQR$ or above $Q3 + 1.5\,IQR$.
+			\item Remove beyond mean.
+			\item Remove $z>1$.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A160 --- Answer: B}
+		\textbf{Correct: B.}
+	\end{frame}
+	
+	\begin{frame}{Q161 --- Z-Score Meaning}
+		What does a z-score represent?
+		\begin{enumerate}[label=\Alph*.]
+			\item Number of standard deviations from the mean.
+			\item The median.
+			\item The mode.
+			\item The variance.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A161 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q162 --- Pandas API Conversion}
+		How is a Spark DataFrame converted to pandas API on Spark?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{spark\_df.pandas\_api}.
+			\item \texttt{spark\_df.to\_pandas()}.
+			\item \texttt{spark\_df.collect()}.
+			\item \texttt{spark\_df.rdd}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A162 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q163 --- toPandas Behavior}
+		What does \texttt{toPandas()} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Collects the DataFrame to local pandas on the driver.
+			\item Converts to pandas API on Spark.
+			\item Saves to disk.
+			\item Deletes the DataFrame.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A163 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Warning: collects all rows to driver memory.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q164 --- Crosstab Output}
+		What does \texttt{df.crosstab()} produce?
+		\begin{enumerate}[label=\Alph*.]
+			\item A contingency table between two categorical columns.
+			\item A scatter plot.
+			\item A correlation matrix.
+			\item A histogram.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A164 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q165 --- dropna Command}
+		Which method drops rows with nulls?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.dropna()}.
+			\item \texttt{df.fillna()}.
+			\item \texttt{df.replace()}.
+			\item \texttt{df.filter()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A165 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q166 --- fillna Command}
+		Which method fills nulls with a value?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.fillna()}.
+			\item \texttt{df.dropna()}.
+			\item \texttt{df.replace()}.
+			\item \texttt{df.filter()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A166 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q167 --- GroupBy Mean}
+		Which computes a mean after grouping?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.groupBy('col').mean()}.
+			\item \texttt{df.mean('col')}.
+			\item \texttt{df.agg('mean')}.
+			\item \texttt{df.summary()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A167 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q168 --- Spark SQL Usage}
+		How can a Spark DataFrame be queried with SQL?
+		\begin{enumerate}[label=\Alph*.]
+			\item Register as temp view and use \texttt{spark.sql()}.
+			\item Convert to pandas only.
+			\item Use \texttt{df.show()} only.
+			\item Use \texttt{df.printSchema()} only.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A168 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q169 --- Join Type}
+		Which join returns all left rows and matching right rows?
+		\begin{enumerate}[label=\Alph*.]
+			\item Left join.
+			\item Inner join.
+			\item Right join.
+			\item Full outer join.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A169 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q170 --- dropDuplicates}
+		Which method removes duplicate rows?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.dropDuplicates()}.
+			\item \texttt{df.distinct()}.
+			\item \texttt{df.dropna()}.
+			\item \texttt{df.filter()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A170 --- Answer: A}
+		\textbf{Correct: A.}
+		\begin{itemize}
+			\item Both \texttt{dropDuplicates()} and \texttt{distinct()} remove duplicates; \texttt{dropDuplicates()} can take subset columns.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Q171 --- Summary on Numeric}
+		Which command provides quartiles in summary statistics?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.summary("quartiles")}.
+			\item \texttt{df.describe()}.
+			\item \texttt{df.count()}.
+			\item \texttt{df.show()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A171 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q172 --- Missing Value Count}
+		Which approach counts nulls per column?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.select([count(when(col(c).isNull(), c)).alias(c) for c in df.columns])}.
+			\item \texttt{df.count()}.
+			\item \texttt{df.describe()}.
+			\item \texttt{df.show()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A172 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q173 --- Histogram Purpose}
+		What does a histogram show?
+		\begin{enumerate}[label=\Alph*.]
+			\item Distribution of a single continuous feature.
+			\item Relationship between two categorical features.
+			\item Model coefficients.
+			\item Confusion matrix.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A173 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q174 --- Box Plot Purpose}
+		What does a box plot show?
+		\begin{enumerate}[label=\Alph*.]
+			\item Distribution with quartiles and outliers.
+			\item Correlation between two categoricals.
+			\item Exact values of all points.
+			\item Confusion matrix.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A174 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q175 --- Correlation Matrix}
+		What does a correlation matrix show?
+		\begin{enumerate}[label=\Alph*.]
+			\item Pairwise correlations between numeric features.
+			\item Distribution of a single feature.
+			\item Model accuracy.
+			\item Number of missing values.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A175 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	% ============================================================
+	% DOMAIN 4: MODEL DEPLOYMENT (additional)
+	% ============================================================
+	
+	\begin{frame}{Q176 --- Serving Endpoint REST Call}
+		How is a deployed endpoint called from an application?
+		\begin{enumerate}[label=\Alph*.]
+			\item HTTP REST call with Databricks auth.
+			\item Direct DBFS read.
+			\item Notebook execution.
+			\item SQL only.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A176 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q177 --- Endpoint Payload Format}
+		What format does a serving endpoint accept for input?
+		\begin{enumerate}[label=\Alph*.]
+			\item JSON records, optionally Pandas-split or dataframe-records format.
+			\item CSV only.
+			\item Pickle file.
+			\item Excel workbook.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A177 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q178 --- Inference Table Purpose}
+		What does an inference table enable?
+		\begin{enumerate}[label=\Alph*.]
+			\item Monitoring and retraining from production logs.
+			\item Faster training.
+			\item Cheaper storage.
+			\item Automatic feature engineering.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A178 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q179 --- Model Serving Version Update}
+		How is a new model version rolled out without downtime?
+		\begin{enumerate}[label=\Alph*.]
+			\item Update endpoint config; serving rolls over.
+			\item Stop endpoint, then create new.
+			\item Manually copy files.
+			\item Delete all other versions.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A179 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q180 --- Serving Endpoint Alias Use}
+		Why configure an endpoint to serve \texttt{@champion}?
+		\begin{enumerate}[label=\Alph*.]
+			\item Alias moves automatically when promoted; no endpoint config change needed.
+			\item Alias is immutable.
+			\item Alias disables logging.
+			\item Alias prevents autoscaling.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A180 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q181 --- Feature Serving Endpoint}
+		What does a Feature Serving endpoint do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Serves feature lookups via REST for real-time inference.
+			\item Trains models.
+			\item Registers models.
+			\item Deletes experiments.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A181 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q182 --- Endpoint Scaling}
+		What does scale-to-zero do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Scales endpoint to zero replicas when idle, then scales up on demand.
+			\item Always keeps one replica.
+			\item Removes the endpoint.
+			\item Increases throughput.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A182 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q183 --- Serving Endpoint Auth}
+		Which auth mechanism is recommended for production automated calls?
+		\begin{enumerate}[label=\Alph*.]
+			\item OAuth machine-to-machine (M2M) or PAT.
+			\item Basic username/password.
+			\item Anonymous.
+			\item Cluster token.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A183 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q184 --- Batch Inference Job}
+		How can a large scoring job be scheduled on Databricks?
+		\begin{enumerate}[label=\Alph*.]
+			\item Databricks Workflows job running batch scoring notebook.
+			\item Manual notebook runs.
+			\item Endpoint only.
+			\item Dashboard.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A184 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q185 --- Endpoint Permissions}
+		Which permission allows querying an endpoint?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{CAN QUERY}.
+			\item \texttt{MANAGE}.
+			\item \texttt{SELECT}.
+			\item \texttt{EXECUTE}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A185 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q186 --- Monitoring Metric}
+		Which metric is key for monitoring a classifier over time?
+		\begin{enumerate}[label=\Alph*.]
+			\item Prediction distribution and drift.
+			\item Only training accuracy.
+			\item Cluster CPU.
+			\item Notebook revision count.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A186 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q187 --- Model Retraining Trigger}
+		What commonly triggers model retraining?
+		\begin{enumerate}[label=\Alph*.]
+			\item Performance drift or new labeled data.
+			\item Cluster idle time.
+			\item Storage growth.
+			\item Notebook save.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A187 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q188 --- Serving Latency}
+		Which factor most affects real-time endpoint latency?
+		\begin{enumerate}[label=\Alph*.]
+			\item Model size and provisioned capacity.
+			\item Number of notebooks.
+			\item Dataset size at training.
+			\item Cluster event logs.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A188 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q189 --- Model Serving Rollback}
+		How can a bad deployment be rolled back?
+		\begin{enumerate}[label=\Alph*.]
+			\item Point the endpoint back to the prior version or alias.
+			\item Retrain the model.
+			\item Delete the endpoint.
+			\item Drop the schema.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A189 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q190 --- Serving Endpoint Health}
+		Which endpoint status indicates it is active?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{Ready}.
+			\item \texttt{Pending}.
+			\item \texttt{Failed}.
+			\item \texttt{Deleted}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A190 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	% ============================================================
+	% TRAP / EDGE-CASE QUESTIONS
+	% ============================================================
+	
+	\begin{frame}{Q191 --- Autolog vs Manual}
+		A data scientist wants both autolog and custom metrics. What is correct?
+		\begin{enumerate}[label=\Alph*.]
+			\item Can combine autolog with explicit \texttt{log\_metric} calls.
+			\item Autolog blocks all custom logging.
+			\item Custom metrics overwrite autolog.
+			\item Only autolog allowed.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A191 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q192 --- Nested Run Comparison}
+		Which UI view is best for comparing hyperparameter trials?
+		\begin{enumerate}[label=\Alph*.]
+			\item The parent run's child runs table/chart.
+			\item Cluster logs.
+			\item Notebook output.
+			\item Dashboard only.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A192 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q193 --- Feature Store Update Pattern}
+		How are new features added to an existing feature table?
+		\begin{enumerate}[label=\Alph*.]
+			\item Write a new DataFrame via \texttt{write\_table()} with merge mode.
+			\item Delete and recreate.
+			\item Edit Parquet files manually.
+			\item Drop table.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A193 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q194 --- Alias Best Practice}
+		Why move \texttt{@champion} rather than edit endpoint config?
+		\begin{enumerate}[label=\Alph*.]
+			\item Single source of truth for production version; consumers stay unchanged.
+			\item Alias is faster.
+			\item Alias is required by Spark.
+			\item Alias avoids logging.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A194 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q195 --- Signature Inference}
+		Which function infers a model signature from training data?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.models.infer\_signature()}.
+			\item \texttt{mlflow.log\_model()}.
+			\item \texttt{mlflow.start\_run()}.
+			\item \texttt{mlflow.set\_tag()}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A195 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q196 --- Feature Store Entity}
+		What identifies a feature table entity?
+		\begin{enumerate}[label=\Alph*.]
+			\item Primary keys.
+			\item Timestamp keys.
+			\item Model version.
+			\item Cluster ID.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A196 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q197 --- Serving Endpoint Model Size}
+		What limits the size of a model deployed to Model Serving?
+		\begin{enumerate}[label=\Alph*.]
+			\item Platform size limits and memory per replica.
+			\item Only the notebook.
+			\item The cluster event log.
+			\item The number of features.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A197 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q198 --- MLflow Artifact URI}
+		Which URI references a run artifact?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{runs:/<run\_id>/<path>}.
+			\item \texttt{models:/name/version}.
+			\item \texttt{artifacts:/path}.
+			\item \texttt{file:///}.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A198 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q199 --- Registry Best Practice}
+		Why register models instead of shipping pickle files?
+		\begin{enumerate}[label=\Alph*.]
+			\item Versioning, lineage, aliases, and access control.
+			\item Faster training.
+			\item Smaller artifacts.
+			\item Automatic feature engineering.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A199 --- Answer: A}
+		\textbf{Correct: A.}
+	\end{frame}
+	
+	\begin{frame}{Q200 --- Exam Review Checklist}
+		Which is the \textbf{least} likely to be tested on the Databricks ML Associate exam?
+		\begin{enumerate}[label=\Alph*.]
+			\item MLflow experiment tracking.
+			\item Unity Catalog model registry.
+			\item Feature Store for training-serving consistency.
+			\item Deep math derivations of SVM dual form.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{A200 --- Answer: D}
+		\textbf{Correct: D.}
+		\begin{itemize}
+			\item Exam focuses on Databricks tooling and workflows, not theoretical derivations.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Final Tips}
+		\begin{itemize}
+			\item Domains: Databricks ML (38\%), Model Development (31\%), ML Workflows (19\%), Deployment (12\%).
+			\item Master tool names and API calls: \texttt{mlflow.*}, \texttt{fe.*}, \texttt{SparkTrials}, \texttt{CrossValidator}.
+			\item Know the "why": UC registry (governance), Feature Store (skew), serving (scale-to-zero).
+			\item Watch for "Select two/three" and "least likely" traps.
+		\end{itemize}
+	\end{frame}
+	
+\end{document}

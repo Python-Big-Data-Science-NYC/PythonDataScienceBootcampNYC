@@ -1,0 +1,2097 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\usepackage{enumitem}
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{Databricks ML Associate}
+\subtitle{Questions 101--200 (Second 100)}
+\author{Practice Exam Deck}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{How to Use This Deck}
+		\begin{itemize}
+			\item This deck contains \textbf{100 new questions} (Q101--Q200), all different from the first 100.
+			\item Each question is on its own slide with four options (A--D).
+			\item The \textbf{next slide} gives the correct answer and explains why the right option is right and why each wrong option is wrong.
+			\item Topics are spread across Feature Store, MLflow, AutoML, data processing, Spark ML, tuning, evaluation, and deployment.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 101}
+		Which method retrieves a feature table object by name in the Unity Catalog Feature Store client?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{fe.get\_table()}
+			\item \texttt{fe.load\_table()}
+			\item \texttt{fe.read\_table()}
+			\item \texttt{fe.fetch\_table()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 101}
+		\textbf{Correct: A} --- \texttt{get\_table()} returns the feature table object.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is not an API.
+			\item C is not an API.
+			\item D is not an API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 102}
+		What is the purpose of a primary key in a Feature Store table?
+		\begin{enumerate}[label=\Alph*.]
+			\item It uniquely identifies each row for point-in-time lookups
+			\item It stores the label
+			\item It defines the model type
+			\item It sets the cluster size
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 102}
+		\textbf{Correct: A} --- primary keys identify rows for feature lookups.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B labels are separate.
+			\item C the model type is unrelated.
+			\item D cluster size is compute.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 103}
+		Which feature table property stores the timestamp used for point-in-time joins?
+		\begin{enumerate}[label=\Alph*.]
+			\item Timestamp key
+			\item Primary key
+			\item Partition key
+			\item Foreign key
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 103}
+		\textbf{Correct: A} --- the timestamp key enables point-in-time lookups.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is the row identifier.
+			\item C is storage layout.
+			\item D is relational, not Feature Store.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 104}
+		Which method scores a batch DataFrame with a feature-aware model?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{fe.score\_batch()}
+			\item \texttt{fe.predict()}
+			\item \texttt{fe.transform()}
+			\item \texttt{fe.infer()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 104}
+		\textbf{Correct: A} --- \texttt{score\_batch()} performs feature-aware batch inference.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the Feature Store scoring API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 105}
+		What does a FeatureLookup specify?
+		\begin{enumerate}[label=\Alph*.]
+			\item Which features to join from a feature table
+			\item Which model to train
+			\item Which cluster to use
+			\item Which metric to optimize
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 105}
+		\textbf{Correct: A} --- FeatureLookup defines the features to retrieve.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is model training.
+			\item C is compute.
+			\item D is tuning.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 106}
+		Why should feature tables be created before training sets?
+		\begin{enumerate}[label=\Alph*.]
+			\item Training sets join features from feature tables
+			\item Training sets create feature tables
+			\item They are independent
+			\item Training sets replace feature tables
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 106}
+		\textbf{Correct: A} --- training sets depend on feature tables.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is reversed.
+			\item C is false.
+			\item D is false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 107}
+		Which MLflow component stores run metadata such as parameters and metrics?
+		\begin{enumerate}[label=\Alph*.]
+			\item The tracking server and backend store
+			\item The artifact store only
+			\item The model registry only
+			\item The notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 107}
+		\textbf{Correct: A} --- the tracking server and backend store hold run metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B stores artifacts.
+			\item C manages models.
+			\item D is source code.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 108}
+		Which MLflow API logs a parameter?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.log\_param()}
+			\item \texttt{mlflow.log\_metric()}
+			\item \texttt{mlflow.log\_artifact()}
+			\item \texttt{mlflow.set\_tag()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 108}
+		\textbf{Correct: A} --- \texttt{log\_param()} logs parameters.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B logs metrics.
+			\item C logs artifacts.
+			\item D sets tags.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 109}
+		Which MLflow API sets a tag on a run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.set\_tag()}
+			\item \texttt{mlflow.log\_tag()}
+			\item \texttt{mlflow.add\_tag()}
+			\item \texttt{mlflow.tag()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 109}
+		\textbf{Correct: A} --- \texttt{set\_tag()} sets a run tag.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 110}
+		What does \texttt{mlflow.end\_run()} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Ends the active run and records its final status
+			\item Deletes the run
+			\item Starts a new run
+			\item Registers a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 110}
+		\textbf{Correct: A} --- it closes the run and records status.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B deletion is separate.
+			\item C is \texttt{start\_run()}.
+			\item D is \texttt{register\_model()}.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 111}
+		Which MLflow function loads a model for inference from a registry URI?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.pyfunc.load\_model()}
+			\item \texttt{mlflow.load\_run()}
+			\item \texttt{mlflow.get\_model()}
+			\item \texttt{mlflow.fetch\_model()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 111}
+		\textbf{Correct: A} --- \texttt{pyfunc.load\_model()} loads a model.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the loading API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 112}
+		What does an MLflow model signature describe?
+		\begin{enumerate}[label=\Alph*.]
+			\item The input and output schema of the model
+			\item The training algorithm
+			\item The cluster size
+			\item The experiment name
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 112}
+		\textbf{Correct: A} --- signatures define input/output schema.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is algorithm choice.
+			\item C is compute.
+			\item D is experiment metadata.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 113}
+		Which method registers a model version in Unity Catalog from a run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.register\_model()}
+			\item \texttt{mlflow.log\_model()}
+			\item \texttt{mlflow.save\_model()}
+			\item \texttt{mlflow.create\_model()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 113}
+		\textbf{Correct: A} --- \texttt{register\_model()} registers a version.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B logs the artifact.
+			\item C saves locally.
+			\item D is not the registry API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 114}
+		What is the role of a model alias such as \texttt{@champion}?
+		\begin{enumerate}[label=\Alph*.]
+			\item It points to a specific model version for deployment
+			\item It deletes old versions
+			\item It trains the model
+			\item It stores metrics
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 114}
+		\textbf{Correct: A} --- aliases point to versions for serving.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B aliases do not delete.
+			\item C aliases do not train.
+			\item D metrics are logged separately.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 115}
+		Which MLflow API searches runs in an experiment?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.search\_runs()}
+			\item \texttt{mlflow.find\_runs()}
+			\item \texttt{mlflow.query\_runs()}
+			\item \texttt{mlflow.list\_runs()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 115}
+		\textbf{Correct: A} --- \texttt{search\_runs()} queries runs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 116}
+		Which AutoML API runs regression?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{databricks.automl.regress()}
+			\item \texttt{databricks.automl.classify()}
+			\item \texttt{databricks.automl.forecast()}
+			\item \texttt{databricks.automl.fit()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 116}
+		\textbf{Correct: A} --- \texttt{regress()} runs regression AutoML.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is classification.
+			\item C is forecasting.
+			\item D is not an API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 117}
+		What does AutoML's leaderboard show?
+		\begin{enumerate}[label=\Alph*.]
+			\item Candidate models ranked by a primary metric
+			\item Cluster costs
+			\item Feature tables
+			\item Experiment tags
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 117}
+		\textbf{Correct: A} --- the leaderboard ranks candidate models.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is billing.
+			\item C is data assets.
+			\item D is metadata.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 118}
+		Which primary metric does AutoML use for classification by default?
+		\begin{enumerate}[label=\Alph*.]
+			\item F1
+			\item RMSE
+			\item MAE
+			\item R-squared
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 118}
+		\textbf{Correct: A} --- classification AutoML optimizes F1.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are regression metrics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 119}
+		Which primary metric does AutoML use for regression by default?
+		\begin{enumerate}[label=\Alph*.]
+			\item RMSE
+			\item F1
+			\item Precision
+			\item Recall
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 119}
+		\textbf{Correct: A} --- regression AutoML optimizes RMSE.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are classification metrics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 120}
+		Which file in an MLflow model directory defines the model's flavor and dependencies?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{MLmodel}
+			\item \texttt{model.pkl}
+			\item \texttt{README.md}
+			\item \texttt{requirements.txt}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 120}
+		\textbf{Correct: A} --- \texttt{MLmodel} defines flavor and dependencies.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is a serialized model.
+			\item C is documentation.
+			\item D is one dependency list.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 121}
+		Which Spark operation selects a subset of columns?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{select()}
+			\item \texttt{filter()}
+			\item \texttt{groupBy()}
+			\item \texttt{join()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 121}
+		\textbf{Correct: A} --- \texttt{select()} projects columns.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B filters rows.
+			\item C aggregates.
+			\item D joins tables.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 122}
+		Which Spark method aggregates rows by a key?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{groupBy()}
+			\item \texttt{select()}
+			\item \texttt{withColumn()}
+			\item \texttt{orderBy()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 122}
+		\textbf{Correct: A} --- \texttt{groupBy()} groups rows.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B projects columns.
+			\item C adds a column.
+			\item D sorts.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 123}
+		Which method adds or replaces a column in a Spark DataFrame?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{withColumn()}
+			\item \texttt{select()}
+			\item \texttt{filter()}
+			\item \texttt{join()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 123}
+		\textbf{Correct: A} --- \texttt{withColumn()} adds or replaces columns.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B selects existing columns.
+			\item C filters rows.
+			\item D joins tables.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 124}
+		Which method drops rows with nulls in any column?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{na.drop()}
+			\item \texttt{na.fill()}
+			\item \texttt{na.replace()}
+			\item \texttt{dropna("all")}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 124}
+		\textbf{Correct: A} --- \texttt{na.drop()} drops rows with nulls.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B fills nulls.
+			\item C replaces values.
+			\item D is the opposite (drop only all-null rows).
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 125}
+		Which method fills nulls with a constant value?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{na.fill()}
+			\item \texttt{na.drop()}
+			\item \texttt{na.replace()}
+			\item \texttt{fillna()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 125}
+		\textbf{Correct: A} --- \texttt{na.fill()} fills nulls.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B drops nulls.
+			\item C replaces values.
+			\item D is pandas, not Spark.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 126}
+		Why is caching a DataFrame useful in iterative ML workflows?
+		\begin{enumerate}[label=\Alph*.]
+			\item It avoids recomputing the same transformations repeatedly
+			\item It trains the model faster
+			\item It improves model accuracy
+			\item It reduces the feature count
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 126}
+		\textbf{Correct: A} --- caching avoids recomputation.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B does not affect model training speed directly.
+			\item C does not change accuracy.
+			\item D does not reduce features.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 127}
+		What is the purpose of repartitioning a Spark DataFrame?
+		\begin{enumerate}[label=\Alph*.]
+			\item To change the number of partitions for parallelism
+			\item To drop nulls
+			\item To encode categoricals
+			\item To register a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 127}
+		\textbf{Correct: A} --- repartitioning controls parallelism.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is null handling.
+			\item C is encoding.
+			\item D is MLflow.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 128}
+		Which operation reduces the number of partitions without a shuffle when possible?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{coalesce()}
+			\item \texttt{repartition()}
+			\item \texttt{groupBy()}
+			\item \texttt{join()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 128}
+		\textbf{Correct: A} --- \texttt{coalesce()} reduces partitions with minimal shuffle.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B shuffles.
+			\item C aggregates.
+			\item D joins.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 129}
+		What does \texttt{StringIndexer} output?
+		\begin{enumerate}[label=\Alph*.]
+			\item A numeric index column for each category
+			\item A one-hot vector
+			\item A scaled feature
+			\item A feature vector
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 129}
+		\textbf{Correct: A} --- it outputs numeric indices.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is OneHotEncoder.
+			\item C is StandardScaler.
+			\item D is VectorAssembler.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 130}
+		What does \texttt{OneHotEncoder} output?
+		\begin{enumerate}[label=\Alph*.]
+			\item A sparse binary vector for each category
+			\item A numeric index
+			\item A scaled feature
+			\item A label
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 130}
+		\textbf{Correct: A} --- one-hot outputs binary vectors.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is StringIndexer.
+			\item C is scaling.
+			\item D is the target.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 131}
+		Which Spark ML transformer scales features to zero mean and unit variance?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{StandardScaler}
+			\item \texttt{MinMaxScaler}
+			\item \texttt{MaxAbsScaler}
+			\item \texttt{Normalizer}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 131}
+		\textbf{Correct: A} --- StandardScaler uses z-score scaling.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B scales to a range.
+			\item C scales by max absolute value.
+			\item D normalizes rows.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 132}
+		Which Spark ML transformer scales features to $[0,1]$?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{MinMaxScaler}
+			\item \texttt{StandardScaler}
+			\item \texttt{MaxAbsScaler}
+			\item \texttt{Normalizer}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 132}
+		\textbf{Correct: A} --- MinMaxScaler scales to $[0,1]$.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is z-score.
+			\item C is max-abs.
+			\item D is row normalization.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 133}
+		What is the role of a \texttt{Bucketizer} in Spark ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item It bins continuous features into buckets
+			\item It encodes strings
+			\item It scales features
+			\item It assembles vectors
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 133}
+		\textbf{Correct: A} --- \texttt{Bucketizer} discretizes continuous features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is StringIndexer.
+			\item C is scaling.
+			\item D is VectorAssembler.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 134}
+		Which Spark ML evaluator is used for binary classification?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{BinaryClassificationEvaluator}
+			\item \texttt{RegressionEvaluator}
+			\item \texttt{MulticlassClassificationEvaluator}
+			\item \texttt{ClusteringEvaluator}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 134}
+		\textbf{Correct: A} --- it evaluates binary classifiers.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is for regression.
+			\item C is for multiclass.
+			\item D is for clustering.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 135}
+		Which metric can \texttt{BinaryClassificationEvaluator} compute?
+		\begin{enumerate}[label=\Alph*.]
+			\item Area under ROC
+			\item RMSE
+			\item Silhouette
+			\item R-squared
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 135}
+		\textbf{Correct: A} --- it computes AUC and related metrics.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is regression.
+			\item C is clustering.
+			\item D is regression.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 136}
+		What does the \texttt{numFolds} parameter in \texttt{CrossValidator} control?
+		\begin{enumerate}[label=\Alph*.]
+			\item The number of CV folds
+			\item The number of trees
+			\item The learning rate
+			\item The number of features
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 136}
+		\textbf{Correct: A} --- \texttt{numFolds} sets the number of folds.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{numTrees}.
+			\item C is \texttt{learningRate}.
+			\item D is feature count.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 137}
+		What does \texttt{parallelism} in \texttt{CrossValidator} control?
+		\begin{enumerate}[label=\Alph*.]
+			\item How many models are trained concurrently
+			\item The number of folds
+			\item The number of features
+			\item The number of trees
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 137}
+		\textbf{Correct: A} --- it controls concurrent training.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{numFolds}.
+			\item C is feature count.
+			\item D is \texttt{numTrees}.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 138}
+		Why is a \texttt{seed} passed to \texttt{CrossValidator}?
+		\begin{enumerate}[label=(\Alph*)]
+			\item To make fold splits reproducible
+			\item To set the number of folds
+			\item To set the learning rate
+			\item To speed up training
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 138}
+		\textbf{Correct: A} --- the seed makes splits reproducible.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{numFolds}.
+			\item C is a model parameter.
+			\item D does not affect speed.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 139}
+		What is the purpose of \texttt{TrainValidationSplit} in Spark ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item It performs a single train-validation split for tuning
+			\item It performs k-fold CV
+			\item It trains a model without tuning
+			\item It deploys a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 139}
+		\textbf{Correct: A} --- it does a single split for tuning.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{CrossValidator}.
+			\item C is a plain fit.
+			\item D is serving.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 140}
+		What does a \texttt{ParamGridBuilder} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Builds a grid of hyperparameter combinations
+			\item Builds a feature vector
+			\item Builds a pipeline
+			\item Builds a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 140}
+		\textbf{Correct: A} --- it builds a hyperparameter grid.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is VectorAssembler.
+			\item C is Pipeline.
+			\item D is the estimator.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 141}
+		Which Spark ML classifier supports multiclass classification natively?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{LogisticRegression}
+			\item \texttt{LinearRegression}
+			\item \texttt{KMeans}
+			\item \texttt{ALS}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 141}
+		\textbf{Correct: A} --- Spark ML logistic regression supports multiclass.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is regression.
+			\item C is clustering.
+			\item D is recommendation.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 142}
+		Which Spark ML algorithm is used for collaborative filtering?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{ALS}
+			\item \texttt{KMeans}
+			\item \texttt{RandomForest}
+			\item \texttt{LogisticRegression}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 142}
+		\textbf{Correct: A} --- ALS is used for collaborative filtering.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is clustering.
+			\item C is classification/regression.
+			\item D is classification.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 143}
+		Which Spark ML algorithm is a clustering method?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{KMeans}
+			\item \texttt{LinearRegression}
+			\item \texttt{RandomForestClassifier}
+			\item \texttt{ALS}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 143}
+		\textbf{Correct: A} --- KMeans is clustering.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is regression.
+			\item C is classification.
+			\item D is recommendation.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 144}
+		What is the purpose of \texttt{maxIter} in Spark ML models?
+		\begin{enumerate}[label=\Alph*.]
+			\item It caps the number of optimization iterations
+			\item It sets the number of trees
+			\item It sets the learning rate
+			\item It sets the number of features
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 144}
+		\textbf{Correct: A} --- \texttt{maxIter} caps iterations.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{numTrees}.
+			\item C is \texttt{learningRate}.
+			\item D is feature count.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 145}
+		Which Spark ML model supports feature importance?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{RandomForestClassifier}
+			\item \texttt{LinearRegression}
+			\item \texttt{KMeans}
+			\item \texttt{ALS}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 145}
+		\textbf{Correct: A} --- tree ensembles expose feature importance.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B uses coefficients, not importance.
+			\item C and D do not expose importance.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 146}
+		What does Hyperopt's \texttt{hp.uniform} define?
+		\begin{enumerate}[label=\Alph*.]
+			\item A uniform search space between two bounds
+			\item A log-uniform space
+			\item A choice list
+			\item A constant
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 146}
+		\textbf{Correct: A} --- \texttt{hp.uniform} is a uniform range.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{hp.loguniform}.
+			\item C is \texttt{hp.choice}.
+			\item D is a constant value.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 147}
+		What does Hyperopt's \texttt{hp.choice} define?
+		\begin{enumerate}[label=\Alph*.]
+			\item A discrete set of options
+			\item A uniform range
+			\item A log-uniform range
+			\item A constant
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 147}
+		\textbf{Correct: A} --- \texttt{hp.choice} selects from options.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{hp.uniform}.
+			\item C is \texttt{hp.loguniform}.
+			\item D is a constant.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 148}
+		What does \texttt{SparkTrials} require to run Hyperopt in parallel?
+		\begin{enumerate}[label=\Alph*.]
+			\item An active Spark cluster
+			\item A local Python environment only
+			\item A SQL warehouse
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 148}
+		\textbf{Correct: A} --- \texttt{SparkTrials} uses a Spark cluster.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is local only.
+			\item C is SQL-only.
+			\item D is not sufficient.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 149}
+		Which Hyperopt search algorithm adapts based on past trials?
+		\begin{enumerate}[label=\Alph*.]
+			\item TPE
+			\item Random search
+			\item Grid search
+			\item Manual search
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 149}
+		\textbf{Correct: A} --- TPE adapts using previous results.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not adapt.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 150}
+		Why is Bayesian optimization preferred over grid search in large search spaces?
+		\begin{enumerate}[label=\Alph*.]
+			\item It uses past results to propose promising configurations
+			\item It always finds the global optimum
+			\item It requires no objective function
+			\item It trains fewer models than grid search by definition
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 150}
+		\textbf{Correct: A} --- it uses past results to guide the search.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B no method guarantees the global optimum.
+			\item C an objective function is required.
+			\item D it can train fewer but not by definition.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 151}
+		What is precision?
+		\begin{enumerate}[label=\Alph*.]
+			\item $TP/(TP+FP)$
+			\item $TP/(TP+FN)$
+			\item $TN/(TN+FP)$
+			\item $(TP+TN)/N$
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 151}
+		\textbf{Correct: A} --- precision is $TP/(TP+FP)$.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is recall.
+			\item C is specificity.
+			\item D is accuracy.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 152}
+		What is recall?
+		\begin{enumerate}[label=\Alph*.]
+			\item $TP/(TP+FN)$
+			\item $TP/(TP+FP)$
+			\item $TN/(TN+FP)$
+			\item $(TP+TN)/N$
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 152}
+		\textbf{Correct: A} --- recall is $TP/(TP+FN)$.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is precision.
+			\item C is specificity.
+			\item D is accuracy.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 153}
+		What is specificity?
+		\begin{enumerate}[label=\Alph*.]
+			\item $TN/(TN+FP)$
+			\item $TP/(TP+FN)$
+			\item $TP/(TP+FP)$
+			\item $(TP+TN)/N$
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 153}
+		\textbf{Correct: A} --- specificity is $TN/(TN+FP)$.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is recall.
+			\item C is precision.
+			\item D is accuracy.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 154}
+		What does ROC-AUC measure?
+		\begin{enumerate}[label=\Alph*.]
+			\item The probability a random positive is ranked above a random negative
+			\item The average precision
+			\item The accuracy at a fixed threshold
+			\item The log loss
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 154}
+		\textbf{Correct: A} --- ROC-AUC measures ranking probability.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is average precision.
+			\item C is threshold-specific.
+			\item D is log loss.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 155}
+		When is PR-AUC preferred over ROC-AUC?
+		\begin{enumerate}[label=\Alph*.]
+			\item Under strong class imbalance
+			\item When classes are balanced
+			\item When the target is continuous
+			\item When using clustering
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 155}
+		\textbf{Correct: A} --- PR-AUC is more informative under imbalance.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B ROC-AUC is fine when balanced.
+			\item C is regression.
+			\item D is unsupervised.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 156}
+		What does a confusion matrix summarize for a binary classifier?
+		\begin{enumerate}[label=\Alph*.]
+			\item TP, FP, FN, TN counts
+			\item Only accuracy
+			\item Only precision
+			\item The feature importance
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 156}
+		\textbf{Correct: A} --- it holds the four confusion counts.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C are derived metrics.
+			\item D is model interpretation.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 157}
+		What is the F1 score?
+		\begin{enumerate}[label=\Alph*.]
+			\item The harmonic mean of precision and recall
+			\item The arithmetic mean of precision and recall
+			\item Accuracy under imbalance
+			\item The area under the ROC curve
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 157}
+		\textbf{Correct: A} --- F1 is the harmonic mean of precision and recall.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is not F1.
+			\item C is not F1.
+			\item D is ROC-AUC.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 158}
+		Which metric is most sensitive to outliers?
+		\begin{enumerate}[label=\Alph*.]
+			\item RMSE
+			\item MAE
+			\item Median absolute error
+			\item R-squared
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 158}
+		\textbf{Correct: A} --- RMSE squares errors, amplifying outliers.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is less sensitive.
+			\item C is robust.
+			\item D is a relative fit measure.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 159}
+		What does an $R^2$ of 0 mean?
+		\begin{enumerate}[label=\Alph*.]
+			\item The model is no better than predicting the mean
+			\item The model is perfect
+			\item The model is overfit
+			\item The model has zero bias
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 159}
+		\textbf{Correct: A} --- $R^2=0$ matches the mean baseline.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is $R^2=1$.
+			\item C is not indicated.
+			\item D is a bias concept.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 160}
+		What does an $R^2$ of 1 mean?
+		\begin{enumerate}[label=\Alph*.]
+			\item The model explains all variance in the target
+			\item The model is no better than the mean
+			\item The model has zero variance
+			\item The model is underfit
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 160}
+		\textbf{Correct: A} --- $R^2=1$ is perfect fit.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is $R^2=0$.
+			\item C is unrelated.
+			\item D is not indicated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 161}
+		What is a learning curve?
+		\begin{enumerate}[label=\Alph*.]
+			\item A plot of train and validation error versus training set size
+			\item A plot of accuracy versus threshold
+			\item A plot of precision versus recall
+			\item A plot of feature importance
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 161}
+		\textbf{Correct: A} --- learning curves show error vs.\ training size.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is a threshold curve.
+			\item C is a PR curve.
+			\item D is feature importance.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 162}
+		What does a persistent gap between training and validation error indicate?
+		\begin{enumerate}[label=\Alph*.]
+			\item Overfitting / high variance
+			\item Underfitting / high bias
+			\item Good generalization
+			\item Data leakage
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 162}
+		\textbf{Correct: A} --- a large gap indicates overfitting.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B underfitting shows high error on both.
+			\item C good generalization has a small gap.
+			\item D leakage is not shown by a gap alone.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 163}
+		What is a validation curve?
+		\begin{enumerate}[label=\Alph*.]
+			\item A plot of train and validation score versus a hyperparameter
+			\item A plot of error versus training size
+			\item A plot of precision versus recall
+			\item A plot of feature importance
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 163}
+		\textbf{Correct: A} --- validation curves vary a hyperparameter.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is a learning curve.
+			\item C is a PR curve.
+			\item D is feature importance.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 164}
+		What is the bias-variance decomposition of expected test error?
+		\begin{enumerate}[label=\Alph*.]
+			\item Bias$^2$ + variance + irreducible error
+			\item Bias + variance
+			\item Training error
+			\item Accuracy
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 164}
+		\textbf{Correct: A} --- the decomposition includes irreducible error.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B omits irreducible error.
+			\item C is training error.
+			\item D is a metric.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 165}
+		What is the effect of increasing regularization strength?
+		\begin{enumerate}[label=\Alph*.]
+			\item Bias increases, variance decreases
+			\item Bias decreases, variance increases
+			\item Both increase
+			\item Both decrease
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 165}
+		\textbf{Correct: A} --- stronger regularization raises bias and lowers variance.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is less regularization.
+			\item C and D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 166}
+		Which method reduces variance by averaging many models?
+		\begin{enumerate}[label=\Alph*.]
+			\item Bagging
+			\item Boosting
+			\item Pruning
+			\item Early stopping
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 166}
+		\textbf{Correct: A} --- bagging averages models to reduce variance.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B boosting reduces bias.
+			\item C pruning simplifies a tree.
+			\item D stops training early.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 167}
+		Which method reduces bias by sequentially correcting errors?
+		\begin{enumerate}[label=\Alph*.]
+			\item Boosting
+			\item Bagging
+			\item Pruning
+			\item Dropout
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 167}
+		\textbf{Correct: A} --- boosting corrects errors sequentially.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is parallel.
+			\item C simplifies trees.
+			\item D is a neural net technique.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 168}
+		What is the purpose of early stopping?
+		\begin{enumerate}[label=\Alph*.]
+			\item Stop training when validation performance stops improving
+			\item Stop training when training error reaches zero
+			\item Stop training after one epoch
+			\item Stop training when the model is too simple
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 168}
+		\textbf{Correct: A} --- early stopping uses validation performance.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B ignores validation.
+			\item C is arbitrary.
+			\item D is underfitting.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 169}
+		What is a random forest?
+		\begin{enumerate}[label=\Alph*.]
+			\item An ensemble of decision trees trained on bootstrapped samples with random feature subsets
+			\item A single decision tree
+			\item A linear model
+			\item A clustering algorithm
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 169}
+		\textbf{Correct: A} --- random forests ensemble trees with bagging.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is a single tree.
+			\item C is linear regression.
+			\item D is unsupervised.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 170}
+		What is gradient boosting?
+		\begin{enumerate}[label=\Alph*.]
+			\item Sequential trees each fitting the previous residual
+			\item Parallel trees on bootstrap samples
+			\item A clustering method
+			\item A dimensionality reduction method
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 170}
+		\textbf{Correct: A} --- boosting fits residuals sequentially.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is bagging.
+			\item C is clustering.
+			\item D is PCA.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 171}
+		What is the main advantage of tree-based models over linear models?
+		\begin{enumerate}[label=\Alph*.]
+			\item They capture non-linear relationships and interactions
+			\item They always train faster
+			\item They need no data
+			\item They have no hyperparameters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 171}
+		\textbf{Correct: A} --- trees capture non-linearity and interactions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is not always true.
+			\item C is false.
+			\item D trees have many hyperparameters.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 172}
+		What is the main advantage of linear models over tree-based models?
+		\begin{enumerate}[label=\Alph*.]
+			\item Interpretability and extrapolation
+			\item They capture all non-linearity
+			\item They never overfit
+			\item They need no preprocessing
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 172}
+		\textbf{Correct: A} --- linear models are interpretable and extrapolate.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is false; trees capture non-linearity.
+			\item C is false.
+			\item D is false; scaling is needed.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 173}
+		What is k-Nearest Neighbors based on?
+		\begin{enumerate}[label=\Alph*.]
+			\item Majority/mean of the $k$ nearest training points
+			\item A decision boundary learned from trees
+			\item A linear combination of features
+			\item A neural network
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 173}
+		\textbf{Correct: A} --- k-NN uses nearest neighbors.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is trees.
+			\item C is linear models.
+			\item D is neural nets.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 174}
+		Why must features be scaled before k-NN?
+		\begin{enumerate}[label=\Alph*.]
+			\item Distance metrics are sensitive to feature scale
+			\item k-NN requires categorical features
+			\item k-NN cannot use numeric features
+			\item Scaling improves accuracy only for trees
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 174}
+		\textbf{Correct: A} --- k-NN uses distances, so scaling matters.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C are false.
+			\item D scaling does not help trees.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 175}
+		Which kernel is linear and used for linearly separable SVM problems?
+		\begin{enumerate}[label=\Alph*.]
+			\item Linear
+			\item RBF
+			\item Polynomial
+			\item Sigmoid
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 175}
+		\textbf{Correct: A} --- the linear kernel is for linear problems.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are non-linear kernels.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 176}
+		What does PCA produce?
+		\begin{enumerate}[label=\Alph*.]
+			\item Orthogonal components ordered by explained variance
+			\item Cluster labels
+			\item A decision boundary
+			\item A target variable
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 176}
+		\textbf{Correct: A} --- PCA produces orthogonal components.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is clustering.
+			\item C is classification.
+			\item D is the target.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 177}
+		Why is standardization important before PCA?
+		\begin{enumerate}[label=\Alph*.]
+			\item PCA maximizes variance, so unscaled features dominate
+			\item PCA requires categorical features
+			\item PCA needs no preprocessing
+			\item PCA only works on text
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 177}
+		\textbf{Correct: A} --- unscaled features can dominate components.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 178}
+		What does the silhouette score measure?
+		\begin{enumerate}[label=\Alph*.]
+			\item How similar points are to their own cluster vs.\ the nearest other cluster
+			\item Model accuracy
+			\item Feature importance
+			\item The number of clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 178}
+		\textbf{Correct: A} --- silhouette measures cluster cohesion and separation.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is classification.
+			\item C is interpretation.
+			\item D is a hyperparameter.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 179}
+		What range does the silhouette score take?
+		\begin{enumerate}[label=\Alph*.]
+			\item $[-1, 1]$
+			\item $[0, 1]$
+			\item $[-\infty, \infty]$
+			\item $[0, \infty]$
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 179}
+		\textbf{Correct: A} --- silhouette ranges from $-1$ to $1$.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are incorrect ranges.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 180}
+		How does DBSCAN differ from k-means?
+		\begin{enumerate}[label=\Alph*.]
+			\item DBSCAN is density-based and finds arbitrary shapes and noise
+			\item DBSCAN requires specifying $k$
+			\item DBSCAN is for regression
+			\item DBSCAN is for classification
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 180}
+		\textbf{Correct: A} --- DBSCAN is density-based and handles noise.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B k-means requires $k$.
+			\item C, D are supervised tasks.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 181}
+		What is anomaly detection?
+		\begin{enumerate}[label=\Alph*.]
+			\item Identifying rare or abnormal points
+			\item Predicting a continuous target
+			\item Clustering all points
+			\item Reducing dimensionality
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 181}
+		\textbf{Correct: A} --- anomaly detection finds rare points.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is regression.
+			\item C is clustering.
+			\item D is PCA.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 182}
+		Which is an unsupervised anomaly detection method?
+		\begin{enumerate}[label=\Alph*.]
+			\item Isolation Forest
+			\item Logistic Regression
+			\item Linear Regression
+			\item Decision Tree Classifier
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 182}
+		\textbf{Correct: A} --- Isolation Forest is unsupervised.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are supervised.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 183}
+		What is the purpose of one-hot encoding?
+		\begin{enumerate}[label=\Alph*.]
+			\item Represent categorical variables as binary columns
+			\item Scale numeric features
+			\item Impute missing values
+			\item Reduce dimensions
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 183}
+		\textbf{Correct: A} --- one-hot represents categories as binary columns.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is scaling.
+			\item C is imputation.
+			\item D is PCA.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 184}
+		Why is label encoding risky for nominal categories in linear models?
+		\begin{enumerate}[label=\Alph*.]
+			\item It implies an ordinal relationship that does not exist
+			\item It creates too many columns
+			\item It removes information
+			\item It only works for numeric data
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 184}
+		\textbf{Correct: A} --- label encoding implies false ordering.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is one-hot.
+			\item C label encoding keeps all categories.
+			\item D is false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 185}
+		What is target encoding?
+		\begin{enumerate}[label=\Alph*.]
+			\item Replacing a category with the mean target value for that category
+			\item One-hot encoding
+			\item Label encoding
+			\item Scaling
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 185}
+		\textbf{Correct: A} --- target encoding uses category mean targets.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are different techniques.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 186}
+		What is a risk of target encoding?
+		\begin{enumerate}[label=\Alph*.]
+			\item Leakage if not computed with cross-validation
+			\item It cannot handle categories
+			\item It creates sparse matrices
+			\item It requires no target
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 186}
+		\textbf{Correct: A} --- target encoding can leak without CV.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B it handles categories.
+			\item C sparse matrices are from one-hot.
+			\item D it uses the target by definition.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 187}
+		What is a Pipeline in Spark ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item A sequence of stages run as one estimator
+			\item A single model
+			\item A visualization tool
+			\item A storage format
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 187}
+		\textbf{Correct: A} --- a Pipeline chains stages.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is an estimator.
+			\item C is visualization.
+			\item D is storage.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 188}
+		Why should preprocessing be part of a Pipeline?
+		\begin{enumerate}[label=\Alph*.]
+			\item To fit transforms only on training data and prevent leakage
+			\item To speed up training
+			\item To reduce features
+			\item To register models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 188}
+		\textbf{Correct: A} --- pipeline preprocessing prevents leakage.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the main reason.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 189}
+		Which Spark ML stage assembles multiple columns into a feature vector?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{VectorAssembler}
+			\item \texttt{StringIndexer}
+			\item \texttt{OneHotEncoder}
+			\item \texttt{StandardScaler}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 189}
+		\textbf{Correct: A} --- VectorAssembler builds feature vectors.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B encodes strings.
+			\item C one-hot encodes.
+			\item D scales.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 190}
+		Which stage converts a string column to numeric indices?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{StringIndexer}
+			\item \texttt{VectorAssembler}
+			\item \texttt{OneHotEncoder}
+			\item \texttt{StandardScaler}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 190}
+		\textbf{Correct: A} --- StringIndexer converts strings to indices.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B assembles vectors.
+			\item C one-hot encodes.
+			\item D scales.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 191}
+		What is batch inference?
+		\begin{enumerate}[label=\Alph*.]
+			\item Scoring a large dataset offline
+			\item Scoring one record at a time via REST
+			\item Training a model
+			\item Tuning hyperparameters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 191}
+		\textbf{Correct: A} --- batch inference scores offline.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is real-time serving.
+			\item C is training.
+			\item D is tuning.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 192}
+		What is real-time inference?
+		\begin{enumerate}[label=\Alph*.]
+			\item Low-latency prediction via a REST endpoint
+			\item Offline scoring
+			\item Model training
+			\item Data ingestion
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 192}
+		\textbf{Correct: A} --- real-time inference serves REST predictions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is batch.
+			\item C is training.
+			\item D is ingestion.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 193}
+		What is streaming inference?
+		\begin{enumerate}[label=\Alph*.]
+			\item Scoring data continuously as it arrives
+			\item Scoring a single batch
+			\item Training on a stream
+			\item Storing predictions
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 193}
+		\textbf{Correct: A} --- streaming inference scores continuously.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is batch.
+			\item C is training.
+			\item D is storage.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 194}
+		Which Databricks feature supports streaming inference?
+		\begin{enumerate}[label=\Alph*.]
+			\item Delta Live Tables
+			\item SQL Warehouse
+			\item Single Node cluster
+			\item Notebook widgets
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 194}
+		\textbf{Correct: A} --- Delta Live Tables supports streaming inference.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is SQL only.
+			\item C is single-node.
+			\item D is UI.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 195}
+		What is traffic splitting on a serving endpoint?
+		\begin{enumerate}[label=\Alph*.]
+			\item Routing a percentage of requests to different model versions
+			\item Training two models
+			\item Storing two models
+			\item Deleting old versions
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 195}
+		\textbf{Correct: A} --- traffic splitting routes requests.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is training.
+			\item C is storage.
+			\item D is deletion.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 196}
+		What is model monitoring in production?
+		\begin{enumerate}[label=\Alph*.]
+			\item Tracking performance and drift over time
+			\item Training the model
+			\item Registering the model
+			\item Deleting the model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 196}
+		\textbf{Correct: A} --- monitoring tracks performance and drift.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is training.
+			\item C is registration.
+			\item D is deletion.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 197}
+		What is data drift?
+		\begin{enumerate}[label=\Alph*.]
+			\item A change in the distribution of input features
+			\item A change in the feature-target relationship
+			\item A model bug
+			\item A training error
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 197}
+		\textbf{Correct: A} --- data drift is an input distribution change.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is concept drift.
+			\item C is a bug.
+			\item D is training error.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 198}
+		What is concept drift?
+		\begin{enumerate}[label=\Alph*.]
+			\item A change in the feature-target relationship
+			\item A change in input distribution
+			\item A model bug
+			\item A data storage issue
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 198}
+		\textbf{Correct: A} --- concept drift changes the relationship.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is data drift.
+			\item C is a bug.
+			\item D is storage.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 199}
+		Which is a fairness concern when deploying ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item Biased training data leading to discriminatory outcomes
+			\item Faster inference
+			\item Lower storage cost
+			\item Better dashboards
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 199}
+		\textbf{Correct: A} --- biased data causes discriminatory outcomes.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are performance or cost concerns.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 200}
+		Which practice best prevents data leakage in a production pipeline?
+		\begin{enumerate}[label=\Alph*.]
+			\item Fit preprocessing and the model only on training data inside a Pipeline
+			\item Fit preprocessing on the full dataset
+			\item Use the test set for feature selection
+			\item Scale before splitting
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 200}
+		\textbf{Correct: A} --- fitting a Pipeline on training data prevents leakage.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D cause leakage.
+		\end{itemize}
+	\end{frame}
+	
+\end{document}

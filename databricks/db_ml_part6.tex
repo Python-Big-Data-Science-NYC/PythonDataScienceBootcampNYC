@@ -1,0 +1,1954 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{Databricks ML Associate}
+\subtitle{Questions 501--600 (Sixth 100)}
+\author{Practice Exam Deck}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{How to Use This Deck}
+		\begin{itemize}
+			\item 100 new questions (Q501--Q600), none repeated from Q1--Q500.
+			\item Each question slide has four options (A--D).
+			\item The next slide gives the correct answer and explains why the right option is right and why each wrong option is wrong.
+			\item This set emphasizes Feature Store data sources and merge behavior, MLflow statuses and artifacts, serving environments, Unity Catalog grants and external locations, Delta schema evolution and merge, Jobs parameters and notifications, Spark ML text transformers, and tracking-server architecture.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 501}
+		Which data source can be used to create a Feature Store table?
+		\begin{enumerate}[label=\Alph*.]
+			\item A Spark DataFrame or a Delta table
+			\item A Python list only
+			\item A notebook only
+			\item A cluster only
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 501}
+		\textbf{Correct: A} --- feature tables are built from DataFrames or Delta tables.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not valid data sources.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 502}
+		What happens when \texttt{fe.write\_table()} is called with \texttt{mode="merge"}?
+		\begin{enumerate}[label=\Alph*.]
+			\item Rows are upserted based on the primary key
+			\item The table is dropped
+			\item Rows are appended without keys
+			\item The table is renamed
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 502}
+		\textbf{Correct: A} --- merge upserts by primary key.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not merge behavior.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 503}
+		Which write mode fully overwrites a feature table?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mode="overwrite"}
+			\item \texttt{mode="merge"}
+			\item \texttt{mode="append"}
+			\item \texttt{mode="upsert"}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 503}
+		\textbf{Correct: A} --- overwrite replaces the table contents.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B upserts.
+			\item C appends.
+			\item D is not a supported mode name.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 504}
+		Which write mode adds new rows without changing existing ones?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mode="append"}
+			\item \texttt{mode="overwrite"}
+			\item \texttt{mode="merge"}
+			\item \texttt{mode="replace"}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 504}
+		\textbf{Correct: A} --- append adds rows.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B overwrites.
+			\item C upserts.
+			\item D is not the mode name.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 505}
+		Why is a merge write mode preferred for updating feature values?
+		\begin{enumerate}[label=\Alph*.]
+			\item It updates existing keys and inserts new ones
+			\item It drops the table
+			\item It appends duplicates
+			\item It renames columns
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 505}
+		\textbf{Correct: A} --- merge updates existing rows and inserts new ones.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 506}
+		What is a FeatureLookup used for in training set creation?
+		\begin{enumerate}[label=\Alph*.]
+			\item To join specific features from a feature table to a label DataFrame
+			\item To train a model
+			\item To serve a model
+			\item To register a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 506}
+		\textbf{Correct: A} --- FeatureLookup defines which features to join.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 507}
+		What does a FeatureLookup require besides the feature table name?
+		\begin{enumerate}[label=\Alph*.]
+			\item A lookup key to join on
+			\item A model
+			\item A cluster
+			\item A metric
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 507}
+		\textbf{Correct: A} --- lookups need a join key.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not required.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 508}
+		What is a training set's role in Feature Store?
+		\begin{enumerate}[label=\Alph*.]
+			\item A point-in-time-correct dataset for training
+			\item A serving endpoint
+			\item A model artifact
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 508}
+		\textbf{Correct: A} --- training sets are point-in-time-correct datasets.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 509}
+		Which MLflow run status indicates a failed run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{FAILED}
+			\item \texttt{FINISHED}
+			\item \texttt{RUNNING}
+			\item \texttt{SCHEDULED}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 509}
+		\textbf{Correct: A} --- \texttt{FAILED} marks a failed run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is success.
+			\item C is in progress.
+			\item D is not a status.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 510}
+		Which MLflow run status indicates a successful run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{FINISHED}
+			\item \texttt{FAILED}
+			\item \texttt{RUNNING}
+			\item \texttt{KILLED}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 510}
+		\textbf{Correct: A} --- \texttt{FINISHED} marks success.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is failure.
+			\item C is in progress.
+			\item D is terminated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 511}
+		Which MLflow run status indicates a terminated run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{KILLED}
+			\item \texttt{FINISHED}
+			\item \texttt{FAILED}
+			\item \texttt{RUNNING}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 511}
+		\textbf{Correct: A} --- \texttt{KILLED} indicates a terminated run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other statuses.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 512}
+		What does an MLflow artifact store store?
+		\begin{enumerate}[label=\Alph*.]
+			\item Files such as models, plots, and data files
+			\item Parameters only
+			\item Metrics only
+			\item Runs only
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 512}
+		\textbf{Correct: A} --- artifacts are files.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are metadata.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 513}
+		Which is a supported MLflow artifact store backend?
+		\begin{enumerate}[label=\Alph*.]
+			\item Cloud object storage
+			\item Only local disk
+			\item Only HDFS
+			\item Only SQLite
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 513}
+		\textbf{Correct: A} --- cloud object storage is supported.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the only options.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 514}
+		What does \texttt{mlflow.get\_artifact\_uri()} return?
+		\begin{enumerate}[label=\Alph*.]
+			\item The URI of the artifact store for the active run
+			\item The model registry URI
+			\item The tracking server URI
+			\item The cluster URI
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 514}
+		\textbf{Correct: A} --- it returns the artifact URI.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are different URIs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 515}
+		What does the model registry store?
+		\begin{enumerate}[label=\Alph*.]
+			\item Model versions and their metadata
+			\item Training data
+			\item Feature tables
+			\item Notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 515}
+		\textbf{Correct: A} --- the registry stores model versions and metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are stored elsewhere.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 516}
+		What is the maximum number of aliases a model version can have?
+		\begin{enumerate}[label=\Alph*.]
+			\item Multiple aliases are allowed per version
+			\item Exactly one
+			\item Exactly two
+			\item None
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 516}
+		\textbf{Correct: A} --- a version can have multiple aliases.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are incorrect.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 517}
+		What happens if an alias points to a new version?
+		\begin{enumerate}[label=\Alph*.]
+			\item Serving references to the alias resolve to the new version
+			\item The old version is deleted
+			\item The model is retrained
+			\item The endpoint is deleted
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 517}
+		\textbf{Correct: A} --- alias moves redirect serving references.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 518}
+		Which MLflow API loads a model version by alias?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{models:/<name>@<alias>}
+			\item \texttt{runs:/<alias>}
+			\item \texttt{models:/<alias>}
+			\item \texttt{models:<name>}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 518}
+		\textbf{Correct: A} --- alias URIs use \texttt{models:/<name>@<alias>}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are malformed URIs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 519}
+		What is a serving endpoint environment in Databricks?
+		\begin{enumerate}[label=\Alph*.]
+			\item The runtime and dependency configuration used to serve a model
+			\item The training data
+			\item The model artifact
+			\item The cluster policy
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 519}
+		\textbf{Correct: A} --- environments configure serving runtime and deps.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 520}
+		What is a serving endpoint's model version reference?
+		\begin{enumerate}[label=\Alph*.]
+			\item The exact version or alias the endpoint serves
+			\item The training data
+			\item The cluster config
+			\item The notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 520}
+		\textbf{Correct: A} --- endpoints reference a version or alias.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 521}
+		What does an endpoint's scale-to-zero setting affect?
+		\begin{enumerate}[label=\Alph*.]
+			\item Whether idle capacity is shut down
+			\item Whether the model is retrained
+			\item Whether the model is registered
+			\item Whether the model is archived
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 521}
+		\textbf{Correct: A} --- scale-to-zero shuts down idle capacity.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 522}
+		Which is a valid endpoint state?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{READY}
+			\item \texttt{FINISHED}
+			\item \texttt{FAILED}
+			\item \texttt{RUNNING}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 522}
+		\textbf{Correct: A} --- \texttt{READY} is an endpoint state.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are run statuses.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 523}
+		What is an external location in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item A governed cloud storage path
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 523}
+		\textbf{Correct: A} --- external locations govern cloud storage.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 524}
+		What is a storage credential in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item A credential used to access cloud storage
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 524}
+		\textbf{Correct: A} --- storage credentials grant cloud access.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 525}
+		Which privilege is required to use an external location?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{USE} or \texttt{READ FILES}
+			\item \texttt{SELECT}
+			\item \texttt{MODIFY}
+			\item \texttt{EXECUTE}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 525}
+		\textbf{Correct: A} --- using an external location needs file-level privileges.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are table/model privileges.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 526}
+		What is a Unity Catalog grant?
+		\begin{enumerate}[label=\Alph*.]
+			\item A privilege assignment to a principal
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 526}
+		\textbf{Correct: A} --- grants assign privileges.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 527}
+		What is a principal in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item A user, group, or service principal
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 527}
+		\textbf{Correct: A} --- principals are users, groups, or SPs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 528}
+		What is a service principal used for in Databricks?
+		\begin{enumerate}[label=\Alph*.]
+			\item Non-human authentication for automated workflows
+			\item Training data
+			\item A model
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 528}
+		\textbf{Correct: A} --- service principals authenticate automation.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 529}
+		What is the purpose of an external table in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item To reference data stored outside UC-managed storage
+			\item To store models
+			\item To store notebooks
+			\item To store clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 529}
+		\textbf{Correct: A} --- external tables reference external storage.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 530}
+		What does Delta Lake schema evolution allow?
+		\begin{enumerate}[label=\Alph*.]
+			\item Adding or changing columns without rewriting data
+			\item Deleting the table
+			\item Deleting the model
+			\item Deleting the cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 530}
+		\textbf{Correct: A} --- schema evolution supports column changes.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 531}
+		Which option enables schema evolution in a Delta write?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mergeSchema=True}
+			\item \texttt{overwriteSchema=True}
+			\item \texttt{appendSchema=True}
+			\item \texttt{evolveSchema=True}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 531}
+		\textbf{Correct: A} --- \texttt{mergeSchema} merges schemas.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B overwrites schema.
+			\item C, D are not options.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 532}
+		What does \texttt{overwriteSchema=True} do on a Delta write?
+		\begin{enumerate}[label=\Alph*.]
+			\item Replaces the table's schema
+			\item Merges schemas
+			\item Appends rows
+			\item Deletes rows
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 532}
+		\textbf{Correct: A} --- \texttt{overwriteSchema} replaces the schema.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{mergeSchema}.
+			\item C, D are row operations.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 533}
+		What does a Delta \texttt{MERGE INTO} statement do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Upserts rows into a target table based on a condition
+			\item Deletes the table
+			\item Renames the table
+			\item Creates a view
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 533}
+		\textbf{Correct: A} --- \texttt{MERGE INTO} upserts rows.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other operations.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 534}
+		What is a Delta table's transaction log used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Tracking table changes and enabling ACID guarantees
+			\item Training models
+			\item Serving models
+			\item Storing notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 534}
+		\textbf{Correct: A} --- the log tracks changes and ACID properties.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 535}
+		What does a Databricks Job parameter do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Passes values to tasks at runtime
+			\item Trains models
+			\item Serves models
+			\item Registers models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 535}
+		\textbf{Correct: A} --- parameters pass runtime values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 536}
+		How are job parameters accessed inside a notebook?
+		\begin{enumerate}[label=\Alph*.]
+			\item With \texttt{dbutils.widgets.get()}
+			\item With \texttt{mlflow.get\_param()}
+			\item With \texttt{spark.conf.get()}
+			\item With \texttt{dbutils.jobs.get()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 536}
+		\textbf{Correct: A} --- widgets retrieve job parameters.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is MLflow params.
+			\item C is Spark conf.
+			\item D is not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 537}
+		What is a job notification used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Alerting on job success or failure
+			\item Training models
+			\item Serving models
+			\item Registering models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 537}
+		\textbf{Correct: A} --- notifications alert on job events.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 538}
+		Which event can trigger a job notification?
+		\begin{enumerate}[label=\Alph*.]
+			\item Job start, success, or failure
+			\item Model registration
+			\item Feature table creation
+			\item Notebook deletion
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 538}
+		\textbf{Correct: A} --- notifications trigger on job events.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated events.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 539}
+		What is a job's maximum concurrent runs setting?
+		\begin{enumerate}[label=\Alph*.]
+			\item It limits how many runs of a job can execute at once
+			\item It limits the cluster size
+			\item It limits the model size
+			\item It limits the feature count
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 539}
+		\textbf{Correct: A} --- concurrency limits simultaneous runs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 540}
+		What is a job timeout?
+		\begin{enumerate}[label=\Alph*.]
+			\item A maximum runtime after which a job is terminated
+			\item A model type
+			\item A feature table
+			\item A cluster mode
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 540}
+		\textbf{Correct: A} --- timeouts terminate long-running jobs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 541}
+		What is a Spark ML tokenizer used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Splitting text into words
+			\item Encoding categories
+			\item Scaling features
+			\item Assembling vectors
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 541}
+		\textbf{Correct: A} --- tokenizers split text.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 542}
+		What is a Spark ML HashingTF used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Converting text tokens into feature vectors
+			\item Scaling numeric features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 542}
+		\textbf{Correct: A} --- HashingTF hashes tokens into vectors.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 543}
+		What is a Spark ML IDF transformer used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Down-weighting common tokens in text features
+			\item Scaling numeric features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 543}
+		\textbf{Correct: A} --- IDF down-weights frequent tokens.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 544}
+		What does a Spark ML Word2Vec model produce?
+		\begin{enumerate}[label=\Alph*.]
+			\item Word embeddings
+			\item Category encodings
+			\item Scaled features
+			\item Imputed values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 544}
+		\textbf{Correct: A} --- Word2Vec produces embeddings.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformations.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 545}
+		What is a Spark ML StopWordsRemover used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Removing common words from text
+			\item Encoding categories
+			\item Scaling features
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 545}
+		\textbf{Correct: A} --- StopWordsRemover removes common words.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 546}
+		What is a Spark ML NGram transformer used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Generating sequences of N tokens
+			\item Encoding categories
+			\item Scaling features
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 546}
+		\textbf{Correct: A} --- NGram creates token sequences.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 547}
+		What is a Spark ML CountVectorizer used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Converting text to token-count vectors
+			\item Scaling features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 547}
+		\textbf{Correct: A} --- CountVectorizer builds count vectors.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 548}
+		What is a pipeline's \texttt{stages} parameter?
+		\begin{enumerate}[label=\Alph*.]
+			\item A list of transformers and estimators
+			\item A list of metrics
+			\item A list of clusters
+			\item A list of tables
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 548}
+		\textbf{Correct: A} --- \texttt{stages} lists pipeline steps.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 549}
+		What does a pipeline do with an estimator stage during \texttt{fit()}?
+		\begin{enumerate}[label=\Alph*.]
+			\item It fits the estimator and stores the resulting model
+			\item It skips it
+			\item It fails
+			\item It deletes it
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 549}
+		\textbf{Correct: A} --- \texttt{fit()} trains estimators.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 550}
+		What does a pipeline do with a transformer stage during \texttt{transform()}?
+		\begin{enumerate}[label=\Alph*.]
+			\item It applies the fitted transformer
+			\item It fits the transformer
+			\item It skips it
+			\item It fails
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 550}
+		\textbf{Correct: A} --- \texttt{transform()} applies transformers.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is for \texttt{fit()}.
+			\item C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 551}
+		What is a Spark ML \texttt{OneVsRest} classifier used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Multiclass classification using binary classifiers
+			\item Regression
+			\item Clustering
+			\item Dimensionality reduction
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 551}
+		\textbf{Correct: A} --- OneVsRest supports multiclass via binary models.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tasks.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 552}
+		What does a Spark ML \texttt{ChiSqSelector} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Selects features using a chi-squared test
+			\item Scales features
+			\item Encodes categories
+			\item Imputes values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 552}
+		\textbf{Correct: A} --- ChiSqSelector selects features statistically.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 553}
+		What does a Spark ML \texttt{PCA} transformer do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Reduces dimensionality via principal components
+			\item Encodes categories
+			\item Scales features
+			\item Imputes values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 553}
+		\textbf{Correct: A} --- PCA reduces dimensions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 554}
+		What is a Spark ML \texttt{PolynomialExpansion} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Creating polynomial and interaction features
+			\item Encoding categories
+			\item Scaling features
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 554}
+		\textbf{Correct: A} --- PolynomialExpansion creates higher-order features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 555}
+		What is a Spark ML \texttt{Binarizer} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Converting numeric features to binary based on a threshold
+			\item Encoding categories
+			\item Scaling features
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 555}
+		\textbf{Correct: A} --- Binarizer thresholds numeric values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 556}
+		What does the MLflow tracking server store in its backend store?
+		\begin{enumerate}[label=\Alph*.]
+			\item Run metadata and metrics
+			\item Model files
+			\item Feature tables
+			\item Notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 556}
+		\textbf{Correct: A} --- the backend store holds run metadata and metrics.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is artifacts.
+			\item C, D are elsewhere.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 557}
+		Which is a common backend store for MLflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item A relational database such as MySQL or PostgreSQL
+			\item A notebook
+			\item A cluster
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 557}
+		\textbf{Correct: A} --- relational databases are common backends.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not backend stores.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 558}
+		What is the purpose of the MLflow artifact store?
+		\begin{enumerate}[label=\Alph*.]
+			\item To store artifacts such as models and plots
+			\item To store parameters
+			\item To store metrics
+			\item To store runs
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 558}
+		\textbf{Correct: A} --- artifact stores hold files.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are backend-store data.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 559}
+		What is a Databricks-managed MLflow experiment?
+		\begin{enumerate}[label=\Alph*.]
+			\item An experiment managed by the Databricks tracking server
+			\item A local SQLite experiment
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 559}
+		\textbf{Correct: A} --- Databricks manages its experiments.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not experiments.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 560}
+		What does \texttt{mlflow.set\_registry\_uri()} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Sets the model registry backend
+			\item Sets the tracking server
+			\item Sets the artifact store
+			\item Sets the cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 560}
+		\textbf{Correct: A} --- it sets the registry URI.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is tracking URI.
+			\item C is artifact URI.
+			\item D is unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 561}
+		What does a model registry webhook do?
+		\begin{enumerate}[label=\Alph*.]
+			\item It sends notifications on model registry events
+			\item It trains models
+			\item It serves models
+			\item It deletes models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 561}
+		\textbf{Correct: A} --- webhooks notify on registry events.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 562}
+		What is a model registry comment used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recording notes about a model version
+			\item Storing model files
+			\item Storing metrics
+			\item Storing parameters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 562}
+		\textbf{Correct: A} --- comments store notes.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are stored elsewhere.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 563}
+		What does a model version's creation timestamp indicate?
+		\begin{enumerate}[label=\Alph*.]
+			\item When the version was registered
+			\item When the model was trained
+			\item When the model was served
+			\item When the model was deleted
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 563}
+		\textbf{Correct: A} --- it indicates registration time.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other times.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 564}
+		Which MLflow API moves a model version's alias?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.set\_registered\_model\_alias()}
+			\item \texttt{mlflow.move\_alias()}
+			\item \texttt{mlflow.create\_alias()}
+			\item \texttt{mlflow.update\_alias()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 564}
+		\textbf{Correct: A} --- \texttt{set\_registered\_model\_alias()} updates aliases.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 565}
+		What is a Databricks SQL warehouse used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Running SQL queries and BI workloads
+			\item Training ML models
+			\item Serving ML models
+			\item Managing Repos
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 565}
+		\textbf{Correct: A} --- SQL warehouses are for SQL/BI.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tools.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 566}
+		Which compute type should not be used for Spark ML training?
+		\begin{enumerate}[label=\Alph*.]
+			\item SQL warehouse
+			\item All-purpose cluster
+			\item Job cluster
+			\item Single-node cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 566}
+		\textbf{Correct: A} --- SQL warehouses cannot run Spark ML.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D can run Spark ML.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 567}
+		What is the purpose of a cluster library?
+		\begin{enumerate}[label=\Alph*.]
+			\item It makes a library available to all notebooks on a cluster
+			\item It installs a feature table
+			\item It registers a model
+			\item It serves a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 567}
+		\textbf{Correct: A} --- cluster libraries apply cluster-wide.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 568}
+		Why install libraries at the cluster level instead of per notebook?
+		\begin{enumerate}[label=\Alph*.]
+			\item It ensures consistent environments across notebooks
+			\item It trains faster
+			\item It serves faster
+			\item It registers models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 568}
+		\textbf{Correct: A} --- cluster libraries ensure consistency.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 569}
+		What is a Databricks workspace?
+		\begin{enumerate}[label=\Alph*.]
+			\item A collaborative environment for notebooks, jobs, and data
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 569}
+		\textbf{Correct: A} --- workspaces host collaboration tools.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are workspace objects.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 570}
+		What is a Databricks notebook folder used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Organizing notebooks and files in a workspace
+			\item Training models
+			\item Serving models
+			\item Registering models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 570}
+		\textbf{Correct: A} --- folders organize workspace content.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 571}
+		What is the purpose of a Databricks secret scope?
+		\begin{enumerate}[label=\Alph*.]
+			\item To store secrets securely
+			\item To store models
+			\item To store feature tables
+			\item To store notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 571}
+		\textbf{Correct: A} --- secret scopes store secrets.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are stored elsewhere.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 572}
+		Which secret scope backend is Databricks-managed?
+		\begin{enumerate}[label=\Alph*.]
+			\item Databricks-backed scope
+			\item Azure Key Vault-backed scope
+			\item AWS Secrets Manager-backed scope
+			\item Local file-backed scope
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 572}
+		\textbf{Correct: A} --- Databricks-backed scopes are managed by Databricks.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C are external backends.
+			\item D is not supported.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 573}
+		What does \texttt{dbutils.secrets.listScopes()} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Lists available secret scopes
+			\item Lists models
+			\item Lists tables
+			\item Lists clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 573}
+		\textbf{Correct: A} --- it lists secret scopes.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other utilities.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 574}
+		What is the purpose of a data access policy in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item Controlling who can access data
+			\item Training models
+			\item Serving models
+			\item Registering models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 574}
+		\textbf{Correct: A} --- access policies control data access.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 575}
+		What is a row filter in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item A rule limiting which rows a user can see
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 575}
+		\textbf{Correct: A} --- row filters limit visible rows.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 576}
+		What is a column mask in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item A rule that hides or transforms column values for some users
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 576}
+		\textbf{Correct: A} --- column masks transform visible values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 577}
+		What does a dynamic view in Unity Catalog allow?
+		\begin{enumerate}[label=\Alph*.]
+			\item Row- or column-level filtering based on the requesting user
+			\item Training models
+			\item Serving models
+			\item Registering models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 577}
+		\textbf{Correct: A} --- dynamic views filter by user.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 578}
+		What is a Delta Live Tables expectation?
+		\begin{enumerate}[label=\Alph*.]
+			\item A data quality rule enforced during pipeline runs
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 578}
+		\textbf{Correct: A} --- DLT expectations enforce data quality.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 579}
+		What happens when a DLT expectation fails?
+		\begin{enumerate}[label=\Alph*.]
+			\item Records may be dropped or the pipeline may fail, based on the expectation
+			\item The pipeline always succeeds
+			\item The cluster restarts
+			\item The model is retrained
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 579}
+		\textbf{Correct: A} --- expectations can drop records or fail the pipeline.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 580}
+		What does DLT's \texttt{@dlt.expect\_or\_drop} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Drops records that violate the expectation
+			\item Fails the pipeline
+			\item Retrains the model
+			\item Restarts the cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 580}
+		\textbf{Correct: A} --- \texttt{expect\_or\_drop} drops bad records.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{expect\_or\_fail}.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 581}
+		What does DLT's \texttt{@dlt.expect\_or\_fail} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Fails the pipeline if the expectation is violated
+			\item Drops bad records
+			\item Retrains the model
+			\item Restarts the cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 581}
+		\textbf{Correct: A} --- \texttt{expect\_or\_fail} fails the pipeline.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{expect\_or\_drop}.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 582}
+		What does a DLT pipeline's development mode change?
+		\begin{enumerate}[label=\Alph*.]
+			\item It reduces resource usage and supports faster iteration
+			\item It trains more models
+			\item It changes the model type
+			\item It changes the feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 582}
+		\textbf{Correct: A} --- development mode favors faster iteration.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 583}
+		What is a DLT pipeline's target schema?
+		\begin{enumerate}[label=\Alph*.]
+			\item The schema where pipeline tables are created
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 583}
+		\textbf{Correct: A} --- target schemas hold DLT tables.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 584}
+		What does a Databricks Asset Bundle's \texttt{databricks.yml} file contain?
+		\begin{enumerate}[label=\Alph*.]
+			\item Bundle configuration for jobs, pipelines, and resources
+			\item Model weights
+			\item Training data
+			\item Feature tables
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 584}
+		\textbf{Correct: A} --- \texttt{databricks.yml} defines bundle resources.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not in the bundle config.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 585}
+		What is the purpose of a bundle's target environment?
+		\begin{enumerate}[label=\Alph*.]
+			\item It selects the workspace and configuration to deploy into
+			\item It selects the model
+			\item It selects the feature table
+			\item It selects the notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 585}
+		\textbf{Correct: A} --- targets select deployment environments.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 586}
+		Which command deploys a Databricks Asset Bundle?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{databricks bundle deploy}
+			\item \texttt{databricks deploy bundle}
+			\item \texttt{databricks bundle run}
+			\item \texttt{databricks bundle validate}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 586}
+		\textbf{Correct: A} --- \texttt{bundle deploy} deploys.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is not a command.
+			\item C runs resources.
+			\item D validates config only.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 587}
+		Which command validates a Databricks Asset Bundle without deploying it?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{databricks bundle validate}
+			\item \texttt{databricks bundle deploy}
+			\item \texttt{databricks bundle run}
+			\item \texttt{databricks bundle init}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 587}
+		\textbf{Correct: A} --- \texttt{bundle validate} checks config.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B deploys.
+			\item C runs resources.
+			\item D scaffolds a bundle.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 588}
+		What is the purpose of a Unity Catalog metastore?
+		\begin{enumerate}[label=\Alph*.]
+			\item It stores metadata for catalogs, schemas, and tables
+			\item It trains models
+			\item It serves models
+			\item It stores notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 588}
+		\textbf{Correct: A} --- metastores store UC metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 589}
+		How many metastores can a Databricks account have per region?
+		\begin{enumerate}[label=\Alph*.]
+			\item One
+			\item Two
+			\item Three
+			\item Unlimited
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 589}
+		\textbf{Correct: A} --- one metastore per region.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are incorrect.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 590}
+		What is a Unity Catalog catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item A top-level container for schemas
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 590}
+		\textbf{Correct: A} --- catalogs contain schemas.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 591}
+		What does the \texttt{USE CATALOG} privilege allow?
+		\begin{enumerate}[label=\Alph*.]
+			\item Using objects within a catalog
+			\item Training models
+			\item Serving models
+			\item Registering models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 591}
+		\textbf{Correct: A} --- \texttt{USE CATALOG} allows catalog use.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 592}
+		What does the \texttt{USE SCHEMA} privilege allow?
+		\begin{enumerate}[label=\Alph*.]
+			\item Using objects within a schema
+			\item Training models
+			\item Serving models
+			\item Registering models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 592}
+		\textbf{Correct: A} --- \texttt{USE SCHEMA} allows schema use.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 593}
+		What is the purpose of a Unity Catalog function?
+		\begin{enumerate}[label=\Alph*.]
+			\item To define reusable logic callable in SQL
+			\item To train models
+			\item To serve models
+			\item To store notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 593}
+		\textbf{Correct: A} --- UC functions define SQL-callable logic.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 594}
+		What does the \texttt{EXECUTE} privilege allow on a function?
+		\begin{enumerate}[label=\Alph*.]
+			\item Calling the function
+			\item Modifying the function
+			\item Deleting the function
+			\item Creating the function
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 594}
+		\textbf{Correct: A} --- \texttt{EXECUTE} allows calling functions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D require other privileges.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 595}
+		What is the benefit of a shared cluster in Databricks?
+		\begin{enumerate}[label=\Alph*.]
+			\item Multiple users can use it with isolation
+			\item It trains faster
+			\item It serves faster
+			\item It registers models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 595}
+		\textbf{Correct: A} --- shared clusters support multiple users.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 596}
+		Why might a single-user cluster be preferred for advanced ML workloads?
+		\begin{enumerate}[label=\Alph*.]
+			\item It supports more configuration and libraries
+			\item It is cheaper
+			\item It supports multiple users
+			\item It supports SQL only
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 596}
+		\textbf{Correct: A} --- single-user clusters allow more customization.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 597}
+		What is a Databricks Repo's purpose?
+		\begin{enumerate}[label=\Alph*.]
+			\item To sync notebooks and files with a Git provider
+			\item To train models
+			\item To serve models
+			\item To store feature tables
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 597}
+		\textbf{Correct: A} --- Repos sync with Git.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 598}
+		Why use Git with Databricks Repos?
+		\begin{enumerate}[label=\Alph*.]
+			\item To track changes and enable collaboration
+			\item To train faster
+			\item To serve faster
+			\item To register models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 598}
+		\textbf{Correct: A} --- Git enables versioning and collaboration.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 599}
+		What does a Databricks notebook's revision history show?
+		\begin{enumerate}[label=\Alph*.]
+			\item Past versions of the notebook
+			\item Model metrics
+			\item Feature tables
+			\item Cluster configs
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 599}
+		\textbf{Correct: A} --- revision history shows notebook versions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 600}
+		What is the best practice for deploying ML code across environments?
+		\begin{enumerate}[label=\Alph*.]
+			\item Use Repos, bundles, and CI/CD pipelines
+			\item Copy notebooks manually
+			\item Use a single workspace only
+			\item Skip testing
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 600}
+		\textbf{Correct: A} --- Repos, bundles, and CI/CD are best practice.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are error-prone or unsafe.
+		\end{itemize}
+	\end{frame}
+	
+\end{document}

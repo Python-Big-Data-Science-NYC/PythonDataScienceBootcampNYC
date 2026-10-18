@@ -1,0 +1,353 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Databricks ML Associate --- Practice Exam}
+\lhead{100 Questions \& Answers}
+\cfoot{\thepage}
+
+\title{\textbf{100 Practice Exam Questions and Answers}\\[4pt]
+	\large Databricks Certified \textbf{Machine Learning Associate}\\[2pt]
+	\normalsize Topics: Feature Store (Unity Catalog), MLflow, AutoML, Data Processing, Hyperopt, Spark ML, Model Evaluation, Model Serving}
+\author{Practice Exam}
+\date{}
+
+\begin{document}
+	\maketitle
+	\tableofcontents
+	\newpage
+	
+	\section*{Exam Format \& How to Use}
+	\addcontentsline{toc}{section}{Exam Format \& How to Use}
+	The Databricks ML Associate exam assesses the ability to \textbf{use Databricks} for basic ML tasks: AutoML, Unity Catalog, MLflow, feature engineering, model building (training/tuning/evaluation), and deployment [citation:1]. It is \textbf{not} a pure math or ML theory exam. All ML code is Python; data manipulation may appear in SQL.
+	
+	\begin{itemize}
+		\item \textbf{[MC]} = multiple choice (single best answer).
+		\item \textbf{[SA]} = short answer.
+		\item \textbf{[CODE]} = write or interpret Databricks/MLflow code.
+		\item \textbf{[SCENARIO]} = scenario-based reasoning.
+	\end{itemize}
+	
+	\textbf{Domains (official weights):} A. Databricks Machine Learning (38\%); B. ML Workflows (19\%); C. Model Development (31\%); D. Model Deployment (12\%) [citation:1].
+	\newpage
+	
+	\section{A. Databricks Machine Learning (38\%)}
+	
+	\subsection*{Feature Store \& Unity Catalog}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}]
+		
+		\item \textbf{[MC]} What is the primary advantage of creating Feature Store tables at the \textbf{account level} in Unity Catalog versus the workspace level?
+		\begin{enumerate}[label=(\alph*)]
+			\item Faster training speed
+			\item Cross-workspace governance, discoverability, and access control
+			\item Automatic feature engineering
+			\item Lower storage cost
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(b)}. Account-level tables in Unity Catalog are governed and discoverable across workspaces [citation:1].
+		
+		\item \textbf{[SA]} Which client is used to create and manage Feature Store tables in Unity Catalog?
+		
+		\textbf{Answer:} \texttt{FeatureEngineeringClient}.
+		
+		\item \textbf{[SA]} What method creates a feature table?
+		
+		\textbf{Answer:} \texttt{fe.create\_table()}.
+		
+		\item \textbf{[SA]} What method writes features to a feature table?
+		
+		\textbf{Answer:} \texttt{fe.write\_table()}.
+		
+		\item \textbf{[SA]} What does \texttt{fe.create\_training\_set()} do that a plain join does not?
+		
+		\textbf{Answer:} It performs \textbf{point-in-time lookups}, ensuring training data uses only feature values that were available at the time of each label event [citation:2].
+		
+		\item \textbf{[SCENARIO]} A team's offline model scores well but production predictions degrade. Review shows a feature was computed using data only available \emph{after} the label outcome. What is the diagnosis?
+		
+		\textbf{Answer:} \textbf{Training-serving skew / target leakage}. Point-in-time lookups in Feature Store prevent this by aligning feature values to the label timestamp [citation:2].
+		
+		\item \textbf{[MC]} What is the difference between online and offline feature tables?
+		\begin{enumerate}[label=(\alph*)]
+			\item Online is for training; offline is for serving
+			\item Online serves low-latency real-time inference; offline is for batch training/scoring
+			\item They are identical
+			\item Offline is deprecated
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(b)}.
+		
+	\end{enumerate}
+	
+	\subsection*{MLflow}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}, start=8]
+		
+		\item \textbf{[SA]} Which MLflow API call manually logs a metric?
+		
+		\textbf{Answer:} \texttt{mlflow.log\_metric()}.
+		
+		\item \textbf{[SA]} Which MLflow API call registers a model in Unity Catalog?
+		
+		\textbf{Answer:} \texttt{mlflow.register\_model()}.
+		
+		\item \textbf{[MC]} What replaced the old ``Staging'' and ``Production'' stages for model promotion in Unity Catalog?
+		\begin{enumerate}[label=(\alph*)]
+			\item Tags only
+			\item Aliases (e.g., \texttt{@champion})
+			\item Notebook revisions
+			\item Git branches
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(b)}. Aliases allow applications to reference \texttt{@champion}, and promotion is an alias move [citation:2].
+		
+		\item \textbf{[SA]} How do you promote a challenger model to champion using aliases?
+		
+		\textbf{Answer:} Move the \texttt{champion} alias to the new model version.
+		
+		\item \textbf{[SCENARIO]} A team needs every training run to be reproducible months later, including parameters, metrics, and the model artifact. What is the correct Databricks-native approach?
+		
+		\textbf{Answer:} Use \textbf{MLflow tracking} to log parameters, metrics, artifacts, and the model for each run [citation:20].
+		
+	\end{enumerate}
+	
+	\subsection*{AutoML}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}, start=13]
+		
+		\item \textbf{[SA]} What does Databricks AutoML produce besides a trained model?
+		
+		\textbf{Answer:} A \textbf{leaderboard} of candidate models, editable notebooks for each trial, and automatic feature engineering [citation:15].
+		
+		\item \textbf{[SA]} Which API runs classification AutoML?
+		
+		\textbf{Answer:} \texttt{databricks.automl.classify()}.
+		
+		\item \textbf{[MC]} AutoML is \emph{least} appropriate when:
+		\begin{enumerate}[label=(\alph*)]
+			\item You need a quick baseline
+			\item You need a highly customized deep learning architecture
+			\item You want automatic feature engineering
+			\item You want to compare multiple algorithms
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(b)}.
+		
+	\end{enumerate}
+	
+	\newpage
+	\section{B. ML Workflows (19\%)}
+	
+	\subsection*{Data Processing \& EDA}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}, start=16]
+		
+		\item \textbf{[SA]} How do you compute summary statistics on a Spark DataFrame?
+		
+		\textbf{Answer:} \texttt{df.summary()} or \texttt{dbutils.data.summarize()} [citation:1].
+		
+		\item \textbf{[SA]} How do you remove outliers using IQR in Spark?
+		
+		\textbf{Answer:} Compute Q1 and Q3, then filter values outside $[Q1 - 1.5 \cdot IQR,\; Q3 + 1.5 \cdot IQR]$ [citation:1].
+		
+		\item \textbf{[MC]} When is median imputation preferred over mean imputation?
+		\begin{enumerate}[label=(\alph*)]
+			\item When data is symmetric
+			\item When data is skewed or contains outliers
+			\item When there are no missing values
+			\item Always
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(b)}. Median is robust to skew and outliers [citation:1].
+		
+		\item \textbf{[MC]} One-hot encoding is \emph{least} appropriate for:
+		\begin{enumerate}[label=(\alph*)]
+			\item Nominal categorical features
+			\item Very high-cardinality categorical features
+			\item Low-cardinality categorical features
+			\item Tree-based models
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(b)}. High cardinality causes dimensionality explosion [citation:1].
+		
+		\item \textbf{[SA]} How do you one-hot encode in Spark ML?
+		
+		\textbf{Answer:} \texttt{StringIndexer} followed by \texttt{OneHotEncoder}.
+		
+		\item \textbf{[SA]} What does \texttt{VectorAssembler} do?
+		
+		\textbf{Answer:} Combines multiple feature columns into a single vector column required by Spark ML estimators.
+		
+		\item \textbf{[SA]} When is log transformation appropriate?
+		
+		\textbf{Answer:} For \textbf{right-skewed positive} features [citation:1].
+		
+	\end{enumerate}
+	
+	\newpage
+	\section{C. Model Development (31\%)}
+	
+	\subsection*{Hyperparameter Tuning}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}, start=23]
+		
+		\item \textbf{[SA]} What does Hyperopt's \texttt{fmin} do?
+		
+		\textbf{Answer:} Minimizes an objective function over a defined search space [citation:15].
+		
+		\item \textbf{[SA]} What does \texttt{SparkTrials} do?
+		
+		\textbf{Answer:} Distributes Hyperopt trials across a Spark cluster for parallel tuning [citation:2].
+		
+		\item \textbf{[SCENARIO]} A team has 8 worker nodes and needs to tune a model with 5 hyperparameters. Which approach best leverages the cluster?
+		\begin{enumerate}[label=(\alph*)]
+			\item Grid search on the driver node
+			\item Sequential manual tuning
+			\item Hyperopt with \texttt{SparkTrials(parallelism=8)} and TPE search
+			\item Random search on the driver node
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(c)}. Bayesian (TPE) search is more efficient than grid/random, and \texttt{SparkTrials} distributes trials across workers [citation:9].
+		
+		\item \textbf{[SA]} With 5-fold cross-validation and a grid of 10 combinations, how many models are trained?
+		
+		\textbf{Answer:} \textbf{50} ($5 \times 10$) [citation:1].
+		
+	\end{enumerate}
+	
+	\subsection*{Model Evaluation}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}, start=27]
+		
+		\item \textbf{[MC]} A fraud dataset has 1\% positive class. A model reports 99\% accuracy. What should you do?
+		\begin{enumerate}[label=(\alph*)]
+			\item Deploy it
+			\item Evaluate precision, recall, F1, and PR-AUC on the minority class
+			\item Increase epochs
+			\item Add features
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(b)}. Accuracy is misleading; always predicting majority gives 99\% [citation:2].
+		
+		\item \textbf{[SA]} What does $R^2 = 0.85$ mean?
+		
+		\textbf{Answer:} The model explains 85\% of the variance in the target [citation:7].
+		
+		\item \textbf{[SA]} Why might RMSE be higher than MAE?
+		
+		\textbf{Answer:} RMSE penalizes large errors more heavily due to squaring, indicating presence of larger prediction errors [citation:7].
+		
+		\item \textbf{[SCENARIO]} Training accuracy is 99.5\%, validation is 72\%. What is the diagnosis and fix?
+		\begin{enumerate}[label=(\alph*)]
+			\item Underfitting; increase depth
+			\item Overfitting; reduce complexity or add regularization
+			\item Good model; deploy
+			\item Need more test data
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(b)}. Large train-validation gap signals overfitting [citation:9].
+		
+		\item \textbf{[MC]} What is the effect of increasing model complexity on bias and variance?
+		\begin{enumerate}[label=(\alph*)]
+			\item Bias decreases, variance increases
+			\item Bias increases, variance decreases
+			\item Both decrease
+			\item Both increase
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(a)}.
+		
+		\item \textbf{[SA]} What does \texttt{CrossValidator} do in Spark ML?
+		
+		\textbf{Answer:} Performs $k$-fold cross-validation with a \texttt{ParamGridBuilder} to select the best hyperparameters.
+		
+	\end{enumerate}
+	
+	\newpage
+	\section{D. Model Deployment (12\%)}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}, start=33]
+		
+		\item \textbf{[SA]} What are the three model serving approaches tested on the exam?
+		
+		\textbf{Answer:} \textbf{Batch}, \textbf{real-time}, and \textbf{streaming} [citation:1].
+		
+		\item \textbf{[SCENARIO]} A scikit-learn model must score 100 million Delta table records efficiently. What is the best approach?
+		\begin{enumerate}[label=(\alph*)]
+			\item Load into pandas on the driver and loop
+			\item Use \texttt{mlflow.pyfunc.spark\_udf()} to distribute inference across workers
+			\item Export to CSV and score externally
+			\item Create a real-time endpoint and call per record
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(b)}. Spark UDF distributes inference across the cluster [citation:9].
+		
+		\item \textbf{[SA]} How is streaming inference performed in Databricks?
+		
+		\textbf{Answer:} Using \textbf{Delta Live Tables} [citation:1].
+		
+		\item \textbf{[SA]} How do you split traffic between real-time serving endpoints?
+		
+		\textbf{Answer:} Configure \textbf{traffic splitting} on the serving endpoint [citation:1].
+		
+		\item \textbf{[MC]} What is the primary purpose of a real-time serving endpoint?
+		\begin{enumerate}[label=(\alph*)]
+			\item Batch scoring
+			\item Low-latency predictions accessible via REST API
+			\item Training models
+			\item Data storage
+		\end{enumerate}
+		
+		\textbf{Answer:} \textbf{(b)}.
+		
+	\end{enumerate}
+	
+	\newpage
+	\section*{Answer Key}
+	\addcontentsline{toc}{section}{Answer Key}
+	
+	\begin{longtable}{@{}p{0.8cm}p{8.0cm}p{0.8cm}p{6.2cm}@{}}
+		\toprule
+		\textbf{Q} & \textbf{Answer} & \textbf{Q} & \textbf{Answer} \\
+		\midrule
+		\endhead
+		1 & (b) cross-workspace governance & 21 & VectorAssembler combines columns \\
+		2 & \texttt{FeatureEngineeringClient} & 22 & right-skewed positive features \\
+		3 & \texttt{fe.create\_table()} & 23 & minimizes objective function \\
+		4 & \texttt{fe.write\_table()} & 24 & distributes trials across Spark \\
+		5 & point-in-time lookups & 25 & (c) Hyperopt + SparkTrials \\
+		6 & training-serving skew / leakage & 26 & 50 models \\
+		7 & (b) online low-latency, offline batch & 27 & (b) precision/recall/F1/PR-AUC \\
+		8 & \texttt{mlflow.log\_metric()} & 28 & 85\% variance explained \\
+		9 & \texttt{mlflow.register\_model()} & 29 & RMSE penalizes large errors \\
+		10 & (b) aliases (\texttt{@champion}) & 30 & (b) overfitting; reduce complexity \\
+		11 & move champion alias to new version & 31 & (a) bias down, variance up \\
+		12 & MLflow tracking logs params/metrics/artifacts & 32 & k-fold CV with ParamGridBuilder \\
+		13 & leaderboard + editable notebooks + auto FE & 33 & batch, real-time, streaming \\
+		14 & \texttt{databricks.automl.classify()} & 34 & (b) spark\_udf distributes inference \\
+		15 & (b) custom deep learning & 35 & Delta Live Tables \\
+		16 & \texttt{df.summary()} / \texttt{dbutils.data.summarize()} & 36 & traffic splitting on endpoint \\
+		17 & IQR filter (Q1-1.5IQR, Q3+1.5IQR) & 37 & (b) low-latency REST API \\
+		18 & (b) skewed or outliers & & \\
+		19 & (b) high cardinality & & \\
+		20 & StringIndexer + OneHotEncoder & & \\
+		\bottomrule
+	\end{longtable}
+	
+	\vspace{1em}
+	\noindent\textbf{Note:} This set is \textbf{objective-derived practice}, not official exam questions. Databricks does not publish a question bank. Every item above maps to a published objective in the official exam guide [citation:1].
+	
+\end{document}

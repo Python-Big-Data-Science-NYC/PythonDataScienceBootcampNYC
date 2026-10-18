@@ -1,0 +1,1942 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{Databricks ML Associate}
+\subtitle{Questions 701--800 (Eighth 100)}
+\author{Practice Exam Deck}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{How to Use This Deck}
+		\begin{itemize}
+			\item 100 new questions (Q701--Q800), none repeated from Q1--Q700.
+			\item Each question slide has four options (A--D).
+			\item The next slide gives the correct answer and explains why the right option is right and why each wrong option is wrong.
+			\item This set emphasizes Feature Store creation parameters, MLflow project/run tags, serving endpoint CRUD, registry operations, evaluator parameters, Hyperopt + MLflow, DLT modes, and CLI/API patterns.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 701}
+		Which parameter identifies the primary key when creating a Feature Store table?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{primary\_keys}
+			\item \texttt{keys}
+			\item \texttt{index\_cols}
+			\item \texttt{row\_id}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 701}
+		\textbf{Correct: A} --- \texttt{primary\_keys} defines the key columns.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the Feature Store parameter.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 702}
+		Which parameter identifies the timestamp column when creating a time-series feature table?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{timestamp\_keys}
+			\item \texttt{event\_time}
+			\item \texttt{time\_col}
+			\item \texttt{ts\_col}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 702}
+		\textbf{Correct: A} --- \texttt{timestamp\_keys} defines time columns.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the Feature Store parameter.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 703}
+		Which parameter gives a feature table a human-readable description?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{description}
+			\item \texttt{comment}
+			\item \texttt{metadata}
+			\item \texttt{notes}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 703}
+		\textbf{Correct: A} --- \texttt{description} sets the table description.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the Feature Store parameter.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 704}
+		Which parameter specifies the database or schema for a feature table?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{database\_name} or schema name in the table name
+			\item \texttt{catalog}
+			\item \texttt{namespace}
+			\item \texttt{prefix}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 704}
+		\textbf{Correct: A} --- the table name includes the schema.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the Feature Store parameter.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 705}
+		What does the \texttt{tags} parameter on a feature table do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Attaches key-value metadata to the table
+			\item Trains the model
+			\item Serves the model
+			\item Registers the model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 705}
+		\textbf{Correct: A} --- tags attach metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 706}
+		What is an MLflow project?
+		\begin{enumerate}[label=\Alph*.]
+			\item A packaged ML code project with an MLproject file
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 706}
+		\textbf{Correct: A} --- projects package code with an MLproject file.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 707}
+		What file defines an MLflow project?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{MLproject}
+			\item \texttt{project.yaml}
+			\item \texttt{mlflow.json}
+			\item \texttt{requirements.txt}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 707}
+		\textbf{Correct: A} --- \texttt{MLproject} defines a project.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the project definition file.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 708}
+		What does an MLflow project's entry point define?
+		\begin{enumerate}[label=\Alph*.]
+			\item A runnable command and its parameters
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 708}
+		\textbf{Correct: A} --- entry points define runnable commands.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 709}
+		Which MLflow API runs an MLflow project?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.run()}
+			\item \texttt{mlflow.start()}
+			\item \texttt{mlflow.execute()}
+			\item \texttt{mlflow.launch()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 709}
+		\textbf{Correct: A} --- \texttt{mlflow.run()} runs a project.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 710}
+		What is a run tag used for in MLflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item Attaching metadata to a run
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 710}
+		\textbf{Correct: A} --- tags attach metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 711}
+		Which MLflow API creates a serving endpoint?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.deployments.create\_endpoint()}
+			\item \texttt{mlflow.serve()}
+			\item \texttt{mlflow.endpoint()}
+			\item \texttt{mlflow.deploy()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 711}
+		\textbf{Correct: A} --- \texttt{create\_endpoint()} creates endpoints.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 712}
+		Which MLflow API queries a serving endpoint?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.deployments.predict()}
+			\item \texttt{mlflow.predict()}
+			\item \texttt{mlflow.query()}
+			\item \texttt{mlflow.infer()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 712}
+		\textbf{Correct: A} --- \texttt{predict()} queries endpoints.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 713}
+		Which MLflow API lists serving endpoints?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.deployments.list\_endpoints()}
+			\item \texttt{mlflow.endpoints()}
+			\item \texttt{mlflow.list\_serve()}
+			\item \texttt{mlflow.deploy\_list()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 713}
+		\textbf{Correct: A} --- \texttt{list\_endpoints()} lists endpoints.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 714}
+		Which MLflow API deletes a serving endpoint?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.deployments.delete\_endpoint()}
+			\item \texttt{mlflow.delete\_serve()}
+			\item \texttt{mlflow.remove\_endpoint()}
+			\item \texttt{mlflow.endpoint\_delete()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 714}
+		\textbf{Correct: A} --- \texttt{delete\_endpoint()} deletes endpoints.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 715}
+		What does a serving endpoint's traffic configuration control?
+		\begin{enumerate}[label=\Alph*.]
+			\item How requests are routed to served entities
+			\item The training algorithm
+			\item The feature table
+			\item The cluster size
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 715}
+		\textbf{Correct: A} --- traffic configs route requests.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 716}
+		What is a served entity in a serving endpoint?
+		\begin{enumerate}[label=\Alph*.]
+			\item A model version or feature spec the endpoint serves
+			\item A training job
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 716}
+		\textbf{Correct: A} --- served entities define what is served.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 717}
+		Which MLflow API creates a registered model in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.create\_model()} or \texttt{register\_model()}
+			\item \texttt{mlflow.new\_model()}
+			\item \texttt{mlflow.add\_model()}
+			\item \texttt{mlflow.make\_model()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 717}
+		\textbf{Correct: A} --- models are created via those APIs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 718}
+		Which MLflow API sets a registered model's description?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.update\_model()}
+			\item \texttt{mlflow.set\_model\_description()}
+			\item \texttt{mlflow.describe\_model()}
+			\item \texttt{mlflow.model\_info()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 718}
+		\textbf{Correct: A} --- \texttt{update\_model()} updates model metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 719}
+		Which MLflow API transitions a model version's stage?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.transition\_model\_version\_stage()}
+			\item \texttt{mlflow.set\_stage()}
+			\item \texttt{mlflow.move\_version()}
+			\item \texttt{mlflow.change\_stage()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 719}
+		\textbf{Correct: A} --- that API transitions stages.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 720}
+		Which MLflow API deletes a model version?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.delete\_model\_version()}
+			\item \texttt{mlflow.remove\_version()}
+			\item \texttt{mlflow.drop\_version()}
+			\item \texttt{mlflow.model\_delete()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 720}
+		\textbf{Correct: A} --- \texttt{delete\_model\_version()} deletes versions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 721}
+		Which MLflow API updates a model version's description?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.update\_model\_version()}
+			\item \texttt{mlflow.set\_version\_desc()}
+			\item \texttt{mlflow.describe\_version()}
+			\item \texttt{mlflow.version\_info()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 721}
+		\textbf{Correct: A} --- \texttt{update\_model\_version()} updates metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 722}
+		What does \texttt{setLabelCol()} do in a Spark ML evaluator?
+		\begin{enumerate}[label=\Alph*.]
+			\item Sets the target column for evaluation
+			\item Sets the metric
+			\item Sets the prediction column
+			\item Sets the model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 722}
+		\textbf{Correct: A} --- it sets the label column.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{setMetricName}.
+			\item C is \texttt{setPredictionCol}.
+			\item D is unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 723}
+		What does \texttt{setRawPredictionCol()} do in a Spark ML evaluator?
+		\begin{enumerate}[label=\Alph*.]
+			\item Sets the column containing raw prediction scores
+			\item Sets the target column
+			\item Sets the metric
+			\item Sets the model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 723}
+		\textbf{Correct: A} --- it sets the raw prediction column.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{setLabelCol}.
+			\item C is \texttt{setMetricName}.
+			\item D is unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 724}
+		What does \texttt{setProbabilityCol()} do in a Spark ML evaluator?
+		\begin{enumerate}[label=\Alph*.]
+			\item Sets the column containing predicted probabilities
+			\item Sets the target column
+			\item Sets the metric
+			\item Sets the model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 724}
+		\textbf{Correct: A} --- it sets the probability column.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{setLabelCol}.
+			\item C is \texttt{setMetricName}.
+			\item D is unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 725}
+		Which Spark ML evaluator computes \texttt{areaUnderPR}?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{BinaryClassificationEvaluator}
+			\item \texttt{RegressionEvaluator}
+			\item \texttt{ClusteringEvaluator}
+			\item \texttt{MulticlassClassificationEvaluator}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 725}
+		\textbf{Correct: A} --- binary evaluator computes \texttt{areaUnderPR}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other evaluators.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 726}
+		Which Spark ML evaluator supports \texttt{accuracy}?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{MulticlassClassificationEvaluator}
+			\item \texttt{RegressionEvaluator}
+			\item \texttt{ClusteringEvaluator}
+			\item \texttt{BinaryClassificationEvaluator}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 726}
+		\textbf{Correct: A} --- multiclass evaluator supports accuracy.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other evaluators.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 727}
+		Which Spark ML evaluator supports \texttt{mae}?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{RegressionEvaluator}
+			\item \texttt{BinaryClassificationEvaluator}
+			\item \texttt{MulticlassClassificationEvaluator}
+			\item \texttt{ClusteringEvaluator}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 727}
+		\textbf{Correct: A} --- regression evaluator supports MAE.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other evaluators.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 728}
+		What is an MLflow autologging benefit?
+		\begin{enumerate}[label=\Alph*.]
+			\item It removes the need to log params/metrics manually
+			\item It trains faster
+			\item It serves faster
+			\item It registers models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 728}
+		\textbf{Correct: A} --- autologging automates logging.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 729}
+		How does Hyperopt integrate with MLflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item By logging each trial's results to MLflow when enabled
+			\item By replacing MLflow
+			\item By serving models
+			\item By registering models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 729}
+		\textbf{Correct: A} --- Hyperopt can log trials to MLflow.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 730}
+		Which Hyperopt feature logs trial results to MLflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{MLflowLogger} or auto-logging integration
+			\item \texttt{SparkTrials} only
+			\item \texttt{STATUS\_OK}
+			\item \texttt{fmin}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 730}
+		\textbf{Correct: A} --- MLflow logging is enabled via the integration.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is distribution.
+			\item C is a status.
+			\item D is the optimizer.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 731}
+		What is a Delta Live Tables pipeline's continuous mode?
+		\begin{enumerate}[label=\Alph*.]
+			\item It keeps the pipeline running to process new data
+			\item It runs once and stops
+			\item It trains models
+			\item It serves models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 731}
+		\textbf{Correct: A} --- continuous pipelines keep processing new data.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is triggered mode.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 732}
+		What is a Delta Live Tables pipeline's triggered mode?
+		\begin{enumerate}[label=\Alph*.]
+			\item It processes data and then stops
+			\item It runs continuously
+			\item It trains models
+			\item It serves models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 732}
+		\textbf{Correct: A} --- triggered pipelines run and stop.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is continuous.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 733}
+		What is a Delta Live Tables pipeline's event log used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Tracking pipeline execution and data quality
+			\item Training models
+			\item Serving models
+			\item Registering models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 733}
+		\textbf{Correct: A} --- event logs track pipeline execution.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 734}
+		What is a Delta Live Tables pipeline's materialized view?
+		\begin{enumerate}[label=\Alph*.]
+			\item A precomputed query result stored as a table
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 734}
+		\textbf{Correct: A} --- materialized views store query results.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 735}
+		Which is a valid Databricks CLI command to list jobs?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{databricks jobs list}
+			\item \texttt{databricks list jobs}
+			\item \texttt{databricks jobs all}
+			\item \texttt{databricks job ls}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 735}
+		\textbf{Correct: A} --- \texttt{jobs list} lists jobs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the command syntax.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 736}
+		Which is a valid Databricks CLI command to run a job?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{databricks jobs run-now}
+			\item \texttt{databricks run job}
+			\item \texttt{databricks jobs start}
+			\item \texttt{databricks job execute}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 736}
+		\textbf{Correct: A} --- \texttt{jobs run-now} starts a job.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the CLI syntax.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 737}
+		Which is a valid Databricks CLI command to list clusters?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{databricks clusters list}
+			\item \texttt{databricks list clusters}
+			\item \texttt{databricks clusters all}
+			\item \texttt{databricks cluster ls}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 737}
+		\textbf{Correct: A} --- \texttt{clusters list} lists clusters.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the CLI syntax.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 738}
+		Which REST API endpoint lists jobs?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{GET /api/2.1/jobs/list}
+			\item \texttt{GET /api/2.1/jobs/all}
+			\item \texttt{GET /api/2.1/list/jobs}
+			\item \texttt{GET /api/2.1/jobs}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 738}
+		\textbf{Correct: A} --- \texttt{/jobs/list} lists jobs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the correct endpoint.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 739}
+		Which REST API endpoint triggers a job run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{POST /api/2.1/jobs/run-now}
+			\item \texttt{POST /api/2.1/jobs/start}
+			\item \texttt{POST /api/2.1/jobs/execute}
+			\item \texttt{POST /api/2.1/jobs/launch}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 739}
+		\textbf{Correct: A} --- \texttt{run-now} triggers a run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the endpoint.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 740}
+		Which REST API endpoint lists clusters?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{GET /api/2.0/clusters/list}
+			\item \texttt{GET /api/2.0/clusters/all}
+			\item \texttt{GET /api/2.0/clusters}
+			\item \texttt{GET /api/2.0/list/clusters}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 740}
+		\textbf{Correct: A} --- \texttt{/clusters/list} lists clusters.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the endpoint.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 741}
+		What is a Databricks personal access token used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Authenticating API and CLI calls
+			\item Training models
+			\item Serving models
+			\item Registering models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 741}
+		\textbf{Correct: A} --- PATs authenticate API/CLI calls.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 742}
+		Which is a best practice for personal access tokens?
+		\begin{enumerate}[label=\Alph*.]
+			\item Rotate tokens regularly and store them securely
+			\item Share tokens publicly
+			\item Commit tokens to Git
+			\item Use the same token for all users
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 742}
+		\textbf{Correct: A} --- rotate and store tokens securely.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unsafe.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 743}
+		What is OAuth used for in Databricks?
+		\begin{enumerate}[label=\Alph*.]
+			\item Delegated authentication for users and service principals
+			\item Training models
+			\item Serving models
+			\item Registering models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 743}
+		\textbf{Correct: A} --- OAuth supports delegated authentication.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 744}
+		What is a Unity Catalog model's fully qualified name format?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{catalog.schema.model}
+			\item \texttt{database.model}
+			\item \texttt{workspace.model}
+			\item \texttt{hive.model}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 744}
+		\textbf{Correct: A} --- UC models use \texttt{catalog.schema.model}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not UC formats.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 745}
+		Which privilege is needed to register a model in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{USE CATALOG} and \texttt{USE SCHEMA} plus create permission
+			\item \texttt{SELECT} only
+			\item \texttt{MODIFY} only
+			\item \texttt{EXECUTE} only
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 745}
+		\textbf{Correct: A} --- registration needs catalog/schema use and create.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are insufficient alone.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 746}
+		Which privilege is needed to serve a model from Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{EXECUTE}
+			\item \texttt{SELECT}
+			\item \texttt{MODIFY}
+			\item \texttt{READ}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 746}
+		\textbf{Correct: A} --- \texttt{EXECUTE} allows model use.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are table privileges.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 747}
+		What is a model version's URI in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{models:/catalog.schema.model/version}
+			\item \texttt{runs:/version/model}
+			\item \texttt{models:/catalog/version}
+			\item \texttt{models://version}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 747}
+		\textbf{Correct: A} --- UC model URIs use \texttt{models:/<name>/<version>}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is a run URI.
+			\item C, D are malformed.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 748}
+		What does \texttt{mlflow.pyfunc.load\_model()} accept?
+		\begin{enumerate}[label=\Alph*.]
+			\item A model URI such as a registry URI or run URI
+			\item A DataFrame
+			\item A cluster
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 748}
+		\textbf{Correct: A} --- it loads by model URI.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not model URIs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 749}
+		What does \texttt{mlflow.pyfunc.predict()} accept after loading?
+		\begin{enumerate}[label=\Alph*.]
+			\item A pandas or Spark DataFrame of inputs
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 749}
+		\textbf{Correct: A} --- \texttt{predict()} accepts input DataFrames.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not inputs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 750}
+		What is an MLflow model URI \texttt{runs:/...} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Loading a model artifact from a run
+			\item Loading a feature table
+			\item Loading a cluster
+			\item Loading a notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 750}
+		\textbf{Correct: A} --- run URIs load artifacts from a run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not loaded by run URIs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 751}
+		What is an MLflow run's source name?
+		\begin{enumerate}[label=\Alph*.]
+			\item The file or notebook that started the run
+			\item The model
+			\item The feature table
+			\item The cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 751}
+		\textbf{Correct: A} --- source name identifies the run origin.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 752}
+		What is an MLflow run's user?
+		\begin{enumerate}[label=\Alph*.]
+			\item The user who started the run
+			\item The model
+			\item The feature table
+			\item The cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 752}
+		\textbf{Correct: A} --- the run user is the initiator.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 753}
+		What is an MLflow run's start time?
+		\begin{enumerate}[label=\Alph*.]
+			\item When the run began
+			\item When the run ended
+			\item When the model was served
+			\item When the model was registered
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 753}
+		\textbf{Correct: A} --- start time is when the run began.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other times.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 754}
+		What is an MLflow run's end time?
+		\begin{enumerate}[label=\Alph*.]
+			\item When the run ended
+			\item When the run began
+			\item When the model was served
+			\item When the model was registered
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 754}
+		\textbf{Correct: A} --- end time is when the run ended.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other times.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 755}
+		What is an MLflow experiment's artifact location?
+		\begin{enumerate}[label=\Alph*.]
+			\item Where artifacts for runs in the experiment are stored
+			\item Where models are registered
+			\item Where clusters are configured
+			\item Where notebooks are stored
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 755}
+		\textbf{Correct: A} --- artifact locations define storage for runs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 756}
+		What is an MLflow experiment's lifecycle stage?
+		\begin{enumerate}[label=\Alph*.]
+			\item Whether the experiment is active or deleted
+			\item The model's stage
+			\item The cluster's mode
+			\item The feature table's mode
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 756}
+		\textbf{Correct: A} --- lifecycle stages track active/deleted experiments.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 757}
+		What is a nested run in MLflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item A run started inside another run
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 757}
+		\textbf{Correct: A} --- nested runs belong to a parent run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 758}
+		Which flag starts a nested run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{nested=True}
+			\item \texttt{child=True}
+			\item \texttt{sub=True}
+			\item \texttt{nest=True}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 758}
+		\textbf{Correct: A} --- \texttt{nested=True} starts a nested run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API flag.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 759}
+		What is an MLflow parent run?
+		\begin{enumerate}[label=\Alph*.]
+			\item The outer run containing nested runs
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 759}
+		\textbf{Correct: A} --- the parent run contains nested runs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 760}
+		What does \texttt{mlflow.get\_parent\_run()} return?
+		\begin{enumerate}[label=\Alph*.]
+			\item The parent run of the active nested run
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 760}
+		\textbf{Correct: A} --- it returns the parent run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 761}
+		Which MLflow API lists nested runs?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.search\_runs()} with a parent filter
+			\item \texttt{mlflow.list\_children()}
+			\item \texttt{mlflow.children()}
+			\item \texttt{mlflow.nested\_runs()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 761}
+		\textbf{Correct: A} --- search with a parent run filter.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 762}
+		What is a Feature Store training set's source?
+		\begin{enumerate}[label=\Alph*.]
+			\item A label DataFrame joined with feature lookups
+			\item A model
+			\item A cluster
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 762}
+		\textbf{Correct: A} --- training sets combine labels and features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 763}
+		What does a training set's label column represent?
+		\begin{enumerate}[label=\Alph*.]
+			\item The target value for each row
+			\item The feature table
+			\item The model
+			\item The cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 763}
+		\textbf{Correct: A} --- label columns hold targets.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 764}
+		What does \texttt{exclude\_columns} do in a FeatureLookup?
+		\begin{enumerate}[label=\Alph*.]
+			\item Excludes specific columns from the lookup
+			\item Trains a model
+			\item Serves a model
+			\item Registers a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 764}
+		\textbf{Correct: A} --- \texttt{exclude\_columns} removes columns.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 765}
+		What does a FeatureLookup's \texttt{lookup\_key} specify?
+		\begin{enumerate}[label=\Alph*.]
+			\item The join key used to match features to the label DataFrame
+			\item The model
+			\item The cluster
+			\item The metric
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 765}
+		\textbf{Correct: A} --- \texttt{lookup\_key} is the join key.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 766}
+		What does a FeatureLookup's \texttt{feature\_names} specify?
+		\begin{enumerate}[label=\Alph*.]
+			\item The specific feature columns to look up
+			\item The model
+			\item The cluster
+			\item The metric
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 766}
+		\textbf{Correct: A} --- \texttt{feature\_names} selects columns.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 767}
+		What is a model's input example used for in MLflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item Documenting expected input format for serving
+			\item Training a model
+			\item Registering a model
+			\item Deleting a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 767}
+		\textbf{Correct: A} --- input examples document expected inputs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 768}
+		What does \texttt{mlflow.models.infer\_signature()} need to work?
+		\begin{enumerate}[label=\Alph*.]
+			\item Sample input data and a model
+			\item A cluster
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 768}
+		\textbf{Correct: A} --- it needs sample input and model.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 769}
+		What is an MLflow model signature's input schema?
+		\begin{enumerate}[label=\Alph*.]
+			\item Column names and types expected at inference
+			\item The model weights
+			\item The training data
+			\item The cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 769}
+		\textbf{Correct: A} --- input schema defines expected columns/types.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 770}
+		What is an MLflow model signature's output schema?
+		\begin{enumerate}[label=\Alph*.]
+			\item Column names and types of predictions
+			\item The model weights
+			\item The training data
+			\item The cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 770}
+		\textbf{Correct: A} --- output schema defines prediction columns/types.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 771}
+		What does a model signature's \texttt{params} field describe?
+		\begin{enumerate}[label=\Alph*.]
+			\item Inference-time parameters
+			\item Training data
+			\item Model weights
+			\item Cluster settings
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 771}
+		\textbf{Correct: A} --- \texttt{params} describes inference parameters.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 772}
+		Why is a model signature important for pipelines?
+		\begin{enumerate}[label=\Alph*.]
+			\item It catches input/output mismatches early
+			\item It trains faster
+			\item It serves faster
+			\item It registers faster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 772}
+		\textbf{Correct: A} --- signatures catch mismatches early.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 773}
+		What is a Spark ML \texttt{OneHotEncoder} estimator output?
+		\begin{enumerate}[label=\Alph*.]
+			\item Sparse vectors
+			\item Scalars
+			\item Strings
+			\item Buckets
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 773}
+		\textbf{Correct: A} --- one-hot outputs sparse vectors.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not outputs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 774}
+		What is a Spark ML \texttt{StringIndexer} default behavior for unseen labels?
+		\begin{enumerate}[label=\Alph*.]
+			\item It can throw an error or assign a default index
+			\item It ignores them
+			\item It drops them
+			\item It duplicates them
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 774}
+		\textbf{Correct: A} --- unseen labels can error or get defaults.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not its behavior.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 775}
+		What is a Spark ML \texttt{VectorIndexer} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Indexing categorical columns inside a vector
+			\item Scaling numeric features
+			\item Imputing values
+			\item Assembling vectors
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 775}
+		\textbf{Correct: A} --- VectorIndexer indexes categoricals in vectors.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 776}
+		What is a Spark ML \texttt{SQLTransformer} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Applying a SQL query as a transformation
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 776}
+		\textbf{Correct: A} --- SQLTransformer applies SQL transformations.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 777}
+		What is a Spark ML \texttt{Imputer} default strategy?
+		\begin{enumerate}[label=\Alph*.]
+			\item Mean
+			\item Median
+			\item Mode
+			\item Zero
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 777}
+		\textbf{Correct: A} --- the default strategy is mean.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other strategies.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 778}
+		What is a Spark ML \texttt{VectorAssembler} output?
+		\begin{enumerate}[label=\Alph*.]
+			\item A single feature vector column
+			\item A scalar
+			\item A string
+			\item A bucket
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 778}
+		\textbf{Correct: A} --- it outputs a feature vector.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not outputs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 779}
+		What is a Spark ML \texttt{Bucketizer} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Binning continuous features
+			\item Scaling features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 779}
+		\textbf{Correct: A} --- Bucketizer bins continuous features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 780}
+		What is a Spark ML \texttt{QuantileDiscretizer} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Binning continuous features by quantiles
+			\item Scaling features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 780}
+		\textbf{Correct: A} --- quantile discretization uses quantiles.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 781}
+		What is a Spark ML \texttt{MinMaxScaler} output range?
+		\begin{enumerate}[label=\Alph*.]
+			\item $[0,1]$
+			\item $[-1,1]$
+			\item $[0,100]$
+			\item Unbounded
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 781}
+		\textbf{Correct: A} --- MinMaxScaler outputs $[0,1]$ by default.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other ranges.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 782}
+		What is a Spark ML \texttt{StandardScaler} output?
+		\begin{enumerate}[label=\Alph*.]
+			\item Zero-mean, unit-variance features
+			\item $[0,1]$ features
+			\item $[-1,1]$ features
+			\item Unbounded features
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 782}
+		\textbf{Correct: A} --- StandardScaler z-scores features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other scales.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 783}
+		What is a Spark ML \texttt{Normalizer} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Scaling each row to unit norm
+			\item Scaling each column
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 783}
+		\textbf{Correct: A} --- Normalizer scales rows to unit norm.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 784}
+		What is a Spark ML \texttt{MaxAbsScaler} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Scaling by the maximum absolute value
+			\item Scaling to $[0,1]$
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 784}
+		\textbf{Correct: A} --- MaxAbsScaler divides by max abs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other methods.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 785}
+		What is a Spark ML \texttt{PolynomialExpansion} output?
+		\begin{enumerate}[label=\Alph*.]
+			\item Polynomial features up to a degree
+			\item A single feature
+			\item A category
+			\item A bucket
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 785}
+		\textbf{Correct: A} --- it outputs polynomial features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not outputs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 786}
+		What is a Spark ML \texttt{DCT} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Discrete cosine transform on a vector
+			\item Scaling
+			\item Encoding
+			\item Imputing
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 786}
+		\textbf{Correct: A} --- DCT applies a cosine transform.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformations.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 787}
+		What is a Spark ML \texttt{ElementwiseProduct} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Multiplying each feature by a scalar
+			\item Scaling to $[0,1]$
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 787}
+		\textbf{Correct: A} --- ElementwiseProduct scales features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other methods.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 788}
+		What is a Spark ML \texttt{Interaction} transformer used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Creating interaction features between vectors
+			\item Scaling features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 788}
+		\textbf{Correct: A} --- Interaction creates interaction features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 789}
+		What is a Spark ML \texttt{VectorSlicer} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Selecting a subset of features from a vector
+			\item Scaling features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 789}
+		\textbf{Correct: A} --- VectorSlicer selects features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 790}
+		What is a Spark ML \texttt{ChiSqSelector} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Selecting features using a chi-squared test
+			\item Scaling features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 790}
+		\textbf{Correct: A} --- ChiSqSelector is a feature selector.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 791}
+		What is a Spark ML \texttt{VarianceThresholdSelector} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Selecting features with variance above a threshold
+			\item Scaling features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 791}
+		\textbf{Correct: A} --- it selects features by variance.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 792}
+		What is a Spark ML \texttt{UnivariateFeatureSelector} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Selecting features via univariate statistical tests
+			\item Scaling features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 792}
+		\textbf{Correct: A} --- it selects features statistically.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 793}
+		What is a Spark ML \texttt{RFormula} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Specifying a model formula in R syntax
+			\item Scaling features
+			\item Encoding categories
+			\item Imputing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 793}
+		\textbf{Correct: A} --- RFormula uses R-style formulas.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 794}
+		What is a Spark ML \texttt{DecisionTreeClassifier} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Classification using decision trees
+			\item Clustering
+			\item Regression
+			\item Dimensionality reduction
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 794}
+		\textbf{Correct: A} --- DecisionTreeClassifier is a classifier.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tasks.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 795}
+		What is a Spark ML \texttt{DecisionTreeRegressor} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Regression using decision trees
+			\item Classification
+			\item Clustering
+			\item Dimensionality reduction
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 795}
+		\textbf{Correct: A} --- DecisionTreeRegressor is a regressor.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tasks.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 796}
+		What is a Spark ML \texttt{GBTClassifier} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Classification using gradient-boosted trees
+			\item Clustering
+			\item Regression
+			\item Dimensionality reduction
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 796}
+		\textbf{Correct: A} --- GBTClassifier is a classifier.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tasks.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 797}
+		What is a Spark ML \texttt{GBTRegressor} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Regression using gradient-boosted trees
+			\item Classification
+			\item Clustering
+			\item Dimensionality reduction
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 797}
+		\textbf{Correct: A} --- GBTRegressor is a regressor.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tasks.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 798}
+		What is a Spark ML \texttt{RandomForestClassifier} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Classification using random forests
+			\item Clustering
+			\item Regression
+			\item Dimensionality reduction
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 798}
+		\textbf{Correct: A} --- RandomForestClassifier is a classifier.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tasks.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 799}
+		What is a Spark ML \texttt{RandomForestRegressor} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Regression using random forests
+			\item Classification
+			\item Clustering
+			\item Dimensionality reduction
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 799}
+		\textbf{Correct: A} --- RandomForestRegressor is a regressor.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tasks.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 800}
+		What is a Spark ML \texttt{LinearSVC} used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Linear support vector classification
+			\item Clustering
+			\item Regression
+			\item Dimensionality reduction
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 800}
+		\textbf{Correct: A} --- LinearSVC is a linear classifier.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tasks.
+		\end{itemize}
+	\end{frame}
+	
+\end{document}

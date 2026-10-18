@@ -1,0 +1,1963 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{Databricks ML Associate}
+\subtitle{Questions 401--500 (Fifth 100)}
+\author{Practice Exam Deck}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{How to Use This Deck}
+		\begin{itemize}
+			\item 100 new questions (Q401--Q500), none repeated from Q1--Q400.
+			\item Each question slide has four options (A--D).
+			\item The next slide gives the correct answer and explains why the right option is right and why each wrong option is wrong.
+			\item This set focuses on MLflow search syntax, model signatures, pipeline persistence, Hyperopt internals, Feature Store batch/stream trade-offs, Unity Catalog lineage, Asset Bundles, MLflow evaluate, monitoring, and distributed training.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 401}
+		Which MLflow search filter string finds runs where the metric \texttt{rmse} is less than 1?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{"metrics.rmse < 1"}
+			\item \texttt{"rmse < 1"}
+			\item \texttt{"metric\_rmse < 1"}
+			\item \texttt{"metrics.rmse =< 1"}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 401}
+		\textbf{Correct: A} --- filters use \texttt{metrics.<name>}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B omits the \texttt{metrics.} prefix.
+			\item C is not the syntax.
+			\item D uses an invalid operator.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 402}
+		Which MLflow search filter matches runs whose parameter \texttt{max\_depth} equals 5?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{"params.max\_depth = '5'"}
+			\item \texttt{"param.max\_depth = 5"}
+			\item \texttt{"params.max\_depth == 5"}
+			\item \texttt{"max\_depth = 5"}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 402}
+		\textbf{Correct: A} --- parameter filters use \texttt{params.<name>} and quoted values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B uses the wrong prefix.
+			\item C uses \texttt{==} and no quotes.
+			\item D omits the prefix.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 403}
+		Which MLflow API marks a run as finished?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.end\_run()}
+			\item \texttt{mlflow.finish\_run()}
+			\item \texttt{mlflow.close\_run()}
+			\item \texttt{mlflow.stop\_run()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 403}
+		\textbf{Correct: A} --- \texttt{end\_run()} finishes a run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 404}
+		Which MLflow API deletes a run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.delete\_run()}
+			\item \texttt{mlflow.remove\_run()}
+			\item \texttt{mlflow.drop\_run()}
+			\item \texttt{mlflow.end\_run(delete=True)}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 404}
+		\textbf{Correct: A} --- \texttt{delete\_run()} deletes a run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 405}
+		What does \texttt{mlflow.active\_run()} return?
+		\begin{enumerate}[label=\Alph*.]
+			\item The currently active run object
+			\item A list of all runs
+			\item A metric value
+			\item A model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 405}
+		\textbf{Correct: A} --- it returns the active run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not returned.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 406}
+		What is the purpose of \texttt{mlflow.set\_tracking\_uri()}?
+		\begin{enumerate}[label=\Alph*.]
+			\item It sets the tracking backend location
+			\item It sets the model registry name
+			\item It sets the cluster size
+			\item It sets the feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 406}
+		\textbf{Correct: A} --- it points MLflow to a tracking backend.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 407}
+		What does \texttt{mlflow.models.infer\_signature()} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item It infers input/output schema from sample data
+			\item It trains the model
+			\item It registers the model
+			\item It deploys the model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 407}
+		\textbf{Correct: A} --- it infers a model signature.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 408}
+		Why is a model signature useful for serving?
+		\begin{enumerate}[label=\Alph*.]
+			\item It validates request and response schemas
+			\item It trains the model
+			\item It stores features
+			\item It deletes versions
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 408}
+		\textbf{Correct: A} --- signatures validate schemas.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 409}
+		What does \texttt{mlflow.models.set\_signature()} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item It attaches a signature to a logged model
+			\item It creates a signature from scratch
+			\item It deletes a signature
+			\item It registers a signature
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 409}
+		\textbf{Correct: A} --- it sets a model's signature.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not its behavior.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 410}
+		What does \texttt{PipelineModel.save()} do in Spark ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item Persists the fitted pipeline to a path
+			\item Trains the pipeline
+			\item Registers the model
+			\item Serves the model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 410}
+		\textbf{Correct: A} --- \texttt{save()} persists a fitted pipeline.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other operations.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 411}
+		What does \texttt{PipelineModel.load()} do in Spark ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item Loads a saved pipeline model from a path
+			\item Trains a pipeline
+			\item Registers a model
+			\item Serves a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 411}
+		\textbf{Correct: A} --- \texttt{load()} restores a saved model.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other operations.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 412}
+		Why save the entire pipeline instead of only the estimator?
+		\begin{enumerate}[label=\Alph*.]
+			\item It preserves preprocessing steps needed at inference
+			\item It trains faster
+			\item It reduces storage
+			\item It registers the model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 412}
+		\textbf{Correct: A} --- the pipeline includes preprocessing.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 413}
+		What does \texttt{Pipeline.fit()} return?
+		\begin{enumerate}[label=\Alph*.]
+			\item A \texttt{PipelineModel} with fitted stages
+			\item A DataFrame
+			\item A metric
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 413}
+		\textbf{Correct: A} --- \texttt{fit()} returns a \texttt{PipelineModel}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not returned.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 414}
+		What happens if a pipeline stage is a transformer only?
+		\begin{enumerate}[label=\Alph*.]
+			\item It is applied without fitting
+			\item It is trained
+			\item It is skipped
+			\item It raises an error
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 414}
+		\textbf{Correct: A} --- transformers are applied, not fit.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is for estimators.
+			\item C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 415}
+		What is an estimator in Spark ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item An algorithm that fits data and produces a model
+			\item A fitted model
+			\item A DataFrame
+			\item A metric
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 415}
+		\textbf{Correct: A} --- estimators produce models via \texttt{fit()}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is a transformer/model.
+			\item C, D are not estimators.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 416}
+		What is a transformer in Spark ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item An object that transforms a DataFrame into another DataFrame
+			\item An algorithm that produces a model
+			\item A metric
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 416}
+		\textbf{Correct: A} --- transformers map DataFrames.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is an estimator.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 417}
+		What does \texttt{hp.quniform()} define in Hyperopt?
+		\begin{enumerate}[label=\Alph*.]
+			\item A uniform distribution quantized to integer steps
+			\item A categorical choice
+			\item A log-uniform distribution
+			\item A constant
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 417}
+		\textbf{Correct: A} --- \texttt{hp.quniform} is a quantized uniform space.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{hp.choice}.
+			\item C is \texttt{hp.loguniform}.
+			\item D is a constant.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 418}
+		What does \texttt{hp.randint()} define in Hyperopt?
+		\begin{enumerate}[label=\Alph*.]
+			\item A random integer in a range
+			\item A categorical choice
+			\item A log-uniform space
+			\item A constant
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 418}
+		\textbf{Correct: A} --- \texttt{hp.randint} samples integers.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other spaces.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 419}
+		What does \texttt{hp.loguniform()} define in Hyperopt?
+		\begin{enumerate}[label=\Alph*.]
+			\item A log-uniform distribution between bounds
+			\item A uniform distribution
+			\item A categorical choice
+			\item A constant
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 419}
+		\textbf{Correct: A} --- \texttt{hp.loguniform} is log-uniform.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{hp.uniform}.
+			\item C is \texttt{hp.choice}.
+			\item D is a constant.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 420}
+		What does the objective function return in Hyperopt?
+		\begin{enumerate}[label=\Alph*.]
+			\item A loss value to minimize and optional metadata
+			\item A model
+			\item A DataFrame
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 420}
+		\textbf{Correct: A} --- the objective returns a loss (and optional status/dict).\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not returned.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 421}
+		What does \texttt{STATUS\_OK} mean in a Hyperopt objective return?
+		\begin{enumerate}[label=\Alph*.]
+			\item The trial completed successfully
+			\item The trial failed
+			\item The trial was pruned
+			\item The trial is running
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 421}
+		\textbf{Correct: A} --- \texttt{STATUS\_OK} marks success.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is \texttt{STATUS\_FAIL}.
+			\item C is pruned.
+			\item D is running.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 422}
+		What is the benefit of pruning trials in Hyperopt?
+		\begin{enumerate}[label=\Alph*.]
+			\item It stops poor trials early to save compute
+			\item It improves accuracy
+			\item It registers models
+			\item It serves models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 422}
+		\textbf{Correct: A} --- pruning saves compute on poor trials.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 423}
+		What does \texttt{SparkTrials(parallelism=N)} control?
+		\begin{enumerate}[label=\Alph*.]
+			\item The number of concurrent Hyperopt trials
+			\item The number of folds
+			\item The number of trees
+			\item The number of features
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 423}
+		\textbf{Correct: A} --- \texttt{parallelism} sets concurrent trials.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other settings.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 424}
+		What does \texttt{fmin} return?
+		\begin{enumerate}[label=\Alph*.]
+			\item The best hyperparameters and the best loss
+			\item A trained model
+			\item A DataFrame
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 424}
+		\textbf{Correct: A} --- \texttt{fmin} returns best params and loss.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not returned.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 425}
+		What is the difference between a feature table and a training set?
+		\begin{enumerate}[label=\Alph*.]
+			\item Feature tables store features; training sets join features with labels
+			\item They are identical
+			\item Training sets store data; feature tables are views
+			\item Feature tables are models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 425}
+		\textbf{Correct: A} --- training sets join features and labels.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 426}
+		What is the purpose of an online feature store in real-time serving?
+		\begin{enumerate}[label=\Alph*.]
+			\item It provides low-latency feature lookups
+			\item It trains models
+			\item It registers models
+			\item It stores notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 426}
+		\textbf{Correct: A} --- online stores serve low-latency features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 427}
+		What is the purpose of an offline feature store?
+		\begin{enumerate}[label=\Alph*.]
+			\item It stores features for batch training and scoring
+			\item It serves real-time requests
+			\item It registers models
+			\item It stores notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 427}
+		\textbf{Correct: A} --- offline stores support batch workflows.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is online.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 428}
+		What is a batch feature table used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Providing features for offline training and batch scoring
+			\item Serving low-latency inference
+			\item Registering models
+			\item Storing notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 428}
+		\textbf{Correct: A} --- batch feature tables support offline use.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is online.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 429}
+		What is a streaming feature table used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Continuously updated features for streaming inference
+			\item Offline batch training
+			\item Model registration
+			\item Notebook storage
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 429}
+		\textbf{Correct: A} --- streaming tables support live features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is offline.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 430}
+		Why is a timestamp column important in feature tables?
+		\begin{enumerate}[label=\Alph*.]
+			\item It enables point-in-time joins
+			\item It trains the model
+			\item It registers the model
+			\item It serves the model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 430}
+		\textbf{Correct: A} --- timestamps enable point-in-time joins.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 431}
+		What is Unity Catalog lineage?
+		\begin{enumerate}[label=\Alph*.]
+			\item A record of data and model dependencies
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 431}
+		\textbf{Correct: A} --- lineage tracks dependencies.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 432}
+		Why is lineage useful for ML models?
+		\begin{enumerate}[label=\Alph*.]
+			\item It shows upstream data and downstream consumers
+			\item It trains models
+			\item It serves models
+			\item It registers models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 432}
+		\textbf{Correct: A} --- lineage reveals upstream/downstream dependencies.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 433}
+		What does a Databricks Asset Bundle define?
+		\begin{enumerate}[label=\Alph*.]
+			\item Infrastructure and jobs as code
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 433}
+		\textbf{Correct: A} --- Asset Bundles define infrastructure as code.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not bundles.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 434}
+		Which file format is used to define a Databricks Asset Bundle?
+		\begin{enumerate}[label=\Alph*.]
+			\item YAML
+			\item JSON
+			\item XML
+			\item CSV
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 434}
+		\textbf{Correct: A} --- bundles use YAML.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the bundle format.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 435}
+		What does \texttt{mlflow.evaluate()} do?
+		\begin{enumerate}[label=\Alph*.]
+			\item It evaluates a model against a dataset and logs metrics
+			\item It trains a model
+			\item It registers a model
+			\item It serves a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 435}
+		\textbf{Correct: A} --- \texttt{evaluate()} computes and logs metrics.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other operations.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 436}
+		Which evaluator type does \texttt{mlflow.evaluate()} accept for classification?
+		\begin{enumerate}[label=\Alph*.]
+			\item A classifier evaluator with metrics such as F1 and ROC-AUC
+			\item A clustering evaluator
+			\item A regression evaluator
+			\item A summarization evaluator
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 436}
+		\textbf{Correct: A} --- classifier evaluators compute classification metrics.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other evaluator types.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 437}
+		What does MLflow's model validation feature do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Compares a candidate model to a baseline
+			\item Trains a new model
+			\item Registers a model
+			\item Serves a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 437}
+		\textbf{Correct: A} --- validation compares against a baseline.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 438}
+		What is a baseline model in validation?
+		\begin{enumerate}[label=\Alph*.]
+			\item A reference model used for comparison
+			\item The newest model
+			\item The training data
+			\item The cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 438}
+		\textbf{Correct: A} --- a baseline is a reference model.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not baselines.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 439}
+		What is the purpose of monitoring model performance in production?
+		\begin{enumerate}[label=\Alph*.]
+			\item Detecting degradation and drift
+			\item Training new models
+			\item Registering models
+			\item Deleting models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 439}
+		\textbf{Correct: A} --- monitoring detects degradation.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 440}
+		What metric is typically monitored for model drift?
+		\begin{enumerate}[label=\Alph*.]
+			\item Population stability index (PSI) or distribution distance
+			\item Training loss
+			\item Cluster CPU
+			\item Storage size
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 440}
+		\textbf{Correct: A} --- PSI or distribution distances detect drift.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not drift metrics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 441}
+		What is a data quality expectation?
+		\begin{enumerate}[label=\Alph*.]
+			\item A rule that data should satisfy
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 441}
+		\textbf{Correct: A} --- expectations are data rules.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 442}
+		What is a model explainability method?
+		\begin{enumerate}[label=\Alph*.]
+			\item SHAP
+			\item PCA
+			\item KMeans
+			\item ALS
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 442}
+		\textbf{Correct: A} --- SHAP explains model predictions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other algorithms.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 443}
+		What is a permutation feature importance?
+		\begin{enumerate}[label=\Alph*.]
+			\item A method that measures accuracy drop when a feature is shuffled
+			\item A model
+			\item A feature table
+			\item A metric
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 443}
+		\textbf{Correct: A} --- permutation importance measures feature impact.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 444}
+		What is partial dependence?
+		\begin{enumerate}[label=\Alph*.]
+			\item The marginal effect of a feature on predictions
+			\item A model type
+			\item A feature table
+			\item A metric
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 444}
+		\textbf{Correct: A} --- partial dependence shows marginal effects.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 445}
+		What is distributed training?
+		\begin{enumerate}[label=\Alph*.]
+			\item Training across multiple machines or devices
+			\item Training a single model on one node
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 445}
+		\textbf{Correct: A} --- distributed training uses multiple resources.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tasks.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 446}
+		Which API enables distributed training in Spark ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{Spark ML estimators on Spark DataFrames}
+			\item \texttt{pandas UDFs only}
+			\item \texttt{Notebook widgets}
+			\item \texttt{SQL warehouses}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 446}
+		\textbf{Correct: A} --- Spark ML trains across a cluster.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not distributed training APIs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 447}
+		What is a HorovodRunner used for in Databricks?
+		\begin{enumerate}[label=\Alph*.]
+			\item Distributed deep learning training
+			\item SQL queries
+			\item Model serving
+			\item Data storage
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 447}
+		\textbf{Correct: A} --- HorovodRunner enables distributed deep learning.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 448}
+		What is the main benefit of distributed training?
+		\begin{enumerate}[label=\Alph*.]
+			\item Reduced training time for large data or models
+			\item Lower accuracy
+			\item Fewer features
+			\item Smaller storage
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 448}
+		\textbf{Correct: A} --- distribution reduces training time.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not benefits.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 449}
+		What is a common challenge in distributed training?
+		\begin{enumerate}[label=\Alph*.]
+			\item Communication overhead between workers
+			\item Too little data
+			\item Too few models
+			\item Too few metrics
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 449}
+		\textbf{Correct: A} --- communication overhead is a key challenge.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the challenge.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 450}
+		What is a data parallel training strategy?
+		\begin{enumerate}[label=\Alph*.]
+			\item Splitting data across workers
+			\item Splitting the model across workers
+			\item Splitting metrics
+			\item Splitting clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 450}
+		\textbf{Correct: A} --- data parallel splits data.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is model parallel.
+			\item C, D are not strategies.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 451}
+		What is a model parallel training strategy?
+		\begin{enumerate}[label=\Alph*.]
+			\item Splitting the model across workers
+			\item Splitting data across workers
+			\item Splitting metrics
+			\item Splitting clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 451}
+		\textbf{Correct: A} --- model parallel splits the model.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is data parallel.
+			\item C, D are not strategies.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 452}
+		What is a checkpoint in distributed training?
+		\begin{enumerate}[label=\Alph*.]
+			\item A saved model state used for recovery or resumption
+			\item A metric
+			\item A cluster
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 452}
+		\textbf{Correct: A} --- checkpoints save model state.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 453}
+		Why are checkpoints useful for long training jobs?
+		\begin{enumerate}[label=\Alph*.]
+			\item They allow resuming after failure
+			\item They reduce features
+			\item They register models
+			\item They serve models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 453}
+		\textbf{Correct: A} --- checkpoints enable resumption.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 454}
+		What is early stopping in training?
+		\begin{enumerate}[label=\Alph*.]
+			\item Ending training when validation performance stops improving
+			\item Ending training after one epoch
+			\item Ending training at a fixed iteration
+			\item Ending training when training error is zero
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 454}
+		\textbf{Correct: A} --- early stopping uses validation performance.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are arbitrary stopping rules.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 455}
+		What is a learning rate in optimization?
+		\begin{enumerate}[label=\Alph*.]
+			\item The step size for parameter updates
+			\item The number of trees
+			\item The number of features
+			\item The number of rows
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 455}
+		\textbf{Correct: A} --- learning rate controls step size.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not learning rates.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 456}
+		What happens if the learning rate is too high?
+		\begin{enumerate}[label=\Alph*.]
+			\item Training may diverge or overshoot
+			\item Training becomes stable
+			\item Accuracy always improves
+			\item Storage increases
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 456}
+		\textbf{Correct: A} --- a high learning rate can diverge.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 457}
+		What happens if the learning rate is too low?
+		\begin{enumerate}[label=\Alph*.]
+			\item Training becomes very slow
+			\item Training diverges
+			\item Accuracy always improves
+			\item Storage increases
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 457}
+		\textbf{Correct: A} --- low learning rates train slowly.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 458}
+		What is a mini-batch in training?
+		\begin{enumerate}[label=\Alph*.]
+			\item A small subset of data used for one update
+			\item The full dataset
+			\item A cluster
+			\item A metric
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 458}
+		\textbf{Correct: A} --- mini-batches update parameters incrementally.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 459}
+		What is an epoch in training?
+		\begin{enumerate}[label=\Alph*.]
+			\item One full pass over the training data
+			\item One update step
+			\item One metric
+			\item One cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 459}
+		\textbf{Correct: A} --- an epoch is a full data pass.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 460}
+		What is a batch size in training?
+		\begin{enumerate}[label=\Alph*.]
+			\item The number of samples per update
+			\item The number of epochs
+			\item The number of trees
+			\item The number of features
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 460}
+		\textbf{Correct: A} --- batch size sets samples per update.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other settings.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 461}
+		What is a confusion matrix useful for beyond accuracy?
+		\begin{enumerate}[label=\Alph*.]
+			\item It shows false positives and false negatives separately
+			\item It trains a model
+			\item It stores data
+			\item It serves a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 461}
+		\textbf{Correct: A} --- it separates FP and FN counts.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 462}
+		What is a ROC curve?
+		\begin{enumerate}[label=\Alph*.]
+			\item A plot of true positive rate versus false positive rate
+			\item A plot of precision versus recall
+			\item A plot of error versus training size
+			\item A plot of feature importance
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 462}
+		\textbf{Correct: A} --- ROC plots TPR vs.\ FPR.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is a PR curve.
+			\item C is a learning curve.
+			\item D is feature importance.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 463}
+		What is a PR curve?
+		\begin{enumerate}[label=\Alph*.]
+			\item A plot of precision versus recall
+			\item A plot of TPR versus FPR
+			\item A plot of error versus training size
+			\item A plot of feature importance
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 463}
+		\textbf{Correct: A} --- PR curves plot precision vs.\ recall.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is ROC.
+			\item C is a learning curve.
+			\item D is feature importance.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 464}
+		What is log loss?
+		\begin{enumerate}[label=\Alph*.]
+			\item A classification metric that penalizes confident wrong predictions
+			\item A regression metric
+			\item A clustering metric
+			\item A drift metric
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 464}
+		\textbf{Correct: A} --- log loss penalizes confident errors.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other metrics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 465}
+		What is cross-entropy?
+		\begin{enumerate}[label=\Alph*.]
+			\item A loss function for classification
+			\item A clustering metric
+			\item A drift metric
+			\item A regression metric
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 465}
+		\textbf{Correct: A} --- cross-entropy is a classification loss.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other metrics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 466}
+		What is a target variable in supervised learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item The value being predicted
+			\item The input features
+			\item The cluster
+			\item The model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 466}
+		\textbf{Correct: A} --- the target is predicted.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 467}
+		What is a feature in supervised learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item An input variable used to predict the target
+			\item The predicted value
+			\item The model
+			\item The cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 467}
+		\textbf{Correct: A} --- features are input variables.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 468}
+		What is a label in supervised learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item The known target value in training data
+			\item The input features
+			\item The model
+			\item The cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 468}
+		\textbf{Correct: A} --- labels are known target values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 469}
+		What is semi-supervised learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item Learning from a mix of labeled and unlabeled data
+			\item Learning from only labeled data
+			\item Learning from only unlabeled data
+			\item Learning without a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 469}
+		\textbf{Correct: A} --- semi-supervised uses both labeled and unlabeled data.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is supervised.
+			\item C is unsupervised.
+			\item D is false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 470}
+		What is self-supervised learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item Learning from data-generated labels
+			\item Learning from manual labels
+			\item Learning from clusters
+			\item Learning without data
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 470}
+		\textbf{Correct: A} --- self-supervised uses generated labels.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is supervised.
+			\item C is unsupervised.
+			\item D is false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 471}
+		What is reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item Learning from rewards and penalties
+			\item Learning from labeled examples
+			\item Learning from clusters
+			\item Learning from no data
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 471}
+		\textbf{Correct: A} --- RL uses rewards and penalties.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is supervised.
+			\item C is unsupervised.
+			\item D is false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 472}
+		What is a reward signal in reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item Feedback guiding the agent's behavior
+			\item A feature
+			\item A label
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 472}
+		\textbf{Correct: A} --- rewards guide learning.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 473}
+		What is a policy in reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item A mapping from states to actions
+			\item A feature
+			\item A label
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 473}
+		\textbf{Correct: A} --- policies map states to actions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 474}
+		What is an agent in reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item The learner that takes actions
+			\item The environment
+			\item The reward
+			\item The state
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 474}
+		\textbf{Correct: A} --- the agent takes actions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other RL components.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 475}
+		What is an environment in reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item The world the agent interacts with
+			\item The agent
+			\item The reward
+			\item The policy
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 475}
+		\textbf{Correct: A} --- the environment is the world.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other RL components.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 476}
+		What is an observation in reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item Information the agent perceives about the environment
+			\item The reward
+			\item The policy
+			\item The model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 476}
+		\textbf{Correct: A} --- observations are perceived information.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other components.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 477}
+		What is an action in reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item A choice the agent makes
+			\item A reward
+			\item A policy
+			\item A model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 477}
+		\textbf{Correct: A} --- actions are agent choices.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other components.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 478}
+		What is exploration in reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item Trying new actions to learn
+			\item Repeating known actions
+			\item Training a model
+			\item Serving a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 478}
+		\textbf{Correct: A} --- exploration tries new actions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is exploitation.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 479}
+		What is exploitation in reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item Choosing the best-known action
+			\item Trying new actions
+			\item Training a model
+			\item Serving a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 479}
+		\textbf{Correct: A} --- exploitation uses known best actions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is exploration.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 480}
+		What is the exploration-exploitation tradeoff?
+		\begin{enumerate}[label=\Alph*.]
+			\item Balancing trying new actions versus using known good actions
+			\item Balancing training and serving
+			\item Balancing data and models
+			\item Balancing clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 480}
+		\textbf{Correct: A} --- the tradeoff balances exploration and exploitation.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 481}
+		What is a Markov decision process?
+		\begin{enumerate}[label=\Alph*.]
+			\item A mathematical framework for RL with states, actions, and rewards
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 481}
+		\textbf{Correct: A} --- an MDP defines RL states/actions/rewards.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 482}
+		What is a state in reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item A representation of the environment at a point in time
+			\item An action
+			\item A reward
+			\item A policy
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 482}
+		\textbf{Correct: A} --- states represent the environment.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other components.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 483}
+		What is a value function in reinforcement learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item An estimate of expected future reward
+			\item A feature
+			\item A label
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 483}
+		\textbf{Correct: A} --- value functions estimate future reward.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 484}
+		What is Q-learning?
+		\begin{enumerate}[label=\Alph*.]
+			\item A reinforcement learning algorithm that learns action values
+			\item A clustering algorithm
+			\item A regression algorithm
+			\item A dimensionality reduction algorithm
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 484}
+		\textbf{Correct: A} --- Q-learning learns action values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other algorithms.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 485}
+		What is a policy gradient method?
+		\begin{enumerate}[label=\Alph*.]
+			\item A method that optimizes the policy directly
+			\item A method that clusters data
+			\item A method that reduces features
+			\item A method that serves models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 485}
+		\textbf{Correct: A} --- policy gradients optimize policies directly.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 486}
+		What is a bandit problem?
+		\begin{enumerate}[label=\Alph*.]
+			\item A simplified RL problem with one state and multiple actions
+			\item A classification problem
+			\item A regression problem
+			\item A clustering problem
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 486}
+		\textbf{Correct: A} --- bandits are single-state RL problems.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other problem types.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 487}
+		What is A/B testing in the context of bandits?
+		\begin{enumerate}[label=\Alph*.]
+			\item Comparing two actions using observed rewards
+			\item Training two models
+			\item Deleting two models
+			\item Registering two models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 487}
+		\textbf{Correct: A} --- A/B tests compare actions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 488}
+		What is a multi-armed bandit?
+		\begin{enumerate}[label=\Alph*.]
+			\item A problem of choosing among multiple actions with unknown rewards
+			\item A clustering problem
+			\item A regression problem
+			\item A dimensionality reduction problem
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 488}
+		\textbf{Correct: A} --- multi-armed bandits involve multiple actions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other problem types.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 489}
+		What is Thompson sampling?
+		\begin{enumerate}[label=\Alph*.]
+			\item A bandit algorithm using posterior distributions
+			\item A clustering algorithm
+			\item A regression algorithm
+			\item A serving method
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 489}
+		\textbf{Correct: A} --- Thompson sampling uses posteriors.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 490}
+		What is epsilon-greedy?
+		\begin{enumerate}[label=\Alph*.]
+			\item A bandit strategy that explores with probability epsilon
+			\item A clustering method
+			\item A regression method
+			\item A serving method
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 490}
+		\textbf{Correct: A} --- epsilon-greedy balances exploration/exploitation.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 491}
+		What is a feature store?
+		\begin{enumerate}[label=\Alph*.]
+			\item A centralized repository for features
+			\item A model
+			\item A cluster
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 491}
+		\textbf{Correct: A} --- a feature store centralizes features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 492}
+		What is a feature view?
+		\begin{enumerate}[label=\Alph*.]
+			\item A logical view of features for a use case
+			\item A model
+			\item A cluster
+			\item A table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 492}
+		\textbf{Correct: A} --- feature views organize features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 493}
+		What is a feature group?
+		\begin{enumerate}[label=\Alph*.]
+			\item A set of related features
+			\item A model
+			\item A cluster
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 493}
+		\textbf{Correct: A} --- feature groups are related features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 494}
+		What is a feature pipeline?
+		\begin{enumerate}[label=\Alph*.]
+			\item A workflow that computes and updates features
+			\item A model
+			\item A cluster
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 494}
+		\textbf{Correct: A} --- feature pipelines compute features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 495}
+		What is a feature transformation?
+		\begin{enumerate}[label=\Alph*.]
+			\item An operation that creates or modifies features
+			\item A model
+			\item A cluster
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 495}
+		\textbf{Correct: A} --- transformations modify features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 496}
+		What is a feature backfill?
+		\begin{enumerate}[label=\Alph*.]
+			\item Computing historical feature values
+			\item Training a model
+			\item Serving a model
+			\item Deleting features
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 496}
+		\textbf{Correct: A} --- backfills compute historical values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 497}
+		Why is a feature backfill needed after a feature definition changes?
+		\begin{enumerate}[label=\Alph*.]
+			\item Historical feature values must be recomputed consistently
+			\item The model retrains automatically
+			\item The cluster resizes
+			\item The notebook is deleted
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 497}
+		\textbf{Correct: A} --- backfills keep history consistent.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 498}
+		What is feature versioning?
+		\begin{enumerate}[label=\Alph*.]
+			\item Tracking changes to feature definitions over time
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 498}
+		\textbf{Correct: A} --- feature versioning tracks definition changes.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 499}
+		What is a feature store's primary benefit for collaboration?
+		\begin{enumerate}[label=\Alph*.]
+			\item Shared, governed feature definitions across teams
+			\item Faster training
+			\item Smaller models
+			\item Fewer clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 499}
+		\textbf{Correct: A} --- feature stores share governed features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 500}
+		What is the best practice for updating a feature table used in production?
+		\begin{enumerate}[label=\Alph*.]
+			\item Backfill, validate, and then update downstream models
+			\item Delete the table
+			\item Stop monitoring
+			\item Skip validation
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 500}
+		\textbf{Correct: A} --- backfill and validate before rollout.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B causes downtime.
+			\item C removes safeguards.
+			\item D risks bad data.
+		\end{itemize}
+	\end{frame}
+	
+\end{document}

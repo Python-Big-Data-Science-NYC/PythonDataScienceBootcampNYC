@@ -1,0 +1,1935 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{Databricks ML Associate}
+\subtitle{Questions 601--700 (Seventh 100)}
+\author{Practice Exam Deck}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{How to Use This Deck}
+		\begin{itemize}
+			\item 100 new questions (Q601--Q700), none repeated from Q1--Q600.
+			\item Each question slide has four options (A--D).
+			\item The next slide gives the correct answer and explains why the right option is right and why each wrong option is wrong.
+			\item This set emphasizes serving payloads and auth, Feature Store time-series and streaming, clustering/recommendation evaluators, Databricks SQL in ML, Delta Sharing, and governance/compliance.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 601}
+		Which format is commonly used to send requests to a Databricks model serving endpoint?
+		\begin{enumerate}[label=\Alph*.]
+			\item JSON
+			\item XML only
+			\item CSV only
+			\item YAML only
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 601}
+		\textbf{Correct: A} --- serving endpoints accept JSON payloads.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the primary payload format.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 602}
+		Which HTTP method is used to query a serving endpoint?
+		\begin{enumerate}[label=\Alph*.]
+			\item POST
+			\item GET with no body
+			\item PUT
+			\item DELETE
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 602}
+		\textbf{Correct: A} --- serving endpoints are queried with POST.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the standard query method.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 603}
+		Which request field typically holds the model input records?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{dataframe\_records} or \texttt{inputs}
+			\item \texttt{model\_id}
+			\item \texttt{endpoint\_name}
+			\item \texttt{workspace\_id}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 603}
+		\textbf{Correct: A} --- inputs are passed via record fields.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are metadata, not inputs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 604}
+		What is a common authentication method for a serving endpoint?
+		\begin{enumerate}[label=\Alph*.]
+			\item A personal access token or OAuth token
+			\item A username and password in the URL
+			\item Anonymous access
+			\item A shared notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 604}
+		\textbf{Correct: A} --- PATs or OAuth tokens authenticate requests.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are insecure or unsupported.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 605}
+		What does a serving endpoint return on a successful request?
+		\begin{enumerate}[label=\Alph*.]
+			\item Predictions in a JSON response
+			\item A model artifact
+			\item A notebook
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 605}
+		\textbf{Correct: A} --- predictions are returned in JSON.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not returned.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 606}
+		What is a serving endpoint's route optimization used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Choosing the best route to a ready endpoint
+			\item Training a model
+			\item Registering a model
+			\item Deleting a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 606}
+		\textbf{Correct: A} --- route optimization picks healthy endpoints.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 607}
+		What is a model serving endpoint's query latency?
+		\begin{enumerate}[label=\Alph*.]
+			\item The time to produce a prediction
+			\item The training time
+			\item The storage size
+			\item The feature count
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 607}
+		\textbf{Correct: A} --- latency is prediction time.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 608}
+		What is a serving endpoint's throughput?
+		\begin{enumerate}[label=\Alph*.]
+			\item The number of predictions per unit time
+			\item The training time
+			\item The storage size
+			\item The feature count
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 608}
+		\textbf{Correct: A} --- throughput is predictions per time.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 609}
+		What is the purpose of a serving endpoint's provisioned concurrency?
+		\begin{enumerate}[label=\Alph*.]
+			\item To keep capacity ready to handle requests
+			\item To train models
+			\item To register models
+			\item To store data
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 609}
+		\textbf{Correct: A} --- provisioned concurrency keeps capacity ready.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 610}
+		What is a Feature Store time-series feature table used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Storing features with timestamps for point-in-time joins
+			\item Training a model
+			\item Serving an endpoint
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 610}
+		\textbf{Correct: A} --- time-series tables enable point-in-time joins.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 611}
+		Which key is required for a time-series feature table?
+		\begin{enumerate}[label=\Alph*.]
+			\item A timestamp key
+			\item A foreign key
+			\item A model key
+			\item A cluster key
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 611}
+		\textbf{Correct: A} --- time-series tables need a timestamp key.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 612}
+		What is a streaming feature table used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Continuously updated features for streaming inference
+			\item Offline training only
+			\item Model registration
+			\item Notebook storage
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 612}
+		\textbf{Correct: A} --- streaming tables support live features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 613}
+		What is a Feature Store backfill?
+		\begin{enumerate}[label=\Alph*.]
+			\item Computing historical feature values
+			\item Training a model
+			\item Serving a model
+			\item Deleting features
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 613}
+		\textbf{Correct: A} --- backfills compute historical values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 614}
+		What is a feature freshness SLA?
+		\begin{enumerate}[label=\Alph*.]
+			\item A guarantee on how recently features were updated
+			\item A model metric
+			\item A cluster setting
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 614}
+		\textbf{Correct: A} --- freshness SLAs bound feature staleness.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 615}
+		What is a feature ingestion pipeline?
+		\begin{enumerate}[label=\Alph*.]
+			\item A workflow that updates features from source data
+			\item A model
+			\item A cluster
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 615}
+		\textbf{Correct: A} --- ingestion pipelines update features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 616}
+		What does a Spark ML \texttt{ClusteringEvaluator} compute?
+		\begin{enumerate}[label=\Alph*.]
+			\item Silhouette score
+			\item RMSE
+			\item AUC
+			\item F1
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 616}
+		\textbf{Correct: A} --- ClusteringEvaluator computes silhouette.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other metrics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 617}
+		What does the silhouette score measure in clustering?
+		\begin{enumerate}[label=\Alph*.]
+			\item How similar points are to their own cluster vs.\ the nearest other cluster
+			\item Model accuracy
+			\item Feature importance
+			\item The number of clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 617}
+		\textbf{Correct: A} --- silhouette measures cohesion and separation.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 618}
+		What does a higher silhouette score indicate?
+		\begin{enumerate}[label=\Alph*.]
+			\item Better-defined clusters
+			\item Worse clusters
+			\item More features
+			\item Fewer rows
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 618}
+		\textbf{Correct: A} --- higher silhouette means better clusters.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 619}
+		What is a clustering evaluation's ideal silhouette range?
+		\begin{enumerate}[label=\Alph*.]
+			\item Close to 1
+			\item Close to $-1$
+			\item Close to 0
+			\item Exactly 0
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 619}
+		\textbf{Correct: A} --- higher (closer to 1) is better.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not ideal.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 620}
+		What does a Spark ML ALS model produce?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recommendations or ratings predictions
+			\item Clusters
+			\item Dimensions
+			\item Categories
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 620}
+		\textbf{Correct: A} --- ALS produces recommendations/ratings.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other tasks.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 621}
+		What evaluation metric is used for ALS rating prediction?
+		\begin{enumerate}[label=\Alph*.]
+			\item RMSE
+			\item Silhouette
+			\item AUC
+			\item Accuracy
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 621}
+		\textbf{Correct: A} --- RMSE measures rating error.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other metrics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 622}
+		What is a recommendation system's cold start problem?
+		\begin{enumerate}[label=\Alph*.]
+			\item Making recommendations for new users or items with no history
+			\item Training too long
+			\item Serving too fast
+			\item Storing too much data
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 622}
+		\textbf{Correct: A} --- cold start involves no user/item history.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 623}
+		What is a content-based recommendation?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recommending items similar to a user's past items
+			\item Recommending based on other users
+			\item Recommending randomly
+			\item Recommending based on clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 623}
+		\textbf{Correct: A} --- content-based uses item similarity.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is collaborative filtering.
+			\item C, D are not methods.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 624}
+		What is collaborative filtering?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recommending based on patterns across users
+			\item Recommending based on item content
+			\item Recommending randomly
+			\item Recommending based on clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 624}
+		\textbf{Correct: A} --- collaborative filtering uses cross-user patterns.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is content-based.
+			\item C, D are not methods.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 625}
+		What does a Databricks SQL dashboard show?
+		\begin{enumerate}[label=\Alph*.]
+			\item Visualizations of SQL query results
+			\item Model weights
+			\item Feature tables
+			\item Cluster logs
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 625}
+		\textbf{Correct: A} --- dashboards visualize query results.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 626}
+		What is a Databricks SQL query used for in an ML workflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item Exploring and preparing data
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 626}
+		\textbf{Correct: A} --- SQL queries support exploration and prep.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other steps.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 627}
+		What is a Databricks SQL alert used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Notifying when a query result meets a condition
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 627}
+		\textbf{Correct: A} --- alerts notify on query conditions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 628}
+		What is a Databricks SQL parameter?
+		\begin{enumerate}[label=\Alph*.]
+			\item A runtime value passed to a query
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 628}
+		\textbf{Correct: A} --- parameters pass runtime values to queries.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 629}
+		What is Delta Sharing used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Sharing data across organizations securely
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 629}
+		\textbf{Correct: A} --- Delta Sharing shares data securely.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 630}
+		What is a Delta Sharing recipient?
+		\begin{enumerate}[label=\Alph*.]
+			\item An organization or user who receives shared data
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 630}
+		\textbf{Correct: A} --- recipients receive shared data.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 631}
+		What is a Delta Sharing share?
+		\begin{enumerate}[label=\Alph*.]
+			\item A collection of tables shared with a recipient
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 631}
+		\textbf{Correct: A} --- a share groups shared tables.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 632}
+		What is a data governance policy?
+		\begin{enumerate}[label=\Alph*.]
+			\item A rule set governing data access and use
+			\item A model
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 632}
+		\textbf{Correct: A} --- governance policies define data rules.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 633}
+		What is data privacy in ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item Protecting sensitive information used in training and inference
+			\item Training faster
+			\item Serving faster
+			\item Registering more models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 633}
+		\textbf{Correct: A} --- privacy protects sensitive data.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 634}
+		What is differential privacy?
+		\begin{enumerate}[label=\Alph*.]
+			\item A technique that adds noise to protect individual records
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 634}
+		\textbf{Correct: A} --- differential privacy protects individuals.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 635}
+		What is PII?
+		\begin{enumerate}[label=\Alph*.]
+			\item Personally identifiable information
+			\item A model metric
+			\item A feature table
+			\item A cluster type
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 635}
+		\textbf{Correct: A} --- PII is personally identifiable information.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 636}
+		Why should PII be masked in ML datasets?
+		\begin{enumerate}[label=\Alph*.]
+			\item To protect privacy and comply with regulations
+			\item To train faster
+			\item To serve faster
+			\item To register more models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 636}
+		\textbf{Correct: A} --- masking protects privacy and compliance.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 637}
+		What is a regulatory compliance requirement in ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item Following data protection and fairness laws
+			\item Training faster
+			\item Serving faster
+			\item Registering more models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 637}
+		\textbf{Correct: A} --- compliance follows legal requirements.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 638}
+		What is model explainability?
+		\begin{enumerate}[label=\Alph*.]
+			\item The ability to explain model predictions
+			\item The model size
+			\item The training time
+			\item The storage size
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 638}
+		\textbf{Correct: A} --- explainability clarifies predictions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 639}
+		Why is explainability important in regulated industries?
+		\begin{enumerate}[label=\Alph*.]
+			\item Decisions must be justified to regulators and users
+			\item It improves accuracy
+			\item It reduces storage
+			\item It speeds training
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 639}
+		\textbf{Correct: A} --- regulated decisions require justification.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the reason.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 640}
+		What is a bias audit in ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item An assessment of whether a model unfairly disadvantages groups
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 640}
+		\textbf{Correct: A} --- bias audits check fairness.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 641}
+		What is a protected attribute?
+		\begin{enumerate}[label=\Alph*.]
+			\item A characteristic that should not lead to discrimination
+			\item A model metric
+			\item A cluster setting
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 641}
+		\textbf{Correct: A} --- protected attributes must not cause discrimination.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 642}
+		What is disparate impact?
+		\begin{enumerate}[label=\Alph*.]
+			\item A model that disproportionately harms a group
+			\item A model metric
+			\item A cluster setting
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 642}
+		\textbf{Correct: A} --- disparate impact is unequal harm.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 643}
+		What is a model card's intended audience?
+		\begin{enumerate}[label=\Alph*.]
+			\item Stakeholders, auditors, and users
+			\item Only developers
+			\item Only the model
+			\item Only the cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 643}
+		\textbf{Correct: A} --- model cards inform a broad audience.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are too narrow or invalid.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 644}
+		What is a data sheet?
+		\begin{enumerate}[label=\Alph*.]
+			\item A document describing a dataset's contents and intended use
+			\item A model artifact
+			\item A cluster setting
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 644}
+		\textbf{Correct: A} --- data sheets describe datasets.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 645}
+		What is a model risk management framework?
+		\begin{enumerate}[label=\Alph*.]
+			\item A process for identifying and mitigating model risks
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 645}
+		\textbf{Correct: A} --- frameworks manage model risk.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 646}
+		What is model validation in risk management?
+		\begin{enumerate}[label=\Alph*.]
+			\item Independent review of model performance and assumptions
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 646}
+		\textbf{Correct: A} --- validation is independent review.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other steps.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 647}
+		What is model drift detection?
+		\begin{enumerate}[label=\Alph*.]
+			\item Monitoring when model performance degrades over time
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 647}
+		\textbf{Correct: A} --- drift detection monitors degradation.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other steps.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 648}
+		What is a model retraining trigger?
+		\begin{enumerate}[label=\Alph*.]
+			\item A condition that starts retraining, such as drift or schedule
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 648}
+		\textbf{Correct: A} --- triggers start retraining.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 649}
+		What is a champion-challenger setup?
+		\begin{enumerate}[label=\Alph*.]
+			\item Comparing a production model against a challenger model
+			\item Training two models
+			\item Deleting two models
+			\item Registering two models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 649}
+		\textbf{Correct: A} --- champion-challenger compares production vs.\ challenger.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the setup.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 650}
+		What is shadow deployment?
+		\begin{enumerate}[label=\Alph*.]
+			\item Running a new model alongside production without affecting users
+			\item Training a model
+			\item Serving a model
+			\item Deleting a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 650}
+		\textbf{Correct: A} --- shadow deployment runs without user impact.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 651}
+		What is a canary deployment?
+		\begin{enumerate}[label=\Alph*.]
+			\item Releasing a model to a small subset of traffic
+			\item Training a model
+			\item Serving a model
+			\item Deleting a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 651}
+		\textbf{Correct: A} --- canary releases go to limited traffic.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 652}
+		What is a blue-green deployment?
+		\begin{enumerate}[label=\Alph*.]
+			\item Running two environments and switching traffic between them
+			\item Training two models
+			\item Deleting two models
+			\item Registering two models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 652}
+		\textbf{Correct: A} --- blue-green switches between environments.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 653}
+		What is a rollback plan?
+		\begin{enumerate}[label=\Alph*.]
+			\item A procedure to revert to a previous model version
+			\item A training plan
+			\item A serving plan
+			\item A registration plan
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 653}
+		\textbf{Correct: A} --- rollback plans revert deployments.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other plans.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 654}
+		What is an SLA for model serving?
+		\begin{enumerate}[label=\Alph*.]
+			\item A commitment on latency and availability
+			\item A training metric
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 654}
+		\textbf{Correct: A} --- SLAs define service commitments.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 655}
+		What is an SLO for model serving?
+		\begin{enumerate}[label=\Alph*.]
+			\item An internal objective for service quality
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 655}
+		\textbf{Correct: A} --- SLOs are internal quality targets.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 656}
+		What is a model's p99 latency?
+		\begin{enumerate}[label=\Alph*.]
+			\item The latency below which 99\% of requests fall
+			\item The average latency
+			\item The maximum latency
+			\item The minimum latency
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 656}
+		\textbf{Correct: A} --- p99 is a high-percentile latency.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are different statistics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 657}
+		What is a model's p50 latency?
+		\begin{enumerate}[label=\Alph*.]
+			\item The median latency
+			\item The maximum latency
+			\item The minimum latency
+			\item The training latency
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 657}
+		\textbf{Correct: A} --- p50 is the median.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are different statistics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 658}
+		Why are percentile latencies preferred over averages for serving SLAs?
+		\begin{enumerate}[label=\Alph*.]
+			\item They capture tail behavior experienced by users
+			\item They are easier to compute
+			\item They are always lower
+			\item They ignore outliers
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 658}
+		\textbf{Correct: A} --- percentiles capture tail latency.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 659}
+		What is a model's error rate in serving?
+		\begin{enumerate}[label=\Alph*.]
+			\item The fraction of requests that return errors
+			\item The training loss
+			\item The feature count
+			\item The cluster size
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 659}
+		\textbf{Correct: A} --- error rate measures failed requests.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 660}
+		What is a model's availability in serving?
+		\begin{enumerate}[label=\Alph*.]
+			\item The fraction of time the endpoint is reachable
+			\item The training time
+			\item The feature count
+			\item The cluster size
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 660}
+		\textbf{Correct: A} --- availability is uptime.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 661}
+		What is a Databricks SQL warehouse's serverless mode?
+		\begin{enumerate}[label=\Alph*.]
+			\item Compute that starts quickly without cluster management
+			\item A model type
+			\item A feature table
+			\item A cluster policy
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 661}
+		\textbf{Correct: A} --- serverless SQL starts quickly.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 662}
+		What is a Databricks SQL warehouse's classic mode?
+		\begin{enumerate}[label=\Alph*.]
+			\item Compute that requires cluster configuration
+			\item A model type
+			\item A feature table
+			\item A cluster policy
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 662}
+		\textbf{Correct: A} --- classic SQL uses configured clusters.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 663}
+		What is a Databricks SQL warehouse's size used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Controlling compute capacity
+			\item Controlling model size
+			\item Controlling feature count
+			\item Controlling storage
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 663}
+		\textbf{Correct: A} --- size controls SQL compute capacity.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 664}
+		What is a Databricks SQL warehouse's auto-stop setting?
+		\begin{enumerate}[label=\Alph*.]
+			\item The idle time before the warehouse shuts down
+			\item The maximum runtime
+			\item The number of queries
+			\item The number of users
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 664}
+		\textbf{Correct: A} --- auto-stop shuts down idle warehouses.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other settings.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 665}
+		What is a Databricks SQL warehouse's auto-start setting?
+		\begin{enumerate}[label=\Alph*.]
+			\item Whether it starts automatically when queried
+			\item The maximum runtime
+			\item The number of queries
+			\item The number of users
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 665}
+		\textbf{Correct: A} --- auto-start starts the warehouse on demand.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other settings.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 666}
+		What is a Databricks SQL query's result cache?
+		\begin{enumerate}[label=\Alph*.]
+			\item Stored results reused for repeated queries
+			\item A model artifact
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 666}
+		\textbf{Correct: A} --- result caches reuse query results.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 667}
+		What is a Databricks SQL query's parameter marker?
+		\begin{enumerate}[label=\Alph*.]
+			\item A placeholder for a runtime value
+			\item A model metric
+			\item A cluster setting
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 667}
+		\textbf{Correct: A} --- markers are runtime placeholders.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 668}
+		What is a Databricks SQL dashboard's refresh schedule?
+		\begin{enumerate}[label=\Alph*.]
+			\item How often the dashboard updates
+			\item The model retraining schedule
+			\item The cluster schedule
+			\item The feature schedule
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 668}
+		\textbf{Correct: A} --- refresh schedules update dashboards.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 669}
+		What is a Databricks SQL dashboard's embed?
+		\begin{enumerate}[label=\Alph*.]
+			\item Including the dashboard in an external site
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 669}
+		\textbf{Correct: A} --- embedding adds dashboards to sites.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 670}
+		What is a Databricks SQL dashboard's permissions model?
+		\begin{enumerate}[label=\Alph*.]
+			\item It controls who can view or edit the dashboard
+			\item It trains models
+			\item It serves models
+			\item It registers models
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 670}
+		\textbf{Correct: A} --- permissions control dashboard access.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 671}
+		What is a Delta Sharing provider?
+		\begin{enumerate}[label=\Alph*.]
+			\item The organization that shares data
+			\item The model
+			\item The feature table
+			\item The cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 671}
+		\textbf{Correct: A} --- providers share data.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 672}
+		What is a Delta Sharing recipient token used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Authenticating the recipient's access
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 672}
+		\textbf{Correct: A} --- tokens authenticate recipient access.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 673}
+		What is a Delta Sharing profile file?
+		\begin{enumerate}[label=\Alph*.]
+			\item A file with credentials to access shared data
+			\item A model artifact
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 673}
+		\textbf{Correct: A} --- profile files hold sharing credentials.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 674}
+		What is a data contract?
+		\begin{enumerate}[label=\Alph*.]
+			\item An agreement on data schema and quality expectations
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 674}
+		\textbf{Correct: A} --- data contracts define schema and quality.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 675}
+		What is a data owner in governance?
+		\begin{enumerate}[label=\Alph*.]
+			\item The person accountable for a dataset
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 675}
+		\textbf{Correct: A} --- owners are accountable for datasets.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 676}
+		What is a data steward in governance?
+		\begin{enumerate}[label=\Alph*.]
+			\item A person who manages data quality and policy
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 676}
+		\textbf{Correct: A} --- stewards manage data quality and policy.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 677}
+		What is a data lineage graph?
+		\begin{enumerate}[label=\Alph*.]
+			\item A visual of upstream and downstream data dependencies
+			\item A model metric
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 677}
+		\textbf{Correct: A} --- lineage graphs show dependencies.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 678}
+		What is a data catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item A searchable inventory of data assets and metadata
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 678}
+		\textbf{Correct: A} --- catalogs inventory data assets.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 679}
+		What is a metadata tag in a data catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item A label that classifies data assets
+			\item A model metric
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 679}
+		\textbf{Correct: A} --- tags classify assets.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 680}
+		What is a data classification?
+		\begin{enumerate}[label=\Alph*.]
+			\item Categorizing data by sensitivity or type
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 680}
+		\textbf{Correct: A} --- classification labels data by sensitivity/type.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 681}
+		What is a data retention policy?
+		\begin{enumerate}[label=\Alph*.]
+			\item Rules for how long data is kept
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 681}
+		\textbf{Correct: A} --- retention policies define data lifetimes.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 682}
+		What is data deletion in governance?
+		\begin{enumerate}[label=\Alph*.]
+			\item Removing data according to policy or request
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 682}
+		\textbf{Correct: A} --- deletion follows policy or request.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 683}
+		What is the right to be forgotten?
+		\begin{enumerate}[label=\Alph*.]
+			\item A user's right to have their data deleted
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 683}
+		\textbf{Correct: A} --- it is a right to data deletion.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 684}
+		What is consent management?
+		\begin{enumerate}[label=\Alph*.]
+			\item Tracking and honoring user permissions for data use
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 684}
+		\textbf{Correct: A} --- consent management tracks permissions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 685}
+		What is a data processing agreement?
+		\begin{enumerate}[label=\Alph*.]
+			\item A contract governing how data is handled
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 685}
+		\textbf{Correct: A} --- DPAs govern data handling.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 686}
+		What is anonymization?
+		\begin{enumerate}[label=\Alph*.]
+			\item Removing identifying information from data
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 686}
+		\textbf{Correct: A} --- anonymization removes identifiers.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 687}
+		What is pseudonymization?
+		\begin{enumerate}[label=\Alph*.]
+			\item Replacing identifiers with pseudonyms
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 687}
+		\textbf{Correct: A} --- pseudonymization replaces identifiers.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 688}
+		What is tokenization in privacy?
+		\begin{enumerate}[label=\Alph*.]
+			\item Replacing sensitive values with tokens
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 688}
+		\textbf{Correct: A} --- tokenization replaces sensitive values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 689}
+		What is data masking?
+		\begin{enumerate}[label=\Alph*.]
+			\item Hiding sensitive values from unauthorized users
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 689}
+		\textbf{Correct: A} --- masking hides sensitive values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 690}
+		What is encryption at rest?
+		\begin{enumerate}[label=\Alph*.]
+			\item Encrypting stored data
+			\item Encrypting data in transit
+			\item Training a model
+			\item Serving a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 690}
+		\textbf{Correct: A} --- at-rest encryption protects stored data.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is in transit.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 691}
+		What is encryption in transit?
+		\begin{enumerate}[label=\Alph*.]
+			\item Encrypting data while it moves between systems
+			\item Encrypting stored data
+			\item Training a model
+			\item Serving a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 691}
+		\textbf{Correct: A} --- in-transit encryption protects moving data.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is at rest.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 692}
+		What is a key management service?
+		\begin{enumerate}[label=\Alph*.]
+			\item A service that manages encryption keys
+			\item A model
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 692}
+		\textbf{Correct: A} --- KMS manages encryption keys.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 693}
+		What is a customer-managed key?
+		\begin{enumerate}[label=\Alph*.]
+			\item An encryption key managed by the customer
+			\item A model metric
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 693}
+		\textbf{Correct: A} --- CMKs are managed by the customer.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 694}
+		What is a Databricks audit log used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Tracking workspace activity for compliance
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 694}
+		\textbf{Correct: A} --- audit logs track activity.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 695}
+		What is a compliance report?
+		\begin{enumerate}[label=\Alph*.]
+			\item A document demonstrating compliance with regulations
+			\item A model metric
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 695}
+		\textbf{Correct: A} --- compliance reports demonstrate adherence.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 696}
+		What is a security review in ML?
+		\begin{enumerate}[label=\Alph*.]
+			\item An assessment of security risks in the ML workflow
+			\item A model type
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 696}
+		\textbf{Correct: A} --- security reviews assess ML risks.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 697}
+		What is a vulnerability assessment?
+		\begin{enumerate}[label=\Alph*.]
+			\item Identifying security weaknesses
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 697}
+		\textbf{Correct: A} --- vulnerability assessments find weaknesses.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 698}
+		What is adversarial robustness?
+		\begin{enumerate}[label=\Alph*.]
+			\item A model's ability to resist malicious inputs
+			\item The model size
+			\item The training time
+			\item The feature count
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 698}
+		\textbf{Correct: A} --- adversarial robustness resists malicious inputs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 699}
+		What is an adversarial example?
+		\begin{enumerate}[label=\Alph*.]
+			\item An input designed to fool a model
+			\item A training metric
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 699}
+		\textbf{Correct: A} --- adversarial examples fool models.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 700}
+		What is the best practice for handling sensitive data in ML workflows?
+		\begin{enumerate}[label=\Alph*.]
+			\item Apply governance, masking, and access controls
+			\item Log raw data everywhere
+			\item Share data publicly
+			\item Skip validation
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 700}
+		\textbf{Correct: A} --- governance, masking, and controls protect data.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unsafe.
+		\end{itemize}
+	\end{frame}
+	
+\end{document}

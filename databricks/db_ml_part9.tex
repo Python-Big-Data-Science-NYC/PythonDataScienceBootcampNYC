@@ -1,0 +1,1990 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{Databricks ML Associate}
+\subtitle{Questions 801--900 (Ninth 100)}
+\author{Practice Exam Deck}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{How to Use This Deck}
+		\begin{itemize}
+			\item 100 new questions (Q801--Q900), none repeated from Q1--Q800.
+			\item Each question slide has four options (A--D).
+			\item The next slide gives the correct answer and explains why the right option is right and why each wrong option is wrong.
+			\item This set is \textbf{scenario-heavy}: you are given a situation and must choose the right Databricks tool, API, or workflow.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 801}
+		A team wants to reuse the same customer features across three models and keep them governed in Unity Catalog. What should they build first?
+		\begin{enumerate}[label=\Alph*.]
+			\item A Feature Store table in Unity Catalog
+			\item A model serving endpoint
+			\item An AutoML experiment
+			\item A SQL warehouse
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 801}
+		\textbf{Correct: A} --- shared governed features belong in a Feature Store table.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B serves models, not features.
+			\item C trains models.
+			\item D runs SQL.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 802}
+		A model was trained with \texttt{fe.log\_model()}. At scoring time the input table has only \texttt{customer\_id}. Which call should be used?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{fe.score\_batch(model\_uri, batch\_df)}
+			\item \texttt{model.predict(batch\_df)}
+			\item \texttt{mlflow.pyfunc.load\_model(model\_uri).predict(batch\_df)}
+			\item \texttt{batch\_df.join(feature\_table)}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 802}
+		\textbf{Correct: A} --- \texttt{score\_batch()} uses logged feature metadata to join features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C assume features are already present.
+			\item D is a plain join without automatic lookup.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 803}
+		An offline model scores well but degrades online. Review shows a feature was computed using post-outcome data. What should have been used?
+		\begin{enumerate}[label=\Alph*.]
+			\item Point-in-time lookups in \texttt{create\_training\_set()}
+			\item A larger cluster
+			\item A different optimizer
+			\item More trees
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 803}
+		\textbf{Correct: A} --- point-in-time lookups prevent leakage.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not address leakage.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 804}
+		A team wants one parent run for tuning and a child run per trial. What should they do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Start child runs with \texttt{nested=True}
+			\item Turn on autologging only
+			\item Use the same experiment ID
+			\item Use a SQL warehouse
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 804}
+		\textbf{Correct: A} --- nested runs create parent-child relationships.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B does not create nesting.
+			\item C only groups runs in an experiment.
+			\item D is SQL compute.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 805}
+		A data scientist wants to compare 50 hyperparameter runs visually and sort by RMSE. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item The MLflow experiment UI
+			\item A SQL warehouse
+			\item A notebook widget
+			\item A Repo
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 805}
+		\textbf{Correct: A} --- the experiment UI compares runs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not compare runs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 806}
+		A team wants the run with the lowest RMSE in an experiment. Which call returns it?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.search\_runs(exp\_id, order\_by=["metrics.rmse ASC"])}
+			\item \texttt{mlflow.search\_runs(exp\_id, order\_by=["metrics.rmse DESC"])}
+			\item \texttt{mlflow.best\_run(exp\_id)}
+			\item \texttt{mlflow.get\_run(exp\_id)}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 806}
+		\textbf{Correct: A} --- ascending order puts the lowest RMSE first.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B returns the worst first.
+			\item C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 807}
+		A team wants a quick baseline across several algorithms without writing training code. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Databricks AutoML
+			\item A SQL warehouse
+			\item A Repo
+			\item A cluster policy
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 807}
+		\textbf{Correct: A} --- AutoML builds baselines automatically.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not AutoML.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 808}
+		AutoML produced a leaderboard. What must the team still do manually?
+		\begin{enumerate}[label=\Alph*.]
+			\item Deploy the best model
+			\item Tune hyperparameters
+			\item Evaluate models
+			\item Run EDA
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 808}
+		\textbf{Correct: A} --- deployment is outside AutoML.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are automated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 809}
+		A team needs MLflow preinstalled and does not want to install libraries each time. What should they select?
+		\begin{enumerate}[label=\Alph*.]
+			\item A Databricks Runtime ML version
+			\item A SQL warehouse
+			\item A single-node cluster
+			\item A standard runtime without ML
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 809}
+		\textbf{Correct: A} --- Runtime ML includes MLflow.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not include ML libraries.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 810}
+		A job has three dependent notebooks and fails intermittently. What is the best way to find the failing task?
+		\begin{enumerate}[label=\Alph*.]
+			\item Review the matrix view of the job run
+			\item Run each notebook interactively
+			\item Migrate to DLT
+			\item Increase cluster size
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 810}
+		\textbf{Correct: A} --- the matrix view shows task statuses.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is debugging after identifying the task.
+			\item C, D do not diagnose failures.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 811}
+		A team must improve a production notebook without changing what runs daily. What should they do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Create a Git branch in Repos and commit changes there
+			\item Clone notebooks to a workspace folder
+			\item Create a new Git repo
+			\item Clone into a new Repo
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 811}
+		\textbf{Correct: A} --- branches isolate development.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B loses Git version control.
+			\item C, D are unnecessarily complex.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 812}
+		A team wants scheduled retraining every day. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item A Databricks Job with a schedule trigger
+			\item A notebook widget
+			\item A SQL warehouse
+			\item A serving endpoint
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 812}
+		\textbf{Correct: A} --- Jobs support schedule triggers.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not schedule training.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 813}
+		A team needs streaming inference as data arrives. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Delta Live Tables
+			\item A SQL warehouse
+			\item A single-node cluster
+			\item A notebook widget
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 813}
+		\textbf{Correct: A} --- DLT supports streaming inference.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not streaming inference.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 814}
+		A team needs low-latency REST predictions. What should they create?
+		\begin{enumerate}[label=\Alph*.]
+			\item A real-time serving endpoint
+			\item A batch inference job
+			\item A DLT pipeline
+			\item A SQL dashboard
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 814}
+		\textbf{Correct: A} --- real-time endpoints serve REST predictions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is offline.
+			\item C is streaming.
+			\item D is visualization.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 815}
+		A model must score 100M Delta records overnight. What is the best approach?
+		\begin{enumerate}[label=\Alph*.]
+			\item Batch inference with a Spark UDF
+			\item A real-time endpoint per record
+			\item A notebook loop on the driver
+			\item Export to CSV and score externally
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 815}
+		\textbf{Correct: A} --- Spark UDF distributes inference.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is high-latency per record.
+			\item C does not scale.
+			\item D is manual.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 816}
+		A team wants to split traffic between two model versions on one endpoint. What should they configure?
+		\begin{enumerate}[label=\Alph*.]
+			\item Traffic splitting on the serving endpoint
+			\item Two separate endpoints
+			\item Two clusters
+			\item Two notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 816}
+		\textbf{Correct: A} --- traffic splitting routes requests.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not split traffic on one endpoint.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 817}
+		A team wants to promote a model to production using aliases. What do they do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Move the \texttt{champion} alias to the new version
+			\item Delete the old version
+			\item Retrain the model
+			\item Create a new experiment
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 817}
+		\textbf{Correct: A} --- promotion is moving the alias.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B deletes history.
+			\item C is unnecessary.
+			\item D is unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 818}
+		A team wants to register a model from a run. Which call is correct?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.register\_model(f"runs:/\{run\_id\}/model", "name")}
+			\item \texttt{mlflow.register\_model(run\_id, "name")}
+			\item \texttt{mlflow.register\_model(f"runs:/\{run\_id\}/model")}
+			\item \texttt{mlflow.register\_model(f"runs:/\{run\_id\}/name", "model")}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 818}
+		\textbf{Correct: A} --- the URI includes the run and artifact path.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is not a model URI.
+			\item C omits the name.
+			\item D swaps path and name.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 819}
+		A team needs to view the notebook that created an MLflow run. What should they click?
+		\begin{enumerate}[label=\Alph*.]
+			\item The Source link on the experiment page
+			\item The MLmodel artifact
+			\item The Models link
+			\item The Start Time link
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 819}
+		\textbf{Correct: A} --- the Source link opens the notebook snapshot.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is metadata.
+			\item C links to the registry.
+			\item D opens run details.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 820}
+		A team wants the notebook to be reproducible months later. What is the best practice?
+		\begin{enumerate}[label=\Alph*.]
+			\item Use MLflow tracking for params, metrics, artifacts, and model
+			\item Print metrics to stdout
+			\item Save notebooks to local disk
+			\item Rely on cluster logs
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 820}
+		\textbf{Correct: A} --- MLflow tracking supports reproducibility.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not durable or centralized.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 821}
+		A team needs a robust imputation for skewed numeric features. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Median imputation
+			\item Mean imputation
+			\item Zero imputation
+			\item Drop rows
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 821}
+		\textbf{Correct: A} --- median is robust to skew.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is distorted by skew.
+			\item C biases the distribution.
+			\item D loses data.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 822}
+		A team must preserve information about missingness. What should they add?
+		\begin{enumerate}[label=\Alph*.]
+			\item A binary indicator feature per imputed column
+			\item A mean imputation
+			\item A constant feature
+			\item A drop of the column
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 822}
+		\textbf{Correct: A} --- indicator features preserve missingness.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D lose or distort information.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 823}
+		A team wants to one-hot encode in Spark ML. What is the correct order?
+		\begin{enumerate}[label=\Alph*.]
+			\item StringIndexer then OneHotEncoder
+			\item OneHotEncoder then StringIndexer
+			\item VectorAssembler then OneHotEncoder
+			\item Imputer then OneHotEncoder
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 823}
+		\textbf{Correct: A} --- index first, then one-hot encode.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is reversed.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 824}
+		A data scientist builds a Spark ML \texttt{Imputer} and calls \texttt{transform} directly. Why does it fail?
+		\begin{enumerate}[label=\Alph*.]
+			\item The imputer was not fit first
+			\item The columns must be identical
+			\item It does not impute test data
+			\item The strategy is invalid
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 824}
+		\textbf{Correct: A} --- the imputer must be fit first.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 825}
+		A team wants to combine numeric and encoded categorical features. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{VectorAssembler}
+			\item \texttt{StringIndexer}
+			\item \texttt{OneHotEncoder}
+			\item \texttt{Imputer}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 825}
+		\textbf{Correct: A} --- VectorAssembler combines feature columns.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other transformers.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 826}
+		A team wants a preprocessing and model pipeline fit inside CV. Where should the pipeline go?
+		\begin{enumerate}[label=\Alph*.]
+			\item Inside the cross-validator
+			\item Outside the cross-validator
+			\item As the final stage of itself
+			\item In a separate notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 826}
+		\textbf{Correct: A} --- the pipeline belongs inside the CV to avoid leakage.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B causes leakage.
+			\item C is recursive.
+			\item D breaks integration.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 827}
+		A team tunes 5 hyperparameters on 8 workers. Which approach best leverages the cluster?
+		\begin{enumerate}[label=\Alph*.]
+			\item Hyperopt with \texttt{SparkTrials} and TPE
+			\item Grid search on the driver
+			\item Random search on the driver
+			\item Manual tuning
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 827}
+		\textbf{Correct: A} --- Hyperopt + SparkTrials uses the cluster.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are single-node or inefficient.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 828}
+		With 3-fold CV and a 3x2 hyperparameter grid, how many models train in total?
+		\begin{enumerate}[label=\Alph*.]
+			\item 18
+			\item 6
+			\item 9
+			\item 36
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 828}
+		\textbf{Correct: A} --- $3 \times 2 \times 3 = 18$.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is just combinations.
+			\item C, D are wrong arithmetic.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 829}
+		A team wants fewer models trained because compute is limited. What should they choose?
+		\begin{enumerate}[label=\Alph*.]
+			\item A train-validation split
+			\item k-fold CV
+			\item Nested CV
+			\item Leave-one-out CV
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 829}
+		\textbf{Correct: A} --- a split trains fewer models.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D train more models.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 830}
+		A fraud dataset has 1\% positives. Which metric should be used?
+		\begin{enumerate}[label=\Alph*.]
+			\item PR-AUC or F1
+			\item Accuracy
+			\item RMSE
+			\item R-squared
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 830}
+		\textbf{Correct: A} --- imbalance-aware metrics are appropriate.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is misleading.
+			\item C, D are regression metrics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 831}
+		A health team wants to catch as many positives as possible. Which metric should be optimized?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recall
+			\item Precision
+			\item Accuracy
+			\item RMSE
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 831}
+		\textbf{Correct: A} --- recall maximizes positives caught.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D optimize other things.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 832}
+		A model's RMSE is much higher than MAE. What does this suggest?
+		\begin{enumerate}[label=\Alph*.]
+			\item Large errors are present
+			\item Perfect predictions
+			\item No outliers
+			\item The model is underfit
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 832}
+		\textbf{Correct: A} --- RMSE penalizes large errors more.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not implied.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 833}
+		A team evaluates a log(price) model against raw price labels and gets a huge RMSE. What was forgotten?
+		\begin{enumerate}[label=\Alph*.]
+			\item Exponentiating predictions before computing RMSE
+			\item Taking the log of labels
+			\item Scaling features
+			\item Imputing missing values
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 833}
+		\textbf{Correct: A} --- predictions must be transformed back.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not fix the scale mismatch.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 834}
+		A team reports 3-fold CV RMSEs of 10, 12, 17. What is the overall CV RMSE?
+		\begin{enumerate}[label=\Alph*.]
+			\item 13.0
+			\item 17.0
+			\item 12.0
+			\item 39.0
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 834}
+		\textbf{Correct: A} --- $(10+12+17)/3=13.0$.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are wrong arithmetic.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 835}
+		Training accuracy is 99.5\%, validation is 72\%. What should be done?
+		\begin{enumerate}[label=\Alph*.]
+			\item Reduce complexity or add regularization
+			\item Increase depth
+			\item Deploy it
+			\item Add more test data
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 835}
+		\textbf{Correct: A} --- the gap indicates overfitting.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B worsens it.
+			\item C is unsafe.
+			\item D does not fix overfitting.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 836}
+		A team wants to reduce variance without much extra bias. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Bagging
+			\item Boosting
+			\item Increasing depth
+			\item Removing regularization
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 836}
+		\textbf{Correct: A} --- bagging reduces variance.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B reduces bias.
+			\item C, D increase variance.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 837}
+		A team wants to improve bias sequentially. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Boosting
+			\item Bagging
+			\item PCA
+			\item KMeans
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 837}
+		\textbf{Correct: A} --- boosting corrects errors sequentially.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is parallel.
+			\item C, D are other methods.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 838}
+		A team needs feature importance from a tree model. What should they inspect?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{featureImportances}
+			\item \texttt{coefficients}
+			\item \texttt{intercept}
+			\item \texttt{summary}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 838}
+		\textbf{Correct: A} --- tree models expose \texttt{featureImportances}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C are for linear models.
+			\item D is broad.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 839}
+		A team wants to interpret a linear model. What should they inspect?
+		\begin{enumerate}[label=\Alph*.]
+			\item Coefficients
+			\item Feature importance
+			\item Trees
+			\item Clusters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 839}
+		\textbf{Correct: A} --- linear models use coefficients.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is for trees.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 840}
+		A team wants to choose $k$ for k-means. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Elbow method or silhouette
+			\item ROC-AUC
+			\item RMSE
+			\item F1
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 840}
+		\textbf{Correct: A} --- elbow/silhouette select $k$.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other metrics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 841}
+		A team wants to reduce dimensionality before modeling. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item PCA
+			\item KMeans
+			\item ALS
+			\item StringIndexer
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 841}
+		\textbf{Correct: A} --- PCA reduces dimensions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C are other algorithms.
+			\item D encodes strings.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 842}
+		A team wants to cluster customers by behavior without labels. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item KMeans
+			\item LinearRegression
+			\item RandomForestClassifier
+			\item ALS
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 842}
+		\textbf{Correct: A} --- KMeans is unsupervised clustering.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C are supervised.
+			\item D is recommendation.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 843}
+		A team wants recommendations from user-item interactions. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item ALS
+			\item KMeans
+			\item PCA
+			\item LinearRegression
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 843}
+		\textbf{Correct: A} --- ALS is collaborative filtering.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other methods.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 844}
+		A team wants to detect rare anomalies without labels. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Isolation Forest
+			\item LinearRegression
+			\item RandomForestClassifier
+			\item StringIndexer
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 844}
+		\textbf{Correct: A} --- Isolation Forest is unsupervised anomaly detection.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C are supervised.
+			\item D encodes strings.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 845}
+		A team must serve features for real-time inference. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item An online feature table
+			\item An offline feature table
+			\item A SQL warehouse
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 845}
+		\textbf{Correct: A} --- online tables serve low-latency features.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is batch.
+			\item C, D are not feature stores.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 846}
+		A team must train on historical features with point-in-time correctness. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item An offline feature table with timestamp keys
+			\item An online feature table
+			\item A SQL warehouse
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 846}
+		\textbf{Correct: A} --- offline tables with timestamps support point-in-time joins.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is for online serving.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 847}
+		A team must share features across workspaces. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Account-level Feature Store tables in Unity Catalog
+			\item Workspace-level tables
+			\item A notebook
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 847}
+		\textbf{Correct: A} --- account-level tables are cross-workspace.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is workspace-scoped.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 848}
+		A team must update existing feature rows by key. Which write mode should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mode="merge"}
+			\item \texttt{mode="overwrite"}
+			\item \texttt{mode="append"}
+			\item \texttt{mode="replace"}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 848}
+		\textbf{Correct: A} --- merge upserts by key.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B replaces all.
+			\item C appends.
+			\item D is not a mode.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 849}
+		A team must ensure feature tables are available before training sets. What should they do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Create feature tables first, then training sets
+			\item Create training sets first
+			\item Run them in parallel
+			\item Use only one
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 849}
+		\textbf{Correct: A} --- training sets depend on feature tables.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is reversed.
+			\item C, D are invalid.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 850}
+		A team needs cross-workspace governance for models. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Unity Catalog model registry
+			\item Workspace model registry
+			\item A notebook
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 850}
+		\textbf{Correct: A} --- Unity Catalog provides governance.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is workspace-scoped.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 851}
+		A team needs to use an alias in serving. What URI format should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{models:/<name>@<alias>}
+			\item \texttt{models:/<alias>}
+			\item \texttt{runs:/<alias>}
+			\item \texttt{models:<name>}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 851}
+		\textbf{Correct: A} --- alias URIs use \texttt{models:/<name>@<alias>}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are malformed.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 852}
+		A team wants to set a model version description programmatically. Which call should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.update\_model\_version()}
+			\item \texttt{mlflow.set\_tag()}
+			\item \texttt{mlflow.log\_param()}
+			\item \texttt{mlflow.describe()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 852}
+		\textbf{Correct: A} --- it updates version metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C set run metadata.
+			\item D is not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 853}
+		A team needs a description on a registered model. Which call should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.update\_model()}
+			\item \texttt{mlflow.set\_tag()}
+			\item \texttt{mlflow.log\_artifact()}
+			\item \texttt{mlflow.register\_model()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 853}
+		\textbf{Correct: A} --- \texttt{update\_model()} sets model metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C set run metadata.
+			\item D registers versions.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 854}
+		A team needs an endpoint that scales to zero when idle. What should they configure?
+		\begin{enumerate}[label=\Alph*.]
+			\item Scale-to-zero on the endpoint
+			\item A larger cluster
+			\item A bigger model
+			\item A different runtime
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 854}
+		\textbf{Correct: A} --- scale-to-zero saves cost when idle.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not enable scale-to-zero.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 855}
+		A team needs to authenticate serving calls. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item A personal access token or OAuth
+			\item Anonymous access
+			\item A shared password
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 855}
+		\textbf{Correct: A} --- tokens authenticate serving calls.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are insecure or unsupported.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 856}
+		A team needs to monitor data drift in production. What should they track?
+		\begin{enumerate}[label=\Alph*.]
+			\item Input feature distributions over time
+			\item Training loss
+			\item Cluster CPU
+			\item Storage size
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 856}
+		\textbf{Correct: A} --- drift is a change in input distributions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not drift metrics.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 857}
+		A team needs to monitor concept drift. What should they track?
+		\begin{enumerate}[label=\Alph*.]
+			\item The feature-target relationship over time
+			\item Training loss
+			\item Cluster CPU
+			\item Storage size
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 857}
+		\textbf{Correct: A} --- concept drift changes the feature-target relationship.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 858}
+		A team needs a model card. What should it include?
+		\begin{enumerate}[label=\Alph*.]
+			\item Intended use, data, performance, limitations
+			\item Model weights only
+			\item Cluster size
+			\item Notebook code
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 858}
+		\textbf{Correct: A} --- model cards document use and limitations.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are incomplete.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 859}
+		A team must satisfy an auditor about model decisions. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item SHAP explanations
+			\item A larger model
+			\item More data
+			\item A different optimizer
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 859}
+		\textbf{Correct: A} --- SHAP explains predictions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not explain decisions.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 860}
+		A team must detect bias in model outcomes. What should they do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Run a bias audit across protected groups
+			\item Train more trees
+			\item Use a bigger cluster
+			\item Remove features randomly
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 860}
+		\textbf{Correct: A} --- bias audits assess fairness.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not assess bias.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 861}
+		A team must protect PII in training data. What should they do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Mask or pseudonymize identifiers
+			\item Log raw data
+			\item Share data publicly
+			\item Skip validation
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 861}
+		\textbf{Correct: A} --- masking/pseudonymization protects PII.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unsafe.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 862}
+		A team must prevent a model from exposing PII in outputs. What should they do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Validate and sanitize outputs before returning them
+			\item Train longer
+			\item Use a bigger cluster
+			\item Increase tree depth
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 862}
+		\textbf{Correct: A} --- output validation prevents exposure.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not prevent exposure.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 863}
+		A team needs a secret for serving credentials. Where should they store it?
+		\begin{enumerate}[label=\Alph*.]
+			\item A Databricks secret scope
+			\item A notebook
+			\item A Git repo
+			\item A cluster log
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 863}
+		\textbf{Correct: A} --- secret scopes store secrets securely.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D expose secrets.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 864}
+		A team needs to grant read access to a table. Which privilege should they grant?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{SELECT}
+			\item \texttt{MODIFY}
+			\item \texttt{EXECUTE}
+			\item \texttt{OWN}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 864}
+		\textbf{Correct: A} --- \texttt{SELECT} grants read.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other privileges.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 865}
+		A team needs to grant write access to a table. Which privilege should they grant?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{MODIFY}
+			\item \texttt{SELECT}
+			\item \texttt{EXECUTE}
+			\item \texttt{READ}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 865}
+		\textbf{Correct: A} --- \texttt{MODIFY} grants write.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other privileges.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 866}
+		A team needs to grant permission to serve a model. Which privilege should they grant?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{EXECUTE}
+			\item \texttt{SELECT}
+			\item \texttt{MODIFY}
+			\item \texttt{READ}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 866}
+		\textbf{Correct: A} --- \texttt{EXECUTE} allows model use.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are table privileges.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 867}
+		A team needs to limit what rows a user can see. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item A row filter
+			\item A column mask
+			\item A cluster policy
+			\item A secret scope
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 867}
+		\textbf{Correct: A} --- row filters limit visible rows.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B masks columns.
+			\item C constrains clusters.
+			\item D stores secrets.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 868}
+		A team needs to hide sensitive column values from some users. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item A column mask
+			\item A row filter
+			\item A cluster policy
+			\item A secret scope
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 868}
+		\textbf{Correct: A} --- column masks hide values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B filters rows.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 869}
+		A team needs lineage from a table to a model. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Unity Catalog lineage
+			\item A notebook
+			\item A cluster
+			\item A secret scope
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 869}
+		\textbf{Correct: A} --- UC lineage tracks dependencies.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not provide lineage.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 870}
+		A team needs a governed path for external files. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item An external location
+			\item A notebook
+			\item A cluster
+			\item A secret scope
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 870}
+		\textbf{Correct: A} --- external locations govern file paths.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 871}
+		A team needs to manage cloud credentials for UC storage. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item A storage credential
+			\item A notebook
+			\item A cluster
+			\item A secret scope
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 871}
+		\textbf{Correct: A} --- storage credentials manage cloud access.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 872}
+		A team needs to share data with another organization. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Delta Sharing
+			\item A notebook
+			\item A cluster
+			\item A secret scope
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 872}
+		\textbf{Correct: A} --- Delta Sharing shares data securely.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not enable sharing.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 873}
+		A team needs to automate deployment of jobs and pipelines. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Databricks Asset Bundles
+			\item A notebook
+			\item A cluster
+			\item A secret scope
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 873}
+		\textbf{Correct: A} --- bundles automate deployment.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not automate deployment.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 874}
+		A team needs to sync notebooks with Git. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Databricks Repos
+			\item A secret scope
+			\item A cluster policy
+			\item A SQL warehouse
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 874}
+		\textbf{Correct: A} --- Repos sync with Git.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 875}
+		A team needs data quality rules enforced in a pipeline. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Delta Live Tables expectations
+			\item A notebook
+			\item A cluster
+			\item A secret scope
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 875}
+		\textbf{Correct: A} --- DLT expectations enforce quality rules.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not enforce rules.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 876}
+		A team needs to drop bad records during a DLT run. Which expectation should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{expect\_or\_drop}
+			\item \texttt{expect\_or\_fail}
+			\item \texttt{expect\_all}
+			\item \texttt{expect\_none}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 876}
+		\textbf{Correct: A} --- \texttt{expect\_or\_drop} drops bad records.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B fails the pipeline.
+			\item C, D are not valid.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 877}
+		A team needs to fail a DLT pipeline on data quality violations. Which expectation should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{expect\_or\_fail}
+			\item \texttt{expect\_or\_drop}
+			\item \texttt{expect\_all}
+			\item \texttt{expect\_none}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 877}
+		\textbf{Correct: A} --- \texttt{expect\_or\_fail} fails the pipeline.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B drops records.
+			\item C, D are not valid.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 878}
+		A team needs to add columns to a Delta table without rewriting data. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Schema evolution with \texttt{mergeSchema}
+			\item \texttt{overwriteSchema}
+			\item A notebook
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 878}
+		\textbf{Correct: A} --- \texttt{mergeSchema} evolves schemas.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B replaces the schema.
+			\item C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 879}
+		A team needs to upsert into a Delta table. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{MERGE INTO}
+			\item \texttt{INSERT INTO}
+			\item \texttt{CREATE TABLE}
+			\item \texttt{DROP TABLE}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 879}
+		\textbf{Correct: A} --- \texttt{MERGE INTO} upserts.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B appends.
+			\item C creates.
+			\item D deletes.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 880}
+		A team needs to compact small files in a Delta table. What should they run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{OPTIMIZE}
+			\item \texttt{VACUUM}
+			\item \texttt{MERGE}
+			\item \texttt{DROP}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 880}
+		\textbf{Correct: A} --- OPTIMIZE compacts files.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B removes old files.
+			\item C upserts.
+			\item D deletes.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 881}
+		A team needs to remove stale files not needed for time travel. What should they run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{VACUUM}
+			\item \texttt{OPTIMIZE}
+			\item \texttt{MERGE}
+			\item \texttt{DROP}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 881}
+		\textbf{Correct: A} --- VACUUM removes stale files.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B compacts files.
+			\item C upserts.
+			\item D deletes the table.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 882}
+		A team needs to query a previous version of a Delta table. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Time travel
+			\item OPTIMIZE
+			\item VACUUM
+			\item MERGE
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 882}
+		\textbf{Correct: A} --- time travel queries old versions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are write/maintenance operations.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 883}
+		A team needs a data profile before modeling. What should they run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.summary()}
+			\item \texttt{df.show()}
+			\item \texttt{df.printSchema()}
+			\item \texttt{df.count()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 883}
+		\textbf{Correct: A} --- \texttt{summary()} returns descriptive stats.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not give full stats.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 884}
+		A team needs to filter rows where \texttt{price > 0}. Which code works?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.filter(col("price") > 0)}
+			\item \texttt{df[df["price"] > 0]}
+			\item \texttt{df.loc[df["price"] > 0]}
+			\item \texttt{df.query("price > 0")}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 884}
+		\textbf{Correct: A} --- \texttt{filter(col(...))} is the PySpark way.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are pandas-style.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 885}
+		A team needs a Spark DataFrame summary of count, mean, std, min, max, and quartiles. Which call should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{df.summary()}
+			\item \texttt{df.describe().head()}
+			\item \texttt{df.stats()}
+			\item \texttt{df.printSchema()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 885}
+		\textbf{Correct: A} --- \texttt{summary()} includes quartiles.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B lacks quartiles.
+			\item C, D are not stats APIs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 886}
+		A team needs an outlier filter by IQR. Which range should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item $[Q1-1.5IQR,\; Q3+1.5IQR]$
+			\item $[Q1-IQR,\; Q3+IQR]$
+			\item $[Q1-2IQR,\; Q3+2IQR]$
+			\item $[Q1,\; Q3]$
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 886}
+		\textbf{Correct: A} --- the 1.5$\times$IQR rule is standard.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D use wrong thresholds.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 887}
+		A team needs to log a run to a specific experiment. Which call should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.set\_experiment()}
+			\item \texttt{mlflow.start\_run()}
+			\item \texttt{mlflow.log\_artifact()}
+			\item \texttt{mlflow.register\_model()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 887}
+		\textbf{Correct: A} --- \texttt{set\_experiment()} sets the active experiment.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B starts a run.
+			\item C logs files.
+			\item D registers models.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 888}
+		A team needs to log a dictionary as an artifact. Which call should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.log\_dict()}
+			\item \texttt{mlflow.log\_metric()}
+			\item \texttt{mlflow.log\_param()}
+			\item \texttt{mlflow.set\_tag()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 888}
+		\textbf{Correct: A} --- \texttt{log\_dict()} stores JSON artifacts.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D log other things.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 889}
+		A team needs to log a figure. Which call should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.log\_figure()}
+			\item \texttt{mlflow.log\_metric()}
+			\item \texttt{mlflow.log\_param()}
+			\item \texttt{mlflow.set\_tag()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 889}
+		\textbf{Correct: A} --- \texttt{log\_figure()} logs figures.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D log other things.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 890}
+		A team needs to log a model artifact. Which call should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.log\_artifact()}
+			\item \texttt{mlflow.log\_param()}
+			\item \texttt{mlflow.log\_metric()}
+			\item \texttt{mlflow.set\_tag()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 890}
+		\textbf{Correct: A} --- \texttt{log\_artifact()} logs files.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D log other things.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 891}
+		A team needs to log a model in scikit-learn flavor. Which call should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.sklearn.log\_model()}
+			\item \texttt{mlflow.log\_model()}
+			\item \texttt{mlflow.sklearn.save()}
+			\item \texttt{mlflow.sklearn.register()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 891}
+		\textbf{Correct: A} --- \texttt{sklearn.log\_model()} logs the flavor.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is generic.
+			\item C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 892}
+		A team needs to log a Spark ML model. Which flavor should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.spark}
+			\item \texttt{mlflow.sklearn}
+			\item \texttt{mlflow.pytorch}
+			\item \texttt{mlflow.tensorflow}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 892}
+		\textbf{Correct: A} --- Spark ML uses the \texttt{spark} flavor.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other flavors.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 893}
+		A team needs a custom prediction wrapper. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item A custom \texttt{pyfunc} model
+			\item A sklearn model
+			\item A Spark ML model
+			\item A PyTorch model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 893}
+		\textbf{Correct: A} --- pyfunc wraps custom prediction logic.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are standard flavors.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 894}
+		A team needs to validate model inputs at serving. What should they add?
+		\begin{enumerate}[label=\Alph*.]
+			\item A model signature
+			\item A model alias
+			\item A model description
+			\item A model tag
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 894}
+		\textbf{Correct: A} --- signatures validate schemas.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are metadata.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 895}
+		A team needs to review input examples at serving. What should they log with the model?
+		\begin{enumerate}[label=\Alph*.]
+			\item An input example
+			\item A model tag
+			\item A model description
+			\item A model alias
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 895}
+		\textbf{Correct: A} --- input examples document expected inputs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are metadata.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 896}
+		A team needs to trace a model version to its originating run. What should they inspect?
+		\begin{enumerate}[label=\Alph*.]
+			\item The source run link
+			\item The model alias
+			\item The model description
+			\item The model tag
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 896}
+		\textbf{Correct: A} --- source run links provide traceability.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are metadata.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 897}
+		A team needs to archive an old model version. What should they do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Transition it to Archived or delete it
+			\item Rename it
+			\item Retrain it
+			\item Serve it
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 897}
+		\textbf{Correct: A} --- archiving retires versions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not retire it.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 898}
+		A team needs to compare two models in production. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item Traffic splitting on one endpoint
+			\item Two clusters
+			\item Two notebooks
+			\item Two feature tables
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 898}
+		\textbf{Correct: A} --- traffic splitting enables comparisons.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not split traffic.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 899}
+		A team needs an automated release of a new model version. What should they use?
+		\begin{enumerate}[label=\Alph*.]
+			\item CI/CD with MLflow and Repos/Bundles
+			\item A notebook
+			\item A cluster
+			\item A secret scope
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 899}
+		\textbf{Correct: A} --- CI/CD automates releases.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D do not automate releases.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 900}
+		A team needs to reproduce a model months later. What is the best practice?
+		\begin{enumerate}[label=\Alph*.]
+			\item Log params, metrics, artifacts, model, and environment
+			\item Save only the model weights
+			\item Print metrics to stdout
+			\item Use a bigger cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 900}
+		\textbf{Correct: A} --- full MLflow tracking supports reproducibility.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are incomplete or not durable.
+		\end{itemize}
+	\end{frame}
+	
+\end{document}

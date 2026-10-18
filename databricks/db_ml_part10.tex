@@ -1,0 +1,1938 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{Databricks ML Associate}
+\subtitle{Questions 901--1000 (Tenth 100)}
+\author{Practice Exam Deck}
+\date{}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{How to Use This Deck}
+		\begin{itemize}
+			\item 100 new questions (Q901--Q1000), none repeated from Q1--Q900.
+			\item Each question slide has four options (A--D).
+			\item The next slide gives the correct answer and explains why the right option is right and why each wrong option is wrong.
+			\item This set emphasizes the Feature Store client migration, serving containers, UC registry migration, SQL alerting/dashboards, AutoML cloning, tuning strategies, DLT APPLY CHANGES, job task values, and notebook-scoped tracking.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 901}
+		Which client replaced \texttt{FeatureStoreClient} for Unity Catalog Feature Store tables?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{FeatureEngineeringClient}
+			\item \texttt{FeatureStoreClientV2}
+			\item \texttt{UnityCatalogClient}
+			\item \texttt{FeatureClient}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 901}
+		\textbf{Correct: A} --- \texttt{FeatureEngineeringClient} is the UC client.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not real clients.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 902}
+		Which import statement is used to create a Feature Engineering client?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{from databricks.feature\_engineering import FeatureEngineeringClient}
+			\item \texttt{from databricks.feature\_store import FeatureStoreClient}
+			\item \texttt{from databricks.ml import FeatureClient}
+			\item \texttt{from databricks.uc import FeatureEngineeringClient}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 902}
+		\textbf{Correct: A} --- the UC client comes from \texttt{feature\_engineering}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is the legacy client.
+			\item C, D are not real imports.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 903}
+		Which import statement is used for the legacy workspace Feature Store client?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{from databricks.feature\_store import FeatureStoreClient}
+			\item \texttt{from databricks.feature\_engineering import FeatureEngineeringClient}
+			\item \texttt{from databricks.ml import FeatureStoreClient}
+			\item \texttt{from databricks.uc import FeatureStoreClient}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 903}
+		\textbf{Correct: A} --- the legacy client comes from \texttt{feature\_store}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is the UC client.
+			\item C, D are not real imports.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 904}
+		Which client should you use for account-level feature tables in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{FeatureEngineeringClient}
+			\item \texttt{FeatureStoreClient}
+			\item \texttt{MLflowClient}
+			\item \texttt{UnityCatalogClient}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 904}
+		\textbf{Correct: A} --- UC feature tables use \texttt{FeatureEngineeringClient}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is legacy.
+			\item C is MLflow.
+			\item D is not a feature client.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 905}
+		Which client method creates a feature table in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{fe.create\_table()}
+			\item \texttt{fe.create()}
+			\item \texttt{fe.new\_table()}
+			\item \texttt{fe.register\_table()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 905}
+		\textbf{Correct: A} --- \texttt{create\_table()} creates UC feature tables.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 906}
+		Which method computes a training set with \texttt{FeatureEngineeringClient}?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{fe.create\_training\_set()}
+			\item \texttt{fe.build\_training\_set()}
+			\item \texttt{fe.make\_training\_set()}
+			\item \texttt{fe.get\_training\_set()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 906}
+		\textbf{Correct: A} --- \texttt{create\_training\_set()} computes training sets.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 907}
+		Which method logs a feature-aware model with \texttt{FeatureEngineeringClient}?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{fe.log\_model()}
+			\item \texttt{fe.save\_model()}
+			\item \texttt{fe.register\_model()}
+			\item \texttt{fe.store\_model()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 907}
+		\textbf{Correct: A} --- \texttt{log\_model()} logs feature-aware models.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 908}
+		Which method scores a batch DataFrame with a feature-aware model?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{fe.score\_batch()}
+			\item \texttt{fe.predict\_batch()}
+			\item \texttt{fe.run\_batch()}
+			\item \texttt{fe.infer\_batch()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 908}
+		\textbf{Correct: A} --- \texttt{score\_batch()} performs batch scoring.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 909}
+		What does a Feature Engineering client's \texttt{get\_table()} return?
+		\begin{enumerate}[label=\Alph*.]
+			\item A feature table object
+			\item A model
+			\item A cluster
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 909}
+		\textbf{Correct: A} --- \texttt{get\_table()} returns the table object.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 910}
+		What does a feature table object's \texttt{description} attribute contain?
+		\begin{enumerate}[label=\Alph*.]
+			\item The table's metadata description
+			\item The model weights
+			\item The training data
+			\item The cluster settings
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 910}
+		\textbf{Correct: A} --- \texttt{description} holds metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 911}
+		What is an MLflow model serving container image?
+		\begin{enumerate}[label=\Alph*.]
+			\item A container image that serves a logged MLflow model
+			\item A model artifact
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 911}
+		\textbf{Correct: A} --- serving images serve MLflow models.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 912}
+		Which tool builds an MLflow model serving image?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow models build-docker}
+			\item \texttt{mlflow build}
+			\item \texttt{mlflow image}
+			\item \texttt{mlflow docker}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 912}
+		\textbf{Correct: A} --- \texttt{build-docker} builds serving images.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the CLI command.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 913}
+		What does an MLflow model serving container expose?
+		\begin{enumerate}[label=\Alph*.]
+			\item An HTTP endpoint for predictions
+			\item A model registry
+			\item A feature store
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 913}
+		\textbf{Correct: A} --- serving images expose HTTP prediction endpoints.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 914}
+		What is the purpose of \texttt{mlflow models serve}?
+		\begin{enumerate}[label=\Alph*.]
+			\item It serves a model locally for testing
+			\item It trains a model
+			\item It registers a model
+			\item It deletes a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 914}
+		\textbf{Correct: A} --- \texttt{serve} runs a local endpoint.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 915}
+		Which endpoint does the MLflow model server expose by default?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{/invocations}
+			\item \texttt{/predict}
+			\item \texttt{/score}
+			\item \texttt{/infer}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 915}
+		\textbf{Correct: A} --- \texttt{/invocations} is the default endpoint.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the default.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 916}
+		Why migrate from the workspace model registry to Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item To gain governance, lineage, and cross-workspace access
+			\item To train faster
+			\item To serve faster
+			\item To store more features
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 916}
+		\textbf{Correct: A} --- UC adds governance and lineage.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 917}
+		Which tool migrates registered models to Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item The Databricks model registry migration notebook
+			\item A notebook widget
+			\item A SQL warehouse
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 917}
+		\textbf{Correct: A} --- the migration notebook handles it.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 918}
+		What is a Databricks SQL alert?
+		\begin{enumerate}[label=\Alph*.]
+			\item A condition-triggered notification on query results
+			\item A model metric
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 918}
+		\textbf{Correct: A} --- alerts notify on query results.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 919}
+		What is a Databricks SQL dashboard?
+		\begin{enumerate}[label=\Alph*.]
+			\item A collection of query visualizations
+			\item A model artifact
+			\item A cluster
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 919}
+		\textbf{Correct: A} --- dashboards visualize query results.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 920}
+		What is a SQL query parameter in Databricks SQL?
+		\begin{enumerate}[label=\Alph*.]
+			\item A placeholder for runtime values
+			\item A model metric
+			\item A cluster
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 920}
+		\textbf{Correct: A} --- SQL parameters pass runtime values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 921}
+		What does a SQL warehouse's auto-stop setting do?
+		\begin{enumerate}[label=\Alph*.]
+			\item Stops the warehouse after an idle period
+			\item Stops a running model
+			\item Stops a feature table
+			\item Stops a cluster policy
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 921}
+		\textbf{Correct: A} --- auto-stop idles warehouses down.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 922}
+		What is AutoML experiment cloning?
+		\begin{enumerate}[label=\Alph*.]
+			\item Copying an AutoML experiment to reproduce or modify it
+			\item Training a new model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 922}
+		\textbf{Correct: A} --- cloning reproduces experiments.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 923}
+		What is the main advantage of \texttt{TrainValidationSplit} over \texttt{CrossValidator}?
+		\begin{enumerate}[label=\Alph*.]
+			\item Fewer models trained, saving compute
+			\item Higher accuracy
+			\item More folds
+			\item Fewer hyperparameters
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 923}
+		\textbf{Correct: A} --- a single split trains fewer models.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 924}
+		What does \texttt{TrainValidationSplit.setTrainRatio(0.8)} mean?
+		\begin{enumerate}[label=\Alph*.]
+			\item 80\% training, 20\% validation
+			\item 80\% validation, 20\% training
+			\item 80\% test, 20\% training
+			\item 80\% train, 20\% dropped
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 924}
+		\textbf{Correct: A} --- 80\% training, 20\% validation.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D misread the ratio.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 925}
+		What is a DLT \texttt{APPLY CHANGES} target used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Applying CDC changes into a target table
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 925}
+		\textbf{Correct: A} --- \texttt{APPLY CHANGES} handles CDC.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 926}
+		What does \texttt{APPLY CHANGES INTO} handle in DLT?
+		\begin{enumerate}[label=\Alph*.]
+			\item Upserts and deletes from a change feed
+			\item Training
+			\item Serving
+			\item Registration
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 926}
+		\textbf{Correct: A} --- it applies upserts/deletes.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 927}
+		What is a job task value in Databricks?
+		\begin{enumerate}[label=\Alph*.]
+			\item A value returned from a task for downstream tasks
+			\item A model metric
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 927}
+		\textbf{Correct: A} --- task values pass data between tasks.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 928}
+		Which API reads a task value from a downstream task?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{dbutils.jobs.taskValues.get()}
+			\item \texttt{dbutils.widgets.get()}
+			\item \texttt{dbutils.jobs.get()}
+			\item \texttt{dbutils.values.get()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 928}
+		\textbf{Correct: A} --- task values are read via \texttt{taskValues}.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B reads widgets.
+			\item C, D are not APIs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 929}
+		Which API sets a task value from a task?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{dbutils.jobs.taskValues.set()}
+			\item \texttt{dbutils.widgets.set()}
+			\item \texttt{dbutils.values.set()}
+			\item \texttt{dbutils.jobs.set()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 929}
+		\textbf{Correct: A} --- \texttt{taskValues.set()} sets task values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B sets widgets.
+			\item C, D are not APIs.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 930}
+		What is notebook-scoped MLflow tracking?
+		\begin{enumerate}[label=\Alph*.]
+			\item Tracking runs from within a notebook session
+			\item Tracking a cluster
+			\item Tracking a feature table
+			\item Tracking a notebook widget
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 930}
+		\textbf{Correct: A} --- notebook-scoped tracking logs from a session.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 931}
+		Which MLflow function starts a run in a notebook?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.start\_run()}
+			\item \texttt{mlflow.begin()}
+			\item \texttt{mlflow.open()}
+			\item \texttt{mlflow.init()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 931}
+		\textbf{Correct: A} --- \texttt{start\_run()} opens a run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 932}
+		Which MLflow function ends a run?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.end\_run()}
+			\item \texttt{mlflow.close()}
+			\item \texttt{mlflow.stop()}
+			\item \texttt{mlflow.finish()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 932}
+		\textbf{Correct: A} --- \texttt{end\_run()} closes a run.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 933}
+		What does the MLflow tracking UI show for a run?
+		\begin{enumerate}[label=\Alph*.]
+			\item Params, metrics, artifacts, and source
+			\item Only metrics
+			\item Only params
+			\item Only artifacts
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 933}
+		\textbf{Correct: A} --- the UI shows all run metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are incomplete.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 934}
+		Which MLflow API returns a run's details?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.get\_run()}
+			\item \texttt{mlflow.run\_info()}
+			\item \texttt{mlflow.details()}
+			\item \texttt{mlflow.info()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 934}
+		\textbf{Correct: A} --- \texttt{get\_run()} returns run details.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 935}
+		Which MLflow API returns an experiment's details?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.get\_experiment()}
+			\item \texttt{mlflow.experiment\_info()}
+			\item \texttt{mlflow.exp()}
+			\item \texttt{mlflow.info\_exp()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 935}
+		\textbf{Correct: A} --- \texttt{get\_experiment()} returns details.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 936}
+		Which MLflow API lists experiments?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.search\_experiments()}
+			\item \texttt{mlflow.list\_experiments()}
+			\item \texttt{mlflow.experiments()}
+			\item \texttt{mlflow.all\_experiments()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 936}
+		\textbf{Correct: A} --- \texttt{search\_experiments()} lists experiments.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 937}
+		What is a model's input example stored for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Documenting expected serving inputs
+			\item Training a model
+			\item Registering a model
+			\item Deleting a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 937}
+		\textbf{Correct: A} --- input examples document serving inputs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 938}
+		Which API logs a model with an input example?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.log\_model(..., input\_example=...)}
+			\item \texttt{mlflow.log\_param()}
+			\item \texttt{mlflow.log\_metric()}
+			\item \texttt{mlflow.set\_tag()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 938}
+		\textbf{Correct: A} --- \texttt{input\_example} is a \texttt{log\_model} argument.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D log other things.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 939}
+		What is a model's signature inferred from?
+		\begin{enumerate}[label=\Alph*.]
+			\item Sample input and output data
+			\item Model weights
+			\item Cluster size
+			\item Feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 939}
+		\textbf{Correct: A} --- signatures infer from samples.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 940}
+		What is a model's alias used for in serving?
+		\begin{enumerate}[label=\Alph*.]
+			\item Pointing an endpoint to a version
+			\item Training a model
+			\item Registering a model
+			\item Deleting a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 940}
+		\textbf{Correct: A} --- aliases point endpoints to versions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 941}
+		What is a model's version number?
+		\begin{enumerate}[label=\Alph*.]
+			\item An integer identifying a specific version
+			\item A metric
+			\item A cluster setting
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 941}
+		\textbf{Correct: A} --- versions are numbered sequentially.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 942}
+		What is a model version's status in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item A readiness state such as pending registration or ready
+			\item A metric
+			\item A cluster setting
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 942}
+		\textbf{Correct: A} --- status reflects registration state.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 943}
+		Which status means a version is not yet ready to serve?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{PENDING\_REGISTRATION}
+			\item \texttt{READY}
+			\item \texttt{ONLINE}
+			\item \texttt{ACTIVE}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 943}
+		\textbf{Correct: A} --- pending registration is not ready.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B is ready.
+			\item C, D are not statuses.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 944}
+		What does a model version's \texttt{READY} status mean?
+		\begin{enumerate}[label=\Alph*.]
+			\item The version can be used for serving
+			\item The version is being trained
+			\item The version is deleted
+			\item The version is a draft
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 944}
+		\textbf{Correct: A} --- READY means the version is usable.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 945}
+		What is an MLflow experiment's default artifact location?
+		\begin{enumerate}[label=\Alph*.]
+			\item A workspace-configured storage path
+			\item A local disk
+			\item A model registry
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 945}
+		\textbf{Correct: A} --- artifact locations are configured by the workspace.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the default.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 946}
+		What is a Databricks SQL warehouse's serverless behavior?
+		\begin{enumerate}[label=\Alph*.]
+			\item Quick startup without cluster management
+			\item Manual cluster setup
+			\item Only local storage
+			\item No SQL support
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 946}
+		\textbf{Correct: A} --- serverless SQL starts quickly.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 947}
+		What is a SQL dashboard's schedule?
+		\begin{enumerate}[label=\Alph*.]
+			\item How often the dashboard refreshes
+			\item How often the model retrains
+			\item How often clusters restart
+			\item How often features update
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 947}
+		\textbf{Correct: A} --- schedules control dashboard refresh.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 948}
+		What is a SQL alert's destination?
+		\begin{enumerate}[label=\Alph*.]
+			\item Where notifications are sent
+			\item The model registry
+			\item The feature store
+			\item The cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 948}
+		\textbf{Correct: A} --- destinations receive alerts.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 949}
+		What is a SQL query's run-as user?
+		\begin{enumerate}[label=\Alph*.]
+			\item The user whose permissions run the query
+			\item The model owner
+			\item The cluster owner
+			\item The feature owner
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 949}
+		\textbf{Correct: A} --- run-as determines query permissions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 950}
+		What is a DLT pipeline's cluster configuration?
+		\begin{enumerate}[label=\Alph*.]
+			\item The compute settings for running the pipeline
+			\item The model type
+			\item The feature table
+			\item The notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 950}
+		\textbf{Correct: A} --- cluster settings control compute.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 951}
+		What is a DLT pipeline's development mode?
+		\begin{enumerate}[label=\Alph*.]
+			\item A faster iteration mode with reduced resources
+			\item A production mode
+			\item A training mode
+			\item A serving mode
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 951}
+		\textbf{Correct: A} --- development mode speeds iteration.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 952}
+		What is a DLT pipeline's trigger interval?
+		\begin{enumerate}[label=\Alph*.]
+			\item How often a triggered pipeline runs
+			\item How often the model trains
+			\item How often the cluster restarts
+			\item How often features update
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 952}
+		\textbf{Correct: A} --- trigger intervals control pipeline runs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 953}
+		What is a DLT pipeline's target schema?
+		\begin{enumerate}[label=\Alph*.]
+			\item Where tables are created
+			\item Where models are registered
+			\item Where features are stored
+			\item Where clusters run
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 953}
+		\textbf{Correct: A} --- target schemas hold DLT tables.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 954}
+		What is a DLT expectation's name used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Reporting data quality metrics
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 954}
+		\textbf{Correct: A} --- names label quality metrics.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 955}
+		What is a DLT pipeline's event log used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Debugging and monitoring pipeline runs
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 955}
+		\textbf{Correct: A} --- event logs support debugging.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 956}
+		What is a SQL dashboard's parameter?
+		\begin{enumerate}[label=\Alph*.]
+			\item A runtime value used in dashboard queries
+			\item A model metric
+			\item A cluster setting
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 956}
+		\textbf{Correct: A} --- dashboard parameters pass values.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 957}
+		What is a SQL dashboard's schedule owner?
+		\begin{enumerate}[label=\Alph*.]
+			\item The user responsible for the schedule
+			\item The model owner
+			\item The cluster owner
+			\item The feature owner
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 957}
+		\textbf{Correct: A} --- schedule owners manage refresh.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 958}
+		What is a SQL query's cache?
+		\begin{enumerate}[label=\Alph*.]
+			\item Reuse of results for repeated queries
+			\item A model artifact
+			\item A cluster
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 958}
+		\textbf{Correct: A} --- caches reuse query results.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 959}
+		What is a SQL query's schedule in Databricks SQL?
+		\begin{enumerate}[label=\Alph*.]
+			\item Periodic refresh of a query or dashboard
+			\item Model retraining
+			\item Cluster restart
+			\item Feature updates
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 959}
+		\textbf{Correct: A} --- schedules refresh queries/dashboards.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 960}
+		What is a SQL alert's condition?
+		\begin{enumerate}[label=\Alph*.]
+			\item A predicate that triggers the alert
+			\item A model metric
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 960}
+		\textbf{Correct: A} --- conditions define alert triggers.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 961}
+		What is a SQL dashboard's embed token?
+		\begin{enumerate}[label=\Alph*.]
+			\item A token that allows embedding the dashboard externally
+			\item A model metric
+			\item A feature table
+			\item A cluster
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 961}
+		\textbf{Correct: A} --- embed tokens enable external embedding.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 962}
+		What is a SQL query's parameter marker syntax?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{:param\_name}
+			\item \texttt{\{param\_name\}}
+			\item \texttt{\$param\_name}
+			\item \texttt{@param\_name}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 962}
+		\textbf{Correct: A} --- markers use \texttt{:name} syntax.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the Databricks SQL syntax.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 963}
+		What is a SQL query's warehouse?
+		\begin{enumerate}[label=\Alph*.]
+			\item The compute used to run the query
+			\item A model artifact
+			\item A feature table
+			\item A cluster policy
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 963}
+		\textbf{Correct: A} --- warehouses run SQL queries.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 964}
+		What is the main benefit of a Databricks SQL warehouse over an all-purpose cluster for BI?
+		\begin{enumerate}[label=\Alph*.]
+			\item Optimized for SQL and BI workloads
+			\item Supports Spark ML
+			\item Supports Python
+			\item Supports streaming
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 964}
+		\textbf{Correct: A} --- SQL warehouses are BI-optimized.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not supported in SQL warehouses.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 965}
+		What is a SQL warehouse's size?
+		\begin{enumerate}[label=\Alph*.]
+			\item Its compute capacity
+			\item Its storage capacity
+			\item Its model size
+			\item Its feature count
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 965}
+		\textbf{Correct: A} --- size controls SQL compute.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 966}
+		What is a SQL warehouse's multi-cluster setting?
+		\begin{enumerate}[label=\Alph*.]
+			\item Whether the warehouse scales to multiple clusters
+			\item Whether it supports ML
+			\item Whether it supports streaming
+			\item Whether it supports notebooks
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 966}
+		\textbf{Correct: A} --- multi-cluster enables scaling.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are false.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 967}
+		What is a model alias change logged as?
+		\begin{enumerate}[label=\Alph*.]
+			\item A registry activity event
+			\item A training metric
+			\item A feature table
+			\item A notebook
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 967}
+		\textbf{Correct: A} --- alias changes are registry activity.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 968}
+		What is a model version's owner used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Accountability for the version
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 968}
+		\textbf{Correct: A} --- owners are accountable.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 969}
+		What is a model version's run link used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Traceability to the originating run
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 969}
+		\textbf{Correct: A} --- run links provide traceability.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 970}
+		What is a model version's signature used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Validating input/output schemas
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 970}
+		\textbf{Correct: A} --- signatures validate schemas.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 971}
+		What is a model version's input example used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Documenting expected input format
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 971}
+		\textbf{Correct: A} --- input examples document input format.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 972}
+		What is a model version's description used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recording human-readable notes
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 972}
+		\textbf{Correct: A} --- descriptions hold notes.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 973}
+		What is a model version's tag used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Key-value metadata
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 973}
+		\textbf{Correct: A} --- tags attach metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 974}
+		What is a model version's alias used for?
+		\begin{enumerate}[label=\Alph*.]
+			\item Referencing a version by name
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 974}
+		\textbf{Correct: A} --- aliases reference versions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 975}
+		What is a model version's stage used for in the workspace registry?
+		\begin{enumerate}[label=\Alph*.]
+			\item Indicating lifecycle state
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 975}
+		\textbf{Correct: A} --- stages indicate lifecycle.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 976}
+		Which API sets a model version's stage in the workspace registry?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.transition\_model\_version\_stage()}
+			\item \texttt{mlflow.set\_stage()}
+			\item \texttt{mlflow.move\_version()}
+			\item \texttt{mlflow.change\_stage()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 976}
+		\textbf{Correct: A} --- that API transitions stages.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 977}
+		Which API sets a model version's alias in Unity Catalog?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.set\_registered\_model\_alias()}
+			\item \texttt{mlflow.set\_alias()}
+			\item \texttt{mlflow.add\_alias()}
+			\item \texttt{mlflow.create\_alias()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 977}
+		\textbf{Correct: A} --- that API sets aliases.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 978}
+		Which API deletes a model version's alias?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.delete\_registered\_model\_alias()}
+			\item \texttt{mlflow.remove\_alias()}
+			\item \texttt{mlflow.drop\_alias()}
+			\item \texttt{mlflow.remove\_alias\_model()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 978}
+		\textbf{Correct: A} --- that API deletes aliases.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 979}
+		Which API lists a model's aliases?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.get\_model\_version\_aliases()}
+			\item \texttt{mlflow.list\_aliases()}
+			\item \texttt{mlflow.aliases()}
+			\item \texttt{mlflow.model\_aliases()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 979}
+		\textbf{Correct: A} --- that API lists aliases.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 980}
+		Which API searches model versions?
+		\begin{enumerate}[label=\Alph*.]
+			\item \texttt{mlflow.search\_model\_versions()}
+			\item \texttt{mlflow.list\_versions()}
+			\item \texttt{mlflow.find\_versions()}
+			\item \texttt{mlflow.query\_versions()}
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 980}
+		\textbf{Correct: A} --- that API searches versions.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not the API.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 981}
+		What is the purpose of an MLflow run's source?
+		\begin{enumerate}[label=\Alph*.]
+			\item Identifying the notebook or file that started the run
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 981}
+		\textbf{Correct: A} --- source identifies the run origin.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 982}
+		What is the purpose of an MLflow run's user?
+		\begin{enumerate}[label=\Alph*.]
+			\item Identifying who started the run
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 982}
+		\textbf{Correct: A} --- user identifies the initiator.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 983}
+		What is the purpose of an MLflow run's start time?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recording when the run began
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 983}
+		\textbf{Correct: A} --- start time records run start.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 984}
+		What is the purpose of an MLflow run's end time?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recording when the run ended
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 984}
+		\textbf{Correct: A} --- end time records run end.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 985}
+		What is a run's lifecycle stage in MLflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item Active or deleted
+			\item Training or serving
+			\item Online or offline
+			\item Public or private
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 985}
+		\textbf{Correct: A} --- lifecycle stages are active/deleted.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not lifecycle stages.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 986}
+		What is an experiment's lifecycle stage in MLflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item Active or deleted
+			\item Training or serving
+			\item Online or offline
+			\item Public or private
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 986}
+		\textbf{Correct: A} --- lifecycle stages are active/deleted.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not lifecycle stages.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 987}
+		What is the purpose of a model's signature in MLflow?
+		\begin{enumerate}[label=\Alph*.]
+			\item Defining input/output schema
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 987}
+		\textbf{Correct: A} --- signatures define schemas.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 988}
+		What is the purpose of an MLflow model's \texttt{MLmodel} file?
+		\begin{enumerate}[label=\Alph*.]
+			\item Defining the model's flavor and dependencies
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 988}
+		\textbf{Correct: A} --- \texttt{MLmodel} defines flavor/deps.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 989}
+		What is the purpose of an MLflow model's \texttt{conda.yaml}?
+		\begin{enumerate}[label=\Alph*.]
+			\item Defining the model's dependencies
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 989}
+		\textbf{Correct: A} --- \texttt{conda.yaml} lists dependencies.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 990}
+		What is the purpose of an MLflow model's \texttt{requirements.txt}?
+		\begin{enumerate}[label=\Alph*.]
+			\item Listing Python package requirements
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 990}
+		\textbf{Correct: A} --- it lists Python dependencies.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 991}
+		What is an MLflow model's \texttt{input\_example} stored as?
+		\begin{enumerate}[label=\Alph*.]
+			\item An artifact used at serving for validation
+			\item A metric
+			\item A cluster setting
+			\item A feature table
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 991}
+		\textbf{Correct: A} --- input examples are artifacts.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 992}
+		What does \texttt{mlflow.models.get\_model\_dependencies()} return?
+		\begin{enumerate}[label=\Alph*.]
+			\item A model's dependencies
+			\item A model's weights
+			\item A model's metrics
+			\item A model's tags
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 992}
+		\textbf{Correct: A} --- it returns dependencies.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are not returned.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 993}
+		What is the purpose of an MLflow run's parent run ID?
+		\begin{enumerate}[label=\Alph*.]
+			\item Identifying the parent of a nested run
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 993}
+		\textbf{Correct: A} --- parent run IDs link nested runs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 994}
+		What is the purpose of an MLflow run's experiment ID?
+		\begin{enumerate}[label=\Alph*.]
+			\item Identifying the experiment the run belongs to
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 994}
+		\textbf{Correct: A} --- experiment IDs link runs to experiments.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 995}
+		What is the purpose of an MLflow run's artifact URI?
+		\begin{enumerate}[label=\Alph*.]
+			\item Locating the run's artifacts
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 995}
+		\textbf{Correct: A} --- artifact URIs locate files.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 996}
+		What is the purpose of an MLflow run's status?
+		\begin{enumerate}[label=\Alph*.]
+			\item Indicating whether it succeeded or failed
+			\item Training a model
+			\item Serving a model
+			\item Registering a model
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 996}
+		\textbf{Correct: A} --- status indicates success/failure.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are unrelated.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 997}
+		What is the purpose of an MLflow run's params?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recording run inputs
+			\item Recording run metrics
+			\item Recording run artifacts
+			\item Recording run tags
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 997}
+		\textbf{Correct: A} --- params are run inputs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other data.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 998}
+		What is the purpose of an MLflow run's metrics?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recording run outputs
+			\item Recording run inputs
+			\item Recording run artifacts
+			\item Recording run tags
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 998}
+		\textbf{Correct: A} --- metrics are run outputs.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other data.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 999}
+		What is the purpose of an MLflow run's tags?
+		\begin{enumerate}[label=\Alph*.]
+			\item Recording metadata about the run
+			\item Recording run inputs
+			\item Recording run outputs
+			\item Recording run artifacts
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 999}
+		\textbf{Correct: A} --- tags store metadata.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are other data.
+		\end{itemize}
+	\end{frame}
+	
+	% ---------------------------------------------------------------
+	\begin{frame}{Question 1000}
+		What is the best practice for organizing MLflow runs?
+		\begin{enumerate}[label=\Alph*.]
+			\item Use experiments per project and tags for run metadata
+			\item Use one experiment for everything
+			\item Use no experiments
+			\item Use one run for everything
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Answer 1000}
+		\textbf{Correct: A} --- organize by experiment and tag.\\
+		\vspace{0.5em}
+		\textbf{Wrong:}
+		\begin{itemize}
+			\item B, C, D are poor practices.
+		\end{itemize}
+	\end{frame}
+	
+\end{document}

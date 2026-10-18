@@ -1,0 +1,2140 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage[T1]{fontenc}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+
+\title{Databricks ML Associate}
+\subtitle{High-Yield Next 100 (Set 3: Scenarios and Code Reading)}
+\author{Practice Exam Deck}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{How to Use This Deck}
+\begin{itemize}
+\item 100 more questions (Q1--Q100), complementing Sets 1 and 2, with more scenario, calculation, and code-reading items, on topics that commonly appear on the Databricks Machine Learning Associate exam.
+\item Each question slide has four options (A--D); the next slide gives the correct answer and why the others are wrong.
+\item Topic order: AutoML details; code reading; Feature Engineering scenarios; Spark DataFrame code; tuning scenarios; metric calculations; ML concepts; deployment, jobs, and monitoring; Unity Catalog governance.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exam Domains Covered}
+\begin{itemize}
+\item \textbf{Databricks Machine Learning:} runtime, AutoML, MLflow, Unity Catalog registry, Feature Engineering client.
+\item \textbf{Data Processing:} EDA, imputation, encoding, Spark ML transformers, pandas API on Spark and UDFs.
+\item \textbf{Model Development:} Hyperopt, CrossValidator, metrics, bias/variance, leakage.
+\item \textbf{Model Deployment:} batch, streaming, real-time serving, monitoring.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 1}
+Which AutoML argument lists columns that should not be used as features?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{skip\_cols\_list}
+\item \texttt{drop\_features}
+\item \texttt{exclude\_cols}
+\item \texttt{ignore\_rows}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 1}
+\textbf{Correct: C} --- it removes columns such as IDs from training.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not an argument.
+\item B: not an argument.
+\item D: not an argument.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 2}
+How do you tell AutoML how long it may run?
+\begin{enumerate}[label=\Alph*.]
+\item Set \texttt{max\_evals}
+\item Set \texttt{numFolds}
+\item Set \texttt{autotermination\_minutes} on the model
+\item Set \texttt{timeout\_minutes}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 2}
+\textbf{Correct: D} --- the experiment stops after the timeout.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: that is a Hyperopt argument.
+\item B: that is Spark ML CV.
+\item C: that is a cluster setting.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 3}
+Which AutoML argument selects the metric used to rank trials?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{score\_with}
+\item \texttt{primary\_metric}
+\item \texttt{eval\_fn}
+\item \texttt{rank\_by}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 3}
+\textbf{Correct: B} --- for example f1, roc\_auc, rmse, or r2.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not an argument.
+\item C: not an argument.
+\item D: not an argument.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 4}
+Which argument makes AutoML split classification or regression data chronologically?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{split\_seed}
+\item \texttt{order\_by}
+\item \texttt{time\_col}
+\item \texttt{stratify\_col}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 4}
+\textbf{Correct: C} --- it uses the earliest rows for training and later rows for validation and test.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not an argument.
+\item B: not an argument.
+\item D: not an argument.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 5}
+Which arguments are required for \texttt{databricks.automl.forecast()} beyond the data and target?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{exclude\_cols} only
+\item \texttt{time\_col} and \texttt{horizon} (with a frequency)
+\item \texttt{pos\_label} and \texttt{threshold}
+\item \texttt{numTrees} and \texttt{maxDepth}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 5}
+\textbf{Correct: B} --- forecasting needs the time axis and how far ahead to predict.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not enough for forecasting.
+\item C: classification concepts.
+\item D: tree hyperparameters.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 6}
+Which algorithm families does AutoML classification commonly try?
+\begin{enumerate}[label=\Alph*.]
+\item Prophet only
+\item Transformers only
+\item Decision trees, random forests, logistic regression, XGBoost, and LightGBM
+\item k-means and PCA
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 6}
+\textbf{Correct: C} --- AutoML tries several algorithm families.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: a forecasting model.
+\item B: not used for tabular AutoML here.
+\item D: unsupervised methods.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 7}
+Where do AutoML trial notebooks and runs appear?
+\begin{enumerate}[label=\Alph*.]
+\item Only in the Spark UI
+\item In a feature table
+\item Only in the cluster logs
+\item In an MLflow experiment
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 7}
+\textbf{Correct: D} --- each trial is logged as a run with a notebook.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not stored there.
+\item B: not stored there.
+\item C: not stored there.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 8}
+A binary AutoML classification task has a rare positive class labelled "fraud". What does \texttt{pos\_label} help with?
+\begin{enumerate}[label=\Alph*.]
+\item Excluding the class
+\item Telling AutoML which class counts as positive for precision, recall, and F1
+\item Choosing the cluster size
+\item Setting the number of trees
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 8}
+\textbf{Correct: B} --- metrics depend on which class is positive.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not its purpose.
+\item C: not its purpose.
+\item D: not its purpose.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 9}
+What does this code do?  \texttt{with mlflow.start\_run(): mlflow.log\_param("depth", 4); mlflow.log\_metric("rmse", 2.5)}
+\begin{enumerate}[label=\Alph*.]
+\item Creates two separate runs
+\item Registers a model
+\item Creates one run holding the parameter \texttt{depth} and the metric \texttt{rmse}
+\item Raises an error because params and metrics cannot be mixed
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 9}
+\textbf{Correct: C} --- both are logged to the same active run.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: only one run is started.
+\item B: no registration call.
+\item D: they can.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 10}
+A notebook calls \texttt{mlflow.sklearn.log\_model(model, "model")} outside any \texttt{start\_run}. What happens in a Databricks notebook?
+\begin{enumerate}[label=\Alph*.]
+\item It always raises an error
+\item It registers to Unity Catalog
+\item It logs nothing
+\item A run is started automatically and the model is logged to it
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 10}
+\textbf{Correct: D} --- MLflow auto-creates a run when logging without one.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: an active run is created.
+\item B: no registered\_model\_name was given.
+\item C: it logs the model.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 11}
+What does \texttt{mlflow.pyfunc.load\_model("models:/main.ml.churn@Champion").predict(pdf)} return for a classifier logged with predicted labels?
+\begin{enumerate}[label=\Alph*.]
+\item The model signature only
+\item The model's predictions for the rows in \texttt{pdf}
+\item A new run ID
+\item A registered model version
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 11}
+\textbf{Correct: B} --- pyfunc models take a pandas DataFrame and return predictions.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not returned.
+\item C: not returned.
+\item D: not returned.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 12}
+A model was logged without a signature. What can happen when it is served?
+\begin{enumerate}[label=\Alph*.]
+\item It uses a GPU
+\item It cannot be registered
+\item It trains slower
+\item Input schema validation is weaker, so mismatched columns may cause errors or silent issues
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 12}
+\textbf{Correct: D} --- signatures help enforce expected inputs.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not related.
+\item B: it can be registered in most cases.
+\item C: not related.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 13}
+What is the result of \texttt{mlflow.search\_runs(order\_by=["metrics.f1 DESC"], max\_results=1)} when searching experiment runs?
+\begin{enumerate}[label=\Alph*.]
+\item All runs
+\item The most recent run always
+\item The run with the highest F1
+\item The run with the lowest F1
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 13}
+\textbf{Correct: C} --- descending order puts the highest F1 first.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: max\_results limits to 1.
+\item B: not sorted by time.
+\item D: that would be ASC.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 14}
+Which line is correct for logging a Spark ML model?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{mlflow.sklearn.log\_model(pipeline\_model, "model")}
+\item \texttt{mlflow.spark.save(pipeline\_model)}
+\item \texttt{mlflow.spark.log\_model(pipeline\_model, "model")}
+\item \texttt{mlflow.log\_dataframe(pipeline\_model)}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 14}
+\textbf{Correct: C} --- use the Spark flavor for Spark ML models.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: wrong flavor.
+\item B: not the logging API.
+\item D: not an API.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 15}
+Which code builds a Spark ML pipeline correctly?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{Pipeline(indexer, encoder, assembler, rf)}
+\item \texttt{Pipeline(stages=rf, assembler)}
+\item \texttt{Pipeline.add(indexer).add(rf)}
+\item \texttt{Pipeline(stages=[indexer, encoder, assembler, rf])}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 15}
+\textbf{Correct: D} --- stages are listed in order.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: stages must be passed as a list.
+\item B: invalid syntax.
+\item C: not the API.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 16}
+What does this return?  \texttt{rf = RandomForestClassifier(featuresCol="features", labelCol="label"); model = rf.fit(train)}
+\begin{enumerate}[label=\Alph*.]
+\item A fitted \texttt{RandomForestClassificationModel}
+\item A predictions DataFrame
+\item A \texttt{Pipeline}
+\item A metric value
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 16}
+\textbf{Correct: A} --- fit on an estimator returns a model.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: that is \texttt{transform}.
+\item C: not returned.
+\item D: not returned.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 17}
+What does \texttt{model.transform(test)} return for a Spark ML classifier?
+\begin{enumerate}[label=\Alph*.]
+\item A DataFrame with added columns such as \texttt{prediction} and \texttt{probability}
+\item A list of weights
+\item A metric
+\item A new model
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 17}
+\textbf{Correct: A} --- transform adds output columns.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: not returned.
+\item C: use an evaluator for that.
+\item D: that is fit.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 18}
+Which code evaluates AUC for a Spark ML model's predictions?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{model.score(preds)}
+\item \texttt{BinaryClassificationEvaluator(metricName="areaUnderROC").evaluate(preds)}
+\item \texttt{RegressionEvaluator(metricName="areaUnderROC").evaluate(preds)}
+\item \texttt{preds.auc()}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 18}
+\textbf{Correct: B} --- the evaluator takes the predictions DataFrame.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not the Spark ML API.
+\item C: wrong evaluator.
+\item D: not an API.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 19}
+Which Hyperopt call is correct for minimizing \texttt{objective} over \texttt{space} with TPE for 20 trials?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{tpe.fmin(space)}
+\item \texttt{fmin(fn=objective, space=space, algo=tpe.suggest, max\_evals=20)}
+\item \texttt{minimize(objective, space, 20)}
+\item \texttt{fmin(objective, space, algo=tpe, max\_evals=20)}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 19}
+\textbf{Correct: B} --- fn, space, algo, and max\_evals are the core arguments.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not the API.
+\item C: not the API.
+\item D: algo needs \texttt{tpe.suggest}.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 20}
+An objective returns \texttt{-accuracy} while the team reports the best result. What should they report?
+\begin{enumerate}[label=\Alph*.]
+\item The number of trials
+\item The loss as the accuracy directly
+\item The worst loss
+\item The negated best loss, which is the best accuracy
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 20}
+\textbf{Correct: D} --- loss is -accuracy, so flip the sign.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not a metric.
+\item B: the sign is flipped.
+\item C: not the best.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 21}
+A scikit-learn Hyperopt objective is run with \texttt{SparkTrials(parallelism=8)} on an 8-worker cluster. What is the main benefit?
+\begin{enumerate}[label=\Alph*.]
+\item Up to 8 trials can run at the same time on workers
+\item TPE becomes random search
+\item Each model trains on all workers
+\item Trials are guaranteed to be better
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 21}
+\textbf{Correct: A} --- SparkTrials distributes single-node trials.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: TPE still runs.
+\item C: sklearn does not distribute.
+\item D: not guaranteed.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 22}
+With SparkTrials, how are MLflow runs for trials typically organized?
+\begin{enumerate}[label=\Alph*.]
+\item One run per cluster node
+\item A parent run with a child run per trial
+\item One run per Spark task
+\item No runs are created
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 22}
+\textbf{Correct: B} --- Hyperopt on Databricks logs trials as nested runs.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not how it is organized.
+\item C: not how it is organized.
+\item D: runs are created.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 23}
+Which snippet pulls the Python value of the best run's RMSE from a \texttt{search\_runs} DataFrame \texttt{runs}?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{runs.get\_metric()}
+\item \texttt{runs.rmse()}
+\item \texttt{runs["rmse"].best}
+\item \texttt{runs.loc[0, "metrics.rmse"]}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 23}
+\textbf{Correct: D} --- metrics columns are named \texttt{metrics.<name>}.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not valid.
+\item B: not valid.
+\item C: not valid.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 24}
+What does \texttt{df.randomSplit([0.7, 0.3], seed=1)} return?
+\begin{enumerate}[label=\Alph*.]
+\item A dict of metrics
+\item A list of two DataFrames
+\item A Pipeline
+\item A single DataFrame
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 24}
+\textbf{Correct: B} --- the weights define the split.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not returned.
+\item C: not returned.
+\item D: it returns multiple.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 25}
+Which code removes the \texttt{id} column and keeps the rest?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{df.select("id")}
+\item \texttt{df.drop("id")}
+\item \texttt{df.remove("id")}
+\item \texttt{df.filter("id")}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 25}
+\textbf{Correct: B} --- drop removes the named column.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: keeps only id.
+\item C: not an API.
+\item D: filters rows.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 26}
+Which code keeps rows where \texttt{age} is greater than 30?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{df.limit(df.age > 30)}
+\item \texttt{df.select(df.age > 30)}
+\item \texttt{df.drop(df.age > 30)}
+\item \texttt{df.filter(df.age > 30)}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 26}
+\textbf{Correct: D} --- filter keeps rows matching the condition.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: limit takes a number.
+\item B: returns a boolean column.
+\item C: drops columns.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 27}
+Which code casts \texttt{price} to double?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{df.withColumn("price", df.price.cast("double"))}
+\item \texttt{df.price.toDouble()}
+\item \texttt{df.drop("price", "double")}
+\item \texttt{df.convert("price", "double")}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 27}
+\textbf{Correct: A} --- cast changes the column type.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: not an API.
+\item C: drops columns.
+\item D: not an API.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 28}
+Which code creates a Spark DataFrame from a pandas DataFrame \texttt{pdf}?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{spark.createDataFrame(pdf)}
+\item \texttt{pdf.toSpark()}
+\item \texttt{spark.load(pdf)}
+\item \texttt{pdf.to\_delta()}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 28}
+\textbf{Correct: A} --- it converts pandas to Spark.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: not an API.
+\item C: not an API.
+\item D: not the conversion.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 29}
+Training features were computed with a window using future data relative to each label date. What is the problem?
+\begin{enumerate}[label=\Alph*.]
+\item Slow inference
+\item Underfitting only
+\item Too few trees
+\item Data leakage that makes offline metrics too optimistic
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 29}
+\textbf{Correct: D} --- the model sees information unavailable at prediction time.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not the problem.
+\item B: not the main problem.
+\item C: not the problem.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 30}
+A feature table has \texttt{customer\_id} as key and a \texttt{ts} timestamp key. The label table has \texttt{customer\_id} and \texttt{event\_time}. What is needed for a point-in-time join?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{lookup\_key="ts"} only
+\item A \texttt{FeatureLookup} with \texttt{timestamp\_lookup\_key="event\_time"}
+\item A cross join
+\item Rounding all dates
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 30}
+\textbf{Correct: B} --- this joins the latest feature values at or before each event time.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: ignores the label time column.
+\item C: causes leakage and row explosion.
+\item D: does not fix joins.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 31}
+A team wants to add a new column to an existing feature table without overwriting existing rows. What should they do?
+\begin{enumerate}[label=\Alph*.]
+\item Create a new cluster
+\item Drop and recreate the table every time
+\item Use \texttt{mode="overwrite"} with only new rows
+\item Write the new column with \texttt{fe.write\_table(..., mode="merge")} keyed on the primary key
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 31}
+\textbf{Correct: D} --- merge adds or updates by key.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not related.
+\item B: loses history.
+\item C: replaces data.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 32}
+Training uses \texttt{FeatureLookup}s over two feature tables. Which column must exist in the label DataFrame?
+\begin{enumerate}[label=\Alph*.]
+\item The lookup key columns (and a timestamp column for point-in-time lookups)
+\item A copy of every feature
+\item Only the label column
+\item An MLflow run ID
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 32}
+\textbf{Correct: A} --- keys connect the label rows to feature rows.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: unnecessary.
+\item C: keys are required too.
+\item D: not needed.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 33}
+Why might offline model accuracy be good but online accuracy poor?
+\begin{enumerate}[label=\Alph*.]
+\item The cluster is too small
+\item The model has too few parameters
+\item Features are computed differently online than offline (training-serving skew)
+\item MLflow is not installed
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 33}
+\textbf{Correct: C} --- a feature store reduces this risk.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not implied.
+\item B: not implied.
+\item D: not implied.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 34}
+Which key type does \texttt{fe.create\_table} need so that rows can be uniquely identified?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{foreign\_keys}
+\item \texttt{cluster\_keys} only
+\item \texttt{primary\_keys}
+\item \texttt{partition\_keys} only
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 34}
+\textbf{Correct: C} --- primary keys identify feature rows.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not required.
+\item B: for layout only.
+\item D: for layout only.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 35}
+A feature table is large and only some features are needed for a model. How do you limit the features used?
+\begin{enumerate}[label=\Alph*.]
+\item Drop the table
+\item Use \texttt{df.limit(1)}
+\item Specify \texttt{feature\_names} in the \texttt{FeatureLookup}
+\item Disable lineage
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 35}
+\textbf{Correct: C} --- only the listed features are joined.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: loses features.
+\item B: reduces rows, not features.
+\item D: unrelated.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 36}
+What is true about a model logged by \texttt{fe.log\_model()} when scored with \texttt{fe.score\_batch()}?
+\begin{enumerate}[label=\Alph*.]
+\item All features must be in the input DataFrame
+\item The model is retrained
+\item Feature values are looked up from the feature tables by key
+\item Scoring always uses the training data
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 36}
+\textbf{Correct: C} --- the input DataFrame only needs keys and non-lookup inputs.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: that defeats the lookup.
+\item B: not true.
+\item D: not true.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 37}
+Which code adds a column \texttt{is\_high} that is 1 when \texttt{amount > 100} and 0 otherwise?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{df.withColumn("is\_high", F.when(df.amount > 100, 1).otherwise(0))}
+\item \texttt{df.withColumn("is\_high").when(1)}
+\item \texttt{df.add("is\_high", df.amount > 100)}
+\item \texttt{df.if("amount", 100)}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 37}
+\textbf{Correct: A} --- when/otherwise builds conditional columns.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: invalid.
+\item C: not an API.
+\item D: not an API.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 38}
+Which aggregation computes the average \texttt{price} per \texttt{region}?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{df.avg("region", "price")}
+\item \texttt{df.agg("region").avg("price")}
+\item \texttt{df.groupBy("price").agg(F.avg("region"))}
+\item \texttt{df.groupBy("region").agg(F.avg("price"))}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 38}
+\textbf{Correct: D} --- groupBy then agg.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not an API.
+\item B: invalid.
+\item C: swapped columns.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 39}
+Which join keeps all rows from the left DataFrame, with nulls where the right has no match?
+\begin{enumerate}[label=\Alph*.]
+\item Left join
+\item Inner join
+\item Cross join
+\item Left anti join
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 39}
+\textbf{Correct: A} --- left join preserves all left rows.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: keeps only matches.
+\item C: returns all pairs.
+\item D: keeps only non-matching rows.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 40}
+Which join finds left rows with no match in the right DataFrame?
+\begin{enumerate}[label=\Alph*.]
+\item Left anti join
+\item Inner join
+\item Full outer join
+\item Left semi join
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 40}
+\textbf{Correct: A} --- it returns non-matching left rows.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: returns matches.
+\item C: returns all rows.
+\item D: returns matching left rows.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 41}
+Which call stacks two DataFrames with the same schema vertically?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{df1.union(df2)}
+\item \texttt{df1.stack(df2)}
+\item \texttt{df1.join(df2)}
+\item \texttt{df1.merge(df2)}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 41}
+\textbf{Correct: A} --- union appends rows.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: not an API.
+\item C: combines columns by key.
+\item D: not a Spark DataFrame method.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 42}
+Which code orders a Spark DataFrame by \texttt{score} highest first?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{df.limit("score")}
+\item \texttt{df.sortUp("score")}
+\item \texttt{df.orderBy(F.col("score").desc())}
+\item \texttt{df.orderBy("score", asc=True)}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 42}
+\textbf{Correct: C} --- desc sorts in descending order.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: limit takes a count.
+\item B: not an API.
+\item D: ascending.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 43}
+A pandas-on-Spark DataFrame \texttt{psdf} is needed as a Spark DataFrame again. Which call converts it?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{spark.from\_pandas(psdf)}
+\item \texttt{psdf.collect\_spark()}
+\item \texttt{psdf.to\_spark()}
+\item \texttt{psdf.toDF()}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 43}
+\textbf{Correct: C} --- to\_spark converts to a Spark DataFrame.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not an API.
+\item B: not an API.
+\item D: not the pandas API on Spark method.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 44}
+A scikit-learn model must score a very large Spark DataFrame. Which approach distributes scoring?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{df.coalesce(1)} and loop
+\item \texttt{df.cache()} only
+\item A pandas UDF or \texttt{mlflow.pyfunc.spark\_udf} wrapping the model
+\item \texttt{df.toPandas().predict()}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 44}
+\textbf{Correct: C} --- both run predictions on workers.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not distributed.
+\item B: does not score.
+\item D: runs on the driver only.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 45}
+Which Spark SQL statement creates a table from a query result?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{CREATE TABLE t AS SELECT ...}
+\item \texttt{MAKE TABLE t FROM ...}
+\item \texttt{COPY TABLE t}
+\item \texttt{SELECT INTO t}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 45}
+\textbf{Correct: A} --- CTAS creates a table from a query.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: not valid.
+\item C: not valid.
+\item D: not Spark SQL.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 46}
+What does \texttt{display(df)} offer in a Databricks notebook?
+\begin{enumerate}[label=\Alph*.]
+\item A deployed endpoint
+\item A trained model
+\item A Git commit
+\item An interactive table with built-in charting options
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 46}
+\textbf{Correct: D} --- it renders data with plots.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not provided.
+\item B: not provided.
+\item C: not provided.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 47}
+A 5-fold CrossValidator uses a grid of 2 x 3 x 2 combinations. How many models are trained during the search (excluding the final refit)?
+\begin{enumerate}[label=\Alph*.]
+\item 60
+\item 12
+\item 30
+\item 17
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 47}
+\textbf{Correct: A} --- 12 combinations times 5 folds.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: ignores the folds.
+\item C: miscounts the grid or folds.
+\item D: adds instead of multiplying.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 48}
+A team has limited compute and many hyperparameters. Which strategy is usually more efficient than full grid search?
+\begin{enumerate}[label=\Alph*.]
+\item Removing validation
+\item Random search or Bayesian optimization (Hyperopt/TPE)
+\item Training on the test set
+\item Exhaustive grid with finer steps
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 48}
+\textbf{Correct: B} --- they explore the space with fewer trials.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: invalid.
+\item C: invalid.
+\item D: more costly.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 49}
+A tuning job finds the best validation score at the boundary of the search range. What should the team do?
+\begin{enumerate}[label=\Alph*.]
+\item Expand the search range in that direction and rerun
+\item Accept it as globally optimal
+\item Shrink the range
+\item Switch to the test set
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 49}
+\textbf{Correct: A} --- the optimum may lie outside the range.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: may be wrong.
+\item C: makes it worse.
+\item D: invalid.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 50}
+Why is the test set not used for hyperparameter tuning?
+\begin{enumerate}[label=\Alph*.]
+\item Using it would bias the final performance estimate
+\item MLflow forbids it
+\item It is too small to compute metrics
+\item Hyperopt cannot read it
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 50}
+\textbf{Correct: A} --- tuning on test data leaks information.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: not the reason.
+\item C: not the reason.
+\item D: not the reason.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 51}
+What does \texttt{TrainValidationSplit} need compared with \texttt{CrossValidator}?
+\begin{enumerate}[label=\Alph*.]
+\item A Delta trigger
+\item A serving endpoint
+\item A feature table
+\item A \texttt{trainRatio} instead of \texttt{numFolds}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 51}
+\textbf{Correct: D} --- trainRatio sets the split proportion.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not required.
+\item B: not required.
+\item C: not required.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 52}
+A tuned model performs well in CV but poorly on the held-out test set. What is a likely cause?
+\begin{enumerate}[label=\Alph*.]
+\item The test set is perfect
+\item MLflow logged too many metrics
+\item Too many workers
+\item Overfitting to the validation process or leakage during CV
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 52}
+\textbf{Correct: D} --- tuning can overfit validation folds.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not implied.
+\item B: not related.
+\item C: not related.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 53}
+Where should a Spark ML \texttt{Pipeline} containing preprocessing be placed when tuning with \texttt{CrossValidator}?
+\begin{enumerate}[label=\Alph*.]
+\item Run only on the test data
+\item As the estimator inside the CrossValidator so preprocessing is refit per fold
+\item Skip preprocessing
+\item Fit once on all data before CV
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 53}
+\textbf{Correct: B} --- this avoids leakage across folds.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: invalid.
+\item C: not required.
+\item D: leaks fold information.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 54}
+Hyperopt trials all return the same loss. What is a likely cause?
+\begin{enumerate}[label=\Alph*.]
+\item The cluster is too large
+\item The dataset is too small
+\item TPE is too random
+\item The objective ignores the sampled hyperparameters
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 54}
+\textbf{Correct: D} --- the parameters are not passed into the model.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not related.
+\item B: not necessarily related.
+\item C: does not explain identical loss.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 55}
+A classifier has TP=40, FP=10, FN=20, TN=30. What is its precision?
+\begin{enumerate}[label=\Alph*.]
+\item 0.67
+\item 0.70
+\item 0.50
+\item 0.80
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 55}
+\textbf{Correct: D} --- 40 / (40 + 10).\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: that is recall, 40/60.
+\item B: that is accuracy, 70/100.
+\item C: incorrect.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 56}
+A classifier has TP=40, FP=10, FN=20, TN=30. What is its recall?
+\begin{enumerate}[label=\Alph*.]
+\item 0.50
+\item 0.30
+\item 0.80
+\item About 0.67
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 56}
+\textbf{Correct: D} --- 40 / (40 + 20).\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: incorrect.
+\item B: incorrect.
+\item C: that is precision.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 57}
+A classifier has TP=40, FP=10, FN=20, TN=30. What is its accuracy?
+\begin{enumerate}[label=\Alph*.]
+\item 0.67
+\item 0.80
+\item 0.40
+\item 0.70
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 57}
+\textbf{Correct: D} --- (40 + 30) / 100.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: that is recall.
+\item B: that is precision.
+\item C: incorrect.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 58}
+Prediction errors are 1, 1, 1, and 5. What is the MAE?
+\begin{enumerate}[label=\Alph*.]
+\item 2.0
+\item 8.0
+\item 2.65
+\item 1.0
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 58}
+\textbf{Correct: A} --- (1 + 1 + 1 + 5) / 4.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: that is the sum.
+\item C: that is the RMSE.
+\item D: ignores the large error.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 59}
+Prediction errors are 1, 1, 1, and 5. Which is larger, RMSE or MAE, and why?
+\begin{enumerate}[label=\Alph*.]
+\item RMSE, because squaring weights the large error more
+\item MAE, because it sums errors
+\item Neither can be computed
+\item They are always equal
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 59}
+\textbf{Correct: A} --- RMSE is about 2.65 versus MAE 2.0.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: MAE averages absolute errors.
+\item C: both can be computed.
+\item D: they differ.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 60}
+A bank wants to minimize wrongly flagging good customers as fraud. Which metric focuses on this?
+\begin{enumerate}[label=\Alph*.]
+\item Recall
+\item R2
+\item Precision
+\item Silhouette
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 60}
+\textbf{Correct: C} --- precision penalizes false positives.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: focuses on false negatives.
+\item B: regression metric.
+\item D: clustering metric.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 61}
+A ranking-quality metric that is threshold independent for binary classification is:
+\begin{enumerate}[label=\Alph*.]
+\item ROC AUC
+\item Precision at 0.5
+\item Accuracy at 0.5
+\item F1 at 0.5
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 61}
+\textbf{Correct: A} --- it summarizes performance over all thresholds.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: threshold dependent.
+\item C: threshold dependent.
+\item D: threshold dependent.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 62}
+For highly imbalanced data, which curve is often more informative than the ROC curve?
+\begin{enumerate}[label=\Alph*.]
+\item The residual plot
+\item The precision-recall curve
+\item The learning-rate curve
+\item The elbow curve
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 62}
+\textbf{Correct: B} --- it focuses on the positive class.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: for regression.
+\item C: not a standard evaluation.
+\item D: for clustering.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 63}
+When averaging F1 across classes in multiclass classification, what does macro averaging do?
+\begin{enumerate}[label=\Alph*.]
+\item Pools all predictions first
+\item Ignores rare classes
+\item Computes F1 per class and averages them equally
+\item Weights classes by frequency
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 63}
+\textbf{Correct: C} --- each class counts the same.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: that is micro averaging.
+\item B: not what it does.
+\item D: that is weighted averaging.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 64}
+A model with R2 = -0.2 on the test set indicates:
+\begin{enumerate}[label=\Alph*.]
+\item No variance in the labels
+\item It is worse than predicting the mean
+\item A perfect fit
+\item A bug in the evaluator only
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 64}
+\textbf{Correct: B} --- R2 can be negative on held-out data.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not implied.
+\item C: that is near 1.
+\item D: not necessarily.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 65}
+Which is an example of supervised learning?
+\begin{enumerate}[label=\Alph*.]
+\item Reducing dimensions with PCA
+\item Grouping customers without labels
+\item Detecting topics without labels
+\item Predicting house prices from labelled sales data
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 65}
+\textbf{Correct: D} --- labels guide the training.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: unsupervised.
+\item B: unsupervised.
+\item C: unsupervised.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 66}
+Which is an example of unsupervised learning?
+\begin{enumerate}[label=\Alph*.]
+\item Classifying spam from labelled email
+\item Clustering customers into segments without labels
+\item Forecasting sales from history
+\item Predicting churn from labels
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 66}
+\textbf{Correct: B} --- no target is used.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: supervised.
+\item C: supervised.
+\item D: supervised.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 67}
+Which algorithm classifies a point by the majority label of its nearest neighbors?
+\begin{enumerate}[label=\Alph*.]
+\item k-means
+\item k-nearest neighbors
+\item PCA
+\item Linear regression
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 67}
+\textbf{Correct: B} --- it uses distance to neighbors.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: unsupervised clustering.
+\item C: dimensionality reduction.
+\item D: predicts continuous values.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 68}
+Why does k-nearest neighbors usually need feature scaling?
+\begin{enumerate}[label=\Alph*.]
+\item Distances are dominated by features with large numeric ranges
+\item It does not use distances
+\item It uses only categorical features
+\item It cannot handle numbers
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 68}
+\textbf{Correct: A} --- scaling puts features on comparable scales.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: it does.
+\item C: not true.
+\item D: it can.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 69}
+What is a main advantage of a random forest over a single decision tree?
+\begin{enumerate}[label=\Alph*.]
+\item It needs no data
+\item Lower variance and less overfitting through averaging many trees
+\item It never overfits
+\item It is fully interpretable
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 69}
+\textbf{Correct: B} --- bagging reduces variance.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not true.
+\item C: it can still overfit.
+\item D: a single tree is more interpretable.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 70}
+In gradient boosting, how are trees combined?
+\begin{enumerate}[label=\Alph*.]
+\item In parallel as independent trees only
+\item Sequentially, each tree fitting the errors of the previous ensemble
+\item By clustering features
+\item By averaging identical trees
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 70}
+\textbf{Correct: B} --- boosting corrects residual errors step by step.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: that is bagging.
+\item C: not boosting.
+\item D: not boosting.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 71}
+Which scenario describes underfitting?
+\begin{enumerate}[label=\Alph*.]
+\item Perfect test accuracy
+\item Training stops early by design
+\item Low accuracy on both training and validation data
+\item High training accuracy, low validation accuracy
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 71}
+\textbf{Correct: C} --- the model is too simple to learn the pattern.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not underfitting.
+\item B: not underfitting.
+\item D: that is overfitting.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 72}
+Which action most directly reduces overfitting?
+\begin{enumerate}[label=\Alph*.]
+\item Train on the test set
+\item Remove the validation set
+\item Add regularization or use more training data
+\item Increase model complexity
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 72}
+\textbf{Correct: C} --- both reduce variance.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: invalid.
+\item B: removes the signal.
+\item D: can increase overfitting.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 73}
+Which action can reduce underfitting?
+\begin{enumerate}[label=\Alph*.]
+\item Add stronger regularization
+\item Use a more flexible model or add informative features
+\item Shuffle labels
+\item Reduce training data
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 73}
+\textbf{Correct: B} --- it increases the model's capacity.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: can worsen underfitting.
+\item C: destroys signal.
+\item D: does not help.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 74}
+Why is stratified k-fold useful for classification?
+\begin{enumerate}[label=\Alph*.]
+\item It speeds up training by ignoring labels
+\item It removes the minority class
+\item It shuffles labels
+\item Each fold keeps roughly the same class proportions
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 74}
+\textbf{Correct: D} --- this stabilizes evaluation on imbalanced data.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: it does not.
+\item B: it does not.
+\item C: it does not.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 75}
+A feature is the label's exact copy under a different name. What is this called?
+\begin{enumerate}[label=\Alph*.]
+\item Cross-validation
+\item Regularization
+\item Target leakage
+\item Normalization
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 75}
+\textbf{Correct: C} --- the feature reveals the answer.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not leakage.
+\item B: not leakage.
+\item D: not leakage.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 76}
+Logistic regression outputs probabilities. How do you control the trade-off between precision and recall?
+\begin{enumerate}[label=\Alph*.]
+\item Adjust the decision threshold
+\item Change the cluster size
+\item Change the Delta table version
+\item Change the Git branch
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 76}
+\textbf{Correct: A} --- a higher threshold typically raises precision and lowers recall.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: unrelated.
+\item C: unrelated.
+\item D: unrelated.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 77}
+A batch scoring job needs to write predictions to Delta daily. Which pattern is typical?
+\begin{enumerate}[label=\Alph*.]
+\item Call a REST endpoint per row from the driver
+\item Email predictions
+\item Read input from Delta, apply the model with \texttt{spark\_udf} or \texttt{score\_batch}, then write results to a Delta table
+\item Save predictions in notebook variables
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 77}
+\textbf{Correct: C} --- it is a standard batch inference pipeline.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: does not scale.
+\item B: not a pipeline.
+\item D: not durable.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 78}
+Why might a team prefer batch inference over real-time serving?
+\begin{enumerate}[label=\Alph*.]
+\item It does not require a model
+\item It always has lower latency
+\item It avoids data entirely
+\item Predictions are needed periodically and cost and throughput matter more than latency
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 78}
+\textbf{Correct: D} --- batch is cheaper for large volumes.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: it does.
+\item B: it has higher latency.
+\item C: it uses data.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 79}
+A real-time use case needs sub-second predictions. Which option fits best?
+\begin{enumerate}[label=\Alph*.]
+\item A notebook run manually
+\item A Model Serving endpoint
+\item A Delta \texttt{VACUUM}
+\item A nightly job
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 79}
+\textbf{Correct: B} --- endpoints provide low-latency REST inference.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not production-grade.
+\item C: unrelated.
+\item D: too slow.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 80}
+Which workload setting on a serving endpoint affects how many concurrent requests it can handle?
+\begin{enumerate}[label=\Alph*.]
+\item The notebook theme
+\item Workload size (concurrency)
+\item The Git branch
+\item The MLflow experiment name
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 80}
+\textbf{Correct: B} --- larger sizes handle more concurrent requests.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: unrelated.
+\item C: unrelated.
+\item D: unrelated.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 81}
+A team wants to compare a new model against the current one using live traffic safely. What is a good approach?
+\begin{enumerate}[label=\Alph*.]
+\item Route a small share of traffic to the new version on the same endpoint
+\item Replace the production model without testing
+\item Test only on the training data
+\item Disable monitoring
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 81}
+\textbf{Correct: A} --- traffic splitting supports gradual rollout.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: risky.
+\item C: not safe.
+\item D: removes safety.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 82}
+A new model version performs badly in production. What is the fastest rollback when clients load \texttt{@Champion}?
+\begin{enumerate}[label=\Alph*.]
+\item Delete the new model's experiment
+\item Rewrite all clients
+\item Retrain from scratch immediately
+\item Point the \texttt{Champion} alias back to the previous version
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 82}
+\textbf{Correct: D} --- clients pick up the older version.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: does not roll back.
+\item B: unnecessary.
+\item C: slower.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 83}
+What should a CI/CD process for models typically include before promotion?
+\begin{enumerate}[label=\Alph*.]
+\item Manual copying of files between workspaces only
+\item Automated tests and validation against baseline metrics
+\item Skipping evaluation
+\item Deleting old versions first
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 83}
+\textbf{Correct: B} --- promotion should be gated by checks.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: error prone.
+\item C: risky.
+\item D: prevents rollback.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 84}
+Which job setting reruns a task automatically after a transient failure?
+\begin{enumerate}[label=\Alph*.]
+\item A cluster policy
+\item Auto-termination
+\item Task retries
+\item A model alias
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 84}
+\textbf{Correct: C} --- retries help with temporary errors.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: limits configuration.
+\item B: a cluster setting.
+\item D: labels versions.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 85}
+How do you pass a parameter to a notebook task in a job and read it in the notebook?
+\begin{enumerate}[label=\Alph*.]
+\item Use \texttt{df.cache()}
+\item Edit the notebook for each run
+\item Define a job parameter and read it with \texttt{dbutils.widgets.get("name")}
+\item Use \texttt{dbutils.fs.put}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 85}
+\textbf{Correct: C} --- job parameters appear as widgets.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not for parameters.
+\item B: unnecessary.
+\item D: writes files.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 86}
+Which tool captures serving request/response data to help monitor model quality?
+\begin{enumerate}[label=\Alph*.]
+\item Git folders
+\item Inference tables
+\item Cluster policies
+\item \texttt{ZORDER}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 86}
+\textbf{Correct: B} --- payloads are logged to a Delta table.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: version control.
+\item C: limit configuration.
+\item D: file layout.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 87}
+Ground-truth labels arrive weeks after predictions. How can you monitor model quality in the meantime?
+\begin{enumerate}[label=\Alph*.]
+\item Drop the monitoring tables
+\item Retrain every minute
+\item Track input drift and prediction distributions, then compute accuracy once labels arrive
+\item Do nothing until labels arrive
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 87}
+\textbf{Correct: C} --- proxy signals detect issues earlier.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: removes visibility.
+\item B: wasteful.
+\item D: misses early problems.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 88}
+Which change in the input data indicates data drift?
+\begin{enumerate}[label=\Alph*.]
+\item The experiment name changes
+\item The model file size grows
+\item The cluster restarts
+\item The distribution of a feature in production differs from training
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 88}
+\textbf{Correct: D} --- inputs have shifted.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not drift.
+\item B: not drift.
+\item C: not drift.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 89}
+Why log the training dataset version or Delta table version with each run?
+\begin{enumerate}[label=\Alph*.]
+\item To reproduce the exact data used to train the model
+\item To avoid needing a signature
+\item To reduce model size
+\item To speed up training
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 89}
+\textbf{Correct: A} --- reproducibility requires data lineage.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: not the purpose.
+\item C: not the purpose.
+\item D: not the purpose.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 90}
+Which element makes an MLflow model reproducible on another machine?
+\begin{enumerate}[label=\Alph*.]
+\item Only the run name
+\item The cluster ID
+\item Logged dependencies (requirements or conda environment) along with the model artifact
+\item Only the notebook theme
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 90}
+\textbf{Correct: C} --- the environment can be recreated.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not enough.
+\item B: not portable.
+\item D: not related.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 91}
+Which Unity Catalog object is the top-level container below the metastore?
+\begin{enumerate}[label=\Alph*.]
+\item Schema
+\item Table
+\item Volume
+\item Catalog
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 91}
+\textbf{Correct: D} --- the hierarchy is metastore, catalog, schema, then tables, volumes, models.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: sits under a catalog.
+\item B: sits under a schema.
+\item C: sits under a schema.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 92}
+What does \texttt{GRANT USE SCHEMA ON SCHEMA main.ml TO group} allow, together with other needed privileges?
+\begin{enumerate}[label=\Alph*.]
+\item Creating clusters
+\item Access to objects within the schema
+\item Reading every table automatically
+\item Deleting the catalog
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 92}
+\textbf{Correct: B} --- USE SCHEMA is required to reach objects inside it.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not granted.
+\item C: SELECT is still needed.
+\item D: not granted.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 93}
+Who owns a newly created Unity Catalog table by default?
+\begin{enumerate}[label=\Alph*.]
+\item The cluster
+\item The metastore only
+\item The user or principal who created it
+\item All workspace users
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 93}
+\textbf{Correct: C} --- owners can manage grants on the object.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not an owner.
+\item B: not the default owner.
+\item D: not by default.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 94}
+Why use a service principal to run a production job?
+\begin{enumerate}[label=\Alph*.]
+\item It removes the need for permissions
+\item It avoids tying the job to an individual user's account
+\item It replaces Unity Catalog
+\item It makes models more accurate
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 94}
+\textbf{Correct: B} --- service principals suit automation.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: it still needs permissions.
+\item C: it does not.
+\item D: not related.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 95}
+A column contains sensitive personal data. Which Unity Catalog capability can restrict who sees raw values?
+\begin{enumerate}[label=\Alph*.]
+\item Column masks or row filters
+\item \texttt{mlflow.autolog()}
+\item \texttt{OPTIMIZE}
+\item \texttt{df.cache()}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 95}
+\textbf{Correct: A} --- they apply fine-grained access control.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: logs runs.
+\item C: compacts files.
+\item D: does not control access.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 96}
+What is the benefit of governing models and features in Unity Catalog?
+\begin{enumerate}[label=\Alph*.]
+\item Automatic accuracy gains
+\item Removal of the need for validation
+\item Centralized access control, auditing, and lineage across data and models
+\item Free compute
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 96}
+\textbf{Correct: C} --- one governance layer covers data and ML assets.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not provided.
+\item B: not provided.
+\item D: not provided.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 97}
+Which code fills missing values in column \texttt{age} with the median in Spark ML?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{Imputer(inputCols=["age"], outputCols=["age\_imp"], strategy="median").fit(df).transform(df)}
+\item \texttt{Imputer(strategy="median").transform(df)}
+\item \texttt{df.fillna(median)} with no value computed
+\item \texttt{StandardScaler(strategy="median")}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 97}
+\textbf{Correct: A} --- Imputer is fit and then used to transform.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item B: must fit first and set columns.
+\item C: no median is computed.
+\item D: not a StandardScaler option.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 98}
+What input does Spark ML \texttt{StandardScaler} require?
+\begin{enumerate}[label=\Alph*.]
+\item A pandas Series
+\item A vector column, for example from \texttt{VectorAssembler}
+\item A Delta table path
+\item A string column
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 98}
+\textbf{Correct: B} --- scalers operate on vector columns.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not supported.
+\item C: not supported.
+\item D: not supported.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 99}
+Which call sets the MLflow experiment by workspace path?
+\begin{enumerate}[label=\Alph*.]
+\item \texttt{mlflow.start\_path(path)}
+\item \texttt{mlflow.log\_experiment(path)}
+\item \texttt{mlflow.use\_experiment(path)}
+\item \texttt{mlflow.set\_experiment("/Users/me@company.com/churn")}
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 99}
+\textbf{Correct: D} --- it creates or selects the experiment at the path.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: not an API.
+\item B: not an API.
+\item C: not an API.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Question 100}
+Which workload most benefits from a GPU cluster?
+\begin{enumerate}[label=\Alph*.]
+\item Running \texttt{OPTIMIZE} on Delta
+\item Training a small scikit-learn linear model
+\item Writing a CSV file
+\item Training a deep neural network
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 100}
+\textbf{Correct: D} --- GPUs accelerate large matrix operations.\\
+\vspace{0.5em}
+\textbf{Wrong:}
+\begin{itemize}
+\item A: does not need GPUs.
+\item B: CPU is enough.
+\item C: does not need GPUs.
+\end{itemize}
+\end{frame}
+
+\end{document}

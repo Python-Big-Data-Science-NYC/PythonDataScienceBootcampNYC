@@ -1,0 +1,1059 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Databricks ML Associate --- 100 Exam-Style Questions}
+\lhead{Questions}
+\cfoot{\thepage}
+
+\title{\textbf{100 Exam-Style Practice Questions}\\[4pt]
+	\large Databricks Certified \textbf{Machine Learning Associate}\\[2pt]
+	\normalsize 4 options per question. Answer key with explanations on the final pages.}
+\author{Practice Exam}
+\date{}
+
+\begin{document}
+	\maketitle
+	\tableofcontents
+	\newpage
+	
+	\section*{Instructions}
+	\addcontentsline{toc}{section}{Instructions}
+	Each question has exactly four options (A--D). Choose the single best answer. The answer key with a short explanation of why the correct option is right and why the other three are wrong begins on page~\pageref{sec:key}.
+	
+	\textbf{Domains:} A. Databricks Machine Learning (Q1--38); B. ML Workflows (Q39--57); C. Model Development (Q58--88); D. Model Deployment (Q89--100).
+	\newpage
+	
+	\section{A. Databricks Machine Learning}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}]
+		
+		\item A machine learning engineer created a Feature Table \texttt{new\_table} using Feature Store Client \texttt{fs} and specified a metadata description. Which line of code returns that description?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{fs.create\_training\_set("new\_table")}
+			\item \texttt{fs.get\_table("new\_table").description}
+			\item \texttt{fs.get\_table("new\_table").load\_df()}
+			\item \texttt{fs.get\_table("new\_table")}
+		\end{enumerate}
+		
+		\item What is the primary advantage of creating Feature Store tables at the account level in Unity Catalog rather than at the workspace level?
+		\begin{enumerate}[label=(\alph*)]
+			\item Faster model training
+			\item Cross-workspace governance, discoverability, and access control
+			\item Automatic feature engineering
+			\item Lower storage cost
+		\end{enumerate}
+		
+		\item Which client is used to create and manage Feature Store tables in Unity Catalog?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{FeatureStoreClient}
+			\item \texttt{FeatureEngineeringClient}
+			\item \texttt{UnityCatalogClient}
+			\item \texttt{MLflowClient}
+		\end{enumerate}
+		
+		\item Which method creates a feature table with \texttt{FeatureEngineeringClient}?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{fe.create\_table()}
+			\item \texttt{fe.write\_table()}
+			\item \texttt{fe.create\_training\_set()}
+			\item \texttt{fe.log\_model()}
+		\end{enumerate}
+		
+		\item Which method writes features to an existing feature table?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{fe.create\_table()}
+			\item \texttt{fe.write\_table()}
+			\item \texttt{fe.score\_batch()}
+			\item \texttt{fe.get\_table()}
+		\end{enumerate}
+		
+		\item What does \texttt{fe.create\_training\_set()} provide that a plain DataFrame join does not?
+		\begin{enumerate}[label=(\alph*)]
+			\item Automatic one-hot encoding
+			\item Point-in-time lookups aligned to the label timestamp
+			\item Model registration
+			\item Hyperparameter tuning
+		\end{enumerate}
+		
+		\item A model performs well offline but degrades in production. Review shows a feature was computed using data available only after the label outcome. What is the diagnosis?
+		\begin{enumerate}[label=(\alph*)]
+			\item Underfitting
+			\item Training-serving skew / target leakage
+			\item Class imbalance
+			\item Concept drift
+		\end{enumerate}
+		
+		\item What is the difference between online and offline feature tables?
+		\begin{enumerate}[label=(\alph*)]
+			\item Online is for training; offline is for serving
+			\item Online serves low-latency real-time inference; offline is for batch training and scoring
+			\item They are identical
+			\item Offline is deprecated
+		\end{enumerate}
+		
+		\item A feature-aware model was logged with \texttt{fs.log\_model()} and a \texttt{batch\_df} contains only the primary key \texttt{customer\_id}. Which call generates predictions by automatically joining the required features?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{model.predict(batch\_df)}
+			\item \texttt{fs.score\_batch(model\_uri, batch\_df)}
+			\item \texttt{mlflow.pyfunc.load\_model(model\_uri).predict(batch\_df)}
+			\item \texttt{batch\_df.join(feature\_table)}
+		\end{enumerate}
+		
+		\item Which namespace format is correct for a feature table in Unity Catalog?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{catalog.schema.table}
+			\item \texttt{database.table}
+			\item \texttt{workspace.table}
+			\item \texttt{hive\_metastore.table}
+		\end{enumerate}
+		
+		\item Which MLflow API call manually logs a metric?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{mlflow.log\_metric()}
+			\item \texttt{mlflow.log\_param()}
+			\item \texttt{mlflow.log\_artifact()}
+			\item \texttt{mlflow.set\_tag()}
+		\end{enumerate}
+		
+		\item Which MLflow API call registers a model in Unity Catalog?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{mlflow.log\_model()}
+			\item \texttt{mlflow.register\_model()}
+			\item \texttt{mlflow.save\_model()}
+			\item \texttt{mlflow.start\_run()}
+		\end{enumerate}
+		
+		\item What replaced the old Staging and Production stages for model promotion in Unity Catalog?
+		\begin{enumerate}[label=(\alph*)]
+			\item Tags only
+			\item Aliases such as \texttt{@champion}
+			\item Notebook revisions
+			\item Git branches
+		\end{enumerate}
+		
+		\item How do you promote a challenger model to champion using aliases?
+		\begin{enumerate}[label=(\alph*)]
+			\item Delete the old model version
+			\item Move the \texttt{champion} alias to the new model version
+			\item Rename the model
+			\item Create a new experiment
+		\end{enumerate}
+		
+		\item What does \texttt{mlflow.search\_runs()} return?
+		\begin{enumerate}[label=(\alph*)]
+			\item A single run ID
+			\item A pandas DataFrame of runs that can be sorted and filtered
+			\item A trained model
+			\item A list of experiments
+		\end{enumerate}
+		
+		\item A run ID is stored in \texttt{run\_id} and the logged model name is \texttt{"model"}. Which line registers it as \texttt{"best\_model"}?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{mlflow.register\_model(run\_id, "best\_model")}
+			\item \texttt{mlflow.register\_model(f"runs:/\{run\_id\}/model", "best\_model")}
+			\item \texttt{mlflow.register\_model(f"runs:/\{run\_id\}/model")}
+			\item \texttt{mlflow.register\_model(f"runs:/\{run\_id\}/best\_model", "model")}
+		\end{enumerate}
+		
+		\item A data scientist wants one parent run for tuning and a child run per trial, starting runs manually. What should they do?
+		\begin{enumerate}[label=(\alph*)]
+			\item Turn on Databricks Autologging
+			\item Specify \texttt{nested=True} when starting each child run
+			\item Start each child run inside the parent's code block without \texttt{nested}
+			\item Give child runs the same experiment ID
+		\end{enumerate}
+		
+		\item Which UI element on the MLflow experiment page opens the notebook that created a run?
+		\begin{enumerate}[label=(\alph*)]
+			\item The \texttt{MLmodel} artifact
+			\item The \texttt{Models} link
+			\item The \texttt{Source} link
+			\item The \texttt{Start Time} link
+		\end{enumerate}
+		
+		\item Which function searches runs ordered by a metric ascending to find the lowest RMSE?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{mlflow.search\_runs(experiment\_id, order\_by=["metrics.rmse DESC"])}
+			\item \texttt{mlflow.best\_run(experiment\_id, order\_by=["metrics.rmse"])}
+			\item \texttt{mlflow.search\_runs(experiment\_id, order\_by=["metrics.rmse ASC"])}
+			\item \texttt{mlflow.search\_runs(experiment\_id, filter="rmse < 1")}
+		\end{enumerate}
+		
+		\item On which page do you transition a registered model version from Staging to Production?
+		\begin{enumerate}[label=(\alph*)]
+			\item The MLflow Model Registry home page
+			\item The experiment page
+			\item The model version page
+			\item The model page only
+		\end{enumerate}
+		
+		\item Which MLflow API call logs an artifact?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{mlflow.log\_metric()}
+			\item \texttt{mlflow.log\_param()}
+			\item \texttt{mlflow.log\_artifact()}
+			\item \texttt{mlflow.set\_tag()}
+		\end{enumerate}
+		
+		\item What is the simplest Databricks-native way to make every training run reproducible months later?
+		\begin{enumerate}[label=(\alph*)]
+			\item Save notebooks to a local drive
+			\item Use MLflow tracking to log parameters, metrics, artifacts, and the model
+			\item Print metrics to stdout
+			\item Rely on cluster logs
+		\end{enumerate}
+		
+		\item What does Databricks AutoML produce besides a trained model?
+		\begin{enumerate}[label=(\alph*)]
+			\item Only a model artifact
+			\item A leaderboard, editable notebooks, and an automated EDA notebook
+			\item A production endpoint
+			\item A data warehouse
+		\end{enumerate}
+		
+		\item Which API runs classification AutoML?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{databricks.automl.classify()}
+			\item \texttt{databricks.automl.regress()}
+			\item \texttt{databricks.automl.forecast()}
+			\item \texttt{databricks.automl.train()}
+		\end{enumerate}
+		
+		\item AutoML is least appropriate when:
+		\begin{enumerate}[label=(\alph*)]
+			\item You need a quick baseline
+			\item You need a highly customized deep learning architecture
+			\item You want automatic feature engineering
+			\item You want to compare multiple algorithms
+		\end{enumerate}
+		
+		\item Which step must a data scientist perform outside an AutoML experiment?
+		\begin{enumerate}[label=(\alph*)]
+			\item Model tuning
+			\item Model evaluation
+			\item Model deployment
+			\item Exploratory data analysis
+		\end{enumerate}
+		
+		\item How do you begin using Databricks Runtime ML?
+		\begin{enumerate}[label=(\alph*)]
+			\item Add an init script line
+			\item Check a Databricks Runtime ML box
+			\item Select a Runtime ML version from the Databricks Runtime Version dropdown
+			\item Set \texttt{runtime-version="ml"} in the Spark session
+		\end{enumerate}
+		
+		\item Why is Databricks Runtime ML convenient for MLflow users?
+		\begin{enumerate}[label=(\alph*)]
+			\item It removes the need for a cluster
+			\item It preinstalls MLflow and other ML libraries
+			\item It disables logging
+			\item It only supports R
+		\end{enumerate}
+		
+		\item Which evaluation metric is not suitable for AutoML regression experiments?
+		\begin{enumerate}[label=(\alph*)]
+			\item F1
+			\item R-squared
+			\item MAE
+			\item MSE
+		\end{enumerate}
+		
+		\item Which file typically defines a model's format and dependencies in an MLflow run?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{requirements.txt}
+			\item \texttt{MLmodel}
+			\item \texttt{README.md}
+			\item \texttt{conda.yaml} only
+		\end{enumerate}
+		
+		\item What does \texttt{fs.log\_model()} add to a model artifact?
+		\begin{enumerate}[label=(\alph*)]
+			\item Hyperparameters
+			\item Feature lookup metadata for automatic joins at inference
+			\item A confusion matrix
+			\item A serving endpoint
+		\end{enumerate}
+		
+		\item Which is a benefit of registering models in Unity Catalog over the workspace registry?
+		\begin{enumerate}[label=(\alph*)]
+			\item Faster training
+			\item Lineage, governance, and cross-workspace access
+			\item Automatic hyperparameter tuning
+			\item Free storage
+		\end{enumerate}
+		
+		\item What does an MLflow experiment group together?
+		\begin{enumerate}[label=(\alph*)]
+			\item Runs of a related ML task
+			\item Clusters
+			\item Notebooks only
+			\item Feature tables
+		\end{enumerate}
+		
+		\item Which API call starts an MLflow run?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{mlflow.start\_run()}
+			\item \texttt{mlflow.log\_run()}
+			\item \texttt{mlflow.open\_run()}
+			\item \texttt{mlflow.new\_run()}
+		\end{enumerate}
+		
+		\item Which is true about aliases in the Unity Catalog model registry?
+		\begin{enumerate}[label=(\alph*)]
+			\item An alias can point to many versions at once
+			\item An alias points to one model version and can be moved
+			\item Aliases are immutable
+			\item Aliases replace experiments
+		\end{enumerate}
+		
+		\item Which object stores the actual model files and metadata for a run?
+		\begin{enumerate}[label=(\alph*)]
+			\item The artifact store
+			\item The parameter log
+			\item The metric log
+			\item The experiment tag
+		\end{enumerate}
+		
+		\item Why should secrets not be logged as MLflow parameters?
+		\begin{enumerate}[label=(\alph*)]
+			\item Parameters are stored in plain text and visible to experiment users
+			\item Parameters are not persisted
+			\item Parameters are encrypted by default
+			\item Parameters are deleted after the run
+		\end{enumerate}
+		
+	\end{enumerate}
+	
+	\newpage
+	\section{B. ML Workflows}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}, start=39]
+		
+		\item A Spark DataFrame \texttt{spark\_df} must keep only rows where \texttt{price > 0}. Which code block works?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{spark\_df[spark\_df["price"] > 0]}
+			\item \texttt{spark\_df.filter(col("price") > 0)}
+			\item \texttt{SELECT * FROM spark\_df WHERE price > 0}
+			\item \texttt{spark\_df.loc[spark\_df["price"] > 0,:]}
+		\end{enumerate}
+		
+		\item Which line returns count, mean, standard deviation, min, max, and quantiles for numeric columns?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{spark\_df.summary()}
+			\item \texttt{spark\_df.stats()}
+			\item \texttt{spark\_df.describe().head()}
+			\item \texttt{spark\_df.printSchema()}
+		\end{enumerate}
+		
+		\item How do you remove outliers using IQR in Spark?
+		\begin{enumerate}[label=(\alph*)]
+			\item Drop the top 10\% of rows
+			\item Filter values outside $[Q1 - 1.5 \cdot IQR,\; Q3 + 1.5 \cdot IQR]$
+			\item Filter values outside $[Q1 - IQR,\; Q3 + IQR]$
+			\item Replace all values with the mean
+		\end{enumerate}
+		
+		\item When is median imputation preferred over mean imputation?
+		\begin{enumerate}[label=(\alph*)]
+			\item When data is symmetric
+			\item When data is skewed or contains extreme outliers
+			\item When there are no missing values
+			\item Always
+		\end{enumerate}
+		
+		\item A data scientist replaces missing values with the median. A colleague says valuable information is lost. Which approach preserves the most information?
+		\begin{enumerate}[label=(\alph*)]
+			\item Impute with the mean instead
+			\item Let the algorithm handle missing values
+			\item Drop all features with missing values
+			\item Add a binary indicator feature marking which values were imputed
+		\end{enumerate}
+		
+		\item One-hot encoding is least appropriate for:
+		\begin{enumerate}[label=(\alph*)]
+			\item Nominal categorical features
+			\item Very high-cardinality categorical features
+			\item Low-cardinality categorical features
+			\item Tree-based models
+		\end{enumerate}
+		
+		\item A feature repository one-hot encodes all categorical variables. Why is this problematic?
+		\begin{enumerate}[label=(\alph*)]
+			\item One-hot encoding is not supported by most libraries
+			\item It depends on target values
+			\item It is computationally intensive and should be done on small samples
+			\item It is a potentially problematic strategy for some ML algorithms due to dimensionality and sparsity
+		\end{enumerate}
+		
+		\item How do you one-hot encode in Spark ML?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{OneHotEncoder} alone
+			\item \texttt{StringIndexer} then \texttt{OneHotEncoder}
+			\item \texttt{VectorAssembler} then \texttt{StringIndexer}
+			\item \texttt{Imputer} then \texttt{OneHotEncoder}
+		\end{enumerate}
+		
+		\item What does \texttt{VectorAssembler} do?
+		\begin{enumerate}[label=(\alph*)]
+			\item Combines multiple columns into a single feature vector
+			\item Splits a vector into columns
+			\item Encodes strings
+			\item Imputes missing values
+		\end{enumerate}
+		
+		\item A data scientist creates an \texttt{Imputer} and calls \texttt{transform} directly on it. Why does it fail?
+		\begin{enumerate}[label=(\alph*)]
+			\item It does not impute both training and test sets
+			\item \texttt{inputCols} and \texttt{outputCols} must be identical
+			\item It should call \texttt{fit} instead of \texttt{transform}
+			\item It does not fit the imputer to create an \texttt{ImputerModel}
+		\end{enumerate}
+		
+		\item When is log transformation appropriate?
+		\begin{enumerate}[label=(\alph*)]
+			\item For right-skewed positive features
+			\item For left-skewed negative features
+			\item For categorical features
+			\item For binary features
+		\end{enumerate}
+		
+		\item A pandas notebook must scale to big data with the least refactoring effort. What approach is recommended?
+		\begin{enumerate}[label=(\alph*)]
+			\item Refactor to process data in parallel
+			\item Refactor to the PySpark DataFrame API
+			\item Refactor to the Scala Dataset API
+			\item Refactor to Spark SQL
+			\item Refactor to the pandas API on Spark
+		\end{enumerate}
+		
+		\item Which function applies a Python function to each group of a grouped DataFrame and returns a DataFrame?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{applyInPandas}
+			\item \texttt{groupedApplyInPandas}
+			\item \texttt{mapInPandas}
+			\item \texttt{predict}
+		\end{enumerate}
+		
+		\item A data scientist wants group-specific model inference in parallel. Which call fills the blank in \texttt{df.groupby("device\_id").\_\_\_(apply\_model, schema=...) }?
+		\begin{enumerate}[label=(\alph*)]
+			\item \texttt{applyInPandas}
+			\item \texttt{groupedApplyInPandas}
+			\item \texttt{mapInPandas}
+			\item \texttt{predict}
+		\end{enumerate}
+		
+		\item Which imputation strategy is most appropriate for a numeric feature with extreme outliers?
+		\begin{enumerate}[label=(\alph*)]
+			\item Mean
+			\item Median
+			\item Mode
+			\item Zero
+		\end{enumerate}
+		
+		\item What does a boxplot show?
+		\begin{enumerate}[label=(\alph*)]
+			\item Only the mean
+			\item Median, quartiles, and outliers
+			\item Correlation
+			\item Class balance
+		\end{enumerate}
+		
+		\item Which technique helps detect multicollinearity?
+		\begin{enumerate}[label=(\alph*)]
+			\item Variance Inflation Factor
+			\item Silhouette score
+			\item ROC AUC
+			\item Confusion matrix
+		\end{enumerate}
+		
+		\item Why is stratification important for classification splits?
+		\begin{enumerate}[label=(\alph*)]
+			\item It preserves class proportions in each split
+			\item It increases training speed
+			\item It removes outliers
+			\item It ensures reproducibility only
+		\end{enumerate}
+		
+		\item Which is a symptom of an imbalanced dataset?
+		\begin{enumerate}[label=(\alph*)]
+			\item A 50/50 class split
+			\item A 99\% negative / 1\% positive split
+			\item A continuous target with normal distribution
+			\item Missing values
+		\end{enumerate}
+		
+	\end{enumerate}
+	
+	\newpage
+	\section{C. Model Development}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}, start=58]
+		
+		\item Which algorithm typically uses bagging?
+		\begin{enumerate}[label=(\alph*)]
+			\item Gradient boosted trees
+			\item K-means
+			\item Random forest
+			\item Linear regression
+		\end{enumerate}
+		
+		\item Spark ML linear regression on large data uses which approach for distributed training?
+		\begin{enumerate}[label=(\alph*)]
+			\item Logistic regression
+			\item Spark ML cannot distribute linear regression
+			\item Iterative optimization such as L-BFGS
+			\item Least-squares normal equations
+		\end{enumerate}
+		
+		\item Why can a Spark ML decision tree differ from a scikit-learn tree with identical data and hyperparameters?
+		\begin{enumerate}[label=(\alph*)]
+			\item Spark ML tests every feature
+			\item Spark ML automatically prunes overfit trees
+			\item Spark ML tests more split candidates
+			\item Spark ML tests a random sample of features
+			\item Spark ML tests binned feature values as representative split candidates
+		\end{enumerate}
+		
+		\item What does Hyperopt's \texttt{fmin} do?
+		\begin{enumerate}[label=(\alph*)]
+			\item Minimizes an objective function over a search space
+			\item Maximizes accuracy only
+			\item Trains a model
+			\item Logs a metric
+		\end{enumerate}
+		
+		\item What does \texttt{SparkTrials} do?
+		\begin{enumerate}[label=(\alph*)]
+			\item Distributes Hyperopt trials across a Spark cluster
+			\item Runs trials on the driver only
+			\item Saves models to the registry
+			\item Encodes categorical features
+		\end{enumerate}
+		
+		\item What is the role of \texttt{tpe.suggest} in Hyperopt?
+		\begin{enumerate}[label=(\alph*)]
+			\item Evaluates the objective function
+			\item Specifies the MLflow experiment
+			\item Suggests new hyperparameter configurations based on previous results
+			\item Parallelizes the tuning process
+		\end{enumerate}
+		
+		\item A team has 8 workers and 5 hyperparameters. Which approach best leverages the cluster?
+		\begin{enumerate}[label=(\alph*)]
+			\item Grid search on the driver
+			\item Sequential manual tuning
+			\item Hyperopt with \texttt{SparkTrials} and TPE
+			\item Random search on the driver
+		\end{enumerate}
+		
+		\item With 3-fold CV and a grid of 3 $\times$ 2 hyperparameter values, how many models are trained in total?
+		\begin{enumerate}[label=(\alph*)]
+			\item 6
+			\item 9
+			\item 18
+			\item 36
+		\end{enumerate}
+		
+		\item With 3-fold CV and a grid of 3 $\times$ 2 values, how many models can be trained in parallel?
+		\begin{enumerate}[label=(\alph*)]
+			\item 3
+			\item 5
+			\item 6
+			\item 18
+		\end{enumerate}
+		
+		\item What is a primary advantage of Hyperopt over manual tuning or grid search?
+		\begin{enumerate}[label=(\alph*)]
+			\item It efficiently explores the search space using algorithms like TPE
+			\item Manual tuning is faster
+			\item Grid search is more reliable
+			\item Hyperopt needs more evaluations
+		\end{enumerate}
+		
+		\item When is \texttt{StringIndexer} used in a pipeline?
+		\begin{enumerate}[label=(\alph*)]
+			\item To convert textual or categorical values to numeric indices
+			\item To impute missing values
+			\item To scale numeric features
+			\item To assemble vectors
+		\end{enumerate}
+		
+		\item Why might a train-validation split be more efficient than k-fold CV?
+		\begin{enumerate}[label=(\alph*)]
+			\item It requires testing fewer models, saving compute
+			\item It reduces hyperparameter values to test
+			\item It guarantees reproducibility
+			\item It ensures bias-free training
+		\end{enumerate}
+		
+		\item When using a pipeline and a cross-validator, where should they be placed?
+		\begin{enumerate}[label=(\alph*)]
+			\item Always put the cross-validator inside the pipeline
+			\item If the pipeline includes estimators, put the entire pipeline inside the cross-validator
+			\item If concerned about leakage, put the pipeline inside the cross-validator
+			\item Always put the pipeline inside the cross-validator
+		\end{enumerate}
+		
+		\item A health organization wants to maximize the number of positive infection cases identified. Which metric should be used?
+		\begin{enumerate}[label=(\alph*)]
+			\item RMSE
+			\item Precision
+			\item Area under the residual operating curve
+			\item Accuracy
+			\item Recall
+		\end{enumerate}
+		
+		\item When should F1 be used over accuracy?
+		\begin{enumerate}[label=(\alph*)]
+			\item When classes are balanced
+			\item When there are more than two classes
+			\item When there is significant imbalance and avoiding false negatives is a priority
+			\item When true positives and true negatives are equally important
+		\end{enumerate}
+		
+		\item A fraud dataset has a 1\% positive class and a model reports 99\% accuracy. What should you do?
+		\begin{enumerate}[label=(\alph*)]
+			\item Deploy it
+			\item Evaluate precision, recall, F1, and PR-AUC
+			\item Increase epochs
+			\item Add features
+		\end{enumerate}
+		
+		\item What does $R^2 = 0.85$ mean?
+		\begin{enumerate}[label=(\alph*)]
+			\item 85\% of predictions are correct
+			\item The model explains 85\% of the variance in the target
+			\item The model has 85\% precision
+			\item The RMSE is 0.85
+		\end{enumerate}
+		
+		\item Why might RMSE be higher than MAE?
+		\begin{enumerate}[label=(\alph*)]
+			\item RMSE penalizes large errors more heavily
+			\item MAE squares errors
+			\item RMSE ignores outliers
+			\item MAE is in different units
+		\end{enumerate}
+		
+		\item Training accuracy is 99.5\% and validation accuracy is 72\%. What is the diagnosis and fix?
+		\begin{enumerate}[label=(\alph*)]
+			\item Underfitting; increase depth
+			\item Overfitting; reduce complexity or add regularization
+			\item Good model; deploy
+			\item Need more test data
+		\end{enumerate}
+		
+		\item What is the effect of increasing model complexity on bias and variance?
+		\begin{enumerate}[label=(\alph*)]
+			\item Bias decreases, variance increases
+			\item Bias increases, variance decreases
+			\item Both decrease
+			\item Both increase
+		\end{enumerate}
+		
+		\item A log(price) model is evaluated against actual price values and its RMSE is much larger than a price model. Which explanation is invalid?
+		\begin{enumerate}[label=(\alph*)]
+			\item The second model is much more accurate
+			\item They failed to exponentiate predictions before computing RMSE
+			\item They failed to take the log of predictions in the first model
+			\item The first model is much more accurate
+			\item RMSE is invalid for regression
+		\end{enumerate}
+		
+		\item What is the 3-fold CV RMSE given fold RMSEs 10.0, 12.0, and 17.0?
+		\begin{enumerate}[label=(\alph*)]
+			\item 13.0
+			\item 17.0
+			\item 12.0
+			\item 39.0
+		\end{enumerate}
+		
+		\item What happens if the model is placed as a stage inside a pipeline and the cross-validator is the final stage?
+		\begin{enumerate}[label=(\alph*)]
+			\item Training takes longer
+			\item Feature engineering is computed using validation data, causing leakage
+			\item CV is no longer reproducible
+			\item The model is refit once more per fold
+		\end{enumerate}
+		
+		\item What does \texttt{CrossValidator} do in Spark ML?
+		\begin{enumerate}[label=(\alph*)]
+			\item Performs k-fold CV with a \texttt{ParamGridBuilder}
+			\item Trains one model
+			\item Clusters data
+			\item Imputes missing values
+		\end{enumerate}
+		
+		\item When is a train-validation split preferable to k-fold CV?
+		\begin{enumerate}[label=(\alph*)]
+			\item When high interpretability is required
+			\item When compute is limited, especially for large data or complex models
+			\item When the algorithm is highly parallelizable
+			\item When compute is unlimited
+		\end{enumerate}
+		
+		\item Which technique mitigates overfitting?
+		\begin{enumerate}[label=(\alph*)]
+			\item Feature engineering and dimensionality reduction
+			\item Increasing model complexity
+			\item Using only one technique such as data augmentation
+			\item All of the above
+		\end{enumerate}
+		
+		\item What is k-Nearest Neighbors' key hyperparameter tradeoff?
+		\begin{enumerate}[label=(\alph*)]
+			\item Small $k$ gives low bias and high variance; large $k$ gives high bias and low variance
+			\item Small $k$ gives high bias; large $k$ gives high variance
+			\item $k$ has no effect
+			\item $k$ only affects training time
+		\end{enumerate}
+		
+		\item Which kernel is commonly used for non-linear SVM classification?
+		\begin{enumerate}[label=(\alph*)]
+			\item Linear
+			\item RBF
+			\item Identity
+			\item Zero
+		\end{enumerate}
+		
+		\item What is gradient boosting?
+		\begin{enumerate}[label=(\alph*)]
+			\item Trees trained in parallel on bootstrap samples
+			\item Trees trained sequentially, each correcting previous errors
+			\item A clustering method
+			\item A dimensionality reduction method
+		\end{enumerate}
+		
+		\item What is the role of \texttt{max\_depth} in tree models?
+		\begin{enumerate}[label=(\alph*)]
+			\item Limits tree depth to control complexity and overfitting
+			\item Sets the number of trees
+			\item Sets the learning rate
+			\item Sets the number of features
+		\end{enumerate}
+		
+	\end{enumerate}
+	
+	\newpage
+	\section{D. Model Deployment}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}, start=89]
+		
+		\item What are the three model serving approaches tested on the exam?
+		\begin{enumerate}[label=(\alph*)]
+			\item Batch, real-time, and streaming
+			\item Batch, offline, and online
+			\item Training, validation, and testing
+			\item SQL, Python, and Scala
+		\end{enumerate}
+		
+		\item A scikit-learn model must score 100 million Delta records efficiently. What is the best approach?
+		\begin{enumerate}[label=(\alph*)]
+			\item Load into pandas on the driver and loop
+			\item Use \texttt{mlflow.pyfunc.spark\_udf()} to distribute inference
+			\item Export to CSV and score externally
+			\item Create a real-time endpoint and call per record
+		\end{enumerate}
+		
+		\item How is streaming inference performed in Databricks?
+		\begin{enumerate}[label=(\alph*)]
+			\item Using Delta Live Tables
+			\item Using a SQL Warehouse
+			\item Using the driver only
+			\item Using a pandas UDF on a single node
+		\end{enumerate}
+		
+		\item How do you split traffic between real-time serving endpoints?
+		\begin{enumerate}[label=(\alph*)]
+			\item Configure traffic splitting on the serving endpoint
+			\item Duplicate the model
+			\item Use a SQL query
+			\item Rename the endpoint
+		\end{enumerate}
+		
+		\item What is the primary purpose of a real-time serving endpoint?
+		\begin{enumerate}[label=(\alph*)]
+			\item Batch scoring
+			\item Low-latency predictions accessible via REST API
+			\item Training models
+			\item Data storage
+		\end{enumerate}
+		
+		\item A team replaces one model with three new models of nearly equal latency. When is the new solution less efficient during inference?
+		\begin{enumerate}[label=(\alph*)]
+			\item When if-else logic picks a model per prediction
+			\item When average model latency exceeds the original model's size
+			\item When fewer features are used
+			\item When every record must be scored by all three models
+		\end{enumerate}
+		
+		\item What is a batch inference job in Databricks?
+		\begin{enumerate}[label=(\alph*)]
+			\item Scoring a large dataset offline and writing predictions to a table
+			\item A real-time REST endpoint
+			\item A training job
+			\item A cluster configuration
+		\end{enumerate}
+		
+		\item Which compute type is best for Spark SQL data prep plus Spark ML training in a notebook?
+		\begin{enumerate}[label=(\alph*)]
+			\item Single Node cluster
+			\item Standard (all-purpose) cluster
+			\item SQL Warehouse
+			\item None of these
+		\end{enumerate}
+		
+		\item Why is model monitoring important in production?
+		\begin{enumerate}[label=(\alph*)]
+			\item Data distributions and relationships can drift over time
+			\item Once deployed, models never degrade
+			\item It replaces evaluation
+			\item It improves training speed
+		\end{enumerate}
+		
+		\item What is data drift versus concept drift?
+		\begin{enumerate}[label=(\alph*)]
+			\item Data drift changes input distributions; concept drift changes the feature-target relationship
+			\item Both refer to the same thing
+			\item Data drift changes labels; concept drift changes features
+			\item Neither affects models
+		\end{enumerate}
+		
+		\item Which is a fairness concern when deploying ML?
+		\begin{enumerate}[label=(\alph*)]
+			\item Biased training data leading to discriminatory outcomes
+			\item Faster inference
+			\item Lower storage cost
+			\item Better dashboards
+		\end{enumerate}
+		
+		\item Which practice best guards against leakage in a production pipeline?
+		\begin{enumerate}[label=(\alph*)]
+			\item Fit all transforms on the entire dataset
+			\item Encapsulate preprocessing and model in a Pipeline fit only on training data
+			\item Use the test set for feature selection
+			\item Scale before splitting
+		\end{enumerate}
+		
+	\end{enumerate}
+	
+	\newpage
+	\section{Answer Key with Explanations}
+	\label{sec:key}
+	
+	\begin{enumerate}[leftmargin=*, label=\textbf{Q\arabic*.}]
+		
+		\item \textbf{B}. \texttt{get\_table()} returns the table object; \texttt{.description} reads metadata. (A) creates a training set; (C) loads data; (D) returns the object without the description.
+		
+		\item \textbf{B}. Account-level tables are governed and discoverable across workspaces. (A) and (D) are not the benefit; (C) is false.
+		
+		\item \textbf{B}. \texttt{FeatureEngineeringClient} is the Unity Catalog Feature Store client. (A) is the legacy client; (C) and (D) are wrong.
+		
+		\item \textbf{A}. \texttt{create\_table()} creates. (B) writes; (C) builds a training set; (D) logs a model.
+		
+		\item \textbf{B}. \texttt{write\_table()} writes features. (A) creates; (C) scores; (D) retrieves.
+		
+		\item \textbf{B}. Training sets use point-in-time lookups aligned to label timestamps. (A), (C), (D) are unrelated.
+		
+		\item \textbf{B}. Leakage from post-label data causes training-serving skew. (A), (C), (D) do not match the symptom.
+		
+		\item \textbf{B}. Online tables serve low-latency inference; offline tables are for batch. (A) reverses them; (C), (D) false.
+		
+		\item \textbf{B}. \texttt{fs.score\_batch()} uses logged feature metadata to join features automatically. (A), (C) assume features are already in the DataFrame; (D) is a plain join without automatic lookup.
+		
+		\item \textbf{A}. Unity Catalog uses \texttt{catalog.schema.table}. (B), (C), (D) are not Unity Catalog formats.
+		
+		\item \textbf{A}. \texttt{log\_metric()} logs metrics. (B) logs params; (C) artifacts; (D) tags.
+		
+		\item \textbf{B}. \texttt{register\_model()} registers. (A) logs; (C) saves; (D) starts a run.
+		
+		\item \textbf{B}. Aliases replace stages. (A), (C), (D) are not the replacement mechanism.
+		
+		\item \textbf{B}. Promotion is moving the alias. (A) deletes history; (C), (D) do not promote.
+		
+		\item \textbf{B}. It returns a pandas DataFrame of runs. (A) is too narrow; (C), (D) are false.
+		
+		\item \textbf{B}. The URI must include \texttt{runs:/} and the artifact path. (A) passes only the run ID; (C) omits the registry name; (D) swaps artifact path and name.
+		
+		\item \textbf{B}. Child runs must be started with \texttt{nested=True}. (A) does not nest; (C) raises an error; (D) only groups runs in the same experiment.
+		
+		\item \textbf{C}. The Source link opens the notebook snapshot. (A) is a model metadata file; (B) links to registry; (D) opens run details.
+		
+		\item \textbf{C}. \texttt{search\_runs} with ascending order returns the lowest RMSE first. (A) orders descending; (B) is not the API; (D) filters rather than sorts.
+		
+		\item \textbf{C}. Stage transitions happen on the model version page. (A), (B), (D) are not the direct page.
+		
+		\item \textbf{C}. \texttt{log\_artifact()} logs files. (A), (B), (D) log other things.
+		
+		\item \textbf{B}. MLflow tracking logs params, metrics, artifacts, and models. (A), (C), (D) are not reproducible logs.
+		
+		\item \textbf{B}. AutoML returns a leaderboard, notebooks, and an EDA notebook. (A) is incomplete; (C), (D) are not produced.
+		
+		\item \textbf{A}. Classification AutoML uses \texttt{classify()}. (B) is regression; (C) forecasting; (D) not an API.
+		
+		\item \textbf{B}. AutoML is less suited to highly custom deep learning. (A), (C), (D) are strengths.
+		
+		\item \textbf{C}. Deployment is outside AutoML. (A), (B), (D) are automated.
+		
+		\item \textbf{C}. Runtime ML is selected from the runtime dropdown. (A), (B), (D) do not select the runtime.
+		
+		\item \textbf{B}. Runtime ML preinstalls MLflow and ML libraries. (A), (C), (D) are false.
+		
+		\item \textbf{A}. F1 is for classification, not regression. (B), (C), (D) are regression metrics.
+		
+		\item \textbf{B}. \texttt{MLmodel} defines format and dependencies. (A), (D) are dependency specs; (C) is documentation.
+		
+		\item \textbf{B}. \texttt{log\_model()} packages feature lookup metadata. (A), (C), (D) are not added by this call.
+		
+		\item \textbf{B}. Unity Catalog adds lineage, governance, and cross-workspace access. (A), (C), (D) are false.
+		
+		\item \textbf{A}. Experiments group related runs. (B), (C), (D) are not grouped by experiments.
+		
+		\item \textbf{A}. \texttt{start\_run()} starts a run. (B), (C), (D) are not APIs.
+		
+		\item \textbf{B}. An alias points to one version and can be moved. (A) is false; (C) aliases are movable; (D) false.
+		
+		\item \textbf{A}. Artifacts live in the artifact store. (B), (C), (D) store metadata, not files.
+		
+		\item \textbf{A}. Parameters are stored in plain text and visible. (B), (C), (D) are false.
+		
+		\item \textbf{B}. \texttt{filter(col(...))} is the PySpark way. (A) is pandas-like; (C) is SQL, not DataFrame code; (D) is pandas.
+		
+		\item \textbf{A}. \texttt{summary()} returns count, mean, std, min, max, and quantiles. (B) is not an API; (C) lacks quantiles; (D) prints schema.
+		
+		\item \textbf{B}. The 1.5$\times$IQR rule is standard. (A), (C), (D) are wrong thresholds or methods.
+		
+		\item \textbf{B}. Median is robust to skew and outliers. (A), (C), (D) are wrong contexts.
+		
+		\item \textbf{D}. Indicator features preserve missingness information. (A), (B), (C) lose or ignore information.
+		
+		\item \textbf{B}. High cardinality causes dimensionality explosion. (A), (C), (D) are not the main problem.
+		
+		\item \textbf{D}. Premature one-hot can hurt some algorithms. (A), (B), (C) are false or irrelevant.
+		
+		\item \textbf{B}. Spark ML uses StringIndexer then OneHotEncoder. (A), (C), (D) are wrong order or wrong tools.
+		
+		\item \textbf{A}. VectorAssembler combines columns into a vector. (B), (C), (D) are different operations.
+		
+		\item \textbf{D}. The imputer must be fit first. (A), (B), (C) are not the cause.
+		
+		\item \textbf{A}. Log transform suits right-skewed positive data. (B), (C), (D) are wrong distributions.
+		
+		\item \textbf{E}. pandas API on Spark minimizes refactoring. (A), (B), (C), (D) require larger rewrites.
+		
+		\item \textbf{A}. \texttt{applyInPandas} applies per group and returns a DataFrame. (B) is not an API; (C) maps partitions; (D) is not an API.
+		
+		\item \textbf{A}. Same as above. (B), (C), (D) are wrong.
+		
+		\item \textbf{B}. Median is robust to outliers. (A), (C), (D) are not robust.
+		
+		\item \textbf{B}. Boxplots show median, quartiles, and outliers. (A), (C), (D) are not boxplot content.
+		
+		\item \textbf{A}. VIF detects multicollinearity. (B), (C), (D) measure other things.
+		
+		\item \textbf{A}. Stratification preserves class proportions. (B), (C), (D) are unrelated.
+		
+		\item \textbf{B}. 99/1 is severe imbalance. (A), (C), (D) are not imbalance symptoms.
+		
+		\item \textbf{C}. Random forest uses bagging. (A) uses boosting; (B) is clustering; (D) is a single model.
+		
+		\item \textbf{C}. Large data uses iterative optimizers such as L-BFGS. (A), (B), (D) are wrong.
+		
+		\item \textbf{E}. Spark bins continuous features for distributed efficiency. (A), (B), (C), (D) are not the reason.
+		
+		\item \textbf{A}. \texttt{fmin} minimizes the objective. (B), (C), (D) are wrong.
+		
+		\item \textbf{A}. \texttt{SparkTrials} distributes trials. (B), (C), (D) are wrong.
+		
+		\item \textbf{C}. \texttt{tpe.suggest} proposes new configurations. (A), (B), (D) are other responsibilities.
+		
+		\item \textbf{C}. Hyperopt with \texttt{SparkTrials} and TPE leverages the cluster. (A), (B), (D) are inefficient.
+		
+		\item \textbf{C}. $3 \times 2 \times 3 = 18$. (A), (B), (D) are wrong counts.
+		
+		\item \textbf{C}. Six combinations can run in parallel. (A), (B), (D) are wrong counts.
+		
+		\item \textbf{A}. Hyperopt explores more efficiently with TPE. (B), (C), (D) are false.
+		
+		\item \textbf{A}. StringIndexer converts categories to indices. (B), (C), (D) are other transformers.
+		
+		\item \textbf{B}. Train-validation trains fewer models. (A), (C), (D) are false.
+		
+		\item \textbf{B}. Put the pipeline inside the CV when it contains estimators. (A), (C), (D) are not the general rule.
+		
+		\item \textbf{E}. Recall maximizes identification of positives. (A), (B), (C), (D) measure other things.
+		
+		\item \textbf{C}. F1 is for imbalance with false-negative priority. (A), (B), (D) are wrong conditions.
+		
+		\item \textbf{B}. Evaluate precision, recall, F1, and PR-AUC. (A), (C), (D) are wrong actions.
+		
+		\item \textbf{B}. $R^2$ is the fraction of variance explained. (A), (C), (D) are wrong interpretations.
+		
+		\item \textbf{A}. RMSE penalizes large errors more. (B), (C), (D) are false.
+		
+		\item \textbf{B}. Large train-validation gap means overfitting; reduce complexity. (A), (C), (D) are wrong.
+		
+		\item \textbf{A}. Complexity lowers bias and raises variance. (B), (C), (D) are false.
+		
+		\item \textbf{E}. RMSE is valid for regression. (A), (B), (C), (D) are possible explanations.
+		
+		\item \textbf{A}. $(10+12+17)/3 = 13.0$. (B), (C), (D) are wrong.
+		
+		\item \textbf{B}. Feature engineering on validation data leaks. (A), (C), (D) are not the consequence.
+		
+		\item \textbf{A}. \texttt{CrossValidator} does k-fold CV with a parameter grid. (B), (C), (D) are other tools.
+		
+		\item \textbf{B}. A split is cheaper than k-fold CV. (A), (C), (D) are false.
+		
+		\item \textbf{A}. Feature engineering and dimensionality reduction mitigate overfitting. (B) worsens it; (C) is insufficient; (D) is false.
+		
+		\item \textbf{A}. Small $k$ means low bias and high variance. (B), (C), (D) are false.
+		
+		\item \textbf{B}. RBF is common for non-linear SVM. (A) is linear; (C), (D) are not kernels.
+		
+		\item \textbf{B}. Boosting trains sequentially. (A) is bagging; (C), (D) are other methods.
+		
+		\item \textbf{A}. \texttt{max\_depth} limits depth. (B), (C), (D) are other hyperparameters.
+		
+		\item \textbf{A}. Batch, real-time, and streaming are the three serving approaches. (B), (C), (D) are not the exam's three.
+		
+		\item \textbf{B}. \texttt{spark\_udf} distributes inference. (A), (C), (D) do not scale.
+		
+		\item \textbf{A}. Streaming inference uses Delta Live Tables. (B), (C), (D) are not streaming inference.
+		
+		\item \textbf{A}. Traffic splitting is configured on the endpoint. (B), (C), (D) do not split traffic.
+		
+		\item \textbf{B}. Real-time endpoints serve low-latency REST predictions. (A), (C), (D) are not the purpose.
+		
+		\item \textbf{D}. Scoring every record with all three models multiplies cost. (A), (B), (C) do not necessarily reduce efficiency.
+		
+		\item \textbf{A}. Batch inference scores offline and writes predictions. (B), (C), (D) are other concepts.
+		
+		\item \textbf{B}. A Standard cluster supports SQL and Spark ML. (A) is single-node; (C) is SQL-only; (D) is false.
+		
+		\item \textbf{A}. Drift degrades deployed models. (B), (C), (D) are false.
+		
+		\item \textbf{A}. Data drift changes inputs; concept drift changes the relationship. (B), (C), (D) are false.
+		
+		\item \textbf{A}. Biased data can cause discriminatory outcomes. (B), (C), (D) are not fairness concerns.
+		
+		\item \textbf{B}. A Pipeline fit on training data prevents leakage. (A), (C), (D) cause leakage.
+		
+	\end{enumerate}
+	
+\end{document}
