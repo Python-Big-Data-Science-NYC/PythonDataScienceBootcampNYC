@@ -1,0 +1,1122 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\title{CRISC Exam - Domain 4: Technology \& Security}
+\subtitle{Technology Risk Questions 106--145 with Explanations}
+\author{Compiled from ISACA CRISC Review Manual 8th Edition}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{Outline}
+		\tableofcontents
+	\end{frame}
+	
+	% ================ SECTION 8: CRYPTOGRAPHY & PKI ================
+	
+	\section{Cryptography \& PKI}
+	
+	\begin{frame}{Q106: Digital Signature vs. Encryption}
+		\begin{block}{Question}
+			A message that is signed but not encrypted provides:
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Confidentiality but not integrity
+			\item Integrity and nonrepudiation but not confidentiality
+			\item Confidentiality, integrity, and nonrepudiation
+			\item None of the above
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q106: Explanation}
+		\begin{block}{Correct Answer: B}
+			Digitally signing a message applies encryption only to the digest and does not make the message content confidential. A message may be encrypted and not signed (confidential but lacking integrity or nonrepudiation), signed and not encrypted (not confidential but with integrity and nonrepudiation), or signed and encrypted (confidential with integrity and nonrepudiation).
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Signed-only messages are not confidential
+				\item \textbf{B - Correct:} Signed-only provides integrity and nonrepudiation
+				\item \textbf{C - Incorrect:} Confidentiality requires encryption of the message
+				\item \textbf{D - Incorrect:} Signed-only does provide two protections
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q107: Certificate Authority Purpose}
+		\begin{block}{Question}
+			What is the purpose of a certificate authority (CA)?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item To encrypt all network traffic
+			\item To link public keys with specific owners by verifying identity and generating certificates on behalf of the public key owner
+			\item To store all organizational data
+			\item To replace firewalls
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q107: Explanation}
+		\begin{block}{Correct Answer: B}
+			Public key encryption does not prove that the person who owns the public key being distributed is who he or she claims to be. Certificates link public keys with specific owners by relying on the endorsement of a trusted third party known as a certificate authority (CA). The CA verifies identity by other means and generates the certificate on behalf of the owner of a public key.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} CAs do not encrypt traffic
+				\item \textbf{B - Correct:} CAs verify identity and issue certificates
+				\item \textbf{C - Incorrect:} CAs do not store organizational data
+				\item \textbf{D - Incorrect:} CAs do not replace firewalls
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q108: Certificate Revocation List}
+		\begin{block}{Question}
+			What happens when a certificate is placed on a certificate revocation list (CRL)?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item The certificate is automatically renewed
+			\item Requests to validate the certificate result in a notification that the certificate has been revoked, warning that it should not be trusted
+			\item The certificate becomes more trusted
+			\item The certificate owner is notified to change their password
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q108: Explanation}
+		\begin{block}{Correct Answer: B}
+			The owner of a certificate may cancel it at any time during its validity period by notifying the CA, which will put the certificate on a certificate revocation list (CRL). Requests to validate a certificate that is on a CRL result in a notification that the certificate has been revoked, warning that the certificate should not be trusted as a means of verifying identity.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Revocation is not renewal
+				\item \textbf{B - Correct:} Revoked certificates are not trusted
+				\item \textbf{C - Incorrect:} Revocation reduces trust
+				\item \textbf{D - Incorrect:} CRLs are about certificates, not passwords
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q109: PKI Cross-Certification}
+		\begin{block}{Question}
+			What is required when members of different PKI implementations are linked by relationships established between their respective CAs?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Nothing; links happen automatically
+			\item A cross-certification agreement to provide a policy basis for the inter-connectivity
+			\item All certificates must be revoked
+			\item A new root CA must be created
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q109: Explanation}
+		\begin{block}{Correct Answer: B}
+			PKI implementations may be connected to one another and allow certificate verification using an external CA. When members of different PKI implementations are linked by relationships established between their respective CAs, a cross-certification agreement should be in place to provide a policy basis for this inter-connectivity.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Links require explicit agreements
+				\item \textbf{B - Correct:} Cross-certification provides the policy basis
+				\item \textbf{C - Incorrect:} Revocation is not required for linking
+				\item \textbf{D - Incorrect:} A new root CA is not required
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q110: Certificate Expiration Risk}
+		\begin{block}{Question}
+			What happens if certificates are not renewed prior to expiration?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Nothing changes
+			\item Results may include loss of access to encrypted messages and communications channels that depend on PKI-authenticated access
+			\item Certificates become more trusted
+			\item The CA is automatically notified
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q110: Explanation}
+		\begin{block}{Correct Answer: B}
+			The risk practitioner should ensure that mechanisms for certificate management are in place so certificates can be renewed prior to expiration. Once a certificate expires, results may include loss of access to encrypted messages and communications channels that depend on PKI-authenticated access.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Expiration causes access loss
+				\item \textbf{B - Correct:} Expiration causes loss of access
+				\item \textbf{C - Incorrect:} Expiration reduces trust
+				\item \textbf{D - Incorrect:} Renewal requires proactive action
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q111: Encryption Disadvantage}
+		\begin{block}{Question}
+			Which of the following is a disadvantage of encryption?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item It improves system performance
+			\item It requires processing and its demands increase with the length of the key and strength of the algorithm
+			\item It reduces network traffic
+			\item It eliminates the need for key management
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q111: Explanation}
+		\begin{block}{Correct Answer: B}
+			One disadvantage of encryption is that it requires processing and its demands increase with the length of the key and strength of the algorithm. Encryption also increases network traffic based on the need to verify certificates, particularly in cases with large numbers of small messages. The increased processing and transmission demands mean encryption should be used only when necessary.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Encryption adds processing overhead
+				\item \textbf{B - Correct:} Processing demands increase with key length
+				\item \textbf{C - Incorrect:} Encryption can increase network traffic
+				\item \textbf{D - Incorrect:} Encryption requires key management
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q112: Encryption Fail-Secure}
+		\begin{block}{Question}
+			Why is encryption not a fail-secure control?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Because it always fails
+			\item Because if keys are corrupted or lost, encrypted data will not be immediately recoverable and, in some cases, may not be recoverable at all
+			\item Because it has no security value
+			\item Because keys are never needed
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q112: Explanation}
+		\begin{block}{Correct Answer: B}
+			The risk practitioner should understand that encryption is not a fail-secure control: if keys are corrupted or lost, encrypted data will not be immediately recoverable and, in some cases, may not be recoverable at all. This presents a challenge to data availability.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Encryption does not always fail
+				\item \textbf{B - Correct:} Lost keys make data unrecoverable
+				\item \textbf{C - Incorrect:} Encryption is vital to security
+				\item \textbf{D - Incorrect:} Keys are essential for decryption
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q113: Symmetric vs. Asymmetric Strengths}
+		\begin{block}{Question}
+			Which statement correctly describes the respective strengths of symmetric and asymmetric encryption?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Symmetric is slow; asymmetric is fast
+			\item Symmetric is excellent for confidentiality of large messages; asymmetric is used to securely exchange symmetric keys
+			\item Both are equally fast
+			\item Neither provides confidentiality
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q113: Explanation}
+		\begin{block}{Correct Answer: B}
+			Symmetric encryption algorithms are excellent at providing confidentiality to large messages, but managing shared secret keys is difficult. Asymmetric algorithms are much slower, but keys can be securely exchanged between users. Because of these respective strengths, asymmetric algorithms are used to send symmetric keys, which are then used to encrypt messages.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Symmetric is fast; asymmetric is slow
+				\item \textbf{B - Correct:} Symmetric for bulk; asymmetric for key exchange
+				\item \textbf{C - Incorrect:} They differ significantly in speed
+				\item \textbf{D - Incorrect:} Both provide confidentiality
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% ================ SECTION 9: SECURITY AWARENESS & TRAINING ================
+	
+	\section{Security Awareness \& Training}
+	
+	\begin{frame}{Q114: Social Engineering - Weakest Link}
+		\begin{block}{Question}
+			Why are human users considered the weakest link in information security?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Because they are not needed
+			\item Because security technology has improved dramatically, but human users are more vulnerable than ever and accustomed to freely sharing information
+			\item Because they always follow procedures
+			\item Because they have no access to systems
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q114: Explanation}
+		\begin{block}{Correct Answer: B}
+			Current threat actors have correctly identified human users as the weakest link in the information security foundation of modern enterprises. Security technology has improved dramatically; in contrast, human users are more vulnerable than ever. Employees accustomed to freely sharing information on social media may make information more widely available than authorized by organizational policy.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Humans are essential to operations
+				\item \textbf{B - Correct:} Human vulnerability has increased
+				\item \textbf{C - Incorrect:} Users often work around procedures
+				\item \textbf{D - Incorrect:} Users have significant system access
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q115: Primary Purpose of Security Training}
+		\begin{block}{Question}
+			What is the primary concern that should be given to teaching people in a security awareness program?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Teaching them to write code
+			\item Teaching them to recognize social engineering techniques intended to get them to carry out tasks that benefit malicious agendas
+			\item Teaching them to configure firewalls
+			\item Teaching them to manage databases
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q115: Explanation}
+		\begin{block}{Correct Answer: B}
+			The foremost concern should be given to teaching people to recognize social engineering techniques intended to get them to carry out tasks that benefit malicious agendas. The actual tasks tend to be simple, such as clicking a link, providing a phone number, or opening an attachment, but these tasks fit into larger plans to deploy malware, take over accounts, or provide leverage to reach further into an enterprise.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Coding is not the focus of awareness training
+				\item \textbf{B - Correct:} Recognize social engineering techniques
+				\item \textbf{C - Incorrect:} Firewall configuration is technical training
+				\item \textbf{D - Incorrect:} Database management is technical training
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q116: Awareness Training Minimum Scope}
+		\begin{block}{Question}
+			At a minimum, an information security training and awareness program should address which three things?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Coding, testing, and deployment
+			\item Threats from social engineering, methods of alerting internal security capabilities, and policies and regulatory requirements specific to the enterprise
+			\item Budgeting, staffing, and scheduling
+			\item Hardware, software, and networks
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q116: Explanation}
+		\begin{block}{Correct Answer: B}
+			At a minimum, the program should address: threats from social engineering including phishing and vishing; methods of alerting internal security capabilities such as an IT service desk or incident response team; and policies and regulatory requirements specific to the enterprise or its business sector.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} These are technical SDLC activities
+				\item \textbf{B - Correct:} Social engineering, alerting, policies
+				\item \textbf{C - Incorrect:} These are management activities
+				\item \textbf{D - Incorrect:} These are technology domains
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q117: Ethical Phishing Exercises}
+		\begin{block}{Question}
+			Why do organizations implement ethical phishing email exercises?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item To punish employees who fail
+			\item To assess how easy it is for employees to fall victim to a phishing scam and measure the level of exposed risk
+			\item To increase employee productivity
+			\item To replace all other security controls
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q117: Explanation}
+		\begin{block}{Correct Answer: B}
+			It is common to implement ethical phishing email exercises to assess how easy it is for employees to fall victim to a phishing scam. As a result, the enterprise can measure the level of exposed risk and the necessity of improving the awareness programs in place.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Exercises are for learning, not punishment
+				\item \textbf{B - Correct:} Measure exposure and program necessity
+				\item \textbf{C - Incorrect:} Exercises are not for productivity
+				\item \textbf{D - Incorrect:} They complement, not replace, controls
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q118: Role-Based Training}
+		\begin{block}{Question}
+			Why do leading enterprises incorporate role-based training for administrators and others handling sensitive tasks?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item To reduce training costs
+			\item As a way of mitigating role-specific risk
+			\item To comply with all regulations
+			\item To replace general awareness training
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q118: Explanation}
+		\begin{block}{Correct Answer: B}
+			Leading enterprises also incorporate role-based training for administrators and others in roles that handle sensitive tasks or data as a way of mitigating role-specific risk. This training goes beyond general awareness to address the specific threats and responsibilities of particular roles.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Role-based training may increase costs
+				\item \textbf{B - Correct:} Mitigates role-specific risk
+				\item \textbf{C - Incorrect:} Compliance is secondary to risk mitigation
+				\item \textbf{D - Incorrect:} It complements general awareness
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q119: Human Firewall Concept}
+		\begin{block}{Question}
+			How can properly trained human judgment serve as a first line of defense?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item By replacing all technical controls
+			\item By helping identify attacks in progress even when directed elsewhere and alerting response capabilities within the organization
+			\item By eliminating all risk
+			\item By automating all security processes
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q119: Explanation}
+		\begin{block}{Correct Answer: B}
+			Human users are also the first line of defense. Properly trained, human judgment can help identify attacks in progress even when directed elsewhere. By alerting response capabilities within the organization, resilient people help create a resilient workforce, which in turn improves organizational information and cybersecurity.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Technical controls are still essential
+				\item \textbf{B - Correct:} Trained humans identify and alert
+				\item \textbf{C - Incorrect:} No control eliminates all risk
+				\item \textbf{D - Incorrect:} Humans complement automation
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% ================ SECTION 10: DATA PRIVACY & PROTECTION ================
+	
+	\section{Data Privacy \& Protection}
+	
+	\begin{frame}{Q120: GDPR Seven Principles}
+		\begin{block}{Question}
+			Which of the following correctly lists key GDPR principles?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Profitability, efficiency, secrecy
+			\item Lawfulness/fairness/transparency, purpose limitation, data minimization, accuracy, storage limitation, integrity/confidentiality, accountability
+			\item Availability, integrity, confidentiality
+			\item Identify, assess, respond, monitor
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q120: Explanation}
+		\begin{block}{Correct Answer: B}
+			The GDPR establishes seven key principles: lawfulness/fairness/transparency, purpose limitation, data minimization, accuracy, storage limitation, integrity and confidentiality, and accountability. The GDPR applies to data stored anywhere in the European Union and sets limits on the transfer to other jurisdictions of covered data associated with EU citizens.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Not GDPR principles
+				\item \textbf{B - Correct:} The seven GDPR principles
+				\item \textbf{C - Incorrect:} These are the CIA triad
+				\item \textbf{D - Incorrect:} These are risk management phases
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q121: GDPR Penalties}
+		\begin{block}{Question}
+			What is the maximum potential penalty for violations of GDPR?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item 1,000 Euros
+			\item Up to 20 million Euros or 4\% of an enterprise's prior-year income
+			\item 100,000 Euros
+			\item There are no penalties
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q121: Explanation}
+		\begin{block}{Correct Answer: B}
+			As penalties associated with noncompliance increase—for instance, violations of GDPR can extend as high as 20 million Euros or 4\% of an enterprise's prior-year income—enterprises are finding it increasingly important to manage these areas of risk.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Far too low
+				\item \textbf{B - Correct:} Up to 20M Euros or 4\% of income
+				\item \textbf{C - Incorrect:} Far too low
+				\item \textbf{D - Incorrect:} Significant penalties exist
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q122: Privacy vs. Confidentiality}
+		\begin{block}{Question}
+			What distinguishes privacy from confidentiality?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item They are identical concepts
+			\item An individual identified by information subject to privacy controls has rights regarding the handling and retention of that data, even if that person is not the data owner
+			\item Confidentiality only applies to paper records
+			\item Privacy only applies to digital data
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q122: Explanation}
+		\begin{block}{Correct Answer: B}
+			At its essence, privacy is very similar to confidentiality: the goal is to ensure no one gets access to information who should not have it. What distinguishes privacy is that an individual identified by information subject to privacy controls—the subject—has rights regarding the handling and retention of that data, even if that person is not the data owner. Privacy breaches may also arise from data unintentionally revealed by other data through implication or association.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} They are related but distinct
+				\item \textbf{B - Correct:} Data subject rights distinguish privacy
+				\item \textbf{C - Incorrect:} Confidentiality applies to all formats
+				\item \textbf{D - Incorrect:} Privacy applies beyond digital data
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q123: Informed Consent Revocation}
+		\begin{block}{Question}
+			What must a privacy program provide regarding informed consent?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Only a signed consent form
+			\item A process for revocation of consent in addition to obtaining consent
+			\item A one-time consent that cannot be changed
+			\item No consent at all
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q123: Explanation}
+		\begin{block}{Correct Answer: B}
+			Data subject to privacy regulations should be collected, used, and retained with the informed consent of the subject. A signed consent form is typically part of the process but may not be enough to establish informed consent. In addition, there may need to be a process for revocation of consent.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} A form alone may not establish informed consent
+				\item \textbf{B - Correct:} Revocation process is required
+				\item \textbf{C - Incorrect:} Consent must be revocable
+				\item \textbf{D - Incorrect:} Consent is required for data collection
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q124: Privacy Impact Assessment Focus}
+		\begin{block}{Question}
+			How does a privacy impact assessment (PIA) differ from a risk assessment?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item A PIA accounts for the effects of a compromise on the subject rather than impact to the enterprise
+			\item A PIA only assesses financial risk
+			\item A PIA replaces the need for risk assessment
+			\item A PIA focuses only on technical controls
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q124: Explanation}
+		\begin{block}{Correct Answer: A}
+			Organizations conduct PIAs to identify and manage risk related to privacy whenever personal information is collected. The PIA typically covers how information is used, shared, and maintained. Similar to a risk assessment, a PIA accounts for the effects of a compromise on the subject rather than impact to the enterprise.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Correct:} PIA focuses on harm to the subject
+				\item \textbf{B - Incorrect:} PIA covers more than financial risk
+				\item \textbf{C - Incorrect:} PIA complements risk assessment
+				\item \textbf{D - Incorrect:} PIA includes nontechnical considerations
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q125: Data Minimization Rationale}
+		\begin{block}{Question}
+			Why is data minimization a key privacy principle?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item To reduce storage costs
+			\item Because data accumulated without limit is a potential disaster for enterprises subject to strong privacy regulations should a data breach occur
+			\item To improve system performance
+			\item To simplify backups
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q125: Explanation}
+		\begin{block}{Correct Answer: B}
+			Many enterprises accumulate considerable data and retain it without limit. Risk practitioners should understand that this data, which may be viewed as an asset, is also a potential disaster for enterprises subject to strong privacy regulations should a data breach occur. Privacy is best assured when only data that is expressly needed and relevant for a particular purpose is collected.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Cost is a secondary benefit
+				\item \textbf{B - Correct:} Less data reduces breach impact
+				\item \textbf{C - Incorrect:} Performance is a secondary benefit
+				\item \textbf{D - Incorrect:} Backups are secondary
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q126: Data Destruction and Legal Retention}
+		\begin{block}{Question}
+			What should be done when data must be retained for specific periods according to law or regulation, even though it is no longer needed for its original purpose?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Destroy it immediately regardless of law
+			\item Implement access restrictions to the data
+			\item Share it publicly
+			\item Ignore the data
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q126: Explanation}
+		\begin{block}{Correct Answer: B}
+			Just as data should be collected only when necessary, it should generally be destroyed once its purpose is concluded. Destruction can be complicated, because there are some types of data that must be retained for specific periods according to law or regulation, and contractual obligations may also impose specific parameters for destruction. In this case, it is important to implement access restrictions to the data.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Legal requirements must be followed
+				\item \textbf{B - Correct:} Access restrictions protect retained data
+				\item \textbf{C - Incorrect:} Sharing publicly violates privacy
+				\item \textbf{D - Incorrect:} Ignoring data increases risk
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q127: Privacy Context - Least Privilege}
+		\begin{block}{Question}
+			How does the principle of least privilege apply in a privacy context?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item All employees should have access to all private data
+			\item Access to information subject to privacy considerations should be limited to individuals with a valid business need and limited according to least privilege
+			\item Only the IT department should have access
+			\item Privacy data should be freely shared
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q127: Explanation}
+		\begin{block}{Correct Answer: B}
+			Access to information subject to privacy considerations should be limited to individuals with a valid business need, and the extent of that access should be limited according to the principle of least privilege. Many enterprises segregate duties for release of private data to serve as checks against accidental release.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Broad access violates privacy
+				\item \textbf{B - Correct:} Need-to-know and least privilege
+				\item \textbf{C - Incorrect:} IT does not need all data access
+				\item \textbf{D - Incorrect:} Privacy data requires protection
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q128: Privacy Expert Consultation}
+		\begin{block}{Question}
+			What is perhaps the most important function an IT risk practitioner has in controlling privacy risk?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Making all privacy decisions independently
+			\item Recognizing that there may be considerations beyond his or her knowledge and consulting with organizational privacy officers or experts
+			\item Ignoring privacy concerns
+			\item Delegating all privacy matters to IT
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q128: Explanation}
+		\begin{block}{Correct Answer: B}
+			Perhaps the most important function that an IT risk practitioner has in controlling privacy risk is recognizing that there may be considerations and factors beyond his or her knowledge and ability to predict. Data privacy is a comprehensive field involving multiple principles, frameworks, and standards in addition to legal and regulatory requirements that vary widely. Risk practitioners should consult with organizational privacy officers or privacy experts.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Privacy requires expert input
+				\item \textbf{B - Correct:} Recognize limitations and consult experts
+				\item \textbf{C - Incorrect:} Ignoring privacy increases risk
+				\item \textbf{D - Incorrect:} Privacy is an enterprise concern
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q129: Privacy Regulation Conflict}
+		\begin{block}{Question}
+			What should a risk practitioner be aware of regarding privacy regulations across jurisdictions?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item All jurisdictions have identical privacy laws
+			\item Rules applicable to certain contexts may conflict with those that apply to other contexts, including geography and types of data
+			\item Privacy laws never change
+			\item Only one country has privacy laws
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q129: Explanation}
+		\begin{block}{Correct Answer: B}
+			Practitioners should be aware that privacy is a dynamic field subject to regular changes and that rules applicable to certain contexts may conflict with those that apply to other contexts, including geography and types of data. Even in a cloud environment, physical storage of data may impose obligations, and international agreements are not always reliable over the long term.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Privacy laws vary widely
+				\item \textbf{B - Correct:} Rules may conflict across contexts
+				\item \textbf{C - Incorrect:} Privacy laws change regularly
+				\item \textbf{D - Incorrect:} Many countries have privacy laws
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q130: Safe Harbor Invalidation}
+		\begin{block}{Question}
+			What happened to the US-EU Safe Harbor program established to facilitate compliance with GDPR?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item It remains fully valid
+			\item It was declared insufficient by a European court in 2020
+			\item It was expanded to include more countries
+			\item It was never created
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q130: Explanation}
+		\begin{block}{Correct Answer: B}
+			The US-EU "Safe Harbor" program established to facilitate compliance with GDPR was declared insufficient by a European court in 2020. This illustrates that international agreements are not always reliable over the long term, and each set of laws and regulations specific to a given context should be given appropriate study.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} It was invalidated
+				\item \textbf{B - Correct:} Declared insufficient in 2020
+				\item \textbf{C - Incorrect:} It was not expanded
+				\item \textbf{D - Incorrect:} It existed and was invalidated
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% ================ SECTION 11: THREAT LANDSCAPE & VULNERABILITY MANAGEMENT ================
+	
+	\section{Threat Landscape \& Vulnerability Management}
+	
+	\begin{frame}{Q131: Internal Threat - Disgruntled Employee}
+		\begin{block}{Question}
+			What is the typical profile of a malicious insider?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item An external hacker with no organizational access
+			\item A current or former employee, contractor, or business partner who has or had authorized access and intentionally intercepts, interrupts, modifies, or fabricates data
+			\item A random person on the internet
+			\item An automated bot
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q131: Explanation}
+		\begin{block}{Correct Answer: B}
+			The typical malicious insider is a current or former employee, contractor, or other business partner who has or had authorized access to an organization's network, system, or data and has intentionally intercepted, interrupted, modified, or fabricated data in the organization's information systems. During times of strike, layoffs, mergers, relocation, and reorganization, an employee is more likely to be a threat.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Insiders have authorized access
+				\item \textbf{B - Correct:} Current/former employee with access
+				\item \textbf{C - Incorrect:} Random persons lack access
+				\item \textbf{D - Incorrect:} Bots are not insiders
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q132: Personnel Threat Mitigation First Step}
+		\begin{block}{Question}
+			What is the first step in addressing personnel threats?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Implementing monitoring tools
+			\item Starting with the hiring process and reviewing qualifications and attitude of prospective employees
+			\item Installing antivirus software
+			\item Conducting penetration testing
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q132: Explanation}
+		\begin{block}{Correct Answer: B}
+			The first step in addressing personnel threats is to start with the hiring process and review the qualifications and attitude of prospective employees. At the time of hiring, the employee should be required to sign a nondisclosure agreement (NDA) and be advised of the ethics and policies of the enterprise. Checking references and performing background checks may be worthwhile where permitted by law.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Monitoring comes later
+				\item \textbf{B - Correct:} Hiring process is the first step
+				\item \textbf{C - Incorrect:} Antivirus is a technical control
+				\item \textbf{D - Incorrect:} Penetration testing is external
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q133: Employee Departure Controls}
+		\begin{block}{Question}
+			What should happen to system access when an employee departs the organization?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Access should remain active indefinitely
+			\item Access should be revoked immediately prior to the employee's departure, and all organizational assets should be returned
+			\item Access should be revoked after 30 days
+			\item No action is needed
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q133: Explanation}
+		\begin{block}{Correct Answer: B}
+			At the end of employment, an employee should return all organizational assets, including identification badges, equipment, and uniforms so they cannot use those to gain unauthorized access in the future. Systems, network, and facility access should be revoked immediately prior to the employee's departure to minimize the potential for crimes of opportunity or retaliation.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Access must be revoked
+				\item \textbf{B - Correct:} Revoke access and return assets
+				\item \textbf{C - Incorrect:} Immediate revocation is required
+				\item \textbf{D - Incorrect:} Action is essential
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q134: Third-Party Internal Threat}
+		\begin{block}{Question}
+			Why do third parties with internal access pose an internal threat?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Because they are always malicious
+			\item Because they usually have internal access points and higher knowledge and capabilities to potentially initiate a threat from within an enterprise
+			\item Because they have no access
+			\item Because they cannot cause harm
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q134: Explanation}
+		\begin{block}{Correct Answer: B}
+			Internal threats can also originate from third parties who have access to internal systems or process data on behalf of the organization. Risk practitioners should also consider vendor staff, business process outsourcing staff, and any other external individuals that have been granted access. Although they can be considered external threats, they usually have some internal access points and higher knowledge and capabilities to potentially initiate a threat from within an enterprise.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Not all third parties are malicious
+				\item \textbf{B - Correct:} Internal access and knowledge create risk
+				\item \textbf{C - Incorrect:} They do have access
+				\item \textbf{D - Incorrect:} They can cause harm
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q135: External Threat - Most Breaches}
+		\begin{block}{Question}
+			According to Verizon's Data Breach Investigations Report, most breaches are the result of:
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Highly sophisticated nation-state attacks
+			\item Targets of opportunity rather than determined attacks
+			\item Insider threats
+			\item Physical theft
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q135: Explanation}
+		\begin{block}{Correct Answer: B}
+			Most breaches are the result of targets of opportunity, not determined attacks. As seen in the annual reports from Verizon, ways-in analysis witnessed substantial growth of attacks involving the exploitation of vulnerabilities as the critical path to initiate a breach when compared to previous years.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Nation-state attacks are less common
+				\item \textbf{B - Correct:} Targets of opportunity
+				\item \textbf{C - Incorrect:} Insider threats are a subset
+				\item \textbf{D - Incorrect:} Physical theft is less common
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q136: APT Characteristics}
+		\begin{block}{Question}
+			What characterizes an advanced persistent threat (APT)?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Low skill and undetermined effort
+			\item Advanced skills, determination (persistence), and significant resources, often sponsored by governments, organized crime, or competitors
+			\item Random and opportunistic attacks
+			\item Limited to physical attacks
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q136: Explanation}
+		\begin{block}{Correct Answer: B}
+			The term APT refers to advanced, highly skilled attackers that are determined (persistent) in their attempts to exploit systems and networks. Their increased skills and the effectiveness of the tools they possess make the risk of compromise significant. APTs may be sponsored by governments, organized crime, or competitors.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} APTs are highly skilled
+				\item \textbf{B - Correct:} Advanced, persistent, well-resourced
+				\item \textbf{C - Incorrect:} APTs are targeted, not random
+				\item \textbf{D - Incorrect:} APTs use multiple vectors
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q137: Emerging Threat Indicators}
+		\begin{block}{Question}
+			Which of the following may indicate an emerging threat?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Normal system performance
+			\item Unusual activity on a system, repeated alarms, degraded performance, or new or excessive activity in logs
+			\item Regular scheduled maintenance
+			\item Routine user logins
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q137: Explanation}
+		\begin{block}{Correct Answer: B}
+			Indications of emerging threats may include unusual activity on a system, repeated alarms, degraded system or network performance, or new or excessive activity in logs. In many cases, compromised organizations have evidence of emergent threats in their logs well in advance of the actual compromise, but the evidence is either not acted on or not noticed.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Normal performance is not an indicator
+				\item \textbf{B - Correct:} Unusual activity indicates emerging threat
+				\item \textbf{C - Incorrect:} Maintenance is routine
+				\item \textbf{D - Incorrect:} Routine logins are normal
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q138: Threat Information Sources}
+		\begin{block}{Question}
+			Which of the following is a valuable source of threat information for the risk practitioner?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Only internal audit reports
+			\item CERT advisories, security company reports, media reports, and peer organizations
+			\item Only social media
+			\item Only vendor marketing materials
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q138: Explanation}
+		\begin{block}{Correct Answer: B}
+			Annual reports from antivirus, security, and telecommunications companies provide a summary review of risk and exposure factors observed in the field and may assist in developing and presenting risk management solutions to management. Information on incidents and risk may also come from computer or cybersecurity monitoring and reporting services by government and nonprofit organizations.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Internal audit is only one source
+				\item \textbf{B - Correct:} Multiple external sources are valuable
+				\item \textbf{C - Incorrect:} Social media alone is insufficient
+				\item \textbf{D - Incorrect:} Marketing materials are biased
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q139: Threat Modeling Methods - STRIDE}
+		\begin{block}{Question}
+			What does the STRIDE threat modeling method evaluate?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Financial risk only
+			\item Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, and Elevation of privilege
+			\item Only network vulnerabilities
+			\item Only physical security
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q139: Explanation}
+		\begin{block}{Correct Answer: B}
+			STRIDE evaluates the system detail design and models the in-place system. By building dataflow diagrams (DFDs), STRIDE is used to identify system entities, events, and the boundaries of the system. It helps identify relevant mitigating techniques and is the most mature threat-modeling method.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} STRIDE is not financial
+				\item \textbf{B - Correct:} The six STRIDE categories
+				\item \textbf{C - Incorrect:} STRIDE covers more than network
+				\item \textbf{D - Incorrect:} STRIDE is design-focused
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q140: PASTA Threat Modeling}
+		\begin{block}{Question}
+			What is the primary focus of the PASTA threat modeling method?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Privacy concerns only
+			\item A risk-centric framework that aims to bring business objectives and technical requirements together
+			\item Automated code review
+			\item Network scanning
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q140: Explanation}
+		\begin{block}{Correct Answer: B}
+			PASTA (Process for Attack Simulation and Threat Analysis) is a risk-centric threat-modeling framework. It aims to bring business objectives and technical requirements together, contains built-in prioritization of threat mitigation, and encourages collaboration among stakeholders. It is laborious but has rich documentation.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} LINDDUN focuses on privacy
+				\item \textbf{B - Correct:} PASTA is risk-centric
+				\item \textbf{C - Incorrect:} Automated code review is separate
+				\item \textbf{D - Incorrect:} Network scanning is separate
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q141: Vulnerability Assessment Purpose}
+		\begin{block}{Question}
+			What is the purpose of vulnerability identification?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item To find problems before an adversary does and exploits them
+			\item To eliminate all vulnerabilities
+			\item To replace risk assessment
+			\item To punish system owners
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q141: Explanation}
+		\begin{block}{Correct Answer: A}
+			The purpose of vulnerability identification is to find the problems before they are found by an adversary and exploited. This is why an enterprise should conduct regular vulnerability assessments and penetration tests to identify, validate, and classify its vulnerabilities.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Correct:} Find problems before adversaries
+				\item \textbf{B - Incorrect:} Not all vulnerabilities can be eliminated
+				\item \textbf{C - Incorrect:} Vulnerability assessment complements risk assessment
+				\item \textbf{D - Incorrect:} Assessment is not punitive
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q142: Common Vulnerability Scoring System}
+		\begin{block}{Question}
+			Which Common Vulnerability Scoring System (CVSS) metric group defines inherent characteristics of a vulnerability that remain constant across environments?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item Base metrics
+			\item Temporal metrics
+			\item Environmental metrics
+			\item Foundational metrics
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q142: Explanation}
+		\begin{block}{Correct Answer: A}
+			Base metrics define the inherent characteristics of a vulnerability that remain constant across environments. Temporal metrics reflect the current state of exploitability and remediation, which may change over time. Environmental metrics customize the score based on the vulnerability's impact within a specific organizational context.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Correct:} Base metrics are constant
+				\item \textbf{B - Incorrect:} Temporal metrics change over time
+				\item \textbf{C - Incorrect:} Environmental metrics are org-specific
+				\item \textbf{D - Incorrect:} Foundational is not a CVSS metric group
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q143: False Positives and Zero-Day Exploits}
+		\begin{block}{Question}
+			What does it mean when a vulnerability assessment identifies no vulnerabilities in a system?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item The system is completely invulnerable
+			\item It means only that the types of vulnerabilities the assessment was intended to detect were not detected—the system may remain vulnerable to unknown vulnerabilities
+			\item The system is not connected to the network
+			\item The assessment was successful
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q143: Explanation}
+		\begin{block}{Correct Answer: B}
+			A vulnerability assessment that identifies no vulnerabilities is not equal to the system being invulnerable in the absolute sense. It means only that the types of vulnerabilities the assessment was intended to detect were not detected. Even if no known vulnerabilities exist within the system, the system may remain vulnerable to unknown vulnerabilities, some of which are stored or sold for future use as zero-day exploits.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} No system is invulnerable
+				\item \textbf{B - Correct:} Absence of detection is not absence of risk
+				\item \textbf{C - Incorrect:} Network connection is unrelated
+				\item \textbf{D - Incorrect:} The assessment may have limitations
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q144: Threat Matrix Purpose}
+		\begin{block}{Question}
+			Why might a risk practitioner develop a threat actor profile or threat matrix?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\item To eliminate all threat actors
+			\item To reasonably account for certain elements associated with motivation and capabilities that could be brought to bear against the enterprise
+			\item To replace risk assessment
+			\item To publish publicly
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q144: Explanation}
+		\begin{block}{Correct Answer: B}
+			By developing a threat actor profile, the risk practitioner can reasonably account for certain elements associated with motivation and capabilities that could be brought to bear against the enterprise. The threat matrix helps categorize the threat that a group of threat actors may pose to an enterprise's environment.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} Threat actors cannot be eliminated
+				\item \textbf{B - Correct:} Account for motivation and capabilities
+				\item \textbf{C - Incorrect:} Threat profiling complements risk assessment
+				\item \textbf{D - Incorrect:} Threat profiles are typically confidential
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Q145: Root Cause Analysis}
+		\begin{block}{Question}
+			What is the purpose of root cause analysis in risk management?
+		\end{block}
+		\begin{enumerate}
+			[(A)]
+			\item To punish individuals responsible for incidents
+			\item To establish the origins of events so that lessons can be learned and the problem can be prevented from recurring
+			\item To calculate annual loss expectancy
+			\item To replace risk assessment
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q145: Explanation}
+		\begin{block}{Correct Answer: B}
+			Root cause analysis is a process of diagnosis to establish the origins of events so that lessons can be learned from consequences. A prudent risk practitioner examines the root cause of an incident to discover the conditions and factors that led to the event, rather than reacting to the symptoms of the problem.
+		\end{block}
+		\begin{block}{Option Analysis}
+			\begin{itemize}
+				\item \textbf{A - Incorrect:} RCA is for learning, not punishment
+				\item \textbf{B - Correct:} Establish origins to prevent recurrence
+				\item \textbf{C - Incorrect:} ALE is quantitative analysis
+				\item \textbf{D - Incorrect:} RCA complements risk assessment
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	% ================ FINAL SLIDES ================
+	
+	\begin{frame}{Domain 4 Key Takeaways}
+		\begin{block}{Essential Concepts}
+			\begin{itemize}
+				\item Signed-only messages provide integrity/nonrepudiation, not confidentiality
+				\item CAs verify identity and issue certificates; CRLs revoke them
+				\item Encryption adds processing overhead and is not fail-secure
+				\item Symmetric is fast for bulk data; asymmetric is slow but solves key distribution
+				\item Humans are the weakest link; awareness training is essential
+				\item GDPR: lawfulness, purpose limitation, minimization, accuracy, storage, integrity, accountability
+				\item Privacy differs from confidentiality because data subjects have rights
+				\item PIAs focus on harm to the individual; minimization reduces breach impact
+				\item Insiders and third parties with access are significant threats
+				\item APTs are advanced, persistent, and well-resourced
+				\item STRIDE and PASTA are threat modeling methods
+				\item Base CVSS metrics are constant across environments
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Final Advice}
+		\begin{block}{Exam Preparation}
+			\centering
+			\vspace{0.3cm}
+			\textbf{Remember:}
+			\begin{itemize}
+				\item Understand the \textit{why} behind each technology risk concept
+				\item Know the difference between similar terms
+				\item Understand how emerging technologies introduce new risk
+				\item Practice scenario-based questions
+				\item Use the ISACA mindset
+			\end{itemize}
+			\vspace{0.5cm}
+			\textbf{Good Luck on Your CRISC Exam!}
+		\end{block}
+	\end{frame}
+	
+\end{document}
