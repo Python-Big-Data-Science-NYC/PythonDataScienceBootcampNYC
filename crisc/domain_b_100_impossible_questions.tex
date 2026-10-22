@@ -1,0 +1,1431 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamerfont{block body}{size=\small}
+\setbeamerfont{alertblock body}{size=\small}
+
+\title{CRISC Domain B -- Impossible Questions}
+\subtitle{100 Expert-Level Questions -- Answer on the Next Slide}
+\author{CRISC Mastery Series}
+\date{\today}
+
+% ------------------------------------------------------------
+% \hq{number}{topic}{question}{options}{letter}{explanation}{trap}
+% Creates one question frame and one explanation frame.
+% (No blank lines are allowed inside the arguments.)
+% ------------------------------------------------------------
+\newcommand{\hq}[7]{%
+  \begin{frame}{Q#1: #2}
+    \begin{block}{Question}
+      #3
+    \end{block}
+    \begin{enumerate}[(A)]
+      #4
+    \end{enumerate}
+  \end{frame}
+  \begin{frame}{Q#1: Explanation}
+    \begin{block}{Correct Answer: #5}
+      \begin{itemize}
+        #6
+      \end{itemize}
+    \end{block}
+    \begin{alertblock}{Critical Trap}
+      #7
+    \end{alertblock}
+  \end{frame}
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Warning}
+  \begin{alertblock}{Extreme Difficulty}
+    100 questions. Each answer and explanation is on the slide after its question.\\
+    What remains needs calculation, probability, dependency analysis and judgment.\\
+    Do not be discouraged if you miss most of them.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% ============================================================
+\section{Quantitative Risk Analysis}
+% ============================================================
+
+\hq{1}{Control ROI}
+{An asset is worth \$2M with an exposure factor of 40\% and an ARO of 0.5. A control reduces the ARO to 0.1 and the exposure factor to 25\% at a cost of \$60K per year. What is the net annual benefit?}
+{\item \$350K
+ \item \$410K
+ \item \$290K
+ \item \$50K}
+{C}
+{\item Before: ALE $=$ \$2M $\times$ 40\% $\times$ 0.5 $=$ \$400K
+ \item After: ALE $=$ \$2M $\times$ 25\% $\times$ 0.1 $=$ \$50K
+ \item Gross reduction $=$ \$350K
+ \item Net benefit $=$ \$350K $-$ \$60K $=$ \$290K}
+{\$350K ignores the control cost. \$50K is the residual ALE, not a benefit.}
+
+\hq{2}{Joint Probability Bounds}
+{Risk A has a 20\% likelihood and Risk B has a 30\% likelihood. They are known to be positively correlated. Which statement MUST be true about the probability that both occur?}
+{\item It equals exactly 6\%
+ \item It is at least 50\%
+ \item It can exceed 30\%
+ \item It is strictly greater than 6\% and at most 20\%}
+{D}
+{\item Independence gives $0.2 \times 0.3 = 6\%$
+ \item Positive correlation pushes the joint probability above 6\%
+ \item A joint event can never be more likely than its rarer component
+ \item Upper bound $= \min(20\%, 30\%) = 20\%$}
+{Correlation changes the joint probability, but it is always capped by the least likely event.}
+
+\hq{3}{Annualizing a Monthly Probability}
+{A threat event occurs in any given month with probability 5\%, independently of other months. What is the probability of at least one occurrence in 12 months?}
+{\item About 46\%
+ \item About 54\%
+ \item 5\%
+ \item 60\%}
+{A}
+{\item $P(\text{none in 12 months}) = 0.95^{12} \approx 0.54$
+ \item $P(\text{at least one}) = 1 - 0.54 \approx 0.46$
+ \item 54\% is the probability of NO event
+ \item $12 \times 5\% = 60\%$ ignores overlap of outcomes}
+{Probabilities of ``at least one'' do not add linearly. Use the complement.}
+
+\hq{4}{Alert Reliability}
+{The probability of a targeted attack this quarter is 10\%. When an attack is under way, the detection alert fires 90\% of the time. When no attack is under way, it fires falsely 20\% of the time. The alert has just fired. What is the probability that an attack is actually under way?}
+{\item 90\%
+ \item 10\%
+ \item About 33\%
+ \item 50\%}
+{C}
+{\item $P(\text{alert}) = 0.9 \times 0.1 + 0.2 \times 0.9 = 0.27$
+ \item $P(\text{attack} \mid \text{alert}) = 0.09 / 0.27 = 1/3$
+ \item A low base rate makes most alerts false positives
+ \item The alert raises the estimate from 10\% to 33\%, not to 90\%}
+{Detection accuracy is not the same as the probability that an alert is real. Base rates matter.}
+
+\hq{5}{Three-Point Estimate}
+{Analysts estimate a loss at \$100K (optimistic), \$200K (most likely) and \$700K (pessimistic). What is the PERT expected loss?}
+{\item \$333K
+ \item \$200K
+ \item \$267K
+ \item \$400K}
+{C}
+{\item PERT mean $= (O + 4M + P)/6$
+ \item $= (100 + 800 + 700)/6 \approx \$267K$
+ \item \$333K is the simple average of the three values
+ \item \$200K is the mode and ignores the long tail}
+{The most likely value is not the expected value when the distribution is skewed.}
+
+\hq{6}{Skewed Confidence Interval}
+{A FAIR analysis gives a 90\% confidence interval of \$200K to \$2M with a most likely value of \$500K. Which interpretation is BEST?}
+{\item Expected annual loss likely exceeds \$500K because of right skew
+ \item Expected annual loss is exactly \$500K
+ \item The interval is invalid because it is asymmetric
+ \item The loss will certainly fall inside the interval}
+{A}
+{\item Loss distributions are typically right-skewed (lognormal-like)
+ \item The long upper tail pulls the mean above the mode
+ \item Budgeting on the mode understates expected loss
+ \item A 90\% interval leaves a 10\% chance of falling outside it}
+{Most likely $\neq$ expected value. Asymmetric intervals are normal for losses.}
+
+\hq{7}{Aggregating Volatility}
+{Two risks each have an annual loss standard deviation of \$300K. Their correlation is 0.5. What is the standard deviation of the combined loss?}
+{\item \$424K
+ \item \$300K
+ \item \$600K
+ \item \$520K}
+{D}
+{\item $\text{Var} = \sigma^2 + \sigma^2 + 2\rho\sigma^2 = 3\sigma^2$
+ \item $\text{SD} = 300 \times \sqrt{3} \approx \$520K$
+ \item \$424K assumes independence ($\rho = 0$)
+ \item \$600K assumes perfect correlation ($\rho = 1$)}
+{Standard deviations do not add. Correlation controls how much diversification you get.}
+
+\hq{8}{Common-Cause Failure}
+{Two preventive controls each stop an attack 90\% of the time. A design review calls them ``independent layers,'' implying a 1\% chance that both fail. Testing reveals a shared dependency (the same identity provider) whose failure disables both controls 4\% of the time. Otherwise they fail independently. What is the probability that both fail?}
+{\item 1\%
+ \item 4\%
+ \item About 5\%
+ \item 10\%}
+{C}
+{\item $P(\text{both fail}) = 0.04 + 0.96 \times 0.10 \times 0.10$
+ \item $= 0.04 + 0.0096 \approx 4.96\%$
+ \item Residual risk is about five times the ``independent'' estimate
+ \item Defense in depth fails when layers share a failure mode}
+{Layered controls are only independent if they share no common dependency.}
+
+\hq{9}{Rule of Three}
+{A control is tested 30 times with zero failures. Which statement about its true failure rate is MOST defensible?}
+{\item It is 0\%
+ \item It is at most 3\%
+ \item It is at most 30\%
+ \item It is at most roughly 10\% with 95\% confidence}
+{D}
+{\item With zero failures in $n$ trials, the 95\% upper bound is about $3/n$
+ \item $3/30 = 10\%$
+ \item Zero observed failures does not prove zero failures
+ \item Small samples leave wide uncertainty}
+{``No failures observed'' is not ``no failures exist.''}
+
+\hq{10}{FAIR Decomposition}
+{Threat event frequency is 20 per year and vulnerability (probability a threat event becomes a loss event) is 15\%. Primary loss per event is \$40K. There is a 30\% chance of a secondary loss of \$200K per event. What is the annualized loss exposure?}
+{\item \$120K
+ \item \$720K
+ \item \$300K
+ \item \$2.0M}
+{C}
+{\item Loss event frequency $= 20 \times 15\% = 3$ per year
+ \item Expected loss per event $= 40K + 0.3 \times 200K = \$100K$
+ \item ALE $= 3 \times \$100K = \$300K$
+ \item \$120K ignores secondary loss; \$720K treats it as certain; \$2.0M ignores vulnerability}
+{Use loss event frequency, not threat event frequency, and weight secondary loss by its probability.}
+
+% ============================================================
+\section{Risk Evaluation}
+% ============================================================
+
+\hq{11}{Ordinal Matrix Flaw}
+{An organization multiplies 1--5 likelihood and impact scores in a 5x5 matrix. A risk scored 5x1 and a risk scored 1x5 both receive 5. What is the MOST fundamental flaw in this approach?}
+{\item Multiplication always overstates risk
+ \item Ordinal ranks are not ratio-scale values, so products can misrank risks with very different expected losses
+ \item A 5x5 matrix is too small
+ \item Scores above 20 cannot be compared}
+{B}
+{\item Scale points are ordered labels, not measured quantities
+ \item Equal products can hide very different loss profiles
+ \item Products of ordinal ranks can reverse true priority
+ \item Calibrated quantitative ranges are more defensible}
+{A numeric-looking score does not make an ordinal scale quantitative.}
+
+\hq{12}{Aggregate Appetite and Correlation}
+{Three risks each have an expected annual loss of \$400K. Aggregate appetite is \$1M and aggregate tolerance is \$1.3M. The risks are believed to be strongly positively correlated. Which position is MOST accurate?}
+{\item Above appetite but within tolerance on an expected basis; correlation does not change the expected sum but fattens the tail, so the loss distribution must be examined
+ \item Within appetite because every individual risk is below \$1M
+ \item Beyond tolerance because correlated risks add up to more than their expected values
+ \item Within appetite because diversification lowers the expected aggregate loss}
+{A}
+{\item Expected losses add: $3 \times \$400K = \$1.2M$
+ \item \$1.2M is above appetite (\$1M) and within tolerance (\$1.3M)
+ \item Correlation does not change the expected sum
+ \item Correlation does increase tail (extreme-loss) exposure}
+{Correlation affects the spread of outcomes, not the sum of expected values.}
+
+\hq{13}{Cost Exceeds Benefit}
+{A control costing \$400K per year would reduce expected loss by only \$150K per year. Without it, residual risk exceeds appetite but is well within capacity. What should the risk practitioner recommend?}
+{\item Implement the control because the risk exceeds appetite
+ \item Escalate for formal, documented acceptance by the owner with authority to exceed appetite, while exploring cheaper alternatives
+ \item Accept informally to avoid delay
+ \item Buy full insurance without further analysis}
+{B}
+{\item Treatment must be economically justified
+ \item Exceeding appetite requires explicit authority to accept
+ \item Acceptance must be documented and reviewed
+ \item Cheaper responses should still be explored}
+{Exceeding appetite does not force a treatment. It forces a decision by the right authority.}
+
+\hq{14}{Mitigation That Backfires}
+{After a new control is deployed, the verified residual risk is HIGHER than the original inherent risk. What is the MOST likely explanation?}
+{\item An arithmetic error is the only plausible cause
+ \item The control introduced secondary risk that outweighs its benefit, so the response must be redesigned
+ \item Inherent risk was necessarily overstated
+ \item The risk has been transferred to the control owner}
+{B}
+{\item Controls can create new risks (complexity, new attack surface, new dependencies)
+ \item Secondary risk must be assessed alongside residual risk
+ \item Net exposure, not control count, is what matters
+ \item Redesign or replace the response}
+{A control is not automatically net-positive.}
+
+% ============================================================
+\section{Business Impact Analysis}
+% ============================================================
+
+\hq{15}{Recovery Dependencies}
+{System A has an RTO of 4 hours. A's own restoration takes 2 hours and can start only after both System B and System C are available. B takes 3 hours to restore and C takes 2 hours, restored in parallel. Can A meet its RTO?}
+{\item Yes, the longest single task is 3 hours
+ \item Yes, B and C run in parallel and fit inside 4 hours
+ \item No, recovery takes 7 hours
+ \item No, recovery takes 5 hours}
+{D}
+{\item B and C run in parallel, so the dependency stage takes $\max(3, 2) = 3$ hours
+ \item A then needs its own 2 hours: $3 + 2 = 5$ hours
+ \item 5 hours exceeds the 4-hour RTO
+ \item 7 hours would be the fully sequential case}
+{Critical path = longest dependency chain, not the longest single task.}
+
+\hq{16}{Probability of Meeting RPO}
+{The RPO is 1 hour and backups run every 4 hours. A failure occurs at a uniformly random time. What is the probability that the data loss stays within the RPO?}
+{\item 0\%
+ \item 25\%
+ \item 50\%
+ \item 75\%}
+{B}
+{\item Data loss equals the time since the last backup, uniform from 0 to 4 hours
+ \item Loss is within RPO only when it is at most 1 hour
+ \item Probability $= 1/4 = 25\%$
+ \item Expected loss is 2 hours, twice the RPO}
+{A backup interval longer than the RPO means the RPO is usually missed.}
+
+\hq{17}{MTD Consistency}
+{A process has an RTO of 4 hours, a work recovery time (WRT) of 6 hours and an MTD of 8 hours. What is the PRIMARY problem?}
+{\item Consistent because RTO (4 h) is less than MTD (8 h)
+ \item Consistent because WRT is excluded from MTD
+ \item MTD should automatically be raised to 20 hours
+ \item Inconsistent: RTO plus WRT is 10 hours, which exceeds the 8-hour MTD}
+{D}
+{\item The business must be fully operating again within the MTD
+ \item Requirement: $\text{RTO} + \text{WRT} \leq \text{MTD}$
+ \item Here $4 + 6 = 10 > 8$
+ \item Shorten RTO or WRT, or revalidate the MTD with the business}
+{Meeting the RTO alone does not guarantee meeting the MTD.}
+
+\hq{18}{MTD from Escalating Impact}
+{Outage losses are \$10K per hour for the first 4 hours and \$50K per hour afterwards. Management defines MTD as the point where cumulative loss reaches \$400K. What is the MTD?}
+{\item 11.2 hours
+ \item 8 hours
+ \item 4 hours
+ \item 40 hours}
+{A}
+{\item First 4 hours: $4 \times \$10K = \$40K$
+ \item Remaining threshold: $\$400K - \$40K = \$360K$
+ \item At \$50K per hour: $360 / 50 = 7.2$ hours
+ \item MTD $= 4 + 7.2 = 11.2$ hours}
+{Impact is not linear. Piece the loss curve together before dividing.}
+
+% ============================================================
+\section{Risk Treatment}
+% ============================================================
+
+\hq{19}{Treatment Selection}
+{A risk has an 80\% likelihood and a \$100K impact. Treatment A costs \$50K and cuts likelihood to 20\%. Treatment B costs \$30K and cuts impact to \$40K. Applying both costs \$80K. Which option has the best net benefit?}
+{\item Both treatments
+ \item Treatment B only
+ \item Neither
+ \item Treatment A only}
+{B}
+{\item Baseline expected loss $= 0.8 \times 100 = \$80K$
+ \item A: loss \$20K, net benefit $= 60 - 50 = +\$10K$
+ \item B: loss \$32K, net benefit $= 48 - 30 = +\$18K$
+ \item Both: loss \$8K, net benefit $= 72 - 80 = -\$8K$}
+{Benefits of overlapping treatments are not additive. The second one has diminishing value.}
+
+\hq{20}{Present Value of a Control}
+{A control costs \$120K upfront and reduces expected annual loss from \$90K to \$20K for 3 years. The discount rate is 10\%. What is the approximate NPV?}
+{\item About $+$\$54K, so approve
+ \item About $+$\$90K
+ \item About $-$\$50K, so reject
+ \item About $+$\$210K}
+{A}
+{\item Annual benefit $= \$70K$
+ \item PV factor for 3 years at 10\% $\approx 2.487$
+ \item PV of benefits $\approx \$174K$
+ \item NPV $\approx 174 - 120 = +\$54K$}
+{\$90K is the undiscounted net. \$210K is gross undiscounted benefit.}
+
+\hq{21}{Insurance Economics}
+{There is a 10\% annual chance of a \$2M loss. Insurance covers 80\% of the loss above a \$200K deductible and costs \$60K per year. What is the total expected annual cost with insurance?}
+{\item \$56K
+ \item \$200K
+ \item \$116K
+ \item \$260K}
+{C}
+{\item Retained per event $= 200K + 20\% \times 1.8M = \$560K$
+ \item Expected retained loss $= 0.1 \times 560K = \$56K$
+ \item Add premium: $56K + 60K = \$116K$
+ \item Uninsured expected loss would be \$200K}
+{Include the premium and the retained share. Insurance also leaves counterparty and coverage risk.}
+
+% ============================================================
+\section{Risk Monitoring}
+% ============================================================
+
+\hq{22}{Control Test Results}
+{A control runs 250 times per year. A sample of 25 executions shows 5 deviations. The tolerable deviation rate is 5\%. What is the BEST conclusion?}
+{\item Effective, because the sample is only 10\% of the population
+ \item Effective, because 80\% of items passed
+ \item Inconclusive until all 250 executions are tested
+ \item Not effective: the 20\% sample deviation rate far exceeds the 5\% tolerable rate, so remediate and expand testing}
+{D}
+{\item Sample deviation rate $= 5/25 = 20\%$
+ \item 20\% is four times the tolerable rate
+ \item A passing rate of 80\% is not acceptable here
+ \item Full-population testing is not needed to see a clear failure}
+{Compare results to the tolerable rate, not to a ``mostly passed'' feeling.}
+
+\hq{23}{Silent Indicators}
+{Every KRI has stayed green for three consecutive years, yet the organization suffered two significant incidents. What is the MOST appropriate conclusion?}
+{\item Controls are exceptionally effective
+ \item Thresholds are likely too loose or indicators insensitive, so back-test and recalibrate
+ \item Reduce monitoring frequency to save cost
+ \item Retire the KRIs}
+{B}
+{\item Indicators should have moved before the incidents
+ \item Back-test KRIs against past incidents
+ \item Tighten thresholds and add leading indicators
+ \item Consistent green is a warning sign, not proof of safety}
+{A KRI that cannot detect a known failure is not doing its job.}
+
+
+% ============================================================
+\section{Advanced Quantitative Analysis}
+% ============================================================
+
+\hq{24}{Poisson Annual Probability}
+{Loss events arrive at an average rate of 0.5 per year (Poisson, independent). What is the probability of at least one event in a year?}
+{\item 25\%
+ \item About 39\%
+ \item 50\%
+ \item About 63\%}
+{B}
+{\item $P(\text{none}) = e^{-0.5} \approx 0.607$
+ \item $P(\text{at least one}) \approx 0.393$
+ \item 63\% would be the answer for a rate of 1.0 per year
+ \item 50\% wrongly treats the rate as a probability}
+{A rate is not a probability. Use $1 - e^{-\lambda}$.}
+
+\hq{25}{Portfolio Compromise}
+{Ten independent systems each have a 10\% annual chance of compromise. What is the probability that at least one is compromised?}
+{\item About 35\%
+ \item 100\%
+ \item About 65\%
+ \item 10\%}
+{C}
+{\item $P(\text{none}) = 0.9^{10} \approx 0.349$
+ \item $P(\text{at least one}) \approx 0.651$
+ \item 100\% comes from adding $10 \times 10\%$
+ \item 35\% is the probability that none are compromised}
+{Many small independent risks add up to a large combined risk, but not linearly.}
+
+\hq{26}{Exclusive Scenarios}
+{Three mutually exclusive outcomes this year: a 10\% chance of a \$500K loss, a 5\% chance of a \$2M loss, otherwise no loss. What is the expected loss?}
+{\item \$150K
+ \item \$2.5M
+ \item \$250K
+ \item \$75K}
+{A}
+{\item $0.10 \times 500K = \$50K$
+ \item $0.05 \times 2M = \$100K$
+ \item Sum $= \$150K$
+ \item \$2.5M adds the severities without weighting}
+{Weight each loss by its own probability.}
+
+\hq{27}{Volatility of One Event}
+{A single event has a 20\% chance of causing a \$1M loss and otherwise causes nothing. What is the standard deviation of the loss?}
+{\item \$200K
+ \item \$800K
+ \item \$160K
+ \item \$400K}
+{D}
+{\item Bernoulli loss: $\text{SD} = L\sqrt{p(1-p)}$
+ \item $= 1M \times \sqrt{0.2 \times 0.8} = 1M \times 0.4$
+ \item \$200K is the expected loss, not the volatility
+ \item Rare large losses are very volatile}
+{Expected loss is not the same as volatility.}
+
+\hq{28}{Value at Risk}
+{Annual loss is normally distributed with mean \$1M and standard deviation \$400K. What is the 95\% one-tailed VaR ($z = 1.645$)?}
+{\item About \$1.66M
+ \item \$1.00M
+ \item About \$1.93M
+ \item \$1.40M}
+{A}
+{\item $\text{VaR} = \mu + z\sigma = 1M + 1.645 \times 0.4M$
+ \item $\approx \$1.66M$
+ \item \$1.93M is the 99\% figure ($z = 2.326$)
+ \item \$1.00M is only the mean}
+{VaR is a quantile of the loss distribution, not the average loss.}
+
+\hq{29}{Expected Shortfall}
+{Which statement about 95\% expected shortfall (ES) is correct?}
+{\item It is the average loss in the worst 5\% of outcomes and is never below the 95\% VaR
+ \item It is the average loss across all outcomes
+ \item It is the loss level exceeded 5\% of the time
+ \item It always equals VaR for normal distributions}
+{A}
+{\item VaR marks where the tail starts
+ \item ES averages the losses beyond that point
+ \item So $\text{ES} \geq \text{VaR}$
+ \item ES captures tail severity that VaR ignores}
+{VaR says where the tail begins. ES says how bad it gets.}
+
+\hq{30}{Monte Carlo Precision}
+{A Monte Carlo run of 10,000 independent trials estimates an event probability of 5\%. What is the approximate standard error?}
+{\item About 0.22 percentage points
+ \item About 0.5 percentage points
+ \item About 0.05 percentage points
+ \item About 2.2 percentage points}
+{A}
+{\item $\text{SE} = \sqrt{p(1-p)/n}$
+ \item $= \sqrt{0.05 \times 0.95 / 10000} \approx 0.0022$
+ \item So the estimate is about $5\% \pm 0.4\%$ at 95\% confidence
+ \item More trials shrink error only with the square root of $n$}
+{Simulation output is an estimate with its own sampling error.}
+
+\hq{31}{Reverse Conditional}
+{2\% of systems are breached each year. Among breached systems, 80\% were unpatched. 20\% of all systems are unpatched. What is the probability that an unpatched system is breached?}
+{\item 80\%
+ \item 2\%
+ \item 8\%
+ \item 40\%}
+{C}
+{\item Bayes: $P(B \mid U) = P(U \mid B)P(B)/P(U)$
+ \item $= 0.8 \times 0.02 / 0.20 = 0.08$
+ \item 80\% is the reverse conditional probability
+ \item Unpatched systems are 4 times riskier than average}
+{$P(A \mid B) \neq P(B \mid A)$.}
+
+\hq{32}{Multiplicative Sensitivity}
+{$\text{ALE} = \text{TEF} \times \text{vulnerability} \times \text{loss}$. TEF rises 50\%, vulnerability falls 40\%, and loss per event rises 25\%. What happens to ALE?}
+{\item It rises 35\%
+ \item It rises 10\%
+ \item It falls 5\%
+ \item It rises 12.5\%}
+{D}
+{\item Factors multiply: $1.5 \times 0.6 \times 1.25 = 1.125$
+ \item Adding the percentages gives $+35\%$, which is wrong
+ \item Order of changes does not matter
+ \item Run one-at-a-time sensitivities to see drivers}
+{Percent changes in multiplicative models compound. They do not add.}
+
+\hq{33}{Perfect Hedge}
+{Two risks each have a loss standard deviation of \$300K and a correlation of $-1$. What is the standard deviation of the combined loss?}
+{\item \$300K
+ \item \$600K
+ \item \$0
+ \item \$424K}
+{C}
+{\item $\text{Var} = \sigma^2 + \sigma^2 + 2\rho\sigma^2 = 0$ when $\rho = -1$
+ \item Gains in one exactly offset losses in the other
+ \item Perfect negative correlation is rare in practice
+ \item Never assume it without evidence}
+{Diversification benefit depends entirely on correlation.}
+
+\hq{34}{Frequency Versus Severity}
+{Scenario X: 4 events per year of \$250K each. Scenario Y: 2 events per year of \$500K each. Both are Poisson with fixed severity and the same \$1M expected annual loss. Which is true?}
+{\item Volatility is identical
+ \item Y is more volatile (SD about \$707K versus \$500K)
+ \item X is more volatile
+ \item Y has a lower expected loss}
+{B}
+{\item Compound Poisson: $\text{Var} = \lambda s^2$
+ \item X: $4 \times 250^2 \to \text{SD} = \$500K$
+ \item Y: $2 \times 500^2 \to \text{SD} \approx \$707K$
+ \item Fewer, larger events means a fatter tail}
+{Equal expected loss does not mean equal risk.}
+
+\hq{35}{Premium Loading}
+{Expected annual loss is \$200K and an insurer charges \$260K. What is the loading on expected loss?}
+{\item 26\%
+ \item 23\%
+ \item 60\%
+ \item 30\%}
+{D}
+{\item Loading $= (\text{premium} - \text{EL})/\text{EL}$
+ \item $= (260 - 200)/200 = 30\%$
+ \item 23\% wrongly divides by the premium
+ \item Insurance usually costs more than expected loss}
+{Measure loading against expected loss, not against the premium.}
+
+\hq{36}{Backing Out Inherent Risk}
+{After controls with combined 70\% effectiveness, residual exposure is \$120K. What was the inherent exposure?}
+{\item \$360K
+ \item \$400K
+ \item \$204K
+ \item \$171K}
+{B}
+{\item $\text{Residual} = \text{Inherent} \times (1 - 0.7)$
+ \item $\text{Inherent} = 120 / 0.3 = \$400K$
+ \item \$171K divides by 0.7 by mistake
+ \item \$204K multiplies by 1.7 by mistake}
+{Residual is a fraction of inherent, so divide by the remaining fraction.}
+
+\hq{37}{Return Period}
+{A loss level has a 1-in-20-year return period. What is the probability it is exceeded at least once in 10 years?}
+{\item About 40\%
+ \item 50\%
+ \item 5\%
+ \item 10\%}
+{A}
+{\item Annual probability $= 5\%$
+ \item $P(\text{none in 10 years}) = 0.95^{10} \approx 0.60$
+ \item $P(\text{at least one}) \approx 40\%$
+ \item 50\% would require 14 years}
+{A return period is not a schedule. Events can cluster or never occur.}
+
+\hq{38}{Century Event}
+{What is the probability of at least one 1-in-100-year event in a 30-year period?}
+{\item About 26\%
+ \item 1\%
+ \item 30\%
+ \item 74\%}
+{A}
+{\item $P(\text{none}) = 0.99^{30} \approx 0.74$
+ \item $P(\text{at least one}) \approx 0.26$
+ \item 74\% is the probability of none
+ \item 30\% adds probabilities linearly}
+{Use the complement for at-least-one probabilities.}
+
+\hq{39}{Perpetual Benefit}
+{A control costs \$600K upfront and permanently cuts expected annual loss by \$60K. The discount rate is 8\%. What is the NPV?}
+{\item $+$\$750K
+ \item $-$\$540K
+ \item $-$\$150K
+ \item $+$\$150K}
+{D}
+{\item PV of a perpetuity $= 60 / 0.08 = \$750K$
+ \item $\text{NPV} = 750 - 600 = +\$150K$
+ \item \$750K is the benefit, not the NPV
+ \item Payback is 10 years, but NPV is still positive}
+{Value permanent benefits as a perpetuity, then subtract cost.}
+
+\hq{40}{Calibration}
+{Experts give 90\% confidence ranges, but actual values fall inside the ranges only 50\% of the time. What is the diagnosis?}
+{\item Overconfidence: ranges are too narrow, so apply calibration training
+ \item Normal behavior for 90\% ranges
+ \item Underconfidence: ranges are too wide
+ \item Only a data quality problem}
+{A}
+{\item A well-calibrated 90\% range captures truth about 90\% of the time
+ \item 50\% capture means ranges are far too tight
+ \item Calibration training and feedback improve this
+ \item Widen ranges or use structured elicitation}
+{Most experts are overconfident. Test calibration.}
+
+\hq{41}{Budgeted Portfolio}
+{Budget is \$250K. Independent, additive options: A costs \$50K and avoids \$120K; B costs \$200K and avoids \$400K; C costs \$20K and avoids \$35K. Which portfolio maximizes net benefit?}
+{\item A and B (net \$270K)
+ \item A and C (net \$85K)
+ \item A, B and C (net \$285K)
+ \item B and C (net \$215K)}
+{A}
+{\item Net: A $= +70$, B $= +200$, C $= +15$
+ \item A + B costs \$250K, net \$270K
+ \item A + B + C costs \$270K and breaks the budget
+ \item B + C nets only \$215K}
+{Highest ROI alone is not the same as maximum value under a budget.}
+
+\hq{42}{Two-Stage Detection}
+{Stage 1 detection catches 70\% of intrusions. Whatever passes is examined by stage 2, which catches 50\% of what it sees (independent of stage 1). What fraction of intrusions is missed by both?}
+{\item 15\%
+ \item 0\%
+ \item 35\%
+ \item 20\%}
+{A}
+{\item Missed by stage 1 $= 30\%$
+ \item Missed by stage 2 as well $= 0.3 \times 0.5 = 15\%$
+ \item 20\% would wrongly average the catch rates
+ \item Detection layers multiply the misses}
+{Combined misses multiply. Catch rates do not add.}
+
+\hq{43}{Weighted Scenario Mean}
+{Scenario probabilities and losses: 60\% at \$50K, 30\% at \$200K, 10\% at \$1M. What is the expected loss?}
+{\item \$200K
+ \item About \$417K
+ \item \$190K
+ \item \$1.25M}
+{C}
+{\item $0.6 \times 50 = 30$
+ \item $0.3 \times 200 = 60$
+ \item $0.1 \times 1000 = 100$; total $\$190K$
+ \item \$417K is the unweighted average of the three losses}
+{Always weight outcomes by probability.}
+
+\hq{44}{Multi-Year Poisson}
+{Loss events arrive at 0.5 per year (Poisson). What is the probability of at least one event in 3 years?}
+{\item About 22\%
+ \item 50\%
+ \item About 78\%
+ \item About 85\%}
+{C}
+{\item Expected events in 3 years $= 1.5$
+ \item $P(\text{none}) = e^{-1.5} \approx 0.223$
+ \item $P(\text{at least one}) \approx 0.777$
+ \item 22\% is the probability of none}
+{Scale the rate by time, then use the Poisson complement.}
+
+% ============================================================
+\section{Advanced Risk Evaluation}
+% ============================================================
+
+\hq{45}{Usable Appetite Statement}
+{Which risk appetite statement is MOST usable for decisions?}
+{\item The organization will follow industry standards
+ \item Expected annual cyber loss will not exceed \$2M, and no scenario will exceed \$5M at 95\% confidence
+ \item The organization has a low appetite for cyber risk
+ \item The organization will manage cyber risk responsibly}
+{B}
+{\item It is measurable
+ \item It sets both an aggregate and a tail limit
+ \item It names a confidence level
+ \item Vague words cannot trigger escalation}
+{If it cannot be measured, it cannot be breached.}
+
+\hq{46}{Beyond Tolerance}
+{Capacity is \$10M, tolerance is \$6M and appetite is \$4M. Aggregate exposure is now \$7M. What is the BEST description?}
+{\item Within appetite because it is below capacity
+ \item Beyond tolerance but within capacity: escalate and either reduce exposure or formally approve it
+ \item Capacity exceeded: stop operations
+ \item Acceptable because it is below capacity}
+{B}
+{\item Ordering is appetite $<$ tolerance $<$ capacity
+ \item \$7M exceeds tolerance (\$6M)
+ \item It is still under capacity (\$10M)
+ \item Tolerance breach triggers escalation and a plan}
+{Capacity is the survival limit, not the acceptance limit.}
+
+\hq{47}{Central Tendency}
+{70\% of assessed risks cluster at ``medium on a 5-point scale. What is the most likely problem?}
+{\item The analysts are too senior
+ \item Central tendency bias: use anchored criteria and calibrate scorers
+ \item The matrix is too large
+ \item The portfolio is genuinely balanced}
+{B}
+{\item Raters avoid extreme scores
+ \item Vague scale definitions encourage hedging
+ \item Anchored examples reduce it
+ \item Compare scorer distributions to detect it}
+{A suspiciously uniform distribution signals a scoring problem.}
+
+\hq{48}{Same Mean, Different Tail}
+{Risk X has expected loss \$100K and SD \$50K. Risk Y has expected loss \$100K and SD \$400K. The board has low tolerance for loss volatility. Which should be prioritized?}
+{\item Y: equal expected loss hides a far larger tail
+ \item Equal priority
+ \item X: it is more certain
+ \item Neither: expected losses are equal}
+{A}
+{\item Y can produce losses many times its mean
+ \item Low tolerance for volatility means tail matters
+ \item Ranking by mean alone ignores this
+ \item Evaluate distributions, not only point values}
+{Expected value ranks risks only if volatility is irrelevant.}
+
+\hq{49}{Concentration}
+{Twelve risks rated ``medium all depend on the same vendor. What is the BEST interpretation?}
+{\item Low risk, since medium is acceptable
+ \item A concentration risk to evaluate in aggregate, which may exceed appetite even though each item is medium
+ \item A procurement issue only
+ \item Twelve independent mediums, so no action}
+{B}
+{\item A shared dependency creates correlated failure
+ \item The portfolio exposure is greater than any single rating
+ \item Aggregate by dependency, not only by item
+ \item Registers often hide concentration}
+{Twelve mediums with one root cause is one large risk.}
+
+\hq{50}{Silo Aggregation}
+{Five departments each accept a \$200K risk (each limit is \$250K). All depend on one shared service. Enterprise aggregate appetite is \$600K. What is the issue?}
+{\item Appetite applies per department only
+ \item The exposure is only \$200K because it is the same dependency
+ \item None: each is within its limit
+ \item Correlated exposure could total \$1M, above enterprise appetite, so acceptances must be aggregated}
+{D}
+{\item $5 \times \$200K = \$1M$ if the shared service fails
+ \item Local limits do not guarantee enterprise limits
+ \item Acceptance needs an enterprise view
+ \item Escalate or treat the shared dependency}
+{Local approval does not equal enterprise acceptance.}
+
+\hq{51}{Residual-Only Register}
+{A risk register records only residual ratings. What is the main weakness?}
+{\item Residual ratings are always inaccurate
+ \item Registers must list threats only
+ \item Inherent risk never matters
+ \item Hidden dependence on controls: if a control fails, the true exposure is invisible}
+{D}
+{\item Inherent rating shows exposure without controls
+ \item It shows how much each control is carrying
+ \item Control failure analysis needs both
+ \item Treatment prioritization needs both}
+{Residual alone hides control dependence.}
+
+\hq{52}{Velocity}
+{Two risks both score 12. Risk A can reach full impact within minutes with no warning. Risk B develops over months with clear leading indicators. Where is stronger preventive investment most needed?}
+{\item Risk B, because indicators are costly
+ \item Neither: scores are equal
+ \item Risk B, because it lasts longer
+ \item Risk A, because short velocity leaves no time to respond after detection}
+{D}
+{\item Velocity is time from trigger to impact
+ \item A has no response window
+ \item B can be managed with monitoring and response
+ \item Equal scores can need very different strategies}
+{Same score, different urgency.}
+
+\hq{53}{Rank Reversal}
+{Impact levels are logarithmic: level 2 $=$ \$100K and level 5 $=$ \$100M. Risk P has likelihood level 5 (50\%) and impact 2. Risk Q has likelihood level 2 (5\%) and impact 5. Both score 10. What is the real difference?}
+{\item Q has about 100 times the expected loss (\$5M versus \$50K)
+ \item Q has 10 times the expected loss
+ \item P has the larger expected loss
+ \item They are equal}
+{A}
+{\item P: $0.5 \times 100K = \$50K$
+ \item Q: $0.05 \times 100M = \$5M$
+ \item Equal scores hide a 100x gap
+ \item Multiplying ordinal levels ignores the underlying scales}
+{Matrix scores are not expected losses.}
+
+\hq{54}{Appetite Test}
+{Appetite: no scenario will exceed \$5M at 95\% confidence. Simulation shows a 95th percentile of \$4.8M and a 99th percentile of \$9M. What is the BEST conclusion?}
+{\item Compliant, so no further discussion
+ \item Compliant with the statement as written, but the 99\% tail deserves board attention and a review of the statement
+ \item Non-compliant because the 99th percentile exceeds \$5M
+ \item Cannot be tested}
+{B}
+{\item 95th percentile \$4.8M is under \$5M
+ \item The statement fixed the confidence level at 95\%
+ \item The 99\% tail is much larger
+ \item Choose confidence levels deliberately}
+{Passing a test is not the same as being safe.}
+
+% ============================================================
+\section{Advanced Business Impact and Recovery}
+% ============================================================
+
+\hq{55}{Availability Budget}
+{A service has a 99.9\% availability target measured over a 30-day month. How much downtime does it permit?}
+{\item About 7.2 hours
+ \item About 4.3 minutes
+ \item About 43 minutes
+ \item About 8.8 hours}
+{C}
+{\item 30 days $= 43{,}200$ minutes
+ \item $0.1\% \times 43{,}200 = 43.2$ minutes
+ \item 7.2 hours would be 99\%
+ \item 8.8 hours per year is the figure for 99.9\% annually}
+{Check whether the target period is monthly or yearly.}
+
+\hq{56}{Series Availability}
+{Three components in series each have 99.9\% availability and all must work. What is the combined availability?}
+{\item 99.9\%
+ \item 99.97\%
+ \item About 99.7\%
+ \item 99.0\%}
+{C}
+{\item $0.999^3 \approx 0.997$
+ \item Series dependencies multiply
+ \item Each added component lowers availability
+ \item The weakest link is not the whole story}
+{In series, availability multiplies down.}
+
+\hq{57}{Parallel Availability}
+{Two independent redundant components each have 99\% availability and either is sufficient. What is the combined availability?}
+{\item 99.99\%
+ \item 99.9\%
+ \item 99\%
+ \item 98\%}
+{A}
+{\item $1 - 0.01^2 = 0.9999$
+ \item Both must fail for an outage
+ \item Assumes independence and no common cause
+ \item Shared power or software erodes the benefit}
+{Redundancy helps only if failures are independent.}
+
+\hq{58}{MTBF and MTTR}
+{A system has an MTBF of 1,000 hours and an MTTR of 4 hours. What is its steady-state availability?}
+{\item 96.00\%
+ \item 99.96\%
+ \item About 99.60\%
+ \item 99.00\%}
+{C}
+{\item $A = \text{MTBF} / (\text{MTBF} + \text{MTTR})$
+ \item $= 1000 / 1004 \approx 0.9960$
+ \item Repair time matters as much as failure rate
+ \item 99.96\% would need an MTTR of 0.4 hours}
+{Availability depends on both how often and how long.}
+
+\hq{59}{Annual Downtime}
+{Using MTBF 1,000 hours and MTTR 4 hours, what is the expected annual downtime?}
+{\item 4 hours
+ \item About 87.6 hours
+ \item About 35 hours
+ \item About 8.8 hours}
+{C}
+{\item Unavailability $= 4 / 1004 \approx 0.398\%$
+ \item $8760 \times 0.00398 \approx 34.9$ hours
+ \item Each failure costs 4 hours; there are about 8.7 failures per year
+ \item A small unavailability still adds up}
+{Convert percentages to hours per year before judging them.}
+
+\hq{60}{Replication Lag}
+{The RPO is 5 minutes. Asynchronous replication typically lags 15 minutes. What is the conclusion?}
+{\item RPO is not met: lag exceeds RPO, so reduce lag or use synchronous replication
+ \item Nothing can be concluded
+ \item RPO is met because RTO is unaffected
+ \item RPO is met because replication exists}
+{A}
+{\item Data in the lag window is lost at failover
+ \item 15 minutes is greater than 5 minutes
+ \item Replication is not the same as meeting RPO
+ \item Choose technology to fit the objective}
+{Having replication does not mean meeting the RPO.}
+
+\hq{61}{Sequential Recovery}
+{MTD is 24 hours. Recovery is strictly sequential: network 6 h, database 8 h, application 6 h, validation 6 h. Can the MTD be met?}
+{\item No: the total is 32 hours
+ \item No: total is 26 hours, which exceeds the MTD by 2 hours
+ \item Yes: the total is 20 hours
+ \item Yes: the longest step is 8 hours}
+{B}
+{\item $6 + 8 + 6 + 6 = 26$ hours
+ \item Sequential steps add. They do not overlap
+ \item Parallelize or pre-stage to save time
+ \item Revisit MTD only if the business agrees}
+{Sum sequential steps. Do not look at the longest one.}
+
+\hq{62}{Hot Site Economics}
+{Downtime costs \$80K per hour. A hot site costs \$500K per year and cuts recovery from 24 hours to 2 hours. A disaster has a 5\% annual probability. What is the conclusion?}
+{\item Justified: avoided loss per disaster is \$1.76M, which exceeds \$500K
+ \item Not justified on cost alone: expected benefit is about \$88K versus \$500K
+ \item Break-even at \$500K
+ \item Justified because 24 hours is too long}
+{B}
+{\item Hours saved $= 22$
+ \item Loss avoided per disaster $= 22 \times 80K = \$1.76M$
+ \item Expected annual benefit $= 0.05 \times 1.76M = \$88K$
+ \item Other drivers (regulation, reputation) may still justify it}
+{Weight avoided loss by probability before comparing with annual cost.}
+
+\hq{63}{Recovery Capacity}
+{Ten systems each have a 4-hour RTO. The team can restore 2 systems at a time and each wave takes 3 hours. How many systems can meet the RTO?}
+{\item 6
+ \item 4
+ \item 10
+ \item 2}
+{D}
+{\item Wave 1 finishes at 3 hours (2 systems)
+ \item Wave 2 finishes at 6 hours, which is over the RTO
+ \item Equal RTOs do not guarantee capacity
+ \item Capacity planning must match the RTOs}
+{RTOs are only achievable if recovery capacity exists.}
+
+\hq{64}{Test Scaling}
+{A DR test restored a system in 6 hours. Data has grown 50\% since, and restore time scales linearly with data. What restore time should planners expect?}
+{\item About 9 hours
+ \item About 7.5 hours
+ \item 6 hours
+ \item About 12 hours}
+{A}
+{\item $6 \times 1.5 = 9$ hours
+ \item Old test results expire as data grows
+ \item RTO of 8 hours would now fail
+ \item Retest after material change}
+{A passed DR test has a shelf life.}
+
+\hq{65}{Nightly Plus Logs}
+{Full backups run nightly and transaction logs are shipped every 15 minutes. What RPO is realistically achievable?}
+{\item 12 hours
+ \item Zero
+ \item About 15 minutes
+ \item 24 hours}
+{C}
+{\item Restore the full backup, then replay logs
+ \item Loss is bounded by the log interval
+ \item Zero would need synchronous replication
+ \item Log shipping itself must be monitored}
+{RPO is set by the most frequent recovery point, not the slowest.}
+
+% ============================================================
+\section{Advanced Risk Treatment}
+% ============================================================
+
+\hq{66}{Break-Even Likelihood}
+{A \$90K per year control fully removes a \$600K loss. What annual likelihood makes the control break even?}
+{\item 54\%
+ \item 90\%
+ \item 15\%
+ \item 6.7\%}
+{C}
+{\item Break-even when $p \times 600K = 90K$
+ \item $p = 90/600 = 15\%$
+ \item If the likelihood is lower, the control loses money
+ \item Compare with realistic likelihood ranges}
+{Break-even analysis shows how wrong an estimate can be.}
+
+\hq{67}{ARO Reduction}
+{A control costs \$90K per year and reduces ARO from 0.3 to 0.1. SLE is \$500K. What is the net annual benefit?}
+{\item $-$\$10K
+ \item $+$\$60K
+ \item $+$\$10K
+ \item $+$\$100K}
+{C}
+{\item Reduction $= (0.3 - 0.1) \times 500K = \$100K$
+ \item Net $= 100 - 90 = +\$10K$
+ \item \$100K is the gross benefit
+ \item Thin margins make estimates critical}
+{Net benefit subtracts the cost from the ALE reduction.}
+
+\hq{68}{ROSI}
+{A control reduces ALE by \$400K and costs \$160K. What is the return on security investment?}
+{\item 250\%
+ \item 150\%
+ \item 40\%
+ \item 60\%}
+{B}
+{\item $\text{ROSI} = (\text{reduction} - \text{cost}) / \text{cost}$
+ \item $= (400 - 160)/160 = 1.5$
+ \item 250\% divides gross benefit by cost
+ \item 40\% is cost divided by benefit}
+{ROSI uses net benefit, not gross benefit.}
+
+\hq{69}{Stacked Controls}
+{Three independent layers each remove half of the remaining risk. What fraction of inherent risk remains?}
+{\item 12.5\%
+ \item 25\%
+ \item 0\%
+ \item 50\%}
+{A}
+{\item $0.5^3 = 0.125$
+ \item Each layer works on what the last one left
+ \item Risk never reaches zero
+ \item Assumes independence, which is rarely perfect}
+{Layers compound multiplicatively.}
+
+\hq{70}{Prevent Plus Detect}
+{Inherent: 10 events per year at \$100K each. A preventive control stops 80\% of events. A detective control halves the impact of remaining events. What is the residual annual loss?}
+{\item \$300K
+ \item \$100K
+ \item \$500K
+ \item \$200K}
+{B}
+{\item Inherent $= 10 \times 100K = \$1M$
+ \item After prevention: $2 \times 100K = \$200K$
+ \item After detection: $2 \times 50K = \$100K$
+ \item \$200K counts only prevention}
+{Preventive controls cut frequency, detective ones cut impact. Apply each to the right term.}
+
+\hq{71}{Avoidance Economics}
+{A company exits a product line earning \$2M profit per year to avoid \$1.5M of expected annual loss. What is the likely effect?}
+{\item Net gain of \$3.5M
+ \item Net gain of \$1.5M
+ \item No effect
+ \item Net loss of about \$0.5M per year unless other costs change}
+{D}
+{\item Value lost $= \$2M$
+ \item Loss avoided $= \$1.5M$
+ \item Net $= -\$0.5M$ per year
+ \item Treat avoidance as a business decision, not a free action}
+{Avoiding a risk also avoids its rewards.}
+
+\hq{72}{SLA Credits}
+{A cloud SLA gives service credits capped at one month of fees (\$20K). A multi-day outage would cost \$500K. Does the SLA transfer the risk?}
+{\item Yes: the provider bears the loss
+ \item No: credits are a small offset and the organization retains most of the loss
+ \item Yes: credits are insurance
+ \item Only for outages under one day}
+{B}
+{\item Credits cap at \$20K
+ \item \$480K or more stays with the organization
+ \item Contractual remedies differ from risk transfer
+ \item Consider insurance or resilience}
+{An SLA is a performance promise, not an indemnity.}
+
+\hq{73}{Interim Exposure}
+{A risk has a 24\% annual probability of a \$1M loss. A treatment takes 6 months to deploy. What is the approximate expected loss during rollout?}
+{\item \$240K
+ \item \$1M
+ \item \$60K
+ \item About \$120K}
+{D}
+{\item Annual expected loss $= 0.24 \times 1M = \$240K$
+ \item Six months is half a year: $\$120K$
+ \item The risk stays live during implementation
+ \item Consider an interim control}
+{Delay has a quantifiable price.}
+
+\hq{74}{Insurance Exclusions}
+{A cyber policy excludes losses from known vulnerabilities left unpatched for over 30 days. The organization has many such systems. What is the implication?}
+{\item The premium makes the risk acceptable
+ \item Exclusions do not matter after a claim
+ \item The risk is fully transferred
+ \item Transfer is partly void: the risk is effectively retained and must be treated by patching}
+{D}
+{\item Coverage depends on policy conditions
+ \item Unpatched systems fall outside cover
+ \item Retained risk equals the excluded loss
+ \item Review exclusions before relying on transfer}
+{Insurance transfers only what the policy actually covers.}
+
+\hq{75}{Cost per Dollar Reduced}
+{Control A costs \$100K and reduces \$150K of risk. B costs \$40K and reduces \$80K. C costs \$200K and reduces \$260K. Which is most cost-effective?}
+{\item C (\$0.77)
+ \item B (\$0.50 per \$1 reduced)
+ \item A (\$0.67)
+ \item All are equal}
+{B}
+{\item A: $100/150 = 0.67$
+ \item B: $40/80 = 0.50$
+ \item C: $200/260 = 0.77$
+ \item Lowest cost per dollar reduced wins on efficiency}
+{Absolute savings and efficiency can rank differently.}
+
+\hq{76}{Shared Hazard}
+{Two data centers 10 km apart sit on the same flood plain and the same power grid. The design calls them geographically redundant. What is the concern?}
+{\item Common-cause exposure weakens the redundancy; assess shared hazards
+ \item Floods are not a risk for data centers
+ \item None: two sites always means independence
+ \item Distance is the only factor}
+{A}
+{\item Redundancy requires independent failure modes
+ \item One flood or grid event could hit both
+ \item Check power, network and hazard overlap
+ \item Independence must be demonstrated}
+{Redundancy without independence is an illusion.}
+
+\hq{77}{Overdue Treatment}
+{A treatment plan is 6 months overdue and the related KRI is worsening. The risk was accepted on the assumption of timely treatment. What is the BEST action?}
+{\item Extend the deadline silently
+ \item Wait for completion
+ \item Reassess residual risk now and escalate: the approved risk position no longer holds
+ \item Close the risk}
+{C}
+{\item Acceptance depended on the plan
+ \item Delay increases exposure
+ \item The approver must know
+ \item A new decision is required}
+{A risk decision based on a plan expires when the plan slips.}
+
+% ============================================================
+\section{Advanced Risk Monitoring}
+% ============================================================
+
+\hq{78}{Control Indicator}
+{The percentage of privileged-account reviews completed on time is BEST classified as a:}
+{\item Key goal indicator
+ \item Key risk indicator (KRI)
+ \item Key control indicator (KCI)
+ \item Key performance indicator for revenue}
+{C}
+{\item It shows whether a control is operating
+ \item KRIs show changes in exposure
+ \item Controls and risk are monitored separately
+ \item A falling KCI may later move a KRI}
+{KCI measures the control. KRI measures the risk.}
+
+\hq{79}{Zero Deviations}
+{A control was tested with zero deviations in 59 sampled items. What can be supported statistically?}
+{\item 95\% confidence that the rate is at most 1\%
+ \item Nothing can be supported
+ \item About 95\% confidence that the deviation rate is at most roughly 5\%
+ \item The deviation rate is 0\%}
+{C}
+{\item $P(\text{0 of 59 if rate} = 5\%) = 0.95^{59} \approx 0.05$
+ \item So rate above 5\% is unlikely at 95\% confidence
+ \item Zero observed does not mean zero true rate
+ \item Tighter bounds need larger samples}
+{Sample results bound the rate. They do not prove it.}
+
+\hq{80}{False Alarm Rate}
+{A weekly KRI is approximately normal and the alert threshold is the mean plus 2 standard deviations (one-tailed probability 2.3\%). About how many false alerts per year (52 weeks) should be expected when nothing has changed?}
+{\item About 5.2
+ \item About 2.6
+ \item About 0.1
+ \item About 1.2}
+{D}
+{\item $0.0228 \times 52 \approx 1.2$
+ \item 2.6 would use a 5\% tail
+ \item A 3 SD threshold gives about 0.07 per year
+ \item Thresholds must balance sensitivity and noise}
+{Every threshold has a false-alarm rate.}
+
+\hq{81}{Compounding Trend}
+{A KRI currently at 50 is growing 8\% per week. The threshold is 100. About how long until it breaches?}
+{\item About 9 weeks
+ \item About 25 weeks
+ \item About 12.5 weeks
+ \item About 6 weeks}
+{A}
+{\item $50 \times 1.08^n = 100$
+ \item $n = \ln 2 / \ln 1.08 \approx 9.0$
+ \item 12.5 weeks wrongly assumes linear growth (+4 per week)
+ \item Compounding shortens time to breach}
+{Percentage growth compounds. Do not extrapolate linearly.}
+
+\hq{82}{Decaying Effectiveness}
+{A control starts 90\% effective. Without maintenance its effectiveness decays by 10\% (relative) each quarter. What is it after 4 quarters?}
+{\item About 59\%
+ \item About 54\%
+ \item About 81\%
+ \item 50\%}
+{A}
+{\item $0.9 \times 0.9^4 = 0.9 \times 0.656$
+ \item $\approx 59\%$
+ \item 54\% subtracts 36 points linearly
+ \item Unmaintained controls drift quietly}
+{Controls degrade unless tested and maintained.}
+
+\hq{83}{Self-Reported Metrics}
+{A KRI is compiled by the same team it measures, with no validation. What is the main weakness?}
+{\item The KRI is too technical
+ \item No weakness: teams know best
+ \item Reporting bias: use independent or system-sourced data and validate
+ \item The KRI is too frequent}
+{C}
+{\item Teams have incentives to look good
+ \item Unverified data cannot support escalation
+ \item Automation reduces manual bias
+ \item Spot checks add assurance}
+{Whoever is measured should not control the measurement.}
+
+\hq{84}{Self-Review Threat}
+{A risk practitioner designed a control and is now asked to test its operating effectiveness. What is the concern?}
+{\item Self-review threat to objectivity: use an independent tester
+ \item The test will take too long
+ \item None: the designer knows the control best
+ \item The control will be too strict}
+{A}
+{\item Designers tend to confirm their own work
+ \item Independence strengthens assurance
+ \item Walkthroughs can still involve the designer
+ \item Testing should be done by someone else}
+{Do not mark your own homework.}
+
+\hq{85}{Measurement Change}
+{A KRI rose for three weeks after a new tool changed how events are counted. What is the BEST action?}
+{\item Escalate immediately as a risk increase
+ \item Double the threshold
+ \item Validate and restate the baseline before concluding risk increased
+ \item Ignore the KRI}
+{C}
+{\item The change may be an artifact of measurement
+ \item Compare old and new methods on overlapping data
+ \item Document the change and recalibrate
+ \item Escalate only if the underlying risk moved}
+{A moved number is not always a moved risk.}
+
+\hq{86}{CSA Bias}
+{Control self-assessments rate 95\% of controls effective, but independent tests find only 70\% effective. What is the BEST response?}
+{\item Trust the self-assessment
+ \item Cancel independent tests
+ \item Average the two and stop
+ \item Treat self-assessment as biased: add independent sampling and recalibrate}
+{D}
+{\item Gap of 25 points indicates optimism
+ \item Self-assessment is useful for engagement but not assurance
+ \item Independent evidence should override
+ \item Investigate which controls diverge}
+{Self-assessment needs independent verification.}
+
+\hq{87}{Leading Indicator}
+{Which is the BEST leading KRI for ransomware exposure?}
+{\item Percentage of critical systems missing patches older than 30 days
+ \item Number of ransomware incidents last year
+ \item Total security budget
+ \item Number of audit findings closed}
+{A}
+{\item It moves before an incident occurs
+ \item Incident counts are lagging
+ \item Budget does not measure exposure
+ \item Closed findings measure activity, not exposure}
+{A leading indicator changes before the loss does.}
+
+\hq{88}{Exception Aging}
+{40\% of risk exceptions are past their expiry date and have been auto-renewed. What does this indicate?}
+{\item A permanent acceptance policy
+ \item An acceptance governance failure: require re-approval and escalate
+ \item Nothing, since exceptions are low risk
+ \item Efficient administration}
+{B}
+{\item Exceptions must be time-bound
+ \item Auto-renewal bypasses re-evaluation
+ \item Conditions may have changed
+ \item Old exceptions accumulate hidden risk}
+{Exceptions are not permanent.}
+
+\hq{89}{Sample Size}
+{Control A is tested with 25 items from a population of 25,000. Control B is tested with 25 items from a population of 250. Both show zero deviations. Which gives stronger statistical assurance?}
+{\item A, because its population is larger
+ \item Neither provides any assurance
+ \item About the same: absolute sample size drives confidence, not the percentage of the population
+ \item B, because it covers 10\% of the population}
+{C}
+{\item $0.95^{25} \approx 0.28$ for both on the same logic
+ \item Confidence depends mainly on $n$ and the deviation rate
+ \item Coverage percentage is a poor proxy
+ \item Larger samples tighten the bound}
+{Percentage of population sampled is not the measure of assurance.}
+
+% ============================================================
+\section{Advanced Identification and Governance}
+% ============================================================
+
+\hq{90}{Risk Statement Quality}
+{Which is the BEST-formed risk statement?}
+{\item Because privileged access is not reviewed, a departing administrator could exfiltrate customer data, causing regulatory fines and customer loss
+ \item Hackers
+ \item Weak access control
+ \item Data breach}
+{A}
+{\item It states cause, event and consequence
+ \item ``Weak access control is only a cause
+ \item ``Data breach is only an event
+ \item ``Hackers is only a threat source}
+{A risk statement must link cause, event and business consequence.}
+
+\hq{91}{Pre-Mortem}
+{Which technique BEST counters overconfidence in a project plan?}
+{\item An annual survey
+ \item Pre-mortem: assume the project has failed and explain why
+ \item Benchmarking only
+ \item Consensus approval}
+{B}
+{\item It gives permission to voice doubts
+ \item It surfaces risks that optimism hides
+ \item Consensus can reinforce groupthink
+ \item Run it before commitment}
+{Imagine failure to find the risks success hides.}
+
+\hq{92}{Fourth Parties}
+{A critical vendor relies on an undisclosed subcontractor. Assessing only the vendor misses what?}
+{\item Only legal risk
+ \item Only pricing risk
+ \item Nothing: only the contract signatory matters
+ \item Concentration and flow-down risk: assess critical subcontractors and require contractual flow-down}
+{D}
+{\item Subcontractors may share one provider
+ \item Controls may not flow down
+ \item Visibility needs contract rights
+ \item Critical chains need mapping}
+{Your vendor\textquotesingle s vendor is still your risk.}
+
+\hq{93}{Diluted Ownership}
+{A significant risk is owned by a committee of five managers. What is the problem?}
+{\item The risk is too large
+ \item Diluted accountability: assign a single accountable owner
+ \item The committee is too small
+ \item None: shared ownership is stronger}
+{B}
+{\item Everyone owns it, so no one acts
+ \item One accountable owner can be held to deadlines
+ \item Others can be responsible or consulted
+ \item Ownership drives follow-through}
+{Shared ownership often means no ownership.}
+
+\hq{94}{Regulatory Lead Time}
+{A regulation passes with an 18-month effective date. When should the risk assessment of the compliance gap occur?}
+{\item At 17 months
+ \item Only after a penalty
+ \item After the effective date
+ \item Now: lead time is the window to design and fund treatment}
+{D}
+{\item Late assessment compresses options
+ \item Treatment may need budget cycles
+ \item Early view lets you plan staging
+ \item Reassess as guidance evolves}
+{Lead time is only useful if you start at the beginning.}
+
+\hq{95}{Incomplete Scenario}
+{A scenario lists a threat and a vulnerability but no affected business objective. What is wrong?}
+{\item It is incomplete: without consequence for objectives it cannot be prioritized
+ \item It is already quantified
+ \item Nothing: threat and vulnerability suffice
+ \item It is too detailed}
+{A}
+{\item Risk is about effect on objectives
+ \item Impact is required for ranking
+ \item Link the scenario to a process and loss type
+ \item Without it, treatment cannot be justified}
+{No objective at stake means no risk to rank.}
+
+\hq{96}{Healthy Risk Culture}
+{Which metric BEST indicates a healthy risk culture?}
+{\item Number of policies published
+ \item Number of audits scheduled
+ \item Number of training slides
+ \item Trended time from detecting an incident or near-miss to escalation}
+{D}
+{\item It measures behavior, not paperwork
+ \item Short, steady times suggest people raise bad news early
+ \item Rising times signal hesitation
+ \item Pair with near-miss reporting rates}
+{Culture shows up in how fast bad news travels.}
+
+\hq{97}{Limit Cascade}
+{Business unit risk limits sum to \$5M, but the enterprise appetite is \$3M. When is this acceptable?}
+{\item Never: limits must sum to the enterprise figure
+ \item Always: units are independent
+ \item Only if the CFO agrees verbally
+ \item Only if units are unlikely to reach their limits at the same time, which needs correlation analysis}
+{D}
+{\item Limits can exceed appetite if peaks do not coincide
+ \item Correlated stress can fill all limits together
+ \item Test the cascade with stress scenarios
+ \item Document the diversification assumption}
+{Sum of limits versus appetite depends on correlation.}
+
+\hq{98}{Cascading Scenario}
+{A cloud outage stops payments, which triggers customer attrition, which triggers covenant breaches. How should this be analyzed?}
+{\item As one cascading scenario, evaluating the whole chain
+ \item As four separate small risks
+ \item Only the last consequence
+ \item Only the first event}
+{A}
+{\item Dependencies create sequences
+ \item Separate scoring understates the chain
+ \item Model triggers and timing
+ \item Identify where the chain can be broken}
+{Chains of events must be assessed as chains.}
+
+\hq{99}{Fourth Parties}
+{A critical vendor relies on an undisclosed subcontractor. Assessing only the vendor misses what?}
+{\item Only pricing risk
+ \item Concentration and flow-down risk: assess critical subcontractors and require contractual flow-down
+ \item Only legal risk
+ \item Nothing: only the contract signatory matters}
+{B}
+{\item Subcontractors may share one provider
+ \item Controls may not flow down
+ \item Visibility needs contract rights
+ \item Critical chains need mapping}
+{The vendor\textquotesingle s vendor is still your risk.}
+
+\hq{100}{Anchoring}
+{Estimators are told ``last year\textquotesingle s loss was \$1M before giving their own estimates. Which bias is most likely, and what is the fix?}
+{\item Optimism bias: reward higher estimates
+ \item Availability bias: remove history entirely
+ \item No bias: history is objective
+ \item Anchoring: elicit independent estimates first, then discuss}
+{D}
+{\item The number pulls estimates toward it
+ \item Independent first-round estimates reduce this
+ \item Compare spreads before consensus
+ \item Use history as evidence, not as a prompt}
+{The first number heard shapes every number after it.}
+
+\begin{frame}{Key Takeaways for Domain B}
+  \begin{block}{Summary}
+    \begin{itemize}
+      \item \textbf{Analysis:} Use complements, base rates, correlation, skew and tails. Percentages compound.
+      \item \textbf{Evaluation:} Aggregate across silos. Ordinal scores and means can mislead.
+      \item \textbf{BIA:} Critical path, capacity, availability math, and RTO $+$ WRT $\leq$ MTD.
+      \item \textbf{Treatment:} Net, discounted benefit. Layers need independence. Transfer needs coverage.
+      \item \textbf{Monitoring:} Calibrate thresholds, verify independently, watch for decay.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Thank You}
+  \begin{center}
+    {\Huge \textbf{Good Luck on Your CRISC Exam!}}
+
+    \vspace{1cm}
+
+    Remember: the ISACA mindset is about\\
+    understanding why a question is asked,\\
+    not just what is technically correct.
+  \end{center}
+\end{frame}
+
+\end{document}

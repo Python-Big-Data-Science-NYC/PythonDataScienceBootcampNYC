@@ -1,0 +1,2778 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+
+\title{CRISC Domain D - 100 Hard Questions with Advanced Options}
+\subtitle{Information Technology and Security - Expert Level Part 4}
+\author{CRISC Mastery Series}
+\date{\today}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{Warning}
+		\begin{alertblock}{Extreme Difficulty}
+			Every question is scenario-based and asks for the BEST, FIRST, or MOST appropriate action.\\
+			Every option is long and plausible; several are partly correct.\\
+			Think like a risk practitioner advising the business, not a technician.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Outline}
+		\tableofcontents
+	\end{frame}
+	
+	% ============================================================
+	\section{1. Enterprise Architecture}
+	% ============================================================
+	
+	\begin{frame}{Q301: Missing Gap Analysis}
+		\begin{block}{Question}
+			\small A risk practitioner reviewing an architecture program finds that the target-state design was approved without any gap analysis between the baseline and target architectures. What is the MOST significant risk?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item The architecture board will be unable to meet again, because gap analysis is a mandatory precondition for scheduling any further review sessions
+			\item The target architecture will be technically invalid, because baseline documentation is always more reliable than any future-state design
+			\item Migration planning and funding will lack evidence of what must change, leading to underestimated cost, missed dependencies, and unmanaged transition risk
+			\item Vendors will be prevented from bidding, because requirements cannot be expressed to the market without a completed gap register
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q301: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Gap analysis links baseline to target state
+				\item It drives sequencing, cost, and dependency decisions
+				\item Without it, transition risk stays hidden
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A target state without gap analysis is an aspiration, not a plan.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q302: Conflicting Principles}
+		\begin{block}{Question}
+			\small Two approved principles conflict on a major initiative: ``buy before build'' and ``minimize exposure of regulated data to third parties.'' The sponsor wants a SaaS product that stores regulated customer data. What should the risk practitioner recommend FIRST?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Apply whichever principle has the lowest implementation cost, since principles are ranked by their financial impact on the project
+			\item Escalate through architecture governance for an explicit, documented trade-off decision, with risk acceptance by the accountable business owner
+			\item Reject the SaaS product, because a conflict between principles is always resolved in favor of the more restrictive principle
+			\item Approve the product and add compensating controls after go-live, since principles are guidance and do not require formal governance review
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q302: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Conflicts need a governed decision, not a silent choice
+				\item Trade-offs must be documented with rationale
+				\item Risk acceptance belongs to the accountable owner
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Principle conflicts are resolved by governance, not by convenience.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q303: Architecture Debt Prioritization}
+		\begin{block}{Question}
+			\small An architecture team reports that tactical integrations built to meet deadlines now generate most of the incident volume. Leadership asks whether to fund remediation. Which analysis BEST supports a risk-based decision?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Compare the remediation cost with the original project budget to determine whether the earlier shortcuts were cost-effective
+			\item Rank integrations by age and retire the oldest first, since age is the strongest single predictor of failure and security weakness
+			\item Defer remediation until incident volume exceeds the threshold written into the integration vendor's support contract
+			\item Quantify the ongoing operational and security exposure of the debt against the cost and risk of remediation, then prioritize by business criticality
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q303: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Debt is a risk exposure, not just a cost
+				\item Compare exposure against remediation effort
+				\item Prioritize by business criticality
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Fund remediation by risk reduction, not by age or sunk cost.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q304: Shadow IT Response}
+		\begin{block}{Question}
+			\small Business units are adopting unsanctioned SaaS tools that process customer data. Blocking them outright would disrupt operations. What is the BEST architecture-aligned response?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Issue a policy prohibiting all unsanctioned tools and rely on disciplinary action to drive compliance across business units
+			\item Discover and assess the tools, bring high-value ones under governance through risk-based onboarding, and offer sanctioned alternatives for unmet needs
+			\item Allow continued use but require each business unit to self-certify the security of its tools once a year
+			\item Transfer accountability for the tools to the business units that procured them and remove them from the IT risk register
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q304: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Visibility comes before control
+				\item Onboard valuable tools through risk-based review
+				\item Address the unmet need that drove adoption
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Shadow IT is a symptom of unmet needs; prohibition alone drives it underground.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q305: Identity Provider Dependency}
+		\begin{block}{Question}
+			\small An architecture review finds that authentication for 40 critical applications depends on a single identity provider instance in one data center. What is the MOST appropriate recommendation?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Migrate all 40 applications to local authentication so that none depend on a shared service for sign-in
+			\item Assess the business impact of identity provider failure and design resilience, such as redundancy, failover, and break-glass access, proportionate to application criticality
+			\item Accept the risk, because commercial identity platforms are vendor-supported and therefore inherently highly available
+			\item Add monitoring to detect outages quickly, since detection alone satisfies the availability requirement of dependent applications
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q305: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item A shared dependency creates correlated failure
+				\item Resilience should match dependent criticality
+				\item Break-glass access protects against lockout
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Shared services need resilience sized to what depends on them.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q306: Proprietary Cloud Services}
+		\begin{block}{Question}
+			\small A proposed cloud platform offers proprietary services that greatly reduce development time but make later migration costly. Which approach BEST addresses the lock-in risk?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Reject every proprietary service, since lock-in risk always outweighs the benefit of faster delivery
+			\item Rely on termination clauses in the contract, since legal exit rights remove the technical dependency
+			\item Evaluate exit cost and strategy during the decision, apply abstraction where the business case justifies it, and document residual lock-in as accepted risk
+			\item Adopt a multi-cloud design for every workload regardless of criticality to eliminate lock-in entirely
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q306: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Lock-in is a trade-off, not an automatic veto
+				\item Plan the exit before committing
+				\item Document residual risk for acceptance
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Manage lock-in through informed trade-offs, not blanket rules.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q307: Undocumented APIs}
+		\begin{block}{Question}
+			\small An organization adopting microservices discovers hundreds of undocumented internal APIs. Which risk should the practitioner treat as MOST critical from a governance standpoint?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Higher network latency from excessive service calls, which will degrade user experience across the platform
+			\item Unknown APIs cannot be inventoried, secured, or monitored, which leaves unmanaged attack surface and unclear ownership
+			\item Increased licensing cost, because each undocumented API will eventually require its own gateway license
+			\item Developers may rename endpoints, which would break backward compatibility for external partners
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q307: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item You cannot protect what you cannot see
+				\item Ownership of each API must be known
+				\item Inventory enables monitoring and security testing
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Undocumented interfaces are unmanaged attack surface.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q308: Expired Exception}
+		\begin{block}{Question}
+			\small An architecture exception allowed a non-standard database for 12 months. The exception has now expired, but the application still runs on it. What should the risk practitioner do FIRST?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Allow the exception to roll over automatically, since the application remains operational and unchanged
+			\item Instruct the application team to migrate immediately, regardless of cost, dependencies, or business impact
+			\item Ensure the expired exception is reassessed, current risk is reflected in the risk register, and renewal or remediation is decided by the accountable authority
+			\item Close the exception record, since expiry of the approval period shows the matter has been resolved
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q308: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Expiry does not remove the underlying risk
+				\item Reassess and update the risk register
+				\item Decision authority renews or remediates
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			An expired exception with a live deviation is an unmanaged risk.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q309: Acquisition Integration}
+		\begin{block}{Question}
+			\small After an acquisition, leadership wants fast integration of networks and applications. What should be the architecture risk priority?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Connect the networks immediately to realize synergies, and remediate security issues after integration is complete
+			\item Replace all acquired applications with the parent's standard stack before connecting any systems
+			\item Rely on the acquired company's compliance attestation, since it was reviewed during due diligence
+			\item Assess the acquired environment's security posture and dependencies before connecting it, then integrate in stages with defined trust boundaries
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q309: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Connecting unknown environments imports their risk
+				\item Stage integration with trust boundaries
+				\item Due diligence is not a substitute for technical assessment
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Assess before you connect.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q310: Conflicting Customer Data}
+		\begin{block}{Question}
+			\small Several departments keep their own copies of customer data with inconsistent definitions, causing reporting errors. Which architecture-level response BEST addresses the root cause?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Consolidate all departmental databases onto a single server so that duplicate copies disappear physically
+			\item Run a nightly reconciliation job that overwrites departmental data with the most recently updated version
+			\item Establish authoritative data sources and enterprise definitions with accountable data owners, supported by integration patterns that limit uncontrolled copies
+			\item Require each department to document its own definitions in a local data dictionary maintained by its team
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q310: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item The root cause is lack of authority and definition
+				\item Owners are accountable for each domain
+				\item Integration patterns reduce uncontrolled copies
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Fix data conflicts with ownership and authoritative sources, not with copying.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q311: Standards and Innovation}
+		\begin{block}{Question}
+			\small Engineering teams complain that mandatory technology standards slow innovation. What is the BEST way for architecture governance to respond?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Remove standards for non-production environments, since production controls are sufficient to manage risk
+			\item Keep standards for critical controls while providing a defined, risk-based path to evaluate and onboard new technologies
+			\item Suspend standards for innovation projects until they reach production readiness, then enforce them
+			\item Retain all standards unchanged, since any flexibility inevitably increases risk to the enterprise
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q311: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Governance should enable as well as restrict
+				\item Critical controls stay mandatory
+				\item A clear onboarding path reduces workarounds
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Good governance offers a path for new technology, not only a wall.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q312: Fragile Strategic Capability}
+		\begin{block}{Question}
+			\small A capability heat map shows a capability rated critical to strategy but supported by an end-of-life application with little investment planned. What should the risk practitioner conclude?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item The risk is low, because end-of-life applications are normally covered by extended support arrangements
+			\item The application must be decommissioned immediately, because end-of-life status always outweighs capability value
+			\item Strategic dependence on a fragile asset is a significant risk that requires prioritized investment or a mitigation plan
+			\item The heat map is flawed, because capabilities should not be rated by strategic importance
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q312: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item High criticality plus weak support equals high risk
+				\item Mitigation or investment must be planned
+				\item Strategy depends on supporting assets
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Criticality without support is a risk hotspot.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q313: Reference Architecture Deviation}
+		\begin{block}{Question}
+			\small A project team deviates from the approved reference architecture to meet a deadline, claiming equivalent controls. What is the BEST way to validate the claim?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Accept the claim, because the project manager is accountable for delivery and schedule risk
+			\item Require full adoption of the reference architecture without considering the control objectives the team cites
+			\item Ask the vendor who supplied the components to certify that the design is equivalent
+			\item Have architecture or security review the deviation against the control objectives the reference architecture satisfies, and document the outcome
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q313: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Equivalence must be demonstrated, not asserted
+				\item Compare against control objectives
+				\item Document the review outcome
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A claim of equivalent controls needs independent validation.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q314: Cloud-First Strategy}
+		\begin{block}{Question}
+			\small The CIO announces a ``cloud-first'' strategy. Which action BEST ensures that risk is considered in its implementation?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Embed risk criteria in workload placement decisions, such as data sensitivity, regulatory constraints, and exit feasibility
+			\item Migrate low-risk workloads first and postpone any risk assessment until high-risk workloads are considered
+			\item Delegate cloud risk decisions to the provider through the shared responsibility model
+			\item Require all business units to adopt cloud by a fixed date to ensure a consistent approach
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q314: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Strategy needs decision criteria
+				\item Placement depends on data and regulation
+				\item Shared responsibility does not transfer accountability
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Cloud-first still needs risk-based placement.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q315: Tight Coupling}
+		\begin{block}{Question}
+			\small A proposed architecture uses tightly coupled components to reduce cost. What risk should the practitioner highlight?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Tight coupling increases the likelihood that one failure cascades across components, reducing resilience and making change harder to isolate
+			\item Tight coupling prevents scalability, because coupled components can never be deployed on separate servers
+			\item Tightly coupled systems cannot be monitored, because telemetry requires loosely coupled interfaces
+			\item Cost optimization is not an architecture concern and should not influence design decisions
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q315: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Coupling spreads failures
+				\item Changes become harder to isolate
+				\item Cost savings must be weighed against resilience
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Efficiency gained through coupling is paid for in fragility.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q316: Stale Architecture Repository}
+		\begin{block}{Question}
+			\small A review finds the enterprise architecture repository is largely out of date. What is the MOST significant implication for risk management?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Audit findings will increase, since documentation deficiencies are always scored as high severity
+			\item Risk assessments and impact analyses based on inaccurate architecture information may misjudge dependencies and exposure
+			\item Architecture staff will lose motivation, reducing the quality of future designs
+			\item The repository can be disregarded, because operational teams already hold accurate tacit knowledge
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q316: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Risk analysis relies on accurate dependency data
+				\item Stale data leads to wrong impact conclusions
+				\item Tacit knowledge is not auditable or scalable
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Outdated architecture data produces unreliable risk conclusions.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q317: Governance Effectiveness}
+		\begin{block}{Question}
+			\small How can the risk practitioner BEST determine whether architecture governance is effective?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Assess whether the process consistently influences decisions, for example exceptions are tracked, deviations are remediated, and outcomes align with principles
+			\item Count the number of architecture review meetings held each quarter
+			\item Measure the number of projects approved without conditions, since that indicates alignment
+			\item Verify that all architecture documents are stored in the repository, whether or not they are used
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q317: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Effectiveness is shown by influence on decisions
+				\item Track exceptions and remediation
+				\item Activity counts are not outcomes
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Measure outcomes of governance, not its activity.
+		\end{alertblock}
+	\end{frame}
+		
+	% ============================================================
+	\section{2. IT Operations and Change Management}
+	% ============================================================
+	
+	\begin{frame}{Q318: Unapproved Emergency Change}
+		\begin{block}{Question}
+			\small A critical outage required an emergency change. The change manager was unavailable and an engineer deployed the fix under verbal approval. What is the MOST important follow-up?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Retroactively review and document the change through the emergency change process, including approval, testing evidence, and post-implementation validation
+			\item Take no further action, since the outage was resolved and the speed of response was justified
+			\item Revert the change at once to restore the prior state, and then process it through the normal procedure
+			\item Discipline the engineer for bypassing approval and treat the matter as closed
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q318: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Emergency changes still need records
+				\item Approval and evidence are captured after the event
+				\item Validate that the fix did not introduce new risk
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Emergency does not mean undocumented.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q319: Rubber-Stamp CAB}
+		\begin{block}{Question}
+			\small A change advisory board approves 98 percent of changes, while change-related incidents are rising. What should the risk practitioner investigate FIRST?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Whether the board receives sufficient risk and impact information and challenges changes rigorously, or approves as a formality
+			\item Whether the board should meet more often to reduce its backlog of pending requests
+			\item Whether membership should be limited to IT staff so that decisions are faster
+			\item Whether incidents are being misclassified, since a high approval rate indicates good change quality
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q319: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Approval rate alone says little
+				\item Look at the quality of information reviewed
+				\item Challenge and testing evidence matter
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A board that approves everything is not a control.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q320: Developer Deploys to Production}
+		\begin{block}{Question}
+			\small A developer can deploy their own code to production in an organization that requires change approval. If segregation cannot be fully achieved, which is the BEST compensating control?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item A manager's informal confirmation that the developer is trustworthy and experienced
+			\item Independent review of deployment logs against approved change records, performed by someone other than the deployer
+			\item Quarterly security awareness training that covers secure deployment practices
+			\item A policy statement reminding developers that unapproved code must not be deployed
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q320: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Compensating controls must detect misuse
+				\item Independence is essential
+				\item Reconcile deployments to approvals
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A compensating control needs independent detection, not trust.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q321: Inaccurate CMDB}
+		\begin{block}{Question}
+			\small An audit finds the CMDB is accurate for only 60 percent of critical assets. What is the MOST significant risk?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Asset depreciation will be misreported in the financial statements
+			\item Software licensing costs will rise, because vendors can audit the CMDB for discrepancies
+			\item Incident, change, and vulnerability decisions will rely on incomplete dependency and ownership data, causing misjudged impact
+			\item IT staff will be unable to access configuration management tools during incidents
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q321: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item CMDB supports many operational processes
+				\item Poor data misleads impact assessment
+				\item Ownership gaps delay response
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A weak CMDB weakens every process that depends on it.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q322: Unpatchable Legacy System}
+		\begin{block}{Question}
+			\small A business-critical system cannot be patched because the vendor no longer supports it, and a high-severity vulnerability is being exploited in the wild. What is the BEST response?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Accept the vulnerability, because unsupported systems cannot be remediated in any way
+			\item Implement compensating controls such as isolation, access restriction, and enhanced monitoring, document risk acceptance, and plan replacement
+			\item Shut down the system immediately regardless of its business impact
+			\item Apply a patch from a public forum that claims to fix the flaw, since it is the only option available
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q322: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Isolate and monitor the exposed system
+				\item Document acceptance by the accountable owner
+				\item Plan replacement of unsupported technology
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			If you cannot patch, you must contain.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q323: Recurring Incidents}
+		\begin{block}{Question}
+			\small Incidents of the same type recur monthly and are each resolved quickly by the service desk. What does this MOST likely indicate?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Problem management is ineffective, because root causes are not being identified and eliminated
+			\item Incident management is working well, since each incident is resolved within the SLA
+			\item The service desk needs additional staff to reduce recurrence
+			\item The incident classification scheme should be simplified to reduce repeated tickets
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q323: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Fast fixes can hide systemic causes
+				\item Problem management targets root cause
+				\item Recurrence signals a process gap
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Quick resolution of repeat incidents hides a problem-management failure.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q324: SLA Met but Users Unhappy}
+		\begin{block}{Question}
+			\small A provider consistently meets its SLA availability targets, yet business users complain about poor performance. What is the BEST explanation?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item SLA metrics may not reflect the business-relevant user experience, such as measuring server uptime rather than transaction performance
+			\item Users are exaggerating, since SLA metrics are objective and verified
+			\item The SLA is too strict and should be relaxed to match what users realistically expect
+			\item The provider should be penalized regardless, because complaints indicate a breach
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q324: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Metrics must reflect business outcomes
+				\item Uptime is not the same as usable service
+				\item Revisit SLA measures with the business
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Meeting the SLA is not the same as meeting the need.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q325: Peak Season Failure}
+		\begin{block}{Question}
+			\small A retailer's e-commerce platform failed in peak season despite monthly capacity reports showing 60 percent average utilization. What is the MOST likely gap?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Capacity planning based on average utilization did not model peak demand or growth scenarios
+			\item Capacity reports should have been reviewed weekly rather than monthly
+			\item Servers should have been sized to run at 100 percent utilization targets
+			\item Capacity planning is the cloud provider's responsibility under any deployment model
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q325: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Averages hide peaks
+				\item Model growth and seasonal scenarios
+				\item Plan for demand, not for history
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Plan capacity for peaks, not averages.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q326: Untested Rollback}
+		\begin{block}{Question}
+			\small A release process has no tested rollback procedure. A deployment fails and takes hours to reverse. Which control improvement is MOST appropriate?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Prohibit deployments during business hours so failures affect fewer users
+			\item Require documented and tested rollback plans as an approval criterion, validated in pre-production
+			\item Increase the number of approvers required on every release
+			\item Require all releases to be deployed by the most senior engineers
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q326: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Rollback is a recovery control for change
+				\item It must be tested before approval
+				\item Approval criteria enforce discipline
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			An untested rollback plan is only a hope.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q327: Alert Fatigue}
+		\begin{block}{Question}
+			\small Security operations receive thousands of alerts daily and analysts routinely ignore them. What is the BEST way to improve detection effectiveness?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Disable all low-severity alerts across every system to cut volume
+			\item Hire additional analysts so that every alert can be reviewed manually
+			\item Outsource alert review to a provider without changing the existing alert rules
+			\item Tune and prioritize alerts using risk-based use cases, thresholds, and context so analysts focus on high-fidelity events
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q327: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Noise hides real incidents
+				\item Tune with risk-based use cases
+				\item Add context to improve fidelity
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			More alerts are not better detection.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q328: Shared Admin Accounts}
+		\begin{block}{Question}
+			\small A managed service provider administers production systems using shared privileged accounts. What is the PRIMARY risk?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Password complexity cannot be enforced on shared accounts, which makes brute-force attacks the primary exposure from this arrangement
+			\item Lack of individual accountability and inability to attribute actions, increasing the risk of undetected misuse
+			\item Provider staff will be unable to perform emergency changes, because shared accounts are blocked by most change management tools
+			\item Contractual liability will shift to the organization, because shared credential use is treated as customer-approved access under standard service terms
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q328: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Shared accounts prevent attribution
+				\item Misuse becomes hard to detect
+				\item Use named accounts with PAM
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Shared credentials destroy accountability.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q329: Reliable Asset Inventory}
+		\begin{block}{Question}
+			\small Which is the MOST reliable approach to maintaining an accurate hardware and software inventory?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Conduct an annual manual count performed by IT staff
+			\item Ask department heads to email lists of the assets they use
+			\item Rely on purchase orders alone as the source of truth
+			\item Combine automated discovery with reconciliation to procurement and ownership records, and investigate discrepancies
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q329: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Automated discovery finds the unknown
+				\item Reconcile with procurement and owners
+				\item Discrepancies reveal shadow assets
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Inventory accuracy needs discovery plus reconciliation.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q330: Pre-Approved Standard Changes}
+		\begin{block}{Question}
+			\small A DevOps team wants to pre-approve frequent low-risk deployments to avoid CAB delays. What is the BEST risk-informed approach?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Exempt DevOps teams from change management entirely, since they own their deployments and are accountable for the results
+			\item Define standard changes with clear criteria, automated testing and controls, and periodic review of outcomes to confirm they remain low risk
+			\item Pre-approve all changes below a defined cost threshold, since low-cost changes carry proportionately low risk
+			\item Allow teams to classify any change as standard without documented criteria, provided the team lead agrees afterward
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q330: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Pre-approval needs defined criteria
+				\item Automation provides control evidence
+				\item Review outcomes to validate low risk
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Speed is gained through controlled standardization, not exemption.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q331: Skipped Post-Implementation Reviews}
+		\begin{block}{Question}
+			\small Post-implementation reviews are skipped for most changes. What is the BEST justification for reinstating them?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item They verify that intended outcomes and controls were achieved, capture lessons learned, and reveal unexpected or unauthorized side effects
+			\item They satisfy a regulatory requirement that applies to all changes without exception
+			\item They allow IT leadership to assign accountability for failed changes and apply performance penalties to the responsible teams
+			\item They replace the need for testing before deployment by validating each change in the live environment instead
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q331: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Confirm objectives and controls were met
+				\item Capture lessons for future changes
+				\item Detect unintended effects
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Reviews close the change loop.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q332: Monitoring Coverage}
+		\begin{block}{Question}
+			\small Which situation represents the greatest operational risk related to monitoring?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Monitoring dashboards differ in layout and color across teams, which prevents consistent interpretation of system status during incidents
+			\item Monitoring data is retained longer than operational needs require, increasing storage cost beyond what the business case approved
+			\item Non-production systems are not monitored in real time, which leaves development environments without immediate failure alerts
+			\item Critical systems are monitored for availability but not for security-relevant events or performance degradation
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q332: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Coverage must match risk
+				\item Availability alone misses degradation
+				\item Security events need visibility
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Monitor what matters, not just what is easy.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q333: Silent Batch Failure}
+		\begin{block}{Question}
+			\small A batch job failed silently over a weekend, causing incorrect financial reports. Which control improvement is MOST appropriate?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Run batch jobs only during business hours so failures are noticed sooner
+			\item Require the CFO to manually review all report outputs
+			\item Replace the scheduling tool with a different vendor's product
+			\item Implement job monitoring with automated failure alerting, escalation, and reconciliation checks on outputs
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q333: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Failures must generate alerts
+				\item Escalation ensures response
+				\item Reconcile outputs to detect errors
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A failure nobody sees is a control gap.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q334: Missed Escalation}
+		\begin{block}{Question}
+			\small A major incident exceeded its expected resolution time, but the incident manager never escalated to senior management. What is the MOST likely root cause to examine?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Insufficient technical skill in the resolver team, which delayed diagnosis and made escalation seem unnecessary
+			\item Excessive reliance on automated triage tools, which suppressed the alerts that would otherwise have prompted escalation
+			\item Lack of interest in operational issues among senior management, which discouraged the incident manager from raising concerns
+			\item Absence of clear escalation criteria and thresholds based on impact and duration in the incident management process
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q334: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Escalation needs defined triggers
+				\item Impact and duration drive thresholds
+				\item Process gaps beat blaming individuals
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Without triggers, escalation depends on judgment under pressure.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q335: Cloud Console Changes}
+		\begin{block}{Question}
+			\small Operations teams lack visibility into configuration changes made through cloud management consoles. What is the BEST control?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Permanently disable console access for all staff and require every change to go through a ticket handled by a single administrator
+			\item Rely on provider-level logs for audit purposes, without a defined process to review or alert on them
+			\item Enforce infrastructure as code with change logging, and detect and alert on drift from approved configuration
+			\item Require staff to notify the team by email after each console change so that changes can be recorded manually
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q335: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Code-driven changes are reviewable
+				\item Drift detection finds unapproved changes
+				\item Logs must be monitored, not just kept
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Controlled cloud change comes from code and drift detection.
+		\end{alertblock}
+	\end{frame}
+		
+	% ============================================================
+	\section{3. Enterprise Resiliency}
+	% ============================================================
+	
+	\begin{frame}{Q336: RTO Versus Capability}
+		\begin{block}{Question}
+			\small A BIA sets an RTO of 4 hours for a process, but the supporting application has a documented recovery time of 12 hours. What is the BEST action?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Address the gap by improving recovery capability or having the business formally reassess and accept the risk based on impact
+			\item Update the BIA to reflect the 12-hour recovery time as the new RTO
+			\item Take no action, since a DR plan exists and is documented
+			\item Move the process to a different application without further analysis
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q336: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item A gap between need and capability is a risk
+				\item Fix capability or formally accept risk
+				\item Do not rewrite requirements to fit capability
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Do not change the requirement to hide the gap.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q337: RPO Mismatch}
+		\begin{block}{Question}
+			\small A system replicates data to the DR site every 6 hours, while the business states it can tolerate at most 1 hour of data loss. Which statement is correct?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item The RTO is violated because replication occurs too infrequently
+			\item The design is acceptable, because RPO applies only to tape backups
+			\item The replication interval does not meet the RPO, so the solution must be redesigned or the shortfall formally accepted
+			\item The MTPD must be extended to 6 hours to match the replication interval
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q337: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item RPO defines tolerable data loss
+				\item Replication interval must be at or below the RPO
+				\item Shortfall requires a decision
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			RPO is about data loss, RTO is about time.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q338: RTO and MTPD}
+		\begin{block}{Question}
+			\small Which relationship between RTO and MTPD is MOST appropriate?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item RTO is shorter than MTPD, leaving margin before unacceptable impact occurs
+			\item RTO equals MTPD, because any margin implies wasted recovery investment
+			\item RTO exceeds MTPD, because RTO measures only technical recovery effort
+			\item They are unrelated, because they are defined for different audiences
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q338: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item MTPD is the limit of tolerable outage
+				\item RTO is the target within that limit
+				\item Margin allows for recovery variability
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			RTO must fall inside MTPD.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q339: Unrealistic DR Test}
+		\begin{block}{Question}
+			\small A DR test was announced two weeks in advance, used the best staff, and restored only non-critical systems. What is the MOST significant limitation?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item The test was too short to evaluate the recovery procedures properly
+			\item The test does not give reliable assurance that critical systems can be recovered under realistic conditions
+			\item Using the best staff violates segregation of duties requirements
+			\item Advance announcement of a DR test is a regulatory violation
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q339: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Tests must reflect real conditions
+				\item Critical systems must be included
+				\item Surprise and varied staffing build confidence
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A test that avoids the hard parts proves little.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q340: Ransomware and Backups}
+		\begin{block}{Question}
+			\small Following a ransomware event, backups were also encrypted because they were reachable from the production domain. Which control BEST addresses this?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Immutable or offline backups with separate credentials and tested restoration
+			\item Increase backup frequency to every hour, writing to the same repository so that recovery points are as recent as possible
+			\item Apply stronger encryption to the backup files so that attackers cannot read the data even if they can reach it
+			\item Extend backup retention to twelve months so that older copies exist if recent copies are affected
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q340: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Backups must be isolated from production
+				\item Immutability prevents tampering
+				\item Restoration must be tested
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Backups reachable by attackers are not a recovery plan.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q341: Single Region SLA}
+		\begin{block}{Question}
+			\small A critical SaaS application is hosted in a single cloud region, and the provider's SLA guarantees 99.9 percent availability. What is the BEST risk consideration?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item SLA credits do not restore operations, so the organization must assess whether regional failure fits within its impact tolerance and plan accordingly
+			\item The SLA transfers all availability risk to the provider
+			\item A 99.9 percent SLA is equivalent to no unplanned downtime
+			\item A single region is always more resilient than multi-region
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q341: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item SLA compensates but does not recover
+				\item Compare outage risk with tolerance
+				\item Plan for regional failure where needed
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			SLAs compensate for outages; they do not prevent them.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q342: Supplier Without BCP}
+		\begin{block}{Question}
+			\small A business continuity plan assumes the availability of a critical supplier that has no continuity plan of its own. What is the BEST response?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Remove the dependency from the plan and document it as out of scope, since the supplier's resilience is outside the organization's control
+			\item Accept the supplier's verbal assurance of continuity, since the supplier has an established reputation and a long relationship with the organization
+			\item Transfer the risk to the supplier through contract wording alone, and consider the matter closed once the contract is signed
+			\item Assess supplier resilience, require or evaluate continuity capability, and develop alternatives or contingencies for the dependency
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q342: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Dependencies must be assessed
+				\item Develop contingencies
+				\item Contracts do not guarantee recovery
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A dependency you cannot verify is a risk you own.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q343: Communication Failure in Exercise}
+		\begin{block}{Question}
+			\small In a tabletop exercise, technical recovery went well, but communications to customers and regulators were delayed and inconsistent. What is the MOST appropriate improvement?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Add more technical staff to the response team so that recovery work is completed sooner and communication can follow
+			\item Remove external communications from the plan to avoid inconsistent messaging, and handle them ad hoc through executives
+			\item Reserve all communications for legal counsel without defined timing, so that every statement is reviewed before release
+			\item Define communication roles, templates, and approval paths in the plan and rehearse them
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q343: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Communication is part of recovery
+				\item Pre-approved templates save time
+				\item Rehearsal exposes delays
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Recovery includes communication.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q344: Outdated BCP}
+		\begin{block}{Question}
+			\small A BCP was last updated three years ago, although significant organizational and technology changes have occurred. What is the PRIMARY risk?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item The plan may no longer reflect critical processes, dependencies, and contacts, making it ineffective in a real event
+			\item Auditors will impose a financial penalty, because regulations require continuity plans to be rewritten every year
+			\item The plan will become too detailed for executives to use, reducing the likelihood that decision makers will read it
+			\item Insurance coverage will lapse automatically, because insurers require evidence of annual plan revisions
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q344: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Plans must follow organizational change
+				\item Contacts and dependencies change
+				\item Review on a schedule and after major changes
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A plan that does not match reality will fail when needed.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q345: Recovery Sequencing}
+		\begin{block}{Question}
+			\small During DR planning, several applications claim to be Tier 1. What should determine recovery sequencing?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item The seniority and influence of each application owner, since senior owners are best placed to judge their own priority
+			\item The technical complexity of each application, so that the simplest systems are restored first to show quick progress
+			\item BIA results, including dependencies between applications and shared infrastructure
+			\item The order in which the applications were deployed, because older systems usually underpin newer ones
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q345: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Business impact sets priority
+				\item Dependencies determine order
+				\item Foundation services recover first
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Sequence by business impact and dependency, not by politics.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q346: Untested Restores}
+		\begin{block}{Question}
+			\small Backups complete successfully every night, but restoration has never been tested. What is the BEST assessment?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item The control is effective, because job completion is verified daily and failures are corrected by the backup team
+			\item Restoration testing is optional where backups are encrypted, since encryption already assures integrity and availability
+			\item Backup completion does not demonstrate recoverability, so periodic restoration tests are required
+			\item Testing can be replaced by increasing backup frequency, since more recovery points reduce the need to verify restores
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q346: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Success status is not proof of restore
+				\item Test restores regularly
+				\item Frequency does not equal recoverability
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A backup is only as good as its last successful restore.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q347: Active-Active Assumption}
+		\begin{block}{Question}
+			\small Management proposes active-active data centers to guarantee zero downtime. Which risk should the practitioner highlight?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Active-active designs cannot meet recovery time objectives, because switching traffic between sites always takes longer than restoring from backup
+			\item Shared logical failures, such as bad deployments, data corruption, or misconfiguration, can propagate to both sites simultaneously
+			\item Cost makes active-active unsuitable for every critical application, so asynchronous replication is always the better choice
+			\item Both sites will always be affected by the same physical disaster, because active-active requires them to be in the same metropolitan area
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q347: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Replication copies mistakes too
+				\item Logical failures affect both sites
+				\item Backups and change control are still needed
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Redundancy protects against hardware failure, not against bad changes.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q348: Concentration Risk}
+		\begin{block}{Question}
+			\small Many critical functions rely on a single cloud provider and a single DNS service. Which term BEST describes this risk?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Concentration risk, where one provider failure could disrupt multiple critical services at once
+			\item Residual risk, because the dependency remains after existing controls and redundancy have been applied
+			\item Inherent risk, because the dependency exists before any controls are considered and is determined by the business model
+			\item Risk appetite, because the board has chosen to rely on a small number of providers to simplify management
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q348: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Many services share one dependency
+				\item A single failure creates broad impact
+				\item Diversify or build contingency
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			One dependency, many failures.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q349: Impact Tolerance}
+		\begin{block}{Question}
+			\small Regulators require firms to define impact tolerances for important business services. How does impact tolerance differ from RTO?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Impact tolerance is a technical metric measured by IT, expressing how quickly infrastructure must be restored after failure
+			\item Impact tolerance replaces the BIA, because it gives a single maximum disruption figure for the entire organization
+			\item Impact tolerance is determined by service vendors in the SLA, which sets the limit of disruption customers must accept
+			\item Impact tolerance defines the maximum disruption of a business service the organization can withstand, independent of the technical recovery design
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q349: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Tolerance is business-service focused
+				\item It sets the limit of acceptable harm
+				\item Technical design must meet it
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Impact tolerance is a business limit, not a technical target.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q350: People and Site Dependencies}
+		\begin{block}{Question}
+			\small A BCP focuses on IT recovery but assumes staff can reach alternate sites. A regional event prevents travel. What gap does this show?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Inadequate backup frequency, which prevented timely restoration of data at the alternate site
+			\item Insufficient firewall capacity at the alternate site, which slowed access after failover
+			\item Insufficient consideration of people and workspace dependencies and remote work capability
+			\item Excessive involvement of vendors in the response, which reduced the organization's control over recovery decisions
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q350: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Recovery depends on people
+				\item Alternate access must be tested
+				\item Plan beyond technology
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Continuity includes people and places, not just systems.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q351: Restoring After Ransomware}
+		\begin{block}{Question}
+			\small After a ransomware attack, the team wants to restore the latest backup immediately. What should be done FIRST?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Restore the latest backup immediately to minimize downtime, and run the investigation in parallel once systems are back
+			\item Pay the ransom to obtain the decryption key quickly, since this is usually faster than restoring from backups
+			\item Rebuild all systems from scratch before confirming scope, so that nothing from the compromised environment remains
+			\item Contain the threat and identify a clean restore point to avoid reintroducing the malware
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q351: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Contain before restoring
+				\item Choose a verified clean restore point
+				\item Restoring infected data re-infects
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Speed without containment repeats the incident.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q352: DR Test Frequency}
+		\begin{block}{Question}
+			\small Which factor should MOST influence the frequency and depth of DR testing for a system?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item The cost of the DR site, since expensive recovery environments should be tested less often to control operating expense
+			\item The vendor's recommended schedule, since the vendor best understands how its own recovery features should be verified
+			\item Criticality of supported processes, rate of change in the environment, and previous test results
+			\item The number of users with access to the system, since a larger user base creates more recovery complexity
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q352: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Test more where impact is greater
+				\item Change increases test need
+				\item Past failures drive deeper testing
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Test in proportion to risk.
+		\end{alertblock}
+	\end{frame}
+		
+	% ============================================================
+	\section{4. Data Lifecycle Management}
+	% ============================================================
+	
+	\begin{frame}{Q353: Overcomplicated Classification}
+		\begin{block}{Question}
+			\small Data classification is applied inconsistently because users find a seven-level scheme too complex. What is the BEST improvement?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Mandate disciplinary action for any misclassification, so that users treat the scheme seriously
+			\item Increase the number of levels so that each data type can be classified with greater precision
+			\item Simplify the scheme to a few clear levels with handling rules and examples, supported by training and automated labeling
+			\item Classify all data at the highest level so that users do not need to exercise judgment
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q353: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Usability drives adherence
+				\item Handling rules must be clear
+				\item Automation reduces reliance on users
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A scheme that people cannot use is not a control.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q354: Legal Hold}
+		\begin{block}{Question}
+			\small A retention policy requires deletion of emails after 3 years, but the organization receives notice of litigation involving older emails. What should happen?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Continue deletion according to policy, since the retention schedule is the approved procedure and avoids storing excess data
+			\item Move the relevant emails to the personal storage of the custodians, so that organizational systems still comply with the retention policy
+			\item Delete the emails as scheduled but retain a summary document describing their content for use in the litigation
+			\item Suspend deletion of relevant data under a legal hold managed by legal counsel
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q354: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Legal obligations override routine deletion
+				\item Legal counsel directs the hold
+				\item Destroying evidence creates liability
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A legal hold overrides the retention schedule.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q355: Collecting Just in Case}
+		\begin{block}{Question}
+			\small A project proposes collecting additional customer attributes ``in case they are useful later.'' Which principle is MOST relevant?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Data minimization: collect only data necessary for a defined, legitimate purpose
+			\item Data redundancy: retain multiple copies of each attribute so that future analytical needs can be met without recollection
+			\item Data portability: allow customers to move their data so that additional attributes can be reused across services
+			\item Data availability: keep all collected attributes online and accessible so that future projects can use them without delay
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q355: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Collect only what is needed
+				\item Purpose must be defined
+				\item Excess data is excess risk
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Data you do not hold cannot be breached.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q356: Production Data in Test}
+		\begin{block}{Question}
+			\small Developers use copies of production data in test environments with weaker controls. What is the BEST mitigation?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Apply the same password policy to test environments as to production, which brings their authentication in line
+			\item Allow the practice provided developers sign confidentiality agreements acknowledging the sensitivity of the data
+			\item Use masked, tokenized, or synthetic data in non-production, allowing production data only under approved and controlled exceptions
+			\item Restrict test environment access to one named developer, so that exposure of production data is limited to a single person
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q356: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Remove sensitivity from test data
+				\item Exceptions require approval
+				\item Controls should match data sensitivity
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Sensitive data in weak environments is a breach waiting to happen.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q357: Ownerless Dataset}
+		\begin{block}{Question}
+			\small A critical dataset has no assigned owner, and each team assumes someone else is responsible. What is the MOST significant risk?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Storage costs will rise, because unowned datasets cannot be archived or deleted without an approver
+			\item System performance will degrade, because unowned data is not tuned, indexed, or maintained
+			\item No one is accountable for classification, access decisions, quality, or retention, so risk goes unmanaged
+			\item Licensing fees will increase, because vendors charge more for datasets without a registered business owner
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q357: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Ownership drives decisions
+				\item Access approvals need an owner
+				\item Unowned data is unmanaged data
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Unowned data is unmanaged risk.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q358: Conflicting Reports}
+		\begin{block}{Question}
+			\small Reports from a data warehouse regularly conflict with source system figures. Which approach BEST addresses this?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Implement data quality controls and lineage tracing with reconciliation and ownership at each stage
+			\item Replace the business intelligence tool with a different product
+			\item Instruct users to rely only on the source system
+			\item Add more reports so users can cross-check them manually
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q358: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Trace data from source to report
+				\item Reconcile at each stage
+				\item Assign ownership of quality
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Trust in data comes from lineage and reconciliation.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q359: Exiting a Cloud Provider}
+		\begin{block}{Question}
+			\small How can an organization BEST ensure data is irrecoverable when exiting a cloud provider whose physical media it cannot inspect?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Ask the provider to delete the files and rely on its confirmation email as evidence of deletion
+			\item Overwrite the data once using the provider's management portal before closing the account
+			\item Use cryptographic erasure by destroying keys the organization controls, supported by contractual deletion obligations and evidence
+			\item Require physical destruction of the servers that stored the data, witnessed by the customer at the provider's data center
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q359: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Key destruction renders data unreadable
+				\item Customer control of keys is essential
+				\item Contracts require evidence of deletion
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			When you cannot destroy the media, destroy the keys.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q360: Cross-Border Processing}
+		\begin{block}{Question}
+			\small A business wants to use a global analytics service that processes personal data in another region. What should be assessed FIRST?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Performance benchmarks of the analytics service, to confirm it can process the expected data volumes
+			\item Cost savings from regional pricing, to confirm the business case before any legal review begins
+			\item The legal basis and transfer mechanisms for cross-border processing, together with the provider's safeguards
+			\item Whether the data can be compressed before transfer, so that transmission cost and exposure are minimized
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q360: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Privacy law governs where data may go
+				\item Transfer mechanisms must exist
+				\item Evaluate provider safeguards
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Legality comes before performance.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q361: DLP Bypass}
+		\begin{block}{Question}
+			\small DLP generates many false positives, and users bypass it by using personal email. What is the BEST response?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Tune policies with business input, combine with user education, and address the workflow needs that cause users to seek alternatives
+			\item Disable DLP to improve productivity until the false-positive rate falls to an acceptable level
+			\item Increase blocking sensitivity so that fewer sensitive files can leave through any channel, including personal email
+			\item Replace DLP with a stronger perimeter firewall that blocks all external email destinations by default
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q361: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Tune policies with business input
+				\item Educate users
+				\item Fix the workflow need
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Controls that block work get bypassed.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q362: Tokenization Versus Encryption}
+		\begin{block}{Question}
+			\small Which statement BEST differentiates tokenization from encryption?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Tokenization is reversible using an encryption key held by the application, whereas encryption cannot be reversed once applied
+			\item Tokenization replaces data with surrogate values mapped in a secure vault, while encryption mathematically transforms data and is reversible with a key
+			\item Both are hashing techniques; they differ only in output format and are interchangeable for protecting regulated data
+			\item Tokenization always requires more computing power than encryption, which is why it is used only for small datasets
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q362: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Tokens have no mathematical relationship to data
+				\item Vault mapping enables detokenization
+				\item Encryption depends on key protection
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Tokens are substitutes; ciphertext is transformed data.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q363: Erasure and Backups}
+		\begin{block}{Question}
+			\small A data subject requests erasure, but the data also exists in backups that cannot be selectively modified. What is the BEST approach?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Refuse the request, because backups are always exempt from erasure rights under privacy regulations
+			\item Delete all backup sets immediately, so that complete erasure is guaranteed regardless of recovery consequences
+			\item Delete from live systems, document the backup limitation, ensure the data is not restored or used, and let it expire under the backup retention schedule
+			\item Ignore the request until a backup is next restored, then delete the data from the restored system
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q363: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Erase from active systems first
+				\item Document technical limits
+				\item Prevent use of backup copies
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Handle backup limits transparently, not by ignoring them.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q364: Shadow Data}
+		\begin{block}{Question}
+			\small Discovery tools find sensitive data in unmanaged file shares and personal cloud storage. What is the BEST action?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Delete all discovered data immediately, since unmanaged data has no business justification
+			\item Block all access to cloud storage services across the organization until a full inventory is completed
+			\item Accept the risk and issue a reminder, since users are responsible for the storage locations they choose
+			\item Inventory and classify the data, determine ownership, move or protect it under approved controls, and address the behaviors that created it
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q364: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Discover, classify, and assign owners
+				\item Move data into controlled locations
+				\item Fix the root behavior
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Discovery is the start, not the end.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q365: Why Map Data}
+		\begin{block}{Question}
+			\small Why is a data inventory and map foundational to data lifecycle risk management?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item It replaces the need for classification, because location and flow information already indicate sensitivity
+			\item It is required only for backup planning, since other controls rely on classification rather than location
+			\item Controls, retention, privacy obligations, and incident response all depend on knowing where data resides and how it flows
+			\item It reduces the need for periodic access reviews, because the flows already show who uses each dataset
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q365: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item You cannot protect unknown data
+				\item Privacy obligations depend on flows
+				\item Incident response needs data location
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			You cannot manage data you cannot locate.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q366: Sub-Processors}
+		\begin{block}{Question}
+			\small A processor sub-contracts part of its service to another vendor that handles your customer data. Which control is MOST important?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item No additional action is needed, because the primary vendor remains fully liable for its subcontractors
+			\item Ask the sub-vendor to sign a confidentiality agreement, which is sufficient assurance of protection
+			\item Require disclosure of the vendor's pricing and margin structure so that cost transparency is maintained across the chain
+			\item Contractual requirements for sub-processor approval and flow-down of security and privacy obligations, with the ability to assess compliance
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q366: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Obligations must flow down
+				\item Approval rights over sub-processors
+				\item Right to assess compliance
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Your obligations extend down the supply chain.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q367: Inconsistent Retention}
+		\begin{block}{Question}
+			\small Different departments keep data for varying periods with no consistent basis. What is the BEST approach?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Keep all data indefinitely to avoid any risk of noncompliance with retention obligations
+			\item Allow each data owner to choose a retention period based on the needs of their own department
+			\item Delete all data after one year to minimize exposure, regardless of legal or business requirements
+			\item Establish a retention schedule based on legal, regulatory, and business requirements with defined disposal procedures
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q367: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Retention must reflect obligations
+				\item Schedule and disposal are linked
+				\item Consistency supports compliance
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Retention is driven by requirements, not preference.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q368: Long-Term Archives}
+		\begin{block}{Question}
+			\small Archived records must remain readable and trustworthy for 15 years. Which risk is OFTEN overlooked?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Higher storage cost per gigabyte over time, which can make long-term archiving unaffordable
+			\item Backup window limitations, because long-term archives require additional nightly capacity
+			\item Network bandwidth constraints, which limit the speed at which archived records can be retrieved
+			\item Format and media obsolescence and loss of integrity or key access over time
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q368: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Formats and media become obsolete
+				\item Keys must remain available
+				\item Integrity must be verifiable
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Archives fail through obsolescence and lost keys.
+		\end{alertblock}
+	\end{frame}
+		
+	% ============================================================
+	\section{5. SDLC and Emerging Technologies}
+	% ============================================================
+	
+	\begin{frame}{Q369: Security Requirements Missing}
+		\begin{block}{Question}
+			\small A project reaches testing and no security requirements were defined. What is the PRIMARY consequence?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Testers will have fewer test cases to execute, which will shorten the testing phase and the schedule
+			\item The project will automatically fail its next audit, because missing requirements are always an audit finding
+			\item Security gaps will be found late, when remediation is costlier and may be accepted under schedule pressure
+			\item Developers will be unable to use security tools, because those tools are configured from the requirements document
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q369: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Define requirements early
+				\item Late fixes cost more
+				\item Schedule pressure leads to acceptance
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Security requirements belong at the start.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q370: SAST and DAST}
+		\begin{block}{Question}
+			\small Which statement BEST describes how SAST and DAST complement each other?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item SAST analyzes source code for flaws early, while DAST tests the running application for exploitable behavior, giving broader coverage together
+			\item SAST tests running applications and DAST analyzes source code, so both are needed to cover the full pipeline
+			\item They are redundant because each finds the same flaws, so one of them is sufficient for assurance
+			\item Both evaluate only infrastructure configuration and complement each other by covering different network layers
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q370: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item SAST reviews code
+				\item DAST tests the running application
+				\item Together they cover more defects
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Static and dynamic testing find different flaws.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q371: Unknown Library Exposure}
+		\begin{block}{Question}
+			\small A critical vulnerability in an open-source library is announced. The organization cannot quickly tell which applications use it. What capability is MISSING?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item A software bill of materials and dependency inventory to identify affected components
+			\item A larger security operations center, so that more analysts can search for the library across applications
+			\item Stronger network segmentation, so that vulnerable libraries cannot be reached from untrusted networks
+			\item Annual penetration testing, which would have identified the library as a vulnerable component
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q371: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item You must know your components
+				\item SBOM speeds impact assessment
+				\item Supply chain visibility is a control
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			If you cannot list your components, you cannot patch them.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q372: Keys in Repository}
+		\begin{block}{Question}
+			\small A scan finds API keys committed to a code repository. What is the BEST response?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Delete the commit from repository history, since the keys are then no longer accessible to others
+			\item Make the repository private, which restricts access to the keys to authorized staff
+			\item Warn developers by email not to repeat the practice and add the rule to the coding standard
+			\item Revoke and rotate the exposed credentials, then implement secrets management and pre-commit scanning
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q372: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Exposed credentials must be rotated
+				\item Use a secrets manager
+				\item Prevent recurrence with scanning
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Once exposed, a secret must be rotated.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q373: Deferred Security in Agile}
+		\begin{block}{Question}
+			\small In an agile project, security reviews and documentation are repeatedly deferred. What is the BEST way to address this?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Move the project to a waterfall approach, where security phases are fixed and cannot be skipped
+			\item Integrate security activities into sprints through the definition of done, automated checks, and risk-based acceptance criteria
+			\item Add a single security review at the end of the project to ensure that all issues are found before release
+			\item Remove documentation requirements entirely, to keep the team focused on delivering working software
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q373: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Make security part of done
+				\item Automate checks in the pipeline
+				\item Use risk-based criteria
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Agile needs security built in, not bolted on.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q374: Self-Approved Code}
+		\begin{block}{Question}
+			\small The developer who wrote a change also approves their own pull request. What control gap exists?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Insufficient unit test coverage, which allows defects to pass unnoticed through the pipeline
+			\item Inconsistent code style across the repository, which makes automated review less reliable
+			\item Lack of independent review, increasing the risk of errors or malicious code reaching production
+			\item Repository storage limits, which prevent reviewers from keeping a history of approvals
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q374: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Independent review catches errors
+				\item Self-approval defeats segregation
+				\item Enforce reviewer rules in tooling
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Nobody should approve their own work.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q375: Developer-Run UAT}
+		\begin{block}{Question}
+			\small User acceptance testing is performed by the same team that developed the application. What is the MAIN concern?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Developers will complete testing too slowly, because they must switch between development and testing roles
+			\item Lack of independence and business perspective reduces the likelihood of finding requirement or usability gaps
+			\item UAT must always use production data, which developers are not authorized to access
+			\item Documentation will be incomplete, because developers do not write test scripts for their own code
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q375: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item UAT validates business need
+				\item Independence adds objectivity
+				\item Business users should execute UAT
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			UAT belongs to the business.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q376: Machine Learning Credit Model}
+		\begin{block}{Question}
+			\small A bank deploys a machine learning credit decision model. Which governance element is MOST critical?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Training on the largest available dataset, since broader data always improves predictive performance and fairness
+			\item Model validation, ongoing monitoring for drift and bias, and clear accountability and explainability appropriate to the decisions
+			\item The reputation of the model vendor, since an established vendor's validation is sufficient assurance
+			\item Measuring accuracy once at launch, since a model that performs well initially will continue to do so
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q376: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Validate before and after deployment
+				\item Monitor for drift and bias
+				\item Assign accountability
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Models need governance across their whole life.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q377: Training Data Manipulation}
+		\begin{block}{Question}
+			\small Which risk is SPECIFIC to machine learning systems trained on external data?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Unauthorized access to the training environment through weak administrator passwords, a risk that applies equally to any system
+			\item Data poisoning, where manipulated training data degrades or biases model behavior
+			\item Injection of malicious SQL statements into the application database, a risk common to any web application
+			\item Memory corruption flaws in the operating system hosting the model, which exist regardless of the type of model
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q377: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Training data shapes behavior
+				\item Attackers can corrupt inputs
+				\item Validate data sources
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Model integrity depends on data integrity.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q378: Generative AI Leakage}
+		\begin{block}{Question}
+			\small Employees paste confidential code and customer data into a public generative AI tool. What is the BEST combination of controls?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Ban all generative AI tools through a policy statement, relying on employees to comply
+			\item Trust employees' judgment about what to share, supported by an annual reminder of confidentiality obligations
+			\item Rely on the AI vendor's terms of service, which state that submitted data is not used for training
+			\item Establish an acceptable use policy, provide approved AI tools with data protections, and use technical controls such as DLP and access restrictions
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q378: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Policy needs enforcement
+				\item Offer a safe approved alternative
+				\item Use DLP to stop leakage
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Provide a safe path and enforce it.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q379: Default Credentials on IoT}
+		\begin{block}{Question}
+			\small A manufacturer deploys thousands of IoT sensors with default credentials and no update mechanism. What is the MOST significant risk?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Unmanaged, easily compromised devices that provide network entry points and cannot be patched
+			\item Increased electricity consumption across the plant, which raises operating costs
+			\item Data format incompatibility with analytics tools, which prevents collected data from being used
+			\item Gradual drift in sensor accuracy, which reduces the quality of production data over time
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q379: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Default credentials are well known
+				\item Unpatchable devices stay vulnerable
+				\item Segment and inventory devices
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Unmanageable devices are permanent entry points.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q380: Smart Contract Deployment}
+		\begin{block}{Question}
+			\small Before deploying a smart contract that manages financial assets, which activity is MOST important?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item A marketing campaign to attract users, since adoption determines the contract's success
+			\item Independent code audit and extensive testing, since deployed code may be immutable and flaws irreversible
+			\item Raising transaction fees so that the contract executes with priority on the network
+			\item Selecting a faster block time, so that transactions confirm sooner and fraud is detected earlier
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q380: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Deployed code is hard to change
+				\item Audit before release
+				\item Test edge cases thoroughly
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Immutable code demands pre-release assurance.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q381: Low-Code Sprawl}
+		\begin{block}{Question}
+			\small Business users build workflows with low-code tools that connect to sensitive data without IT involvement. What is the BEST governance response?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Provide a governed platform with guardrails, an inventory, data access controls, and review for higher-risk applications
+			\item Prohibit all low-code development and require requests to go through the standard IT project process
+			\item Allow users to self-certify the security of their applications through an annual questionnaire
+			\item Require IT to build every workflow, so that all applications follow the standard development lifecycle
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q381: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Offer a governed platform
+				\item Maintain an inventory
+				\item Review by risk level
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Enable citizen developers safely.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q382: Bot Credentials}
+		\begin{block}{Question}
+			\small Robotic process automation bots log into multiple systems using a shared admin account. What is the BEST improvement?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Increase the length and complexity of the shared password and rotate it quarterly
+			\item Assign unique, least-privilege bot identities with credentials in a vault, logging, and a named owner
+			\item Run bots only during overnight windows when fewer users are active, to reduce exposure
+			\item Remove bot logging to improve performance, since bot actions are already predictable
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q382: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Bots need unique identities
+				\item Vault the credentials
+				\item Log bot actions
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Bots are identities and need least privilege.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q383: Unscanned Container Images}
+		\begin{block}{Question}
+			\small Containers are built from public base images with no scanning. What is the PRIMARY risk?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Slower container startup times, because public images are larger than curated internal images
+			\item Higher licensing fees, because public images carry commercial license obligations
+			\item Increased network traffic, because images must be pulled from external registries on every deployment
+			\item Inherited vulnerabilities or malicious components in public base images are deployed at scale across every container built from them
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q383: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Base images can be vulnerable
+				\item Scan images in the pipeline
+				\item Use trusted registries
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Scan what you build from.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q384: Exposed APIs}
+		\begin{block}{Question}
+			\small Which is the MOST important control for externally exposed APIs?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Strong authentication and authorization on each request, with input validation and rate limiting
+			\item Obscure URL paths that are hard to guess, so that only intended consumers discover the API
+			\item Keeping the API documentation hidden from the public, so that attackers cannot learn how the API works
+			\item Running the API on a non-standard port, so that automated scanners do not detect it
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q384: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Authenticate and authorize every call
+				\item Validate input
+				\item Rate limit to resist abuse
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Obscurity is not authorization.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q385: Crypto Agility}
+		\begin{block}{Question}
+			\small Why should organizations consider cryptographic agility in light of quantum computing?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Because quantum computing makes hashing impossible, so all integrity controls must be replaced immediately
+			\item To replace vulnerable algorithms without major redesign, since long-lived confidential data may be harvested now and decrypted later
+			\item Because quantum computers will make symmetric encryption trivially breakable, so all data must be re-encrypted this year
+			\item Because all current systems are already quantum-safe, so only governance of algorithm choices is needed
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q385: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Algorithms may need replacement
+				\item Harvest now, decrypt later is a risk
+				\item Design for replaceable crypto
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Plan for algorithm change before it is forced.
+		\end{alertblock}
+	\end{frame}
+		
+	% ============================================================
+	\section{6. Information Security Principles}
+	% ============================================================
+	
+	\begin{frame}{Q386: Access Accumulation}
+		\begin{block}{Question}
+			\small An employee has transferred departments three times and retains access from every previous role. Which control would have BEST prevented this?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Access review triggered by role change, plus periodic recertification by business owners
+			\item Stronger password complexity requirements, which would reduce the chance that old accounts are misused
+			\item Annual security awareness training, which would remind employees to surrender access they no longer need
+			\item Single sign-on across applications, which would make it easier to remove access from one place
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q386: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Role change must trigger review
+				\item Owners recertify access
+				\item Prevents privilege accumulation
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Access must follow the role, not the history.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q387: Privileged Access}
+		\begin{block}{Question}
+			\small Which privileged access management capability BEST reduces risk from compromised administrator credentials?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Longer and more complex passwords for administrator accounts, changed at each employee departure
+			\item Shared administrator accounts with scheduled rotation of passwords every thirty days
+			\item Just-in-time privileged access with credential vaulting and session recording
+			\item Email notification to the security team of every administrator login, reviewed weekly
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q387: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Limit standing privileges
+				\item Vault credentials
+				\item Record sessions for accountability
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Reduce standing privilege and record what is done.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q388: Push Bombing}
+		\begin{block}{Question}
+			\small Attackers bombard users with push approval requests until one is accepted. What is the BEST mitigation?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Disable push-based MFA and rely on strong passwords, since fatigue attacks target only the approval step
+			\item Increase password length requirements so that stolen credentials are insufficient on their own
+			\item Switch from push approvals to SMS one-time codes, which are not susceptible to repeated prompts
+			\item Phishing-resistant MFA or number matching, with rate limiting and user reporting
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q388: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Prompt fatigue is an attack method
+				\item Use number matching or FIDO
+				\item Rate limit and report
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			MFA must resist social engineering.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q389: Zero Trust Principle}
+		\begin{block}{Question}
+			\small Which statement BEST reflects zero trust implementation?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Users are trusted after VPN login because they are on the internal network
+			\item A next-generation firewall at the perimeter provides sufficient protection
+			\item MFA is required once per year for all employees
+			\item Access is decided per request using identity, device posture, and context, with least privilege and continuous verification
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q389: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Never trust by location
+				\item Verify identity, device, and context
+				\item Apply least privilege continuously
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Location is not trust.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q390: Keys Beside Data}
+		\begin{block}{Question}
+			\small Encryption keys are stored on the same server as the encrypted data. What is the MAIN issue?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item System performance will degrade, because decryption on the same server consumes additional processing capacity
+			\item Compromise of the server exposes both data and keys, defeating the protection; keys should be separately protected, for example in an HSM or KMS
+			\item Keys will expire sooner when stored on production servers, causing frequent encryption failures
+			\item Regulations prohibit encryption on application servers, so data must be encrypted in the database tier only
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q390: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Keys must be separate from data
+				\item Use HSM or KMS
+				\item Control key access tightly
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Encryption is only as strong as key protection.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q391: Defense in Depth}
+		\begin{block}{Question}
+			\small Which design BEST demonstrates defense in depth for a sensitive database?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item One very strong perimeter firewall with advanced threat detection, which blocks attacks before they reach the database
+			\item Multiple identical firewalls in series, so that a failure in one is covered by the next
+			\item Layered controls including segmentation, access control, encryption, monitoring, and backups
+			\item Strong complex passwords on all database accounts, changed regularly and stored in a vault
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q391: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Multiple layers of control
+				\item Different control types
+				\item One failure does not expose the asset
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			No single control should stand alone.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q392: Premature Eradication}
+		\begin{block}{Question}
+			\small During an active intrusion, the team wants to immediately wipe and rebuild affected servers. What is the concern?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Rebuilding is always preferred to investigation, since it removes the attacker immediately and limits further damage
+			\item Premature eradication may destroy forensic evidence and miss attacker persistence if scope is not understood; containment and investigation come first
+			\item Wiping servers violates cloud service terms, which prohibit customers from destroying provider-managed resources
+			\item Servers cannot be rebuilt during business hours, so the activity must wait for the next maintenance window
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q392: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Contain first
+				\item Preserve evidence
+				\item Understand scope before eradicating
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Investigate scope before you eradicate.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q393: Vulnerability Prioritization}
+		\begin{block}{Question}
+			\small Thousands of vulnerabilities exist. What is the BEST prioritization approach?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Prioritize strictly by CVSS base score, since it is the standardized and objective measure of severity
+			\item Risk-based prioritization using exploitability, asset criticality, exposure, and compensating controls, not CVSS alone
+			\item Remediate the oldest vulnerabilities first, since they have been exposed to attackers for the longest time
+			\item Remediate the easiest vulnerabilities first, so that the largest number of findings are closed quickly
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q393: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Combine exploitability and impact
+				\item Consider asset criticality
+				\item Account for compensating controls
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Severity scores need business context.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q394: Awareness Effectiveness}
+		\begin{block}{Question}
+			\small Which metric BEST shows the effectiveness of security awareness training?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Behavior metrics such as phishing report rates and declining click rates over time
+			\item Training completion percentage, which shows that the workforce has been reached by the program
+			\item Total hours of training delivered, which indicates the depth of the awareness program
+			\item Average quiz scores after the course, which show that employees have retained the material
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q394: Explanation}
+		\begin{block}{Correct Answer: A}
+			\textbf{Why (A) is the best answer:}
+			\begin{itemize}
+				\item Measure behavior change
+				\item Reporting indicates engagement
+				\item Completion is not effectiveness
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Measure behavior, not attendance.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q395: SIEM Without Use Cases}
+		\begin{block}{Question}
+			\small A SIEM collects logs from many sources, but no detection use cases are defined. What is the MAIN weakness?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Storage costs will exceed budget, because logs from all sources are retained without selection
+			\item Log formats will be inconsistent, which prevents correlation across sources
+			\item Analysts will need additional certification, because the platform cannot be used without vendor-specific training
+			\item Collected data is not turned into detection of relevant threats; use cases aligned with risk scenarios are needed
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q395: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Logs alone do not detect
+				\item Align use cases to risk scenarios
+				\item Tune continuously
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A SIEM without use cases is an expensive archive.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q396: Exposed Cloud Bucket}
+		\begin{block}{Question}
+			\small A company's IaaS storage bucket is publicly exposed due to a misconfiguration. Who is MOST likely responsible?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item The cloud provider in every case, since it operates the platform that hosts the storage service
+			\item Both parties equally, regardless of the service model, since responsibility is always split evenly under the shared responsibility model
+			\item The regulator that certified the provider, since certification implies that default configurations are secure
+			\item The customer, since configuring access controls on its own data is the customer's responsibility under shared responsibility
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q396: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Customers configure their own access
+				\item Providers secure the infrastructure
+				\item Misconfiguration is a leading cloud risk
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Shared responsibility does not remove customer duties.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q397: Insider Threat}
+		\begin{block}{Question}
+			\small Which combination BEST mitigates insider threat?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Background checks at hiring, repeated every few years, which screen out most malicious individuals
+			\item A very strict network perimeter that blocks all unauthorized external access
+			\item Least privilege, monitoring for anomalous behavior, segregation of duties, and HR-integrated onboarding and offboarding
+			\item Prohibiting personal devices in the workplace so that data cannot be copied out of the organization
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q397: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item Limit access to what is needed
+				\item Monitor behavior
+				\item Coordinate with HR at joiner, mover, leaver
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Insider risk needs layered, people-centered controls.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q398: Limited Pen Test Scope}
+		\begin{block}{Question}
+			\small A penetration test excluded the most critical systems to avoid disruption. What is the MAIN implication?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item The test is more reliable, because it avoided disruption and therefore produced cleaner results
+			\item Critical systems are automatically secure, since they are subject to stricter change control
+			\item The organization saved cost with no impact on risk, because the tested systems are representative of those excluded
+			\item Assurance does not cover the highest-risk assets, so a controlled testing approach for them should be designed
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q398: Explanation}
+		\begin{block}{Correct Answer: D}
+			\textbf{Why (D) is the best answer:}
+			\begin{itemize}
+				\item Scope determines assurance
+				\item Critical assets need testing
+				\item Use safe, controlled methods
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Do not skip the assets that matter most.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q399: Access Management KRI}
+		\begin{block}{Question}
+			\small Which is the BEST key risk indicator for access management?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Number of password resets performed, which indicates the burden on the help desk
+			\item Total number of users in the directory, which indicates the size of the attack surface
+			\item Percentage of privileged accounts not recertified within policy, and number of orphaned accounts
+			\item Number of help desk calls related to access, which indicates user satisfaction with access processes
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q399: Explanation}
+		\begin{block}{Correct Answer: C}
+			\textbf{Why (C) is the best answer:}
+			\begin{itemize}
+				\item KRIs show risk trends
+				\item Privileged accounts are high risk
+				\item Orphaned accounts show process failure
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			A KRI measures risk exposure, not activity.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Q400: Log Tampering}
+		\begin{block}{Question}
+			\small Administrators can edit the logs on the systems they manage. Which control is MOST appropriate?
+		\end{block}
+		\begin{enumerate}[(A)]
+			\footnotesize
+			\item Ask administrators to confirm in writing that they will not alter logs, and review the confirmation annually
+			\item Forward logs in near real time to a centralized, access-restricted, tamper-evident repository
+			\item Reduce log verbosity so that less information is available that can be edited
+			\item Print logs weekly and file them for manual review by the internal audit function
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Q400: Explanation}
+		\begin{block}{Correct Answer: B}
+			\textbf{Why (B) is the best answer:}
+			\begin{itemize}
+				\item Logs must be independent of admins
+				\item Centralize and restrict access
+				\item Tamper evidence supports investigations
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			Logs controlled by those they record are not reliable evidence.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Exam Mindset Summary}
+		\begin{block}{Remember}
+			\begin{itemize}
+				\item \textbf{Judgment over trivia:} pick the action that best manages risk for the business
+				\item \textbf{Governance first:} exceptions, deviations, and trade-offs need documented decisions by accountable owners
+				\item \textbf{Know the dependency:} resilience, vendors, and shared services must match what depends on them
+				\item \textbf{Test, do not assume:} restores, rollbacks, and compensating controls need evidence
+				\item \textbf{Contain before you eradicate} and preserve evidence
+				\item \textbf{Least privilege and independence:} no self-approval, no shared credentials
+				\item \textbf{Data:} know where it is, who owns it, how long to keep it, and how to destroy it
+				\item \textbf{Security is continuous risk management}
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Thank You}
+		\begin{center}
+			{\Huge \textbf{Good Luck on Your CRISC Exam!}}
+		\end{center}
+	\end{frame}
+	
+\end{document}

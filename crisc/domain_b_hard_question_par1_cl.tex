@@ -1,0 +1,423 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamerfont{block body}{size=\small}
+\setbeamerfont{alertblock body}{size=\small}
+
+\title{CRISC Domain B -- Impossible Questions}
+\subtitle{IT Risk Assessment -- Expert Level Only (Merged Edition)}
+\author{CRISC Mastery Series}
+\date{\today}
+
+% ------------------------------------------------------------
+% \hq{number}{topic}{question}{options}{letter}{explanation}{trap}
+% Creates one question frame and one explanation frame.
+% (No blank lines are allowed inside the arguments.)
+% ------------------------------------------------------------
+\newcommand{\hq}[7]{%
+	\begin{frame}{Q#1: #2}
+		\begin{block}{Question}
+			#3
+		\end{block}
+		\begin{enumerate}[(A)]
+			#4
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}{Q#1: Explanation}
+		\begin{block}{Correct Answer: #5}
+			\begin{itemize}
+				#6
+			\end{itemize}
+		\end{block}
+		\begin{alertblock}{Critical Trap}
+			#7
+		\end{alertblock}
+	\end{frame}
+}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{Warning}
+		\begin{alertblock}{Extreme Difficulty}
+			Every easy and purely definitional question has been removed.\\
+			What remains needs calculation, probability, dependency analysis and judgment.\\
+			Do not be discouraged if you miss most of them.
+		\end{alertblock}
+	\end{frame}
+	
+	\begin{frame}{Outline}
+		\tableofcontents
+	\end{frame}
+	
+	% ============================================================
+	\section{Quantitative Risk Analysis}
+	% ============================================================
+	
+	\hq{1}{Control ROI}
+	{An asset is worth \$2M with an exposure factor of 40\% and an ARO of 0.5. A control reduces the ARO to 0.1 and the exposure factor to 25\% at a cost of \$60K per year. What is the net annual benefit?}
+	{\item \$350K
+		\item \$410K
+		\item \$290K
+		\item \$50K}
+	{C}
+	{\item Before: ALE $=$ \$2M $\times$ 40\% $\times$ 0.5 $=$ \$400K
+		\item After: ALE $=$ \$2M $\times$ 25\% $\times$ 0.1 $=$ \$50K
+		\item Gross reduction $=$ \$350K
+		\item Net benefit $=$ \$350K $-$ \$60K $=$ \$290K}
+	{\$350K ignores the control cost. \$50K is the residual ALE, not a benefit.}
+	
+	\hq{2}{Joint Probability Bounds}
+	{Risk A has a 20\% likelihood and Risk B has a 30\% likelihood. They are known to be positively correlated. Which statement MUST be true about the probability that both occur?}
+	{\item It equals exactly 6\%
+		\item It is at least 50\%
+		\item It can exceed 30\%
+		\item It is strictly greater than 6\% and at most 20\%}
+	{D}
+	{\item Independence gives $0.2 \times 0.3 = 6\%$
+		\item Positive correlation pushes the joint probability above 6\%
+		\item A joint event can never be more likely than its rarer component
+		\item Upper bound $= \min(20\%, 30\%) = 20\%$}
+	{Correlation changes the joint probability, but it is always capped by the least likely event.}
+	
+	\hq{3}{Annualizing a Monthly Probability}
+	{A threat event occurs in any given month with probability 5\%, independently of other months. What is the probability of at least one occurrence in 12 months?}
+	{\item About 46\%
+		\item About 54\%
+		\item 5\%
+		\item 60\%}
+	{A}
+	{\item $P(\text{none in 12 months}) = 0.95^{12} \approx 0.54$
+		\item $P(\text{at least one}) = 1 - 0.54 \approx 0.46$
+		\item 54\% is the probability of NO event
+		\item $12 \times 5\% = 60\%$ ignores overlap of outcomes}
+	{Probabilities of ``at least one'' do not add linearly. Use the complement.}
+	
+	\hq{4}{Alert Reliability}
+	{The probability of a targeted attack this quarter is 10\%. When an attack is under way, the detection alert fires 90\% of the time. When no attack is under way, it fires falsely 20\% of the time. The alert has just fired. What is the probability that an attack is actually under way?}
+	{\item 90\%
+		\item 10\%
+		\item About 33\%
+		\item 50\%}
+	{C}
+	{\item $P(\text{alert}) = 0.9 \times 0.1 + 0.2 \times 0.9 = 0.27$
+		\item $P(\text{attack} \mid \text{alert}) = 0.09 / 0.27 = 1/3$
+		\item A low base rate makes most alerts false positives
+		\item The alert raises the estimate from 10\% to 33\%, not to 90\%}
+	{Detection accuracy is not the same as the probability that an alert is real. Base rates matter.}
+	
+	\hq{5}{Three-Point Estimate}
+	{Analysts estimate a loss at \$100K (optimistic), \$200K (most likely) and \$700K (pessimistic). What is the PERT expected loss?}
+	{\item \$333K
+		\item \$200K
+		\item \$267K
+		\item \$400K}
+	{C}
+	{\item PERT mean $= (O + 4M + P)/6$
+		\item $= (100 + 800 + 700)/6 \approx \$267K$
+		\item \$333K is the simple average of the three values
+		\item \$200K is the mode and ignores the long tail}
+	{The most likely value is not the expected value when the distribution is skewed.}
+	
+	\hq{6}{Skewed Confidence Interval}
+	{A FAIR analysis gives a 90\% confidence interval of \$200K to \$2M with a most likely value of \$500K. Which interpretation is BEST?}
+	{\item Expected annual loss likely exceeds \$500K because of right skew
+		\item Expected annual loss is exactly \$500K
+		\item The interval is invalid because it is asymmetric
+		\item The loss will certainly fall inside the interval}
+	{A}
+	{\item Loss distributions are typically right-skewed (lognormal-like)
+		\item The long upper tail pulls the mean above the mode
+		\item Budgeting on the mode understates expected loss
+		\item A 90\% interval leaves a 10\% chance of falling outside it}
+	{Most likely $\neq$ expected value. Asymmetric intervals are normal for losses.}
+	
+	\hq{7}{Aggregating Volatility}
+	{Two risks each have an annual loss standard deviation of \$300K. Their correlation is 0.5. What is the standard deviation of the combined loss?}
+	{\item \$424K
+		\item \$300K
+		\item \$600K
+		\item \$520K}
+	{D}
+	{\item $\text{Var} = \sigma^2 + \sigma^2 + 2\rho\sigma^2 = 3\sigma^2$
+		\item $\text{SD} = 300 \times \sqrt{3} \approx \$520K$
+		\item \$424K assumes independence ($\rho = 0$)
+		\item \$600K assumes perfect correlation ($\rho = 1$)}
+	{Standard deviations do not add. Correlation controls how much diversification you get.}
+	
+	\hq{8}{Common-Cause Failure}
+	{Two preventive controls each stop an attack 90\% of the time. A design review calls them ``independent layers,'' implying a 1\% chance that both fail. Testing reveals a shared dependency (the same identity provider) whose failure disables both controls 4\% of the time. Otherwise they fail independently. What is the probability that both fail?}
+	{\item 1\%
+		\item 4\%
+		\item About 5\%
+		\item 10\%}
+	{C}
+	{\item $P(\text{both fail}) = 0.04 + 0.96 \times 0.10 \times 0.10$
+		\item $= 0.04 + 0.0096 \approx 4.96\%$
+		\item Residual risk is about five times the ``independent'' estimate
+		\item Defense in depth fails when layers share a failure mode}
+	{Layered controls are only independent if they share no common dependency.}
+	
+	\hq{9}{Rule of Three}
+	{A control is tested 30 times with zero failures. Which statement about its true failure rate is MOST defensible?}
+	{\item It is 0\%
+		\item It is at most 3\%
+		\item It is at most 30\%
+		\item It is at most roughly 10\% with 95\% confidence}
+	{D}
+	{\item With zero failures in $n$ trials, the 95\% upper bound is about $3/n$
+		\item $3/30 = 10\%$
+		\item Zero observed failures does not prove zero failures
+		\item Small samples leave wide uncertainty}
+	{``No failures observed'' is not ``no failures exist.''}
+	
+	\hq{10}{FAIR Decomposition}
+	{Threat event frequency is 20 per year and vulnerability (probability a threat event becomes a loss event) is 15\%. Primary loss per event is \$40K. There is a 30\% chance of a secondary loss of \$200K per event. What is the annualized loss exposure?}
+	{\item \$120K
+		\item \$720K
+		\item \$300K
+		\item \$2.0M}
+	{C}
+	{\item Loss event frequency $= 20 \times 15\% = 3$ per year
+		\item Expected loss per event $= 40K + 0.3 \times 200K = \$100K$
+		\item ALE $= 3 \times \$100K = \$300K$
+		\item \$120K ignores secondary loss; \$720K treats it as certain; \$2.0M ignores vulnerability}
+	{Use loss event frequency, not threat event frequency, and weight secondary loss by its probability.}
+	
+	% ============================================================
+	\section{Risk Evaluation}
+	% ============================================================
+	
+	\hq{11}{Ordinal Matrix Flaw}
+	{An organization multiplies 1--5 likelihood and impact scores in a 5x5 matrix. A risk scored 5x1 and a risk scored 1x5 both receive 5. What is the MOST fundamental flaw in this approach?}
+	{\item Multiplication always overstates risk
+		\item Ordinal ranks are not ratio-scale values, so products can misrank risks with very different expected losses
+		\item A 5x5 matrix is too small
+		\item Scores above 20 cannot be compared}
+	{B}
+	{\item Scale points are ordered labels, not measured quantities
+		\item Equal products can hide very different loss profiles
+		\item Products of ordinal ranks can reverse true priority
+		\item Calibrated quantitative ranges are more defensible}
+	{A numeric-looking score does not make an ordinal scale quantitative.}
+	
+	\hq{12}{Aggregate Appetite and Correlation}
+	{Three risks each have an expected annual loss of \$400K. Aggregate appetite is \$1M and aggregate tolerance is \$1.3M. The risks are believed to be strongly positively correlated. Which position is MOST accurate?}
+	{\item Above appetite but within tolerance on an expected basis; correlation does not change the expected sum but fattens the tail, so the loss distribution must be examined
+		\item Within appetite because every individual risk is below \$1M
+		\item Beyond tolerance because correlated risks add up to more than their expected values
+		\item Within appetite because diversification lowers the expected aggregate loss}
+	{A}
+	{\item Expected losses add: $3 \times \$400K = \$1.2M$
+		\item \$1.2M is above appetite (\$1M) and within tolerance (\$1.3M)
+		\item Correlation does not change the expected sum
+		\item Correlation does increase tail (extreme-loss) exposure}
+	{Correlation affects the spread of outcomes, not the sum of expected values.}
+	
+	\hq{13}{Cost Exceeds Benefit}
+	{A control costing \$400K per year would reduce expected loss by only \$150K per year. Without it, residual risk exceeds appetite but is well within capacity. What should the risk practitioner recommend?}
+	{\item Implement the control because the risk exceeds appetite
+		\item Escalate for formal, documented acceptance by the owner with authority to exceed appetite, while exploring cheaper alternatives
+		\item Accept informally to avoid delay
+		\item Buy full insurance without further analysis}
+	{B}
+	{\item Treatment must be economically justified
+		\item Exceeding appetite requires explicit authority to accept
+		\item Acceptance must be documented and reviewed
+		\item Cheaper responses should still be explored}
+	{Exceeding appetite does not force a treatment. It forces a decision by the right authority.}
+	
+	\hq{14}{Mitigation That Backfires}
+	{After a new control is deployed, the verified residual risk is HIGHER than the original inherent risk. What is the MOST likely explanation?}
+	{\item An arithmetic error is the only plausible cause
+		\item The control introduced secondary risk that outweighs its benefit, so the response must be redesigned
+		\item Inherent risk was necessarily overstated
+		\item The risk has been transferred to the control owner}
+	{B}
+	{\item Controls can create new risks (complexity, new attack surface, new dependencies)
+		\item Secondary risk must be assessed alongside residual risk
+		\item Net exposure, not control count, is what matters
+		\item Redesign or replace the response}
+	{A control is not automatically net-positive.}
+	
+	% ============================================================
+	\section{Business Impact Analysis}
+	% ============================================================
+	
+	\hq{15}{Recovery Dependencies}
+	{System A has an RTO of 4 hours. A's own restoration takes 2 hours and can start only after both System B and System C are available. B takes 3 hours to restore and C takes 2 hours, restored in parallel. Can A meet its RTO?}
+	{\item Yes, the longest single task is 3 hours
+		\item Yes, B and C run in parallel and fit inside 4 hours
+		\item No, recovery takes 7 hours
+		\item No, recovery takes 5 hours}
+	{D}
+	{\item B and C run in parallel, so the dependency stage takes $\max(3, 2) = 3$ hours
+		\item A then needs its own 2 hours: $3 + 2 = 5$ hours
+		\item 5 hours exceeds the 4-hour RTO
+		\item 7 hours would be the fully sequential case}
+	{Critical path = longest dependency chain, not the longest single task.}
+	
+	\hq{16}{Probability of Meeting RPO}
+	{The RPO is 1 hour and backups run every 4 hours. A failure occurs at a uniformly random time. What is the probability that the data loss stays within the RPO?}
+	{\item 0\%
+		\item 25\%
+		\item 50\%
+		\item 75\%}
+	{B}
+	{\item Data loss equals the time since the last backup, uniform from 0 to 4 hours
+		\item Loss is within RPO only when it is at most 1 hour
+		\item Probability $= 1/4 = 25\%$
+		\item Expected loss is 2 hours, twice the RPO}
+	{A backup interval longer than the RPO means the RPO is usually missed.}
+	
+	\hq{17}{MTD Consistency}
+	{A process has an RTO of 4 hours, a work recovery time (WRT) of 6 hours and an MTD of 8 hours. What is the PRIMARY problem?}
+	{\item Consistent because RTO (4 h) is less than MTD (8 h)
+		\item Consistent because WRT is excluded from MTD
+		\item MTD should automatically be raised to 20 hours
+		\item Inconsistent: RTO plus WRT is 10 hours, which exceeds the 8-hour MTD}
+	{D}
+	{\item The business must be fully operating again within the MTD
+		\item Requirement: $\text{RTO} + \text{WRT} \leq \text{MTD}$
+		\item Here $4 + 6 = 10 > 8$
+		\item Shorten RTO or WRT, or revalidate the MTD with the business}
+	{Meeting the RTO alone does not guarantee meeting the MTD.}
+	
+	\hq{18}{MTD from Escalating Impact}
+	{Outage losses are \$10K per hour for the first 4 hours and \$50K per hour afterwards. Management defines MTD as the point where cumulative loss reaches \$400K. What is the MTD?}
+	{\item 11.2 hours
+		\item 8 hours
+		\item 4 hours
+		\item 40 hours}
+	{A}
+	{\item First 4 hours: $4 \times \$10K = \$40K$
+		\item Remaining threshold: $\$400K - \$40K = \$360K$
+		\item At \$50K per hour: $360 / 50 = 7.2$ hours
+		\item MTD $= 4 + 7.2 = 11.2$ hours}
+	{Impact is not linear. Piece the loss curve together before dividing.}
+	
+	% ============================================================
+	\section{Risk Treatment}
+	% ============================================================
+	
+	\hq{19}{Treatment Selection}
+	{A risk has an 80\% likelihood and a \$100K impact. Treatment A costs \$50K and cuts likelihood to 20\%. Treatment B costs \$30K and cuts impact to \$40K. Applying both costs \$80K. Which option has the best net benefit?}
+	{\item Both treatments
+		\item Treatment B only
+		\item Neither
+		\item Treatment A only}
+	{B}
+	{\item Baseline expected loss $= 0.8 \times 100 = \$80K$
+		\item A: loss \$20K, net benefit $= 60 - 50 = +\$10K$
+		\item B: loss \$32K, net benefit $= 48 - 30 = +\$18K$
+		\item Both: loss \$8K, net benefit $= 72 - 80 = -\$8K$}
+	{Benefits of overlapping treatments are not additive. The second one has diminishing value.}
+	
+	\hq{20}{Present Value of a Control}
+	{A control costs \$120K upfront and reduces expected annual loss from \$90K to \$20K for 3 years. The discount rate is 10\%. What is the approximate NPV?}
+	{\item About $+$\$54K, so approve
+		\item About $+$\$90K
+		\item About $-$\$50K, so reject
+		\item About $+$\$210K}
+	{A}
+	{\item Annual benefit $= \$70K$
+		\item PV factor for 3 years at 10\% $\approx 2.487$
+		\item PV of benefits $\approx \$174K$
+		\item NPV $\approx 174 - 120 = +\$54K$}
+	{\$90K is the undiscounted net. \$210K is gross undiscounted benefit.}
+	
+	\hq{21}{Insurance Economics}
+	{There is a 10\% annual chance of a \$2M loss. Insurance covers 80\% of the loss above a \$200K deductible and costs \$60K per year. What is the total expected annual cost with insurance?}
+	{\item \$56K
+		\item \$200K
+		\item \$116K
+		\item \$260K}
+	{C}
+	{\item Retained per event $= 200K + 20\% \times 1.8M = \$560K$
+		\item Expected retained loss $= 0.1 \times 560K = \$56K$
+		\item Add premium: $56K + 60K = \$116K$
+		\item Uninsured expected loss would be \$200K}
+	{Include the premium and the retained share. Insurance also leaves counterparty and coverage risk.}
+	
+	% ============================================================
+	\section{Risk Monitoring}
+	% ============================================================
+	
+	\hq{22}{Control Test Results}
+	{A control runs 250 times per year. A sample of 25 executions shows 5 deviations. The tolerable deviation rate is 5\%. What is the BEST conclusion?}
+	{\item Effective, because the sample is only 10\% of the population
+		\item Effective, because 80\% of items passed
+		\item Inconclusive until all 250 executions are tested
+		\item Not effective: the 20\% sample deviation rate far exceeds the 5\% tolerable rate, so remediate and expand testing}
+	{D}
+	{\item Sample deviation rate $= 5/25 = 20\%$
+		\item 20\% is four times the tolerable rate
+		\item A passing rate of 80\% is not acceptable here
+		\item Full-population testing is not needed to see a clear failure}
+	{Compare results to the tolerable rate, not to a ``mostly passed'' feeling.}
+	
+	\hq{23}{Silent Indicators}
+	{Every KRI has stayed green for three consecutive years, yet the organization suffered two significant incidents. What is the MOST appropriate conclusion?}
+	{\item Controls are exceptionally effective
+		\item Thresholds are likely too loose or indicators insensitive, so back-test and recalibrate
+		\item Reduce monitoring frequency to save cost
+		\item Retire the KRIs}
+	{B}
+	{\item Indicators should have moved before the incidents
+		\item Back-test KRIs against past incidents
+		\item Tighten thresholds and add leading indicators
+		\item Consistent green is a warning sign, not proof of safety}
+	{A KRI that cannot detect a known failure is not doing its job.}
+	
+	% ============================================================
+	\section{Answer Key and Summary}
+	% ============================================================
+	
+	\begin{frame}{Answer Key}
+		\begin{columns}[T]
+			\begin{column}{0.32\textwidth}
+				Q1: C\\ Q2: D\\ Q3: A\\ Q4: C\\ Q5: C\\ Q6: A\\ Q7: D\\ Q8: C
+			\end{column}
+			\begin{column}{0.32\textwidth}
+				Q9: D\\ Q10: C\\ Q11: B\\ Q12: A\\ Q13: B\\ Q14: B\\ Q15: D\\ Q16: B
+			\end{column}
+			\begin{column}{0.32\textwidth}
+				Q17: D\\ Q18: A\\ Q19: B\\ Q20: A\\ Q21: C\\ Q22: D\\ Q23: B
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Key Takeaways for Domain B}
+		\begin{block}{Summary}
+			\begin{itemize}
+				\item \textbf{Analysis:} Use complements, base rates, correlation and skew. Do not add intuitively.
+				\item \textbf{Evaluation:} Ordinal scores mislead. Aggregate and tail views matter.
+				\item \textbf{BIA:} Critical path, RPO versus backup interval, and RTO $+$ WRT $\leq$ MTD.
+				\item \textbf{Treatment:} Compare net, discounted benefit. Overlapping controls are not additive.
+				\item \textbf{Monitoring:} Compare to tolerable rates. Silent indicators need back-testing.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	\begin{frame}{Thank You}
+		\begin{center}
+			{\Huge \textbf{Good Luck on Your CRISC Exam!}}
+			
+			\vspace{1cm}
+			
+			Remember: the ISACA mindset is about\\
+			understanding why a question is asked,\\
+			not just what is technically correct.
+		\end{center}
+	\end{frame}
+	
+\end{document}
